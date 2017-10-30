@@ -1,0 +1,49 @@
+﻿<core:UcViewBase x:Class="XLY.SF.Project.Views.Main.CaseSelectionView"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
+                 xmlns:Lang="clr-namespace:XLY.SF.Framework.Language.PageLanguage;assembly=XLY.SF.Framework.Language"
+                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                 mc:Ignorable="d"
+                 Title="移动到..."
+                 Height="430"
+                 Width="400">
+    <core:UcViewBase.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--此处以下添加自己的引用-->
+
+        </ResourceDictionary>
+    </core:UcViewBase.Resources>
+    <Border>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="40" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Text="请选择要移动到的案例（移动过程可能需要较长时间）" />
+            <ListBox Grid.Row="2"
+                     ItemsSource="{Binding Cases}"
+                     SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
+                     DisplayMemberPath="Name" />
+            <StackPanel Grid.Row="4"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                <Button Content="确定"
+                        Command="{Binding ConfirmCommand}" />
+                <Button Content="取消"
+                        Command="{Binding CancelCommand}" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</core:UcViewBase>

@@ -1,0 +1,16 @@
+﻿using System.Windows;
+using XLY.SF.Project.UserControls.PreviewFile.UserControls.LargeFileTextBox;
+
+namespace XLY.SF.Project.UserControls.PreviewFile.Decoders
+{
+    class TextFileDecoder : IFileDecoder
+    {
+        public FrameworkElement Element { get { return _textBox; } }
+        private readonly TextBoxUserControl _textBox = new TextBoxUserControl();
+
+        public void Decode(string path)
+        {
+            _textBox.OpenFile(path);
+        }
+    }
+}

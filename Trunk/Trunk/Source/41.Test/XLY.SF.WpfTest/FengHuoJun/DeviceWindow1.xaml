@@ -1,0 +1,12 @@
+﻿<Window x:Class="XLY.SF.WpfTest.FengHuoJun.DeviceWindow1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:XLY.SF.WpfTest.FengHuoJun"
+        mc:Ignorable="d"
+        Title="DeviceWindow1" Height="300" Width="300">
+    <Grid>
+        <TextBlock>这是测试的别的窗口</TextBlock>
+    </Grid>
+</Window>

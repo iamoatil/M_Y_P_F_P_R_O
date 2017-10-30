@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DeviceExtractionProjectTemplate"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="http://tempuri.org/type.xsd">
+
+  <xs:import namespace="http://tempuri.org/type.xsd" schemaLocation="type.xsd"/>
+
+  <xs:element name="Extract">
+    <xs:complexType>
+      <xs:attribute name="Mode" type="t:stringType" use="required"/>
+      <xs:attribute name="Path" type="t:uriType" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ItemGroup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Extract" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="DeviceExtraction">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="PropertyGroup" minOccurs="0" />
+        <xs:element ref="ItemGroup" minOccurs="0"/>
+      </xs:all>
+      <xs:attribute name="Id" type="t:stringType" use="required"/>
+      <xs:attribute name="Type" type="t:stringType" use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="CaseProjectTemplate"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:t="http://tempuri.org/type.xsd">
+
+  <xs:import namespace="http://tempuri.org/type.xsd" schemaLocation="type.xsd"/>
+
+  <xs:element name="PropertyGroup">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="Id" type="t:stringType" />
+        <xs:element name="Name" type="t:stringType" />
+        <xs:element name="Number" type="t:stringType" />
+        <xs:element name="Type" type="t:stringType" />
+        <xs:element name="Author" type="t:stringType" />
+        <xs:element name="Timestamp" type="xs:dateTime" />
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Reference">
+    <xs:complexType>
+      <xs:attribute name="Path" type="t:uriType" use="required"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ItemGroup" >
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Reference" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Case">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="PropertyGroup" minOccurs="1"/>
+        <xs:element ref="ItemGroup" minOccurs="0"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

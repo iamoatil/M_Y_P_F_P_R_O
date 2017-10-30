@@ -1,0 +1,285 @@
+﻿<core:UcViewBase x:Class="XLY.SF.Project.Views.Main.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                 xmlns:local="clr-namespace:XLY.SF.Project.Views.Main"
+             xmlns:Lang="clr-namespace:XLY.SF.Framework.Language.PageLanguage;assembly=XLY.SF.Framework.Language"
+             xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
+             mc:Ignorable="d"
+             Loaded="UcViewBase_Loaded" SizeChanged="UcViewBase_SizeChanged">
+    <core:UcViewBase.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--过场动画-->
+            <Storyboard x:Key="OnClick1">
+                <Rotation3DAnimationUsingKeyFrames Storyboard.TargetProperty="(Visual3D.Transform).(Transform3DGroup.Children)[2].(RotateTransform3D.Rotation)" Storyboard.TargetName="containerUIElement3D">
+                    <EasingRotation3DKeyFrame KeyTime="0">
+                        <EasingRotation3DKeyFrame.Value>
+                            <AxisAngleRotation3D Axis="0,1,0" Angle="0"/>
+                        </EasingRotation3DKeyFrame.Value>
+                    </EasingRotation3DKeyFrame>
+                    <EasingRotation3DKeyFrame KeyTime="0:0:0.8">
+                        <EasingRotation3DKeyFrame.Value>
+                            <AxisAngleRotation3D Axis="0,1,0" Angle="0"/>
+                        </EasingRotation3DKeyFrame.Value>
+                    </EasingRotation3DKeyFrame>
+                    <EasingRotation3DKeyFrame KeyTime="0:0:1.2">
+                        <EasingRotation3DKeyFrame.Value>
+                            <AxisAngleRotation3D Axis="0,1,0" Angle="180"/>
+                        </EasingRotation3DKeyFrame.Value>
+                    </EasingRotation3DKeyFrame>
+                </Rotation3DAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="viewport3D">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:1.3" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="border">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:1.3" Value="1"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="border">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="0.5"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:1.3" Value="0.5"/>
+                    <SplineDoubleKeyFrame KeyTime="0:0:1.6" Value="1" KeySpline="0,1,0,0.83"/>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="border">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="0.5"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:1.3" Value="0.5"/>
+                    <SplineDoubleKeyFrame KeyTime="0:0:1.6" Value="1" KeySpline="0,1,0,0.83"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+            <!--展开创建案例界面动画-->
+            <Storyboard x:Key="OnExpandCreateCase">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.LayoutTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="br_CreateCaseView">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <QuarticEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.LayoutTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="br_CreateCaseView">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <QuinticEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+            <!--折叠创建案例界面动画-->
+            <Storyboard x:Key="OnExpandCreateCaseBack">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.LayoutTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="br_CreateCaseView">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <QuinticEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.LayoutTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="br_CreateCaseView">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <QuinticEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+
+            <!--此处以下添加自己的引用-->
+            <BooleanToVisibilityConverter x:Key="bTov"/>
+
+        </ResourceDictionary>
+    </core:UcViewBase.Resources>
+    <core:UcViewBase.Triggers>
+        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource OnClick1}"/>
+        </EventTrigger>
+    </core:UcViewBase.Triggers>
+    <Grid x:Name="gd_Main">
+        <!--3D过场动画-->
+        <Viewport3D x:Name="viewport3D" Grid.RowSpan="3" Opacity="0">
+            <Viewport3D.Camera>
+                <PerspectiveCamera Position="0 0 1500" LookDirection="0 0 -1" NearPlaneDistance="100"/>
+            </Viewport3D.Camera>
+            <Viewport3D.Children>
+                <ContainerUIElement3D x:Name="containerUIElement3D">
+                    <Viewport2DVisual3D>
+                        <Viewport2DVisual3D.Geometry>
+                            <MeshGeometry3D Positions="-200 150 0  -200 -150 0  200 -150 0  200 150 0" TriangleIndices="0 1 2  0 2 3" TextureCoordinates="0 0  0 1  1 1  1 0"/>
+                        </Viewport2DVisual3D.Geometry>
+                        <Viewport2DVisual3D.Material>
+                            <DiffuseMaterial Viewport2DVisual3D.IsVisualHostMaterial="True"/>
+                        </Viewport2DVisual3D.Material>
+                        <Viewport2DVisual3D.Visual>
+                            <Border Width="400" Height="300" Background="Red"/>
+                        </Viewport2DVisual3D.Visual>
+                    </Viewport2DVisual3D>
+                    <Viewport2DVisual3D>
+                        <Viewport2DVisual3D.Geometry>
+                            <MeshGeometry3D Positions="200 150 0  200 -150 0  -200 -150 0  -200 150 0" TriangleIndices="0 1 2  0 2 3" TextureCoordinates="0 0  0 1  1 1  1 0"/>
+                        </Viewport2DVisual3D.Geometry>
+                        <Viewport2DVisual3D.Material>
+                            <DiffuseMaterial Viewport2DVisual3D.IsVisualHostMaterial="True"/>
+                        </Viewport2DVisual3D.Material>
+                        <Viewport2DVisual3D.Visual>
+                            <Border Width="400" Height="300" Background="Aqua"/>
+                        </Viewport2DVisual3D.Visual>
+                    </Viewport2DVisual3D>
+                    <!-- 三维变换 -->
+                    <ContainerUIElement3D.Transform>
+                        <Transform3DGroup>
+                            <TranslateTransform3D OffsetZ="0" OffsetX="0" OffsetY="0"/>
+                            <ScaleTransform3D ScaleZ="1" ScaleY="1" ScaleX="1"/>
+                            <RotateTransform3D d:EulerAngles="0,0,0">
+                                <RotateTransform3D.Rotation>
+                                    <AxisAngleRotation3D Axis="0,1,0" Angle="0"/>
+                                </RotateTransform3D.Rotation>
+                            </RotateTransform3D>
+                            <TranslateTransform3D OffsetZ="0" OffsetX="0" OffsetY="0"/>
+                            <TranslateTransform3D OffsetZ="0" OffsetX="0" OffsetY="0"/>
+                        </Transform3DGroup>
+                    </ContainerUIElement3D.Transform>
+                </ContainerUIElement3D>
+                <ModelVisual3D>
+                    <ModelVisual3D.Content>
+                        <DirectionalLight Color="Beige"/>
+                    </ModelVisual3D.Content>
+                </ModelVisual3D>
+            </Viewport3D.Children>
+        </Viewport3D>
+
+        <!--实际内容区-->
+        <Grid Opacity="1" x:Name="border" RenderTransformOrigin="0.5,0.5">
+            <Grid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Grid.RenderTransform>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#FF2D3C5F" Offset="0"/>
+                    <GradientStop Color="#FF191E37" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <!--任务栏-->
+            <Grid x:Name="gd_TaskBar" Height="60">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <!--拖动条-->
+                <Button Template="{StaticResource btn_EmptyCT}" BorderThickness="0" Background="Transparent" PreviewMouseLeftButtonDown="Button_PreviewMouseLeftButtonDown" Grid.ColumnSpan="9"/>
+
+                <!--图标-->
+                <Image Width="40" Height="40"></Image>
+                <StackPanel Grid.Column="1" Margin="10 0 10 0" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWinTitle,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" FontSize="20"></TextBlock>
+                </StackPanel>
+                <!--工具箱-->
+                <Button Grid.Column="3" Margin="0 3 0 0" Cursor="Hand" VerticalAlignment="Center" HorizontalAlignment="Center" Template="{StaticResource btn_MainTools}" Width="37" Height="35" Content="{Binding XPath=ViewLanguage/View_MainWin_ToolKitName,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></Button>
+                <!--登录用户-->
+                <Grid Grid.Column="4" VerticalAlignment="Center" Margin="40 0 40 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/UserIcon.png" Stretch="Fill" Margin="0 1 8 0" Width="30" Height="27" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="{Binding MainInfo.CurUserName}"></TextBlock>
+                        <TextBlock x:Name="tb_CurTime"></TextBlock>
+                    </StackPanel>
+                </Grid>
+                <!--菜单-->
+                <ComboBox Grid.Column="5" Margin="0 0 10 0" Style="{StaticResource cb_MainMenu}">
+                </ComboBox>
+                <!--最小化-->
+                <Button Grid.Column="6" Click="Button_Click" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_MinSize,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                        Style="{StaticResource btn_Minsize}"/>
+                <!--最大化和还原-->
+                <ToggleButton Grid.Column="7" IsChecked="True" Margin="10 0 10 0" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_MinSize,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                        Style="{StaticResource tlbtn_MaxsizeAndNormal}"></ToggleButton>
+                <!--关闭-->
+                <Button Grid.Column="8" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_Close,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" Command="{Binding ShutdownProgramCommand.ViewExecuteCmd}"
+                        Style="{StaticResource btn_Close}"></Button>
+            </Grid>
+
+            <!--当前案例名-->
+            <Grid Grid.Row="1" Visibility="{Binding MainNavigation.IsShowCurCaseNameRow,Converter={StaticResource bTov},FallbackValue=Visible,Mode=TwoWay}" x:Name="gd_CaseName">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <!--案例展开按钮-->
+                <CheckBox x:Name="btn_Expand" Background="Transparent" Click="Button_Click_1" IsThreeState="False" Cursor="Hand">
+                    <CheckBox.Style>
+                        <Style TargetType="CheckBox">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="CheckBox">
+                                        <Border Background="{TemplateBinding Background}" BorderThickness="0">
+                                            <ContentPresenter/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </CheckBox.Style>
+                    <TextBlock Text="案例名称" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                </CheckBox>
+                <Button Grid.Column="1" Content="{Binding XPath=ViewLanguage/View_MainWin_DataExport,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" Width="80" Margin="10 0 10 0"/>
+                <Button Grid.Column="2" ToolTip="关闭案例" Width="20" Height="20" Command="{Binding CloseCaseCommand.ViewExecuteCmd}"/>
+
+                <!--案例创建界面-->
+                <Border x:Name="br_CreateCaseView" Grid.Row="1" Grid.ColumnSpan="3" Height="{Binding ActualHeight,ElementName=gd_ViewContent}">
+                    <Border.LayoutTransform>
+                        <TransformGroup>
+                            <ScaleTransform x:Name="br_CreateCaseViewScale" ScaleX="0" ScaleY="0"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Border.LayoutTransform>
+                    <ContentControl Content="{Binding MainNavigation.SubView}"/>
+                </Border>
+            </Grid>
+
+            <!--当前选择设备列表-->
+            <Grid Grid.Row="2" Visibility="{Binding MainNavigation.IsShowDeviceListRow,Converter={StaticResource bTov},FallbackValue=Visible,Mode=TwoWay}" x:Name="gd_Devices">
+                <local:DeviceListView />
+            </Grid>
+
+            <!--视图界面-->
+            <Grid Grid.Row="3" x:Name="gd_ViewContent">
+                <ContentControl Margin="0" Content="{Binding MainNavigation.CurMainView}"></ContentControl>
+            </Grid>
+        </Grid>
+    </Grid>
+</core:UcViewBase>

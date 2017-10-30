@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:control="clr-namespace:XLY.SF.Project.Themes">
+    <!--样式加载-->
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ThemesStyle/WindowStyle/Window.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/ButtonStyle/Button.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/DeviceSelectStyle/DeviceSelectStyle.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/DeviceSelectStyle/DeviceSelectItemStyle.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/ComboBoxStyle/ComboBox.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/ToggleButtonStyle/ToggleButton.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="TextBlock">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+
+</ResourceDictionary>
