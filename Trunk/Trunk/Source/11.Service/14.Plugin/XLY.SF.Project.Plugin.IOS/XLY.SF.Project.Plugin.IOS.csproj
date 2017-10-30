@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contacts\Core\IOSContactsDataParseCoreV1_0.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QQ\Core\IOSQQDataParseCoreV1_0.cs" />
     <Compile Include="WeChat\Core\IOSWeChatDataParseCoreV1_0.cs" />
@@ -99,7 +100,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Call\" />
-    <Folder Include="Contacts\" />
     <Folder Include="Sms\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

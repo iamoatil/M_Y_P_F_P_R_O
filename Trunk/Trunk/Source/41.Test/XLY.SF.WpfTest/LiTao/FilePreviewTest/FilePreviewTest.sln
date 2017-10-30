@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FilePreviewTest", "FilePreviewTest\FilePreviewTest.csproj", "{4AB0C2BE-3D6D-456B-B494-4FFDF7FBC84C}"
 EndProject
@@ -13,11 +13,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Framework.Core.Base"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Framework.BaseUtility", "..\..\..\..\01.Framework\XLY.SF.Framework.BaseUtility\XLY.SF.Framework.BaseUtility.csproj", "{E58B3BAA-0F89-4E6D-B34E-4607DFA8F805}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.UserControls", "..\..\..\..\21.Presentation\UserControls\XLY.SF.Project.UserControls\XLY.SF.Project.UserControls.csproj", "{65336A55-E659-4EC8-8BB6-0D99CEFBA159}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Framework.Language", "..\..\..\..\01.Framework\XLY.SF.Framework.Language\XLY.SF.Framework.Language.csproj", "{95C796FD-57F1-4D2E-927F-4E34EA75E319}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.Domains", "..\..\..\..\11.Service\11.Domains\XLY.SF.Project.Domains\XLY.SF.Project.Domains.csproj", "{68F2D8A3-05A8-4AAA-A9E2-00071188595B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.PreviewFiles", "..\..\..\..\21.Presentation\View\XLY.SF.Project.PreviewFiles\XLY.SF.Project.PreviewFiles.csproj", "{65336A55-E659-4EC8-8BB6-0D99CEFBA159}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,18 +81,6 @@ Global
 		{E58B3BAA-0F89-4E6D-B34E-4607DFA8F805}.Release|x64.Build.0 = Release|x64
 		{E58B3BAA-0F89-4E6D-B34E-4607DFA8F805}.Release|x86.ActiveCfg = Release|Any CPU
 		{E58B3BAA-0F89-4E6D-B34E-4607DFA8F805}.Release|x86.Build.0 = Release|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|x64.Build.0 = Debug|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|x86.Build.0 = Debug|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|Any CPU.Build.0 = Release|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|x64.ActiveCfg = Release|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|x64.Build.0 = Release|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|x86.ActiveCfg = Release|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|x86.Build.0 = Release|Any CPU
 		{95C796FD-57F1-4D2E-927F-4E34EA75E319}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{95C796FD-57F1-4D2E-927F-4E34EA75E319}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95C796FD-57F1-4D2E-927F-4E34EA75E319}.Debug|x64.ActiveCfg = Debug|x64
@@ -117,11 +105,58 @@ Global
 		{68F2D8A3-05A8-4AAA-A9E2-00071188595B}.Release|x64.Build.0 = Release|x64
 		{68F2D8A3-05A8-4AAA-A9E2-00071188595B}.Release|x86.ActiveCfg = Release|x86
 		{68F2D8A3-05A8-4AAA-A9E2-00071188595B}.Release|x86.Build.0 = Release|x86
+		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|x64.Build.0 = Debug|Any CPU
+		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|x86.Build.0 = Debug|Any CPU
+		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|x64.ActiveCfg = Release|Any CPU
+		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|x64.Build.0 = Release|Any CPU
+		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|x86.ActiveCfg = Release|Any CPU
+		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1210DF9F-1108-480C-8251-2CE91BBAEB01}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 6
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://192.168.0.16:8080/tfs/xlyteamprojects
+		SccProjectUniqueName0 = ..\\..\\..\\..\\01.Framework\\XLY.SF.Framework.Log4NetService\\XLY.SF.Framework.Log4NetService.csproj
+		SccProjectName0 = ../../../../01.Framework/XLY.SF.Framework.Log4NetService
+		SccAuxPath0 = http://192.168.0.16:8080/tfs/xlyteamprojects
+		SccLocalPath0 = ..\\..\\..\\..\\01.Framework\\XLY.SF.Framework.Log4NetService
+		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName1 = ..\\..\\..\\..\\01.Framework\\XLY.SF.Framework.Core.Base\\XLY.SF.Framework.Core.Base.csproj
+		SccProjectName1 = ../../../../01.Framework/XLY.SF.Framework.Core.Base
+		SccAuxPath1 = http://192.168.0.16:8080/tfs/xlyteamprojects
+		SccLocalPath1 = ..\\..\\..\\..\\01.Framework\\XLY.SF.Framework.Core.Base
+		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName2 = ..\\..\\..\\..\\01.Framework\\XLY.SF.Framework.BaseUtility\\XLY.SF.Framework.BaseUtility.csproj
+		SccProjectName2 = ../../../../01.Framework/XLY.SF.Framework.BaseUtility
+		SccAuxPath2 = http://192.168.0.16:8080/tfs/xlyteamprojects
+		SccLocalPath2 = ..\\..\\..\\..\\01.Framework\\XLY.SF.Framework.BaseUtility
+		SccProvider2 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName3 = ..\\..\\..\\..\\01.Framework\\XLY.SF.Framework.Language\\XLY.SF.Framework.Language.csproj
+		SccProjectName3 = ../../../../01.Framework/XLY.SF.Framework.Language
+		SccAuxPath3 = http://192.168.0.16:8080/tfs/xlyteamprojects
+		SccLocalPath3 = ..\\..\\..\\..\\01.Framework\\XLY.SF.Framework.Language
+		SccProvider3 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName4 = ..\\..\\..\\..\\11.Service\\11.Domains\\XLY.SF.Project.Domains\\XLY.SF.Project.Domains.csproj
+		SccProjectName4 = ../../../../11.Service/11.Domains/XLY.SF.Project.Domains
+		SccAuxPath4 = http://192.168.0.16:8080/tfs/xlyteamprojects
+		SccLocalPath4 = ..\\..\\..\\..\\11.Service\\11.Domains\\XLY.SF.Project.Domains
+		SccProvider4 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName5 = ..\\..\\..\\..\\21.Presentation\\View\\XLY.SF.Project.PreviewFiles\\XLY.SF.Project.PreviewFiles.csproj
+		SccProjectName5 = ../../../../21.Presentation/View/XLY.SF.Project.PreviewFiles
+		SccAuxPath5 = http://192.168.0.16:8080/tfs/xlyteamprojects
+		SccLocalPath5 = ..\\..\\..\\..\\21.Presentation\\View\\XLY.SF.Project.PreviewFiles
+		SccProvider5 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 	EndGlobalSection
 EndGlobal

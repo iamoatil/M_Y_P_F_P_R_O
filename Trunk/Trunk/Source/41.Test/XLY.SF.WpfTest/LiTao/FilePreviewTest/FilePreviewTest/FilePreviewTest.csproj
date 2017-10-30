@@ -45,10 +45,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="XLY.SF.Project.UserControls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\31.Build\Debug\XLY.SF.Project.UserControls.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -103,6 +99,10 @@
     <ProjectReference Include="..\..\..\..\..\11.Service\11.Domains\XLY.SF.Project.Domains\XLY.SF.Project.Domains.csproj">
       <Project>{68f2d8a3-05a8-4aaa-a9e2-00071188595b}</Project>
       <Name>XLY.SF.Project.Domains</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\21.Presentation\View\XLY.SF.Project.PreviewFiles\XLY.SF.Project.PreviewFiles.csproj">
+      <Project>{65336a55-e659-4ec8-8bb6-0d99cefba159}</Project>
+      <Name>XLY.SF.Project.PreviewFiles</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\TestHelper\TestHelper\TestHelper.csproj">
       <Project>{87d036b6-410d-4d13-8c3f-dc81c43da496}</Project>

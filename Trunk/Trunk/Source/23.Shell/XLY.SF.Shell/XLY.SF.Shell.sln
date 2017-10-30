@@ -108,9 +108,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.UnitTest", "..\..\41
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.WpfTest", "..\..\41.Test\XLY.SF.WpfTest\XLY.SF.WpfTest.csproj", "{FA4759AB-A043-44B2-B634-5EFE402D372D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UserControls", "UserControls", "{DCBF6279-8D80-4908-8749-C93B2D90EEC0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.DataDisplayView", "..\..\21.Presentation\View\XLY.SF.Project.DataDisplayView\XLY.SF.Project.DataDisplayView.csproj", "{26B3C073-8944-4917-A7AF-94A10A5B5A7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.UserControls", "..\..\21.Presentation\UserControls\XLY.SF.Project.UserControls\XLY.SF.Project.UserControls.csproj", "{65336A55-E659-4EC8-8BB6-0D99CEFBA159}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.PreviewFiles", "..\..\21.Presentation\View\XLY.SF.Project.PreviewFiles\XLY.SF.Project.PreviewFiles.csproj", "{65336A55-E659-4EC8-8BB6-0D99CEFBA159}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -541,6 +541,18 @@ Global
 		{FA4759AB-A043-44B2-B634-5EFE402D372D}.Release|x64.Build.0 = Release|Any CPU
 		{FA4759AB-A043-44B2-B634-5EFE402D372D}.Release|x86.ActiveCfg = Release|Any CPU
 		{FA4759AB-A043-44B2-B634-5EFE402D372D}.Release|x86.Build.0 = Release|Any CPU
+		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Debug|x64.Build.0 = Debug|Any CPU
+		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Debug|x86.Build.0 = Debug|Any CPU
+		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Release|x64.ActiveCfg = Release|Any CPU
+		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Release|x64.Build.0 = Release|Any CPU
+		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Release|x86.ActiveCfg = Release|Any CPU
+		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Release|x86.Build.0 = Release|Any CPU
 		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -602,14 +614,14 @@ Global
 		{85971D45-4FAF-4DBD-AD3E-D73E79262011} = {FFAF44CB-A10B-470D-915F-D3315E438D5B}
 		{45BAAD0B-FB78-4E6E-BD80-AB513212FEF1} = {A912AB32-171F-4A1D-8167-B9A844188F02}
 		{FA4759AB-A043-44B2-B634-5EFE402D372D} = {A912AB32-171F-4A1D-8167-B9A844188F02}
-		{DCBF6279-8D80-4908-8749-C93B2D90EEC0} = {D69DACFD-97D4-43B4-A04E-E91B1B3249C5}
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159} = {DCBF6279-8D80-4908-8749-C93B2D90EEC0}
+		{26B3C073-8944-4917-A7AF-94A10A5B5A7C} = {3782972E-78FA-4989-845D-120B6382E7DE}
+		{65336A55-E659-4EC8-8BB6-0D99CEFBA159} = {3782972E-78FA-4989-845D-120B6382E7DE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3A587B29-35A1-47EC-AA7B-9EC40EA8AE9A}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 37
+		SccNumberOfProjects = 38
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.0.16:8080/tfs/xlyteamprojects
 		SccLocalPath0 = .
@@ -752,9 +764,13 @@ Global
 		SccProjectTopLevelParentUniqueName35 = XLY.SF.Shell.sln
 		SccProjectName35 = ../../41.Test/XLY.SF.WpfTest
 		SccLocalPath35 = ..\\..\\41.Test\\XLY.SF.WpfTest
-		SccProjectUniqueName36 = ..\\..\\21.Presentation\\UserControls\\XLY.SF.Project.UserControls\\XLY.SF.Project.UserControls.csproj
+		SccProjectUniqueName36 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.DataDisplayView\\XLY.SF.Project.DataDisplayView.csproj
 		SccProjectTopLevelParentUniqueName36 = XLY.SF.Shell.sln
-		SccProjectName36 = ../../21.Presentation/UserControls/XLY.SF.Project.UserControls
-		SccLocalPath36 = ..\\..\\21.Presentation\\UserControls\\XLY.SF.Project.UserControls
+		SccProjectName36 = ../../21.Presentation/View/XLY.SF.Project.DataDisplayView
+		SccLocalPath36 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.DataDisplayView
+		SccProjectUniqueName37 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.PreviewFiles\\XLY.SF.Project.PreviewFiles.csproj
+		SccProjectTopLevelParentUniqueName37 = XLY.SF.Shell.sln
+		SccProjectName37 = ../../21.Presentation/View/XLY.SF.Project.PreviewFiles
+		SccLocalPath37 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.PreviewFiles
 	EndGlobalSection
 EndGlobal

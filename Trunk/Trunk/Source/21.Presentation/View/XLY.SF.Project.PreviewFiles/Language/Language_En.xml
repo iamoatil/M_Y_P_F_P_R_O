@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FilePreviewLanguage>
+    <Preview>Preview</Preview>
+    <HEX>HEX</HEX>
+    <Start>Start</Start>
+    <Pause>Pause</Pause>
+    <Stop>Stop</Stop>
+  </FilePreviewLanguage>
+</LanguageResource>

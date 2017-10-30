@@ -20,102 +20,142 @@
             <c:IsEnableToVisibilityConverter x:Key="IsEnableToVisibilityConverter" />
         </ResourceDictionary>
     </core:UcViewBase.Resources>
-    <StackPanel Margin="20,40,20,40"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
-        <Grid>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="356" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="560" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="164" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="272" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="1"
+                   Grid.Row="1"
+                   HorizontalAlignment="Center">
             <Grid.RowDefinitions>
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
-                <RowDefinition Height="25" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="28" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="32" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="304" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="200" />
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Text="{Binding XPath=ViewLanguage/View_CaseName,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
-                       Grid.Row="0"
-                       HorizontalAlignment="Right" />
-            <TextBlock Text="{Binding XPath=ViewLanguage/View_CaseNumber,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
-                       Grid.Row="2"
-                       HorizontalAlignment="Right" />
-            <TextBlock Text="{Binding XPath=ViewLanguage/View_CaseType,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
-                       Grid.Row="4"
-                       HorizontalAlignment="Right" />
-            <TextBlock Text="{Binding XPath=ViewLanguage/View_CaseAuthor,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
-                       Grid.Row="6"
-                       HorizontalAlignment="Right" />
-            <TextBlock Text="{Binding XPath=ViewLanguage/View_CaseCreateTime,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
-                       Grid.Row="8"
-                       HorizontalAlignment="Right" />
-            <TextBlock Text="{Binding XPath=ViewLanguage/View_StorePath,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
-                       Grid.Row="10"
-                       HorizontalAlignment="Right" />
-
-            <TextBox Grid.Row="0"
-                     Grid.Column="2"
-                     VerticalContentAlignment="Center"
-                     Text="{Binding CaseInfo.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-            <TextBox Grid.Row="2"
-                     Grid.Column="2"
-                     VerticalContentAlignment="Center"
-                     IsEnabled="{Binding IsEnable,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
-                     Text="{Binding CaseInfo.Number,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-            <ComboBox Grid.Row="4"
-                      Grid.Column="2"
-                      VerticalContentAlignment="Center"
-                      SelectedItem="{Binding CaseInfo.Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBox Grid.Row="6"
-                     Grid.Column="2"
-                     VerticalContentAlignment="Center"
-                     Text="{Binding CaseInfo.Author,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock Grid.Row="8"
-                       Grid.Column="2"
-                       Text="{Binding CaseInfo.Timestamp,Mode=OneWay,StringFormat='yyyy-MM-dd HH:mm:ss'}" />
-            <TextBlock Grid.Row="10"
-                       Grid.Column="2"
-                       TextWrapping="NoWrap"
-                       TextTrimming="CharacterEllipsis"
-                       Text="{Binding CaseInfo.Path,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                       ToolTip="{Binding CaseInfo.Path,Mode=OneWay}"/>
-
-            <Button Content="{Binding XPath=ViewLanguage/View_CaseTypeEdition,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
-                    Grid.Row="4"
-                    Grid.Column="4"
-                    Command="{Binding UpdateCaseTypeCommand}"
-                    Width="40"
-                    Height="20" />
-            <Button Content="..."
-                    Visibility="{Binding IsEnable,Mode=OneWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource IsEnableToVisibilityConverter}}"
-                    Grid.Row="10"
-                    Grid.Column="4"
-                    Width="40"
-                    Height="20" />
+            <TextBlock Text="案例编辑"
+                       FontSize="72"
+                       FontWeight="Black" 
+                       Grid.Row="0" />
+            <Border Height="6"
+                    Width="60"
+                    Background="#379be6"
+                    HorizontalAlignment="Left"
+                    Grid.Row="2" />
+            <TextBlock Grid.Row="4"
+                       TextTrimming="None"
+                       TextWrapping="Wrap"
+                       FontSize="16"
+                       Text="请在右方填入相应的案例信息，选择跳过则默认为当前案例信息" />
+            <TextBlock Grid.Row="6"
+                       FontSize="26"
+                       FontFamily="Impact"
+                       Text="INFORMATION" />
         </Grid>
-        <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Center"
-                    Margin="0,40,0,0">
-            <Button Content="{Binding XPath=ViewLanguage/View_CaseCreationConfirm,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
-                    Command="{Binding ConfirmConmmand}"
-                    Width="100"
-                    Height="40" />
-            <Button Content="{Binding XPath=ViewLanguage/View_CaseCreationSkip,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
-                    Command="{Binding SkpConmmand}"
-                    Margin="20,0,0,0"
-                    Width="100"
-                    Height="40" />
+        <StackPanel Grid.Column="3"
+                    Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="60" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding XPath=ViewLanguage/View_CaseName,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                           Grid.Row="0"
+                           HorizontalAlignment="Right" />
+                <TextBlock Text="{Binding XPath=ViewLanguage/View_CaseNumber,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                           Grid.Row="2"
+                           HorizontalAlignment="Right" />
+                <TextBlock Text="{Binding XPath=ViewLanguage/View_CaseType,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                           Grid.Row="4"
+                           HorizontalAlignment="Right" />
+                <TextBlock Text="{Binding XPath=ViewLanguage/View_CaseAuthor,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                           Grid.Row="6"
+                           HorizontalAlignment="Right" />
+                <TextBlock Text="{Binding XPath=ViewLanguage/View_CaseCreateTime,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                           Grid.Row="8"
+                           HorizontalAlignment="Right" />
+                <TextBlock Text="{Binding XPath=ViewLanguage/View_StorePath,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                           Grid.Row="10"
+                           HorizontalAlignment="Right" />
+
+                <TextBox Grid.Row="0"
+                         Grid.Column="2"
+                         VerticalContentAlignment="Center"
+                         Text="{Binding CaseInfo.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Grid.Row="2"
+                         Grid.Column="2"
+                         VerticalContentAlignment="Center"
+                         IsEnabled="{Binding IsEnable,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding CaseInfo.Number,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                <ComboBox Grid.Row="4"
+                          Grid.Column="2"
+                          VerticalContentAlignment="Center"
+                          SelectedItem="{Binding CaseInfo.Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Grid.Row="6"
+                         Grid.Column="2"
+                         VerticalContentAlignment="Center"
+                         Text="{Binding CaseInfo.Author,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="8"
+                           Grid.Column="2"
+                           Text="{Binding CaseInfo.Timestamp,Mode=OneWay,StringFormat='yyyy-MM-dd HH:mm:ss'}" />
+                <TextBlock Grid.Row="10"
+                           Grid.Column="2"
+                           TextWrapping="NoWrap"
+                           TextTrimming="CharacterEllipsis"
+                           Text="{Binding CaseInfo.Path,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                           ToolTip="{Binding CaseInfo.Path,Mode=OneWay}" />
+
+                <Button Content="{Binding XPath=ViewLanguage/View_CaseTypeEdition,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                        Grid.Row="4"
+                        Grid.Column="4"
+                        Command="{Binding UpdateCaseTypeCommand}"
+                        Width="40"
+                        Height="20" />
+                <Button Content="..."
+                        Visibility="{Binding IsEnable,Mode=OneWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource IsEnableToVisibilityConverter}}"
+                        Grid.Row="10"
+                        Grid.Column="4"
+                        Width="40"
+                        Height="20" />
+            </Grid>
+            <StackPanel Margin="0,28,0,0">
+                <Button Content="{Binding XPath=ViewLanguage/View_CaseCreationConfirm,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                        Command="{Binding ConfirmConmmand}"
+                        Height="60" />
+                <Button Content="{Binding XPath=ViewLanguage/View_CaseCreationSkip,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                        Command="{Binding SkpConmmand}"
+                        Margin="0,10,0,0"
+                        Height="60" />
+            </StackPanel>
         </StackPanel>
-    </StackPanel>
+    </Grid>
 </core:UcViewBase>

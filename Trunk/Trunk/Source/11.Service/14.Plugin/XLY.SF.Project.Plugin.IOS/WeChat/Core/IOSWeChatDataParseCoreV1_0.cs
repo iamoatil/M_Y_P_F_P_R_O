@@ -135,7 +135,7 @@ namespace XLY.SF.Project.Plugin.IOS
         /// 解析微信数据
         /// </summary>
         /// <returns></returns>
-        public TreeNode BiuldTree()
+        public TreeNode BuildTree()
         {
             TreeNode rootNode = new TreeNode();
             try
