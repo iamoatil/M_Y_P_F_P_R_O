@@ -1,7 +1,7 @@
 ﻿<Window x:Class="FilePreviewTest.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:pre="clr-namespace:XLY.SF.Project.UserControls.PreviewFile;assembly=XLY.SF.Project.UserControls"
+        xmlns:pre="clr-namespace:XLY.SF.Project.PreviewFiles.UI;assembly=XLY.SF.Project.PreviewFiles"
         Title="MainWindow" Height="350" Width="525"
     DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
