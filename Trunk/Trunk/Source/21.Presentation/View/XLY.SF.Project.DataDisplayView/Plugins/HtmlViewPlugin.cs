@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Core.Base.MefIoc;
@@ -27,7 +28,7 @@ namespace XLY.SF.Project.DataDisplayView
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class HtmlViewPlugin : AbstractDataViewPlugin
     {
-        public override Control GetControl(DataViewPluginArgument arg)
+        public override FrameworkElement GetControl(DataViewPluginArgument arg)
         {
             var plugin = PluginInfo as DataViewPluginInfo;
             HtmlViewControl ctrl = new HtmlViewControl(plugin.ScriptObject, arg.CurrentNode.Items);

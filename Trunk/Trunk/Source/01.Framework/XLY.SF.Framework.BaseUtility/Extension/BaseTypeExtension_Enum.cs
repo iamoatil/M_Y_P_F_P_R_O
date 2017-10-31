@@ -151,5 +151,32 @@ namespace XLY.SF.Framework.BaseUtility
         }
         #endregion
 
+        #region ToEnumByValue
+
+        /// <summary>
+        /// 转换为枚举对象(不适用于位域值)
+        /// </summary>
+        public static T ToEnumByValue<T>(this object value)
+        {
+            return value.GetEnumNameByValue<T>().ToEnum<T>();
+        }
+
+        #endregion
+
+        #region GetEnumNameByValue：通过枚举的值获取对应的枚举名称
+        /// <summary>
+        /// 通过枚举的值获取对应的枚举名称
+        /// </summary>
+        public static string GetEnumNameByValue<T>(this object value)
+        {
+            Type type = typeof(T);
+            if (type.IsEnum)
+            {
+                return Enum.GetName(type, value);
+            }
+            throw new InvalidCastException("必须是枚举类型才能获取枚举名称。");
+        }
+        #endregion
+
     }
 }

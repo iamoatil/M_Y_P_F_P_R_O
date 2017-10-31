@@ -3,9 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-                 xmlns:local="clr-namespace:XLY.SF.Project.Views.Main"
+             xmlns:local="clr-namespace:XLY.SF.Project.Views.Main"
+		     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
              xmlns:Lang="clr-namespace:XLY.SF.Framework.Language.PageLanguage;assembly=XLY.SF.Framework.Language"
              xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
+             xmlns:sys="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
              mc:Ignorable="d"
              Loaded="UcViewBase_Loaded" SizeChanged="UcViewBase_SizeChanged">
     <core:UcViewBase.Resources>
@@ -213,7 +216,88 @@
                     </StackPanel>
                 </Grid>
                 <!--菜单-->
-                <ComboBox Grid.Column="5" Margin="0 0 10 0" Style="{StaticResource cb_MainMenu}">
+                <ComboBox Grid.Column="5" Margin="0 0 10 0" Template="{DynamicResource cb_MainCt}" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <ComboBox.Resources>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="Height" Value="42"/>
+                            <Setter Property="Width" Value="200"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Template" Value="{StaticResource cb_MainMenuItem}"/>
+                        </Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Style>
+                    </ComboBox.Resources>
+                    <ComboBoxItem x:Name="cbi_UserManagement">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/UserManagementIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
+                            <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuUserManagement,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" VerticalAlignment="Center"></TextBlock>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Name="cbi_CaseManagement">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/CaseManagementIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
+                            <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuCaseManagement,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Name="cbi_SysSetting">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/SysSettingsIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
+                            <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuSysSettings,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Name="cbi_PluginManagement">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/PluginManagementIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
+                            <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuPluginManagement,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Name="cbi_SysLog">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/SysLogIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
+                            <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuSysLog,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Name="cbi_SysEmpower">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/SysEmpowerIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
+                            <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuSysEmpower,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <!--分割线，不用操作-->
+                    <ComboBoxItem Height="2" Background="#FF343D5D" IsEnabled="False"/>
+                    <ComboBoxItem x:Name="cbi_UserFeedback">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/UserFeedback.png" Margin="26 0 10 0" Width="16" Height="16"/>
+                            <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuUserFeedback,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Name="cbi_SysUpdate">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/SysUpdateIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
+                            <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuSysUpdate,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Name="cbi_Help">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/HelpIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
+                            <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuHelp,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Name="cbi_About">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/AboutIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
+                            <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuAbout,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                        </StackPanel>
+                    </ComboBoxItem>
+                    <ComboBoxItem x:Name="cbi_LogoutSys">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/LogoutSysIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
+                            <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuLogout,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                        </StackPanel>
+                    </ComboBoxItem>
                 </ComboBox>
                 <!--最小化-->
                 <Button Grid.Column="6" Click="Button_Click" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_MinSize,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
@@ -227,14 +311,14 @@
             </Grid>
 
             <!--当前案例名-->
-            <Grid Grid.Row="1" Visibility="{Binding MainNavigation.IsShowCurCaseNameRow,Converter={StaticResource bTov},FallbackValue=Visible,Mode=TwoWay}" x:Name="gd_CaseName">
+            <Grid Grid.Row="1" Margin="30 0 0 0" Visibility="{Binding MainNavigation.IsShowCurCaseNameRow,Converter={StaticResource bTov},FallbackValue=Visible,Mode=TwoWay}" x:Name="gd_CaseName">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="66"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <!--案例展开按钮-->
@@ -252,10 +336,12 @@
                             </Setter>
                         </Style>
                     </CheckBox.Style>
-                    <TextBlock Text="案例名称" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                    <TextBlock Text="{Binding CurCaseName,FallbackValue=案例名称}" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
                 </CheckBox>
-                <Button Grid.Column="1" Content="{Binding XPath=ViewLanguage/View_MainWin_DataExport,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" Width="80" Margin="10 0 10 0"/>
-                <Button Grid.Column="2" ToolTip="关闭案例" Width="20" Height="20" Command="{Binding CloseCaseCommand.ViewExecuteCmd}"/>
+                <Button Grid.Column="1" Style="{StaticResource btn_TransparentBg}" Height="30" Width="90" Content="{Binding XPath=ViewLanguage/View_MainWin_DataExport,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" Margin="10 0 10 0"/>
+                <Button Grid.Column="2" Style="{StaticResource btn_Close}" 
+                        ToolTip="{Binding XPath=ViewLanguage/View_MainWin_ToolTipCloseCase,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" 
+                        Command="{Binding CloseCaseCommand.ViewExecuteCmd}"/>
 
                 <!--案例创建界面-->
                 <Border x:Name="br_CreateCaseView" Grid.Row="1" Grid.ColumnSpan="3" Height="{Binding ActualHeight,ElementName=gd_ViewContent}">
@@ -281,5 +367,42 @@
                 <ContentControl Margin="0" Content="{Binding MainNavigation.CurMainView}"></ContentControl>
             </Grid>
         </Grid>
+
+        <!--界面触发器-->
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Selected" SourceObject="{Binding ElementName=cbi_UserManagement}">
+                <i:InvokeCommandAction Command="{Binding DataContext.UserManagementCommand.ViewExecuteCmd,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=core:UcViewBase}}"/>
+            </i:EventTrigger>
+            <i:EventTrigger EventName="Selected" SourceObject="{Binding ElementName=cbi_CaseManagement}">
+                <i:InvokeCommandAction Command="{Binding DataContext.CaseManagementCommand.ViewExecuteCmd,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=core:UcViewBase}}"/>
+            </i:EventTrigger>
+            <i:EventTrigger EventName="Selected" SourceObject="{Binding ElementName=cbi_SysSetting}">
+                <i:InvokeCommandAction Command="{Binding DataContext.SysSettingCommand.ViewExecuteCmd,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=core:UcViewBase}}"/>
+            </i:EventTrigger>
+            <i:EventTrigger EventName="Selected" SourceObject="{Binding ElementName=cbi_PluginManagement}">
+                <i:InvokeCommandAction Command="{Binding DataContext.PluginManagementCommand.ViewExecuteCmd,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=core:UcViewBase}}"/>
+            </i:EventTrigger>
+            <i:EventTrigger EventName="Selected" SourceObject="{Binding ElementName=cbi_SysLog}">
+                <i:InvokeCommandAction Command="{Binding DataContext.SysLogCommand.ViewExecuteCmd,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=core:UcViewBase}}"/>
+            </i:EventTrigger>
+            <i:EventTrigger EventName="Selected" SourceObject="{Binding ElementName=cbi_SysEmpower}">
+                <i:InvokeCommandAction Command="{Binding DataContext.SysEmpowerCommand.ViewExecuteCmd,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=core:UcViewBase}}"/>
+            </i:EventTrigger>
+            <i:EventTrigger EventName="Selected" SourceObject="{Binding ElementName=cbi_UserFeedback}">
+                <i:InvokeCommandAction Command="{Binding DataContext.UserFeedbackCommand.ViewExecuteCmd,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=core:UcViewBase}}"/>
+            </i:EventTrigger>
+            <i:EventTrigger EventName="Selected" SourceObject="{Binding ElementName=cbi_SysUpdate}">
+                <i:InvokeCommandAction Command="{Binding DataContext.SysUpdateCommand.ViewExecuteCmd,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=core:UcViewBase}}"/>
+            </i:EventTrigger>
+            <i:EventTrigger EventName="Selected" SourceObject="{Binding ElementName=cbi_Help}">
+                <i:InvokeCommandAction Command="{Binding DataContext.HelpCommand.ViewExecuteCmd,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=core:UcViewBase}}"/>
+            </i:EventTrigger>
+            <i:EventTrigger EventName="Selected" SourceObject="{Binding ElementName=cbi_About}">
+                <i:InvokeCommandAction Command="{Binding DataContext.AboutCommand.ViewExecuteCmd,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=core:UcViewBase}}"/>
+            </i:EventTrigger>
+            <i:EventTrigger EventName="Selected" SourceObject="{Binding ElementName=cbi_LogoutSys}">
+                <i:InvokeCommandAction Command="{Binding DataContext.LogoutSysCommand.ViewExecuteCmd,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=core:UcViewBase}}"/>
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
     </Grid>
 </core:UcViewBase>

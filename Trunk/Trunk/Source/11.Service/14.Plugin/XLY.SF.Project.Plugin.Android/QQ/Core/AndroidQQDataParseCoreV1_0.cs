@@ -24,7 +24,7 @@ namespace XLY.SF.Project.Plugin.Android
     /// <summary>
     /// 安卓QQ数据解析核心类
     /// </summary>
-    public class AndroidQQDataParseCoreV1_0
+    internal class AndroidQQDataParseCoreV1_0
     {
         /// <summary>
         /// 安卓QQ数据解析核心类

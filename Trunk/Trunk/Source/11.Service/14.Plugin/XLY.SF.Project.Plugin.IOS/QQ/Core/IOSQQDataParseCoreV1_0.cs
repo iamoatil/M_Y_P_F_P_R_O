@@ -27,7 +27,7 @@ namespace XLY.SF.Project.Plugin.IOS
     /// <summary>
     /// IOS QQ数据解析
     /// </summary>
-    public class IOSQQDataParseCoreV1_0
+    internal class IOSQQDataParseCoreV1_0
     {
         /// <summary>
         /// IOS QQ数据解析核心类

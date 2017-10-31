@@ -6,12 +6,13 @@
     <ControlTemplate x:Key="btn_EmptyCT" TargetType="Button">
         <Border Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="{TemplateBinding BorderThickness}">
+                BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding Border.CornerRadius}">
             <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
         </Border>
     </ControlTemplate>
 
+    <!--控件模版-->
     <!--首页按钮-->
     <ControlTemplate x:Key="btn_HomePageCT" TargetType="{x:Type Button}">
         <Grid x:Name="gd">
@@ -37,7 +38,6 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-
     <!--首页播放按钮-->
     <ControlTemplate x:Key="btn_HomePagePlay" TargetType="Button">
         <Border x:Name="br" Background="#379be6" CornerRadius="20">
@@ -54,7 +54,6 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-
     <!--主界面工具箱按钮-->
     <ControlTemplate x:Key="btn_MainTools" TargetType="Button">
         <Image x:Name="img_bg" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/ToolKit_normal.png"/>
@@ -68,6 +67,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
+    <!--样式-->
     <!--主界面最小化-->
     <Style x:Key="btn_Minsize" TargetType="Button">
         <Setter Property="BorderThickness" Value="0"/>
@@ -126,7 +126,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-
+    <!--设备选择-->
     <Style x:Key="btn_DeviceSelect"
            TargetType="{x:Type Button}">
         <Setter Property="Background"
@@ -156,4 +156,24 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <!--首页导出按钮-->
+    <Style x:Key="btn_TransparentBg" TargetType="Button">
+        <Setter Property="Template" Value="{StaticResource btn_EmptyCT}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="Foreground" Value="#c8cdd7"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Border.CornerRadius" Value="5"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Background" Value="#c8cdd7"/>
+                <Setter Property="Foreground" Value="#414b69"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter Property="Background" Value="#aab4be"/>
+                <Setter Property="Foreground" Value="#414b69"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
 </ResourceDictionary>

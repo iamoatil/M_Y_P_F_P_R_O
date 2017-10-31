@@ -15,6 +15,20 @@
     <View_MainWin_MinSize>最小化</View_MainWin_MinSize>
     <View_MainWin_Close>关闭</View_MainWin_Close>
     <View_MainWin_DataExport>数据导出</View_MainWin_DataExport>
+    <View_MainWin_ToolTipCloseCase>关闭案例</View_MainWin_ToolTipCloseCase>
+    <View_MainWin_OpLogShutdown>结束程序</View_MainWin_OpLogShutdown>
+    <!--主界面菜单语言-->
+    <View_MainWin_MenuUserManagement>用户管理</View_MainWin_MenuUserManagement>
+    <View_MainWin_MenuCaseManagement>案例管理</View_MainWin_MenuCaseManagement>
+    <View_MainWin_MenuSysSettings>系统设置</View_MainWin_MenuSysSettings>
+    <View_MainWin_MenuPluginManagement>插件管理</View_MainWin_MenuPluginManagement>
+    <View_MainWin_MenuSysLog>系统日志</View_MainWin_MenuSysLog>
+    <View_MainWin_MenuSysEmpower>系统授权</View_MainWin_MenuSysEmpower>
+    <View_MainWin_MenuUserFeedback>用户反馈</View_MainWin_MenuUserFeedback>
+    <View_MainWin_MenuSysUpdate>升级</View_MainWin_MenuSysUpdate>
+    <View_MainWin_MenuHelp>帮助</View_MainWin_MenuHelp>
+    <View_MainWin_MenuAbout>关于我们</View_MainWin_MenuAbout>
+    <View_MainWin_MenuLogout>注销</View_MainWin_MenuLogout>
 
     <!--选择文件、文件夹、保存-->
     <View_SelectControl_OpenTitle>打开文件</View_SelectControl_OpenTitle>

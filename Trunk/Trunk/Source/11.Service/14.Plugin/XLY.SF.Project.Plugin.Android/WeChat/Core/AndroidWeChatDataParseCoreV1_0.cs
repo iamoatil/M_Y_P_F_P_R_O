@@ -26,7 +26,7 @@ namespace XLY.SF.Project.Plugin.Android
     /// <summary>
     /// 安卓微信数据解析核心类
     /// </summary>
-    public class AndroidWeChatDataParseCoreV1_0
+    internal class AndroidWeChatDataParseCoreV1_0
     {
         /// <summary>
         /// 安卓微信数据解析核心类

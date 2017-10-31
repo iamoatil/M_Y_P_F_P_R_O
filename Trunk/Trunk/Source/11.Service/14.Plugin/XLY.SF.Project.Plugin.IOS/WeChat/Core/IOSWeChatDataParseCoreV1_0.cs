@@ -26,7 +26,7 @@ namespace XLY.SF.Project.Plugin.IOS
     /// <summary>
     /// IOS微信数据解析
     /// </summary>
-    public class IOSWeChatDataParseCoreV1_0
+    internal class IOSWeChatDataParseCoreV1_0
     {
         /// <summary>
         /// IOS微信数据解析核心类

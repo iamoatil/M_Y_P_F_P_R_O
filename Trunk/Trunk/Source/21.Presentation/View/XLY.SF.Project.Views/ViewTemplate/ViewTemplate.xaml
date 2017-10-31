@@ -20,6 +20,6 @@
         </ResourceDictionary>
     </core:UcViewBase.Resources>
     <Grid>
-            
+
     </Grid>
 </core:UcViewBase>

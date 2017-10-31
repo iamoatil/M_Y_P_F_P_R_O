@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.Domains;
@@ -22,6 +23,8 @@ namespace XLY.SF.Project.DataDisplayView
     public abstract class AbstractDataViewPlugin : IPlugin
     {
         public IPluginInfo PluginInfo { get; set; }
+
+        public const string XLY_LAYOUT_KEY = "__LayOut";
 
         public object Execute(object arg, IAsyncProgress progress)
         {
@@ -44,7 +47,15 @@ namespace XLY.SF.Project.DataDisplayView
             SelectedDataChanged?.Invoke(data);
         }
 
-        public abstract Control GetControl(DataViewPluginArgument arg);
+        public abstract FrameworkElement GetControl(DataViewPluginArgument arg);
+
+        public FrameworkElement ToControl(DataViewPluginArgument arg, DelgateDataViewSelectedItemChanged e)
+        {
+            SelectedDataChanged += e;
+            TabItem ti = new TabItem() { Header = PluginInfo.Name };
+            ti.Content = GetControl(arg);
+            return ti;
+        }
     }
 
     /// <summary>

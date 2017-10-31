@@ -81,7 +81,7 @@
     <Compile Include="AsyncResult\DefaultAsyncProgress.cs" />
     <Compile Include="Contract\AbstractDataItem.cs" />
     <Compile Include="Contract\AbstractDataSource.cs" />
-    <Compile Include="Contract\CallDataParse.cs" />
+    <Compile Include="Contract\CallDataSource.cs" />
     <Compile Include="Contract\ContactDataSource.cs" />
     <Compile Include="Contract\DataItemContract\IFile.cs" />
     <Compile Include="Contract\DataItemContract\IMail.cs" />
@@ -105,7 +105,7 @@
     <Compile Include="Contract\ITraverse.cs" />
     <Compile Include="Contract\ITree.cs" />
     <Compile Include="Contract\SimpleDataSource.cs" />
-    <Compile Include="Contract\SmsDataParse.cs" />
+    <Compile Include="Contract\SmsDataSource.cs" />
     <Compile Include="DomainEntity\Device\LocalFileDevice.cs" />
     <Compile Include="DomainEntity\Device\UsbDevice.cs" />
     <Compile Include="DomainEntity\Device\UsbDeviceInfo.cs" />

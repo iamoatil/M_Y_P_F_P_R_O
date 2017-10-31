@@ -11,6 +11,7 @@ using XLY.SF.Project.Models;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Project.ViewDomain.VModel.Main;
 using System.IO;
+using XLY.SF.Framework.Language;
 
 
 /*************************************************
@@ -26,7 +27,7 @@ namespace XLY.SF.Project.ViewModels.Main
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class MainViewModel : ViewModelBase
     {
-        #region 属性
+        #region Properties
 
         #region private
 
@@ -46,6 +47,28 @@ namespace XLY.SF.Project.ViewModels.Main
         /// 主界面导航管理器
         /// </summary>
         public MainNavigationManager MainNavigation { get; set; }
+
+        #region 当前案例名称
+
+        private string _curCaseName;
+        /// <summary>
+        /// 当前案例名称
+        /// </summary>
+        public string CurCaseName
+        {
+            get
+            {
+                return this._curCaseName;
+            }
+
+            set
+            {
+                this._curCaseName = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        #endregion
 
         #region Model
 
@@ -81,6 +104,55 @@ namespace XLY.SF.Project.ViewModels.Main
         /// </summary>
         public ProxyRelayCommand CloseCaseCommand { get; set; }
 
+        #region 菜单功能
+
+        /// <summary>
+        /// 用户管理
+        /// </summary>
+        public ProxyRelayCommand UserManagementCommand { get; set; }
+        /// <summary>
+        /// 案例管理
+        /// </summary>
+        public ProxyRelayCommand CaseManagementCommand { get; set; }
+        /// <summary>
+        /// 系统设置
+        /// </summary>
+        public ProxyRelayCommand SysSettingCommand { get; set; }
+        /// <summary>
+        /// 插件管理
+        /// </summary>
+        public ProxyRelayCommand PluginManagementCommand { get; set; }
+        /// <summary>
+        /// 系统日志
+        /// </summary>
+        public ProxyRelayCommand SysLogCommand { get; set; }
+        /// <summary>
+        /// 系统授权
+        /// </summary>
+        public ProxyRelayCommand SysEmpowerCommand { get; set; }
+        /// <summary>
+        /// 用户反馈
+        /// </summary>
+        public ProxyRelayCommand UserFeedbackCommand { get; set; }
+        /// <summary>
+        /// 升级
+        /// </summary>
+        public ProxyRelayCommand SysUpdateCommand { get; set; }
+        /// <summary>
+        /// 帮助
+        /// </summary>
+        public ProxyRelayCommand HelpCommand { get; set; }
+        /// <summary>
+        /// 关于我们
+        /// </summary>
+        public ProxyRelayCommand AboutCommand { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        public ProxyRelayCommand LogoutSysCommand { get; set; }
+
+        #endregion
+
         #endregion
 
         #endregion
@@ -94,11 +166,19 @@ namespace XLY.SF.Project.ViewModels.Main
             _messageBox = messageBox;
 
             MainNavigation = new MainNavigationManager();
+            SystemContext.Instance.CaseChanged += Instance_CaseChanged;
 
             //事件注册
             ShutdownProgramCommand = new ProxyRelayCommand(ExecuteShutdownProgramCommand);
             CloseCaseCommand = new ProxyRelayCommand(ExecuteCloseCaseCommand);
-            
+            UserManagementCommand = new ProxyRelayCommand(ExecuteUserManagementCommand);
+
+
+        }
+
+        private void Instance_CaseChanged(object sender, PropertyChangedEventArgs<Project.CaseManagement.Case> e)
+        {
+            CurCaseName = e.NewValue.Name;
         }
 
         #endregion
@@ -125,21 +205,31 @@ namespace XLY.SF.Project.ViewModels.Main
 
         #region ExecuteCommand
 
+        #region 菜单操作
+
+        //用户管理
+        private string ExecuteUserManagementCommand()
+        {
+            return "打开用户管理";
+        }
+
+        #endregion
+
         //关程序
         private string ExecuteShutdownProgramCommand()
         {
             SysCommonMsgArgs<string> args = new SysCommonMsgArgs<string>(SystemKeys.ShutdownProgram);
             base.MessageAggregation.SendSysMsg(args);
-            return "关闭程序";
+            return LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ViewLanguage_View_MainWin_OpLogShutdown);
         }
 
         //关闭按钮
         private string ExecuteCloseCaseCommand()
         {
+            string tmpCaseName = SystemContext.Instance.CurrentCase?.Name;
             SystemContext.Instance.CurrentCase = null;
             base.NavigationForMainWindow(ExportKeys.HomePageView);
-
-            return "关闭案例";
+            return string.Format("{0}{1}", LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ViewLanguage_View_MainWin_ToolTipCloseCase), tmpCaseName);
         }
 
         #endregion

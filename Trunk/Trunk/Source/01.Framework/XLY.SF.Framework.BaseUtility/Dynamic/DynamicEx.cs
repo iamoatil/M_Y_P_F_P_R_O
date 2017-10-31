@@ -21,7 +21,7 @@ namespace XLY.SF.Framework.BaseUtility
         /// <summary>
         /// 存储成员键值的字典
         /// </summary>
-        private Dictionary<string, object> Members;
+        public Dictionary<string, object> Members { get; set; }
 
         public DynamicEx()
         {

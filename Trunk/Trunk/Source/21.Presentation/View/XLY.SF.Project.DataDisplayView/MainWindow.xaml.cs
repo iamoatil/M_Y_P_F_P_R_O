@@ -12,6 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using XLY.SF.Framework.Core.Base.MefIoc;
+using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Adapter;
+using XLY.SF.Project.ViewDomain.MefKeys;
 
 namespace XLY.SF.Project.DataDisplayView
 {
@@ -23,6 +27,20 @@ namespace XLY.SF.Project.DataDisplayView
         public MainWindow()
         {
             InitializeComponent();
+
+            IocManagerSingle.Instance.LoadParts(this.GetType().Assembly);
+            var view = IocManagerSingle.Instance.GetViewPart(ExportKeys.DataDisplayView);
+            view.DataSource.LoadViewModel();
+            this.Content = view;
+
+            PluginAdapter.Instance.Initialization(new DefaultAsyncProgress());
+
+            var plugin = IocManagerSingle.Instance.GetMetaParts<IPlugin, IMetaPluginType>(PluginExportKeys.PluginScriptKey);
+            foreach (var loader in plugin)
+            {
+
+            }
+            var pls = DataViewPluginAdapter.Instance.Plugins;
         }
     }
 }

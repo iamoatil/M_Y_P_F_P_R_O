@@ -66,6 +66,91 @@ public class Languagekeys
 		public const string ViewLanguage_View_MainWin_DataExport = "LanguageResource/ViewLanguage/View_MainWin_DataExport";
 				
         /// <summary>
+        /// 关闭案例
+        /// </summary>
+		public const string ViewLanguage_View_MainWin_ToolTipCloseCase = "LanguageResource/ViewLanguage/View_MainWin_ToolTipCloseCase";
+				
+        /// <summary>
+        /// 关闭案例
+        /// </summary>
+		public const string ViewLanguage_View_MainWin_OpLogCloseCase = "LanguageResource/ViewLanguage/View_MainWin_OpLogCloseCase";
+				
+        /// <summary>
+        /// 结束程序
+        /// </summary>
+		public const string ViewLanguage_View_MainWin_OpLogShutdown = "LanguageResource/ViewLanguage/View_MainWin_OpLogShutdown";
+				
+        /// <summary>
+        /// 用户管理
+        /// </summary>
+		public const string ViewLanguage_View_MainWin_MenuUserManagement = "LanguageResource/ViewLanguage/View_MainWin_MenuUserManagement";
+				
+        /// <summary>
+        /// 案例管理
+        /// </summary>
+		public const string ViewLanguage_View_MainWin_MenuCaseManagement = "LanguageResource/ViewLanguage/View_MainWin_MenuCaseManagement";
+				
+        /// <summary>
+        /// 系统设置
+        /// </summary>
+		public const string ViewLanguage_View_MainWin_MenuSysSettings = "LanguageResource/ViewLanguage/View_MainWin_MenuSysSettings";
+				
+        /// <summary>
+        /// 插件管理
+        /// </summary>
+		public const string ViewLanguage_View_MainWin_MenuPluginManagement = "LanguageResource/ViewLanguage/View_MainWin_MenuPluginManagement";
+				
+        /// <summary>
+        /// 系统日志
+        /// </summary>
+		public const string ViewLanguage_View_MainWin_MenuSysLog = "LanguageResource/ViewLanguage/View_MainWin_MenuSysLog";
+				
+        /// <summary>
+        /// 系统授权
+        /// </summary>
+		public const string ViewLanguage_View_MainWin_MenuSysEmpower = "LanguageResource/ViewLanguage/View_MainWin_MenuSysEmpower";
+				
+        /// <summary>
+        /// 用户反馈
+        /// </summary>
+		public const string ViewLanguage_View_MainWin_MenuUserFeedback = "LanguageResource/ViewLanguage/View_MainWin_MenuUserFeedback";
+				
+        /// <summary>
+        /// 升级
+        /// </summary>
+		public const string ViewLanguage_View_MainWin_MenuSysUpdate = "LanguageResource/ViewLanguage/View_MainWin_MenuSysUpdate";
+				
+        /// <summary>
+        /// 帮助
+        /// </summary>
+		public const string ViewLanguage_View_MainWin_MenuHelp = "LanguageResource/ViewLanguage/View_MainWin_MenuHelp";
+				
+        /// <summary>
+        /// 关于我们
+        /// </summary>
+		public const string ViewLanguage_View_MainWin_MenuAbout = "LanguageResource/ViewLanguage/View_MainWin_MenuAbout";
+				
+        /// <summary>
+        /// 注销
+        /// </summary>
+		public const string ViewLanguage_View_MainWin_MenuLogout = "LanguageResource/ViewLanguage/View_MainWin_MenuLogout";
+				
+        /// <summary>
+        /// 打开文件
+        /// </summary>
+		public const string ViewLanguage_View_SelectControl_OpenTitle = "LanguageResource/ViewLanguage/View_SelectControl_OpenTitle";
+				
+        /// <summary>
+        /// 保存文件
+        /// </summary>
+		public const string ViewLanguage_View_SelectControl_SaveTitle = "LanguageResource/ViewLanguage/View_SelectControl_SaveTitle";
+				
+        /// <summary>
+        /// 选择文件夹
+        /// </summary>
+		public const string ViewLanguage_View_SelectControl_SelectFolderTitle = "LanguageResource/ViewLanguage/View_SelectControl_SelectFolderTitle";
+				
+        /// <summary>
         /// 打开
         /// </summary>
 		public const string ViewLanguage_View_HomePageOpen = "LanguageResource/ViewLanguage/View_HomePageOpen";
@@ -106,7 +191,7 @@ public class Languagekeys
 		public const string ViewLanguage_View_HomePageMore = "LanguageResource/ViewLanguage/View_HomePageMore";
 				
         /// <summary>
-        /// 案例名
+        /// 案例名称
         /// </summary>
 		public const string ViewLanguage_View_CaseName = "LanguageResource/ViewLanguage/View_CaseName";
 				
@@ -159,12 +244,12 @@ public class Languagekeys
         /// 案例编号
         /// </summary>
 		public const string ViewLanguage_View_CaseNumber = "LanguageResource/ViewLanguage/View_CaseNumber";
-								
+				
         /// <summary>
         /// 案例类型
         /// </summary>
 		public const string ViewLanguage_View_CaseType = "LanguageResource/ViewLanguage/View_CaseType";
-								
+				
         /// <summary>
         /// 存放路径
         /// </summary>
@@ -199,6 +284,36 @@ public class Languagekeys
         /// 案例不存在
         /// </summary>
 		public const string ViewLanguage_View_CaseNotExist = "LanguageResource/ViewLanguage/View_CaseNotExist";
+				
+        /// <summary>
+        /// 至
+        /// </summary>
+		public const string ViewLanguage_View_CaseListTimeTo = "LanguageResource/ViewLanguage/View_CaseListTimeTo";
+				
+        /// <summary>
+        /// 删除
+        /// </summary>
+		public const string ViewLanguage_View_CaseListDelete = "LanguageResource/ViewLanguage/View_CaseListDelete";
+				
+        /// <summary>
+        /// 搜索
+        /// </summary>
+		public const string ViewLanguage_View_CaseListSearch = "LanguageResource/ViewLanguage/View_CaseListSearch";
+				
+        /// <summary>
+        /// 打开
+        /// </summary>
+		public const string ViewLanguage_View_CaseOpen = "LanguageResource/ViewLanguage/View_CaseOpen";
+				
+        /// <summary>
+        /// 序号
+        /// </summary>
+		public const string ViewLanguage_View_CaseListIndex = "LanguageResource/ViewLanguage/View_CaseListIndex";
+				
+        /// <summary>
+        /// 
+        /// </summary>
+		public const string ViewLanguage_View_Operation1 = "LanguageResource/ViewLanguage/View_Operation1";
 				
         /// <summary>
         /// 错误消息
@@ -789,6 +904,31 @@ public class Languagekeys
         /// 
         /// </summary>
 		public const string DescAttributeLanguage_Test = "LanguageResource/DescAttributeLanguage/Test";
+				
+        /// <summary>
+        /// 预览
+        /// </summary>
+		public const string FilePreviewLanguage_Preview = "LanguageResource/FilePreviewLanguage/Preview";
+				
+        /// <summary>
+        /// 16进制
+        /// </summary>
+		public const string FilePreviewLanguage_HEX = "LanguageResource/FilePreviewLanguage/HEX";
+				
+        /// <summary>
+        /// 开始
+        /// </summary>
+		public const string FilePreviewLanguage_Start = "LanguageResource/FilePreviewLanguage/Start";
+				
+        /// <summary>
+        /// 暂停
+        /// </summary>
+		public const string FilePreviewLanguage_Pause = "LanguageResource/FilePreviewLanguage/Pause";
+				
+        /// <summary>
+        /// 停止
+        /// </summary>
+		public const string FilePreviewLanguage_Stop = "LanguageResource/FilePreviewLanguage/Stop";
 		}
 
 

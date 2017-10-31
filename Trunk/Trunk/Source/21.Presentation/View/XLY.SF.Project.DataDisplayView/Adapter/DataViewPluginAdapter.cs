@@ -25,8 +25,6 @@ namespace XLY.SF.Project.DataDisplayView
     {
         public DataViewPluginAdapter()
         {
-            //var pl = IocManagerSingle.Instance.GetParts<IDataViewPlugin>(null);
-            //Plugins = pl.ToList().ConvertAll(p => p.Value);
             Plugins = PluginAdapter.Instance.GetPluginsByType<DataViewPluginInfo>(PluginType.SpfDataView).ToList().ConvertAll(p => (AbstractDataViewPlugin)p.Value);
         }
 
@@ -50,9 +48,17 @@ namespace XLY.SF.Project.DataDisplayView
                 return new List<AbstractDataViewPlugin>();
             }
             string typeName = (type is Type) ? ((Type)type).Name : type.ToSafeString();
-            return Plugins.Where(p =>
-                ((DataViewPluginInfo)p.PluginInfo).ViewType.Any(v => (v.PluginId.Equals(pluginId) || v.PluginId == "*") && (v.TypeName.Equals(typeName) || v.TypeName == "*")))
-                .OrderByDescending(iv => iv.PluginInfo.OrderIndex);
+            //return Plugins.Where(p =>
+            //    ((DataViewPluginInfo)p.PluginInfo).ViewType.Any(v => (v.PluginId.Equals(pluginId) || v.PluginId == "*") && (v.TypeName.Equals(typeName) || v.TypeName == "*")))
+            //    .OrderByDescending(iv => iv.PluginInfo.OrderIndex);
+            return typeName == AbstractDataViewPlugin.XLY_LAYOUT_KEY ? 
+                Plugins.Where(p =>
+               ((DataViewPluginInfo)p.PluginInfo).ViewType.Any(v => (v.PluginId.Equals(pluginId) || v.PluginId == "*") && (v.TypeName.Equals(typeName))))
+               .OrderByDescending(iv => iv.PluginInfo.OrderIndex)
+               :
+               Plugins.Where(p =>
+               ((DataViewPluginInfo)p.PluginInfo).ViewType.Any(v => (v.PluginId.Equals(pluginId) || v.PluginId == "*") && (v.TypeName.Equals(typeName) || v.TypeName == "*")))
+               .OrderByDescending(iv => iv.PluginInfo.OrderIndex);
         }
     }
 }

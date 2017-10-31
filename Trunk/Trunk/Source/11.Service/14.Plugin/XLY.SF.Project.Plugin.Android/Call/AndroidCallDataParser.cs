@@ -3,7 +3,7 @@ using System.ComponentModel.Composition;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.Domains;
 
-namespace XLY.SF.Project.Plugin.Android.Call
+namespace XLY.SF.Project.Plugin.Android
 {
     [Export(PluginExportKeys.PluginKey, typeof(IPlugin))]
     public class AndroidCallDataParser:AbstractDataParsePlugin
@@ -25,7 +25,8 @@ namespace XLY.SF.Project.Plugin.Android.Call
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/data/data/com.android.providers.contacts/databases/#F");
             pluginInfo.SourcePath.AddItem("/data/data/com.motorola.blur.providers.contacts/databases/#F");
-            this.PluginInfo = pluginInfo;
+
+            PluginInfo = pluginInfo;
         }
 
         public override object Execute(object arg, IAsyncProgress progress)

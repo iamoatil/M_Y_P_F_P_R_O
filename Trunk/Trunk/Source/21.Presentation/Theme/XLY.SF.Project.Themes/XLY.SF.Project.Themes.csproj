@@ -57,6 +57,8 @@
     <OutputPath>bin\x86\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Expression.Drawing, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Expression.Effects, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -72,6 +74,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converter\ImageContentToBoolConverter.cs" />
+    <Compile Include="Converter\SubtractionConverter.cs" />
     <Compile Include="CustromControl\DeviceSelectControl\DeviceSelectControl.cs" />
     <Compile Include="CustromControl\DeviceSelectControl\DeviceSelectItemControl.cs" />
     <Compile Include="CustromControl\ComboBox\MenuButton.cs" />
@@ -89,6 +93,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="CustromControl\Window\WindowEx.cs" />
+    <Compile Include="CustromControl\TextBox\TextBoxEx.cs" />
     <Compile Include="ThemesConverter\BooleanToCollapseConverter.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -114,6 +119,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ThemesStyle\ComboBoxStyle\ComboBoxItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ThemesStyle\DeviceSelectStyle\DeviceSelectItemStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -121,6 +130,10 @@
     <Page Include="ThemesStyle\DeviceSelectStyle\DeviceSelectStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ThemesStyle\TextBoxStyle\TextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ThemesStyle\ToggleButtonStyle\ToggleButton.xaml">
       <SubType>Designer</SubType>
@@ -219,6 +232,28 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\DeviceChoose_LoadingBK.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\AboutIcon.png" />
+    <Resource Include="Resources\Images\Icons\CaseManagementIcon.png" />
+    <Resource Include="Resources\Images\Icons\HelpIcon.png" />
+    <Resource Include="Resources\Images\Icons\LogoutSysIcon.png" />
+    <Resource Include="Resources\Images\Icons\PluginManagementIcon.png" />
+    <Resource Include="Resources\Images\Icons\SysEmpowerIcon.png" />
+    <Resource Include="Resources\Images\Icons\SysLogIcon.png" />
+    <Resource Include="Resources\Images\Icons\SysSettingsIcon.png" />
+    <Resource Include="Resources\Images\Icons\SysUpdateIcon.png" />
+    <Resource Include="Resources\Images\Icons\UserFeedback.png" />
+    <Resource Include="Resources\Images\Icons\UserManagementIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\LoginIcon.png" />
+    <Resource Include="Resources\Images\Icons\LoginPassWord.png" />
+    <Resource Include="Resources\Images\Icons\LoginUser.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\CaseCreation_Back.png" />
+    <Resource Include="Resources\Images\CaseCreation_Footer.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:control="clr-namespace:XLY.SF.Project.Themes">
+                    xmlns:control="clr-namespace:XLY.SF.Project.Themes.CustromControl">
     <!--样式加载-->
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ThemesStyle/WindowStyle/Window.xaml"/>
@@ -8,12 +8,39 @@
         <ResourceDictionary Source="ThemesStyle/DeviceSelectStyle/DeviceSelectStyle.xaml"/>
         <ResourceDictionary Source="ThemesStyle/DeviceSelectStyle/DeviceSelectItemStyle.xaml"/>
         <ResourceDictionary Source="ThemesStyle/ComboBoxStyle/ComboBox.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/ComboBoxStyle/ComboBoxItem.xaml"/>
         <ResourceDictionary Source="ThemesStyle/ToggleButtonStyle/ToggleButton.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/TextBoxStyle/TextBox.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
+    <!--系统默认样式加载-->
     <Style TargetType="TextBlock">
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>    
+    <Style TargetType="{x:Type control:TextBoxEx}">
+        <Setter Property="TitleForeground" Value="#9ba5b9"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Background" Value="#414b69"/>
+        <Setter Property="IconWidth" Value="20"/>
+        <Setter Property="IconHeight" Value="20"/>
+        <Setter Property="Template" Value="{StaticResource tb_DefaultCt}"/>
+    </Style>
+    <Style TargetType="Button">
+        <Setter Property="Template" Value="{StaticResource btn_EmptyCT}"/>
+        <Setter Property="Border.CornerRadius" Value="5"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="#379be6"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#3ca5f5"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="#2382cd"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
 </ResourceDictionary>

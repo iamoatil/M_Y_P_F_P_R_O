@@ -157,6 +157,11 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
 
         #endregion
 
+        #region 数据展示
+        public const string DataDisplayView = "DataDisplayView";
+        public const string DataDisplayViewModel = "DataDisplayViewModel";
+        #endregion
+
         #endregion
 
         #region 插件

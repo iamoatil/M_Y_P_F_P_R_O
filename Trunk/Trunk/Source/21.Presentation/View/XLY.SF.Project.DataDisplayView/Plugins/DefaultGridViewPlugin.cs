@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.DataDisplayView.View.Controls;
@@ -31,7 +32,7 @@ namespace XLY.SF.Project.DataDisplayView
             PluginInfo = p;
         }
 
-        public override Control GetControl(DataViewPluginArgument arg)
+        public override FrameworkElement GetControl(DataViewPluginArgument arg)
         {
             DefaultGridViewControl grid = new DefaultGridViewControl();
             grid.DataContext = arg.CurrentNode;

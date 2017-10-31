@@ -130,7 +130,7 @@ namespace XLY.SF.UnitTest
             callDataSource.Items = new DataItems<Call>(DB_PATH);
             for (int i = 0; i < 10; i++)
             {
-                callDataSource.Items.Add(new Call() { DurationSecond = 10000, EndDate = DateTime.Now.AddDays(i + 0.1), Name = "张三_" + i, Number = "10086" });
+                callDataSource.Items.Add(new Call() { DurationSecond = 10000, Name = "张三_" + i, Number = "10086" });
             }
 
             callDataSource.BuildParent();

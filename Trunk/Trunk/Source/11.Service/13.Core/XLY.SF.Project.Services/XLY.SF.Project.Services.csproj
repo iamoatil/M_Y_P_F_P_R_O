@@ -69,7 +69,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AudioDecodeHelper.cs" />
+    <Compile Include="Common\DataParseHelper.cs" />
     <Compile Include="Common\DecryptHelper.cs" />
+    <Compile Include="Common\FragmentHelper.cs" />
     <Compile Include="FileBrowsingService\FileBrowingNode.cs" />
     <Compile Include="FileBrowsingService\FileBrowsingServiceFactory.cs" />
     <Compile Include="FileBrowsingService\AbsFileBrowsingService.cs" />
