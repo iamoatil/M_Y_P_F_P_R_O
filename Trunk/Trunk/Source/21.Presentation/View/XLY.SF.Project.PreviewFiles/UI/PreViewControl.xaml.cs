@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.UserControls.PreviewFile.Decoders;
 using XLY.SF.Project.UserControls.PreviewFile.FileDecode;
 
@@ -23,11 +24,18 @@ namespace XLY.SF.Project.PreviewFiles.UI
 
         public void ReplaceContent(string filePath)
         {
-            FrameworkElement element= _decoderCollection.Decode(filePath);            
-            Preview.Content = element;
-            _binaryDecoder.Decode(filePath);
-            element = _binaryDecoder.Element;
-            HexPreview.Content = element;
+            try
+            {
+                FrameworkElement element = _decoderCollection.Decode(filePath);
+                Preview.Content = element;
+                _binaryDecoder.Decode(filePath);
+                element = _binaryDecoder.Element;
+                HexPreview.Content = element;
+            }
+            catch (System.Exception ex)
+            {
+                LoggerManagerSingle.Instance.Error(ex.Message+"/n"+ex.StackTrace);
+            }            
         }
     }    
 }

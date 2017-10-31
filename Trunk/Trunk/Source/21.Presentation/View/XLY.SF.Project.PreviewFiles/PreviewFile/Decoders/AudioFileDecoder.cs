@@ -30,11 +30,6 @@ namespace XLY.SF.Project.UserControls.PreviewFile.Decoders
 
     class AudioVLCFileDecoder : IFileDecoder
     {
-        public AudioVLCFileDecoder()
-        {
-            _audioUserControl.SetMediaElement(_mediaElement);
-        }
-
         public FrameworkElement Element
         {
             get
@@ -50,6 +45,7 @@ namespace XLY.SF.Project.UserControls.PreviewFile.Decoders
         {
             path = Path.GetFullPath(path);
             _mediaElement.Open(path);
+            _audioUserControl.SetMediaElement(_mediaElement);
         }
     }
 }

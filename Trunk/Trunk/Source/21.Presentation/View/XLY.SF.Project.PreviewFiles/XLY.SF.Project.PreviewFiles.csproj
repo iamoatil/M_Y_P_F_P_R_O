@@ -99,7 +99,7 @@
     <Compile Include="PreviewFile\Decoders\VideoFileDecoder.cs" />
     <Compile Include="PreviewFile\FileDecode\FileDecoderCollection.cs" />
     <Compile Include="PreviewFile\FileDecode\SuffixFileDecoder.cs" />
-    <Compile Include="PreviewFile\IdentifyEncoding.cs" />
+    <Compile Include="UI\UserControls\LargeFileTextBox\IdentifyEncoding.cs" />
     <Compile Include="UI\PathCollection.cs" />
     <Compile Include="UI\PreViewControl.xaml.cs">
       <DependentUpon>PreViewControl.xaml</DependentUpon>

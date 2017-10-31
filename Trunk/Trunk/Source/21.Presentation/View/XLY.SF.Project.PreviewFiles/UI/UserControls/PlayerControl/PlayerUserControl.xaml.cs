@@ -15,7 +15,17 @@ namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.PlayerControl
         {
             InitializeComponent();
             TimeSlider.LargeChange = 0.1;
-            this.VerticalAlignment =VerticalAlignment.Center;            
+            this.VerticalAlignment =VerticalAlignment.Center;
+            this.Unloaded += PlayerUserControlVLC_Unloaded;
+        }
+
+        private void PlayerUserControlVLC_Unloaded(object sender, RoutedEventArgs e)
+        {
+            //停止上一个
+            if (_mediaElement != null)
+            {
+                _mediaElement.Stop();
+            }
         }
         private MediaElement _mediaElement;
 
@@ -26,6 +36,12 @@ namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.PlayerControl
 
         public void SetMediaElement(MediaElement mediaElement)
         {
+            //停止上一个
+            if (_mediaElement != null)
+            {
+                _mediaElement.Stop();
+            }
+            //设置新的一个
             _mediaElement = mediaElement;
             _mediaElement.Volume = 1;
             MediaElementContainer.Children.Clear();

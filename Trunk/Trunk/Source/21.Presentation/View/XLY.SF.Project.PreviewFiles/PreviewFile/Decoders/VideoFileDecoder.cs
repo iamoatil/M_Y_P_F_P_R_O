@@ -2,7 +2,6 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.ComponentModel.Composition;
 using XLY.SF.Project.UserControls.PreviewFile.UserControls.PlayerControl;
 using MediaViewer = XLY.SF.Project.UserControls.PreviewFile.Decoders.FileViewer.MediaViewer;
 
@@ -31,11 +30,6 @@ namespace XLY.SF.Project.UserControls.PreviewFile.Decoders
     
     class VideoVLCFileDecoder : IFileDecoder
     {
-        public VideoVLCFileDecoder()
-        {
-            _videoUserControl.SetMediaElement(_mediaElement);
-        }
-
         public FrameworkElement Element
         {
             get
@@ -51,6 +45,7 @@ namespace XLY.SF.Project.UserControls.PreviewFile.Decoders
         {
             path = Path.GetFullPath(path);
             _mediaElement.Open(path);
+            _videoUserControl.SetMediaElement(_mediaElement);
         }
     }
 }

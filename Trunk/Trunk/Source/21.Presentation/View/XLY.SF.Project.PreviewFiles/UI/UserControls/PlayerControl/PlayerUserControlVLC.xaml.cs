@@ -17,7 +17,18 @@ namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.PlayerControl
             InitializeComponent();
             TimeSlider.LargeChange = 0.1;
             this.VerticalAlignment = VerticalAlignment.Stretch;
+            this.Unloaded += PlayerUserControlVLC_Unloaded;
         }
+
+        private void PlayerUserControlVLC_Unloaded(object sender, RoutedEventArgs e)
+        {
+            //停止上一个
+            if (_mediaElement != null)
+            {
+                _mediaElement.Stop();
+            }
+        }
+
         private MediaElement _mediaElement;        
 
         /// <summary>
@@ -27,10 +38,18 @@ namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.PlayerControl
 
         public void SetMediaElement(MediaElement mediaElement)
         {
+            //停止上一个
+            if(_mediaElement != null)
+            {
+                _mediaElement.Stop();
+            }
+            //设置新的一个
             _mediaElement = mediaElement;
             _mediaElement.Volume = 1;
             MediaElementContainer.Children.Clear();
             MediaElementContainer.Children.Add(_mediaElement);
+
+            Title.Text = Path.GetFileName(_mediaElement.Source.ToString());
 
             _mediaElement.Opened += MediaElement_MediaOpened;
         }        
@@ -41,9 +60,7 @@ namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.PlayerControl
             {
                 this.TimeSlider.Maximum = this._mediaElement.Length.Value.TotalMilliseconds;
                 TotalTime.Text = this._mediaElement.Length.Value.ToString("hh':'mm':'ss"); 
-            }
-
-            Title.Text = Path.GetFileName(_mediaElement.Source.ToString());
+            }            
 
             _dispatcherTimer.Tick += UpdateSliderValueByTimer;
             _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
