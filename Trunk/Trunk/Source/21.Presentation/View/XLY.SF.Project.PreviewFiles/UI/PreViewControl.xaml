@@ -6,6 +6,15 @@
              xmlns:Lang="clr-namespace:XLY.SF.Project.PreviewFiles.Language"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <!--引用基础样式-->
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
     <TabControl>
         <TabItem Header="{Binding XPath=FilePreviewLanguage/Preview,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" x:Name="Preview">            
         </TabItem>
