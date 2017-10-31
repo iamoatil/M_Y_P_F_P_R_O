@@ -13,8 +13,10 @@
             <RowDefinition Height="15"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="Title"/>
-        <Grid Grid.Row="1" x:Name="MediaElementContainer" Background="Black"/>      
+        <TextBlock x:Name="Title" />
+        <Grid Grid.Row="1" x:Name="MediaElementContainer">
+            <Vlc:VlcControl  xmlns:Vlc="clr-namespace:Vlc.DotNet.Wpf;assembly=Vlc.DotNet.Wpf" x:Name="MyControl" />
+        </Grid>        
         <Slider Grid.Row="2" x:Name="TimeSlider" ValueChanged="Slider_ValueChanged" PreviewMouseDown="TimeSlider_PreviewMouseDown"/>
         <Grid Grid.Row="3">
             <TextBlock x:Name="StartTime" Text="00:00:00" />

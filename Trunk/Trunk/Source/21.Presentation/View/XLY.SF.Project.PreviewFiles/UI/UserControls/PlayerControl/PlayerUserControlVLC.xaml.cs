@@ -3,12 +3,12 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using MediaElement=XLY.SF.Project.UserControls.PreviewFile.Decoders.FileViewer.MediaViewer.MediaElement;
+using Vlc.DotNet.Wpf;
 
 namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.PlayerControl
 {
     /// <summary>
-    /// AudioUserControl.xaml 的交互逻辑
+    /// PlayerUserControlVLC.xaml 的交互逻辑
     /// </summary>
     public partial class PlayerUserControlVLC : UserControl
     {
@@ -18,67 +18,70 @@ namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.PlayerControl
             TimeSlider.LargeChange = 0.1;
             this.VerticalAlignment = VerticalAlignment.Stretch;
             this.Unloaded += PlayerUserControlVLC_Unloaded;
+            this.TimeSlider.ValueChanged += Slider_ValueChanged;
+
+            //VlcMediaPlayer初始化
+            this.MyControl.MediaPlayer.VlcLibDirectory = new DirectoryInfo(Environment.CurrentDirectory + @"\RefDlls\libvlc");
+            var options = new string[]
+           {
+               // VLC options can be given here. Please refer to the VLC command line documentation.
+           };
+            this.MyControl.MediaPlayer.VlcMediaplayerOptions = options;
+            // Load libvlc libraries and initializes stuff. It is important that the options (if you want to pass any) and lib directory are given before calling this method.
+            this.MyControl.MediaPlayer.EndInit();
+
+            MyControl.MediaPlayer.TimeChanged += MediaPlayer_TimeChanged;
+            MyControl.MediaPlayer.Playing += MediaPlayer_Playing;
+        }        
+
+        private void MediaPlayer_Playing(object sender, Vlc.DotNet.Core.VlcMediaPlayerPlayingEventArgs e)
+        {
+            this.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                TotalTime.Text = TimeSpan.FromMilliseconds(MyControl.MediaPlayer.Length).ToString("hh':'mm':'ss");
+                StartTime.Text = TimeSpan.FromMilliseconds(this.MyControl.MediaPlayer.Time).ToString("hh':'mm':'ss");
+
+                TimeSlider.Maximum = MyControl.MediaPlayer.Length;
+                TimeSlider.Minimum = 0;
+            }));            
+        }
+
+        private void MediaPlayer_TimeChanged(object sender, Vlc.DotNet.Core.VlcMediaPlayerTimeChangedEventArgs e)
+        {
+            this.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                StartTime.Text = TimeSpan.FromMilliseconds(this.MyControl.MediaPlayer.Time).ToString("hh':'mm':'ss");
+                TimeSlider.Value = this.MyControl.MediaPlayer.Time;
+            }));
+        }
+
+        /// <summary>
+        /// 装载文件到播放器
+        /// </summary>
+        /// <param name="path"></param>
+        public void LoadFile(string path)
+        {
+            this.MyControl.MediaPlayer.SetMedia(new Uri(path));
+            this.Title.Text = path;
+            TotalTime.Text = "00:00:00";
+            StartTime.Text = "00:00:00";
+
+            TimeSlider.Maximum = 0;
+            TimeSlider.Minimum = 0;
         }
 
         private void PlayerUserControlVLC_Unloaded(object sender, RoutedEventArgs e)
         {
             //停止上一个
-            if (_mediaElement != null)
+            if (MyControl != null)
             {
-                _mediaElement.Stop();
+                MyControl.MediaPlayer.Stop();
             }
-        }
-
-        private MediaElement _mediaElement;        
-
-        /// <summary>
-        /// 更新界面进度条的
-        /// </summary>
-        readonly DispatcherTimer _dispatcherTimer = new DispatcherTimer();
-
-        public void SetMediaElement(MediaElement mediaElement)
-        {
-            //停止上一个
-            if(_mediaElement != null)
-            {
-                _mediaElement.Stop();
-            }
-            //设置新的一个
-            _mediaElement = mediaElement;
-            _mediaElement.Volume = 1;
-            MediaElementContainer.Children.Clear();
-            MediaElementContainer.Children.Add(_mediaElement);
-
-            Title.Text = Path.GetFileName(_mediaElement.Source.ToString());
-
-            _mediaElement.Opened += MediaElement_MediaOpened;
-        }        
-
-        private void MediaElement_MediaOpened(object sender, RoutedEventArgs e)
-        {
-            if (this._mediaElement.Length.HasValue)
-            {
-                this.TimeSlider.Maximum = this._mediaElement.Length.Value.TotalMilliseconds;
-                TotalTime.Text = this._mediaElement.Length.Value.ToString("hh':'mm':'ss"); 
-            }            
-
-            _dispatcherTimer.Tick += UpdateSliderValueByTimer;
-            _dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 500);
-            _dispatcherTimer.Start();
-        }
-
-        private void UpdateSliderValueByTimer(object sender, EventArgs e)
-        {
-            if (this._mediaElement.Position.HasValue)
-            {
-                TimeSlider.Value = this._mediaElement.Position.Value.TotalSeconds;
-                StartTime.Text = _mediaElement.Position.Value.ToString("hh':'mm':'ss");
-            }
-        }
+        }   
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            _mediaElement.Position = TimeSpan.FromSeconds(TimeSlider.Value);
+            MyControl.MediaPlayer.Time =(long)TimeSlider.Value;
         }
         
         private void TimeSlider_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -89,17 +92,17 @@ namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.PlayerControl
 
         private void Start_Click(object sender, RoutedEventArgs e)
         {
-            _mediaElement.Play();
+            MyControl.MediaPlayer.Play();
         }
 
         private void Pause_Click(object sender, RoutedEventArgs e)
         {
-            _mediaElement.Pause();
+            MyControl.MediaPlayer.Pause();
         }
 
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
-            _mediaElement.Stop();
+            MyControl.MediaPlayer.Stop();
         }        
     }
 }

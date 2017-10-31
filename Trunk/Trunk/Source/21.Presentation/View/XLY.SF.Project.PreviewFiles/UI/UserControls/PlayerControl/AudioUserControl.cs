@@ -8,18 +8,9 @@
 
 namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.PlayerControl
 {
-    class AudioUserControl: PlayerUserControl
-    {
-        public AudioUserControl() : base()
-        {
-            this.VerticalAlignment = VerticalAlignment.Center;
-            MediaElementContainer.Height = 0;
-        }
-    }
-
     class AudioUserControlVLC : PlayerUserControlVLC
     {
-        public AudioUserControlVLC() : base()
+        public  AudioUserControlVLC()
         {
             this.VerticalAlignment = VerticalAlignment.Center;
             MediaElementContainer.Height = 0;
