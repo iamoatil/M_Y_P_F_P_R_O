@@ -8,9 +8,9 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
-            <!--引用基础样式-->
+            <!--引用样式-->
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
+                <ResourceDictionary Source="/XLY.SF.Project.PreviewFiles;Component/Theme/SPProTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
