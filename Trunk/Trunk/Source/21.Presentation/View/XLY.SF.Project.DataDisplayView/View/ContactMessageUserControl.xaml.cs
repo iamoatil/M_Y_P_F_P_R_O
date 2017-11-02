@@ -31,25 +31,31 @@ namespace XLY.SF.Project.DataDisplayView
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-
+            if(lsb1.Items.Count > 0)
+            {
+                lsb1.SelectedValue = lsb1.Items[0];
+            }
         }
 
         private void lsb1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            WeChatFriendShow accout = lsb1.SelectedValue as WeChatFriendShow;
-            TreeNode nodes = lsb1.DataContext as TreeNode;
+            DataViewPluginArgument arg = lsb1.DataContext as DataViewPluginArgument;
+            if (arg == null)
+                return;
+            WeChatFriendShow accout = lsb1.SelectedItem as WeChatFriendShow;
+            TreeNode nodes = arg.CurrentData as TreeNode;
             if (accout == null || nodes == null)
             {
                 return ;
             }
             var selNode = nodes.TreeNodes.FirstOrDefault(t => t.Text == accout.Nick);
-            var views = DataViewPluginAdapter.Instance.GetView("微信", selNode.Type);
+            var views = DataViewPluginAdapter.Instance.GetView(arg.DataSource.PluginInfo.Guid, selNode.Type);
             tbdetail.Items.Clear();
             foreach (var v in views)
             {
                 v.SelectedDataChanged += OnSelectedDataChanged;
                 TabItem ti = new TabItem() { Header = v.PluginInfo.Name };
-                ti.Content = v.GetControl(new DataViewPluginArgument() { CurrentNode = selNode });
+                ti.Content = v.GetControl(new DataViewPluginArgument() { CurrentData = selNode });
                 tbdetail.Items.Add(ti);
             }
 

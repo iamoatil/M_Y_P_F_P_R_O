@@ -53,6 +53,12 @@ namespace XLY.SF.Project.Models.Logical
             set { }
         }
 
+        public override DateTime LoginTime
+        {
+            get => base.LoginTime;
+            set { }
+        }
+
         #endregion
 
     }

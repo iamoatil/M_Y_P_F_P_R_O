@@ -48,6 +48,10 @@ namespace XLY.SF.Project.Views.Main
         /// 折叠创建案例动画
         /// </summary>
         private Storyboard _sbOnExpandCreateCaseBack;
+        /// <summary>
+        /// 之前的界面【不包含创建案例界面外】
+        /// </summary>
+        private UcViewBase _beforeView;
 
         public MainView()
         {
@@ -72,14 +76,17 @@ namespace XLY.SF.Project.Views.Main
 
         private void UcViewBase_Loaded(object sender, RoutedEventArgs e)
         {
+            Binding s = new Binding("ActualHeight") { ElementName = "gd_ViewContent" };
+            rt.SetBinding(Rectangle.HeightProperty, s);
+
             _sbExpandCreateCase = this.Resources["OnExpandCreateCase"] as Storyboard;
             _sbExpandCreateCase.Completed += _sbExpandCreateCase_Completed;
-
             _sbOnExpandCreateCaseBack = this.Resources["OnExpandCreateCaseBack"] as Storyboard;
             _sbOnExpandCreateCaseBack.Completed += _sbOnExpandCreateCaseBack_Completed;
-
             _winContainer = Window.GetWindow(this);
 
+            //注册主界面导航消息
+            MsgAggregation.Instance.RegisterNaviagtionMsg(this, SystemKeys.MainUcNavigation, MainNavigationCallback);
             //监听子界面展开消息
             MsgAggregation.Instance.RegisterSysMsg<SubViewMsgModel>(this, SystemKeys.SetSubViewStatus, OpenSubViewCallback);
 
@@ -96,7 +103,19 @@ namespace XLY.SF.Project.Views.Main
 
         #endregion
 
-        #region 子界面动画开关
+        #region 主界面导航切换效果
+
+        //主界面导航回调
+        private void MainNavigationCallback(NavigationArgs args)
+        {
+            if (args.MsgToken != ExportKeys.CaseCreationView)
+                _beforeView = args.TargetView;
+            cc_MainContent.Content = args.TargetView;
+        }
+
+        #endregion
+
+        #region 子界面操作
 
         /// <summary>
         /// 打开子界面回调
@@ -105,8 +124,14 @@ namespace XLY.SF.Project.Views.Main
         private void OpenSubViewCallback(SysCommonMsgArgs<SubViewMsgModel> args)
         {
             gd_CaseName.Visibility = Visibility.Visible;
-            btn_Expand.IsChecked = args.Parameters.IsExpandSubView;
-            ExecuteStoryboard(btn_Expand.IsChecked.HasValue && btn_Expand.IsChecked.Value, args.Parameters.NeedStoryboard);
+            //btn_Expand.IsChecked = args.Parameters.IsExpandSubView;
+            ExecuteStoryboard(args.Parameters.IsExpandSubView, args.Parameters.NeedStoryboard);
+        }
+
+        //还原之前的界面
+        private void btn_Expand_Unchecked(object sender, RoutedEventArgs e)
+        {
+            _sbOnExpandCreateCaseBack.Begin();
         }
 
         #endregion
@@ -134,20 +159,10 @@ namespace XLY.SF.Project.Views.Main
         {
             if (isExpandSb)
             {
-                foreach (var item in _sbExpandCreateCase.Children)
-                {
-                    var a = item as DoubleAnimationUsingKeyFrames;
-                    a.KeyFrames[0].KeyTime = needStoryboard ? TimeSpan.FromSeconds(0.5) : TimeSpan.FromSeconds(0);
-                }
                 _sbExpandCreateCase.Begin();
             }
             else
             {
-                foreach (var item in _sbOnExpandCreateCaseBack.Children)
-                {
-                    var a = item as DoubleAnimationUsingKeyFrames;
-                    a.KeyFrames[0].KeyTime = needStoryboard ? TimeSpan.FromSeconds(0.5) : TimeSpan.FromSeconds(0);
-                }
                 _sbOnExpandCreateCaseBack.Begin();
             }
         }
@@ -162,35 +177,24 @@ namespace XLY.SF.Project.Views.Main
             Window.GetWindow(this).WindowState = WindowState.Minimized;
         }
 
-        //执行展开创建案例动画
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            //禁用展开按钮
-            btn_Expand.IsEnabled = false;
-
-            //重置创建案例界面大小
-            ExecuteStoryboard(btn_Expand.IsChecked.HasValue && btn_Expand.IsChecked.Value, true);
-
-
-            //使窗体无法改变大小
-            //Window.GetWindow(this).ResizeMode = ResizeMode.NoResize;
-        }
-
         //动画执行完毕【展开创建案例】
         private void _sbExpandCreateCase_Completed(object sender, EventArgs e)
         {
             btn_Expand.IsEnabled = gd_Devices.Visibility == Visibility.Visible;
+
         }
 
         private void _sbOnExpandCreateCaseBack_Completed(object sender, EventArgs e)
         {
-            btn_Expand.IsEnabled = gd_Devices.Visibility == Visibility.Visible; 
+            btn_Expand.IsEnabled = gd_Devices.Visibility == Visibility.Visible;
+            cc_MainContent.Content = _beforeView;
         }
 
         //界面大小改变【改变案例创建View大小】
         private void UcViewBase_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            br_CreateCaseView.Height = gd_ViewContent.ActualHeight;
+            //由于除首页外，所有界面都会有这两行，所以固定减去这两行高度
+            //br_CreateCaseView.Height = gd_ViewContent.ActualHeight - 122;
         }
 
         #endregion

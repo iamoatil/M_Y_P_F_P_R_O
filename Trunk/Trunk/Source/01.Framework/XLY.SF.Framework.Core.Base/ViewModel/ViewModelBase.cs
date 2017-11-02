@@ -137,15 +137,15 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
             MsgAggregation.Instance.SendNavigationMsgForWindow(args);
         }
 
-        /// <summary>
-        /// 打开新窗体【模式对话框】
-        /// </summary>
-        /// <param name="exportKey"></param>
-        public void NavigationForNewDislogWindow(string exportKey, object param = null)
-        {
-            NavigationArgs args = new NavigationArgs(exportKey, param);
-            MsgAggregation.Instance.SendNavigationMsgForDialogWindow(args);
-        }
+        ///// <summary>
+        ///// 打开新窗体【模式对话框】
+        ///// </summary>
+        ///// <param name="exportKey"></param>
+        //public void NavigationForNewDislogWindow(string exportKey, object param = null)
+        //{
+        //    NavigationArgs args = new NavigationArgs(exportKey, param);
+        //    MsgAggregation.Instance.SendNavigationMsgForDialogWindow(args);
+        //}
 
         #endregion
 

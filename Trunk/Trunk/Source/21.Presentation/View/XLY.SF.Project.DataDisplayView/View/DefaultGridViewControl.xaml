@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:XLY.SF.Project.DataDisplayView.View.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <DataGrid CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding Items}" SelectionChanged="DataGrid_SelectionChanged">
+    <DataGrid CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding Items.View}" SelectionChanged="DataGrid_SelectionChanged">
         <!--<DataGrid.ItemContainerStyle>
             <Style TargetType="DataGridRow">
                 <Style.Triggers>

@@ -73,6 +73,16 @@ namespace XLY.SF.Project.Themes.CustromControl
         public static readonly DependencyProperty TitleForegroundProperty =
             DependencyProperty.Register("TitleForeground", typeof(Brush), typeof(TextBoxEx), new PropertyMetadata(Brushes.Black));
 
+        public Thickness TitlePadding
+        {
+            get { return (Thickness)GetValue(TitlePaddingProperty); }
+            set { SetValue(TitlePaddingProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for TitlePadding.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TitlePaddingProperty =
+            DependencyProperty.Register("TitlePadding", typeof(Thickness), typeof(TextBoxEx), new PropertyMetadata(new Thickness(0, 0, 0, 0)));
+
         #endregion
 
         #region Icon

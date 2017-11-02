@@ -22,7 +22,7 @@ namespace XLY.SF.Project.DataDisplayView
     /// </summary>
     public partial class HtmlViewControl : UserControl
     {
-        public HtmlViewControl(string url, object source)
+        public HtmlViewControl(string url, DataViewPluginArgument source)
         {
             InitializeComponent();
 
@@ -40,11 +40,11 @@ namespace XLY.SF.Project.DataDisplayView
         public event DelgateDataViewSelectedItemChanged OnSelectedDataChanged;
 
         public string Url { get; set; }
-        public object DataSource { get; set; }
+        public DataViewPluginArgument DataSource { get; set; }
 
         private void SaveDataSource()
         {
-            if(DataSource == null)
+            if (DataSource == null || DataSource.Items == null)
             {
                 return;
             }
@@ -53,8 +53,25 @@ namespace XLY.SF.Project.DataDisplayView
             {
                 return;
             }
-            string fileName = System.IO.Path.Combine(fi.DirectoryName, "__data.js");
-            File.WriteAllText(fileName, $"var __data = {Serializer.JsonSerilize(DataSource)}", Encoding.UTF8);
+            if (!Directory.Exists(System.IO.Path.Combine(fi.DirectoryName, "data")))
+            {
+                Directory.CreateDirectory(System.IO.Path.Combine(fi.DirectoryName, "data"));
+            }
+            string fileName = System.IO.Path.Combine(fi.DirectoryName, "data/data.js");
+            //File.WriteAllText(fileName, $"var __data = {Serializer.JsonSerilize(DataSource)}", Encoding.UTF8);
+            using (StreamWriter sw = new StreamWriter(fileName, false, Encoding.UTF8))
+            {
+                sw.Write("var __data = [");
+                int r = 0;
+                foreach (var c in DataSource.Items.View)
+                {
+                    if (r != 0)
+                        sw.Write(",");
+                    sw.Write(Serializer.JsonSerilize(c));
+                    r++;
+                }
+                sw.Write("];");
+            }
         }
     }
 

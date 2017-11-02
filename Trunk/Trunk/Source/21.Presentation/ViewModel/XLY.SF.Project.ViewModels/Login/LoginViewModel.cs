@@ -12,6 +12,13 @@ using XLY.SF.Project.Models;
 using XLY.SF.Project.Models.Entities;
 using XLY.SF.Project.Models.Logical;
 using XLY.SF.Project.ViewDomain.MefKeys;
+using System.Threading.Tasks;
+using XLY.SF.Project.ProxyService;
+using System.Windows;
+using System.Collections.ObjectModel;
+using System.Security.Cryptography;
+using System;
+using System.Text;
 
 
 /*************************************************
@@ -42,7 +49,55 @@ namespace XLY.SF.Project.ViewModels.Login
         #endregion
 
         #region Commands
+        protected override void LoadCore(object parameters)
+        {
+            //执行加载
+            ExecuteSysLoad(parameters.ToString());
+        }
 
+        #region 执行系统加载
+
+        /// <summary>
+        /// 加载
+        /// </summary>
+        /// <param name="solutionContentFromXml">推荐方案内容，XML文件格式</param>
+        /// <returns></returns>
+        private bool ConcreateLoadOfTask(object solutionContentFromXml)
+        {
+            //初始化系统上下文
+            bool opertionResult = SystemContext.Instance.InitSysInfo() &&
+                SystemContext.Instance.LoadProposedSolution(solutionContentFromXml.ToString());
+
+            //开启设备监听服务
+            ProxyFactory.DeviceMonitor.OpenDeviceService();
+
+            //加载一次数据库
+            _dbService.UserInfos.FirstOrDefault();
+            AllUser =new ObservableCollection<UserInfo>(_dbService.UserInfos.OrderByDescending(p=>p.LoginTime).Take(5)); //获取本地前5条用户记录
+
+            return opertionResult;
+        }
+
+        private async void ExecuteSysLoad(string solutionContentFromXml)
+        {
+           
+            var opertionResult = await Task<bool>.Factory.StartNew(ConcreateLoadOfTask, solutionContentFromXml);
+
+            if (!opertionResult)
+            {
+                //加载信息失败，关闭程序
+                MessageBox.ShowDialogErrorMsg("系统加载失败，即将关闭程序。");
+                SysCommonMsgArgs<string> args = new SysCommonMsgArgs<string>(SystemKeys.ShutdownProgram);
+                base.MessageAggregation.SendSysMsg(args);
+            }
+            IsLoadingVisibility = Visibility.Collapsed;
+            IsLoadVisibility = Visibility.Visible;
+            //完成加载，进入登录界面
+            //base.CloseView();
+            //base.NavigationForNewWindow(ExportKeys.ModuleLoginView);
+        }
+
+        #endregion
         /// <summary>
         /// 登录
         /// </summary>
@@ -54,6 +109,19 @@ namespace XLY.SF.Project.ViewModels.Login
         public ICommand ExitSysCommand { get; set; }
 
         #endregion
+
+
+        private ObservableCollection<UserInfo> _AllUser;
+
+        public ObservableCollection<UserInfo> AllUser
+        {
+            get { return _AllUser; }
+            set { _AllUser = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+
 
         #region Model
 
@@ -77,6 +145,34 @@ namespace XLY.SF.Project.ViewModels.Login
 
         #endregion
 
+        private Visibility _IsLoadingVisibility;
+        /// <summary>
+        /// loading是否显示
+        /// </summary>
+        public Visibility IsLoadingVisibility
+        {
+            get { return _IsLoadingVisibility; }
+            set {
+                _IsLoadingVisibility = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        private Visibility _IsLoadVisibility= Visibility.Collapsed;
+        /// <summary>
+        /// 登录是否显示
+        /// </summary>
+        public Visibility IsLoadVisibility
+        {
+            get { return _IsLoadVisibility; }
+            set
+            {
+                _IsLoadVisibility = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+
         protected override void Closed()
         {
 
@@ -87,11 +183,15 @@ namespace XLY.SF.Project.ViewModels.Login
         private string ExecuteLoginCommand()
         {
             string operationLog = string.Empty;
-            var loginUser = _dbService.UserInfos.FirstOrDefault((t) => t.LoginUserName == CurLoginUser.LoginUserName).ToModel<UserInfo, UserInfoEntityModel>();
+
+            MD5CryptoServiceProvider md5Psd = new MD5CryptoServiceProvider();
+            String newPsd = BitConverter.ToString(md5Psd.ComputeHash(Encoding.ASCII.GetBytes(CurLoginUser.LoginPassword)));
+
+            var loginUser = _dbService.UserInfos.FirstOrDefault((t) => t.LoginUserName == CurLoginUser.LoginUserName && t.LoginPassword== newPsd).ToModel<UserInfo, UserInfoEntityModel>();
             if (loginUser == default(UserInfoEntityModel))
             {
                 //登录失败
-                MessageBox.ShowDialogErrorMsg("登录失败，请重新登录");
+                MessageBox.ShowDialogErrorMsg("登录失败，密码或帐号错误！");
             }
             else
             {

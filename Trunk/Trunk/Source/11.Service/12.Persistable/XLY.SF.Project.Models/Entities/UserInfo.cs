@@ -27,5 +27,7 @@ namespace XLY.SF.Project.Models.Entities
 
         [Required]
         public String LoginPassword { get; set; }
+
+        public DateTime LoginTime { get; set; }
     }
 }

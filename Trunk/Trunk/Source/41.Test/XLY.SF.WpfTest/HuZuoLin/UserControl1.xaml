@@ -16,6 +16,24 @@
         
     </UserControl.Resources>
     <Grid>
-        <Button Width="150" Height="30" Content="测试"/>
+        <StackPanel>
+            <control:ComboBoxEx Width="350" IsEnabled="True" Title="测试文字" Height="60" Text="asdflkj " IsEditable="True">
+                <ComboBoxItem Content="测试1"/>
+                <ComboBoxItem Content="测试2"/>
+                <ComboBoxItem Content="测试3"/>
+                <ComboBoxItem Content="测试4"/>
+                <ComboBoxItem Content="测试5"/>
+                <ComboBoxItem Content="测试6"/>
+            </control:ComboBoxEx>
+            <control:ComboBoxEx Width="350" IsEnabled="True" SelectedIndex="2" Title="测试文字" Height="60" Text="asdflkj ">
+                <ComboBoxItem Content="测试1"/>
+                <ComboBoxItem Content="测试2"/>
+                <ComboBoxItem Content="测试3"/>
+                <ComboBoxItem Content="测试4"/>
+                <ComboBoxItem Content="测试5"/>
+                <ComboBoxItem Content="测试6"/>
+            </control:ComboBoxEx>
+            <control:TextBoxEx Width="350" Height="60" Title="测试" Text="adf6540as654df"/>
+        </StackPanel>
     </Grid>
 </UserControl>

@@ -14,10 +14,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <!--系统默认样式加载-->
-    <Style TargetType="TextBlock">
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-    </Style>    
+    <!--自定义控件-->
     <Style TargetType="{x:Type control:TextBoxEx}">
         <Setter Property="TitleForeground" Value="#9ba5b9"/>
         <Setter Property="Foreground" Value="White"/>
@@ -25,8 +22,33 @@
         <Setter Property="Background" Value="#414b69"/>
         <Setter Property="IconWidth" Value="20"/>
         <Setter Property="IconHeight" Value="20"/>
+        <Setter Property="TitlePadding" Value="10 0 10 0"/>
         <Setter Property="Template" Value="{StaticResource tb_DefaultCt}"/>
     </Style>
+    <Style TargetType="{x:Type control:ComboBoxEx}">
+        <Setter Property="Background" Value="#414b69"/>
+        <Setter Property="TitleForeground" Value="#9ba5b9"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="TitlePadding" Value="10 0 10 0"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+        <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
+        <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+        <Setter Property="Template" Value="{DynamicResource cb_DefaultCt}"/>
+        <Style.Triggers>
+            <Trigger Property="IsEditable" Value="true">
+                <Setter Property="Template" Value="{DynamicResource ComboBoxEditableTemplate}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--系统控件-->
+    <Style TargetType="TextBlock">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>    
     <Style TargetType="Button">
         <Setter Property="Template" Value="{StaticResource btn_EmptyCT}"/>
         <Setter Property="Border.CornerRadius" Value="5"/>
@@ -41,6 +63,13 @@
                 <Setter Property="Background" Value="#2382cd"/>
             </Trigger>
         </Style.Triggers>
+    </Style>
+    <Style TargetType="ComboBoxItem">
+        <Setter Property="Template" Value="{DynamicResource cb_DefaultItemCt}"/>
+        <Setter Property="Height" Value="42"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Padding" Value="40 0 0 0"/>
     </Style>
 
 </ResourceDictionary>

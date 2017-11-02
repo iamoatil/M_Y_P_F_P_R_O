@@ -27,15 +27,15 @@ namespace XLY.SF.Project.DataDisplayView
     {
         public PhoneLayoutViewPlugin()
         {
-            var p = new DataViewPluginInfo() { Guid = "432A5C38-4580-49BA-84CB-64C2BD98974A", Name = "手机布局", ViewType = new List<DataViewSupportItem>(), OrderIndex = 0, PluginType = PluginType.SpfDataView };
-            p.ViewType.Add(new DataViewSupportItem() { PluginId = "微信", TypeName = "__LayOut" });
+            var p = new DataViewPluginInfo() { Guid = "8EEB83BF-FF24-45F5-BFBC-EBB306A16F33", Name = "手机布局", ViewType = new List<DataViewSupportItem>(), OrderIndex = 0, PluginType = PluginType.SpfDataView };
+            p.ViewType.Add(new DataViewSupportItem() { PluginId = "微信", TypeName = AbstractDataViewPlugin.XLY_LAYOUT_KEY });
             PluginInfo = p;
         }
 
         public override FrameworkElement GetControl(DataViewPluginArgument arg)
         {
-            Grid grid = new Grid();
-            grid.Background = System.Windows.Media.Brushes.Green;
+            PhoneLayoutControl grid = new PhoneLayoutControl();
+            grid.DataContext = arg;
             return grid;
         }
     }

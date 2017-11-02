@@ -35,7 +35,7 @@ namespace XLY.SF.Project.DataDisplayView
         public override FrameworkElement GetControl(DataViewPluginArgument arg)
         {
             DefaultGridViewControl grid = new DefaultGridViewControl();
-            grid.DataContext = arg.CurrentNode;
+            grid.DataContext = arg; 
             grid.OnSelectedDataChanged += OnSelectedDataChanged;
             return grid;
         }

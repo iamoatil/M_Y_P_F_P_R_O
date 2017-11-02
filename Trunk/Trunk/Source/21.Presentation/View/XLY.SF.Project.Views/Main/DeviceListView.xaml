@@ -23,10 +23,12 @@
                    TargetType="{x:Type ListBoxItem}">
                 <Setter Property="Foreground"
                         Value="White" />
-                <Setter Property="Width"
-                        Value="100" />
+                <Setter Property="MinWidth"
+                        Value="120" />
+                <Setter Property="MaxWidth"
+                        Value="160" />
                 <Setter Property="Height"
-                        Value="32" />
+                        Value="34" />
                 <Setter Property="Margin"
                         Value="0,0,18,0" />
                 <Setter Property="Template">
@@ -34,7 +36,7 @@
                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
                             <Border x:Name="bd"
                                     Background="#283550"
-                                    CornerRadius="16"
+                                    CornerRadius="8"
                                     BorderBrush="#283550"
                                     BorderThickness="0">
                                 <DockPanel>

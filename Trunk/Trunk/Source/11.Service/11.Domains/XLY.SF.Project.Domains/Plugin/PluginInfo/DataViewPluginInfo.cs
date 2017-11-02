@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Xml.Serialization;
 
 
 /* ==============================================================================
@@ -13,11 +14,14 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// 应用数据自定义视图插件配置信息
     /// </summary>
+    [XmlRoot("plugin")]
     public class DataViewPluginInfo : AbstractZipPluginInfo
     {
         /// <summary>
-        /// 该数据视图对应的类型列表，格式为:"插件ID.类名;插件ID.类名;..."
+        /// 该数据视图对应的类型列表，每一项都表示支持的类型
         /// </summary>
+        [XmlArrayItem("item")]
+        [XmlArray("view")]
         public List<DataViewSupportItem> ViewType { get; set; }
 
         /// <summary>
@@ -27,23 +31,31 @@ namespace XLY.SF.Project.Domains
     }
 
     /// <summary>
-    /// 该数据视图对应的类型列表，格式为:"插件ID.类名;插件ID.类名;..."
+    /// 该数据视图对应的类型列表
     /// </summary>
     public class DataViewSupportItem
     {
         /// <summary>
-        /// 该数据视图对应的插件ID
+        /// 该数据视图对应的插件名称，用于描述，比如“微信”
         /// </summary>
+        [XmlAttribute]
+        public string PluginName { get; set; }
+
+        /// <summary>
+        /// 该数据视图对应的插件ID，用于精确匹配插件，为*表示通用匹配，比如“432A5C38-4580-49BA-84CB-64C2BD98974A”
+        /// </summary>
+        [XmlAttribute]
         public string PluginId { get; set; }
 
         /// <summary>
-        /// 该数据视图对应的类名
+        /// 该数据视图对应的类名，比如MessageCore
         /// </summary>
+        [XmlAttribute]
         public string TypeName { get; set; }
 
         public override string ToString()
         {
-            return $"{PluginId}.{TypeName}";
+            return $"{PluginName}({PluginId}).{TypeName}";
         }
     }
 }

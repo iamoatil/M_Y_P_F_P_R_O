@@ -95,6 +95,7 @@ namespace XLY.SF.Project.Services
                             Name = node.FileName,
                             FileSize = node.Size,
                             NodeType = node.IsFolder ? FileBrowingNodeType.Directory : FileBrowingNodeType.File,
+                            NodeState = node.IsDelete ? FileBrowingNodeState.Delete : FileBrowingNodeState.Normal,
                             CreateTime = BaseTypeExtension.ToSafeDateTime(node.Source.CreateTime),
                             LastWriteTime = BaseTypeExtension.ToSafeDateTime(node.Source.ModifyTime),
                             LastAccessTime = BaseTypeExtension.ToSafeDateTime(node.Source.LastAccessTime),
@@ -176,8 +177,6 @@ namespace XLY.SF.Project.Services
             public FileSystemPartition Part { get; set; }
 
             public FNodeX FNode { get; set; }
-
-            public List<FileBrowingNode> ChildNodes { get; set; }
 
             public override string ToString()
             {

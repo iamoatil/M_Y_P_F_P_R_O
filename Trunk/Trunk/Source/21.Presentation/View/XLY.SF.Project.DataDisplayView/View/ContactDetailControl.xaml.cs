@@ -34,5 +34,13 @@ namespace XLY.SF.Project.DataDisplayView
                 OnSelectedDataChanged(lsb1.SelectedItem);
             }
         }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (lsb1.Items.Count > 0)
+            {
+                lsb1.SelectedValue = lsb1.Items[0];
+            }
+        }
     }
 }

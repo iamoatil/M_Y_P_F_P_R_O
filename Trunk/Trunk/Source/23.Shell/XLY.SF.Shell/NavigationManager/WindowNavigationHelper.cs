@@ -107,11 +107,16 @@ namespace XLY.SF.Shell.NavigationManager
         /// </summary>
         public void ExecuteProgramInitialise()
         {
-            //加载界面
-            var loadingView = IocManagerSingle.Instance.GetViewPart(ExportKeys.ModuleLoadingView);
-            loadingView.DataSource.LoadViewModel(XLY.SF.Shell.Properties.Resources.ProposedSolutionConfig);         //传递推荐配置内容
-            var loadingWindow = WindowHelper.Instance.CreateShellWindow(loadingView, false);
-            loadingWindow.Show();
+            ////加载界面
+            //var loadingView = IocManagerSingle.Instance.GetViewPart(ExportKeys.ModuleLoadingView);
+            //loadingView.DataSource.LoadViewModel(XLY.SF.Shell.Properties.Resources.ProposedSolutionConfig);         //传递推荐配置内容
+            //var loadingWindow = WindowHelper.Instance.CreateShellWindow(loadingView, false);
+            //loadingWindow.Show();
+
+            var loginView = IocManagerSingle.Instance.GetViewPart(ExportKeys.ModuleLoginView);
+            loginView.DataSource.LoadViewModel(XLY.SF.Shell.Properties.Resources.ProposedSolutionConfig);         //传递推荐配置内容
+            var loginWindow = WindowHelper.Instance.CreateShellWindow(loginView, false);
+            loginWindow.Show();
         }
 
         #endregion        

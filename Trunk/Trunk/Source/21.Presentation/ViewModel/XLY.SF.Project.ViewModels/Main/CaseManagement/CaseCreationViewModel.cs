@@ -61,7 +61,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         public ICommand ConfirmConmmand => _confirmCommandProxy.ViewExecuteCmd;
 
-        public ICommand SkpConmmand => _skipCommandProxy.ViewExecuteCmd;
+        public ICommand SkipConmmand => _skipCommandProxy.ViewExecuteCmd;
 
         public ICommand UpdateCaseTypeCommand => _updateCaseTypeCommandProxy.ViewExecuteCmd;
 
@@ -150,7 +150,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
                 CaseInfo = newCase.CaseInfo;
 
                 //收起子页面
-                SubViewNavigationHelper.SetSubViewStatus(new ViewDomain.Model.MessageElement.SubViewMsgModel(true, false));
+                EditCaseNavigationHelper.SetEditCaseViewStatus(false);
                 NavigationForMainWindow(ExportKeys.DeviceSelectView);
                 return $"创建案例{newCase.Name}成功";
             }

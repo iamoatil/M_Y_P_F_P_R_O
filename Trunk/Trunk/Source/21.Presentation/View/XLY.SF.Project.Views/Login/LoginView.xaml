@@ -5,9 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
              xmlns:Lang="clr-namespace:XLY.SF.Framework.Language.PageLanguage;assembly=XLY.SF.Framework.Language"
+                 xmlns:cc="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
 		     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
 		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
-             mc:Ignorable="d" IsMaxView="False" Width="500" Height="300" d:DesignHeight="300" d:DesignWidth="500">
+             mc:Ignorable="d" IsMaxView="False" Width="360" Height="480" d:DesignHeight="480" d:DesignWidth="360">
     <core:UcViewBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -15,36 +16,206 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!--此处以下添加自己的引用-->
-
+            <Storyboard x:Key="StoryLeftToRight" RepeatBehavior="Forever" Duration="00:00:01.5" AutoReverse="True">
+                <DoubleAnimationUsingKeyFrames
+                BeginTime="00:00:00"
+                Storyboard.TargetName="e1"
+                Storyboard.TargetProperty="(FrameworkElement.Opacity)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.0" Value="1" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.6" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.9" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:01.2" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:01.5" Value="0" />
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames
+                BeginTime="00:00:00"
+                Storyboard.TargetName="e2"
+                Storyboard.TargetProperty="(FrameworkElement.Opacity)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.0" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3" Value="1" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.6" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.9" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:01.2" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:01.5" Value="0" />
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames
+                BeginTime="00:00:00"
+                Storyboard.TargetName="e3"
+                Storyboard.TargetProperty="(FrameworkElement.Opacity)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.0" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.6" Value="1" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.9" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:01.2" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:01.5" Value="0" />
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames
+                BeginTime="00:00:00"
+                Storyboard.TargetName="e4"
+                 Storyboard.TargetProperty="(FrameworkElement.Opacity)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.0" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.6" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.9" Value="1" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:01.2" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:01.5" Value="0" />
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames
+                BeginTime="00:00:00"
+                Storyboard.TargetName="e5"
+                 Storyboard.TargetProperty="(FrameworkElement.Opacity)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.0" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.6" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.9" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:01.2" Value="1" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:01.5" Value="0" />
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames
+                BeginTime="00:00:00"
+                Storyboard.TargetName="e6"
+                 Storyboard.TargetProperty="(FrameworkElement.Opacity)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.0" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.6" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.9" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:01.2" Value="0" />
+                    <SplineDoubleKeyFrame KeyTime="00:00:01.5" Value="1" />
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
         </ResourceDictionary>
+        
     </core:UcViewBase.Resources>
-    <Grid Background="Red">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="5"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding XPath=ViewLanguage/View_Login_UserName,Source={x:Static Lang:PageLanguageHelper.XmlProvider},StringFormat={}{0}：}"/>
-            <TextBox Grid.Column="1" Width="300" Height="30" Text="{Binding CurLoginUser.LoginUserName}"></TextBox>
+    <Grid>
+        <Border BorderBrush="Black" BorderThickness="0" CornerRadius="25" >
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                    <GradientStop Offset="0" Color="#FF2D3C5F"/>
+                    <GradientStop Offset="1" Color="#191e37" />
+                </LinearGradientBrush>
+            </Border.Background>
+                
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/LoginIcon.png" Grid.Row="1" Width="88" Height="70"></Image>
+                <TextBlock Margin="0,18,0,0"  Grid.Row="2" Text="S P F 智 能 手 机"  FontSize="14" Foreground="White" HorizontalAlignment="Center"/>
+                <TextBlock Margin="0,8,0,0"  Grid.Row="3" Text="数据恢复取证系统"  FontSize="15" Foreground="White" HorizontalAlignment="Center" FontWeight="Bold"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="4"  Margin="44,0,44,0" HorizontalAlignment="Center" Visibility="{Binding IsLoadingVisibility}">
+                    <StackPanel.Triggers>
+                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                            <BeginStoryboard Storyboard="{StaticResource StoryLeftToRight}" />
+                        </EventTrigger>
+                    </StackPanel.Triggers>
+                    <Rectangle
+                    Name="e1"
+                    Width="6"
+                    Height="6"
+                    Margin="2,0,0,0"
+                    HorizontalAlignment="Left"
+                    Fill="White" />
+                    <Rectangle
+                    Name="e2"
+                    Width="6"
+                    Height="6"
+                    Margin="2,0,0,0"
+                    HorizontalAlignment="Left"
+                    Fill="#D2D5D7" />
+                    <Rectangle
+                    Name="e3"
+                    Width="6"
+                    Height="6"
+                    Margin="2,0,0,0"
+                    HorizontalAlignment="Left"
+                    Fill="#A4AAB3" />
+                    <Rectangle
+                    Name="e4"
+                    Width="6"
+                    Height="6"
+                    Margin="2,0,0,0"
+                    HorizontalAlignment="Left"
+                    Fill="#787E8D" />
+                    <Rectangle
+                    Name="e5"
+                    Width="6"
+                    Height="6"
+                    Margin="2,0,0,0"
+                    HorizontalAlignment="Left"
+                    Fill="#4B5368" />
+                    <Rectangle
+                    Name="e6"
+                    Width="6"
+                    Height="6"
+                    Margin="2,0,0,0"
+                    HorizontalAlignment="Left"
+                    Fill="#363E55" />
+                </StackPanel>
+                <Grid Grid.Row="4"  Margin="44,34,44,0" Visibility="{Binding IsLoadVisibility}">
+                    <Grid.RowDefinitions >
+                        <RowDefinition Height="50"></RowDefinition>
+                        <RowDefinition Height="1"></RowDefinition>
+                        <RowDefinition Height="50"></RowDefinition>
+                        <RowDefinition Height="10"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <!--<cc:TextBoxEx Text="{Binding CurLoginUser.LoginUserName}" Grid.ColumnSpan="2"></cc:TextBoxEx>-->
+                    <cc:ComboBoxEx  IsEnabled="True" Title="{Binding XPath=ViewLanguage/View_Login_UserName,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" Grid.ColumnSpan="2"  IsEditable="True" ItemsSource="{Binding AllUser,Mode=OneWay}" SelectedIndex="0" DisplayMemberPath="LoginUserName" Background="#FF414B69" FontSize="14">
+                        <!--<ComboBoxItem Content="测试1"/>
+                        <ComboBoxItem Content="测试2"/>
+                        <ComboBoxItem Content="测试3"/>
+                        <ComboBoxItem Content="测试4"/>
+                        <ComboBoxItem Content="测试5"/>
+                        <ComboBoxItem Content="测试6"/>-->
+                    </cc:ComboBoxEx>
+                    <PasswordBox Grid.Row="2" Grid.ColumnSpan="2" Style="{StaticResource LoginPasswordBoxStyle}" Password="123456"></PasswordBox>
+                    <Button Grid.Row="4"  Content="{Binding XPath=ViewLanguage/View_Login,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="199" Height="46" Command="{Binding LoginCommand.ViewExecuteCmd}" ></Button>
+                    <Button Grid.Row="4" Grid.Column="1" Content="{Binding XPath=ViewLanguage/View_Login_ExitSys,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="68" Height="46" Command="{Binding ExitSysCommand}" Style="{StaticResource btn_LoginClose}"></Button>
+                </Grid> 
+                <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="0,0,0,30">
+                    <TextBlock Margin="75,0,0,0"  Text="{Binding XPath=ViewLanguage/View_Login_Company,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"  FontSize="12" Foreground="#FF6E7891" HorizontalAlignment="Center" />
+                    <TextBlock Margin="10,0,0,0" Text="{Binding XPath=ViewLanguage/View_Login_Version,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"   FontSize="12" Foreground="#FF6E7891" HorizontalAlignment="Center" />
+                </StackPanel>
+                <!--<Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding XPath=ViewLanguage/View_Login_UserName,Source={x:Static Lang:PageLanguageHelper.XmlProvider},StringFormat={}{0}：}"/>
+                    <TextBox Grid.Column="1" Width="300" Height="30" Text="{Binding CurLoginUser.LoginUserName}"></TextBox>
 
-            <TextBlock Grid.Row="2" Text="{Binding XPath=ViewLanguage/View_Login_Password,Source={x:Static Lang:PageLanguageHelper.XmlProvider},StringFormat={}{0}：}"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Width="300" Height="30" Text="{Binding CurLoginUser.LoginPassword}"></TextBox>
-        </Grid>
+                    <TextBlock Grid.Row="2" Text="{Binding XPath=ViewLanguage/View_Login_Password,Source={x:Static Lang:PageLanguageHelper.XmlProvider},StringFormat={}{0}：}"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Width="300" Height="30" Text="{Binding CurLoginUser.LoginPassword}"></TextBox>
+                </Grid>
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Content="{Binding XPath=ViewLanguage/View_Login,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="{Binding XPath=ViewLanguage/View_Login,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
                 VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="120" Height="30" Command="{Binding LoginCommand.ViewExecuteCmd}"></Button>
-            <Button Content="{Binding XPath=ViewLanguage/View_Login_ExitSys,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                    <Button Content="{Binding XPath=ViewLanguage/View_Login_ExitSys,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
                 VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="120" Height="30" Command="{Binding ExitSysCommand}"></Button>
-        </StackPanel>
+                </StackPanel>-->
+            </Grid>
+        </Border>
     </Grid>
 </core:UcViewBase>

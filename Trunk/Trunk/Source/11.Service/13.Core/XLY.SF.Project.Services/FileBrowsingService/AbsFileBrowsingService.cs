@@ -40,7 +40,17 @@ namespace XLY.SF.Project.Services
         /// <returns></returns>
         public async Task<List<FileBrowingNode>> GetChildNodes(FileBrowingNode parentNode, IAsyncProgress async = null)
         {
-            return await Task.Run(() => DoGetChildNodes(parentNode, async));
+            return await Task.Run(() =>
+            {
+                if (null == parentNode.ChildNodes)
+                {
+                    var list = DoGetChildNodes(parentNode, async);
+
+                    parentNode.ChildNodes = list;
+                }
+
+                return parentNode.ChildNodes;
+            });
         }
 
         /// <summary>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Media;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Framework.Language;
+using XLY.SF.Framework.BaseUtility;
 
 namespace XLY.SF.Project.Domains
 {
@@ -15,6 +16,7 @@ namespace XLY.SF.Project.Domains
         {
             OSType = EnumOSType.None;
             Status = EnumDeviceStatus.None;
+            DeviceType = EnumDeviceType.Phone;
         }
 
         /// <summary>
@@ -154,7 +156,7 @@ namespace XLY.SF.Project.Domains
             get { return _Model; }
             set
             {
-                _Model = value;
+                _Model = value?.TrimStart(_Brand).Trim();
                 OnPropertyChanged();
             }
         }

@@ -84,8 +84,13 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         public const string ModuleMainViewModel = "ExportKey_ModuleMainViewModel";
 
         public const String DeviceListView = "ExportKey_DeviceListView";
-
         public const String DeviceListViewModel = "ExportKey_DeviceListViewModel";
+
+        /// <summary>
+        /// 设备主页
+        /// </summary>
+        public const string DeviceHomePageView = "ExportKey_DeviceHomePageView";
+        public const string DeviceHomePageViewModel = "ExportKey_DeviceHomePageViewModel";
 
         #endregion
 

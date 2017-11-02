@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:XLY.SF.Project.DataDisplayView"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
     </Application.Resources>
 </Application>

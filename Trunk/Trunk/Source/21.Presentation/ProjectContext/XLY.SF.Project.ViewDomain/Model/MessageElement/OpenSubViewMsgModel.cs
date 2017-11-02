@@ -16,9 +16,9 @@ namespace XLY.SF.Project.ViewDomain.Model.MessageElement
         /// </summary>
         /// <param name="needStoryboard">是否需要动画</param>
         /// <param name="isExpandSubView">是否为展开子界面</param>
-        public SubViewMsgModel(bool needStoryboard, bool isExpandSubView)
+        public SubViewMsgModel(bool isExpandSubView)
         {
-            NeedStoryboard = needStoryboard;
+            NeedStoryboard = true;
             IsExpandSubView = isExpandSubView;
         }
 

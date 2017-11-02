@@ -12,6 +12,8 @@ using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Project.ViewDomain.VModel.Main;
 using System.IO;
 using XLY.SF.Framework.Language;
+using System.Windows.Input;
+using XLY.SF.Project.ViewModels.Tools;
 
 
 /*************************************************
@@ -95,6 +97,16 @@ namespace XLY.SF.Project.ViewModels.Main
         #region Commands
 
         /// <summary>
+        /// 界面加载完成【主要用于加载首页】
+        /// </summary>
+        public ICommand MainViewLoadedCommand { get; set; }
+
+        /// <summary>
+        /// 是否打开案例编辑界面
+        /// </summary>
+        public ICommand OpenCaseEditCommand { get; set; }
+
+        /// <summary>
         /// 结束程序
         /// </summary>
         public ProxyRelayCommand ShutdownProgramCommand { get; set; }
@@ -103,6 +115,11 @@ namespace XLY.SF.Project.ViewModels.Main
         /// 关闭按钮
         /// </summary>
         public ProxyRelayCommand CloseCaseCommand { get; set; }
+
+        /// <summary>
+        /// 导出
+        /// </summary>
+        public ProxyRelayCommand ExportCommand { get; set; }
 
         #region 菜单功能
 
@@ -169,16 +186,19 @@ namespace XLY.SF.Project.ViewModels.Main
             SystemContext.Instance.CaseChanged += Instance_CaseChanged;
 
             //事件注册
+            OpenCaseEditCommand = new RelayCommand(ExecuteOpenCaseEditCommand);
+            MainViewLoadedCommand = new RelayCommand(ExecuteMainViewLoadedCommand);
             ShutdownProgramCommand = new ProxyRelayCommand(ExecuteShutdownProgramCommand);
             CloseCaseCommand = new ProxyRelayCommand(ExecuteCloseCaseCommand);
+            ExportCommand = new ProxyRelayCommand(ExecuteExportCommand);
             UserManagementCommand = new ProxyRelayCommand(ExecuteUserManagementCommand);
-
-
+            CaseManagementCommand = new ProxyRelayCommand(ExecuteCaseManagementCommand);
+            SysSettingCommand = new ProxyRelayCommand(ExecuteSysSettingCommand);
         }
 
         private void Instance_CaseChanged(object sender, PropertyChangedEventArgs<Project.CaseManagement.Case> e)
         {
-            CurCaseName = e.NewValue.Name;
+            CurCaseName = e.NewValue?.Name;
         }
 
         #endregion
@@ -197,8 +217,6 @@ namespace XLY.SF.Project.ViewModels.Main
                 CurUserName = SystemContext.Instance.CurUserInfo?.UserName,
                 CurSysTime = DateTime.Now
             };
-            //加载首页
-            base.NavigationForMainWindow(ExportKeys.HomePageView);
         }
 
         #endregion
@@ -207,6 +225,17 @@ namespace XLY.SF.Project.ViewModels.Main
 
         #region 菜单操作
 
+        private string ExecuteSysSettingCommand()
+        {
+            return "打开案例管理";
+        }
+
+        //案例管理
+        private string ExecuteCaseManagementCommand()
+        {
+            return "打开案例管理";
+        }
+
         //用户管理
         private string ExecuteUserManagementCommand()
         {
@@ -214,6 +243,25 @@ namespace XLY.SF.Project.ViewModels.Main
         }
 
         #endregion
+
+        //打开案例编辑界面
+        private void ExecuteOpenCaseEditCommand()
+        {
+            EditCaseNavigationHelper.SetEditCaseViewStatus(!EditCaseNavigationHelper.CurEditViewOpenStatus);
+        }
+
+        //主界面加载完成
+        private void ExecuteMainViewLoadedCommand()
+        {
+            //加载首页
+            base.NavigationForMainWindow(ExportKeys.HomePageView);
+        }
+
+        private string ExecuteExportCommand()
+        {
+            base.NavigationForMainWindow(ExportKeys.DeviceHomePageView);
+            return "导出案例";
+        }
 
         //关程序
         private string ExecuteShutdownProgramCommand()

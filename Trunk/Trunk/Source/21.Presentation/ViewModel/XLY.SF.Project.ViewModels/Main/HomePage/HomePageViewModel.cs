@@ -117,15 +117,14 @@ namespace XLY.SF.Project.ViewModels.Main
         private string ExecuteCreateCaseCommand()
         {
             //展开创建案例界面
-            SubViewMsgModel subViewStatus = new SubViewMsgModel(false, true);
-            SubViewNavigationHelper.SetSubViewStatus(subViewStatus);
+            //SubViewMsgModel subViewStatus = new SubViewMsgModel(true);
+            EditCaseNavigationHelper.SetEditCaseViewStatus(true);
 
             return "打开新建案例";
         }
 
         private string ExecuteOpenAllCaseCommand()
         {
-            base.NavigationForNewDislogWindow(ExportKeys.CaseListView);
             return "打开所有案例";
         }
 

@@ -112,7 +112,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                 bool isFirst = false;
                 foreach (var item in DataViewPluginAdapter.Instance.GetView(treeItem.Text, AbstractDataViewPlugin.XLY_LAYOUT_KEY))
                 {
-                    LayoutViewItems.Add(item.ToControl(null, null));
+                    LayoutViewItems.Add(item.ToControl(new DataViewPluginArgument() {  CurrentData = null, DataSource = treeItem.Data as IDataSource}, null));
                     if (!isFirst)   //设置默认选中第一项
                     {
                         SelectedLayoutViewItem = LayoutViewItems[0];
@@ -132,6 +132,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
 
             var treeSource = new TreeDataSource();
             treeSource.TreeNodes = new List<TreeNode>();
+            treeSource.PluginInfo = new DataParsePluginInfo() { Guid = "微信", Name = "微信" };
 
             for (int i = 0; i < 2; i++)
             {
@@ -187,6 +188,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
             treeSource.BuildParent();
 
             var sms = new SimpleDataSource();
+            sms.PluginInfo = new DataParsePluginInfo() { Guid = "短信", Name = "短信" };
             sms.Type = typeof(SMS);
             sms.Items = new DataItems<SMS>(DB_PATH);
             for (int i = 0; i < 10; i++)
@@ -194,6 +196,9 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                 sms.Items.Add(new SMS() { StartDate = DateTime.Now.AddDays(i), Content = "短信内容内容" + i });
             }
             sms.BuildParent();
+
+            sms.Filter<AbstractDataItem>();
+            treeSource.Filter<AbstractDataItem>();
 
             DataList = new ObservableCollection<DataExtactionTreeItem>() {
                 new DataExtactionTreeItem(){Text = "自动提取", TreeNodes = new ObservableCollection<DataExtactionTreeItem>(){

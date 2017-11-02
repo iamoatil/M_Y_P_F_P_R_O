@@ -49,6 +49,6 @@
     </UserControl.Resources>
     
     <Grid>
-        <ListBox x:Name="lsb1" ItemsSource="{Binding Items}" ItemTemplateSelector="{StaticResource tmSelector}" ItemContainerStyleSelector="{StaticResource conSelector}" SelectionChanged="ListBox_SelectionChanged"></ListBox> 
+        <ListBox x:Name="lsb1" ItemsSource="{Binding Items.View}" ItemTemplateSelector="{StaticResource tmSelector}" ItemContainerStyleSelector="{StaticResource conSelector}" SelectionChanged="ListBox_SelectionChanged"></ListBox> 
     </Grid>
 </UserControl>

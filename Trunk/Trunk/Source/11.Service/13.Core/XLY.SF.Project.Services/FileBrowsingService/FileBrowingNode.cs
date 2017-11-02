@@ -8,10 +8,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using XLY.SF.Framework.Core.Base.CoreInterface;
 
 namespace XLY.SF.Project.Services
 {
@@ -31,9 +27,30 @@ namespace XLY.SF.Project.Services
         public string Name { get; internal set; }
 
         /// <summary>
+        /// 是否是文件 如果不是文件，则是文件夹
+        /// </summary>
+        public bool IsFile
+        {
+            get { return NodeType == FileBrowingNodeType.File; }
+        }
+
+        /// <summary>
         /// 节点类型
         /// </summary>
-        public FileBrowingNodeType NodeType { get; internal set; }
+        internal FileBrowingNodeType NodeType { get; set; }
+
+        /// <summary>
+        /// 是否是删除文件、文件夹
+        /// </summary>
+        public bool IsDelete
+        {
+            get { return NodeState == FileBrowingNodeState.Delete; }
+        }
+
+        /// <summary>
+        /// 节点状态
+        /// </summary>
+        public FileBrowingNodeState NodeState { get; internal set; } = FileBrowingNodeState.Normal;
 
         /// <summary>
         /// 文件大小
@@ -55,6 +72,26 @@ namespace XLY.SF.Project.Services
         /// </summary>
         public DateTime? LastAccessTime { get; internal set; }
 
+        /// <summary>
+        /// 子节点
+        /// </summary>
+        public List<FileBrowingNode> ChildNodes { get; internal set; }
+
+    }
+
+    /// <summary>
+    /// 文件节点状态
+    /// </summary>
+    public enum FileBrowingNodeState
+    {
+        /// <summary>
+        /// 正常
+        /// </summary>
+        Normal,
+        /// <summary>
+        /// 删除
+        /// </summary>
+        Delete,
     }
 
     /// <summary>

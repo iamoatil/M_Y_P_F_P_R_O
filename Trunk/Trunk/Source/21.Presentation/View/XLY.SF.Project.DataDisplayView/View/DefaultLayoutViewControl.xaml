@@ -3,10 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:local="clr-namespace:XLY.SF.Project.DataDisplayView"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
         <Style TargetType="{x:Type TreeView}">
             <Setter Property="ItemTemplate">
                 <Setter.Value>
@@ -96,16 +98,22 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
 
         <!--左侧的树形菜单，TreeDataSource下可见-->
-        <TreeView Grid.Column="0" ItemsSource="{Binding TreeNodes}" />
-        <GridSplitter VerticalAlignment="Stretch" Grid.Column="0" Width="3"/>
+        <TreeView Grid.Column="0" ItemsSource="{Binding TreeNodes}" MinWidth="200" Visibility="{Binding IsTreeDataSource, Converter={StaticResource booleanToVisibilityConverter}}" >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectedItemChanged">
+                    <i:InvokeCommandAction Command="{Binding SelecedNodeChanged}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeView}}, Path=SelectedValue}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TreeView>
+        <GridSplitter VerticalAlignment="Stretch" Grid.Column="0" Width="3" Visibility="{Binding IsTreeDataSource, Converter={StaticResource booleanToVisibilityConverter}}"/>
 
         <!--数据显示区域，如果有多个视图方式则加载-->
-        <TabControl Grid.Column="1"/>
+        <TabControl Grid.Column="1"  ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}"/>
 
     </Grid>
 </UserControl>

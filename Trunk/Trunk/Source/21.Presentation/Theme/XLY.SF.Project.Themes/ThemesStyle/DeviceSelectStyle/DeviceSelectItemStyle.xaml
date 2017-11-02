@@ -3,14 +3,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:XLY.SF.Project.Themes">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="DeviceLoadingStyle.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
     <Style x:Key="labelStyle1" TargetType="{x:Type TextBlock}">
-        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontSize" Value="14"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Foreground" Value="White"/>
     </Style>
 
     <Style x:Key="labelStyle2" TargetType="{x:Type TextBlock}">
-        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontSize" Value="14"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontFamily" Value="Impact"/>
     </Style>
@@ -23,56 +27,127 @@
                         <ContentControl.Style>
                             <Style TargetType="ContentControl">
                                 <Style.Triggers>
+                                    <!--手机设备-->
                                     <DataTrigger Binding="{Binding DeviceType}" Value="Phone">
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="ContentControl">
-                                                    <Border
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            Padding="5"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                                                    <Border x:Name="border1" BorderBrush="{TemplateBinding BorderBrush}" Padding="5" BorderThickness="{TemplateBinding BorderThickness}">
                                                         <Grid>
                                                             <Grid.RowDefinitions>
+                                                                <RowDefinition Height="Auto"/>
                                                                 <RowDefinition Height="Auto"/>
                                                                 <RowDefinition Height="Auto"/>
                                                                 <RowDefinition Height="*"/>
                                                             </Grid.RowDefinitions>
                                                             <Image x:Name="bkImage" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_Android.png" Stretch="Fill" Grid.RowSpan="4"/>
-                                                            <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center"  Margin="0 144 0 0">
-                                                                <TextBlock Text="{Binding Brand}" Style="{StaticResource labelStyle1}"></TextBlock>
-                                                                <TextBlock Text="{Binding Model}" Style="{StaticResource labelStyle1}"></TextBlock>
+                                                            <StackPanel Orientation="Vertical" Grid.Row="0" HorizontalAlignment="Center"  Margin="0 134 0 0" Width="110">
+                                                                <TextBlock Text="{Binding Brand}" Style="{StaticResource labelStyle1}" HorizontalAlignment="Center" ></TextBlock>
+                                                                <TextBlock Text="{Binding Model}" Style="{StaticResource labelStyle1}" HorizontalAlignment="Center"></TextBlock>
                                                             </StackPanel>
-                                                            <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center"  Margin="0 12 0 0">
+                                                            <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center"  Margin="0 3 0 0">
                                                                 <TextBlock Text="{Binding OSType}" Style="{StaticResource labelStyle2}" ></TextBlock>
                                                                 <TextBlock Text="{Binding OSVersion}" Style="{StaticResource labelStyle2}" ></TextBlock>
                                                             </StackPanel>
+                                                            <Image x:Name="rootImage" Grid.Row="2" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_root.png" Width="14" Height="15" Margin="0 16 0 0" HorizontalAlignment="Center" />
                                                         </Grid>
                                                     </Border>
                                                     <ControlTemplate.Triggers>
                                                         <DataTrigger Binding="{Binding OSType}" Value="IOS">
                                                             <Setter TargetName="bkImage" Property="Source" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_IOS.png"/>
                                                         </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IsRoot}" Value="false">
+                                                            <Setter TargetName="rootImage" Property="Source" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_unroot.png"/>
+                                                        </DataTrigger>
+                                                        <Trigger Property="IsMouseOver" Value="true">
+                                                            <Setter TargetName="border1" Property="Effect">
+                                                                <Setter.Value>
+                                                                    <DropShadowEffect Color="#94a1c0" ShadowDepth="6" Opacity="0.32" Direction="270"/>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Trigger>
                                                     </ControlTemplate.Triggers>
                                                 </ControlTemplate>
                                             </Setter.Value>
                                         </Setter>
                                     </DataTrigger>
+                                    <!--正在识别的设备-->
                                     <DataTrigger Binding="{Binding DeviceType}" Value="None">
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="ContentControl">
-                                                    <Border
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            Padding="5"
-                            BorderThickness="{TemplateBinding BorderThickness}">
+                                                    <Border x:Name="border1" BorderBrush="{TemplateBinding BorderBrush}" Padding="5" BorderThickness="{TemplateBinding BorderThickness}">    
                                                         <Grid>
                                                             <Image x:Name="bkImage" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_LoadingBK.png" Stretch="Fill" />
                                                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center"  Margin="0 45 0 0">
-                                                                <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_loading.gif" Width="60" Height="60"/>
+                                                                <Button Style="{StaticResource loadingControlStyle}" Width="58" Height="58"/>
                                                                 <TextBlock Text="正在识别" Style="{StaticResource labelStyle1}" Margin="0 45 0 0" ></TextBlock>
                                                             </StackPanel>
                                                         </Grid>
                                                     </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="true">
+                                                            <Setter TargetName="border1" Property="Effect">
+                                                                <Setter.Value>
+                                                                    <DropShadowEffect Color="#94a1c0" ShadowDepth="6" Opacity="0.32" Direction="270"/>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <!--SD卡或U盘-->
+                                    <DataTrigger Binding="{Binding DeviceType}" Value="SDCard">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ContentControl">
+                                                    <Border x:Name="border1" BorderBrush="{TemplateBinding BorderBrush}" Padding="5" BorderThickness="{TemplateBinding BorderThickness}">
+                                                        <Grid>
+                                                            <Image x:Name="bkImage" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_SDCard.png" Stretch="Fill" />
+                                                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center"  Margin="0 45 0 0">
+                                                                <TextBlock Text="{Binding Name}" Style="{StaticResource labelStyle1}" Margin="0 45 0 0" ></TextBlock>
+                                                                <TextBlock Text="SD Card" Style="{StaticResource labelStyle1}" Margin="0 45 0 0" ></TextBlock>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="true">
+                                                            <Setter TargetName="border1" Property="Effect">
+                                                                <Setter.Value>
+                                                                    <DropShadowEffect Color="#94a1c0" ShadowDepth="6" Opacity="0.32" Direction="270"/>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <!--SIM卡-->
+                                    <DataTrigger Binding="{Binding DeviceType}" Value="SIM">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ContentControl">
+                                                    <Border x:Name="border1" BorderBrush="{TemplateBinding BorderBrush}" Padding="5" BorderThickness="{TemplateBinding BorderThickness}">
+                                                        <Grid>
+                                                            <Image x:Name="bkImage" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_Sim.png" Stretch="Fill" />
+                                                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center"  Margin="0 45 0 0">
+                                                                <TextBlock Text="{Binding Name}" Style="{StaticResource labelStyle1}" Margin="0 45 0 0" ></TextBlock>
+                                                                <TextBlock Text="SIM Card" Style="{StaticResource labelStyle1}" Margin="0 45 0 0" ></TextBlock>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="true">
+                                                            <Setter TargetName="border1" Property="Effect">
+                                                                <Setter.Value>
+                                                                    <DropShadowEffect Color="#94a1c0" ShadowDepth="6" Opacity="0.32" Direction="270"/>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
                                                 </ControlTemplate>
                                             </Setter.Value>
                                         </Setter>

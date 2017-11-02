@@ -26,12 +26,19 @@ namespace XLY.SF.Project.Plugin.Android
         private string MainDbPath { get; set; }
 
         /// <summary>
+        /// miui_bak/_tmp_bak文件路径
+        /// </summary>
+        private string OtherDbPath { get; set; }
+
+        /// <summary>
         /// 小米备份联系人数据解析核心类
         /// </summary>
-        /// <param name="mainDbPath">addressbook.store文件路径</param>
-        public XiaomiContactsDataParseCoreV1_0(string mainDbPath)
+        /// <param name="mainDbPath">calllog.store文件路径</param>
+        /// <param name="bakFile">miui_bak/_tmp_bak文件路径</param>
+        public XiaomiContactsDataParseCoreV1_0(string mainDbPath, string bakFile)
         {
             MainDbPath = mainDbPath;
+            OtherDbPath = bakFile;
         }
 
         /// <summary>
@@ -40,14 +47,20 @@ namespace XLY.SF.Project.Plugin.Android
         /// <param name="datasource"></param>
         public void BuildData(ContactDataSource datasource)
         {
-            if (!FileHelper.IsValid(MainDbPath))
+            if (FileHelper.IsValid(MainDbPath))
             {
-                return;
+                foreach (var item in FileParse(MainDbPath))
+                {
+                    datasource.Items.Add(item);
+                }
             }
 
-            foreach (var item in FileParse(MainDbPath))
+            if (FileHelper.IsValid(OtherDbPath))
             {
-                datasource.Items.Add(item);
+                foreach (var item in FileParse(OtherDbPath))
+                {
+                    datasource.Items.Add(item);
+                }
             }
         }
 

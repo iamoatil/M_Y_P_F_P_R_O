@@ -34,7 +34,7 @@ namespace XLY.SF.Project.DataDisplayView
         public override FrameworkElement GetControl(DataViewPluginArgument arg)
         {
             ConversionControl ctrl = new ConversionControl();
-            ctrl.DataContext = arg.CurrentNode;
+            ctrl.DataContext = arg;
             ctrl.OnSelectedDataChanged += OnSelectedDataChanged;
             return ctrl;
         }

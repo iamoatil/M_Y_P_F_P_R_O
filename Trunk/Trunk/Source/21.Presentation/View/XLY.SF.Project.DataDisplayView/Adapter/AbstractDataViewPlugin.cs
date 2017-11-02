@@ -67,7 +67,20 @@ namespace XLY.SF.Project.DataDisplayView
     public class DataViewPluginArgument
     {
         public SPFTask Task { get; set; }
+        /// <summary>
+        /// 当前的数据集合
+        /// </summary>
         public IDataSource DataSource { get; set; }
-        public TreeNode CurrentNode { get; set; }
+        /// <summary>
+        /// 当前的数据，如果是treedatasource，则为TreeNode，如果是SimpleDataSource，则为DataSource
+        /// </summary>
+        public object CurrentData { get; set; }
+
+        /// <summary>
+        /// 返回当前数据的列表Items
+        /// </summary>
+        public IDataItems Items => CurrentData is TreeNode node ? node.Items : 
+            CurrentData is SimpleDataSource sp ? sp.Items : 
+            null;
     }
 }

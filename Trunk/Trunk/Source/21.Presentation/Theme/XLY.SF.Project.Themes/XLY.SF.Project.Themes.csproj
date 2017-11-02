@@ -74,6 +74,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converter\AdditionConverter.cs" />
+    <Compile Include="CustromControl\ComboBox\ComboBoxEx.cs" />
     <Compile Include="Converter\ImageContentToBoolConverter.cs" />
     <Compile Include="Converter\SubtractionConverter.cs" />
     <Compile Include="CustromControl\DeviceSelectControl\DeviceSelectControl.cs" />
@@ -120,6 +122,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ThemesStyle\ComboBoxStyle\ComboBoxItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ThemesStyle\DeviceSelectStyle\DeviceLoadingStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -228,7 +234,7 @@
     <Resource Include="Resources\Images\DeviceHome_titleicon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\DeviceChoose_NoDevices.png.png" />
+    <Resource Include="Resources\Images\DeviceChoose_NoDevices.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\DeviceChoose_LoadingBK.png" />
@@ -254,6 +260,22 @@
   <ItemGroup>
     <Resource Include="Resources\Images\CaseCreation_Back.png" />
     <Resource Include="Resources\Images\CaseCreation_Footer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\DeviceChoose_root.png" />
+    <Resource Include="Resources\Images\DeviceChoose_SDCard.png" />
+    <Resource Include="Resources\Images\DeviceChoose_Sim.png" />
+    <Resource Include="Resources\Images\DeviceChoose_unknown.png" />
+    <Resource Include="Resources\Images\DeviceChoose_unroot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\View_phone_bk.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.Language\XLY.SF.Framework.Language.csproj">
+      <Project>{95c796fd-57f1-4d2e-927f-4e34ea75e319}</Project>
+      <Name>XLY.SF.Framework.Language</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

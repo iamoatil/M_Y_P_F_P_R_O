@@ -31,7 +31,7 @@ namespace XLY.SF.Project.DataDisplayView
         public override FrameworkElement GetControl(DataViewPluginArgument arg)
         {
             var plugin = PluginInfo as DataViewPluginInfo;
-            HtmlViewControl ctrl = new HtmlViewControl(plugin.ScriptObject, arg.CurrentNode.Items);
+            HtmlViewControl ctrl = new HtmlViewControl(plugin.ScriptObject, arg);
             ctrl.OnSelectedDataChanged += OnSelectedDataChanged;
             return ctrl;
         }

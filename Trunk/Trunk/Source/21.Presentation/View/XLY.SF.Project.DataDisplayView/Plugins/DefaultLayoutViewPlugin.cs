@@ -28,14 +28,13 @@ namespace XLY.SF.Project.DataDisplayView
         public DefaultLayoutViewPlugin()
         {
             var p = new DataViewPluginInfo() { Guid = "432A5C38-4580-49BA-84CB-64C2BD98974A", Name = "默认布局", ViewType = new List<DataViewSupportItem>(), OrderIndex = 0, PluginType = PluginType.SpfDataView };
-            p.ViewType.Add(new DataViewSupportItem() { PluginId = "*", TypeName = "__LayOut" });
+            p.ViewType.Add(new DataViewSupportItem() { PluginId = "*", TypeName = AbstractDataViewPlugin.XLY_LAYOUT_KEY });
             PluginInfo = p;
         }
 
         public override FrameworkElement GetControl(DataViewPluginArgument arg)
         {
             DefaultLayoutViewControl grid = new DefaultLayoutViewControl(arg);
-            grid.Background = System.Windows.Media.Brushes.Red;
             return grid;
         }
     }

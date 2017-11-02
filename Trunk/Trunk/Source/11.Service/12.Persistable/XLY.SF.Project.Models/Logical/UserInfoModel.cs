@@ -101,7 +101,15 @@ namespace XLY.SF.Project.Models.Logical
         }
 
         #endregion
-
+        public virtual DateTime LoginTime
+        {
+            get => Entity.LoginTime;
+            set
+            {
+                Entity.LoginTime = value;
+                OnPropertyChanged();
+            }
+        }
         #endregion
 
         #region Methods

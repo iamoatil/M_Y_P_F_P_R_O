@@ -81,7 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Device\DeviceHomeViewModel.cs" />
-    <Compile Include="Device\DeviceSelectViewModel.cs" />
+    <Compile Include="Main\DeviceChoose\DeviceSelectViewModel.cs" />
     <Compile Include="Device\LocalFileSelectControlViewModel.cs" />
     <Compile Include="Loading\LoadingViewModel.cs" />
     <Compile Include="Login\LoginViewModel.cs" />
@@ -91,13 +91,14 @@
     <Compile Include="Main\CaseManagement\CaseListViewModel.cs" />
     <Compile Include="Main\CaseManagement\CaseSelectionViewModel.cs" />
     <Compile Include="Main\CaseManagement\DeviceWindowContentViewModel.cs" />
+    <Compile Include="Main\DeviceHomePage\DeviceHomePageViewModel.cs" />
     <Compile Include="Main\HomePage\HomePageViewModel.cs" />
     <Compile Include="Main\Main\DeviceListViewModel.cs" />
     <Compile Include="Main\Main\MainNavigationManager.cs" />
     <Compile Include="Main\Main\MainViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectControl\SelectControlViewModel.cs" />
-    <Compile Include="Tools\SubViewNavigationHelper.cs" />
+    <Compile Include="Tools\EditCaseNavigationHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.BaseUtility\XLY.SF.Framework.BaseUtility.csproj">

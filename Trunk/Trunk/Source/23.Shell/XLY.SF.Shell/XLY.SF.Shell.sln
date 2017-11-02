@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+VisualStudioVersion = 15.0.26228.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Shell", "XLY.SF.Shell.csproj", "{763F8B72-B80A-4C16-805B-80B2B2B557D4}"
 EndProject
@@ -111,6 +111,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.DataDisplayView", "..\..\21.Presentation\View\XLY.SF.Project.DataDisplayView\XLY.SF.Project.DataDisplayView.csproj", "{26B3C073-8944-4917-A7AF-94A10A5B5A7C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.PreviewFiles", "..\..\21.Presentation\View\XLY.SF.Project.PreviewFiles\XLY.SF.Project.PreviewFiles.csproj", "{65336A55-E659-4EC8-8BB6-0D99CEFBA159}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IsolatedTask", "IsolatedTask", "{773D7753-7773-4ED7-8E09-59AA561A36CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.IsolatedTaskEngine.Common", "..\..\22.Tools\IsolatedTask\XLY.SF.Project.IsolatedTaskEngine.Common\XLY.SF.Project.IsolatedTaskEngine.Common.csproj", "{C31639C3-6E19-4681-8647-46BDD60BFEAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.IsolatedTaskEngine", "..\..\22.Tools\IsolatedTask\XLY.SF.Project.IsolatedTaskEngine\XLY.SF.Project.IsolatedTaskEngine.csproj", "{4A9F07F5-4232-43C2-8806-2998BA4E984E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -541,8 +547,8 @@ Global
 		{FA4759AB-A043-44B2-B634-5EFE402D372D}.Release|x64.Build.0 = Release|Any CPU
 		{FA4759AB-A043-44B2-B634-5EFE402D372D}.Release|x86.ActiveCfg = Release|Any CPU
 		{FA4759AB-A043-44B2-B634-5EFE402D372D}.Release|x86.Build.0 = Release|Any CPU
-		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Debug|Any CPU.Build.0 = Debug|x64
 		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Debug|x64.Build.0 = Debug|Any CPU
 		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -565,6 +571,30 @@ Global
 		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|x64.Build.0 = Release|Any CPU
 		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|x86.ActiveCfg = Release|Any CPU
 		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|x86.Build.0 = Release|Any CPU
+		{C31639C3-6E19-4681-8647-46BDD60BFEAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C31639C3-6E19-4681-8647-46BDD60BFEAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C31639C3-6E19-4681-8647-46BDD60BFEAB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C31639C3-6E19-4681-8647-46BDD60BFEAB}.Debug|x64.Build.0 = Debug|Any CPU
+		{C31639C3-6E19-4681-8647-46BDD60BFEAB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C31639C3-6E19-4681-8647-46BDD60BFEAB}.Debug|x86.Build.0 = Debug|Any CPU
+		{C31639C3-6E19-4681-8647-46BDD60BFEAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C31639C3-6E19-4681-8647-46BDD60BFEAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C31639C3-6E19-4681-8647-46BDD60BFEAB}.Release|x64.ActiveCfg = Release|Any CPU
+		{C31639C3-6E19-4681-8647-46BDD60BFEAB}.Release|x64.Build.0 = Release|Any CPU
+		{C31639C3-6E19-4681-8647-46BDD60BFEAB}.Release|x86.ActiveCfg = Release|Any CPU
+		{C31639C3-6E19-4681-8647-46BDD60BFEAB}.Release|x86.Build.0 = Release|Any CPU
+		{4A9F07F5-4232-43C2-8806-2998BA4E984E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A9F07F5-4232-43C2-8806-2998BA4E984E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A9F07F5-4232-43C2-8806-2998BA4E984E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4A9F07F5-4232-43C2-8806-2998BA4E984E}.Debug|x64.Build.0 = Debug|Any CPU
+		{4A9F07F5-4232-43C2-8806-2998BA4E984E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4A9F07F5-4232-43C2-8806-2998BA4E984E}.Debug|x86.Build.0 = Debug|Any CPU
+		{4A9F07F5-4232-43C2-8806-2998BA4E984E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A9F07F5-4232-43C2-8806-2998BA4E984E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A9F07F5-4232-43C2-8806-2998BA4E984E}.Release|x64.ActiveCfg = Release|Any CPU
+		{4A9F07F5-4232-43C2-8806-2998BA4E984E}.Release|x64.Build.0 = Release|Any CPU
+		{4A9F07F5-4232-43C2-8806-2998BA4E984E}.Release|x86.ActiveCfg = Release|Any CPU
+		{4A9F07F5-4232-43C2-8806-2998BA4E984E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -616,12 +646,15 @@ Global
 		{FA4759AB-A043-44B2-B634-5EFE402D372D} = {A912AB32-171F-4A1D-8167-B9A844188F02}
 		{26B3C073-8944-4917-A7AF-94A10A5B5A7C} = {3782972E-78FA-4989-845D-120B6382E7DE}
 		{65336A55-E659-4EC8-8BB6-0D99CEFBA159} = {3782972E-78FA-4989-845D-120B6382E7DE}
+		{773D7753-7773-4ED7-8E09-59AA561A36CC} = {FDDD33CF-DC4D-4676-9D6F-96D32E0F70BE}
+		{C31639C3-6E19-4681-8647-46BDD60BFEAB} = {773D7753-7773-4ED7-8E09-59AA561A36CC}
+		{4A9F07F5-4232-43C2-8806-2998BA4E984E} = {773D7753-7773-4ED7-8E09-59AA561A36CC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3A587B29-35A1-47EC-AA7B-9EC40EA8AE9A}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 38
+		SccNumberOfProjects = 40
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.0.16:8080/tfs/xlyteamprojects
 		SccLocalPath0 = .
@@ -772,5 +805,13 @@ Global
 		SccProjectTopLevelParentUniqueName37 = XLY.SF.Shell.sln
 		SccProjectName37 = ../../21.Presentation/View/XLY.SF.Project.PreviewFiles
 		SccLocalPath37 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.PreviewFiles
+		SccProjectUniqueName38 = XLY.SF.Project.IsolatedTaskEngine.Common\\XLY.SF.Project.IsolatedTaskEngine.Common.csproj
+		SccProjectTopLevelParentUniqueName38 = XLY.SF.Shell.sln
+		SccProjectName38 = XLY.SF.Project.IsolatedTaskEngine.Common
+		SccLocalPath38 = XLY.SF.Project.IsolatedTaskEngine.Common
+		SccProjectUniqueName39 = ..\\..\\22.Tools\\IsolatedTask\\XLY.SF.Project.IsolatedTaskEngine\\XLY.SF.Project.IsolatedTaskEngine.csproj
+		SccProjectTopLevelParentUniqueName39 = XLY.SF.Shell.sln
+		SccProjectName39 = ../../22.Tools/IsolatedTask/XLY.SF.Project.IsolatedTaskEngine
+		SccLocalPath39 = ..\\..\\22.Tools\\IsolatedTask\\XLY.SF.Project.IsolatedTaskEngine
 	EndGlobalSection
 EndGlobal

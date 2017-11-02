@@ -27,69 +27,62 @@ namespace XLY.SF.Project.ViewModels.Main
         {
             SystemContext.Instance.CaseChanged += Instance_CaseChanged;
 
-            //注册主界面导航消息
-            MsgAggregation.Instance.RegisterNaviagtionMsg(this, SystemKeys.MainUcNavigation, MainNavigationCallback);
+            ////注册主界面导航消息
+            //MsgAggregation.Instance.RegisterNaviagtionMsg(this, SystemKeys.MainUcNavigation, MainNavigationCallback);
 
-            //获取附属界面【创建案例界面】
-            var caseCreationView = IocManagerSingle.Instance.GetViewPart(ExportKeys.CaseCreationView);
-            caseCreationView.DataSource.LoadViewModel();
-            SubView = caseCreationView;
+            ////获取附属界面【创建案例界面】
+            //var caseCreationView = IocManagerSingle.Instance.GetViewPart(ExportKeys.CaseCreationView);
+            //caseCreationView.DataSource.LoadViewModel();
+            //SubView = caseCreationView;
         }
 
         #region 当前界面显示的内容
 
-        private object _curMainView;
-        /// <summary>
-        /// 当前显示的视图
-        /// </summary>
-        public object CurMainView
-        {
-            get { return _curMainView; }
-            set
-            {
-                _curMainView = value;
-                base.OnPropertyChanged();
-            }
-        }
+        //private object _curMainView;
+        ///// <summary>
+        ///// 当前显示的视图
+        ///// </summary>
+        //public object CurMainView
+        //{
+        //    get { return _curMainView; }
+        //    set
+        //    {
+        //        _curMainView = value;
+        //        base.OnPropertyChanged();
+        //    }
+        //}
 
         #endregion
 
-        #region 附属界面【目前只有创建案例界面】
+        //#region 附属界面【目前只有创建案例界面】
 
-        private object _subView;
-        /// <summary>
-        /// 附属界面
-        /// </summary>
-        public object SubView
-        {
-            get
-            {
-                return this._subView;
-            }
+        //private object _subView;
+        ///// <summary>
+        ///// 附属界面
+        ///// </summary>
+        //public object SubView
+        //{
+        //    get
+        //    {
+        //        return this._subView;
+        //    }
 
-            set
-            {
-                this._subView = value;
-                base.OnPropertyChanged();
-            }
-        }
+        //    set
+        //    {
+        //        this._subView = value;
+        //        base.OnPropertyChanged();
+        //    }
+        //}
 
-        #endregion
+        //#endregion
 
         #region 主界面导航
 
-        //主界面导航回调
-        private void MainNavigationCallback(NavigationArgs args)
-        {
-            //首页需要重置界面状态
-
-            //if (args.MsgToken == ExportKeys.HomePageView)
-            //    CollapsedCaseNameRow();
-            //else if (args.MsgToken == ExportKeys.DeviceSelectView && !IsShowDeviceListRow)
-            //    IsShowDeviceListRow = true;
-
-            CurMainView = args.TargetView;
-        }
+        ////主界面导航回调
+        //private void MainNavigationCallback(NavigationArgs args)
+        //{
+        //    CurMainView = args.TargetView;
+        //}
 
         private void Instance_CaseChanged(object sender, PropertyChangedEventArgs<Project.CaseManagement.Case> e)
         {

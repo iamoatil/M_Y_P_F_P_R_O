@@ -40,7 +40,7 @@ namespace XLY.SF.UnitTest
 
         private void Log(string message)
         {
-            Console.WriteLine(message);
+            Console.WriteLine($"[{DateTime.Now.ToString("HH:mm:ss.fff")}]{message}");
         }
 
         private string DeskPath(string relativePath)
@@ -56,7 +56,7 @@ namespace XLY.SF.UnitTest
             TreeDataSource treeDataSource = new TreeDataSource();
             SimpleDataSource callDataSource = new SimpleDataSource();
 
-            treeDataSource.PluginInfo = new DataParsePluginInfo() { Name = "微信", Guid = "11FC356E-3EA6-481F-ACF6-D96925F80A4C", DeviceOSType= EnumOSType.Android };
+            treeDataSource.PluginInfo = new DataParsePluginInfo() { Name = "微信", Guid = "11FC356E-3EA6-481F-ACF6-D96925F80A4C", DeviceOSType = EnumOSType.Android };
             treeDataSource.TreeNodes = new List<TreeNode>();
             var rootNode = new TreeNode() { Text = "微信账户", TreeNodes = new List<TreeNode>(), Type = typeof(WeChatFriendShow), Items = new DataItems<WeChatFriendShow>(DB_PATH) };
             treeDataSource.TreeNodes.Add(rootNode);
@@ -137,7 +137,7 @@ namespace XLY.SF.UnitTest
             Log("开始测试");
             var p = DataReportAdapter.Instance.Plugins;
             Assert.IsTrue(p.Any());
-            var destPath = p.FirstOrDefault(pl=>pl.PluginInfo.Name.Contains("Html报表")).Execute(new DataReportPluginArgument()
+            var destPath = p.FirstOrDefault(pl => pl.PluginInfo.Name.Contains("Html报表")).Execute(new DataReportPluginArgument()
             {
                 DataPool = CreateDataSource(DeskPath(@"")),
                 ReportModuleName = "Html模板2(Bootstrap)",
@@ -179,14 +179,22 @@ namespace XLY.SF.UnitTest
                 ReportPath = DeskPath(@"TestReport\"),
                 CollectionInfo = new ExportCollectionInfo()
                 {
-                     CaseCode="1244", CaseName="杀入按", CaseType="抢劫", CollectLocation="环球中心", CollectLocationCode="610000", CollectorCertificateCode= "CollectorCertificateCode",
-                      CollectorName="by", CollectTime = "2012-3-2"
+                    CaseCode = "1244",
+                    CaseName = "杀入按",
+                    CaseType = "抢劫",
+                    CollectLocation = "环球中心",
+                    CollectLocationCode = "610000",
+                    CollectorCertificateCode = "CollectorCertificateCode",
+                    CollectorName = "by",
+                    CollectTime = "2012-3-2"
                 },
-                DeviceInfo=new ExportDeviceInfo()
+                DeviceInfo = new ExportDeviceInfo()
                 {
-                     BloothMac="29:21:23:42:13:d9", IMEI="2343353453454", Name="fsdfi"
+                    BloothMac = "29:21:23:42:13:d9",
+                    IMEI = "2343353453454",
+                    Name = "fsdfi"
                 }
-            }, new DefaultAsyncProgress()); 
+            }, new DefaultAsyncProgress());
             Log("Save OK!" + destPath);
             System.Diagnostics.Process.Start(destPath.ToSafeString());
             Log("测试结束");
@@ -203,7 +211,7 @@ namespace XLY.SF.UnitTest
             Stopwatch watch = new Stopwatch();
             watch.Start();
             TestRefectionSpeed_Refection(total);
-            Console.WriteLine("反射：" + watch.ElapsedMilliseconds); 
+            Console.WriteLine("反射：" + watch.ElapsedMilliseconds);
             GC.Collect();
 
             watch.Reset();
@@ -233,7 +241,7 @@ namespace XLY.SF.UnitTest
 
         private void TestRefectionSpeed_Refection(int total)
         {
-            Call call = new Call() { StartDate = new DateTime(2013,12,3) , Name = "张三"};
+            Call call = new Call() { StartDate = new DateTime(2013, 12, 3), Name = "张三" };
             for (int i = 0; i < total; i++)
             {
                 var type = call.GetType();
@@ -305,7 +313,7 @@ namespace XLY.SF.UnitTest
 
             for (int i = 0; i < total; i++)
             {
-                call.StartDate= DateTime.Now.AddDays(i);
+                call.StartDate = DateTime.Now.AddDays(i);
             }
         }
 
@@ -476,6 +484,7 @@ namespace XLY.SF.UnitTest
         [TestMethod]
         public void TestChangeType()
         {
+
             object r1 = Convert.ChangeType("234", typeof(string));
             object r2 = Convert.ChangeType("234", typeof(int));
             object r3 = Convert.ChangeType("234", typeof(uint));
@@ -498,8 +507,71 @@ namespace XLY.SF.UnitTest
             //int rt = USBMonitorCoreDll.Initialize(Encoding.Unicode.GetBytes(UsbExePath));
             //Assert.AreEqual(rt, 0);
 
-            
+
         }
         #endregion
+
+        #region 插件序列化和反序列化
+
+        /// <summary>
+        /// 插件序列化和反序列化
+        /// </summary>	
+        [TestMethod]
+        public void TestPluginSerizal()
+        {
+            Log("-----------开始测试插件序列化和反序列化----------------");
+            DataViewPluginInfo pi = new DataViewPluginInfo()
+            {
+                Guid = "{8B8D2903-AAE7-449C-B422-1B6FE625ABA9}",
+                Name = "插件1",
+                PluginType = PluginType.SpfDataView,
+                VersionStr = "1.0.0.1",
+                ViewType = new List<DataViewSupportItem>()
+                  {
+                       new DataViewSupportItem(){ PluginName = "微信", PluginId = "微信ID", TypeName = "MessageCore"},
+                       new DataViewSupportItem(){ PluginName = "短信", PluginId = "短信ID", TypeName = "Message2"}
+                  }
+            };
+
+            Serializer.SerializeToXML(pi, @"C:\Users\fhjun\Desktop\123.xml");
+        }
+        #endregion
+
+        #region 数据Json格式化速度
+
+        /// <summary>
+        /// 数据Json格式化速度
+        /// </summary>	
+        [TestMethod]
+        public void TestItemsToJsonSpeed()
+        {
+            Log("-----------开始测试数据Json格式化速度----------------");
+            int count = 100000;
+            IDataItems items = new DataItems<MessageCore>(@"C:\Users\fhjun\Desktop\123.db");
+            for (int i = 0; i < count; i++)
+            {
+                items.Add(new MessageCore() { Content = "发送的消息的内容是的俄日文2342！32<>^*", Date = DateTime.Now.AddDays(i), SenderName = "张三", MessageType = "文本" });
+            }
+            items.Commit();
+            items.Filter();
+            Stopwatch t = new Stopwatch();
+            t.Start();
+            using (StreamWriter sw = new StreamWriter(@"C:\Users\fhjun\Desktop\123.js", false, Encoding.UTF8))
+            {
+                sw.Write("var __data = [");
+                int r = 0;
+                foreach (var c in items.View)
+                {
+                    if (r != 0)
+                        sw.Write(",");
+                    sw.Write(Serializer.JsonSerilize(c));
+                    r++;
+                }
+                sw.Write("];");
+            }
+            Log($"执行时间：{t.ElapsedMilliseconds}ms");//6.5s--100000数据
+        }
+        #endregion
+
     }
 }

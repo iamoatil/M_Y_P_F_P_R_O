@@ -9,7 +9,7 @@ namespace XLY.SF.Project.Domains
 {
     public class CallLog
     {
-        [XmlElement(ElementName = "Call_Records")]
+        [XmlElement(ElementName = "CALL_RECORDS")]
         public List<Call_Records> listDatas { get; set; }
     }
 

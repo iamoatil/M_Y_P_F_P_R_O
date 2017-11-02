@@ -14,7 +14,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="lsb1" ItemsSource="{Binding Items}" SelectionChanged="lsb1_SelectionChanged">
+        <ListBox x:Name="lsb1" ItemsSource="{Binding Items.View}" SelectionChanged="lsb1_SelectionChanged">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Template">
@@ -54,17 +54,6 @@
             </ListBox.ItemContainerStyle>
         </ListBox>
         <GridSplitter VerticalAlignment="Stretch" Width="3"/>
-        <TabControl x:Name="tbdetail" Grid.Column="1" >
-            <!--<TabItem Header="表格视图">
-                <DataGrid ItemsSource="{Binding Items}" AutoGenerateColumns="True" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
-                    <DataGrid.DataContext>
-                        <MultiBinding Converter="{StaticResource treeNodeConverter}">
-                            <Binding Path="SelectedValue" ElementName="lsb1"></Binding>
-                            <Binding Path="DataContext" ElementName="lsb1"></Binding>
-                        </MultiBinding>
-                    </DataGrid.DataContext>
-                </DataGrid>
-            </TabItem>-->
-        </TabControl>
+        <TabControl x:Name="tbdetail" Grid.Column="1" ></TabControl>
     </Grid>
 </UserControl>

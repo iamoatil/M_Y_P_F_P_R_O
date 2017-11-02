@@ -157,14 +157,17 @@ namespace XLY.SF.Project.Themes
 
             ((INotifyCollectionChanged)this.Items).CollectionChanged += DeviceSelectControl_CollectionChanged;
 
-            this.Loaded += DeviceSelectControl_Loaded;
+            BindingItems();
+            SetAutoSize();
+            ScrollToItem();
+            //this.Loaded += DeviceSelectControl_Loaded;
         }
 
         private void DeviceSelectControl_Loaded(object sender, RoutedEventArgs e)
         {
-            BindingItems();
-            SetAutoSize();
-            ScrollToItem();
+            //BindingItems();
+            //SetAutoSize();
+            //ScrollToItem();
         }
 
         private void DeviceSelectControl_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

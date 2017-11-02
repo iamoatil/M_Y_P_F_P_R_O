@@ -5,8 +5,10 @@
     <View_Loading>系统加载中，请稍等</View_Loading>
     <View_Login>登录</View_Login>
     <View_Login_ExitSys>退出</View_Login_ExitSys>
-    <View_Login_UserName>用户名</View_Login_UserName>
-    <View_Login_Password>密码</View_Login_Password>
+    <View_Login_UserName>帐  号</View_Login_UserName>
+    <View_Login_Password>密  码</View_Login_Password>
+    <View_Login_Company>效率源信息安全股份有限公司</View_Login_Company>
+    <View_Login_Version>版本 1.0</View_Login_Version>
 
     <!--主页-->
     <View_MainWinTitle>SPF9139智能手机数据恢复取证系统</View_MainWinTitle>
@@ -77,7 +79,8 @@
     <!--消息提示-->
     <View_MessageBox_Error>错误消息</View_MessageBox_Error>
     <View_MessageBox_Notice>提示消息</View_MessageBox_Notice>
-  </ViewLanguage>
+  
+</ViewLanguage>
 
   <!--其他-->
   <DeviceLanguage Prompt="设备相关语言资源">

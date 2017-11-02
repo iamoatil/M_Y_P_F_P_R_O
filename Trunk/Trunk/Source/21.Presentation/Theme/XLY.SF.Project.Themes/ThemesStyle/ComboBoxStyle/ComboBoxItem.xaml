@@ -10,9 +10,6 @@
             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
         </Border>
         <ControlTemplate.Triggers>
-            <Trigger Property="IsEnabled" Value="false">
-                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-            </Trigger>
             <Trigger Property="IsHighlighted" Value="true">
                 <Setter Property="Effect" TargetName="Bd">
                     <Setter.Value>
@@ -21,6 +18,18 @@
                 </Setter>
                 <Setter Property="Foreground" Value="#FF41AAEB"/>
                 <Setter Property="Background" Value="#21000000" TargetName="Bd"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <!--默认下拉框项模版-->
+    <ControlTemplate x:Key="cb_DefaultItemCt" TargetType="ComboBoxItem">
+        <Border x:Name="Bd" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+            <ContentPresenter Margin="{TemplateBinding Padding}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsHighlighted" Value="true">
+                <Setter Property="Background" Value="#4e5a7e" TargetName="Bd"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
