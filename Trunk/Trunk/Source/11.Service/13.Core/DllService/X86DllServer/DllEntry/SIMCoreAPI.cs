@@ -29,7 +29,7 @@ namespace X86DllServer
     /// </summary>
     public static class SIMCoreAPI
     {
-        private const string SIMdll = "simDataRead.dll";
+        private const string SIMdll = @"Lib\vcdll\SIM\simDataRead.dll";
 
         /// <summary>
         /// 扫描com口

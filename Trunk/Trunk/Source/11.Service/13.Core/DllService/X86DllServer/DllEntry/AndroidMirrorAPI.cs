@@ -17,7 +17,7 @@ namespace X86DllServer
     public static class AndroidMirrorAPI
     {
         // Android镜像
-        private const string _MirrorDllPath = "phoneAndroidImg.dll";
+        private const string _MirrorDllPath = @"Lib\vcdll\PhoneAndroidImg\phoneAndroidImg.dll";
 
         /// <summary>
         /// 镜像回调函数

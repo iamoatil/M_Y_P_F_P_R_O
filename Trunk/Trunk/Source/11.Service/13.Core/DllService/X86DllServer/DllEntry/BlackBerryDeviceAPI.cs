@@ -16,7 +16,7 @@ namespace X86DllServer
     /// </summary>
     public static class BlackBerryDeviceAPI
     {
-        private const string _BlackBerryImg = "phoneBlackBerryImg.dll";
+        private const string _BlackBerryImg = @"Lib\vcdll\BlackBerry\phoneBlackBerryImg.dll";
 
         #region 设备检测
 

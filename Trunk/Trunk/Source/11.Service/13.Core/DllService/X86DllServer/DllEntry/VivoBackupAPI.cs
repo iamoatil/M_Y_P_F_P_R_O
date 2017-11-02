@@ -20,7 +20,7 @@ namespace X86DllServer.DllEntry
     /// </summary>
     public static class VivoBackupAPI
     {
-        private const string _MirrorDllPath = "phoneAndroidImg.dll";
+        private const string _MirrorDllPath = @"Lib\vcdll\PhoneAndroidImg\phoneAndroidImg.dll";
 
         /// <summary>
         /// 获取镜像句柄，以类型的方式获取
