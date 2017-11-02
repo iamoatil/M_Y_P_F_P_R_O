@@ -17,8 +17,8 @@ namespace CopyDll
     {
         public DirectoryPair(string sourceDir,string targetDir)
         {
-            SourceDir = new FileDirectory(sourceDir,"*.*", SearchOption.AllDirectories);
-            TargetDir = new FileDirectory(targetDir, "*.*", SearchOption.AllDirectories);
+            SourceDir = new FileDirectory(Path.GetFullPath(sourceDir),"*.*", SearchOption.AllDirectories);
+            TargetDir = new FileDirectory(Path.GetFullPath(targetDir), "*.*", SearchOption.AllDirectories);
         }
 
         public FileDirectory SourceDir { get; private set; }
