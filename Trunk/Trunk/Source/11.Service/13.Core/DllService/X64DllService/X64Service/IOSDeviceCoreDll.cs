@@ -17,8 +17,8 @@ namespace X64Service
 {
     public static class IOSDeviceCoreDll
     {
-        private const string IPhoneDeviceDll = @"bin\iphoneDevice.dll";
-        private const string DevicePreDealDll = @"bin\iphoneDevice_pre.dll";
+        private const string IPhoneDeviceDll = @"Lib\vcdllX64\IphoneDevices\iphoneDevice.dll";
+        private const string DevicePreDealDll = @"Lib\vcdllX64\IphoneDevices\iphoneDevice_pre.dll";
 
         static IOSDeviceCoreDll()
         {

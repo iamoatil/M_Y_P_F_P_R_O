@@ -10,19 +10,22 @@ namespace X64Service
 {
     public class MirrorCoreDll
     {
-        private const string _Hd = @"bin\hd.dll";
+        //DLL的目录
+        private const string _DllDir = @"Lib\vcdllX64\Mirror";
 
-        private const string _Hd0 = @"bin\hd0.dll";
+        private const string _Hd = _DllDir+@"\hd.dll";
 
-        private const string _DskFsMaster = @"bin\dsk_fs_master.dll";
+        private const string _Hd0 = _DllDir+@"\hd0.dll";
 
-        private const string _FileTypTPL = @"bin\file_type_tpl.dll";
+        private const string _DskFsMaster = _DllDir+@"\dsk_fs_master.dll";
 
-        private const string _SnapShotDLL = @"bin\blk_fdt_snapshot.dll";
+        private const string _FileTypTPL = _DllDir+@"\file_type_tpl.dll";
 
-        private const string _TimeConverter = @"bin\xtime_convert.dll";
+        private const string _SnapShotDLL = _DllDir+@"\blk_fdt_snapshot.dll";
 
-        private const string _RaidEx = @"bin\rdEx.dll";
+        private const string _TimeConverter = _DllDir+@"\xtime_convert.dll";
+
+        private const string _RaidEx = _DllDir+@"\rdEx.dll";
 
 
         /// <summary>

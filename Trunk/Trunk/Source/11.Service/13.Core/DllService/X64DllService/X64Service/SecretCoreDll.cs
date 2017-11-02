@@ -14,10 +14,12 @@ namespace X64Service
     /// </summary>
   public static class SecretCoreDll
     {
+        //DLL的目录
+        private const string _DllDir = @"Lib\vcdllX64\Mirror\";
 
-        private const string _XlyHasp = "bin\\xlyhasp.dll";
+        private const string _XlyHasp = @"Lib\vcdllX64\Mirror\xlyhasp.dll";
 
-        private const string _Secret = "bin\\Secret.dll";
+        private const string _Secret = @"Lib\vcdllX64\Secret\Secret.dll";
 
         #region 检测老加密狗
 

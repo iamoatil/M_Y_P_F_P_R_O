@@ -19,7 +19,7 @@ namespace X64Service
     public static class SqliteCoreDll
     {
 
-        private const string _SqliteDllName = @"bin\SqliteInterface.dll";
+        private const string _SqliteDllName = @"Lib\vcdllX64\Sqltite\SqliteInterface.dll";
 
         public static int Init(string licensePath)
         {

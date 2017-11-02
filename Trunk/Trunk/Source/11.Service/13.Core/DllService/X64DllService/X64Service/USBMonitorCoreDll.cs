@@ -10,7 +10,7 @@ namespace X64Service
     /// </summary>
     public static class USBMonitorCoreDll
     {
-        private const string _USBDeviceMonitor = @"bin\\UsbMonitor.dll";
+        private const string _USBDeviceMonitor = @"Lib\vcdllX64\UsbDeviceMonitor\UsbMonitor.dll";
 
         #region USB端口检测DLL封装
 

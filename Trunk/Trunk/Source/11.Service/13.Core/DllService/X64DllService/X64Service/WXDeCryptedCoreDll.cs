@@ -16,7 +16,7 @@ namespace X64Service
     /// </summary>
     public static class WXDeCryptedCoreDll
     {
-        private const string _DllName = @"bin\WXDecrypted.dll";
+        private const string _DllName = @"Lib\vcdllX64\WxDEcrypted\WXDecrypted.dll";
 
         /// <summary>
         /// 打开数据库

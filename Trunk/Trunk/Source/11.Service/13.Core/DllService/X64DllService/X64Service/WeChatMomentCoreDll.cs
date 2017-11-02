@@ -16,6 +16,7 @@ namespace X64Service
     /// </summary>
     public static class WeChatMomentCoreDll
     {
+        //todo 需要确定dll的位置
         private const string WeiXinMomentDllname = "bin\\WeChat_Moment_Extract_for_Android.dll";
 
         /// <summary>
