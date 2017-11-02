@@ -16,7 +16,7 @@ namespace CopyDll
     /// <summary>
     /// FileDirectory
     /// </summary>
-    class FileDirectory
+    public class FileDirectory
     {
         public FileDirectory(string dirPath, string searchPattern, SearchOption searchOption)
         {
