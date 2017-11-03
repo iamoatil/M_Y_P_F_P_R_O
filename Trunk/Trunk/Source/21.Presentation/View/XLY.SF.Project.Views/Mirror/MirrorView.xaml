@@ -46,8 +46,8 @@
         </GroupBox>
         <GroupBox Header="镜像目标" Margin="20,0,0,0" Grid.Row="1" Grid.Column="1">
             <Grid>
-                <Button Content="更改存储路径" HorizontalAlignment="Left" Margin="21,10,0,0" VerticalAlignment="Top" Width="84" Command="{Binding SetTargetPathCommand}"/>
-                <TextBlock TextWrapping="Wrap" Margin="0,40,0,0" Text="{Binding Path=TargetPosition.FilePath}" Background="WhiteSmoke"/>
+                <Button Content="更改存储路径" HorizontalAlignment="Left" Margin="21,10,0,0" VerticalAlignment="Top" Width="84" Command="{Binding TargetPosition.SetTargetPathCommand}"/>
+                <TextBlock TextWrapping="Wrap" Margin="0,40,0,0" Text="{Binding TargetPosition.FilePath}" Background="WhiteSmoke"/>
 
             </Grid>
         </GroupBox>

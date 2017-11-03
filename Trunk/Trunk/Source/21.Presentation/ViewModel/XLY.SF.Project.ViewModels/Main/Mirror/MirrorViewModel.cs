@@ -33,8 +33,7 @@ namespace XLY.SF.Project.ViewModels.Main
     public class MirrorViewModel : ViewModelBase
     {
         public MirrorViewModel()
-        {
-            SetTargetPathCommand = new RelayCommand(new Action(() => _targetPosition.Set()));
+        {           
             StartCommand = new RelayCommand(new Action(() => { MessageBox.Show("Start"); }));
             StopCommand = new RelayCommand(new Action(() => { MessageBox.Show("Stop"); }));
         }
@@ -45,7 +44,7 @@ namespace XLY.SF.Project.ViewModels.Main
         public SourcePosition SourcePosition { get { return _sourcePosition; } }
         public TargetPosition TargetPosition { get { return _targetPosition; } }
 
-        public ICommand SetTargetPathCommand { get; private set; }
+       
 
         public ICommand StartCommand { get; private set; }
 
@@ -106,6 +105,11 @@ namespace XLY.SF.Project.ViewModels.Main
 
     public class TargetPosition : NotifyPropertyBase
     {
+        public TargetPosition()
+        {
+            SetTargetPathCommand = new RelayCommand(new Action(() => Set()));
+        }
+
         /// <summary>
         /// 镜像文件的路径
         /// </summary>
@@ -121,6 +125,7 @@ namespace XLY.SF.Project.ViewModels.Main
             }
         }
 
+        public ICommand SetTargetPathCommand { get; private set; }
 
         /// <summary>
         /// 设置目标位置
