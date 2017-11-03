@@ -39,5 +39,10 @@ namespace XLY.SF.Project.Views.Mirror
         {
 
         }
+
+        private void ChangeTargetPath_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

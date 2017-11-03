@@ -59,16 +59,28 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\21.Presentation\View\XLY.SF.Project.Views\XLY.SF.Project.Views.csproj">
-      <Project>{4afff74b-66b7-4934-8e37-3d65b38a1b39}</Project>
-      <Name>XLY.SF.Project.Views</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\01.Framework\XLY.SF.Framework.Core.Base\XLY.SF.Framework.Core.Base.csproj">
+      <Project>{28682FE4-EC72-42A3-BB2C-27D19F55E14F}</Project>
+      <Name>XLY.SF.Framework.Core.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\21.Presentation\ViewModel\XLY.SF.Project.ViewModels\XLY.SF.Project.ViewModels.csproj">
+      <Project>{9D2B3936-A461-4B11-AB1B-FAFD1AEAB5DC}</Project>
+      <Name>XLY.SF.Project.ViewModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\21.Presentation\View\XLY.SF.Project.Views\XLY.SF.Project.Views.csproj">
+      <Project>{4afff74b-66b7-4934-8e37-3d65b38a1b39}</Project>
+      <Name>XLY.SF.Project.Views</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\TestHelper\TestHelper\TestHelper.csproj">
+      <Project>{87d036b6-410d-4d13-8c3f-dc81c43da496}</Project>
+      <Name>TestHelper</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
