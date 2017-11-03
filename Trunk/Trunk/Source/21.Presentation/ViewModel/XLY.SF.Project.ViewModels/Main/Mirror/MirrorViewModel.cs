@@ -15,9 +15,12 @@ using XLY.SF.Framework.Language;
 using System.Windows.Input;
 using XLY.SF.Project.ViewModels.Tools;
 using Microsoft.Win32;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
+using XLY.SF.Project.Domains;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 
 /* ==============================================================================
@@ -33,18 +36,17 @@ namespace XLY.SF.Project.ViewModels.Main
     public class MirrorViewModel : ViewModelBase
     {
         public MirrorViewModel()
-        {           
-            StartCommand = new RelayCommand(new Action(() => { MessageBox.Show("Start"); }));
-            StopCommand = new RelayCommand(new Action(() => { MessageBox.Show("Stop"); }));
+        {
+            StartCommand = new RelayCommand(new Action(() => { System.Windows.MessageBox.Show("Start"); }));
+            StopCommand = new RelayCommand(new Action(() => { System.Windows.MessageBox.Show("Stop"); }));
+           
         }
-
+       
         SourcePosition _sourcePosition = new SourcePosition();
         TargetPosition _targetPosition = new TargetPosition();
 
         public SourcePosition SourcePosition { get { return _sourcePosition; } }
         public TargetPosition TargetPosition { get { return _targetPosition; } }
-
-       
 
         public ICommand StartCommand { get; private set; }
 
@@ -58,10 +60,39 @@ namespace XLY.SF.Project.ViewModels.Main
             PhoneDisks = new DiskPatitions("手机");
             SimDisk = new DiskPatitions("Sim");
             SDDisk = new DiskPatitions("Sd");
+            
         }
+
+        private Domains.Device _device;
+
         public DiskPatitions PhoneDisks { get; private set; }
         public DiskPatitions SimDisk { get; private set; }
         public DiskPatitions SDDisk { get; private set; }
+        
+        /// <summary>
+        /// 初始化设备
+        /// </summary>
+        public void InitializeDevice(IDevice device)
+        {
+            _device = (Domains.Device)device;
+            if (_device == null)
+            {
+                return;
+            }
+            List<Partition> partitions = _device.GetPartitons();
+            if(_device.DeviceType == EnumDeviceType.Phone)
+            {
+                PhoneDisks.Items = partitions;                
+            }
+            else if (_device.DeviceType == EnumDeviceType.SIM)
+            {
+                SimDisk.Items = partitions;
+            }
+            else if(_device.DeviceType == EnumDeviceType.SDCard)
+            {
+                SDDisk.Items = partitions;
+            }            
+        }
     }
 
     /// <summary>
@@ -72,7 +103,6 @@ namespace XLY.SF.Project.ViewModels.Main
         public DiskPatitions(string name)
         {
             Name = name;
-            Items = new ObservableCollection<string>() {"1","2" };
         }
 
         /// <summary>
@@ -83,18 +113,26 @@ namespace XLY.SF.Project.ViewModels.Main
         public string Name
         {
             get { return _name; }
-            private set { _name = value; }
+            private set
+            {
+                _name = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
         /// 磁盘分区
         /// </summary>
-        private ObservableCollection<string> _items;
+        private List<Partition> _items;
 
-        public ObservableCollection<string> Items
+        public List<Partition> Items
         {
             get { return _items; }
-            private set { _items = value; }
+            set
+            {
+                _items = value;
+                OnPropertyChanged();
+            }
         }
 
         public void Load()
@@ -113,14 +151,14 @@ namespace XLY.SF.Project.ViewModels.Main
         /// <summary>
         /// 镜像文件的路径
         /// </summary>
-        private string _filePath;
+        private string _dirPath= @"C:\XLYSFTasks\";
 
-        public string FilePath
+        public string DirPath
         {
-            get { return _filePath; }
+            get { return _dirPath; }
             set
             {
-                _filePath = value;
+                _dirPath = value;
                 OnPropertyChanged();
             }
         }
@@ -132,13 +170,12 @@ namespace XLY.SF.Project.ViewModels.Main
         /// </summary>
         public void Set()
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.RestoreDirectory = true;
-            bool? isOk = saveFileDialog.ShowDialog();
-            if (isOk == true)
+            FolderBrowserDialog folderBrowserDialog  = new FolderBrowserDialog();
+            DialogResult dr = folderBrowserDialog.ShowDialog();
+            if (dr == DialogResult.OK)
             {
-                string filePath = saveFileDialog.FileName;
-                FilePath = filePath;
+                string filePath = folderBrowserDialog.SelectedPath;
+                DirPath = filePath;
             }
         }
     }

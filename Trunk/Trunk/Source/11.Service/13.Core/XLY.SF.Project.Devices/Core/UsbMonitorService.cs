@@ -22,8 +22,8 @@ namespace XLY.SF.Project.Devices
 
         }
 
-        private static readonly string UsbExePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin\\USBMonitorService.exe");
-
+        private static readonly string UsbExePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Lib\vcdllX64\UsbDeviceMonitor\USBMonitorService.exe");
+        
         ///// <summary>
         ///// 唯一实例
         ///// </summary>

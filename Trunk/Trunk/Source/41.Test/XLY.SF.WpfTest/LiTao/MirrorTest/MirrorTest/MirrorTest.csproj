@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\..\..\31.Build\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -47,6 +47,10 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="XLY.SF.Project.ProxyService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\21.Presentation\ProjectContext\XLY.SF.Project.Proxy\XLY.SF.Project.ProxyService\bin\Debug\XLY.SF.Project.ProxyService.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -68,6 +72,18 @@
     <ProjectReference Include="..\..\..\..\..\01.Framework\XLY.SF.Framework.Core.Base\XLY.SF.Framework.Core.Base.csproj">
       <Project>{28682FE4-EC72-42A3-BB2C-27D19F55E14F}</Project>
       <Name>XLY.SF.Framework.Core.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\11.Service\11.Domains\XLY.SF.Project.Domains\XLY.SF.Project.Domains.csproj">
+      <Project>{68F2D8A3-05A8-4AAA-A9E2-00071188595B}</Project>
+      <Name>XLY.SF.Project.Domains</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\11.Service\13.Core\XLY.SF.Project.Devices\XLY.SF.Project.Devices.csproj">
+      <Project>{9EB7A2CF-AE03-47EE-B850-88A0FCCDD0BD}</Project>
+      <Name>XLY.SF.Project.Devices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\21.Presentation\ProjectContext\XLY.SF.Project.ViewDomain\XLY.SF.Project.ViewDomain.csproj">
+      <Project>{3048CC82-28C9-4833-8D71-EA86FEA3FB20}</Project>
+      <Name>XLY.SF.Project.ViewDomain</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\21.Presentation\ViewModel\XLY.SF.Project.ViewModels\XLY.SF.Project.ViewModels.csproj">
       <Project>{9D2B3936-A461-4B11-AB1B-FAFD1AEAB5DC}</Project>
