@@ -20,8 +20,7 @@ namespace CopyDll
     class Program
     {
         static void Main(string[] args)
-        {
-            List<string> _filePaths = Directory.GetFiles(@"D:\SourceFiles\", "*.*", SearchOption.AllDirectories).ToList();
+        {            
             //参数正确性验证
             bool isValidate = true;
             if (args.Length != 0 

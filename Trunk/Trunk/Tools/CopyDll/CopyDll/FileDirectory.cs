@@ -61,6 +61,7 @@ namespace CopyDll
         /// <param name="targetDir"></param>
         public static void CopyIfNewest(FileDirectory sourceDir, FileDirectory targetDir)
         {
+            Console.Write("正在拷贝目录：" + sourceDir._dirPath.Substring(sourceDir._dirPath.LastIndexOf(@"\")));
             foreach (string path in sourceDir._filePaths)
             {
                 string fakeTargetPath = path.Replace(sourceDir._dirPath, targetDir._dirPath);
@@ -72,6 +73,7 @@ namespace CopyDll
                     {
                         Directory.CreateDirectory(dirName);
                     }
+                    Console.Write(".");
                     File.Copy(path, fakeTargetPath);
                 }
                 else
@@ -81,10 +83,12 @@ namespace CopyDll
 
                     if (sourceFileTime > targetFileTime)
                     {
+                        Console.Write(".");
                         File.Copy(path, fakeTargetPath,true);
                     }
                 }
             }
+            Console.WriteLine("/n拷贝结束");
         }
     }
 }
