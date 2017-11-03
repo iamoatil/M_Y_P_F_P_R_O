@@ -167,6 +167,9 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         public const string DataDisplayViewModel = "DataDisplayViewModel";
         #endregion
 
+        #region 镜像
+        public const string MirrorView = "MirrorView";        
+        #endregion
         #endregion
 
         #region 插件
