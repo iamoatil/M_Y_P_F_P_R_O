@@ -19,17 +19,17 @@ namespace CopyDll
 {
     class Program
     {
-        static void Main(string[] args)
-        {            
+        static void NewProcess(string[] args)
+        {
             //参数正确性验证
             bool isValidate = true;
-            if (args.Length != 0 
+            if (args.Length != 0
                 && args.Length != 3)
             {
                 isValidate = false;
             }
-            string sd =null;
-            string td =null;
+            string sd = null;
+            string td = null;
             if (args.Length == 3)
             {
                 sd = args[1].Trim();
@@ -50,7 +50,7 @@ namespace CopyDll
                 }
             }
 
-            if(isValidate == false)
+            if (isValidate == false)
             {
                 Console.WriteLine("                       格式错误                            \n" +
                                   "此程序只支持以下两种格式运行：                              \n" +
@@ -62,15 +62,15 @@ namespace CopyDll
 
             //初始化FileDirectory列表
             List<DirectoryPair> _directoryPairList = new List<DirectoryPair>();
-            if(args.Length == 0)
+            if (args.Length == 0)
             {
-                string exePath=Process.GetCurrentProcess().MainModule.FileName;
+                string exePath = Process.GetCurrentProcess().MainModule.FileName;
                 string exeDir = Path.GetDirectoryName(exePath);
-                string[] rows=File.ReadAllLines(exeDir+@"\config.cfg");
+                string[] rows = File.ReadAllLines(exeDir + @"\config.cfg");
                 foreach (var row in rows)
                 {
                     string[] items = row.Split('|');
-                    if(items.Length != 2)
+                    if (items.Length != 2)
                     {
                         continue;
                     }
@@ -101,9 +101,23 @@ namespace CopyDll
             //执行拷贝
             foreach (var directoryPair in _directoryPairList)
             {
-                FileDirectory.CopyIfNewest(directoryPair.SourceDir,directoryPair.TargetDir);
+                FileDirectory.CopyIfNewest(directoryPair.SourceDir, directoryPair.TargetDir);
             }
+        }
 
+        static void Main(string[] args)
+        {
+            try
+            {
+                NewProcess(args);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("发生错误！");
+                Console.WriteLine(ex.Message+"\n"+ex.StackTrace);                
+            }
+            Console.WriteLine("按任意键继续");
+            Console.Read();
             return;
             //待拷贝DLL位置
             string sourceDllDir = Path.GetFullPath(@"..\..\..\..\Lib\vcdll");
