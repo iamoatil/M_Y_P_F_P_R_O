@@ -1,58 +1,71 @@
-﻿<UserControl x:Class="XLY.SF.Project.Views.Mirror.MirrorView"
+﻿<viewmodel:UcViewBase
+    xmlns:viewmodel="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"             
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+    x:Class="XLY.SF.Project.Views.Mirror.MirrorView"             
              mc:Ignorable="d" 
             Height="500" Width="800" >  
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="10*"/>
-            <RowDefinition Height="70*"/>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="10*"/>
-        </Grid.RowDefinitions>
-        <TextBlock HorizontalAlignment="Center"  Text="物理镜像" VerticalAlignment="Top" Margin="245,0" Grid.ColumnSpan="2" />
-        <GroupBox Header="镜像源" Margin="0,0,20,0" Grid.Row="1">
-            <Grid>
-                <TabControl >
-                    <TabItem Header="手机">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="1*"/>
+			<ColumnDefinition Width="1*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="10*"/>
+			<RowDefinition Height="70*"/>
+			<RowDefinition Height="5*"/>
+			<RowDefinition Height="10*"/>
+		</Grid.RowDefinitions>
+		<TextBlock HorizontalAlignment="Center"  Text="物理镜像" VerticalAlignment="Top" Margin="245,0" Grid.ColumnSpan="2" />
+		<GroupBox x:Name="groupBox" Header="镜像源" Margin="0,0,20,0" Grid.Row="1">
+			<Grid>
+                <TabControl x:Name="tabControl" DataContext="{Binding SourcePosition}" Tag="{Binding CurrentSelectedDisk}">
+					<TabItem x:Name="tabItem1" Header="手机" DataContext="{Binding PhoneDisks}">
+						<i:Interaction.Triggers>
+							<ei:PropertyChangedTrigger Binding="{Binding IsSelected, ElementName=tabItem}">
+                                <ei:ChangePropertyAction PropertyName="Tag" TargetObject="{Binding ElementName=tabControl}" Value="{Binding DataContext, ElementName=tabItem1}"/>
+							</ei:PropertyChangedTrigger>
+						</i:Interaction.Triggers>
+						<Grid Background="#FFE5E5E5">
+							<ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding CurrentSelectedItem}"/>
+						</Grid>                              
+					</TabItem>
+                    <TabItem x:Name="tabItem2" Header="SIM卡" DataContext="{Binding SimDisk}">
+                        <i:Interaction.Triggers>
+                            <ei:PropertyChangedTrigger Binding="{Binding IsSelected, ElementName=tabItem}">
+                                <ei:ChangePropertyAction PropertyName="Tag" TargetObject="{Binding ElementName=tabControl}" Value="{Binding DataContext, ElementName=tabItem2}"/>
+                            </ei:PropertyChangedTrigger>
+                        </i:Interaction.Triggers>
                         <Grid Background="#FFE5E5E5">
-                            <ListBox ItemsSource="{Binding SourcePosition.PhoneDisks.Items}">                                
-                            </ListBox>
-                        </Grid>                              
-                    </TabItem>
-                    <TabItem Header="SIM卡">
+							<ListBox ItemsSource="{Binding Items}"/>
+						</Grid>
+					</TabItem>
+                    <TabItem x:Name="tabItem3" Header="SD卡" DataContext="{Binding SDDisk}">
+                        <i:Interaction.Triggers>
+                            <ei:PropertyChangedTrigger Binding="{Binding IsSelected, ElementName=tabItem}">
+                                <ei:ChangePropertyAction PropertyName="Tag" TargetObject="{Binding ElementName=tabControl}" Value="{Binding DataContext, ElementName=tabItem3}"/>
+                            </ei:PropertyChangedTrigger>
+                        </i:Interaction.Triggers>
                         <Grid Background="#FFE5E5E5">
-                            <ListBox ItemsSource="{Binding SourcePosition.SimDisk.Items}">
+							<ListBox ItemsSource="{Binding Items}"/>
+						</Grid>
+					</TabItem>
+				</TabControl>
 
-                            </ListBox>
-                        </Grid>
-                    </TabItem>
-                    <TabItem Header="SD卡">
-                        <Grid Background="#FFE5E5E5">
-                            <ListBox ItemsSource="{Binding SourcePosition.SDDisk.Items}">
+			</Grid>
+		</GroupBox>
+		<GroupBox Header="镜像目标" Margin="20,0,0,0" Grid.Row="1" Grid.Column="1">
+			<Grid>
+				<Button Content="更改存储路径" HorizontalAlignment="Left" Margin="21,10,0,0" VerticalAlignment="Top" Width="84" Command="{Binding TargetPosition.SetTargetPathCommand}"/>
+				<TextBlock TextWrapping="Wrap" Margin="0,40,0,0" Text="{Binding TargetPosition.DirPath}" Background="WhiteSmoke"/>
 
-                            </ListBox>
-                        </Grid>
-                    </TabItem>
-                </TabControl>
-
-            </Grid>
-        </GroupBox>
-        <GroupBox Header="镜像目标" Margin="20,0,0,0" Grid.Row="1" Grid.Column="1">
-            <Grid>
-                <Button Content="更改存储路径" HorizontalAlignment="Left" Margin="21,10,0,0" VerticalAlignment="Top" Width="84" Command="{Binding TargetPosition.SetTargetPathCommand}"/>
-                <TextBlock TextWrapping="Wrap" Margin="0,40,0,0" Text="{Binding TargetPosition.DirPath}" Background="WhiteSmoke"/>
-
-            </Grid>
-        </GroupBox>
-        <ProgressBar HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,6" Grid.Row="2" Grid.ColumnSpan="2" />
-        <Button Content="开始" HorizontalAlignment="Left" VerticalAlignment="Center" Width="75" Grid.Row="3" Command="{Binding StartCommand}"/>
-        <Button Content="停止" VerticalAlignment="Center" HorizontalAlignment="Right" Width="75" Grid.Row="3" Grid.Column="1" Command="{Binding StopCommand}"/>
-    </Grid>
-</UserControl>
+			</Grid>
+		</GroupBox>
+		<ProgressBar HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,0,6" Grid.Row="2" Grid.ColumnSpan="2" />
+		<Button Content="开始" HorizontalAlignment="Left" VerticalAlignment="Center" Width="75" Grid.Row="3" Command="{Binding StartCommand}"/>
+		<Button Content="停止" VerticalAlignment="Center" HorizontalAlignment="Right" Width="75" Grid.Row="3" Grid.Column="1" Command="{Binding StopCommand}"/>
+	</Grid>
+</viewmodel:UcViewBase>

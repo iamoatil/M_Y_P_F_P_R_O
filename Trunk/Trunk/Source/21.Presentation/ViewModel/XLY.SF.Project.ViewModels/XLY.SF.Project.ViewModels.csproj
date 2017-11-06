@@ -128,6 +128,10 @@
       <Project>{85971D45-4FAF-4DBD-AD3E-D73E79262011}</Project>
       <Name>XLY.SF.Project.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\11.Service\13.Core\XLY.SF.Project.DataMirror\XLY.SF.Project.DataMirror.csproj">
+      <Project>{9E9B358E-6067-41B9-B986-E58E09210FC5}</Project>
+      <Name>XLY.SF.Project.DataMirror</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ProjectContext\ProjectExtend\XLY.SF.Project.Extension.csproj">
       <Project>{E280C623-F0DD-47A8-AC87-80A0B5BBAFDB}</Project>
       <Name>XLY.SF.Project.Extension</Name>

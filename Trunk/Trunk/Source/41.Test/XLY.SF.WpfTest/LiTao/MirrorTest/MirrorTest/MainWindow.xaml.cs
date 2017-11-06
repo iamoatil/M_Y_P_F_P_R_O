@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Windows;
+using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.Devices;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.ProxyService;
@@ -34,7 +35,13 @@ namespace MirrorTest
         }
         private void DeviceMonitor_OnDeviceConnected(IDevice dev, bool isOnline)
         {
-            _mirrorViewModel.SourcePosition.InitializeDevice(dev);
+            _mirrorViewModel.SourcePosition.RefreshPartitions(dev);
+
+            SPFTask task = new SPFTask();
+            task.Name = "TestName";
+            task.Device = (Device)dev;
+             IAsyncProgress asyncProgress = new DefaultAsyncProgress();
+            _mirrorViewModel.Initialize(task, asyncProgress);
         }
     }
 }
