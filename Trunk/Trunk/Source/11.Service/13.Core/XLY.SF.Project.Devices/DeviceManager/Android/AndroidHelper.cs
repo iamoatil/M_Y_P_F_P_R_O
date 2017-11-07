@@ -39,7 +39,7 @@ namespace XLY.SF.Project.Devices
         /// Gets or Sets the adb location on the OS.
         /// </summary>
         /// <value>The adb location on the OS.</value>
-        public static readonly string AdbOsLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"adb\adb.exe");
+        public static readonly string AdbOsLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Lib\adb\adb.exe");
 
         #endregion
 

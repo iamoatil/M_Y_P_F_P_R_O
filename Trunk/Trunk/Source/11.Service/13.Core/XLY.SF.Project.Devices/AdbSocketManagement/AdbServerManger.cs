@@ -34,7 +34,7 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
         /// <summary>
         /// ADB程序本地地址
         /// </summary>
-        private static readonly string _adbOsLocation = @"ADB\adb.exe";
+        private static readonly string _adbOsLocation = @"Lib\ADB\adb.exe";
 
         #region 关闭Adb
 

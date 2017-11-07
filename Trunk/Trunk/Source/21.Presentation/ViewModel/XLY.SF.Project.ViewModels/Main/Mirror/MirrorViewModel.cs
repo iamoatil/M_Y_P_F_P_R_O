@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using XLY.SF.Project.DataMirror;
+using DllClient;
 
 
 /* ==============================================================================
@@ -45,7 +46,7 @@ namespace XLY.SF.Project.ViewModels.Main
         public void Initialize(SPFTask task,IAsyncProgress async)
         {
             Mirror mirror=GetNewMirror(task);
-            SourcePosition.MirrorControlerBox mirrorControler = new SourcePosition.MirrorControlerBox(task,mirror,async);
+            SourcePosition.MirrorControlerBox mirrorControler = new SourcePosition.MirrorControlerBox(task,mirror,async, SourcePosition);
             SourcePosition.SetMirrorControler(mirrorControler);
         }
 
@@ -112,7 +113,9 @@ namespace XLY.SF.Project.ViewModels.Main
         internal void SetMirrorControler(MirrorControlerBox mirrorControler)
         {
             _mirrorControlerBox = mirrorControler;
-        }
+            //要先登录，否则回调为空
+            X86DLLClientSingle.Instance.CoreChannel.Login();
+        }        
 
         /// <summary>
         /// 刷新分区信息
@@ -165,16 +168,20 @@ namespace XLY.SF.Project.ViewModels.Main
             SPFTask _task;
             Mirror _mirror;
             IAsyncProgress _asyn;
-            public MirrorControlerBox(SPFTask task, Mirror mirror, IAsyncProgress asyn)
+            SourcePosition _sourcePosition;
+            public MirrorControlerBox(SPFTask task, Mirror mirror, IAsyncProgress asyn, SourcePosition sourcePosition)
             {
                 _task = task;
                 _mirror = mirror;
                 _asyn = asyn;
+                _sourcePosition = sourcePosition;
                 _mirrorControler = new MirrorControler();
             }
 
             public void Start()
             {
+                //todo 此处因Mirror结构，不太好。
+                _mirror.Block=_sourcePosition.CurrentSelectedDisk.CurrentSelectedItem;
                 _mirrorControler.Execute(_task, _mirror, _asyn);
             }
 
@@ -237,7 +244,7 @@ namespace XLY.SF.Project.ViewModels.Main
                 {
                     CurrentSelectedItem = value[0];
                 }
-                _items = value;
+                _items = value;        
                 OnPropertyChanged();
             }
         }

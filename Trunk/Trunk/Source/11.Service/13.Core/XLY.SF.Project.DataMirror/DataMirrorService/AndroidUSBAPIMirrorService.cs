@@ -87,7 +87,8 @@ namespace XLY.SF.Project.DataMirror
 
                 X86DLLClientSingle.Instance.ClientCallback._ImageDataCallBack += ImageDataCallBack;
 
-                result = service.AndroidMirror_ImageDataZone(openHandle, Source.Block.Block, 0, -1);
+                string block = Source.Block.Block.Replace("\\",@"/");//此处把windows的反斜杠替换成linux的斜杠，否则，镜像时出现size全为0的回调数据
+                result = service.AndroidMirror_ImageDataZone(openHandle, block, 0, -1);
                 if (0 != result)
                 {
                     LoggerManagerSingle.Instance.Error(string.Format("安卓手机镜像出错！ImageDataZone失败，设备ID:{0} 错误码:{1}", device.ID, result));

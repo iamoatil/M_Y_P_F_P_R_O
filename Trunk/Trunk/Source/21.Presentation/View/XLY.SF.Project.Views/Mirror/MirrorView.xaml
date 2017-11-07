@@ -25,7 +25,7 @@
                 <TabControl x:Name="tabControl" DataContext="{Binding SourcePosition}" Tag="{Binding CurrentSelectedDisk}">
 					<TabItem x:Name="tabItem1" Header="手机" DataContext="{Binding PhoneDisks}">
 						<i:Interaction.Triggers>
-							<ei:PropertyChangedTrigger Binding="{Binding IsSelected, ElementName=tabItem}">
+							<ei:PropertyChangedTrigger Binding="{Binding IsSelected, ElementName=tabItem1}">
                                 <ei:ChangePropertyAction PropertyName="Tag" TargetObject="{Binding ElementName=tabControl}" Value="{Binding DataContext, ElementName=tabItem1}"/>
 							</ei:PropertyChangedTrigger>
 						</i:Interaction.Triggers>
@@ -35,7 +35,7 @@
 					</TabItem>
                     <TabItem x:Name="tabItem2" Header="SIM卡" DataContext="{Binding SimDisk}">
                         <i:Interaction.Triggers>
-                            <ei:PropertyChangedTrigger Binding="{Binding IsSelected, ElementName=tabItem}">
+                            <ei:PropertyChangedTrigger Binding="{Binding IsSelected, ElementName=tabItem2}">
                                 <ei:ChangePropertyAction PropertyName="Tag" TargetObject="{Binding ElementName=tabControl}" Value="{Binding DataContext, ElementName=tabItem2}"/>
                             </ei:PropertyChangedTrigger>
                         </i:Interaction.Triggers>
@@ -45,7 +45,7 @@
 					</TabItem>
                     <TabItem x:Name="tabItem3" Header="SD卡" DataContext="{Binding SDDisk}">
                         <i:Interaction.Triggers>
-                            <ei:PropertyChangedTrigger Binding="{Binding IsSelected, ElementName=tabItem}">
+                            <ei:PropertyChangedTrigger Binding="{Binding IsSelected, ElementName=tabItem3}">
                                 <ei:ChangePropertyAction PropertyName="Tag" TargetObject="{Binding ElementName=tabControl}" Value="{Binding DataContext, ElementName=tabItem3}"/>
                             </ei:PropertyChangedTrigger>
                         </i:Interaction.Triggers>
