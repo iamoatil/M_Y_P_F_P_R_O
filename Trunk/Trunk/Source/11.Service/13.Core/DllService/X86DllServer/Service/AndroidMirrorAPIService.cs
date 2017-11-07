@@ -39,7 +39,13 @@ namespace X86DllServer.Service
             var buff = new byte[datasize];
             Marshal.Copy(data, buff, 0, datasize);
 
-            _clientCallback.ImageDataCallBack(buff, ref stop);
+            try
+            {
+                _clientCallback.ImageDataCallBack(buff, ref stop);
+            }
+            catch (Exception ex)
+            {                
+            }            
 
             return 0;
         }
