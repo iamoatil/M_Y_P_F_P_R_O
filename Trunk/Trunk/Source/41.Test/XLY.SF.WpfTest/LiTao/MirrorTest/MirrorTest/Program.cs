@@ -9,9 +9,9 @@ namespace MirrorTest
     {
         [STAThread]
         static void Main(string[] args)
-        {
+        {         
             MainWindow win = new MainWindow();
-            win.ShowDialog();
+            win.ShowDialog();            
         }
     }
 }

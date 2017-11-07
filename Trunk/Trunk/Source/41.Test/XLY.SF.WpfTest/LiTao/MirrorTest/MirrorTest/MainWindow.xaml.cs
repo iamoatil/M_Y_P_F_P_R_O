@@ -25,14 +25,14 @@ namespace MirrorTest
             this.Foreground = Brushes.Black;
             MirrorView.DataContext = _mirrorViewModel;
             this.Loaded += Window_Loaded;
-            
+            this.Unloaded += Window_Unloaded;
         }
         MirrorViewModel _mirrorViewModel = new MirrorViewModel();
+        ServerHostManager serverHostManager = new ServerHostManager();
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            StartServerHost();
-            
+            serverHostManager.StartServerHost();            
 
             ProxyFactory.DeviceMonitor.OnDeviceConnected += (dev, isOnline) =>
             {
@@ -41,21 +41,10 @@ namespace MirrorTest
             ProxyFactory.DeviceMonitor.OpenDeviceService();
         }
 
-        /// <summary>
-        /// 启动DllServerHost.exe的原因是，安卓镜像采用的dll（研究部提供）是x86的，而现在我们的SPPro是x64的，所以不能直接调用。
-        /// 当前采取的策略是镜像功能作为一个独立的程序运行，其数据通过wcf传递给SPPro，这样就能解决X64调用X86的问题了。
-        /// 
-        /// 所以，镜像功能的测试需要先运行x86的镜像独立程序。
-        /// </summary>
-        private void StartServerHost()
+        private void Window_Unloaded(object sender, RoutedEventArgs e)
         {
-            const string serverHostPath = @"ServerHost\DllServerHost.exe";
-            if (!File.Exists(serverHostPath))
-            {
-                throw new Exception("程序不能运行，请确保文件"+ serverHostPath+"存在");
-            }
-            Process.Start(serverHostPath);
-        }
+            serverHostManager.StopServerHost();
+        }      
 
         private void DeviceMonitor_OnDeviceConnected(IDevice dev, bool isOnline)
         {
