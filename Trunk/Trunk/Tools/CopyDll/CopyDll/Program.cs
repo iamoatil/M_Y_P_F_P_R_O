@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 /*
  * 编写者：胡佐霖
@@ -18,106 +14,11 @@ using System.Threading.Tasks;
 namespace CopyDll
 {
     class Program
-    {
-        static void NewProcess(string[] args)
-        {
-            //参数正确性验证
-            bool isValidate = true;
-            if (args.Length != 0
-                && args.Length != 3)
-            {
-                isValidate = false;
-            }
-            string sd = null;
-            string td = null;
-            if (args.Length == 3)
-            {
-                sd = args[1].Trim();
-                td = args[2].Trim();
-                if (!Directory.Exists(sd))
-                {
-                    isValidate = false;
-                    Console.WriteLine(sd + "源目录不存在");
-                }
-                try
-                {
-                    Path.GetDirectoryName(td);
-                }
-                catch (Exception)
-                {
-                    isValidate = false;
-                    Console.WriteLine(td + "目的目录不是有效的目录");
-                }
-            }
-
-            if (isValidate == false)
-            {
-                Console.WriteLine("                       格式错误                            \n" +
-                                  "此程序只支持以下两种格式运行：                              \n" +
-                                  "1，CopyDll.exe                        ----无参数形式       \n" +
-                                  "2，CopyDll.exe “源目录” “目的目录”     ---- 有参数形式      \n" +
-                                  "     且要保证源目录存在，目的目录字符串是目录                \n");
-                return;
-            }
-
-            //初始化FileDirectory列表
-            List<DirectoryPair> _directoryPairList = new List<DirectoryPair>();
-            if (args.Length == 0)
-            {
-                string exePath = Process.GetCurrentProcess().MainModule.FileName;
-                string exeDir = Path.GetDirectoryName(exePath);
-                string[] rows = File.ReadAllLines(exeDir + @"\config.cfg");
-                foreach (var row in rows)
-                {
-                    string[] items = row.Split('|');
-                    if (items.Length != 2)
-                    {
-                        continue;
-                    }
-                    sd = items[0].Trim();
-                    td = items[1].Trim();
-                    if (!Directory.Exists(sd))
-                    {
-                        Console.WriteLine(sd + "源目录不存在");
-                        continue;
-                    }
-                    try
-                    {
-                        Path.GetDirectoryName(td);
-                    }
-                    catch (Exception)
-                    {
-                        Console.WriteLine(td + "目的目录不是有效的目录");
-                        continue;
-                    }
-
-                    _directoryPairList.Add(new DirectoryPair(sd, td));
-                }
-            }
-            else
-            {
-                _directoryPairList.Add(new DirectoryPair(sd, td));
-            }
-            //执行拷贝
-            foreach (var directoryPair in _directoryPairList)
-            {
-                FileDirectory.CopyIfNewest(directoryPair.SourceDir, directoryPair.TargetDir);
-            }
-        }
-
+    {  
         static void Main(string[] args)
         {
-            try
-            {
-                NewProcess(args);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("发生错误！");
-                Console.WriteLine(ex.Message+"\n"+ex.StackTrace);                
-            }
-            Console.WriteLine("按任意键继续");
-            Console.Read();
+            DllCopyProgram program = new DllCopyProgram();
+            program.Execute(args);
             return;
             //待拷贝DLL位置
             string sourceDllDir = Path.GetFullPath(@"..\..\..\..\Lib\vcdll");

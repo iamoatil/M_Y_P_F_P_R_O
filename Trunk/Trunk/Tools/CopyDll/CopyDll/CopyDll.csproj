@@ -80,6 +80,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Compile Include="DirectoryPair.cs" />
+    <Compile Include="DllCopyProgram.cs" />
     <Compile Include="FileDirectory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
