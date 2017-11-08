@@ -36,7 +36,7 @@ namespace MirrorTest
         /// </summary>
         public void StopServerHost()
         {
-            Process[] processes = Process.GetProcessesByName(Path.GetFileName(ServerHostPath));
+            Process[] processes = Process.GetProcessesByName(Path.GetFileNameWithoutExtension(ServerHostPath));
             if (processes != null
                 && processes.Length > 0)
             {

@@ -158,7 +158,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>cd /d $(SolutionDir)..\..\..\Tools\CopyDll\
+    <PreBuildEvent>cd /d $(ProjectDir)..\..\..\..\Tools\CopyDll\
 CopyDll.exe</PreBuildEvent>
   </PropertyGroup>
 </Project>

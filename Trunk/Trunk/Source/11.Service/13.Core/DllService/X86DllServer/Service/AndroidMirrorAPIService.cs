@@ -12,6 +12,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.ServiceModel;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using X86DllServer.IService;
 
@@ -44,7 +45,8 @@ namespace X86DllServer.Service
                 _clientCallback.ImageDataCallBack(buff, ref stop);
             }
             catch (Exception ex)
-            {                
+            {
+                Thread.CurrentThread.Abort();
             }            
 
             return 0;

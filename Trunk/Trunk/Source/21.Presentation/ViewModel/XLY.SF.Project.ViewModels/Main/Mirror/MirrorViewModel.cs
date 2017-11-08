@@ -1,28 +1,16 @@
 ﻿using GalaSoft.MvvmLight.Command;
-using ProjectExtend.Context;
 using System;
 using System.ComponentModel.Composition;
 using XLY.SF.Framework.Core.Base.CoreInterface;
-using XLY.SF.Framework.Core.Base.MefIoc;
-using XLY.SF.Framework.Core.Base.MessageBase;
-using XLY.SF.Framework.Core.Base;
 using XLY.SF.Framework.Core.Base.ViewModel;
-using XLY.SF.Project.Models;
 using XLY.SF.Project.ViewDomain.MefKeys;
-using XLY.SF.Project.ViewDomain.VModel.Main;
-using System.IO;
-using XLY.SF.Framework.Language;
 using System.Windows.Input;
-using XLY.SF.Project.ViewModels.Tools;
-using Microsoft.Win32;
-using System.Collections.ObjectModel;
-using System.Windows;
 using XLY.SF.Project.Domains;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using XLY.SF.Project.DataMirror;
 using DllClient;
+using System.Threading;
 
 
 /* ==============================================================================
@@ -39,22 +27,34 @@ namespace XLY.SF.Project.ViewModels.Main
     {
         public MirrorViewModel()
         {
-            StartCommand = new RelayCommand(new Action(() => { SourcePosition.Start(); }));
+            StartCommand = new RelayCommand(new Action(() => {
+                if (SourcePosition != null
+                || SourcePosition.CurrentSelectedDisk != null
+                || SourcePosition.CurrentSelectedDisk.CurrentSelectedItem != null)
+                {
+                    ProgressPosition.TotalSize=(int)SourcePosition.CurrentSelectedDisk.CurrentSelectedItem.Size;
+                }
+                SourcePosition.Start();
+            }));
             StopCommand = new RelayCommand(new Action(() => { SourcePosition.Stop(); }));           
         }
-       
-        public void Initialize(SPFTask task,IAsyncProgress async)
-        {
-            Mirror mirror=GetNewMirror(task);
-            SourcePosition.MirrorControlerBox mirrorControler = new SourcePosition.MirrorControlerBox(task,mirror,async, SourcePosition);
+
+        
+        public void Initialize(SPFTask task, IAsyncProgress asyncProgress)
+        {   
+            Mirror mirror = GetNewMirror(task);
+            SourcePosition.MirrorControlerBox mirrorControler = new SourcePosition.MirrorControlerBox(task, mirror, asyncProgress);
+
             SourcePosition.SetMirrorControler(mirrorControler);
         }
 
-        SourcePosition _sourcePosition = new SourcePosition();
-        TargetPosition _targetPosition = new TargetPosition();
+        readonly SourcePosition _sourcePosition = new SourcePosition();
+        readonly TargetPosition _targetPosition = new TargetPosition();
+        readonly ProgressPosition _progressPosition = new ProgressPosition();
 
         public SourcePosition SourcePosition { get { return _sourcePosition; } }
         public TargetPosition TargetPosition { get { return _targetPosition; } }
+        public ProgressPosition ProgressPosition { get { return _progressPosition; } }
 
         public ICommand StartCommand { get; private set; }
 
@@ -115,7 +115,7 @@ namespace XLY.SF.Project.ViewModels.Main
             _mirrorControlerBox = mirrorControler;
             //要先登录，否则回调为空
             X86DLLClientSingle.Instance.CoreChannel.Login();
-        }        
+        }
 
         /// <summary>
         /// 刷新分区信息
@@ -142,11 +142,20 @@ namespace XLY.SF.Project.ViewModels.Main
             }            
         }
 
+        /// <summary>
+        /// 开始执行镜像
+        /// 注意：因为执行镜像是一个耗时的过程，可能2,3个小时，所以不能使用主线程调用。所以此处用线程池中的一个线程来执行
+        /// </summary>
         public void Start()
         {
             if(_mirrorControlerBox != null)
             {
-                _mirrorControlerBox.Start();
+                if (CurrentSelectedDisk != null
+                    && CurrentSelectedDisk.CurrentSelectedItem != null)
+                {
+                    _mirrorControlerBox.UpdateData(CurrentSelectedDisk.CurrentSelectedItem);
+                }
+                ThreadPool.QueueUserWorkItem((o)=> { _mirrorControlerBox.Start(); });     
             }
         }
 
@@ -168,36 +177,43 @@ namespace XLY.SF.Project.ViewModels.Main
             SPFTask _task;
             Mirror _mirror;
             IAsyncProgress _asyn;
-            SourcePosition _sourcePosition;
-            public MirrorControlerBox(SPFTask task, Mirror mirror, IAsyncProgress asyn, SourcePosition sourcePosition)
+            public MirrorControlerBox(SPFTask task, Mirror mirror, IAsyncProgress asyn)
             {
                 _task = task;
                 _mirror = mirror;
                 _asyn = asyn;
-                _sourcePosition = sourcePosition;
                 _mirrorControler = new MirrorControler();
             }
 
-            public void Start()
+            //此处封装了关键的方法：Start，Stop，Continue，Pause
+            internal void Start()
             {
-                //todo 此处因Mirror结构，不太好。
-                _mirror.Block=_sourcePosition.CurrentSelectedDisk.CurrentSelectedItem;
                 _mirrorControler.Execute(_task, _mirror, _asyn);
             }
 
-            public void Stop()
+            internal void Stop()
             {
                 _mirrorControler.Stop(_asyn);
             }
 
-            public void Continue()
+            internal void Continue()
             {
                 _mirrorControler.Continue(_asyn);
             }
 
-            public void Pause()
+            internal void Pause()
             {
                 _mirrorControler.Pause(_asyn);
+            }
+
+            //每次开始镜像的之前都需要更新数据
+            /// <summary>
+            /// 更新数据
+            /// </summary>
+            /// <param name="currentSelectedItem"></param>
+            internal void UpdateData(Partition currentSelectedItem)
+            {
+                _mirror.Block= currentSelectedItem;
             }
         }
     }
@@ -255,6 +271,9 @@ namespace XLY.SF.Project.ViewModels.Main
         public Partition CurrentSelectedItem { get; set; }
     }
 
+    /// <summary>
+    /// 目标位置
+    /// </summary>
     public class TargetPosition : NotifyPropertyBase
     {
         public TargetPosition()
@@ -292,6 +311,46 @@ namespace XLY.SF.Project.ViewModels.Main
                 DirPath = filePath;
             }
         }
+    }
+
+    /// <summary>
+    /// 进度条位置
+    /// </summary>
+    public class ProgressPosition : NotifyPropertyBase
+    {
+        /// <summary>
+        /// 已经完成的大小
+        /// </summary>
+        public int FinishedSize
+        {
+            get { return _finishedSize; }
+            set
+            {
+                _finishedSize = value;
+                if (Math.Abs(_lastChangedValue - _finishedSize) > TotalSize / 100)
+                {
+                    OnPropertyChanged();
+                    _lastChangedValue = _finishedSize;
+                }
+            }
+        }
+        private int _finishedSize=0;
+
+        private int _lastChangedValue = 0;
+
+        /// <summary>
+        /// 总共大小
+        /// </summary>
+        public int TotalSize
+        {
+            get { return _totalSize; }
+            set
+            {
+                _totalSize = value;
+                OnPropertyChanged();
+            }
+        }
+        private int _totalSize=100;
     }
 }
 
