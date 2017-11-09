@@ -23,9 +23,9 @@ namespace XLY.SF.Project.ViewModels.Main
 {
     [Export(ExportKeys.MirrorView, typeof(ViewModelBase))]
     [PartCreationPolicy(CreationPolicy.Shared)]
-    public class MirrorViewModel : ViewModelBase
+    public class WcfMirrorViewModel : ViewModelBase
     {
-        public MirrorViewModel()
+        public WcfMirrorViewModel()
         {
             StartCommand = new RelayCommand(new Action(() => {
                 if (SourcePosition != null
@@ -54,7 +54,10 @@ namespace XLY.SF.Project.ViewModels.Main
             };
             asyncProgress.OnCompleted += (status, arg) =>
             {
-                ProgressPosition.FinishedSize = ProgressPosition.TotalSize;
+                if(status == AsyncProgressCompleteStatus.Success)
+                {
+                    ProgressPosition.FinishedSize = ProgressPosition.TotalSize;
+                }                
             };
         }
 
@@ -337,6 +340,7 @@ namespace XLY.SF.Project.ViewModels.Main
             set
             {
                 _finishedSize = value;
+                //只有在进度变化1000分之一时才通知
                 if (Math.Abs(_lastChangedValue - _finishedSize) > TotalSize / 1000)
                 {
                     OnPropertyChanged();

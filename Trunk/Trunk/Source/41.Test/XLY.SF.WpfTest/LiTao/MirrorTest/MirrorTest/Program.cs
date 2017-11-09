@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Windows;
-using System.Windows.Media;
-using XLY.SF.Project.Views.Mirror;
 
 namespace MirrorTest
 {
@@ -9,9 +6,12 @@ namespace MirrorTest
     {
         [STAThread]
         static void Main(string[] args)
-        {         
-            MainWindow win = new MainWindow();
-            win.ShowDialog();            
+        {
+            CmdMainWindow win = new CmdMainWindow();
+            win.ShowDialog();
+
+            //WcfMainWindow win2 = new WcfMainWindow();
+            //win2.ShowDialog();
         }
     }
 }

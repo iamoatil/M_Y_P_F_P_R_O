@@ -49,7 +49,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dll", "Dll", "{81698BA0-AC3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mirror", "Mirror", "{9BF95808-E499-43EB-8576-EBED6B5A6B6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.DataMirrorApp", "..\..\..\..\11.Service\13.Core\XLY.SF.Project.DataMirrorApp\XLY.SF.Project.DataMirrorApp.csproj", "{C238AB12-8943-4CCD-B701-472F97FE5665}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.MirrorBackgroundApp", "..\..\..\..\11.Service\13.Core\XLY.SF.Project.DataMirrorApp\XLY.SF.Project.MirrorBackgroundApp.csproj", "{C238AB12-8943-4CCD-B701-472F97FE5665}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

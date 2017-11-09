@@ -55,20 +55,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ServerHostManager.cs" />
+    <Compile Include="WcfMainWindow.xaml.cs">
+      <DependentUpon>WcfMainWindow.xaml</DependentUpon>
+    </Compile>
     <Content Include="ReadMe.txt" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="CmdMainWindow.xaml.cs">
+      <DependentUpon>CmdMainWindow.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="MainWindow.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="CmdMainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WcfMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

@@ -62,8 +62,14 @@ namespace XLY.SF.Project.DataMirrorApp
             }
         }
 
+        /// <summary>
+        /// 关闭文件的时候，先把缓冲区的数据写到文件缓冲区
+        /// </summary>
         public void Close()
         {
+            _fileStream.Write(_buffer, 0, _curWriteIndex);
+            _curWriteIndex = 0;
+            _fileStream.Flush();
             _fileStream.Close();
         }
 

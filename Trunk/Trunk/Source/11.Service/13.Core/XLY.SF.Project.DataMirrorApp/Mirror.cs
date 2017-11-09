@@ -7,10 +7,7 @@
 * ==============================================================================*/
 
 using System;
-using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
 
 namespace XLY.SF.Project.DataMirrorApp
 {
@@ -34,12 +31,7 @@ namespace XLY.SF.Project.DataMirrorApp
         /// <summary>
         /// 是否有错误
         /// </summary>
-        bool _haveErrors = false;
-
-        /// <summary>
-        /// 当前产生的信息
-        /// </summary>
-        public string Infor { get; private set; }
+        bool _haveErrors = false;        
 
         /// <summary>
         /// 在Initialize方法中打开设备，并且初始化
@@ -53,21 +45,22 @@ namespace XLY.SF.Project.DataMirrorApp
                 _deviceHandle = AndroidMirrorAPI.OpenDevice(deviceSerialnumber);
                 if (IntPtr.Zero == _deviceHandle)
                 {
-                    Infor=string.Format("安卓手机镜像出错！OpenDevice失败，设备ID:{0}", deviceSerialnumber);
+                    Console.WriteLine(string.Format("安卓手机镜像出错！OpenDevice失败，设备ID:{0}", deviceSerialnumber));
                     _haveErrors = true;
                     return;
                 }
                 var result = AndroidMirrorAPI.Initialize(_deviceHandle, 61440, (IntPtr)isHtc);
                 if (0 != result)
                 {
-                    Infor=string.Format("安卓手机镜像出错！Initialize失败，设备ID:{0} 错误码:{1}", deviceSerialnumber, result);
+                    Console.WriteLine(string.Format("安卓手机镜像出错！Initialize失败，设备ID:{0} 错误码:{1}", deviceSerialnumber, result));
                     _haveErrors = true;
                     return;
                 }
             }
             catch (Exception ex)
             {
-                Infor = string.Format("安卓手机镜像出错！设备ID:{0} {1}", deviceSerialnumber, ex);
+                MirrorFile.Close();
+                Console.WriteLine(string.Format("安卓手机镜像出错！设备ID:{0} {1}", deviceSerialnumber, ex));
                 _haveErrors = true;
             }            
         }
@@ -79,16 +72,19 @@ namespace XLY.SF.Project.DataMirrorApp
                 var result = AndroidMirrorAPI.ImageDataZone(_deviceHandle, block, 0, -1,ImageDataCallBack);
                 if (0 != result)
                 {
-                    Infor=string.Format("安卓手机镜像出错！ImageDataZone失败，设备ID:{0} 错误码:{1}", _deviceSerialnumber, result);
+                    Stop("Exception");
+                    Console.WriteLine(string.Format("安卓手机镜像出错！ImageDataZone失败，设备ID:{0} 错误码:{1}", _deviceSerialnumber, result));
                     _haveErrors = true;
                     return;
                 }
+                Stop("Success");
             }
         }
 
-        public void Stop()
+        public void Stop(string msg)
         {
-            Console.WriteLine("Stop");
+            MirrorFile.Close();
+            Console.WriteLine("Operate|Stop|"+ msg);
         }
 
         private int ImageDataCallBack(IntPtr data, int datasize, ref int stop)
@@ -97,7 +93,7 @@ namespace XLY.SF.Project.DataMirrorApp
             Marshal.Copy(data, buff, 0, datasize);
 
             MirrorFile.Write(buff);
-            Infor = "info:"+MirrorFile.WritedSize.ToString(); ;
+            Console.WriteLine("Progress|" +MirrorFile.WritedSize.ToString()) ;
             return 0;
         }
     }
