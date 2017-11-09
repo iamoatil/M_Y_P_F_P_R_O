@@ -43,9 +43,19 @@ namespace XLY.SF.Project.ViewModels.Main
         public void Initialize(SPFTask task, IAsyncProgress asyncProgress)
         {   
             Mirror mirror = GetNewMirror(task);
-            SourcePosition.MirrorControlerBox mirrorControler = new SourcePosition.MirrorControlerBox(task, mirror, asyncProgress);
+            SourcePosition.MirrorControlerBox mirrorControler = new SourcePosition.MirrorControlerBox(task, mirror, asyncProgress);           
 
             SourcePosition.SetMirrorControler(mirrorControler);
+
+            //设置滚动条进度
+            asyncProgress.OnAdvance += (step, message) =>
+            {
+                ProgressPosition.FinishedSize = (int)asyncProgress.Progress;
+            };
+            asyncProgress.OnCompleted += (status, arg) =>
+            {
+                ProgressPosition.FinishedSize = ProgressPosition.TotalSize;
+            };
         }
 
         readonly SourcePosition _sourcePosition = new SourcePosition();
@@ -327,7 +337,7 @@ namespace XLY.SF.Project.ViewModels.Main
             set
             {
                 _finishedSize = value;
-                if (Math.Abs(_lastChangedValue - _finishedSize) > TotalSize / 100)
+                if (Math.Abs(_lastChangedValue - _finishedSize) > TotalSize / 1000)
                 {
                     OnPropertyChanged();
                     _lastChangedValue = _finishedSize;

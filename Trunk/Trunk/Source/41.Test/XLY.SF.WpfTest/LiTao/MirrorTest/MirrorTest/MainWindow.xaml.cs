@@ -38,7 +38,7 @@ namespace MirrorTest
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            serverHostManager.StartServerHost();            
+            //serverHostManager.StartServerHost();            
 
             ProxyFactory.DeviceMonitor.OnDeviceConnected += (dev, isOnline) =>
             {
@@ -52,12 +52,7 @@ namespace MirrorTest
             
             _mirrorViewModel.SourcePosition.RefreshPartitions(dev);
 
-            IAsyncProgress asyncProgress = new DefaultAsyncProgress();
-            asyncProgress.OnAdvance += (step, message) =>
-            {             
-                _mirrorViewModel.ProgressPosition.FinishedSize = (int)asyncProgress.Progress;
-            };
-
+            IAsyncProgress asyncProgress = new DefaultAsyncProgress();            
             SPFTask task = new SPFTask();
             task.Name = "TestName";
             task.Device = (Device)dev;            
