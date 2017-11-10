@@ -46,7 +46,7 @@
             <Trigger Property="IsEnabled" Value="false">
                 <Setter TargetName="gd" Property="Effect">
                     <Setter.Value>
-                        <ee:EmbossedEffect Color="#4b556e"/>
+                        <ee:ColorToneEffect DarkColor="#4b556e" LightColor="#4b556e" Desaturation="1" ToneAmount="1"/>
                     </Setter.Value>
                 </Setter>
             </Trigger>

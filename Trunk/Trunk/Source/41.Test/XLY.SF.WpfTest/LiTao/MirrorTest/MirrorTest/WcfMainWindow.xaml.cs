@@ -49,14 +49,12 @@ namespace MirrorTest
 
         private void DeviceMonitor_OnDeviceConnected(IDevice dev, bool isOnline)
         {
-            
             _mirrorViewModel.SourcePosition.RefreshPartitions(dev);
-
-            IAsyncProgress asyncProgress = new DefaultAsyncProgress();            
+            
             SPFTask task = new SPFTask();
             task.Name = "TestName";
             task.Device = (Device)dev;            
-            _mirrorViewModel.Initialize(task, asyncProgress);
+            _mirrorViewModel.Initialize(task);
         }
     }
 }

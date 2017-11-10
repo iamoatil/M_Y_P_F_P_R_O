@@ -40,8 +40,10 @@ namespace XLY.SF.Project.ViewModels.Main
         }
 
         
-        public void Initialize(SPFTask task, IAsyncTaskProgress asyncProgress)
-        {   
+        public void Initialize(SPFTask task)
+        {
+            IAsyncTaskProgress asyncProgress = new MyDefaultSingleTaskReporter();
+
             Mirror mirror = GetNewMirror(task);
             SourcePosition.MirrorControlerBox mirrorControler = new SourcePosition.MirrorControlerBox(task, mirror, asyncProgress);           
 
@@ -102,6 +104,14 @@ namespace XLY.SF.Project.ViewModels.Main
             }
             mirror.MirrorFlag = MirrorFlag.NewMirror;
             return mirror;
+        }
+    }
+
+    public class MyDefaultSingleTaskReporter : DefaultSingleTaskReporter
+    {
+        public MyDefaultSingleTaskReporter()
+        {
+            State = TaskState.Running;
         }
     }
 
