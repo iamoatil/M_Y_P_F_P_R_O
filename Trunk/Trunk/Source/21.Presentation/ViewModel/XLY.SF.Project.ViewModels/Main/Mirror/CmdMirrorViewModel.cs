@@ -31,7 +31,7 @@ namespace XLY.SF.Project.ViewModels.Main
                 || SourcePosition.CurrentSelectedDisk.CurrentSelectedItem != null)
                 {
                     ProgressPosition.TotalSize=SourcePosition.CurrentSelectedDisk.CurrentSelectedItem.Size;
-                    CaculateTime(ProgressPosition.TotalSize);
+                    CaculateTime(0);
                 }
                 SourcePosition.Start();
             }));
@@ -60,9 +60,9 @@ namespace XLY.SF.Project.ViewModels.Main
                 if(e.IsCompleted)
                 {
                     ProgressPosition.FinishedSize = ProgressPosition.TotalSize;
-                    CaculateTime(0);
-                    SourcePosition.IsMirroring = false;
-                }                
+                    CaculateTime(0);                    
+                }
+                SourcePosition.IsMirroring = false;
             };
         }
 
@@ -93,7 +93,7 @@ namespace XLY.SF.Project.ViewModels.Main
                 OnPropertyChanged();
             }
         }
-        private string _remainTime = "00:05:30";      
+        private string _remainTime;      
 
         /// <summary>
         /// 通过数据量的大小，得出镜像他们所需的时间
