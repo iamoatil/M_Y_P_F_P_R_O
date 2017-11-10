@@ -7,6 +7,7 @@ namespace MirrorTest
         [STAThread]
         static void Main(string[] args)
         {
+
             CmdMainWindow win = new CmdMainWindow();
             win.ShowDialog();
 
