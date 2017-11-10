@@ -40,7 +40,7 @@ namespace XLY.SF.Project.ViewModels.Main
         }
 
         
-        public void Initialize(SPFTask task, IAsyncProgress asyncProgress)
+        public void Initialize(SPFTask task, IAsyncTaskProgress asyncProgress)
         {   
             Mirror mirror = GetNewMirror(task);
             SourcePosition.MirrorControlerBox mirrorControler = new SourcePosition.MirrorControlerBox(task, mirror, asyncProgress);           
@@ -48,16 +48,16 @@ namespace XLY.SF.Project.ViewModels.Main
             SourcePosition.SetMirrorControler(mirrorControler);
 
             //设置滚动条进度
-            asyncProgress.OnAdvance += (step, message) =>
+            asyncProgress.ProgressChanged += (o, e) =>
             {
-                ProgressPosition.FinishedSize = (int)asyncProgress.Progress;
+                ProgressPosition.FinishedSize = (int)e.Progress;
             };
-            asyncProgress.OnCompleted += (status, arg) =>
+            asyncProgress.Ternimated += (o, e) =>
             {
-                if(status == AsyncProgressCompleteStatus.Success)
+                if (e.IsCompleted)
                 {
                     ProgressPosition.FinishedSize = ProgressPosition.TotalSize;
-                }                
+                }
             };
         }
 
@@ -189,8 +189,8 @@ namespace XLY.SF.Project.ViewModels.Main
             readonly MirrorControler _mirrorControler;
             SPFTask _task;
             Mirror _mirror;
-            IAsyncProgress _asyn;
-            public MirrorControlerBox(SPFTask task, Mirror mirror, IAsyncProgress asyn)
+            IAsyncTaskProgress _asyn;
+            public MirrorControlerBox(SPFTask task, Mirror mirror, IAsyncTaskProgress asyn)
             {
                 _task = task;
                 _mirror = mirror;

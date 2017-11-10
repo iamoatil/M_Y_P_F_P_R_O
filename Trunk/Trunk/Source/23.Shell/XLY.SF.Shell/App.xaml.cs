@@ -12,6 +12,7 @@ using XLY.SF.Shell.SpfException;
 using XLY.SF.Framework.BaseUtility;
 using System.Collections.Generic;
 using XLY.SF.Project.ViewDomain.MefKeys;
+using ProjectExtend.Context;
 
 namespace XLY.SF.Shell
 {
@@ -97,8 +98,14 @@ namespace XLY.SF.Shell
         {
             var configHelper = IocManagerSingle.Instance.GetPart<ISystemConfigService>(CoreExportKeys.SysConfigHelper);
             var curLanguage = configHelper.GetSysConfigValueByKey("Language");
-            var curLangType = curLanguage.ToSafeEnum<LanguageType>(LanguageType.Cn);       //转换语言配置，默认为中文
-            LanguageHelperSingle.Instance.SwitchLanguage(curLangType, true);
+            //转换语言配置，默认为中文
+            var curLangType = curLanguage.ToSafeEnum<LanguageType>(LanguageType.Cn);
+#if DEBUG
+            SystemContext.LanguageManager.Switch(curLangType);
+#else
+
+            LanguageManager.SwitchAll(curLangType);
+#endif
         }
 
         #endregion
@@ -110,7 +117,7 @@ namespace XLY.SF.Shell
             IMessageBox _msgBox = IocManagerSingle.Instance.GetPart<IMessageBox>();
             if (!string.IsNullOrWhiteSpace(args.Parameters))
             {
-                if (_msgBox.ShowMutualMsg(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ViewLanguage_View_MessageBox_Notice), args.Parameters))
+                if (_msgBox.ShowMutualMsg(SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_MessageBox_Notice], args.Parameters))
                     Application.Current.Shutdown();
             }
             else

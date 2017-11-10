@@ -60,7 +60,7 @@ namespace XLY.SF.Project.DataReport
                         }
                     }
                 }
-                catch (Exception ex)
+                catch 
                 {
                 }
             }

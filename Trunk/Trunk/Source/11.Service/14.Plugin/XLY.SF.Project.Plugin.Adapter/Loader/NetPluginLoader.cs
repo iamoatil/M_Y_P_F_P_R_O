@@ -24,7 +24,7 @@ namespace XLY.SF.Project.Plugin.Adapter
     [Export(PluginExportKeys.PluginLoaderKey, typeof(IPluginLoader))]
     public class NetPluginLoader : AbstractPluginLoader
     {
-        protected override void LoadPlugin(IAsyncProgress asyn)
+        protected override void LoadPlugin(IAsyncTaskProgress asyn)
         {
             var plugins = IocManagerSingle.Instance.GetParts<IPlugin>(PluginExportKeys.PluginKey);
             Plugins = plugins.ToList().ConvertAll(p => p.Value);

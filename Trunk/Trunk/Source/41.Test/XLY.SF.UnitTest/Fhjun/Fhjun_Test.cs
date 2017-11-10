@@ -35,7 +35,7 @@ namespace XLY.SF.UnitTest
         {
             Console.WriteLine("开始启动服务");
             IocManagerSingle.Instance.LoadParts(this.GetType().Assembly);
-            PluginAdapter.Instance.Initialization(new DefaultAsyncProgress());
+            PluginAdapter.Instance.Initialization(null);
         }
 
         private void Log(string message)
@@ -159,7 +159,7 @@ namespace XLY.SF.UnitTest
                     IMEI = "2343353453454",
                     Name = "fsdfi"
                 }
-            }, new DefaultAsyncProgress());
+            }, null);
             Log("Save OK!" + destPath);
             System.Diagnostics.Process.Start(destPath.ToSafeString());
             Log("测试结束");
@@ -194,7 +194,7 @@ namespace XLY.SF.UnitTest
                     IMEI = "2343353453454",
                     Name = "fsdfi"
                 }
-            }, new DefaultAsyncProgress());
+            }, null);
             Log("Save OK!" + destPath);
             System.Diagnostics.Process.Start(destPath.ToSafeString());
             Log("测试结束");
@@ -570,6 +570,136 @@ namespace XLY.SF.UnitTest
                 sw.Write("];");
             }
             Log($"执行时间：{t.ElapsedMilliseconds}ms");//6.5s--100000数据
+        }
+        #endregion
+
+        #region 数据修改后更新数据库
+
+        /// <summary>
+        /// 数据修改后更新数据库
+        /// </summary>	
+        [TestMethod]
+        public void TestDataItemPropertyModify()
+        {
+            Log("-----------开始测试数据修改后更新数据库----------------");
+
+            string db = @"C:\Users\fhjun\Desktop\TestDataItemPropertyModify.db";
+            string db2 = db.Insert(db.LastIndexOf('.'), "_bmk");
+            if (File.Exists(db))
+            {
+                File.Delete(db);
+            }
+            if (File.Exists(db2))
+            {
+                File.Delete(db2);
+            }
+            IDataItems items = new DataItems<MessageCore>(db);
+            //MessageCore mm3 = null;
+            //for (int i = 0; i < 1; i++)
+            //{
+            //    MessageCore mm = new MessageCore() { Content = "正常消息", Date = DateTime.Now.AddDays(i), SenderName = "张三", MessageType = "文本" };
+            //    mm.Content = "正常消息1";
+            //    items.Add(mm);
+            //    if (i == 3)
+            //        mm.Content = "这是修改Content后的数据";
+            //    if (i % 3 == 0)
+            //        mm.BookMarkId = 2;
+            //    if (i == 0)
+            //        mm3 = mm;
+            //}
+            MessageCore mm = new MessageCore() { Content = "正常消息", Date = DateTime.Now.AddDays(0), SenderName = "张三", MessageType = "文本" };
+            mm.Content = "正常消息1";
+            items.Add(mm);
+            mm.Content = "这是修改Content后的数据";
+            mm.Content = "这是修改Content后的数据2222";
+
+            items.Commit();
+            items.Filter();
+
+            mm.BookMarkId = 3;
+            mm.BookMarkId = -1;
+        }
+        #endregion
+
+        #region 数据的序列化和反序列化
+
+        /// <summary>
+        /// 数据的序列化和反序列化
+        /// </summary>	
+        [TestMethod]
+        public void TestDataSeriazal()
+        {
+            Log("-----------开始测试数据的序列化和反序列化----------------");
+
+            string DB_PATH = DeskPath("TestDataSeriazal.db");
+
+            //var DataSource = new TreeDataSource();
+            //DataSource.TreeNodes = new List<TreeNode>();
+            //for (int i = 0; i < 2; i++)
+            //{
+            //    TreeNode t = new TreeNode();
+            //    t.Text = "账号" + i;
+            //    DataSource.TreeNodes.Add(t);
+
+            //    TreeNode accouts = new TreeNode();
+            //    accouts.Text = "好友列表";
+            //    accouts.IsHideChildren = true;
+            //    t.TreeNodes.Add(accouts);
+            //    accouts.Type = typeof(WeChatFriendShow);
+            //    accouts.Items = new DataItems<WeChatFriendShow>(DB_PATH);
+            //    for (int j = 0; j < 10; j++)
+            //    {
+            //        accouts.Items.Add(new WeChatFriendShow() { Nick = "昵称" + j, WeChatId = "账号" + j });
+            //    }
+
+            //    TreeNode accouts2 = new TreeNode();
+            //    accouts2.Text = "聊天记录";
+            //    accouts2.IsHideChildren = i % 2 == 0;
+            //    accouts2.Type = typeof(WeChatFriendShow);
+            //    accouts2.Items = new DataItems<WeChatFriendShow>(DB_PATH);
+            //    t.TreeNodes.Add(accouts2);
+            //    for (int j = 0; j < 5; j += 2)
+            //    {
+            //        accouts2.Items.Add(new WeChatFriendShow() { Nick = "昵称" + j, WeChatId = "账号" + j });
+            //        TreeNode friend = new TreeNode();
+            //        friend.Text = "昵称" + j;
+            //        friend.Type = typeof(MessageCore);
+            //        friend.Items = new DataItems<MessageCore>(DB_PATH);
+            //        accouts2.TreeNodes.Add(friend);
+
+            //        for (int k = 0; k < 100; k++)
+            //        {
+            //            MessageCore msg = new MessageCore() { SenderName = friend.Text, SenderImage = "images/zds.png", Receiver = t.Text, Content = "消息内容" + k, MessageType = k % 4 == 0 ? "图片" : "文本", SendState = EnumSendState.Send };
+            //            friend.Items.Add(msg);
+            //            MessageCore msg2 = new MessageCore() { Receiver = friend.Text, SenderImage = "images/zjq.png", SenderName = t.Text, Content = "返回消息内容" + k, MessageType = k % 5 == 0 ? "图片" : "文本", SendState = EnumSendState.Receive };
+            //            friend.Items.Add(msg2);
+            //        }
+            //    }
+
+            //    TreeNode accouts3 = new TreeNode();
+            //    accouts3.Text = "群消息";
+            //    accouts3.IsHideChildren = true;
+            //    t.TreeNodes.Add(accouts3);
+
+            //    TreeNode accouts4 = new TreeNode();
+            //    accouts4.Text = "发现";
+            //    accouts4.IsHideChildren = true;
+            //    t.TreeNodes.Add(accouts4);
+            //}
+            //DataSource.BuildParent();
+
+            //System.IO.File.WriteAllText(DB_PATH + ".js", Serializer.JsonSerilize(DataSource));
+
+            var source2 = Serializer.JsonDeserilize<TreeDataSource>(System.IO.File.ReadAllText(DB_PATH + ".js"));
+            source2.BuildParent();
+            var dsss = source2.TreeNodes[0].TreeNodes[0].Items;
+            var t = source2.TreeNodes[0].TreeNodes[0].Total;
+            //dsss.Filter();
+            foreach (AbstractDataItem i in dsss.View)
+            {
+                i.BookMarkId = 5;
+                Console.WriteLine($"1111111111111"); 
+            }
         }
         #endregion
 

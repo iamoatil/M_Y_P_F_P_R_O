@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
 using System.IO.Pipes;
 using System.Text;
+using System.Threading;
 
 namespace XLY.SF.Project.IsolatedTaskEngine.Common
 {
@@ -11,6 +11,23 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
     /// </summary>
     public abstract class MessageTransceiver : IDisposable
     {
+        #region Event
+
+        /// <summary>
+        /// 连接断开事件。
+        /// </summary>
+        public event EventHandler Disconnect;
+
+        /// <summary>
+        /// 触发连接断开事件。
+        /// </summary>
+        protected void OnDisconnect()
+        {
+            Disconnect?.Invoke(this, EventArgs.Empty);
+        }
+
+        #endregion
+
         #region Fields
 
         private readonly PipeStream _pipe;
@@ -39,7 +56,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <summary>
         /// 管道。
         /// </summary>
-        protected PipeStream Pipe => _pipe;
+        internal protected PipeStream Pipe => _pipe;
 
         /// <summary>
         /// 对象使用的资源是否已被清理。
@@ -55,7 +72,24 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <summary>
         /// 启动消息收发器。
         /// </summary>
-        public abstract void Launch();
+        /// <returns>成功返回true；否则返回false。</returns>
+        public Boolean Launch()
+        {
+            if (!LaunchCore()) return false;
+            try
+            {
+                _pipe.ReadMode = PipeTransmissionMode.Message;
+                return true;
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
+            catch (IOException)
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         /// 发送消息。
@@ -65,20 +99,22 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         {
             try
             {
-                _writer.AutoFlush = true;
-                String json = JsonConvert.SerializeObject(message);
-                _writer.WriteLine(json);
+                if (_pipe.IsConnected)
+                {
+                    String json = message.ToString();
+                    _writer.WriteLine(json);
+                    _writer.Flush();
+                }
             }
             catch (ObjectDisposedException)
             {
+                OnDisconnect();
             }
             catch (IOException)
             {
+                OnDisconnect();
             }
-            catch(JsonReaderException)
-            {
-            }
-            catch (JsonSerializationException)
+            catch (Exception)
             {
             }
         }
@@ -93,20 +129,19 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
             String temp = null;
             try
             {
-                _pipe.ReadMode = PipeTransmissionMode.Message;
                 do
                 {
                     temp = _reader.ReadLine();
-                    if (String.IsNullOrWhiteSpace(temp)) continue;
+                    if (String.IsNullOrWhiteSpace(temp))
+                    {
+                        OnDisconnect();
+                        return null;
+                    }
                     sb.Append(temp);
                 } while (!_pipe.IsMessageComplete);
-                return JsonConvert.DeserializeObject<Message>(sb.ToString());
+                return Message.ToMessage(sb.ToString());
             }
-            catch (JsonReaderException)
-            {
-                return null;
-            }
-            catch (JsonSerializationException)
+            catch (Exception)
             {
                 return null;
             }
@@ -142,6 +177,12 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         #region Protected
 
         /// <summary>
+        /// 启动消息收发器。
+        /// </summary>
+        /// <returns>成功返回true；否则返回false。</returns>
+        protected abstract Boolean LaunchCore();
+
+        /// <summary>
         /// 清理资源。
         /// </summary>
         /// <param name="isDisposing">true表示显示清理，否则表示系统自动清理。</param>
@@ -150,7 +191,17 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
             if (IsDisposed) return;
             if (isDisposing)
             {
-                _writer.Close();
+                _pipe.Dispose();
+                try
+                {
+                    _writer.Close();
+                }
+                catch (ObjectDisposedException)
+                {
+                }
+                catch (IOException)
+                {
+                }
                 _reader.Close();
             }
             IsDisposed = true;

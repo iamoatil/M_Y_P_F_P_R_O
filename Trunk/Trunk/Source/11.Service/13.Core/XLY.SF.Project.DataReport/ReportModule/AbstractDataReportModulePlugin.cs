@@ -27,7 +27,7 @@ namespace XLY.SF.Project.DataReport
             
         }
 
-        public object Execute(object arg, IAsyncProgress progress)
+        public object Execute(object arg, IAsyncTaskProgress progress)
         {
             return null;
         }

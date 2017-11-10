@@ -52,7 +52,7 @@ namespace XLY.SF.Project.DataPump.IOS
             if (device == null) return false;
             IOSDeviceManager dm = device.DeviceManager as IOSDeviceManager;
             if (dm == null) return false;
-            String savePath = dm.CopyUserData(device, context.TargetDirectory, context.Reporter);
+            String savePath = dm.CopyUserData(device, context.TargetDirectory, null);
             if (FileHelper.IsValidDictory(savePath))
             {
                 RenameUnofficialApp(savePath);

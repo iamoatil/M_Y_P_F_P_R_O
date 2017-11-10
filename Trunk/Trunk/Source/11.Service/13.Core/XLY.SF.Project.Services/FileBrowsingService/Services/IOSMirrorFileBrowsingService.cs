@@ -16,6 +16,8 @@ using System.Threading.Tasks;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
+using XLY.SF.Project.Domains;
+using XLY.SF.Project.Domains.Contract;
 
 namespace XLY.SF.Project.Services
 {
@@ -39,7 +41,7 @@ namespace XLY.SF.Project.Services
         /// </summary>
         private string DataSourcePath { get; set; }
 
-        protected override FileBrowingNode DoGetRootNode(IAsyncProgress async)
+        protected override FileBrowingNode DoGetRootNode(IAsyncTaskProgress async)
         {
             var di = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).Root.Name;
 
@@ -58,7 +60,7 @@ namespace XLY.SF.Project.Services
             return node;
         }
 
-        protected override List<FileBrowingNode> DoGetChildNodes(FileBrowingNode parentNode, IAsyncProgress async)
+        protected override List<FileBrowingNode> DoGetChildNodes(FileBrowingNode parentNode, IAsyncTaskProgress async)
         {
             List<FileBrowingNode> list = new List<FileBrowingNode>();
 
@@ -98,14 +100,14 @@ namespace XLY.SF.Project.Services
             return list;
         }
 
-        protected override void DoDownload(FileBrowingNode node, string savePath, bool persistRelativePath, IAsyncProgress async)
+        protected override void DoDownload(FileBrowingNode node, string savePath, bool persistRelativePath, IAsyncTaskProgress async)
         {
             FileHelper.CreateDirectory(savePath);
 
             DownLoadNode(node as IOSMirrorFileBrowingNode, savePath, persistRelativePath, async);
         }
 
-        private void DownLoadNode(IOSMirrorFileBrowingNode node, string savePath, bool persistRelativePath, IAsyncProgress async)
+        private void DownLoadNode(IOSMirrorFileBrowingNode node, string savePath, bool persistRelativePath, IAsyncTaskProgress async)
         {
             if (null == node || node.SourcePath.IsInvalid())
             {
@@ -133,7 +135,7 @@ namespace XLY.SF.Project.Services
             }
         }
 
-        private void DownLoadFile(IOSMirrorFileBrowingNode fileNode, string savePath, bool persistRelativePath, IAsyncProgress async)
+        private void DownLoadFile(IOSMirrorFileBrowingNode fileNode, string savePath, bool persistRelativePath, IAsyncTaskProgress async)
         {
             try
             {
@@ -155,6 +157,31 @@ namespace XLY.SF.Project.Services
             {
 
             }
+        }
+
+        /// <summary>
+        /// 开始搜索
+        /// </summary>
+        /// <param name="node">搜索根节点，必须是文件夹类型 即IsFile为false</param>
+        /// <param name="args">搜索条件</param>
+        /// <param name="async">异步通知</param>
+        protected override void BeginSearch(FileBrowingNode node, IEnumerable<FilterArgs> args, IAsyncTaskProgress async)
+        {
+            var stateArg = args.FirstOrDefault(a => a is FilterByEnumStateArgs);
+            if (null != stateArg && (stateArg as FilterByEnumStateArgs).State != EnumDataState.Normal)
+            {//如果要搜索删除状态的文件，直接返回。因为IOS镜像文件浏览不会有删除状态的文件。
+                //TODO:通知搜索结束
+                return;
+            }
+
+            var dateArg = args.FirstOrDefault(a => a is FilterByDateRangeArgs);
+            if (null != stateArg)
+            {//如果要搜索指定创建时间范围的文件，直接返回。因为IOS镜像文件浏览无法获取文件创建时间。
+                //TODO:通知搜索结束
+                return;
+            }
+
+            base.BeginSearch(node, args, async);
         }
 
         /// <summary>

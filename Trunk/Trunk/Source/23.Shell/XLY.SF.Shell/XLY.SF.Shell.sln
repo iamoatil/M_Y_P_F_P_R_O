@@ -73,7 +73,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Theme", "Theme", "{40B32285
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "View", "View", "{3782972E-78FA-4989-845D-120B6382E7DE}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ViewModle", "ViewModle", "{590EAA8B-7E87-4169-BF0B-93EFE198C66A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ViewModel", "ViewModel", "{590EAA8B-7E87-4169-BF0B-93EFE198C66A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.Themes", "..\..\21.Presentation\Theme\XLY.SF.Project.Themes\XLY.SF.Project.Themes.csproj", "{C4C4FC67-5D56-4426-ACC5-B53CD24C6B69}"
 EndProject
@@ -117,6 +117,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.IsolatedTaskEngine.Common", "..\..\22.Tools\IsolatedTask\XLY.SF.Project.IsolatedTaskEngine.Common\XLY.SF.Project.IsolatedTaskEngine.Common.csproj", "{C31639C3-6E19-4681-8647-46BDD60BFEAB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.IsolatedTaskEngine", "..\..\22.Tools\IsolatedTask\XLY.SF.Project.IsolatedTaskEngine\XLY.SF.Project.IsolatedTaskEngine.csproj", "{4A9F07F5-4232-43C2-8806-2998BA4E984E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.DeviceExtractionService", "..\..\22.Tools\XLY.SF.Project.DeviceExtractionService\XLY.SF.Project.DeviceExtractionService.csproj", "{D638DE22-8503-4F73-95F6-8D6E6CBD3A98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.DataExtraction", "..\..\21.Presentation\View\XLY.SF.Project.DataExtraction\XLY.SF.Project.DataExtraction.csproj", "{57B9DE4A-F6F2-4F41-9829-2E852A963EF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -595,6 +599,30 @@ Global
 		{4A9F07F5-4232-43C2-8806-2998BA4E984E}.Release|x64.Build.0 = Release|Any CPU
 		{4A9F07F5-4232-43C2-8806-2998BA4E984E}.Release|x86.ActiveCfg = Release|Any CPU
 		{4A9F07F5-4232-43C2-8806-2998BA4E984E}.Release|x86.Build.0 = Release|Any CPU
+		{D638DE22-8503-4F73-95F6-8D6E6CBD3A98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D638DE22-8503-4F73-95F6-8D6E6CBD3A98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D638DE22-8503-4F73-95F6-8D6E6CBD3A98}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D638DE22-8503-4F73-95F6-8D6E6CBD3A98}.Debug|x64.Build.0 = Debug|Any CPU
+		{D638DE22-8503-4F73-95F6-8D6E6CBD3A98}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D638DE22-8503-4F73-95F6-8D6E6CBD3A98}.Debug|x86.Build.0 = Debug|Any CPU
+		{D638DE22-8503-4F73-95F6-8D6E6CBD3A98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D638DE22-8503-4F73-95F6-8D6E6CBD3A98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D638DE22-8503-4F73-95F6-8D6E6CBD3A98}.Release|x64.ActiveCfg = Release|Any CPU
+		{D638DE22-8503-4F73-95F6-8D6E6CBD3A98}.Release|x64.Build.0 = Release|Any CPU
+		{D638DE22-8503-4F73-95F6-8D6E6CBD3A98}.Release|x86.ActiveCfg = Release|Any CPU
+		{D638DE22-8503-4F73-95F6-8D6E6CBD3A98}.Release|x86.Build.0 = Release|Any CPU
+		{57B9DE4A-F6F2-4F41-9829-2E852A963EF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57B9DE4A-F6F2-4F41-9829-2E852A963EF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57B9DE4A-F6F2-4F41-9829-2E852A963EF4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{57B9DE4A-F6F2-4F41-9829-2E852A963EF4}.Debug|x64.Build.0 = Debug|Any CPU
+		{57B9DE4A-F6F2-4F41-9829-2E852A963EF4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{57B9DE4A-F6F2-4F41-9829-2E852A963EF4}.Debug|x86.Build.0 = Debug|Any CPU
+		{57B9DE4A-F6F2-4F41-9829-2E852A963EF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57B9DE4A-F6F2-4F41-9829-2E852A963EF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57B9DE4A-F6F2-4F41-9829-2E852A963EF4}.Release|x64.ActiveCfg = Release|Any CPU
+		{57B9DE4A-F6F2-4F41-9829-2E852A963EF4}.Release|x64.Build.0 = Release|Any CPU
+		{57B9DE4A-F6F2-4F41-9829-2E852A963EF4}.Release|x86.ActiveCfg = Release|Any CPU
+		{57B9DE4A-F6F2-4F41-9829-2E852A963EF4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -649,12 +677,14 @@ Global
 		{773D7753-7773-4ED7-8E09-59AA561A36CC} = {FDDD33CF-DC4D-4676-9D6F-96D32E0F70BE}
 		{C31639C3-6E19-4681-8647-46BDD60BFEAB} = {773D7753-7773-4ED7-8E09-59AA561A36CC}
 		{4A9F07F5-4232-43C2-8806-2998BA4E984E} = {773D7753-7773-4ED7-8E09-59AA561A36CC}
+		{D638DE22-8503-4F73-95F6-8D6E6CBD3A98} = {FDDD33CF-DC4D-4676-9D6F-96D32E0F70BE}
+		{57B9DE4A-F6F2-4F41-9829-2E852A963EF4} = {3782972E-78FA-4989-845D-120B6382E7DE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3A587B29-35A1-47EC-AA7B-9EC40EA8AE9A}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 40
+		SccNumberOfProjects = 42
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.0.16:8080/tfs/xlyteamprojects
 		SccLocalPath0 = .
@@ -805,13 +835,21 @@ Global
 		SccProjectTopLevelParentUniqueName37 = XLY.SF.Shell.sln
 		SccProjectName37 = ../../21.Presentation/View/XLY.SF.Project.PreviewFiles
 		SccLocalPath37 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.PreviewFiles
-		SccProjectUniqueName38 = XLY.SF.Project.IsolatedTaskEngine.Common\\XLY.SF.Project.IsolatedTaskEngine.Common.csproj
+		SccProjectUniqueName38 = ..\\..\\22.Tools\\IsolatedTask\\XLY.SF.Project.IsolatedTaskEngine.Common\\XLY.SF.Project.IsolatedTaskEngine.Common.csproj
 		SccProjectTopLevelParentUniqueName38 = XLY.SF.Shell.sln
-		SccProjectName38 = XLY.SF.Project.IsolatedTaskEngine.Common
-		SccLocalPath38 = XLY.SF.Project.IsolatedTaskEngine.Common
+		SccProjectName38 = ../../22.Tools/IsolatedTask/XLY.SF.Project.IsolatedTaskEngine.Common
+		SccLocalPath38 = ..\\..\\22.Tools\\IsolatedTask\\XLY.SF.Project.IsolatedTaskEngine.Common
 		SccProjectUniqueName39 = ..\\..\\22.Tools\\IsolatedTask\\XLY.SF.Project.IsolatedTaskEngine\\XLY.SF.Project.IsolatedTaskEngine.csproj
 		SccProjectTopLevelParentUniqueName39 = XLY.SF.Shell.sln
 		SccProjectName39 = ../../22.Tools/IsolatedTask/XLY.SF.Project.IsolatedTaskEngine
 		SccLocalPath39 = ..\\..\\22.Tools\\IsolatedTask\\XLY.SF.Project.IsolatedTaskEngine
+		SccProjectUniqueName40 = ..\\..\\22.Tools\\XLY.SF.Project.DeviceExtractionService\\XLY.SF.Project.DeviceExtractionService.csproj
+		SccProjectTopLevelParentUniqueName40 = XLY.SF.Shell.sln
+		SccProjectName40 = ../../22.Tools/XLY.SF.Project.DeviceExtractionService
+		SccLocalPath40 = ..\\..\\22.Tools\\XLY.SF.Project.DeviceExtractionService
+		SccProjectUniqueName41 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.DataExtraction\\XLY.SF.Project.DataExtraction.csproj
+		SccProjectTopLevelParentUniqueName41 = XLY.SF.Shell.sln
+		SccProjectName41 = ../../21.Presentation/View/XLY.SF.Project.DataExtraction
+		SccLocalPath41 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.DataExtraction
 	EndGlobalSection
 EndGlobal

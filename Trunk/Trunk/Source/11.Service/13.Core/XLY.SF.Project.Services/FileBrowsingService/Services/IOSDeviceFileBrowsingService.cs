@@ -18,6 +18,7 @@ using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Devices.AdbSocketManagement;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Domains.Contract;
 
 namespace XLY.SF.Project.Services
 {
@@ -48,12 +49,12 @@ namespace XLY.SF.Project.Services
             };
         }
 
-        protected override FileBrowingNode DoGetRootNode(IAsyncProgress async)
+        protected override FileBrowingNode DoGetRootNode(IAsyncTaskProgress async)
         {
             return RootNode;
         }
 
-        protected override List<FileBrowingNode> DoGetChildNodes(FileBrowingNode parentNode, IAsyncProgress async)
+        protected override List<FileBrowingNode> DoGetChildNodes(FileBrowingNode parentNode, IAsyncTaskProgress async)
         {
             return DoGetChildNodes(parentNode as IOSDeviceFileBrowingNode);
         }
@@ -133,14 +134,14 @@ namespace XLY.SF.Project.Services
             return list;
         }
 
-        protected override void DoDownload(FileBrowingNode node, string savePath, bool persistRelativePath, IAsyncProgress async)
+        protected override void DoDownload(FileBrowingNode node, string savePath, bool persistRelativePath, IAsyncTaskProgress async)
         {
             FileHelper.CreateDirectory(savePath);
 
             DownLoadNode(node as IOSDeviceFileBrowingNode, savePath, persistRelativePath, async);
         }
 
-        private void DownLoadNode(IOSDeviceFileBrowingNode node, string savePath, bool persistRelativePath, IAsyncProgress async)
+        private void DownLoadNode(IOSDeviceFileBrowingNode node, string savePath, bool persistRelativePath, IAsyncTaskProgress async)
         {
             if (null == node || node.SourcePath.IsInvalid())
             {
@@ -168,7 +169,7 @@ namespace XLY.SF.Project.Services
             }
         }
 
-        private void DownLoadFile(IOSDeviceFileBrowingNode fileNode, string savePath, bool persistRelativePath, IAsyncProgress async)
+        private void DownLoadFile(IOSDeviceFileBrowingNode fileNode, string savePath, bool persistRelativePath, IAsyncTaskProgress async)
         {
             try
             {
@@ -199,6 +200,25 @@ namespace XLY.SF.Project.Services
                 IOSDeviceCoreDll.CloseIphoneFileService(IPhone.ID);
             }
         }
+
+        /// <summary>
+        /// 开始搜索
+        /// </summary>
+        /// <param name="node">搜索根节点，必须是文件夹类型 即IsFile为false</param>
+        /// <param name="args">搜索条件</param>
+        /// <param name="async">异步通知</param>
+        protected override void BeginSearch(FileBrowingNode node, IEnumerable<FilterArgs> args, IAsyncTaskProgress async)
+        {
+            var stateArg = args.FirstOrDefault(a => a is FilterByEnumStateArgs);
+            if (null != stateArg && (stateArg as FilterByEnumStateArgs).State != EnumDataState.Normal)
+            {//如果要搜索删除状态的文件，直接返回。因为IOS手机文件浏览不会有删除状态的文件。
+                //TODO:通知搜索结束
+                return;
+            }
+
+            base.BeginSearch(node, args, async);
+        }
+
 
         /// <summary>
         /// iPhone文件节点

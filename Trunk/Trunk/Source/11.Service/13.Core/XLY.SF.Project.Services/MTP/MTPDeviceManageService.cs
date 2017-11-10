@@ -116,7 +116,7 @@ namespace XLY.SF.Project.Services
         /// <param name="device"></param>
         /// <param name="asyn"></param>
         /// <returns>根节点</returns>
-        public MTPFileNode GetRootFileNode(MTPDevice device, IAsyncProgress asyn)
+        public MTPFileNode GetRootFileNode(MTPDevice device, IAsyncTaskProgress asyn)
         {
             MTPFileNode root = new MTPFileNode() { Type = MTPFileNodeType.Root, Name = "Root", Childrens = new List<MTPFileNode>(), Level = -1 };
 
@@ -218,7 +218,7 @@ namespace XLY.SF.Project.Services
         /// <param name="content"></param>
         /// <param name="properties"></param>
         /// <param name="asyn"></param>
-        private void CreateTree(MTPFileNode parentNode, IPortableDeviceContent content, IPortableDeviceProperties properties, IAsyncProgress asyn)
+        private void CreateTree(MTPFileNode parentNode, IPortableDeviceContent content, IPortableDeviceProperties properties, IAsyncTaskProgress asyn)
         {
             List<string> objectsId = GetChildrenObjectIds(content, parentNode.Id);
             if (objectsId != null && objectsId.Count > 0)

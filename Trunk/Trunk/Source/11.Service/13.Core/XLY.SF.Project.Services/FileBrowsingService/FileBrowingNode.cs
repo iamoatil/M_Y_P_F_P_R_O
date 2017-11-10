@@ -8,6 +8,7 @@
 
 using System;
 using System.Collections.Generic;
+using XLY.SF.Project.BaseUtility.Helper;
 
 namespace XLY.SF.Project.Services
 {
@@ -50,7 +51,7 @@ namespace XLY.SF.Project.Services
         /// <summary>
         /// 节点状态
         /// </summary>
-        public FileBrowingNodeState NodeState { get; internal set; } = FileBrowingNodeState.Normal;
+        internal FileBrowingNodeState NodeState { get; set; } = FileBrowingNodeState.Normal;
 
         /// <summary>
         /// 文件大小
@@ -77,12 +78,35 @@ namespace XLY.SF.Project.Services
         /// </summary>
         public List<FileBrowingNode> ChildNodes { get; internal set; }
 
+        private string _FullPath;
+
+        /// <summary>
+        /// 全路径
+        /// </summary>
+        public string FullPath
+        {
+            get
+            {
+                if (null == _FullPath)
+                {
+                    if (null == Parent)
+                    {
+                        _FullPath = Name;
+                    }
+                    else
+                    {
+                        _FullPath = FileHelper.ConnectPath(Parent.FullPath, Name);
+                    }
+                }
+                return _FullPath;
+            }
+        }
     }
 
     /// <summary>
     /// 文件节点状态
     /// </summary>
-    public enum FileBrowingNodeState
+    internal enum FileBrowingNodeState
     {
         /// <summary>
         /// 正常

@@ -10,7 +10,12 @@
         <ResourceDictionary Source="ThemesStyle/ComboBoxStyle/ComboBox.xaml"/>
         <ResourceDictionary Source="ThemesStyle/ComboBoxStyle/ComboBoxItem.xaml"/>
         <ResourceDictionary Source="ThemesStyle/ToggleButtonStyle/ToggleButton.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/ToggleButtonStyle/RadioButton.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/ToggleButtonStyle/CheckBox.xaml"/>
         <ResourceDictionary Source="ThemesStyle/TextBoxStyle/TextBox.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/ScrollViewerStyle/ScrollViewer.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/TabControlStyle/TabControlWithButton.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/Listbox/ListboxItemStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <!--系统默认样式加载-->
@@ -18,7 +23,7 @@
     <Style TargetType="{x:Type control:TextBoxEx}">
         <Setter Property="TitleForeground" Value="#9ba5b9"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontSize" Value="14"/>
         <Setter Property="Background" Value="#414b69"/>
         <Setter Property="IconWidth" Value="20"/>
         <Setter Property="IconHeight" Value="20"/>
@@ -39,16 +44,41 @@
         <Setter Property="Template" Value="{DynamicResource cb_DefaultCt}"/>
         <Style.Triggers>
             <Trigger Property="IsEditable" Value="true">
-                <Setter Property="Template" Value="{DynamicResource ComboBoxEditableTemplate}"/>
+                <Setter Property="Template" Value="{DynamicResource ComboBoxEditableCt}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
+    <!--带图标按钮-->
+    <Style TargetType="{x:Type control:IconButton}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Background" Value="#0fffffff"/>
+        <Setter Property="Template" Value="{DynamicResource btn_IconChangeColorCt}"/>
+    </Style>
+    <!--设备首页推荐方案按钮【带图标按钮】-->
+    <Style TargetType="{x:Type control:IconRadioButton}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Background" Value="#0fffffff"/>
+        <Setter Property="Template" Value="{DynamicResource rb_IconHasArrowCt}"/>
+    </Style>
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <!--系统控件-->
     <Style TargetType="TextBlock">
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
-    </Style>    
+    </Style>
     <Style TargetType="Button">
         <Setter Property="Template" Value="{StaticResource btn_EmptyCT}"/>
         <Setter Property="Border.CornerRadius" Value="5"/>
@@ -70,6 +100,14 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="Padding" Value="40 0 0 0"/>
+    </Style>
+    <Style TargetType="ScrollViewer">
+        <Setter Property="Template" Value="{DynamicResource ScrollViewerDefaultCt}"/>
+    </Style>
+    <Style TargetType="CheckBox">
+        <Setter Property="Padding" Value="5 0 0 0"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template" Value="{DynamicResource cb_Default}"/>
     </Style>
 
 </ResourceDictionary>

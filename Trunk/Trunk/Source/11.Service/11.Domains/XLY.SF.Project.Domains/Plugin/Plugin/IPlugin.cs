@@ -28,6 +28,6 @@ namespace XLY.SF.Project.Domains
         /// 执行插件
         /// </summary>
         /// <returns></returns>
-        object Execute(object arg, IAsyncProgress progress);
+        object Execute(object arg, IAsyncTaskProgress progress);
     }
 }

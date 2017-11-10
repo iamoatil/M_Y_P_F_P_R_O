@@ -1,15 +1,9 @@
 ﻿using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.CommandWpf;
 using ProjectExtend.Context;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Core.Base.MefIoc;
@@ -18,9 +12,14 @@ using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.CaseManagement;
 using XLY.SF.Project.Models.Logical;
 using XLY.SF.Project.ViewDomain.MefKeys;
+using XLY.SF.Project.ViewModels.Main.CaseManagement;
+using System.Linq;
 
 namespace XLY.SF.Project.ViewModels.Main
 {
+    /// <summary>
+    /// 案例设备列表管理
+    /// </summary>
     [Export(ExportKeys.DeviceListViewModel, typeof(ViewModelBase))]
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class DeviceListViewModel : ViewModelBase
@@ -40,11 +39,11 @@ namespace XLY.SF.Project.ViewModels.Main
         public DeviceListViewModel()
         {
             _selectDeviceCommandProxy = new ProxyRelayCommand(SelectDevice);
-            CloseCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<DeviceExtraction>(Close);
-            _moveToCommandProxy = new ProxyRelayCommand<DeviceExtraction>(MoveTo);
-            _deleteCommandProxy = new ProxyRelayCommand<DeviceExtraction>(Delete);
-            PopupCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<DeviceExtraction>(Popup);
-            MessageAggregation.RegisterGeneralMsg<DeviceExtraction>(this, ExportKeys.DeviceWindowClosedMsg, (d) => BackToList(d.Parameters));
+            CloseCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<DeviceExtractionAdorner>(Close);
+            _moveToCommandProxy = new ProxyRelayCommand<DeviceExtractionAdorner>(MoveTo);
+            _deleteCommandProxy = new ProxyRelayCommand<DeviceExtractionAdorner>(Delete);
+            PopupCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<DeviceExtractionAdorner>(Popup);
+            MessageAggregation.RegisterGeneralMsg<DeviceExtractionAdorner>(this, ExportKeys.DeviceWindowClosedMsg, (d) => BackToList(d.Parameters));
         }
 
         #endregion
@@ -70,8 +69,8 @@ namespace XLY.SF.Project.ViewModels.Main
 
         #region Items
 
-        private ObservableCollection<DeviceExtraction> _items;
-        public ObservableCollection<DeviceExtraction> Items
+        private ObservableCollection<DeviceExtractionAdorner> _items;
+        public ObservableCollection<DeviceExtractionAdorner> Items
         {
             get => _items;
             private set
@@ -85,8 +84,8 @@ namespace XLY.SF.Project.ViewModels.Main
 
         #region SelectedItem
 
-        private DeviceExtraction _selectedItem;
-        public DeviceExtraction SelectedItem
+        private DeviceExtractionAdorner _selectedItem;
+        public DeviceExtractionAdorner SelectedItem
         {
             get => _selectedItem;
             private set
@@ -101,7 +100,8 @@ namespace XLY.SF.Project.ViewModels.Main
                     }
                     else
                     {
-                        NavigationForMainWindow(ExportKeys.DeviceHomeView, value);
+                        //NavigationForMainWindow(ExportKeys.DeviceHomeView, value);
+                        NavigationForMainWindow(ExportKeys.DeviceHomePageView, value.Device);
                     }
                 }
             }
@@ -118,7 +118,7 @@ namespace XLY.SF.Project.ViewModels.Main
         protected override void LoadCore(object parameters)
         {
             SystemContext.Instance.CaseChanged += Instance_CaseChanged;
-            MessageAggregation.RegisterGeneralMsg<DeviceExtraction>(this, ExportKeys.DeviceAddedMsg, AddDevice);
+            MessageAggregation.RegisterGeneralMsg<DeviceExtractionAdorner>(this, ExportKeys.DeviceAddedMsg, AddDevice);
         }
 
         #endregion
@@ -130,7 +130,8 @@ namespace XLY.SF.Project.ViewModels.Main
             Case @case = e.NewValue;
             if (@case != null)
             {
-                Items = new ObservableCollection<DeviceExtraction>(@case.DeviceExtractions);
+                var items = @case.DeviceExtractions.Select(x => new DeviceExtractionAdorner(x)).ToArray();
+                Items = new ObservableCollection<DeviceExtractionAdorner>(items);
             }
             else
             {
@@ -138,9 +139,13 @@ namespace XLY.SF.Project.ViewModels.Main
             }
         }
 
-        private void AddDevice(GeneralArgs<DeviceExtraction> args)
+        /// <summary>
+        /// 添加设备
+        /// </summary>
+        /// <param name="args"></param>
+        private void AddDevice(GeneralArgs<DeviceExtractionAdorner> args)
         {
-            DeviceExtraction de = args.Parameters;
+            DeviceExtractionAdorner de = args.Parameters;
             if (!Items.Contains(de))
             {
                 Items.Add(de);
@@ -154,39 +159,85 @@ namespace XLY.SF.Project.ViewModels.Main
             return "选择数据源";
         }
 
-        private void Popup(DeviceExtraction de)
+        /// <summary>
+        /// 弹出设备界面
+        /// </summary>
+        /// <param name="de"></param>
+        private void Popup(DeviceExtractionAdorner de)
         {
             Items.Remove(de);
             NavigationForNewWindow(ExportKeys.DeviceWindowContentView, de, true);
         }
 
-        private void BackToList(DeviceExtraction de)
+        /// <summary>
+        /// 停靠设备界面到案例
+        /// </summary>
+        /// <param name="de"></param>
+        private void BackToList(DeviceExtractionAdorner de)
         {
             Items.Add(de);
         }
 
-        private void Close(DeviceExtraction de)
+        /// <summary>
+        /// 关闭设备
+        /// </summary>
+        /// <param name="de"></param>
+        private void Close(DeviceExtractionAdorner de)
         {
             Items.Remove(de);
         }
 
-        private String MoveTo(DeviceExtraction de)
+        /// <summary>
+        /// 移动设备
+        /// </summary>
+        /// <param name="de"></param>
+        /// <returns></returns>
+        private String MoveTo(DeviceExtractionAdorner de)
         {
             IPopupWindowService win = IocManagerSingle.Instance.GetPart<IPopupWindowService>();
             RecentCaseEntityModel rc = win.ShowDialogWindow(ExportKeys.CaseSelectionView, de) as RecentCaseEntityModel;
-            if (rc == null) return $"取消移动设备[{de["Name"]}]";
-            return $"移动设备[{de["Name"]}]到案例[{1}]";
+            if (rc == null)
+            {
+                return $"取消移动设备[{de.Name}]";
+            }
+            else
+            {
+                var toCase = Case.Open(rc.CaseProjectFile);
+                if (toCase == null)
+                {
+                    return $"案例[{rc.Name}]不存在";
+                }
+
+                Items.Remove(de);
+                toCase.Attach(de.Target);
+                SystemContext.Instance.CurrentCase.Detach(de.Target);
+
+                var log = $"移动设备[{de.Name}]到案例[{toCase.Name}]";
+
+                //移动文件
+                Directory.Move(de.Target.Path, Path.Combine(toCase.Path, new DirectoryInfo(de.Target.Path).Name));
+
+                return log;
+            }
         }
 
-        private String Delete(DeviceExtraction de)
+        /// <summary>
+        /// 删除设备 包括相关文件
+        /// </summary>
+        /// <param name="de"></param>
+        /// <returns></returns>
+        private String Delete(DeviceExtractionAdorner de)
         {
             if (MessageBox.ShowDialogNoticeMsg(""))
             {
+                var log = $"确认删除设备[{de.Name}]";
+
                 Items.Remove(de);
                 de.Delete();
-                return $"确认删除设备[{de["Name"]}]";
+
+                return log;
             }
-            return $"取消删除设备[{de["Name"]}]";
+            return $"取消删除设备[{de.Name}]";
         }
 
         #endregion

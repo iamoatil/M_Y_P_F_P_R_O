@@ -20,7 +20,7 @@ namespace XLY.SF.Project.Domains
     {
         public override IPluginInfo PluginInfo { get; set; }
 
-        public override object Execute(object arg, IAsyncProgress progress)
+        public override object Execute(object arg, IAsyncTaskProgress progress)
         {
             var task = arg as SPFTask;
             DataParsePluginInfo p = PluginInfo as DataParsePluginInfo;
@@ -57,7 +57,7 @@ namespace XLY.SF.Project.Domains
         private static string _ScriptContextRunName = System.IO.Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "XLY.SF.Tools.ScriptContextRun.exe");
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        private object ExecuteJs(string jsCode, IAsyncProgress progress)
+        private object ExecuteJs(string jsCode, IAsyncTaskProgress progress)
         {
             if (!System.IO.File.Exists(_ScriptContextRunName))
             {

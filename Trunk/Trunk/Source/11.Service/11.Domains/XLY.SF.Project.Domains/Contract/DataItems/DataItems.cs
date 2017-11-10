@@ -34,7 +34,7 @@ namespace XLY.SF.Project.Domains
     {
         #region Fields
 
-        private readonly AggregationFilterView<T> _filterView;
+        private readonly DataAggregationFilterView<T> _filterView;
 
         private readonly T[] _empty;
 
@@ -42,19 +42,30 @@ namespace XLY.SF.Project.Domains
 
         #region Constructors
 
-        public DataItems(string dbFilePath, bool isCreateNew = true)
+        public DataItems(string dbFilePath, bool isCreateNew = true, string tableName = null, string key = null)
         {
-            Key = Guid.NewGuid().ToString();
+            Key = key ?? Guid.NewGuid().ToString();
 
             DbFilePath = dbFilePath;
+            if(tableName != null)
+            {
+                DbTableName = tableName;
+            }
             if (isCreateNew)
             {
-                DbTableName = DbInstance.CreateTable<T>();
+                DbTableName = DbInstance.CreateTable<T>(DbTableName);
+            }
+            else
+            {
+                DbInstance.SetTableName(typeof(T).FullName, DbTableName);
             }
             Provider = new SQLiteFilterDataProvider(dbFilePath, DbTableName);
-            _filterView = new AggregationFilterView<T>(this, Key);
+            _filterView = new DataAggregationFilterView<T>(this, Key);
+            _filterView.OnAssociatedBookmark += _filterView_OnAssociatedBookmark;
             _empty = new T[0];
         }
+
+     
 
         #endregion
 
@@ -117,8 +128,18 @@ namespace XLY.SF.Project.Domains
             OnPropertyChanged("Count");
         }
 
+
         #endregion
 
+        #region Private
+        /// <summary>
+        /// 关联数据的书签状态
+        /// </summary>
+        private void _filterView_OnAssociatedBookmark()
+        {
+            DbInstance.GetDataItemsBookmark(View);
+        }
+        #endregion
         #endregion
     }
 }

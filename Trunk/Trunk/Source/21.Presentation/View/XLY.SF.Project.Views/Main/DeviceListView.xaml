@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
-             xmlns:Lang="clr-namespace:XLY.SF.Framework.Language.PageLanguage;assembly=XLY.SF.Framework.Language"
+             xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -40,47 +40,65 @@
                                     BorderBrush="#283550"
                                     BorderThickness="0">
                                 <DockPanel>
-                                    <ToggleButton x:Name="MenuToggleButton"
-                                                  Content="v"
-                                                  Margin="0,3,14,3"
-                                                  Foreground="White"
-                                                  Background="Transparent"
-                                                  DockPanel.Dock="Right" />
-                                    <Popup AllowsTransparency="True"
-                                           StaysOpen="False"
-                                           PlacementTarget="{Binding ElementName=MenuToggleButton}"
-                                           IsOpen="{Binding IsChecked,Mode=TwoWay,ElementName=MenuToggleButton}">
-                                        <Border>
-                                            <Menu>
-                                                <Menu.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <StackPanel Orientation="Vertical"
-                                                                    IsItemsHost="True" />
-                                                    </ItemsPanelTemplate>
-                                                </Menu.ItemsPanel>
-                                                <MenuItem Header="弹出"
-                                                          Command="{Binding DataContext.PopupCommand,ElementName=Root}"
-                                                          CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}" />
-                                                <MenuItem Header="移动"
-                                                          Command="{Binding DataContext.MoveToCommand,ElementName=Root}"
-                                                          CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}" />
-                                                <MenuItem Header="删除"
-                                                          Command="{Binding DataContext.DeleteCommand,ElementName=Root}"
-                                                          CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}" />
-                                                <MenuItem Header="关闭"
-                                                          Command="{Binding DataContext.CloseCommand,ElementName=Root}"
-                                                          CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}"/>
-                                            </Menu>
-                                        </Border>
-                                    </Popup>
                                     <TextBlock Margin="20,3,0,3"
                                                Foreground="White"
-                                               Text="{Binding [Name]}"
-                                               ToolTip="{Binding [Name]}"
+                                               Text="{Binding Name}"
+                                               ToolTip="{Binding Name}"
                                                TextTrimming="CharacterEllipsis"
                                                TextWrapping="WrapWithOverflow"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Left" />
+                                    <ComboBox Template="{DynamicResource cb_MainCt}" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                        <ComboBox.Resources>
+                                            <Style TargetType="ComboBoxItem">
+                                                <Setter Property="Height" Value="42"/>
+                                                <Setter Property="Width" Value="120"/>
+                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="Padding" Value="0"/>
+                                                <Setter Property="Template" Value="{StaticResource cb_MainMenuItem}"/>
+                                            </Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="FontSize" Value="14"/>
+                                                <Setter Property="Foreground" Value="White"/>
+                                            </Style>
+                                        </ComboBox.Resources>
+                                        <ComboBoxItem x:Name="device_PopUp">
+                                            <TextBlock  Margin="24,0,0,0"
+                                                        Text="{Binding XPath=DeviceLanguage/Device_PopUp,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
+                                        </ComboBoxItem>
+                                        <ComboBoxItem x:Name="device_Move">
+                                            <TextBlock  Margin="24,0,0,0"
+                                                       Text="{Binding XPath=DeviceLanguage/Device_Move,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
+                                        </ComboBoxItem>
+                                        <ComboBoxItem x:Name="device_Delete">
+                                            <TextBlock Margin="24,0,0,0"
+                                                       Text="{Binding XPath=DeviceLanguage/Device_Delete,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
+                                        </ComboBoxItem>
+                                        <ComboBoxItem x:Name="device_Close">
+                                            <TextBlock Margin="24,0,0,0"
+                                                       Text="{Binding XPath=DeviceLanguage/Device_Close,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
+                                        </ComboBoxItem>
+                                        <!--界面触发器-->
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp" SourceObject="{Binding ElementName=device_PopUp}">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.PopupCommand,ElementName=Root}"
+                                                          CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp" SourceObject="{Binding ElementName=device_Move}">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.MoveToCommand,ElementName=Root}"
+                                                          CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp" SourceObject="{Binding ElementName=device_Delete}">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.DeleteCommand,ElementName=Root}"
+                                                          CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}"/>
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp" SourceObject="{Binding ElementName=device_Close}">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.CloseCommand,ElementName=Root}"
+                                                          CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </ComboBox>
                                 </DockPanel>
                             </Border>
                             <ControlTemplate.Triggers>
@@ -101,14 +119,13 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <DockPanel>
-        <Button Content="数据源选择"
+        <Button Content="数据源"
                 Margin="30,0,0,0"
-                Height="32"
-                Width="120"
+                Height="34"
+                Width="104"
                 Style="{StaticResource btn_DeviceSelect}"
                 DockPanel.Dock="Left"
                 Command="{Binding SelectDeviceCommand}" />
-
         <ListBox ItemContainerStyle="{StaticResource DeviceItemStyle}"
                  Background="Transparent"
                  BorderThickness="0"

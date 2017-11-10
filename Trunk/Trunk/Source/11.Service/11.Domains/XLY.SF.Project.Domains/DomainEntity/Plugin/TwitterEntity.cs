@@ -157,7 +157,7 @@ namespace XLY.SF.Project.Domains
         [Display]
         public string FavoritesDesc
         {
-            get { return Favorites == 1 ? LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_Status_Yes) : LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_Status_No); }
+            get { return Favorites == 1 ? LanguageManager.Current[Languagekeys.OtherLanguage_Status_Yes] : LanguageManager.Current[Languagekeys.OtherLanguage_Status_No]; }
         }
 
         public int Favorites { get; set; }
@@ -165,7 +165,7 @@ namespace XLY.SF.Project.Domains
         [Display]
         public string RetweetedDesc
         {
-            get { return Retweeted == 1 ? LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_Status_Yes) : LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_Status_No); }
+            get { return Retweeted == 1 ? LanguageManager.Current[Languagekeys.OtherLanguage_Status_Yes] : LanguageManager.Current[Languagekeys.OtherLanguage_Status_No]; }
         }
 
         public int Retweeted { get; set; }
@@ -274,7 +274,7 @@ namespace XLY.SF.Project.Domains
         [Display]
         public string EntryTypeDesc
         {
-            get { return "0" == EntryType ? (IsSend ? LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_Message_Send) : LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_Message_Receive)) : LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_Message_SendFail); }
+            get { return "0" == EntryType ? (IsSend ? LanguageManager.Current[Languagekeys.OtherLanguage_Message_Send] : LanguageManager.Current[Languagekeys.OtherLanguage_Message_Receive]) : LanguageManager.Current[Languagekeys.OtherLanguage_Message_SendFail]; }
         }
 
         public bool IsSend { get; set; }
@@ -298,7 +298,7 @@ namespace XLY.SF.Project.Domains
             [Display]
             public string ResultDesc
             {
-                get { return ResultType == "0" ? LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_ResultType_YouXiaoShuJu) : LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_ResultType_WuXiaoShuJu); }
+                get { return ResultType == "0" ? LanguageManager.Current[Languagekeys.OtherLanguage_ResultType_YouXiaoShuJu] : LanguageManager.Current[Languagekeys.OtherLanguage_ResultType_WuXiaoShuJu]; }
             }
 
             public string ResultType { get; set; }

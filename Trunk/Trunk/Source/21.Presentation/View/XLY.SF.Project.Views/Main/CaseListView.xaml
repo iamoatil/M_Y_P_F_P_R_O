@@ -4,11 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
-             xmlns:Lang="clr-namespace:XLY.SF.Framework.Language.PageLanguage;assembly=XLY.SF.Framework.Language"
-		     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+                 xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
+                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
 		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
              mc:Ignorable="d"
-                 Title="{Binding XPath=ViewLanguage/View_CaseListViewTitle,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                 Title="{Binding XPath=ViewLanguage/View_CaseListViewTitle,Source={x:Static ex:SystemContext.LanguageProvider}}"
                  Width="800"
                  Height="600" CanResize="True">
     <core:UcViewBase.Resources>
@@ -25,30 +25,26 @@
                Margin="20">
         <DockPanel DockPanel.Dock="Top" 
                    LastChildFill="False">
-            <TextBlock Text="{Binding XPath=ViewLanguage/View_CaseKeyword,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" />
-            <TextBox Width="100"
-                     Margin="10,0,0,0"
-                     Text="{Binding FilterArgs.Keyword,Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}"/>
 
-            <TextBlock Text="{Binding XPath=ViewLanguage/View_CaseCreateTime,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
-                       Margin="20,0,0,0" />
             <DatePicker Width="100"
                         Margin="10,0,0,0"
                         SelectedDate="{Binding FilterArgs.Begin,Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Text="{Binding XPath=ViewLanguage/View_CaseListTimeTo,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
-                       Margin="10,0,0,0" />
+            <TextBlock Text="-"
+                       Foreground="Black" VerticalAlignment="Center"
+                       Margin="5,0,5,0" />
             <DatePicker Width="100"
-                        Margin="10,0,0,0"
                         SelectedDate="{Binding FilterArgs.End,Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox Width="100"
+                     Margin="5,0,0,0"
+                     Text="{Binding FilterArgs.Keyword,Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}" />
 
-            <Button Content="{Binding XPath=ViewLanguage/View_CaseListDelete,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
-                    Command="{Binding DeleteCommand}"
+            <Button Content="{Binding XPath=ViewLanguage/View_CaseListSearch,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                    Command="{Binding SearchCommand}"
+                    Margin=" 10,0,0,0"/>
+            <Button Content="{Binding XPath=ViewLanguage/View_CaseListDelete,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                    Command="{Binding DeleteBatchCommand}"
                     Margin=" 10,0,0,0"
                     DockPanel.Dock="Right" />
-            <Button Content="{Binding XPath=ViewLanguage/View_CaseListSearch,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
-                    Command="{Binding SearchCommand}"
-                    Margin=" 10,0,0,0" 
-                    DockPanel.Dock="Right"/>
         </DockPanel>
         <DataGrid Margin="0,10,0,0"
                   AutoGenerateColumns="False"
@@ -58,11 +54,8 @@
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding XPath=ViewLanguage/View_CaseSelectAll,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" />
-                                <CheckBox Command="{Binding DataContext.SelectAllCommand,ElementName=Root}"
-                                          CommandParameter="{Binding IsChecked,RelativeSource={RelativeSource Self}}"/>
-                            </StackPanel>
+                            <CheckBox Command="{Binding DataContext.SelectAllCommand,ElementName=Root}"
+                                      CommandParameter="{Binding IsChecked,RelativeSource={RelativeSource Self}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.HeaderTemplate>
                     <DataGridTemplateColumn.CellTemplate>
@@ -73,34 +66,40 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/View_CaseListIndex,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/View_CaseListIndex,Source={x:Static ex:SystemContext.LanguageProvider}}"
                                     Width="50"
                                     Binding="{Binding Index,Mode=OneTime}" />
-                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/View_CaseName,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/View_CaseName,Source={x:Static ex:SystemContext.LanguageProvider}}"
                                     Width="120"
                                     Binding="{Binding CaseInfo.Name,Mode=OneTime}" />
-                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/View_CaseNumber,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/View_CaseNumber,Source={x:Static ex:SystemContext.LanguageProvider}}"
                                     Width="100"
                                     Binding="{Binding CaseInfo.Number,Mode=OneTime}" />
-                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/View_CaseAuthor,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/View_CaseAuthor,Source={x:Static ex:SystemContext.LanguageProvider}}"
                                     Width="80"
                                     Binding="{Binding CaseInfo.Author,Mode=OneTime}" />
-                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/View_CaseCreateTime,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/View_CaseCreateTime,Source={x:Static ex:SystemContext.LanguageProvider}}"
                                     Width="120"
                                     Binding="{Binding CaseInfo.Timestamp,Mode=OneTime,StringFormat='yyyy-MM-dd HH:mm:ss'}" />
-                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/View_CaseType,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/View_CaseType,Source={x:Static ex:SystemContext.LanguageProvider}}"
                                     Width="80"
                                     Binding="{Binding CaseInfo.Type,Mode=OneTime}" />
-                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/View_CaseDeviceCount,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/View_CaseDeviceCount,Source={x:Static ex:SystemContext.LanguageProvider}}"
                                     Width="80" />
-                <DataGridTemplateColumn Header="{Binding XPath=ViewLanguage/View_CaseOperation,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                <DataGridTemplateColumn Header="{Binding XPath=ViewLanguage/View_CaseOperation,Source={x:Static ex:SystemContext.LanguageProvider}}"
                                         Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Content="{Binding XPath=ViewLanguage/View_CaseOpen,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
-                                    Command="{Binding DataContext.OpenCommand,ElementName=Root}"
-                                    CommandParameter="{Binding CaseInfo}"
-                                    HorizontalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="{Binding XPath=ViewLanguage/View_CaseOpen,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                        Command="{Binding DataContext.OpenCommand,ElementName=Root}"
+                                        CommandParameter="{Binding CaseInfo}"
+                                        VerticalAlignment="Center" />
+                                <Button Content="{Binding XPath=ViewLanguage/View_CaseDelete,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                        Command="{Binding DataContext.DeleteCommand,ElementName=Root}"
+                                        CommandParameter="{Binding}"
+                                        VerticalAlignment="Center" />
+                            </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

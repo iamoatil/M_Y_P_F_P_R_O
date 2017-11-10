@@ -42,43 +42,43 @@ namespace XLY.SF.Project.Domains
                 StringBuilder sb1 = new StringBuilder();
                 if (!string.IsNullOrEmpty(this.Working_phone01) && !string.IsNullOrEmpty(this.Working_phone02))
                 {
-                    sb1.AppendFormat(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_AddressBook_Work) + " [{0},{1}]", this.Working_phone01, this.Working_phone02);
+                    sb1.AppendFormat(LanguageManager.Current[Languagekeys.OtherLanguage_AddressBook_Work] + " [{0},{1}]", this.Working_phone01, this.Working_phone02);
                 }
                 else if (!string.IsNullOrEmpty(this.Working_phone01))
                 {
-                    sb1.AppendFormat(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_AddressBook_Work)+ " [{0}]", this.Working_phone01);
+                    sb1.AppendFormat(LanguageManager.Current[Languagekeys.OtherLanguage_AddressBook_Work]+ " [{0}]", this.Working_phone01);
                 }
                 else if (!string.IsNullOrEmpty(this.Working_phone02))
                 {
-                    sb1.AppendFormat(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_AddressBook_Work) + " [{0}]", this.Working_phone02);
+                    sb1.AppendFormat(LanguageManager.Current[Languagekeys.OtherLanguage_AddressBook_Work] + " [{0}]", this.Working_phone02);
                 }
 
                 StringBuilder sb2 = new StringBuilder();
                 if (!string.IsNullOrEmpty(this.Residential_telephone01) && !string.IsNullOrEmpty(this.Residential_telephone02))
                 {
-                    sb2.AppendFormat(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_AddressBook_House) + " [{0},{1}]", this.Residential_telephone01, this.Residential_telephone02);
+                    sb2.AppendFormat(LanguageManager.Current[Languagekeys.OtherLanguage_AddressBook_House] + " [{0},{1}]", this.Residential_telephone01, this.Residential_telephone02);
                 }
                 else if (!string.IsNullOrEmpty(this.Residential_telephone01))
                 {
-                    sb2.AppendFormat(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_AddressBook_House) + " [{0}]", this.Residential_telephone01);
+                    sb2.AppendFormat(LanguageManager.Current[Languagekeys.OtherLanguage_AddressBook_House] + " [{0}]", this.Residential_telephone01);
                 }
                 else if (!string.IsNullOrEmpty(this.Residential_telephone02))
                 {
-                    sb2.AppendFormat(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_AddressBook_House) + " [{0}]", this.Residential_telephone02);
+                    sb2.AppendFormat(LanguageManager.Current[Languagekeys.OtherLanguage_AddressBook_House] + " [{0}]", this.Residential_telephone02);
                 }
 
                 StringBuilder sb3 = new StringBuilder();
                 if (!string.IsNullOrEmpty(this.Mobile_phone01) && !string.IsNullOrEmpty(this.Mobile_phone02))
                 {
-                    sb3.AppendFormat(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_AddressBook_Mobile) + " [{0},{1}]", this.Mobile_phone01, this.Mobile_phone02);
+                    sb3.AppendFormat(LanguageManager.Current[Languagekeys.OtherLanguage_AddressBook_Mobile] + " [{0},{1}]", this.Mobile_phone01, this.Mobile_phone02);
                 }
                 else if (!string.IsNullOrEmpty(this.Mobile_phone01))
                 {
-                    sb3.AppendFormat(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_AddressBook_Mobile) + " [{0}]", this.Mobile_phone01);
+                    sb3.AppendFormat(LanguageManager.Current[Languagekeys.OtherLanguage_AddressBook_Mobile] + " [{0}]", this.Mobile_phone01);
                 }
                 else if (!string.IsNullOrEmpty(this.Mobile_phone02))
                 {
-                    sb3.AppendFormat(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_AddressBook_Mobile) + " [{0}]", this.Mobile_phone02);
+                    sb3.AppendFormat(LanguageManager.Current[Languagekeys.OtherLanguage_AddressBook_Mobile] + " [{0}]", this.Mobile_phone02);
                 }
 
                 StringBuilder sb4 = new StringBuilder();
@@ -142,29 +142,29 @@ namespace XLY.SF.Project.Domains
                 StringBuilder sb1 = new StringBuilder();
                 if (!string.IsNullOrEmpty(this.Work_residence01) && !string.IsNullOrEmpty(this.Work_residence02))
                 {
-                    sb1.AppendFormat(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_AddressBook_Work) + " [{0},{1}]", this.Work_residence01, this.Work_residence02);
+                    sb1.AppendFormat(LanguageManager.Current[Languagekeys.OtherLanguage_AddressBook_Work] + " [{0},{1}]", this.Work_residence01, this.Work_residence02);
                 }
                 else if (!string.IsNullOrEmpty(this.Work_residence01))
                 {
-                    sb1.AppendFormat(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_AddressBook_Work) + " [{0}]", this.Work_residence01);
+                    sb1.AppendFormat(LanguageManager.Current[Languagekeys.OtherLanguage_AddressBook_Work] + " [{0}]", this.Work_residence01);
                 }
                 else if (!string.IsNullOrEmpty(this.Work_residence02))
                 {
-                    sb1.AppendFormat(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_AddressBook_Work) + " [{0}]", this.Work_residence02);
+                    sb1.AppendFormat(LanguageManager.Current[Languagekeys.OtherLanguage_AddressBook_Work] + " [{0}]", this.Work_residence02);
                 }
 
                 StringBuilder sb2 = new StringBuilder();
                 if (!string.IsNullOrEmpty(this.Residential_address01) && !string.IsNullOrEmpty(this.Residential_address02))
                 {
-                    sb2.AppendFormat(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_AddressBook_House) + " [{0},{1}]", this.Residential_address01, this.Residential_address02);
+                    sb2.AppendFormat(LanguageManager.Current[Languagekeys.OtherLanguage_AddressBook_House] + " [{0},{1}]", this.Residential_address01, this.Residential_address02);
                 }
                 else if (!string.IsNullOrEmpty(this.Residential_address01))
                 {
-                    sb2.AppendFormat(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_AddressBook_House) + " [{0}]", this.Residential_address01);
+                    sb2.AppendFormat(LanguageManager.Current[Languagekeys.OtherLanguage_AddressBook_House] + " [{0}]", this.Residential_address01);
                 }
                 else if (!string.IsNullOrEmpty(this.Residential_address02))
                 {
-                    sb2.AppendFormat(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_AddressBook_House) + " [{0}]", this.Residential_address02);
+                    sb2.AppendFormat(LanguageManager.Current[Languagekeys.OtherLanguage_AddressBook_House] + " [{0}]", this.Residential_address02);
                 }
 
                 StringBuilder sb4 = new StringBuilder();

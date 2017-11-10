@@ -25,14 +25,13 @@ namespace XLY.SF.Project.DataPump
         /// 初始化类型 XLY.SF.Project.DataPump.DataPumpTaskContext 实例。
         /// </summary>
         /// <param name="pumpDescriptor">对任务进行描述的元数据。</param>
-        /// <param name="targetDirectory">数据保存目录。</param>
         /// <param name="source">数据源。如果不需要数据源则设置为null。</param>
-        internal DataPumpExecutionContext(Pump pumpDescriptor,String targetDirectory, SourceFileItem source)
+        internal DataPumpExecutionContext(Pump pumpDescriptor, SourceFileItem source)
         {
             PumpDescriptor = pumpDescriptor ?? throw new ArgumentNullException("metadata");
-            if (String.IsNullOrWhiteSpace(targetDirectory)) throw new ArgumentNullException("targetDirectory");
+            if (String.IsNullOrWhiteSpace(pumpDescriptor.SavePath)) throw new ArgumentNullException("targetDirectory");
             Source = source;
-            TargetDirectory = targetDirectory;
+            TargetDirectory = pumpDescriptor.SavePath;
         }
 
         /// <summary>
@@ -42,8 +41,8 @@ namespace XLY.SF.Project.DataPump
         /// <param name="pumpDescriptor">对任务进行描述的元数据。</param>
         /// <param name="targetDirectory">数据保存目录。</param>
         [Obsolete("在以后的版本中会移除该方法")]
-        internal DataPumpExecutionContext(Pump pumpDescriptor, String targetDirectory)
-            : this(pumpDescriptor, targetDirectory, null)
+        internal DataPumpExecutionContext(Pump pumpDescriptor)
+            : this(pumpDescriptor, null)
         {
         }
 

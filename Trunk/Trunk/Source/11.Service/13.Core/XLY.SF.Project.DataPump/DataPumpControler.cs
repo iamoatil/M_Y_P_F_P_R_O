@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
+using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.DataPump.Android;
 using XLY.SF.Project.DataPump.IOS;
 using XLY.SF.Project.Domains;
@@ -45,7 +46,7 @@ namespace XLY.SF.Project.DataPump
         /// <param name="rootSavePath">本地储存根目录</param>
         /// <param name="asyn">异步通知</param>
         [Obsolete("在以后的版本中会移除该方法")]
-        public void Init(Pump pump, IEnumerable<ExtractItem> extractItems, String rootSavePath, IAsyncProgress asyn)
+        public void Init(Pump pump, IEnumerable<ExtractItem> extractItems, String rootSavePath, DefaultMultiTaskReporter asyn)
         {
             DataPump = pump.GetDataPump();
             Context = DataPump.CreateContext(pump, rootSavePath, null, null, asyn);
@@ -58,7 +59,7 @@ namespace XLY.SF.Project.DataPump
         /// <param name="asyn">异步通知接口</param>
         /// <returns>是否提取成功</returns>
         [Obsolete("请使用 DataPumpExtensions.Execute 扩展方法替代，在以后的版本中会移除该方法")]
-        public void Extract(SourceFileItem item, IAsyncProgress asyn)
+        public void Extract(SourceFileItem item, DefaultMultiTaskReporter asyn)
         {
             if (Context == null) return;
             Context.UnsafeSource = item;

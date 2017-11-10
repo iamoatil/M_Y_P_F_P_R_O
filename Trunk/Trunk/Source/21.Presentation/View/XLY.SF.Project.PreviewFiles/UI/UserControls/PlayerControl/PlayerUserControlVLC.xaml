@@ -2,8 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:Lang="clr-namespace:XLY.SF.Project.PreviewFiles.Language"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:XLY.SF.Project.PreviewFiles"
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="173.591">
     <Grid>
         <Grid.RowDefinitions>
@@ -21,9 +21,9 @@
             <TextBlock x:Name="TotalTime" Text="00:00:00" HorizontalAlignment="Right"/>
         </Grid>
         <Grid Grid.Row="4">
-            <Button Content="{Binding XPath=FilePreviewLanguage/Start,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="75" Click="Start_Click"  />
-            <Button Content="{Binding XPath=FilePreviewLanguage/Pause,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" HorizontalAlignment="Center"  VerticalAlignment="Bottom" Width="76" Click="Pause_Click" />
-            <Button Content="{Binding XPath=FilePreviewLanguage/Stop,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" HorizontalAlignment="Right"  VerticalAlignment="Bottom" Width="75" Click="Stop_Click"  />
+            <Button Content="{Binding XPath=FilePreviewLanguage/Start,Source={x:Static local:LanguageHelper.LanguageProvider}}" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="75" Click="Start_Click"  />
+            <Button Content="{Binding XPath=FilePreviewLanguage/Pause,Source={x:Static local:LanguageHelper.LanguageProvider}}" HorizontalAlignment="Center"  VerticalAlignment="Bottom" Width="76" Click="Pause_Click" />
+            <Button Content="{Binding XPath=FilePreviewLanguage/Stop,Source={x:Static local:LanguageHelper.LanguageProvider}}" HorizontalAlignment="Right"  VerticalAlignment="Bottom" Width="75" Click="Stop_Click"  />
         </Grid>       
     </Grid>
 </UserControl>

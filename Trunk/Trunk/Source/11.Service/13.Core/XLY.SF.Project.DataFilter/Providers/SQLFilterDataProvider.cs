@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using XLY.SF.Framework.BaseUtility;
 
 namespace XLY.SF.Project.DataFilter.Providers
 {
@@ -65,6 +66,8 @@ namespace XLY.SF.Project.DataFilter.Providers
             private T[] _cache = new T[0];
 
             private Boolean _isFirstRead = true;
+
+            public const string JsonColumnName = "XLYJson";
 
             #endregion
 
@@ -152,22 +155,24 @@ namespace XLY.SF.Project.DataFilter.Providers
                     String json = null;
                     T temp = default(T);
                     List<T> list = new List<T>();
+                    int colIndex = _reader.GetOrdinal(JsonColumnName);
                     while (_reader.Read())
                     {
-                        _reader.GetValues(values);
-                        for (Int32 i = 0; i < Columns.Length; i++)
-                        {
-                            if (values[i] == null)
-                            {
-                                _temp[Columns[i].Key] = MakeDefault(Columns[i].Value);
-                            }
-                            else
-                            {
-                                _temp[Columns[i].Key] = values[i].ToString();
-                            }
-                        }
-                        json = JsonConvert.SerializeObject(_temp);
-                        temp = JsonConvert.DeserializeObject<T>(json);
+                        //_reader.GetValues(values);
+                        //for (Int32 i = 0; i < Columns.Length; i++)
+                        //{
+                        //    if (values[i] == null)
+                        //    {
+                        //        _temp[Columns[i].Key] = MakeDefault(Columns[i].Value);
+                        //    }
+                        //    else
+                        //    {
+                        //        _temp[Columns[i].Key] = values[i].ToString();
+                        //    }
+                        //}
+                        //json = JsonConvert.SerializeObject(_temp);
+                        json = _reader.GetValue(colIndex)?.ToString();
+                        temp = json == null ? default(T) : Serializer.JsonDeserilize<T>(json);
                         list.Add(temp);
                         yield return temp;
                     }

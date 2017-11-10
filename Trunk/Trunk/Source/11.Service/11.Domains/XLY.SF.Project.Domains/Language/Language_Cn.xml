@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageResource>
+  <DeviceLanguage Prompt="设备相关语言资源">
+    <DeviceType_IOS>IOS</DeviceType_IOS>
+    <DeviceUseableValidation_InUse>当前设备正在使用中, 请稍后再试</DeviceUseableValidation_InUse>
+    <DeviceUseableValidation_Offline>当前设备未正常链接, 请检测该任务是否正确连接设备。</DeviceUseableValidation_Offline>
+    <DeviceUseableValidation_IsInvalid>当前设备不可用, 请检测该任务是否正确连接设备。</DeviceUseableValidation_IsInvalid>
+
+    <Device_PopUp>弹出</Device_PopUp>
+    <Device_Move>移动</Device_Move>
+    <Device_Delete>删除</Device_Delete>
+    <Device_Close>关闭</Device_Close>
+
+
+    <Partition_all>全部存储芯片</Partition_all>
+    <Partition_data>数据区</Partition_data>
+    <Partition_system>系统区</Partition_system>
+    <Partition_sdcard>内置存储区</Partition_sdcard>
+    <Partition_cache>缓存区</Partition_cache>
+    <Partition_IsInvalid>无可用镜像源</Partition_IsInvalid>
+    <IOSExtractLocalApps>系统正在从{0}设备中提取内置应用数据...</IOSExtractLocalApps>
+    <IOSExtractNotLocalApps>系统正在从{0}设备中提取{1}应用数据...</IOSExtractNotLocalApps>
+    <IOSExtractNotLocalAppsOver> {0} 应用数据提取完成</IOSExtractNotLocalAppsOver>
+    <IOSInitProgress>初始化完成了{0}%</IOSInitProgress>
+    <IOSCopyProgress>已拷贝{0}MB数据</IOSCopyProgress>
+    <IOSCopyDataOver>数据拷贝完成, 准备后期合并处理……</IOSCopyDataOver>
+    <IOSExtractLocalOver>内置应用数据提取完成</IOSExtractLocalOver>
+    <IOSLastStepProgress>正在后期合并, 完成了{0}%</IOSLastStepProgress>
+    <IOSCopyError>拷贝过程出错</IOSCopyError>
+    <IOSUserExit>用户终止</IOSUserExit>
+    <IOSExtractLocalAppsReport>系统正从{0}设备提取内置应用数据, {1}</IOSExtractLocalAppsReport>
+    <IOSExtractNotLocalAppProgress>系统正在提取{0}应用数据, 正在提取{1}文件, 大小{2}</IOSExtractNotLocalAppProgress>
+    <IOSDeviceCopyError>设备:{0} 在拷贝IOS用户数据时出错, 出错步骤 {1},原因:{2}</IOSDeviceCopyError>
+  </DeviceLanguage>
+
+
+  <OtherLanguage Prompt="其他语言资源">
+    <PluginModule_WeiZhi>未知</PluginModule_WeiZhi>
+    <PluginModule_ZhengChang>正常</PluginModule_ZhengChang>
+    <PluginModule_ShanChu>删除</PluginModule_ShanChu>
+    <PluginModule_SuiPian>碎片</PluginModule_SuiPian>
+    <DateTimeFormat_Year>年</DateTimeFormat_Year>
+    <DateTimeFormat_Month>月</DateTimeFormat_Month>
+    <DateTimeFormat_Day>日</DateTimeFormat_Day>
+    <DateTimeFormat_Hour>时</DateTimeFormat_Hour>
+    <DateTimeFormat_Minite>分</DateTimeFormat_Minite>
+    <DateTimeFormat_Second>秒</DateTimeFormat_Second>
+    <DeviceType_IOS>苹果</DeviceType_IOS>
+    <DeviceType_Android>安卓</DeviceType_Android>
+    <DeviceType_BlackBerry>黑莓</DeviceType_BlackBerry>
+    <Device_IOS_IsRoot_Root>已越狱</Device_IOS_IsRoot_Root>
+    <Device_IOS_IsRoot_NotRoot>未越狱</Device_IOS_IsRoot_NotRoot>
+    <Device_Android_IsRoot_Root>已Root</Device_Android_IsRoot_Root>
+    <Device_Android_IsRoot_NotRoot>未Root</Device_Android_IsRoot_NotRoot>
+    <FileXProperty_FileName>文件名称</FileXProperty_FileName>
+    <FileXProperty_FullPath>完整路径</FileXProperty_FullPath>
+    <FileXProperty_ExtName>扩展名称</FileXProperty_ExtName>
+    <FileXProperty_FileType>类型</FileXProperty_FileType>
+    <FileXProperty_FileSize>大小</FileXProperty_FileSize>
+    <FileXProperty_Property>属性</FileXProperty_Property>
+    <FileXProperty_CreateDate>创建日期</FileXProperty_CreateDate>
+    <FileXProperty_LastAccessDate>最后访问日期</FileXProperty_LastAccessDate>
+    <FileXProperty_LastEditDate>最后编辑日期</FileXProperty_LastEditDate>
+    <EntityDescAttribute_Name>名称</EntityDescAttribute_Name>
+    <EntityDescAttribute_Age>年龄</EntityDescAttribute_Age>
+    <EnumCallType_Unknown>未知</EnumCallType_Unknown>
+    <EnumCallType_CallIn>呼入</EnumCallType_CallIn>
+    <EnumCallType_CallOut>呼出</EnumCallType_CallOut>
+    <EnumCallType_MissedCallIn>呼入未接</EnumCallType_MissedCallIn>
+    <EnumCallType_MissedCallInNotViewed>呼入未接(未查看)</EnumCallType_MissedCallInNotViewed>
+    <EnumCallType_MissedCallInAlreadyOpen>呼入未接(未打开)</EnumCallType_MissedCallInAlreadyOpen>
+    <EnumCallType_MissedCallOut>呼出未接</EnumCallType_MissedCallOut>
+    <AddressBook_Work>工作</AddressBook_Work>
+    <AddressBook_House>住宅</AddressBook_House>
+    <AddressBook_Mobile>手机</AddressBook_Mobile>
+    <ResultType_YouXiaoShuJu>有效数据</ResultType_YouXiaoShuJu>
+    <ResultType_WuXiaoShuJu>无效数据</ResultType_WuXiaoShuJu>
+    <Status_Yes>是</Status_Yes>
+    <Status_No>否</Status_No>
+    <Message_Send>发送</Message_Send>
+    <Message_Receive>接收</Message_Receive>
+    <Message_SendFail>发送失败</Message_SendFail>
+    <MessageStatus_Read>已读</MessageStatus_Read>
+    <MessageStatus_UnRead>未读</MessageStatus_UnRead>
+  </OtherLanguage>
+
+</LanguageResource>
+
+

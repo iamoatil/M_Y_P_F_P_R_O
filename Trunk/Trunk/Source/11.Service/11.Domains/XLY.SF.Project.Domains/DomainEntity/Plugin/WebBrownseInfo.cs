@@ -290,13 +290,13 @@ namespace XLY.SF.Project.Domains
             {
                 if (this.ReadStatus == "0")
                 {
-                    return LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_MessageStatus_Read);
+                    return LanguageManager.Current[Languagekeys.OtherLanguage_MessageStatus_Read];
                 }
                 else if (this.ReadStatus == "1")
                 {
-                    return LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_MessageStatus_UnRead);
+                    return LanguageManager.Current[Languagekeys.OtherLanguage_MessageStatus_UnRead];
                 }
-                return LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_MessageStatus_UnRead);
+                return LanguageManager.Current[Languagekeys.OtherLanguage_MessageStatus_UnRead];
             }
         }
 
@@ -534,7 +534,7 @@ namespace XLY.SF.Project.Domains
         [Display]
         public string _Expire_Time
         {
-            get { return this.Expire_Time == 0 ? LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_Status_Yes) : LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_Status_No); }
+            get { return this.Expire_Time == 0 ? LanguageManager.Current[Languagekeys.OtherLanguage_Status_Yes] : LanguageManager.Current[Languagekeys.OtherLanguage_Status_No]; }
         }
 
         /// <summary>

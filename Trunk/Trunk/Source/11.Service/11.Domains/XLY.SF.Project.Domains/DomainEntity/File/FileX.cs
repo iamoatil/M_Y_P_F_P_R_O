@@ -192,15 +192,15 @@ namespace XLY.SF.Project.Domains
                 //dic.Add(LanguageHelperSingle.Instance.Language.OtherLanguage.FileXProperty_CreateDate, this.CreationDate.ToDateTimeString());
                 //dic.Add(LanguageHelperSingle.Instance.Language.OtherLanguage.FileXProperty_LastAccessDate, this.LastAccessDate.ToDateTimeString());
                 //dic.Add(LanguageHelperSingle.Instance.Language.OtherLanguage.FileXProperty_LastEditDate, this.LastWriteData.ToDateTimeString());
-                dic.Add(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_FileXProperty_FileName), this.Name);
-                dic.Add(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_FileXProperty_FullPath), this.FullPath);
-                dic.Add(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_FileXProperty_ExtName), this.Extension);
-                dic.Add(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_FileXProperty_FileType), this.FileType);
-                dic.Add(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_FileXProperty_FileSize), this.SizeDesc);
-                dic.Add(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_FileXProperty_Property), this.AttrubuteDesc.ToString());
-                dic.Add(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_FileXProperty_CreateDate), this.CreationDate.ToDateTimeString());
-                dic.Add(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_FileXProperty_LastAccessDate), this.LastAccessDate.ToDateTimeString());
-                dic.Add(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_FileXProperty_LastEditDate), this.LastWriteData.ToDateTimeString());
+                dic.Add(LanguageManager.Current[Languagekeys.OtherLanguage_FileXProperty_FileName], this.Name);
+                dic.Add(LanguageManager.Current[Languagekeys.OtherLanguage_FileXProperty_FullPath], this.FullPath);
+                dic.Add(LanguageManager.Current[Languagekeys.OtherLanguage_FileXProperty_ExtName], this.Extension);
+                dic.Add(LanguageManager.Current[Languagekeys.OtherLanguage_FileXProperty_FileType], this.FileType);
+                dic.Add(LanguageManager.Current[Languagekeys.OtherLanguage_FileXProperty_FileSize], this.SizeDesc);
+                dic.Add(LanguageManager.Current[Languagekeys.OtherLanguage_FileXProperty_Property], this.AttrubuteDesc.ToString());
+                dic.Add(LanguageManager.Current[Languagekeys.OtherLanguage_FileXProperty_CreateDate], this.CreationDate.ToDateTimeString());
+                dic.Add(LanguageManager.Current[Languagekeys.OtherLanguage_FileXProperty_LastAccessDate], this.LastAccessDate.ToDateTimeString());
+                dic.Add(LanguageManager.Current[Languagekeys.OtherLanguage_FileXProperty_LastEditDate], this.LastWriteData.ToDateTimeString());
                 return dic;
             }
         }

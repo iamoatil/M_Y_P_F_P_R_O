@@ -35,7 +35,7 @@ namespace XLY.SF.Project.ScriptEngine.Context
         /// <param name="paramValues"></param>
         /// <param name="isThrowExeception"></param>
         /// <returns></returns>
-        public object Execute(string script, IAsyncProgress asyn, object[] argrument = null, Dictionary<string, object> paramValues = null, bool isThrowExeception = true)
+        public object Execute(string script, IAsyncTaskProgress asyn, object[] argrument = null, Dictionary<string, object> paramValues = null, bool isThrowExeception = true)
         {
             try
             {

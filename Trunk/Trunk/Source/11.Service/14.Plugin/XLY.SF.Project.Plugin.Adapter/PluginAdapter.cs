@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using XLY.SF.Framework.Core.Base.MefIoc;
+using System.Reflection;
+using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
+using XLY.SF.Framework.Core.Base.MefIoc;
 using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.Domains;
-using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.Services;
 
 namespace XLY.SF.Project.Plugin.Adapter
@@ -20,22 +21,21 @@ namespace XLY.SF.Project.Plugin.Adapter
         public static PluginAdapter Instance => SingleWrapperHelper<PluginAdapter>.Instance;
 
         /// <summary>
-        /// 插件加载器
-        /// </summary>
-        [ImportMany("PluginLoader", typeof(IPluginLoader))]
-        public List<IPluginLoader> PluginLoaders { get; set; }
-
-        /// <summary>
         /// 插件列表
         /// </summary>
         public Dictionary<AbstractPluginInfo, IPlugin> Plugins { get; set; }
 
         #region 初始化控制器
 
+        static PluginAdapter()
+        {
+            IocManagerSingle.Instance.LoadParts();
+        }
+
         /// <summary>
         /// 初始化
         /// </summary>
-        public void Initialization(IAsyncProgress asyn)
+        public void Initialization(IAsyncTaskProgress asyn)
         {
             Plugins = new Dictionary<AbstractPluginInfo, IPlugin>();
             var pluginLoaders = IocManagerSingle.Instance.GetParts<IPluginLoader>(PluginExportKeys.PluginLoaderKey);
@@ -75,16 +75,27 @@ namespace XLY.SF.Project.Plugin.Adapter
         /// </summary>
         /// <param name="source">数据泵</param>
         /// <returns></returns>
-        public ExtractItemCollection GetAllExtractItems(Pump source)
+        public List<ExtractItem> GetAllExtractItems(Pump source)
         {
-            ExtractItemCollection extracts = new ExtractItemCollection();
+            List<ExtractItem> extracts = new List<ExtractItem>();
 
             //插件过滤 根据提取方式和操作系统
             var filtetResult = GetPluginsByType<DataParsePluginInfo>(PluginType.SpfDataParse).Keys.Where(p => p.Pump.HasFlag(source.Type) &&
                                                             p.DeviceOSType.HasFlag(source.OSType));
 
-            //加载提取项列表
-            extracts.Load(filtetResult);
+            foreach (var plug in filtetResult)
+            {
+                if (!extracts.Any(e => e.AppName == plug.AppName && e.Name == plug.Name && e.GroupName == plug.Group))
+                {
+                    ExtractItem item = new ExtractItem();
+                    item.Name = plug.Name;
+                    item.GroupName = plug.Group;
+                    item.AppName = plug.AppName;
+                    item.Icon = plug.Icon;
+
+                    extracts.Add(item);
+                }
+            }
 
             return extracts;
         }
@@ -215,7 +226,7 @@ namespace XLY.SF.Project.Plugin.Adapter
             //插件匹配
             foreach (var extract in extractItems)
             {
-                result.Add(extract, filtetResult.Where(p => p.Name == extract.Name && p.Group == extract.Parent.Name).ToList());
+                result.Add(extract, filtetResult.Where(p => p.Name == extract.Name && p.Group == extract.GroupName).ToList());
             }
 
             return result;
@@ -239,7 +250,7 @@ namespace XLY.SF.Project.Plugin.Adapter
         /// <param name="plugin">要执行的插件</param>
         /// <param name="asyn">异步通知</param>
         /// <param name="callback">插件执行完回调</param>
-        public void ExecutePlugin(DataParsePluginInfo plugin, IAsyncProgress asyn, Action<IDataSource> callback)
+        public void ExecutePlugin(DataParsePluginInfo plugin, IAsyncTaskProgress asyn, Action<IDataSource> callback)
         {
             var pl = Plugins[plugin] as AbstractDataParsePlugin;
             if (null != pl)
@@ -257,7 +268,7 @@ namespace XLY.SF.Project.Plugin.Adapter
         /// <param name="plugins">要执行的插件列表</param>
         /// <param name="asyn">异步通知</param>
         /// <param name="callback">插件执行完回调</param>
-        public void ExecutePluginList(List<DataParsePluginInfo> plugins, IAsyncProgress asyn, Action<IDataSource> callback)
+        public void ExecutePluginList(List<DataParsePluginInfo> plugins, IAsyncTaskProgress asyn, Action<IDataSource> callback)
         {
             if (plugins != null)
             {
@@ -279,52 +290,6 @@ namespace XLY.SF.Project.Plugin.Adapter
                 return;
             }
         }
-
-        //private static string _ScriptContextRunName = System.IO.Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "XLY.SF.Tools.ScriptContextRun.exe");
-
-        ///// <summary>
-        ///// 执行JS插件
-        ///// </summary>
-        ///// <param name="jsCode">要执行的插件的JS源码</param>
-        ///// <returns></returns>
-        //[MethodImpl(MethodImplOptions.Synchronized)]
-        //public object ExecuteJs(string jsCode)
-        //{
-        //    if (!System.IO.File.Exists(_ScriptContextRunName))
-        //    {
-        //        return new JavaScriptContext().Execute(jsCode);
-        //    }
-        //    else
-        //    {
-        //        string res = "";
-        //        try
-        //        {
-        //            string jsFile = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Format("JS_{0}.jscode", Guid.NewGuid().ToString()));
-        //            System.IO.File.WriteAllText(jsFile, jsCode, System.Text.Encoding.UTF8);
-
-        //            Process pro = new Process();
-        //            pro.StartInfo.FileName = _ScriptContextRunName;
-        //            pro.StartInfo.Arguments = string.Format("\"{0}\"", jsFile);
-        //            pro.StartInfo.UseShellExecute = false;
-        //            pro.StartInfo.CreateNoWindow = true;
-
-        //            pro.Start();
-        //            pro.WaitForExit();
-
-        //            if (System.IO.File.Exists(jsFile))
-        //            {
-        //                res = System.IO.File.ReadAllText(jsFile, System.Text.Encoding.UTF8);
-        //                System.IO.File.Delete(jsFile);
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            LoggerManagerSingle.Instance.Error("JS execute error:" + ex.Message);
-        //        }
-
-        //        return res;
-        //    }
-        //}
 
         #endregion
 

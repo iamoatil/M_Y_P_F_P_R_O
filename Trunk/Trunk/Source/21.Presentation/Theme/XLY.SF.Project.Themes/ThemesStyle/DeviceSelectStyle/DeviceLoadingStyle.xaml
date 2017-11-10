@@ -18,7 +18,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Viewbox>
-                        <Canvas Width="128" Height="128">
+                        <Canvas x:Name="canvas1" Width="128" Height="128">
                             <Border x:Name="bd0" Style="{StaticResource loadingItemstyle}">
                                 <Border.RenderTransform>
                                     <RotateTransform Angle="0" CenterX="64" CenterY="0"/>
@@ -183,9 +183,11 @@
 
                     <ControlTemplate.Triggers>
                         <!--启动动画-->
-                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                            <BeginStoryboard Storyboard="{StaticResource loadingStoryboard1}" />
-                        </EventTrigger>
+                        <Trigger Property="Visibility" Value="Visible">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource loadingStoryboard1}"/>
+                            </Trigger.EnterActions>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using XLY.SF.Framework.Language;
 
 namespace XLY.SF.Framework.BaseUtility
 {
@@ -24,7 +20,7 @@ namespace XLY.SF.Framework.BaseUtility
             {
                 return name;
             }
-            string nameDexc = LanguageHelperSingle.Instance.GetEntityDescByKey(name);
+            string nameDexc = "";//LanguageHelperSingle.Instance.GetEntityDescByKey(name);
             if (!String.IsNullOrEmpty(nameDexc))
             {
                 return nameDexc;

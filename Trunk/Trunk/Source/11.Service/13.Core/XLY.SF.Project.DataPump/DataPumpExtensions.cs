@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
+using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.DataPump.Android;
 using XLY.SF.Project.DataPump.IOS;
 using XLY.SF.Project.Domains;
@@ -27,15 +28,15 @@ namespace XLY.SF.Project.DataPump
         /// 执行数据泵。
         /// </summary>
         /// <param name="pump">元数据。</param>
-        /// <param name="savePath">保存路径。</param>
         /// <param name="source">数据源。</param>
         /// <param name="reporter">异步通知器。</param>
         /// <param name="items">提取项列表。</param>
         /// <returns>数据泵任务执行上下文。</returns>
-        public static DataPumpExecutionContext Execute(this Pump pump, String savePath, SourceFileItem source, IAsyncProgress reporter, IEnumerable<ExtractItem> items = null)
+        public static DataPumpExecutionContext Execute(this Pump pump, SourceFileItem source, MultiTaskReportBase reporter, params ExtractItem[] items)
         {
             DataPumpBase dataPump = pump.GetDataPump();
-            DataPumpExecutionContext context = dataPump.CreateContext(pump, savePath, source);
+            DataPumpExecutionContext context = dataPump.CreateContext(pump, source);
+            context.ExtractItems = items;
             DataPumpControllableExecutionContext contextEx = context as DataPumpControllableExecutionContext;
             if (contextEx != null) contextEx.Reporter = reporter;
             dataPump.Execute(context);
@@ -139,9 +140,9 @@ namespace XLY.SF.Project.DataPump
         /// <param name="extractItems">提取项列表。</param>
         /// <param name="asyn">异步通知器。</param>
         /// <returns>执行上下文。</returns>
-        internal static DataPumpExecutionContext CreateContext(this DataPumpBase dataPump, Pump metaData, String rootSavePath, SourceFileItem source, IEnumerable<ExtractItem> extractItems, IAsyncProgress asyn = null)
+        internal static DataPumpExecutionContext CreateContext(this DataPumpBase dataPump, Pump metaData, String rootSavePath, SourceFileItem source, IEnumerable<ExtractItem> extractItems, DefaultMultiTaskReporter asyn = null)
         {
-            DataPumpExecutionContext context = dataPump.CreateContext(metaData, rootSavePath, source);
+            DataPumpExecutionContext context = dataPump.CreateContext(metaData, source);
             context.ExtractItems = extractItems;
             DataPumpControllableExecutionContext contextEx = context as DataPumpControllableExecutionContext;
             if (contextEx != null) contextEx.Reporter = asyn;

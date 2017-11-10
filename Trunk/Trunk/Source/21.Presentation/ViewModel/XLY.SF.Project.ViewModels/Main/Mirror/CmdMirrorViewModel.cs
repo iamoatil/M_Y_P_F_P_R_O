@@ -30,7 +30,8 @@ namespace XLY.SF.Project.ViewModels.Main
                 || SourcePosition.CurrentSelectedDisk != null
                 || SourcePosition.CurrentSelectedDisk.CurrentSelectedItem != null)
                 {
-                    ProgressPosition.TotalSize=(int)SourcePosition.CurrentSelectedDisk.CurrentSelectedItem.Size;
+                    ProgressPosition.TotalSize=SourcePosition.CurrentSelectedDisk.CurrentSelectedItem.Size;
+                    CaculateTime(ProgressPosition.TotalSize);
                 }
                 SourcePosition.Start();
             }));
@@ -38,23 +39,29 @@ namespace XLY.SF.Project.ViewModels.Main
         }
 
         
-        public void Initialize(SPFTask task, IAsyncProgress asyncProgress)
-        {   
+        public void Initialize(SPFTask task)
+        {
+            IAsyncTaskProgress asyncProgress = new MyDefaultSingleTaskReporter();
+
             Mirror mirror = GetNewMirror(task);
             CmdSourcePosition.MirrorControlerBox mirrorControler = new CmdSourcePosition.MirrorControlerBox(task, mirror, asyncProgress);           
 
             SourcePosition.SetMirrorControler(mirrorControler);
 
             //设置滚动条进度
-            asyncProgress.OnAdvance += (step, message) =>
+            asyncProgress.ProgressChanged += (o, e) =>
             {
-                ProgressPosition.FinishedSize = (int)asyncProgress.Progress;
+                ProgressPosition.FinishedSize = (int)e.Progress;
+                CaculateTime(ProgressPosition.TotalSize-ProgressPosition.FinishedSize);
+                SourcePosition.IsMirroring = true;
             };
-            asyncProgress.OnCompleted += (status, arg) =>
+            asyncProgress.Ternimated += (o, e) =>
             {
-                if(status == AsyncProgressCompleteStatus.Success)
+                if(e.IsCompleted)
                 {
                     ProgressPosition.FinishedSize = ProgressPosition.TotalSize;
+                    CaculateTime(0);
+                    SourcePosition.IsMirroring = false;
                 }                
             };
         }
@@ -70,6 +77,33 @@ namespace XLY.SF.Project.ViewModels.Main
         public ICommand StartCommand { get; private set; }
 
         public ICommand StopCommand { get; private set; }
+
+        /// <summary>
+        /// 剩余时间
+        /// </summary>
+        public string RemainTime
+        {
+            get
+            {
+                return _remainTime;
+            }
+            set
+            {
+                _remainTime = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _remainTime = "00:05:30";      
+
+        /// <summary>
+        /// 通过数据量的大小，得出镜像他们所需的时间
+        /// </summary>
+        /// <param name="size"></param>
+        private void CaculateTime(long size)
+        {
+            long estimatedTime = size / (1024 * 1024 * 5);
+            RemainTime = TimeSpan.FromSeconds(estimatedTime).ToString();
+        }
 
         /// <summary>
         /// 根据Task生成一个Mirror
@@ -101,9 +135,17 @@ namespace XLY.SF.Project.ViewModels.Main
             mirror.MirrorFlag = MirrorFlag.NewMirror;
             return mirror;
         }
+
+        public class MyDefaultSingleTaskReporter : DefaultSingleTaskReporter
+        {
+            public MyDefaultSingleTaskReporter()
+            {
+                State = TaskState.Running;
+            }
+        }
     }
 
-    public class CmdSourcePosition
+    public class CmdSourcePosition: NotifyPropertyBase
     {
         public CmdSourcePosition()
         {
@@ -121,10 +163,24 @@ namespace XLY.SF.Project.ViewModels.Main
         
         public CmdDiskPatitions CurrentSelectedDisk { get; set; }
 
+        /// <summary>
+        /// 是否正在镜像
+        /// </summary>
+        public bool IsMirroring
+        {
+            get { return _isMirroring; }
+            set
+            {
+                _isMirroring = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _isMirroring = false;
+
         internal void SetMirrorControler(MirrorControlerBox mirrorControler)
         {
-            _mirrorControlerBox = mirrorControler;
-         
+            _mirrorControlerBox = mirrorControler;         
         }
 
         /// <summary>
@@ -186,8 +242,8 @@ namespace XLY.SF.Project.ViewModels.Main
             MirrorBackgroundProcess _mirrorBackgroundProcess;
             SPFTask _task;
             Mirror _mirror;
-            IAsyncProgress _asyn;
-            public MirrorControlerBox(SPFTask task, Mirror mirror, IAsyncProgress asyn)
+            IAsyncTaskProgress _asyn;
+            public MirrorControlerBox(SPFTask task, Mirror mirror, IAsyncTaskProgress asyn)
             {
                 _task = task;
                 _mirror = mirror;
@@ -209,6 +265,7 @@ namespace XLY.SF.Project.ViewModels.Main
                     if(_mirrorBackgroundProcess != null)
                     {
                         _mirrorBackgroundProcess.CallBack -= OnCallBack;
+                        _mirrorBackgroundProcess.Close();
                     }
                     _mirrorBackgroundProcess = new MirrorBackgroundProcess();
                     _mirrorBackgroundProcess.CallBack += OnCallBack;
@@ -218,23 +275,20 @@ namespace XLY.SF.Project.ViewModels.Main
 
             private void OnCallBack(string info)
             {
+                DefaultSingleTaskReporter defalutAsyn = (DefaultSingleTaskReporter)_asyn;
                 if (info.StartsWith("Operate"))
                 {
                     string operateStr = info.Substring("Operate|".Length);
                     if (operateStr.StartsWith("Stop"))
                     {
-                        string argStr = operateStr.Substring("Stop|".Length);
+                        string argStr = operateStr.Substring("Stop|".Length);                        
                         if (argStr == "Success")
                         {
-                            _asyn.OnCompleted(AsyncProgressCompleteStatus.Success, null);
+                            defalutAsyn.Finish();
                         }
                         else if(argStr == "UserStoped")
                         {
-                            _asyn.OnCompleted(AsyncProgressCompleteStatus.UserStoped, null);
-                        }
-                        else if (argStr == "Exception")
-                        {
-                            _asyn.OnCompleted(AsyncProgressCompleteStatus.Execption, null);                            
+                            defalutAsyn.Stop();                           
                         }
 
                         _mirrorBackgroundProcess.CallBack -= OnCallBack;
@@ -247,9 +301,15 @@ namespace XLY.SF.Project.ViewModels.Main
                     int finisedSize = 0;
                     if (int.TryParse(finisedSizeStr, out finisedSize))
                     {
-                        _asyn.Progress = finisedSize;
-                        _asyn.OnAdvance(0, "");
+                        defalutAsyn.ChangeProgress(finisedSize);
                     }
+                }
+                else if(info.StartsWith("Exception|"))
+                {
+                    defalutAsyn.Defeat("Exception");
+                    _mirrorBackgroundProcess.CallBack -= OnCallBack;
+                    _mirrorBackgroundProcess.Close();
+                    //todo 此处应该有提示
                 }
             }
             internal void Stop()
@@ -392,7 +452,7 @@ namespace XLY.SF.Project.ViewModels.Main
         /// <summary>
         /// 已经完成的大小
         /// </summary>
-        public int FinishedSize
+        public long FinishedSize
         {
             get { return _finishedSize; }
             set
@@ -406,14 +466,14 @@ namespace XLY.SF.Project.ViewModels.Main
                 }
             }
         }
-        private int _finishedSize=0;
+        private long _finishedSize =0;
 
-        private int _lastChangedValue = 0;
+        private long _lastChangedValue = 0;
 
         /// <summary>
         /// 总共大小
         /// </summary>
-        public int TotalSize
+        public long TotalSize
         {
             get { return _totalSize; }
             set
@@ -422,7 +482,7 @@ namespace XLY.SF.Project.ViewModels.Main
                 OnPropertyChanged();
             }
         }
-        private int _totalSize=100;
+        private long _totalSize =100;
     }
 }
 

@@ -21,7 +21,7 @@ namespace XLY.SF.Project.Services
     {
         #region Constructors
 
-        public CottageMirrorDeviceService(IFileSystemDevice device, IAsyncProgress iAsyn)
+        public CottageMirrorDeviceService(IFileSystemDevice device, IAsyncTaskProgress iAsyn)
             : base(device, iAsyn)
         {
         }

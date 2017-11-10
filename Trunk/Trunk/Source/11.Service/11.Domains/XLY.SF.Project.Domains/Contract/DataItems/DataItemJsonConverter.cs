@@ -45,7 +45,7 @@ namespace XLY.SF.Project.Domains
                 type = Type.GetType(dicProp["$type"].ToString());
                 if (type.IsGenericType)
                 {
-                    item = Activator.CreateInstance(type, dicProp["DbFilePath"], false) as IDataItems;
+                    item = Activator.CreateInstance(type, dicProp["DbFilePath"], false, dicProp["DbTableName"], dicProp["Key"]) as IDataItems;
                 }
                 else
                 {

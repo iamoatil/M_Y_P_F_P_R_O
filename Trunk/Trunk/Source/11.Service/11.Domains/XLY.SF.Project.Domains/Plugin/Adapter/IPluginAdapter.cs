@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using XLY.SF.Framework.Core.Base.CoreInterface;
-using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.Domains
 {
@@ -10,14 +9,14 @@ namespace XLY.SF.Project.Domains
     /// </summary>
     public interface IPluginAdapter
     {
-        void Initialization(IAsyncProgress asyn);
+        void Initialization(IAsyncTaskProgress asyn);
 
         /// <summary>
         /// 获取提取项列表
         /// </summary>
         /// <param name="source">数据泵</param>
         /// <returns></returns>
-        ExtractItemCollection GetAllExtractItems(Pump source);
+        List<ExtractItem> GetAllExtractItems(Pump source);
 
         /// <summary>
         /// 匹配插件（根据数据泵，即设备类型、设备操作系统类型、数据提取类型匹配插件）
@@ -42,7 +41,7 @@ namespace XLY.SF.Project.Domains
         /// 执行插件（内部处理异常）
         /// </summary>
         /// <returns></returns>
-        void ExecutePlugin(DataParsePluginInfo plugin, IAsyncProgress asyn, Action<IDataSource> callback);
+        void ExecutePlugin(DataParsePluginInfo plugin, IAsyncTaskProgress asyn, Action<IDataSource> callback);
 
         //object ExecuteJs(string jsCode);
 

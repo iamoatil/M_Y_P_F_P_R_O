@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using XLY.SF.Framework.BaseUtility;
+using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Domains.Contract;
 using XLY.SF.Project.Domains.Contract.DataItemContract;
 
@@ -18,7 +19,7 @@ namespace XLY.SF.Project.Domains
     /// 单行数据的基类
     /// </summary>
     [Serializable]
-    public abstract class AbstractDataItem : IDataState, INotifyPropertyChanged
+    public abstract class AbstractDataItem : NotifyPropertyBase, IDataState, IAOPPropertyChangedMonitor
     {
         protected AbstractDataItem()
         {
@@ -75,6 +76,11 @@ namespace XLY.SF.Project.Domains
         /// 是否是敏感数据，比如包含了“东突”等暴恐信息
         /// </summary>
         public bool IsSensitive { get => _isSensitive; set { _isSensitive = value; OnPropertyChanged(); } }
+
+        /// <summary>
+        /// 属性改变时的事件
+        /// </summary>
+        public event Action<object, string, object> OnPropertyValueChangedEvent;
         #endregion
 
         #region MD5
@@ -88,12 +94,24 @@ namespace XLY.SF.Project.Domains
         }
         #endregion
 
-        #region Notify
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string propertyName = null)
+        #region 属性监听
+
+        /// <summary>
+        /// 使用AOP实现监听属性的变化，在变化时将数据更新到数据库中
+        /// </summary>
+        /// <param name="propertyValue"></param>
+        /// <param name="propertyName"></param>
+        public virtual void OnPropertyValueChanged(object propertyValue, [CallerMemberName] string propertyName = null)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            OnPropertyValueChangedEvent?.Invoke(this, propertyName, propertyValue);
+        }
+
+        /// <summary>
+        /// 重新计算数据，如MD5值
+        /// </summary>
+        public virtual void Recalculate()
+        {
+            _md5 = BuildMd5();
         }
         #endregion
     }

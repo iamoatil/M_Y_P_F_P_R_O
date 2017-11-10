@@ -12,16 +12,8 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
     public enum SystemMessageCode
     {
         /// <summary>
-        /// 完成事件的消息码。
+        /// 任务结束事件的消息码。
         /// </summary>
-        CompletedEvent=-1,
-        /// <summary>
-        /// 失败事件的消息码。
-        /// </summary>
-        FailedEvent = -2,
-        /// <summary>
-        /// 进度改变事件的消息码。
-        /// </summary>
-        ProgressChangedEvent = -3,
+        TaskOverEvent=-1,
     }
 }

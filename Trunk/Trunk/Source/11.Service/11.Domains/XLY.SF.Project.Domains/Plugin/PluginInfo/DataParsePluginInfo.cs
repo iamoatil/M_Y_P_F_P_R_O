@@ -52,6 +52,12 @@ namespace XLY.SF.Project.Domains
         [XmlIgnore]
         public SourceFileItems SourcePath { get; set; }
 
+        /// <summary>
+        /// 提取数据保存数据库路径
+        /// </summary>
+        [XmlIgnore]
+        public string SaveDbPath { get; set; }
+
         [XmlArrayItem("value")]
         [XmlArray("source")]
         public List<string> SourcePathStr { get; set; }

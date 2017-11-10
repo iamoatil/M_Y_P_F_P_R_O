@@ -1,0 +1,70 @@
+﻿<core:UcViewBase x:Class="XLY.SF.Project.Views.Main.DeviceMainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:XLY.SF.Project.Views.Main"
+             xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
+             xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+             xmlns:control="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
+             mc:Ignorable="d">
+    <core:UcViewBase.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--此处以下添加自己的引用-->
+
+        </ResourceDictionary>
+    </core:UcViewBase.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="230"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+            <StackPanel.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#2e3c5d" Offset="0"/>
+                    <GradientStop Color="#262e4b" Offset="0.5"/>
+                    <GradientStop Color="#1e223c" Offset="1"/>
+                </LinearGradientBrush>
+            </StackPanel.Background>
+            <!--设备信息-->
+            <Grid Margin="30 30 30 38">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding CurDevModel.DevName}" FontSize="16" FontWeight="Bold" TextWrapping="Wrap"/>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 14 0 0">
+                    <control:IconCheckBox Background="#263454" Height="24" Width="84" Content="ROOT" IsChecked="{Binding DevName.IsRoot}" Visibility="{Binding DevName.HasRoot,Converter={StaticResource bToV}}"
+                                          Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageIsRootIcon.png" Margin="0 0 2 0"/>
+
+                    <control:IconCheckBox Background="#263454" Height="24" Width="84" Content="{Binding XPath=ViewLanguage/View_DevHomePage_UnConnect, Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                          Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageConnectIcon.png"/>
+                </StackPanel>
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <control:MenuRadioButton x:Name="mr" GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_MenuExtract, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageIcon.png" Height="50"/>
+                <Rectangle Grid.Column="1" Fill="{Binding Background,ElementName=mr}"/>
+                <!--提取状态-->
+                <Button Grid.Column="1" Visibility="Hidden" Style="{StaticResource loadingControlStyle}" Width="24" Height="24" Margin="0 0 35 0"/>
+            </Grid>
+            <control:MenuRadioButton GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_MenuResult, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageResultIcon.png" Height="50" Margin="0 5 0 5"/>
+            <control:MenuRadioButton GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_FileView, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageFileViewIcon.png" Height="50" Margin="0 0 0 5"/>
+            <control:MenuRadioButton GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_Warning, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageWarningIcon.png" Height="50"/>
+            <StackPanel.Effect>
+                <DropShadowEffect Color="#181D3A" Opacity="0.4" Direction="0" BlurRadius="30" ShadowDepth="4" RenderingBias="Quality"/>
+            </StackPanel.Effect>
+        </StackPanel>
+    </Grid>
+</core:UcViewBase>

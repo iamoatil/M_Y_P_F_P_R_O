@@ -9,6 +9,7 @@ using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Core.Base;
 using XLY.SF.Framework.Language;
 using XLY.SF.Shell.CommWindow;
+using ProjectExtend.Context;
 
 
 /*************************************************
@@ -72,7 +73,7 @@ namespace XLY.SF.Shell.MessageBox
         /// <param name="isDialog">是否为模式对话框</param>
         public void ShowErrorMsg(string errorText)
         {
-            var msgWin = CreateMsgWindow(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ViewLanguage_View_MessageBox_Error), errorText);
+            var msgWin = CreateMsgWindow(SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_MessageBox_Error], errorText);
             msgWin.Show();
         }
 
@@ -81,7 +82,7 @@ namespace XLY.SF.Shell.MessageBox
         /// </summary>
         public bool ShowDialogErrorMsg(string errorText)
         {
-            return ShowMutualMsg(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ViewLanguage_View_MessageBox_Error), errorText);
+            return ShowMutualMsg(SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_MessageBox_Error], errorText);
         }
 
         /// <summary>
@@ -91,7 +92,7 @@ namespace XLY.SF.Shell.MessageBox
         /// <param name="isDialog">是否为模式对话框</param>
         public void ShowNoticeMsg(string msg)
         {
-            var msgWin = CreateMsgWindow(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ViewLanguage_View_MessageBox_Notice), msg);
+            var msgWin = CreateMsgWindow(SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_MessageBox_Notice], msg);
             msgWin.Show();
         }
 
@@ -101,7 +102,7 @@ namespace XLY.SF.Shell.MessageBox
         /// <param name="text">消息内容</param>
         public bool ShowDialogNoticeMsg(string text)
         {
-            return ShowMutualMsg(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ViewLanguage_View_MessageBox_Notice), text);
+            return ShowMutualMsg(SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_MessageBox_Notice], text);
         }
     }
 }

@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{57B9DE4A-F6F2-4F41-9829-2E852A963EF4}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>XLY.SF.Project.DataExtraction</RootNamespace>
+    <AssemblyName>XLY.SF.Project.DataExtraction</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\23.Shell\XLY.SF.Shell\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.3.0.19032, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\23.Shell\XLY.SF.Shell\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\23.Shell\XLY.SF.Shell\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="ExtractionView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ExtractionCode.cs" />
+    <Compile Include="ExtractionItem.cs" />
+    <Compile Include="ExtractionView.xaml.cs">
+      <DependentUpon>ExtractionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExtractionViewModel.cs" />
+    <Compile Include="Language\LanguageHelper.cs" />
+    <Compile Include="Language\LanguageTextTeamplate.LanguageElement.cs">
+      <DependentUpon>LanguageTextTeamplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.Core.Base\XLY.SF.Framework.Core.Base.csproj">
+      <Project>{28682fe4-ec72-42a3-bb2c-27d19f55e14f}</Project>
+      <Name>XLY.SF.Framework.Core.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.Language\XLY.SF.Framework.Language.csproj">
+      <Project>{95C796FD-57F1-4D2E-927F-4E34EA75E319}</Project>
+      <Name>XLY.SF.Framework.Language</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\11.Service\11.Domains\XLY.SF.Project.Domains\XLY.SF.Project.Domains.csproj">
+      <Project>{68F2D8A3-05A8-4AAA-A9E2-00071188595B}</Project>
+      <Name>XLY.SF.Project.Domains</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\11.Service\13.Core\XLY.SF.Project.DataExtract\XLY.SF.Project.DataExtract.csproj">
+      <Project>{4DB2D5F7-3A3F-4F95-9BF6-434F3D8298B3}</Project>
+      <Name>XLY.SF.Project.DataExtract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\11.Service\13.Core\XLY.SF.Project.Devices\XLY.SF.Project.Devices.csproj">
+      <Project>{9EB7A2CF-AE03-47EE-B850-88A0FCCDD0BD}</Project>
+      <Name>XLY.SF.Project.Devices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\11.Service\14.Plugin\XLY.SF.Project.Plugin.Adapter\XLY.SF.Project.Plugin.Adapter.csproj">
+      <Project>{78424848-06CB-4D68-81D2-6338F56AACAD}</Project>
+      <Name>XLY.SF.Project.Plugin.Adapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\22.Tools\IsolatedTask\XLY.SF.Project.IsolatedTaskEngine.Common\XLY.SF.Project.IsolatedTaskEngine.Common.csproj">
+      <Project>{c31639c3-6e19-4681-8647-46bdd60bfeab}</Project>
+      <Name>XLY.SF.Project.IsolatedTaskEngine.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Language\Language_Cn.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Language\Language_En.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Language\LanguageTextTeamplate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LanguageTextTeamplate.LanguageElement.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

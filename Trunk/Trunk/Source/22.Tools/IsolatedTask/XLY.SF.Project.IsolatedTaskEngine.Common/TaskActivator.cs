@@ -44,16 +44,6 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
 
         #endregion
 
-        #region ProgressChanged
-
-        public event EventHandler ProgressChanged;
-
-        protected void OnProgressChanged()
-        {
-        }
-
-        #endregion
-
         #endregion
 
         #region Constructors
@@ -67,15 +57,26 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
 
         #endregion
 
+        #region Properties
+
+        internal Action<Message> RequestSendMessageCallback { get; set; }
+
+        /// <summary>
+        /// 对象占用的资源是否已经被释放。
+        /// </summary>
+        public Boolean IsDisposed { get; private set; }
+
+        #endregion
+
         #region Methods
 
         #region Public
 
         /// <summary>
-        /// 执行命令。
+        /// 启动。
         /// </summary>
-        /// <param name="message">消息。</param>
-        public abstract void Execute(Message message);
+        /// <returns>成功返回true；否则返回false。</returns>
+        public abstract Boolean Launch();
 
         /// <summary>
         /// 释放资源。
@@ -95,6 +96,25 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <param name="isDisposing">如果为true表示显示清理，否则系统自动清理。</param>
         protected virtual void Dispose(Boolean isDisposing)
         {
+            if (IsDisposed) return;
+            IsDisposed = true;
+        }
+
+        /// <summary>
+        /// 客户进程收到消息时执行该方法。
+        /// </summary>
+        /// <param name="message">消息。</param>
+        internal protected virtual void OnReceive(Message message)
+        {
+        }
+
+        /// <summary>
+        /// 客户进程发送消息时执行该方法。
+        /// </summary>
+        /// <param name="message">消息。</param>
+        protected void OnSend(Message message)
+        {
+            RequestSendMessageCallback?.Invoke(message);
         }
 
         #endregion

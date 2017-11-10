@@ -28,6 +28,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         public MainDisplayViewModel()
         {
             SelecedAppChanged = new RelayCommand<object>(DoSelecedAppChanged);
+            ExpandPreviewAreaCommond = new RelayCommand<object>(DoExpandPreviewAreaCommond);
         }
 
         #region 事件
@@ -91,6 +92,39 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         }
         #endregion
 
+        #region 数据预览的高度
+        private double _previewAreaHeight = 40;
+
+        /// <summary>
+        /// 数据预览的高度
+        /// </summary>	
+        public double PreviewAreaHeight
+        {
+            get { return _previewAreaHeight; }
+            set
+            {
+                _previewAreaHeight = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
+        #region 是否展开数据预览区域
+        private bool _isExpandPreviewArea = false;
+
+        /// <summary>
+        /// 是否展开数据预览区域
+        /// </summary>	
+        public bool IsExpandPreviewArea
+        {
+            get { return _isExpandPreviewArea; }
+            set
+            {
+                _isExpandPreviewArea = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
 
         #endregion
 
@@ -109,16 +143,32 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
             if(app is DataExtactionTreeItem treeItem && treeItem.Data != null)
             {
                 LayoutViewItems = new ObservableCollection<object>();
-                bool isFirst = false;
                 foreach (var item in DataViewPluginAdapter.Instance.GetView(treeItem.Text, AbstractDataViewPlugin.XLY_LAYOUT_KEY))
                 {
                     LayoutViewItems.Add(item.ToControl(new DataViewPluginArgument() {  CurrentData = null, DataSource = treeItem.Data as IDataSource}, null));
-                    if (!isFirst)   //设置默认选中第一项
-                    {
-                        SelectedLayoutViewItem = LayoutViewItems[0];
-                        isFirst = true;
-                    }
                 }
+                SelectedLayoutViewItem = LayoutViewItems.FirstOrDefault();
+            }
+        }
+        #endregion
+
+        #region 展开或折叠预览区域
+
+        public RelayCommand<object> ExpandPreviewAreaCommond { get; set; }
+
+        /// <summary>
+        /// 展开或折叠预览区域
+        /// </summary>
+        private void DoExpandPreviewAreaCommond(object isExpanded)
+        {
+            IsExpandPreviewArea = bool.Parse(isExpanded?.ToString());
+            if (IsExpandPreviewArea)
+            {
+                PreviewAreaHeight = 200;
+            }
+            else
+            {
+                PreviewAreaHeight = 40;
             }
         }
         #endregion

@@ -78,7 +78,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AsyncResult\DefaultAsyncProgress.cs" />
     <Compile Include="Contract\AbstractDataItem.cs" />
     <Compile Include="Contract\AbstractDataSource.cs" />
     <Compile Include="Contract\CallDataSource.cs" />
@@ -104,6 +103,7 @@
     <Compile Include="Contract\DataItemContract\IConversion.cs" />
     <Compile Include="Contract\ITraverse.cs" />
     <Compile Include="Contract\ITree.cs" />
+    <Compile Include="Contract\DataItems\IAOPPropertyChangedMonitor.cs" />
     <Compile Include="Contract\SimpleDataSource.cs" />
     <Compile Include="Contract\SmsDataSource.cs" />
     <Compile Include="DomainEntity\Device\LocalFileDevice.cs" />
@@ -158,8 +158,14 @@
     <Compile Include="DomainEntity\Plugin\OppoCallDataEntity.cs" />
     <Compile Include="DomainEntity\Plugin\PhoneCallLogs.cs" />
     <Compile Include="DomainEntity\Plugin\Sms.cs" />
+    <Compile Include="DomainEntity\Pump\PumpSolution.cs" />
     <Compile Include="DomainEntity\Report\ExportCollectionInfo.cs" />
     <Compile Include="DomainEntity\Report\ExportDeviceInfo.cs" />
+    <Compile Include="Language\LanguageTextTeamplate.LanguageElement.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LanguageTextTeamplate.tt</DependentUpon>
+    </Compile>
     <Compile Include="Plugin\ExportKeys\PluginExportKeys.cs" />
     <Compile Include="Plugin\IScriptContext.cs" />
     <Compile Include="Plugin\Meta\IMetaPluginType.cs" />
@@ -242,6 +248,23 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Language\Language_Cn.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Language\Language_En.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Language\LanguageTextTeamplate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LanguageTextTeamplate.LanguageElement.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

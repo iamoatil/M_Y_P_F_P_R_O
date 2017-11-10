@@ -1299,7 +1299,7 @@ namespace XLY.SF.Project.Devices
         /// <param name="targetPath">本地全文件路径</param>
         /// <param name="asyn">进度信息</param>
         /// <param name="persistRelativePath">是否保留相对路径</param>
-        public string CopyFile(Device device, string sourcePath, string targetPath, IAsyncProgress asyn, bool persistRelativePath = true)
+        public string CopyFile(Device device, string sourcePath, string targetPath, IAsyncTaskProgress asyn, bool persistRelativePath = true)
         {
             if (!sourcePath.IsValid() || !targetPath.IsValid())
             {
@@ -1321,10 +1321,9 @@ namespace XLY.SF.Project.Devices
             }
             //folder
             sourcePath = sourcePath.Replace("#F", "");
-            if (asyn != null)
-            {
-                asyn.Advance(0, "FindFile" + sourcePath);
-            }
+
+            //asyn?.Advance(0, "FindFile" + sourcePath);
+
             var files = FindFiles(device, sourcePath);
             if (!files.IsValid())
             {
@@ -1347,7 +1346,7 @@ namespace XLY.SF.Project.Devices
         /// <param name="targetPath">目标文件路径</param>
         /// <param name="asyn">进度信息</param>
         /// <param name="persistRelativePath">是否保留相对路径</param>
-        private void CopyFolder(Device device, List<LSFile> files, string targetPath, IAsyncProgress asyn, bool persistRelativePath = true)
+        private void CopyFolder(Device device, List<LSFile> files, string targetPath, IAsyncTaskProgress asyn, bool persistRelativePath = true)
         {
             if (!files.IsValid())
             {
@@ -1362,10 +1361,9 @@ namespace XLY.SF.Project.Devices
                     {
                         UpgradeFilePermission(device, file.FullPath);
                     }
-                    if (asyn != null)
-                    {
-                        asyn.Advance(0, "FindFile" + file.FullPath);
-                    }
+
+                    //asyn?.Advance(0, "FindFile" + file.FullPath);
+
                     var fs = FindFiles(device, file.FullPath);
 
                     if (persistRelativePath)
@@ -1394,7 +1392,7 @@ namespace XLY.SF.Project.Devices
         /// <param name="targetPath">目标路径</param>
         /// <param name="asyn">进度信息</param>
         /// <returns></returns>
-        public string CopySingleFile(Device device, LSFile file, string targetPath, IAsyncProgress asyn, bool persistRelativePath = true)
+        public string CopySingleFile(Device device, LSFile file, string targetPath, IAsyncTaskProgress asyn, bool persistRelativePath = true)
         {
             if (!file.HasPermission)
             {
@@ -1455,7 +1453,7 @@ namespace XLY.SF.Project.Devices
         /// <param name="targetPath">目标路径</param>
         /// <param name="asyn">进度信息</param>
         /// <returns></returns>
-        public string CopySingleFile(Device device, string sourceFile, string targetPath, IAsyncProgress asyn, bool persistRelativePath = true)
+        public string CopySingleFile(Device device, string sourceFile, string targetPath, IAsyncTaskProgress asyn, bool persistRelativePath = true)
         {
             string target = string.Empty;
             try
@@ -1473,10 +1471,7 @@ namespace XLY.SF.Project.Devices
 
                 DoPullFile(device, sourceFile, target);
 
-                if (asyn != null)
-                {
-                    asyn.Advance(0, "PullFile" + sourceFile);
-                }
+                //asyn?.Advance(0, "PullFile" + sourceFile);
 
                 return target;
             }

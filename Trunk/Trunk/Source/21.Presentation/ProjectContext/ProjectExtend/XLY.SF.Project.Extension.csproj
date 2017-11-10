@@ -80,12 +80,26 @@
     <Compile Include="Function\StrategyRecommend\StrategyProposed.cs" />
     <Compile Include="Function\StrategyRecommend\SolutionProposedManager.cs" />
     <Compile Include="Helper\FoundationHelper.cs" />
+    <Compile Include="Language\LanguageTextTeamplate.LanguageElement.cs">
+      <DependentUpon>LanguageTextTeamplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.Core.Base\XLY.SF.Framework.Core.Base.csproj">
       <Project>{28682FE4-EC72-42A3-BB2C-27D19F55E14F}</Project>
       <Name>XLY.SF.Framework.Core.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.Language\XLY.SF.Framework.Language.csproj">
+      <Project>{95C796FD-57F1-4D2E-927F-4E34EA75E319}</Project>
+      <Name>XLY.SF.Framework.Language</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.Log4NetService\XLY.SF.Framework.Log4NetService.csproj">
       <Project>{6E3193B7-7316-415A-B529-0F743D5F267B}</Project>
@@ -110,6 +124,29 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Language\Language_Cn.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Language\Language_En.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Language\LanguageTextTeamplate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LanguageTextTeamplate.LanguageElement.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

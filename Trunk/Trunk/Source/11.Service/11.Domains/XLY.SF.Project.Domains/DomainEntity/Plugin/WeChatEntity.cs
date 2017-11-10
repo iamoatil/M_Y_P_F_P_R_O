@@ -567,7 +567,7 @@ namespace XLY.SF.Project.Domains
         public int LikeCount { get; set; }
 
         [Display]
-        public string LikeFlagDes { get { return LikeFlag ? LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_Status_Yes) : LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_Status_No); } }
+        public string LikeFlagDes { get { return LikeFlag ? LanguageManager.Current[Languagekeys.OtherLanguage_Status_Yes] : LanguageManager.Current[Languagekeys.OtherLanguage_Status_No]; } }
 
         /// <summary>
         /// 是否点赞

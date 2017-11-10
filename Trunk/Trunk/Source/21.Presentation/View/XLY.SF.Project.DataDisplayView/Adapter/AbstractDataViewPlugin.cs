@@ -26,7 +26,7 @@ namespace XLY.SF.Project.DataDisplayView
 
         public const string XLY_LAYOUT_KEY = "__LayOut";
 
-        public object Execute(object arg, IAsyncProgress progress)
+        public object Execute(object arg, IAsyncTaskProgress progress)
         {
             return GetControl(arg as DataViewPluginArgument);
         }

@@ -260,8 +260,8 @@ namespace XLY.SF.Project.Domains
                 {
                     //case EnumOSType.IOS: return IsRoot ? LanguageHelperSingle.Instance.Language.OtherLanguage.Device_IOS_IsRoot_Root : LanguageHelperSingle.Instance.Language.OtherLanguage.Device_IOS_IsRoot_NotRoot;
                     //case EnumOSType.Android: return IsRoot ? LanguageHelperSingle.Instance.Language.OtherLanguage.Device_Android_IsRoot_Root : LanguageHelperSingle.Instance.Language.OtherLanguage.Device_Android_IsRoot_NotRoot;
-                    case EnumOSType.IOS: return IsRoot ? LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_Device_IOS_IsRoot_Root) : LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_Device_IOS_IsRoot_NotRoot);
-                    case EnumOSType.Android: return IsRoot ? LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_Device_Android_IsRoot_Root) : LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_Device_Android_IsRoot_NotRoot);
+                    case EnumOSType.IOS: return IsRoot ? LanguageManager.Current[Languagekeys.OtherLanguage_Device_IOS_IsRoot_Root] : LanguageManager.Current[Languagekeys.OtherLanguage_Device_IOS_IsRoot_NotRoot];
+                    case EnumOSType.Android: return IsRoot ? LanguageManager.Current[Languagekeys.OtherLanguage_Device_Android_IsRoot_Root] : LanguageManager.Current[Languagekeys.OtherLanguage_Device_Android_IsRoot_NotRoot];
                 }
                 return IsRoot.ToString();
             }

@@ -23,7 +23,7 @@ namespace XLY.SF.Project.DataView
     {
         public IPluginInfo PluginInfo { get; set; }
 
-        public object Execute(object arg, IAsyncProgress progress)
+        public object Execute(object arg, IAsyncTaskProgress progress)
         {
             return GetControl(arg as DataViewPluginArgument);
         }

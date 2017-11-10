@@ -51,7 +51,7 @@ namespace XLY.SF.Project.Plugin.Adapter
          
         */
 
-        protected override void LoadPlugin(IAsyncProgress asyn)
+        protected override void LoadPlugin(IAsyncTaskProgress asyn)
         {
             List<IPlugin> plugins = new List<IPlugin>();
             //string dir = SystemContext.Instance.CurLanguage == LanguageType.Cn ? FileHelper.GetPhysicalPath("\\Script\\cn")

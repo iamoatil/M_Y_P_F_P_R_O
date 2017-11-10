@@ -24,13 +24,13 @@ namespace XLY.SF.Project.DataMirror
         /// </summary>
         /// <param name="mirror">镜像源</param>
         /// <param name="asyn">异步通知</param>
-        void Execute(Mirror mirror, IAsyncProgress asyn);
+        void Execute(Mirror mirror, IAsyncTaskProgress asyn);
 
         /// <summary>
         /// 停止镜像
         /// </summary>
         /// <param name="asyn">异步通知</param>
-        void Stop(IAsyncProgress asyn);
+        void Stop(IAsyncTaskProgress asyn);
 
         /// <summary>
         /// 是否可以暂停
@@ -41,13 +41,13 @@ namespace XLY.SF.Project.DataMirror
         /// 暂停
         /// </summary>
         /// <param name="asyn">异步通知</param>
-        void Suspend(IAsyncProgress asyn);
+        void Suspend(IAsyncTaskProgress asyn);
 
         /// <summary>
         /// 继续
         /// </summary>
         /// <param name="asyn">异步通知</param>
-        void Continue(IAsyncProgress asyn);
+        void Continue(IAsyncTaskProgress asyn);
 
     }
 }

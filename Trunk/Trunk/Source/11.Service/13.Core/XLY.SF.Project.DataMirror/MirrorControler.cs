@@ -34,7 +34,7 @@ namespace XLY.SF.Project.DataMirror
         /// <param name="task">任务</param>
         /// <param name="mirror">镜像源信息</param>
         /// <param name="asyn">异步通知</param>
-        public void Execute(SPFTask task, Mirror mirror, IAsyncProgress asyn)
+        public void Execute(SPFTask task, Mirror mirror, IAsyncTaskProgress asyn)
         {
             //生成保存目录
             FileHelper.CreateExitsDirectorySafe(mirror.Target);
@@ -43,7 +43,7 @@ namespace XLY.SF.Project.DataMirror
             MirrorService = SingleWrapperHelper<MirrorServiceFactory>.GetInstance().GetInstance(mirror);
             MirrorService.Execute(mirror, asyn);
 
-            if (asyn.IsSuccess && FileHelper.IsValid(mirror.Local))
+            if (FileHelper.IsValid(mirror.Local))
             {//镜像成功
                 mirror.VerifyCode = FileHelper.MD5FromFileUpper(mirror.Local);
 
@@ -63,7 +63,7 @@ namespace XLY.SF.Project.DataMirror
         /// <summary>
         /// 停止镜像
         /// </summary>
-        public void Stop(IAsyncProgress asyn)
+        public void Stop(IAsyncTaskProgress asyn)
         {
             MirrorService?.Stop(asyn);
         }
@@ -71,7 +71,7 @@ namespace XLY.SF.Project.DataMirror
         /// <summary>
         /// 暂停镜像
         /// </summary>
-        public void Pause(IAsyncProgress asyn)
+        public void Pause(IAsyncTaskProgress asyn)
         {
             if (null != MirrorService && MirrorService.EnableSuspend)
             {
@@ -82,7 +82,7 @@ namespace XLY.SF.Project.DataMirror
         /// <summary>
         /// 继续镜像
         /// </summary>
-        public void Continue(IAsyncProgress asyn)
+        public void Continue(IAsyncTaskProgress asyn)
         {
             if (null != MirrorService && MirrorService.EnableSuspend)
             {

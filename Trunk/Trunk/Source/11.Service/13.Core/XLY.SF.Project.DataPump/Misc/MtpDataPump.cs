@@ -80,7 +80,7 @@ namespace XLY.SF.Project.DataPump.Misc
             MTPDevice mtpDevice = MtpDeviceManager.Instance.GetMTPDevice(device);
             if (mtpDevice != null)
             {
-                mtpDevice.RootFileNode = MtpDeviceManager.Instance.GetRootFileNode(mtpDevice, context.Reporter);
+                mtpDevice.RootFileNode = MtpDeviceManager.Instance.GetRootFileNode(mtpDevice, null);
             }
             return mtpDevice;
         }

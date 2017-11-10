@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XLY.SF.Framework.Core.Base.CoreInterface;
+using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.DataPump;
 using XLY.SF.Project.Devices;
 using XLY.SF.Project.Domains;
@@ -32,15 +33,15 @@ namespace XLY.SF.UnitTest
         #endregion
 
         [TestMethod]
-        public void TestExecuteMethod(Pump pump, String savePath, SourceFileItem source, IAsyncProgress reporter, IEnumerable<ExtractItem> items = null)
+        public void TestExecuteMethod(Pump pump, SourceFileItem source, MultiTaskReportBase reporter, params ExtractItem[] items)
         {
-            DataPumpExecutionContext context = pump.Execute(savePath, source, reporter, items);
+            DataPumpExecutionContext context = pump.Execute(source, reporter, items);
         }
 
         [TestMethod]
-        public void TestCancelMethod(Pump pump, String savePath, SourceFileItem source, IAsyncProgress reporter, IEnumerable<ExtractItem> items = null)
+        public void TestCancelMethod(Pump pump, SourceFileItem source, MultiTaskReportBase reporter, params ExtractItem[] items)
         {
-            DataPumpExecutionContext context = pump.Execute(savePath, source, reporter, items);
+            DataPumpExecutionContext context = pump.Execute(source, reporter, items);
             context.Cancel();
         }
 
@@ -70,6 +71,7 @@ namespace XLY.SF.UnitTest
             souce = item;
             pump.Source = device;
             pump.ScanModel = ScanFileModel.Quick;
+            pump.SavePath = @"F:\Temp";
             return pump;
         }
 
@@ -77,7 +79,7 @@ namespace XLY.SF.UnitTest
         {
             Pump pump = CreatePump(device, out SourceFileItem item);
             if (pump == null) return;
-            TestExecuteMethod(pump, @"F:\Temp", item, null);
+            TestExecuteMethod(pump, item, null);
         }
 
         #endregion

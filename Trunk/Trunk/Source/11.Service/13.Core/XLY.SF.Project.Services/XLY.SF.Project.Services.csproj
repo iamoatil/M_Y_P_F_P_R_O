@@ -91,6 +91,11 @@
       <DependentUpon>FileServiceAbstractX.cs</DependentUpon>
     </Compile>
     <Compile Include="FileService\SDCardDeviceService.cs" />
+    <Compile Include="Language\LanguageTextTeamplate.LanguageElement.cs">
+      <DependentUpon>LanguageTextTeamplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="LocalFile\LocalFileService.cs" />
     <Compile Include="MTP\MTPDeviceManageService.cs" />
     <Compile Include="PluginFeatureMathch\Comm\DbHelper.cs" />
@@ -125,10 +130,6 @@
       <Project>{e58b3baa-0f89-4e6d-b34e-4607dfa8f805}</Project>
       <Name>XLY.SF.Framework.BaseUtility</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\21.Presentation\ProjectContext\ProjectExtend\XLY.SF.Project.Extension.csproj">
-      <Project>{e280c623-f0dd-47a8-ac87-80a0b5bbafdb}</Project>
-      <Name>XLY.SF.Project.Extension</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\11.Domains\XLY.SF.Project.Domains\XLY.SF.Project.Domains.csproj">
       <Project>{68f2d8a3-05a8-4aaa-a9e2-00071188595b}</Project>
       <Name>XLY.SF.Project.Domains</Name>
@@ -146,7 +147,9 @@
       <Name>XLY.SF.Project.Devices</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
@@ -155,6 +158,14 @@
     <Content Include="Config\PluginFeatureMathchConfig_Android_en.xml" />
     <Content Include="Config\PluginFeatureMathchConfig_IOS.xml" />
     <Content Include="Config\PluginFeatureMathchConfig_IOS_en.xml" />
+    <Content Include="Language\LanguageTextTeamplate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LanguageTextTeamplate.LanguageElement.cs</LastGenOutput>
+    </Content>
+    <EmbeddedResource Include="Language\Language_En.xml" />
+    <EmbeddedResource Include="Language\Language_Cn.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

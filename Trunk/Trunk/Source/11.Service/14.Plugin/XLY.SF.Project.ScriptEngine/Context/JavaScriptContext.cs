@@ -31,7 +31,7 @@ namespace XLY.SF.Project.ScriptEngine
         /// <param name="paramValues">其它需要设置到脚本的动态参数</param>
         /// <param name="isThrowExeception">如果执行出现错误，是否抛出异常</param>
         /// <returns></returns>
-        public object Execute(string content, IAsyncProgress asyn, object[] argrument = null, Dictionary<string, object> paramValues = null, bool isThrowExeception = true)
+        public object Execute(string content, IAsyncTaskProgress asyn, object[] argrument = null, Dictionary<string, object> paramValues = null, bool isThrowExeception = true)
         {
             try
             {

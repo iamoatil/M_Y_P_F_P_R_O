@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
+using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
@@ -81,10 +82,10 @@ namespace XLY.SF.Project.DataPump.Android
                         if (apps == null) return false;
                         VivoBackupCallBackDelegate callback = (Int64 size, String fileName, ref Int32 stop) =>
                         {
-                            if (context.Reporter.State == AsyncProgressState.Stopping)
-                            {
-                                stop = 1;
-                            }
+                            //if (context.Reporter.State == AsyncProgressState.Stopping)
+                            //{
+                            //    stop = 1;
+                            //}
                         };
                         X86DLLClientSingle.Instance.ClientCallback._VivoBackupCallBack += callback;
                         try
@@ -126,8 +127,7 @@ namespace XLY.SF.Project.DataPump.Android
                 }
             }
             LoggerManagerSingle.Instance.Error("Vivo手机数据备份失败！");
-            context.Reporter.IsSuccess = false;
-            context.Reporter.Stop();
+            //context.Reporter.Finish();
             return false;
         }
 

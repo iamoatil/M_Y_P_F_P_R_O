@@ -68,6 +68,8 @@ namespace XLY.SF.Framework.Core.Base.MefIoc
                 AggregateCatalog agg = new AggregateCatalog();
                 DirectoryCatalog catalog = new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory, "XLY.*.dll");
                 agg.Catalogs.Add(catalog);
+                //DirectoryCatalog catalog2 = new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory, "XLY.*.exe");
+                //agg.Catalogs.Add(catalog2);
                 AssemblyCatalog ac = new AssemblyCatalog(this.GetType().Assembly);
                 agg.Catalogs.Add(ac);
 

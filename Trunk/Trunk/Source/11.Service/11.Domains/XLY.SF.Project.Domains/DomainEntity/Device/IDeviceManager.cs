@@ -27,7 +27,7 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 拷贝指定文件
         /// </summary>
-        string CopyFile(Device device, string source, string targetPath, IAsyncProgress asyn);
+        string CopyFile(Device device, string source, string targetPath, IAsyncTaskProgress asyn);
 
         /// <summary>
         /// 获取设备分区结构列表

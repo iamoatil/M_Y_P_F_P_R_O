@@ -1,0 +1,146 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ee="http://schemas.microsoft.com/expression/2010/effects"
+                    xmlns:local="clr-namespace:XLY.SF.Project.Themes.ThemesStyle.ToggleButtonStyle">
+    <!--控件模版-->
+    <!--默认复选框样式-->
+    <ControlTemplate x:Key="cb_Default" TargetType="{x:Type CheckBox}">
+        <Grid x:Name="gd" Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="bg" Width="14" Height="14" CornerRadius="2" BorderBrush="#379be6" BorderThickness="2">
+                <Grid>
+                    <Rectangle x:Name="rtFull" Visibility="Collapsed" Margin="2" Fill="White"/>
+                    <Rectangle x:Name="rt_Arrow1" Visibility="Collapsed" Fill="White" Width="5" Height="2" RadiusX="1" RadiusY="1" RenderTransformOrigin="0.5,0.5" Margin="0.672,4.789,4.327,3.21">
+                        <Rectangle.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="34.606"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+                    <Rectangle x:Name="rt_Arrow2" Visibility="Collapsed" Fill="White" Width="7" Height="2" RadiusX="1" RadiusY="1" RenderTransformOrigin="0.5,0.5" Margin="2.896,3.894,0.103,4.105">
+                        <Rectangle.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="-42.699"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Rectangle.RenderTransform>
+                    </Rectangle>
+                </Grid>
+            </Border>
+            <ContentPresenter Grid.Column="1" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Visibility" Value="Visible" TargetName="rt_Arrow1"/>
+                <Setter Property="Visibility" Value="Visible" TargetName="rt_Arrow2"/>
+                <Setter Property="Background" Value="#379be6" TargetName="bg"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter TargetName="gd" Property="Effect">
+                    <Setter.Value>
+                        <ee:EmbossedEffect Color="#4b556e"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="{x:Null}">
+                <Setter Property="Visibility" Value="Visible" TargetName="rtFull"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!--样式-->
+    <!--设备首页编辑按钮-->
+    <Style x:Key="cb_DevHomePageEdit" TargetType="ToggleButton">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="#c8cdd7"/>
+        <Setter Property="Foreground" Value="#c8cdd7"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Border.CornerRadius" Value="5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Border x:Name="br" Background="{Binding Background,RelativeSource={RelativeSource Mode=TemplatedParent}}" CornerRadius="5"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                    <ContentPresenter x:Name="cp"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" Value="#c8cdd7" TargetName="br"/>
+                            <Setter Property="Effect" TargetName="cp">
+                                <Setter.Value>
+                                    <ee:EmbossedEffect Color="#414b69"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" Value="#aab4be" TargetName="br"/>
+                            <Setter Property="Effect" TargetName="cp">
+                                <Setter.Value>
+                                    <ee:EmbossedEffect Color="#414b69"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" Value="#379be6"/>
+                <Setter Property="BorderBrush" Value="#379be6"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Border x:Name="br" Background="{Binding Background,RelativeSource={RelativeSource Mode=TemplatedParent}}" CornerRadius="5"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter x:Name="cp"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#3ca5f5" TargetName="br"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Background" Value="#2382cd" TargetName="br"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
+
+
+
+
+
+
+</ResourceDictionary>

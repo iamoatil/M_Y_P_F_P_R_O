@@ -11,8 +11,8 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="lsb1" ItemsSource="{Binding Items.View}" SelectionChanged="lsb1_SelectionChanged">
-            <ListBox.ItemContainerStyle>
+        <ListBox x:Name="lsb1" ItemsSource="{Binding Items.View}" SelectionChanged="lsb1_SelectionChanged" ItemContainerStyle="{StaticResource accoutListItemStyle}" BorderThickness="0">
+            <!--<ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Template">
                         <Setter.Value>
@@ -45,9 +45,9 @@
                         </Trigger>
                     </Style.Triggers>
                 </Style>
-            </ListBox.ItemContainerStyle>
+            </ListBox.ItemContainerStyle>-->
         </ListBox>
-        <GridSplitter VerticalAlignment="Stretch" Width="3"/>
+        <GridSplitter VerticalAlignment="Stretch" Width="2" Background="Transparent"/>
         <StackPanel Grid.Column="1" DataContext="{Binding Path=SelectedValue, ElementName=lsb1}">
             <TextBlock Text="{Binding WeChatId}"/>
             <TextBlock Text="{Binding Nick}"/>

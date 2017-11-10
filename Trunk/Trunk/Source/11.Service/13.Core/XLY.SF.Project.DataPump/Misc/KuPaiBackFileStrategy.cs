@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using X64Service;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.BaseUtility.Helper;
 
@@ -17,6 +11,42 @@ namespace XLY.SF.Project.DataPump.Misc
         #region Methods
 
         #region Public
+
+        public void InitExecution(DataPumpControllableExecutionContext context)
+        {
+            String destPath = context.GetContextData<String>("destPath");
+            String sourcePath = context.GetContextData<String>("sourcePath");
+
+            //contacts.zip
+            String sourceFile = Path.Combine(sourcePath, "contacts.zip");
+            if (FileHelper.IsValid(sourceFile))
+            {
+                var savePath = Path.Combine(destPath, @"data\contacts");
+                FileHelper.CreateDirectory(savePath);
+
+                ZipFile.ExtractToDirectory(sourceFile, savePath);
+            }
+
+            //recentcalls.zip
+            sourceFile = Path.Combine(sourcePath, "recentcalls.zip");
+            if (FileHelper.IsValid(sourceFile))
+            {
+                var savePath = Path.Combine(destPath, @"data\recentcalls");
+                FileHelper.CreateDirectory(savePath);
+
+                ZipFile.ExtractToDirectory(sourceFile, savePath);
+            }
+
+            //sms.zip
+            sourceFile = Path.Combine(sourcePath, "sms.zip");
+            if (FileHelper.IsValid(sourceFile))
+            {
+                var savePath = Path.Combine(destPath, @"data\sms");
+                FileHelper.CreateDirectory(savePath);
+
+                ZipFile.ExtractToDirectory(sourceFile, savePath);
+            }
+        }
 
         public static Boolean IsKuPaiBackFile(DataPumpControllableExecutionContext context, out String backFilePath)
         {
@@ -35,34 +65,18 @@ namespace XLY.SF.Project.DataPump.Misc
 
         public void Process(DataPumpControllableExecutionContext context)
         {
-            String destPath = context.GetContextData<String>("destPath");
-            String sourcePath = context.GetContextData<String>("sourcePath");
-
-            //contacts.zip
-            String sourceFile = Path.Combine(sourcePath, "contacts.zip");
-            if (FileHelper.IsValid(sourceFile))
+            if (context.Source.ItemType == Domains.SourceFileItemType.NormalPath)
             {
-                //asyn.Advance(0, String.Format(LanguageHelper.Get("LANGKEY_KaiShiJieYa_01484"), sourceFile));
-                ZipFile.ExtractToDirectory(sourceFile, destPath.TrimEnd('/', '\\') + @"\data\contacts");
-                //asyn.Advance(0, String.Format(LanguageHelper.Get("LANGKEY_JieYaChengGong_01486"), sourceFile));
-            }
+                String destPath = context.GetContextData<String>("destPath");
 
-            //recentcalls.zip
-            sourceFile = Path.Combine(sourcePath, "recentcalls.zip");
-            if (FileHelper.IsValid(sourceFile))
-            {
-                //asyn.Advance(0, String.Format(LanguageHelper.Get("LANGKEY_KaiShiJieYa_01484"), sourceFile));
-                ZipFile.ExtractToDirectory(sourceFile, destPath.TrimEnd('/', '\\') + @"\data\recentcalls");
-                //asyn.Advance(0, String.Format(LanguageHelper.Get("LANGKEY_JieYaChengGong_01486"), sourceFile));
-            }
+                string path = context.Source.Config.TrimEnd("#F");
+                if (path.StartsWith("/data/data/"))
+                {
+                    path = ("/data/" + path.TrimStart("/data/data/"));
+                }
+                path = path.Replace("/", @"\");
 
-            //sms.zip
-            sourceFile = Path.Combine(sourcePath, "sms.zip");
-            if (FileHelper.IsValid(sourceFile))
-            {
-                //asyn.Advance(0, String.Format(LanguageHelper.Get("LANGKEY_KaiShiJieYa_01484"), sourceFile));
-                ZipFile.ExtractToDirectory(sourceFile, destPath.TrimEnd('/', '\\') + @"\data\sms");
-                //asyn.Advance(0, String.Format(LanguageHelper.Get("LANGKEY_JieYaChengGong_01486"), sourceFile));
+                context.Source.Local = FileHelper.ConnectPath(destPath, "data", path);
             }
         }
 

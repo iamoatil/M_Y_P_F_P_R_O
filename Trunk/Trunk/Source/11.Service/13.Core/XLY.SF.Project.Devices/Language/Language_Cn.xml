@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageResource>
+  <DeviceLanguage Prompt="设备相关语言资源">
+    <DeviceType_IOS>IOS</DeviceType_IOS>
+    <DeviceUseableValidation_InUse>当前设备正在使用中, 请稍后再试</DeviceUseableValidation_InUse>
+    <DeviceUseableValidation_Offline>当前设备未正常链接, 请检测该任务是否正确连接设备。</DeviceUseableValidation_Offline>
+    <DeviceUseableValidation_IsInvalid>当前设备不可用, 请检测该任务是否正确连接设备。</DeviceUseableValidation_IsInvalid>
+
+    <Device_PopUp>弹出</Device_PopUp>
+    <Device_Move>移动</Device_Move>
+    <Device_Delete>删除</Device_Delete>
+    <Device_Close>关闭</Device_Close>
+
+
+    <Partition_all>全部存储芯片</Partition_all>
+    <Partition_data>数据区</Partition_data>
+    <Partition_system>系统区</Partition_system>
+    <Partition_sdcard>内置存储区</Partition_sdcard>
+    <Partition_cache>缓存区</Partition_cache>
+    <Partition_IsInvalid>无可用镜像源</Partition_IsInvalid>
+    <IOSExtractLocalApps>系统正在从{0}设备中提取内置应用数据...</IOSExtractLocalApps>
+    <IOSExtractNotLocalApps>系统正在从{0}设备中提取{1}应用数据...</IOSExtractNotLocalApps>
+    <IOSExtractNotLocalAppsOver> {0} 应用数据提取完成</IOSExtractNotLocalAppsOver>
+    <IOSInitProgress>初始化完成了{0}%</IOSInitProgress>
+    <IOSCopyProgress>已拷贝{0}MB数据</IOSCopyProgress>
+    <IOSCopyDataOver>数据拷贝完成, 准备后期合并处理……</IOSCopyDataOver>
+    <IOSExtractLocalOver>内置应用数据提取完成</IOSExtractLocalOver>
+    <IOSLastStepProgress>正在后期合并, 完成了{0}%</IOSLastStepProgress>
+    <IOSCopyError>拷贝过程出错</IOSCopyError>
+    <IOSUserExit>用户终止</IOSUserExit>
+    <IOSExtractLocalAppsReport>系统正从{0}设备提取内置应用数据, {1}</IOSExtractLocalAppsReport>
+    <IOSExtractNotLocalAppProgress>系统正在提取{0}应用数据, 正在提取{1}文件, 大小{2}</IOSExtractNotLocalAppProgress>
+    <IOSDeviceCopyError>设备:{0} 在拷贝IOS用户数据时出错, 出错步骤 {1},原因:{2}</IOSDeviceCopyError>
+  </DeviceLanguage>
+
+  <ErrorMessageLanguage Prompt="错误提示信息语言资源">
+    <ErrMsg_NotFindTable>未找到表</ErrMsg_NotFindTable>
+    <ErrMsg_NotDeviceConnect>没有设备连接</ErrMsg_NotDeviceConnect>
+    <ErrMsg_WriteFileFail>文件写失败</ErrMsg_WriteFileFail>
+    <ErrMsg_PhoneAccessFail>手机访问失败</ErrMsg_PhoneAccessFail>
+    <ErrMsg_NotExistAccessFile>不存在需要访问的文件</ErrMsg_NotExistAccessFile>
+    <ErrMsg_ReadFileFail>读取失败</ErrMsg_ReadFileFail>
+    <ErrMsg_IOSDllErrorID>IOS设备读取底层读取发生错误, 错误码</ErrMsg_IOSDllErrorID>
+  </ErrorMessageLanguage>
+
+</LanguageResource>
+
+

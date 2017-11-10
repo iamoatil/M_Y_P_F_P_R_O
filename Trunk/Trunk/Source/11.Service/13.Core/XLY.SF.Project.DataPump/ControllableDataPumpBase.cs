@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XLY.SF.Framework.Core.Base.CoreInterface;
+using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.DataPump
@@ -32,12 +33,11 @@ namespace XLY.SF.Project.DataPump
         /// 创建执行数据泵时所需的上下文对象。
         /// </summary>
         /// <param name="metadata">元数据。</param>
-        /// <param name="targetDirectory">数据保存目录。</param>
         /// <param name="source">数据源。</param>
         /// <returns>执行上下文。</returns>
-        public override DataPumpExecutionContext CreateContext(Pump metadata, String targetDirectory, SourceFileItem source)
+        public override DataPumpExecutionContext CreateContext(Pump metadata, SourceFileItem source)
         {
-            return new DataPumpControllableExecutionContext(metadata, targetDirectory, source) { Owner = this };
+            return new DataPumpControllableExecutionContext(metadata, source) { Owner = this };
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace XLY.SF.Project.DataPump
         {
             DataPumpControllableExecutionContext contextEx = context as DataPumpControllableExecutionContext;
             if (contextEx == null) throw new InvalidOperationException("context is not DataPumpControllableExecutionContext");
-            if (contextEx.Status == AsyncProgressState.Running || contextEx.Status == AsyncProgressState.Starting) return;
+            if (contextEx.Status == TaskState.Running || contextEx.Status == TaskState.Starting) return;
             ExecuteCore(contextEx);
         }
 
@@ -68,10 +68,10 @@ namespace XLY.SF.Project.DataPump
         public virtual void Cancel(DataPumpControllableExecutionContext context)
         {
             if (context.Owner != this) return;
-            if ((context.Status == AsyncProgressState.Starting) ||
-                (context.Status == AsyncProgressState.Running))
+            //枚举值高字节如果为0x01，表示正在执行
+            if (((Int32)context.Status & 0xFF00) == 0x0100)
             {
-                context.Reporter.Stop();
+                context.Reporter.StopAll();
                 context.CancellationTokenSource.Cancel();
                 context.Reset();
             }

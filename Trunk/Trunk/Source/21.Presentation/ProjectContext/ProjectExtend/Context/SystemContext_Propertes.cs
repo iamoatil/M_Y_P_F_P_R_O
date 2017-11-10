@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows.Data;
 using XLY.SF.Framework.Core.Base;
+using XLY.SF.Framework.Language;
 using XLY.SF.Project.CaseManagement;
 using XLY.SF.Project.Models.Logical;
 using XLY.SF.Project.ViewDomain.Model;
@@ -185,24 +187,6 @@ namespace ProjectExtend.Context
 
         #endregion
 
-        #region 当前语言
-
-        /// <summary>
-        /// 当前语言
-        /// </summary>
-        public LanguageType CurLanguage
-        {
-            get
-            {
-                var curLanguage = _configService.GetSysConfigValueByKey("Language");
-                if (!string.IsNullOrEmpty(curLanguage) && Enum.IsDefined(typeof(LanguageType), curLanguage))
-                    return (LanguageType)Enum.Parse(typeof(LanguageType), curLanguage);
-                return LanguageType.Cn;
-            }
-        }
-
-        #endregion
-
         #region 当前登录用户信息
 
         /// <summary>
@@ -261,6 +245,17 @@ namespace ProjectExtend.Context
         {
             AsyncOperation = AsyncOperationManager.CreateOperation(this);
         }
+        #endregion
+
+        #region 语言
+
+        public static XmlDataProvider LanguageProvider { get; } = new XmlDataProvider { XPath = "LanguageResource" };
+
+        /// <summary>
+        /// 当前语言
+        /// </summary>
+        public static LanguageManager LanguageManager { get; }
+
         #endregion
 
         #region private

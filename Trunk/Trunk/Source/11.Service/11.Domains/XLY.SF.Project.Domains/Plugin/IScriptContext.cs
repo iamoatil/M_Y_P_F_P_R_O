@@ -32,6 +32,6 @@ namespace XLY.SF.Project.Domains
         /// <returns></returns>
         [HandleProcessCorruptedStateExceptions]
         [SecurityCritical]
-        object Execute(string script, IAsyncProgress asyn, object[] argrument = null, Dictionary<string, object> paramValues = null, bool isThrowExeception = true);
+        object Execute(string script, IAsyncTaskProgress asyn, object[] argrument = null, Dictionary<string, object> paramValues = null, bool isThrowExeception = true);
     }
 }

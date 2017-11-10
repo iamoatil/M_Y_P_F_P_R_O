@@ -8,9 +8,12 @@
     <convert:LeftOffsetConvert x:Key="subtraction"/>
     <!--加法转换器-->
     <convert:AdditionConverter x:Key="add"/>
+    
+    
+    
 
     <!--自定义控件样式-->
-    <!--自定义主界面选择按钮-->
+    <!--打开案例按钮-->
     <Style TargetType="{x:Type local:MenuButton}">
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
@@ -55,17 +58,30 @@
                             </Button.Template>
                         </Button>
                         <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
-                            <Border x:Name="Shdw" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=MainGrid}">
-                                <Border x:Name="DropDownBorder" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}">
-                                    <ScrollViewer x:Name="DropDownScrollViewer">
-                                        <Grid RenderOptions.ClearTypeHint="Enabled">
-                                            <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
-                                                <Rectangle x:Name="OpaqueRect" Fill="{Binding Background, ElementName=DropDownBorder}" Height="{Binding ActualHeight, ElementName=DropDownBorder}" Width="{Binding ActualWidth, ElementName=DropDownBorder}"/>
-                                            </Canvas>
-                                            <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            <Border x:Name="DropDownBorder" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=MainGrid}" Margin="16">
+                                <ScrollViewer x:Name="DropDownScrollViewer">
+                                    <Grid RenderOptions.ClearTypeHint="Enabled" x:Name="br">
+                                        <Grid Margin="16 0 16 16">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="12"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Path Data="M7.4999999,0 L15,12 L-3.1373461E-08,12 z" Fill="#FF2D3C63" HorizontalAlignment="Right" Margin="0 0 28 0" Height="12" Width="15"/>
+                                            <Border Grid.Row="1">
+                                                <Border.Background>
+                                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                        <GradientStop Color="#FF2D3C63" Offset="0"/>
+                                                        <GradientStop Color="#FF232848" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                                <ItemsPresenter x:Name="ItemsPresenter" Margin="0 6 0 6" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                            </Border>
+                                            <Grid.Effect>
+                                                <DropShadowEffect Color="#CC374164" BlurRadius="18" ShadowDepth="5" Direction="270"/>
+                                            </Grid.Effect>
                                         </Grid>
-                                    </ScrollViewer>
-                                </Border>
+                                    </Grid>
+                                </ScrollViewer>
                             </Border>
                         </Popup>
                         <ToggleButton x:Name="tb_Menu" Grid.Column="1" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
@@ -111,10 +127,6 @@
                             </MultiTrigger.Conditions>
                             <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
                         </MultiTrigger>
-                        <Trigger Property="ScrollViewer.CanContentScroll" SourceName="DropDownScrollViewer" Value="false">
-                            <Setter Property="Canvas.Top" TargetName="OpaqueRect" Value="{Binding VerticalOffset, ElementName=DropDownScrollViewer}"/>
-                            <Setter Property="Canvas.Left" TargetName="OpaqueRect" Value="{Binding HorizontalOffset, ElementName=DropDownScrollViewer}"/>
-                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -197,7 +209,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <!--【默认】下拉框，可输入状态模版-->
-    <ControlTemplate x:Key="ComboBoxEditableTemplate" TargetType="{x:Type local:ComboBoxEx}">
+    <ControlTemplate x:Key="ComboBoxEditableCt" TargetType="{x:Type local:ComboBoxEx}">
         <Grid>
             <Border Background="{TemplateBinding Background}" CornerRadius="5" MinHeight="32" x:Name="bg">
                 <Grid x:Name="Placement" SnapsToDevicePixels="true" Margin="{TemplateBinding Padding}">
@@ -246,6 +258,69 @@
             <Trigger Property="IsEnabled" Value="false">
                 <Setter Property="Foreground" Value="#9ba5b9" TargetName="PART_EditableTextBox"/>
                 <Setter Property="Background" Value="#4d556d" TargetName="bg"/>
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsGrouping" Value="true"/>
+                    <Condition Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="false"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+            </MultiTrigger>
+            <Trigger Property="ScrollViewer.CanContentScroll" SourceName="DropDownScrollViewer" Value="false">
+                <Setter Property="Canvas.Top" TargetName="OpaqueRect" Value="{Binding VerticalOffset, ElementName=DropDownScrollViewer}"/>
+                <Setter Property="Canvas.Left" TargetName="OpaqueRect" Value="{Binding HorizontalOffset, ElementName=DropDownScrollViewer}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <ControlTemplate x:Key="ComboBoxEditableCtEnabled" TargetType="{x:Type local:ComboBoxEx}">
+        <Grid>
+            <Border Background="{TemplateBinding Background}" CornerRadius="5" MinHeight="32" x:Name="bg">
+                <Grid x:Name="Placement" SnapsToDevicePixels="true" Margin="{TemplateBinding Padding}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="tb_Title" VerticalAlignment="Center" 
+                                       Foreground="{Binding TitleForeground,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:ComboBoxEx}}" 
+                                       Text="{Binding Title,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:ComboBoxEx}}"
+                                       Margin="{Binding TitlePadding,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:ComboBoxEx}}"/>
+                    <Popup x:Name="PART_Popup" Width="{TemplateBinding Width,Converter={StaticResource add},ConverterParameter=32}" HorizontalOffset="-16" ClipToBounds="False" AllowsTransparency="true" Grid.ColumnSpan="3" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" VerticalOffset="2" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
+                        <Grid>
+                            <Border x:Name="DropDownBorder" Margin="16 0 16 16" MinWidth="{Binding ActualWidth,ElementName=Placement}" HorizontalAlignment="Center" CornerRadius="5" BorderThickness="0" Background="#485374">
+                                <ScrollViewer x:Name="DropDownScrollViewer" Margin="0 6 0 6">
+                                    <Grid RenderOptions.ClearTypeHint="Enabled">
+                                        <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
+                                            <Rectangle x:Name="OpaqueRect" Fill="{Binding Background, ElementName=DropDownBorder}" Height="{Binding ActualHeight, ElementName=DropDownBorder}" Width="{Binding ActualWidth, ElementName=DropDownBorder}"/>
+                                        </Canvas>
+                                        <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                    </Grid>
+                                </ScrollViewer>
+                                <Border.Effect>
+                                    <DropShadowEffect Color="#CC374164" BlurRadius="18" ShadowDepth="5" Direction="270"/>
+                                </Border.Effect>
+                            </Border>
+                        </Grid>
+                    </Popup>
+                    <TextBox Grid.Column="1" x:Name="PART_EditableTextBox" Background="{Binding DataContext.Background,RelativeSource={RelativeSource Mode=TemplatedParent}}" Foreground="White" Template="{DynamicResource tb_EmptyCt}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" VerticalContentAlignment="Center"/>
+                    <ToggleButton Grid.Column="2" Margin="5" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Template="{DynamicResource tb_CbDefaultCt}"/>
+                </Grid>
+            </Border>
+            <Border x:Name="br" CornerRadius="4" BorderBrush="#4b5a78" BorderThickness="2" Visibility="Collapsed"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsFocused" Value="true" SourceName="PART_EditableTextBox">
+                <Setter Property="Background" Value="#37415f" TargetName="bg"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Visibility" Value="Visible" TargetName="br"/>
+            </Trigger>
+            <Trigger Property="HasItems" Value="false">
+                <Setter Property="Height" TargetName="DropDownBorder" Value="95"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Foreground" Value="#9ba5b9" TargetName="PART_EditableTextBox"/>
+                <Setter Property="Background" Value="#33414b69" TargetName="bg"/>
             </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>

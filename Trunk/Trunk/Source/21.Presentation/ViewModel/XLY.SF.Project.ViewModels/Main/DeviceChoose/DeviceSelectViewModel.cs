@@ -14,6 +14,7 @@ using XLY.SF.Project.CaseManagement;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.ProxyService;
 using XLY.SF.Project.ViewDomain.MefKeys;
+using XLY.SF.Project.ViewModels.Main.CaseManagement;
 
 /* ==============================================================================
 * Assembly   ：	XLY.SF.Project.ViewModels.Device.DeviceSelectViewModel
@@ -200,19 +201,18 @@ namespace XLY.SF.Project.ViewModels.Device
             {
                 return;
             }
+            DeviceExtractionAdorner dea = new DeviceExtractionAdorner();
             var ca = SystemContext.Instance.CurrentCase;
             var dev = ca.DeviceExtractions.FirstOrDefault(d => d[DeviceExternsion.XLY_IdKey] == device.ID);
             if (dev == null)     //不存在则创建新设备
             {
                 dev = SystemContext.Instance.CurrentCase.CreateDeviceExtraction(device.Name, device.DeviceType.ToString());
-                foreach (var item in device.Save())
-                {
-                    dev[item.Key] = item.Value;
-                }
-                dev.Save();
+                dea.Device = device;
+                dea.Save();
             }
+            dea.Target = dev;
             //跳转到设备
-            MessageAggregation.SendGeneralMsg(new GeneralArgs<DeviceExtraction>(ExportKeys.DeviceAddedMsg) { Parameters = dev });
+            MessageAggregation.SendGeneralMsg(new GeneralArgs<DeviceExtractionAdorner>(ExportKeys.DeviceAddedMsg) { Parameters = dea });
         }
         #endregion
     }

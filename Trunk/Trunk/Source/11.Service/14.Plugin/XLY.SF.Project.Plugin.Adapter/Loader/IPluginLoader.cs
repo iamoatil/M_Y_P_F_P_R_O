@@ -14,6 +14,6 @@ namespace XLY.SF.Project.Plugin.Adapter
         /// </summary>
         /// <param name="asyn"></param>
         /// <returns></returns>
-        IEnumerable<IPlugin> Load(IAsyncProgress asyn);
+        IEnumerable<IPlugin> Load(IAsyncTaskProgress asyn);
     }
 }

@@ -15,17 +15,15 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
 
         event EventHandler<TaskOverEventArgs> TaskOver;
 
-        event EventHandler ProgressChanged;
-
         #endregion
 
         #region Methods
 
         /// <summary>
-        /// 执行特定业务。
+        /// 启动业务。
         /// </summary>
-        /// <param name="message">消息。</param>
-        void Execute(Message message);
+        /// <returns>成功返回true；否则返回false。</returns>
+        Boolean Launch();
 
         #endregion
     }

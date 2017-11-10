@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using XLY.SF.Framework.Core.Base.CoreInterface;
-using XLY.SF.Framework.Language;
+using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 
@@ -11,7 +11,7 @@ namespace XLY.SF.Project.Services
     public class FileService : IFileService
     {
         private FileServiceAbstractX fileServiceX;
-        private IAsyncProgress IAsync;
+        private IAsyncTaskProgress IAsync;
         private FNodeX _systemTree;
 
         public int ExternalCount { get; private set; }
@@ -60,7 +60,7 @@ namespace XLY.SF.Project.Services
         /// <param name="device"></param>
         /// <param name="iAsync"></param>
         /// <returns></returns>
-        public FNodeX GetFileSystem(IFileSystemDevice device, IAsyncProgress iAsync)
+        public FNodeX GetFileSystem(IFileSystemDevice device, SingleTaskReportBase iAsync)
         {
             IAsync = iAsync;
             CreateFileServiceAbstractX(device, iAsync);
@@ -72,7 +72,7 @@ namespace XLY.SF.Project.Services
             return _systemTree;
         }
 
-        private void CreateFileServiceAbstractX(IFileSystemDevice device, IAsyncProgress iAsync)
+        private void CreateFileServiceAbstractX(IFileSystemDevice device, SingleTaskReportBase iAsync)
         {
             if (device is MirrorDevice)
             {
@@ -126,7 +126,8 @@ namespace XLY.SF.Project.Services
             {
                 return;
             }
-            IAsync?.Advance(1, LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.FileServiceLanguage_File_KaiShiHuiFuYingYongWenJianLieB));
+
+            //IAsync?.Advance(1, LanguageManager.Current[Languagekeys.FileServiceLanguage_File_KaiShiHuiFuYingYongWenJianLieB]);
 
             string pattern = "com.tencen(.+).mm";
             Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
@@ -158,7 +159,7 @@ namespace XLY.SF.Project.Services
                 return;
             }
 
-            IAsync?.Advance(1, LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.FileServiceLanguage_File_KaiShiHuiFuYingYongWenJianLieB));
+            //IAsync?.Advance(1, LanguageManager.Current[Languagekeys.FileServiceLanguage_File_KaiShiHuiFuYingYongWenJianLieB]);
 
             string pattern = "com.tencen(.+).mm";
             Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
@@ -209,7 +210,7 @@ namespace XLY.SF.Project.Services
             var sourceFiles = GetKeyFNodeX;
             var key = item.Key;
             var suffix = item.Value.Split(separateChar);
-            IAsync?.Advance(1, LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.FileServiceLanguage_File_KaiShiHuiFuMeiTiWenJianShuJu));
+            //IAsync?.Advance(1, LanguageManager.Current[Languagekeys.FileServiceLanguage_File_KaiShiHuiFuMeiTiWenJianShuJu]);
             foreach (var suf in suffix)
             {
                 if (sourceFiles.ContainsKey(suf))

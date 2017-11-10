@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
-             xmlns:Lang="clr-namespace:XLY.SF.Framework.Language.PageLanguage;assembly=XLY.SF.Framework.Language"
-		     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+                 xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
+                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
 		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="200">

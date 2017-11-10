@@ -46,13 +46,13 @@ namespace XLY.SF.Project.DataPump.Android
         {
             SourceFileItem source = context.Source;
             String path = FileHelper.ConnectLinuxPath(device.SDCardPath, source.SDCardConfig);
-            source.Local = device.CopyFile(path, context.TargetDirectory, context.Reporter);
+            source.Local = device.CopyFile(path, context.TargetDirectory, null);
         }
 
         private void HandleWithNormalPath(Device device, DataPumpControllableExecutionContext context)
         {
             String path = context.Source.Config;
-            context.Source.Local = device.CopyFile(path, context.TargetDirectory, context.Reporter);
+            context.Source.Local = device.CopyFile(path, context.TargetDirectory, null);
         }
 
         #endregion

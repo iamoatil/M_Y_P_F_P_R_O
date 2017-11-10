@@ -51,6 +51,7 @@ namespace XLY.SF.Project.CaseManagement
         /// <summary>
         /// 设备提取配置。
         /// </summary>
+        /// <exception cref="InvalidOperationException"></exception>
         internal DPConfiguration Configuration
         {
             get
@@ -115,12 +116,14 @@ namespace XLY.SF.Project.CaseManagement
         /// <summary>
         /// 获取节点PropertyGroup中定义的元素名称。
         /// </summary>
+        /// <exception cref="InvalidOperationException"></exception>
         public IEnumerable<String> PropertNames => Configuration.GetPropertyNames();
 
         /// <summary>
         /// 获取配置中指定名称的自定义属性。
         /// </summary>
         /// <param name="propertyName">属性名称。</param>
+        /// <exception cref="InvalidOperationException"></exception>
         /// <returns>属性值。</returns>
         public String this[String propertyName]
         {

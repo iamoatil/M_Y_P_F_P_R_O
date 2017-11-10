@@ -74,6 +74,8 @@ namespace XLY.SF.Project.DataPump.Misc
                     _strategy = new AppDataStategy();
                 }
             }
+
+            _strategy?.InitExecution(context);
         }
 
         #endregion

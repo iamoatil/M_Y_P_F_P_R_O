@@ -107,16 +107,11 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         private void ResetLayoutViews(string pluginId, object type, object currentData)
         {
             LayoutViewItems = new ObservableCollection<object>();
-            bool isFirst = false;
             foreach (var item in DataViewPluginAdapter.Instance.GetView(pluginId, type))
             {
                 LayoutViewItems.Add(item.ToControl(new DataViewPluginArgument() { CurrentData = currentData, DataSource = _arg.DataSource }, null));
-                if (!isFirst)   //设置默认选中第一项
-                {
-                    SelectedLayoutViewItem = LayoutViewItems[0];
-                    isFirst = true;
-                }
             }
+            SelectedLayoutViewItem = LayoutViewItems.FirstOrDefault(); //设置默认选中第一项
         }
         #endregion
 

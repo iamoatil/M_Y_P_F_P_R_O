@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,6 +43,13 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
             IsCompleted = isCompleted;
         }
 
+        /// <summary>
+        /// 初始化类型 TaskFailedEventArgs 实例。
+        /// </summary>
+        private TaskOverEventArgs()
+        {
+        }
+
         #endregion
 
         #region Properties
@@ -49,17 +57,17 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <summary>
         /// 异常信息。
         /// </summary>
-        public Exception Exception { get; }
+        public Exception Exception { get; private set; }
 
         /// <summary>
         /// 错误消息。
         /// </summary>
-        public String ErrorMessage { get; }
+        public String ErrorMessage { get; private set; }
 
         /// <summary>
         /// 任务是否完成。
         /// </summary>
-        public Boolean IsCompleted { get; }
+        public Boolean IsCompleted { get; private set; }
 
         #endregion
     }

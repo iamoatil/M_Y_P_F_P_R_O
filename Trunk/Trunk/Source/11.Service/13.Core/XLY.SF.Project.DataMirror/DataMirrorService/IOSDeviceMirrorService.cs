@@ -16,7 +16,7 @@ namespace XLY.SF.Project.DataMirror
     {
         private IOSDeviceManager DeviceManager { get; set; }
 
-        public override void Execute(Mirror mirror, IAsyncProgress asyn)
+        public override void Execute(Mirror mirror, IAsyncTaskProgress asyn)
         {
             var device = mirror.Source as Device;
 
@@ -47,7 +47,7 @@ namespace XLY.SF.Project.DataMirror
             FileHelper.DeleteDirectorySafe(tempSavePath);
         }
 
-        public override void Stop(IAsyncProgress asyn)
+        public override void Stop(IAsyncTaskProgress asyn)
         {
             DeviceManager?.StopCopyUserData();
             DeviceManager = null;

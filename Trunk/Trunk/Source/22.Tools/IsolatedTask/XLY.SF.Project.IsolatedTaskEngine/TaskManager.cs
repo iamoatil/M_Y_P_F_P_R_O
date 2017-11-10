@@ -75,12 +75,19 @@ namespace XLY.SF.Project.IsolatedTaskEngine
                 _semaphore.WaitOne();
                 if (_requestStop) break;
                 TaskHandler newHandler = new TaskHandler(_setup, TaskOverCallback);
-                lock (_tasks)
-                {
-                    if (_requestStop) break;
-                    _tasks.Add(newHandler);
-                }
                 newHandler.Launch();
+                if (newHandler.IsLaunched)
+                {
+                    lock (_tasks)
+                    {
+                        if (_requestStop)
+                        {
+                            newHandler.Close();
+                            break;
+                        }
+                        _tasks.Add(newHandler);
+                    }
+                }
             }
             IsRuning = false;
         }

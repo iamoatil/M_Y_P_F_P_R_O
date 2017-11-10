@@ -40,14 +40,14 @@ namespace XLY.SF.Project.DataMirror
         /// <summary>
         /// 镜像异步通知
         /// </summary>
-        private IAsyncProgress MirrorAsyn { get; set; }
+        private IAsyncTaskProgress MirrorAsyn { get; set; }
 
         /// <summary>
         /// 镜像源
         /// </summary>
         private Mirror Source { get; set; }
 
-        public override void Execute(Mirror mirror, IAsyncProgress asyn)
+        public override void Execute(Mirror mirror, IAsyncTaskProgress asyn)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace XLY.SF.Project.DataMirror
                 TotalSize = Source.Block.Size;
                 MirrorAsyn = asyn;
 
-                MirrorAsyn.Start(TotalSize);
+                //MirrorAsyn.Start(TotalSize);
 
                 var device = Source.Source as Device;
 
@@ -65,8 +65,8 @@ namespace XLY.SF.Project.DataMirror
                 if (0 == openHandle)
                 {
                     LoggerManagerSingle.Instance.Error(string.Format("安卓手机镜像出错！OpenDevice失败，设备ID:{0}", device.ID));
-                    MirrorAsyn.IsSuccess = false;
-                    MirrorAsyn.Stop();
+                    //MirrorAsyn.IsSuccess = false;
+                    //MirrorAsyn.Stop();
                     return;
                 }
 
@@ -74,8 +74,8 @@ namespace XLY.SF.Project.DataMirror
                 if (0 != result)
                 {
                     LoggerManagerSingle.Instance.Error(string.Format("安卓手机镜像出错！Initialize失败，设备ID:{0} 错误码:{1}", device.ID, result));
-                    MirrorAsyn.IsSuccess = false;
-                    MirrorAsyn.Stop();
+                    //MirrorAsyn.IsSuccess = false;
+                    //MirrorAsyn.Stop();
                     return;
                 }
 
@@ -87,21 +87,21 @@ namespace XLY.SF.Project.DataMirror
 
                 X86DLLClientSingle.Instance.ClientCallback._ImageDataCallBack += ImageDataCallBack;
 
-                string block = Source.Block.Block.Replace("\\",@"/");//此处把windows的反斜杠替换成linux的斜杠，否则，镜像时出现size全为0的回调数据
+                string block = Source.Block.Block.Replace("\\", @"/");//此处把windows的反斜杠替换成linux的斜杠，否则，镜像时出现size全为0的回调数据
                 result = service.AndroidMirror_ImageDataZone(openHandle, block, 0, -1);
                 if (0 != result)
                 {
                     LoggerManagerSingle.Instance.Error(string.Format("安卓手机镜像出错！ImageDataZone失败，设备ID:{0} 错误码:{1}", device.ID, result));
-                    MirrorAsyn.IsSuccess = false;
-                    MirrorAsyn.Stop();
+                    //MirrorAsyn.IsSuccess = false;
+                    //MirrorAsyn.Stop();
                     return;
                 }
             }
             catch (Exception ex)
             {
                 LoggerManagerSingle.Instance.Error("安卓手机镜像出错！", ex);
-                MirrorAsyn.IsSuccess = false;
-                MirrorAsyn.Stop();
+                //MirrorAsyn.IsSuccess = false;
+                //MirrorAsyn.Stop();
             }
             finally
             {
@@ -113,26 +113,26 @@ namespace XLY.SF.Project.DataMirror
             }
         }
 
-        public override void Stop(IAsyncProgress asyn)
+        public override void Stop(IAsyncTaskProgress asyn)
         {
             IsStop = true;
         }
 
         public override bool EnableSuspend => true;
 
-        public override void Suspend(IAsyncProgress asyn)
+        public override void Suspend(IAsyncTaskProgress asyn)
         {
             IsStop = true;
         }
 
-        public override void Continue(IAsyncProgress asyn)
+        public override void Continue(IAsyncTaskProgress asyn)
         {
             try
             {
                 TotalSize = Source.Block.Size;
                 MirrorAsyn = asyn;
 
-                MirrorAsyn.Start(TotalSize);
+                //MirrorAsyn.Start(TotalSize);
 
                 var device = Source.Source as Device;
 
@@ -142,8 +142,8 @@ namespace XLY.SF.Project.DataMirror
                 if (0 == openHandle)
                 {
                     LoggerManagerSingle.Instance.Error(string.Format("安卓手机镜像出错！OpenDevice失败，设备ID:{0}", device.ID));
-                    MirrorAsyn.IsSuccess = false;
-                    MirrorAsyn.Stop();
+                    //MirrorAsyn.IsSuccess = false;
+                    //MirrorAsyn.Stop();
                     return;
                 }
 
@@ -151,8 +151,8 @@ namespace XLY.SF.Project.DataMirror
                 if (0 != result)
                 {
                     LoggerManagerSingle.Instance.Error(string.Format("安卓手机镜像出错！Initialize失败，设备ID:{0} 错误码:{1}", device.ID, result));
-                    MirrorAsyn.IsSuccess = false;
-                    MirrorAsyn.Stop();
+                    //MirrorAsyn.IsSuccess = false;
+                    //MirrorAsyn.Stop();
                     return;
                 }
 
@@ -166,16 +166,16 @@ namespace XLY.SF.Project.DataMirror
                 if (0 != result)
                 {
                     LoggerManagerSingle.Instance.Error(string.Format("安卓手机镜像出错！ImageDataZone失败，设备ID:{0} 错误码:{1}", device.ID, result));
-                    MirrorAsyn.IsSuccess = false;
-                    MirrorAsyn.Stop();
+                    //MirrorAsyn.IsSuccess = false;
+                    //MirrorAsyn.Stop();
                     return;
                 }
             }
             catch (Exception ex)
             {
                 LoggerManagerSingle.Instance.Error("安卓手机镜像出错！", ex);
-                MirrorAsyn.IsSuccess = false;
-                MirrorAsyn.Stop();
+                //MirrorAsyn.IsSuccess = false;
+                //MirrorAsyn.Stop();
             }
             finally
             {
@@ -195,7 +195,7 @@ namespace XLY.SF.Project.DataMirror
 
                 TotalSize += data.Length;
 
-                MirrorAsyn.Advance(data.Length);
+                //MirrorAsyn.Advance(data.Length);
 
                 if (IsStop)
                 {

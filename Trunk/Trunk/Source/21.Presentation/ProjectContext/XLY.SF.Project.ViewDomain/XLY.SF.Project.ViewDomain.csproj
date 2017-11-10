@@ -56,6 +56,7 @@
     <Compile Include="Model\SelectControlElement\FolderElement.cs" />
     <Compile Include="Model\SolutionProposed\StrategyElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="VModel\DevHomePage\DeviceModel.cs" />
     <Compile Include="VModel\Main\MainModel.cs" />
     <Compile Include="VModel\SelectControl\FilterElement.cs" />
   </ItemGroup>

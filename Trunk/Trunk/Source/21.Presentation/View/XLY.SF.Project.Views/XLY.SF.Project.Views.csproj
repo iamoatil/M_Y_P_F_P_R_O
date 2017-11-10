@@ -83,8 +83,8 @@
     <Compile Include="Behavior\TreeViewExpandedBehavior.cs" />
     <Compile Include="Converters\ContraryBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\IsEnableToVisibilityConverter.cs" />
-    <Compile Include="Device\DeviceHomeView.xaml.cs">
-      <DependentUpon>DeviceHomeView.xaml</DependentUpon>
+    <Compile Include="Main\DeviceView\DeviceMainView.xaml.cs">
+      <DependentUpon>DeviceMainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Main\DeviceSelectView.xaml.cs">
       <DependentUpon>DeviceSelectView.xaml</DependentUpon>
@@ -107,7 +107,7 @@
     <Compile Include="Main\CaseSelectionView.xaml.cs">
       <DependentUpon>CaseSelectionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Main\DeviceHomePageView.xaml.cs">
+    <Compile Include="Main\DeviceView\DeviceHomePageView.xaml.cs">
       <DependentUpon>DeviceHomePageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Main\DeviceListView.xaml.cs">
@@ -141,7 +141,6 @@
     <Compile Include="SelectControl\SelectControlView.xaml.cs">
       <DependentUpon>SelectControlView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModule.cs" />
     <Compile Include="ViewTemplate\ViewTemplate.xaml.cs">
       <DependentUpon>ViewTemplate.xaml</DependentUpon>
     </Compile>
@@ -157,7 +156,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Device\DeviceHomeView.xaml">
+    <Page Include="Main\DeviceView\DeviceMainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -189,7 +188,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Main\DeviceHomePageView.xaml">
+    <Page Include="Main\DeviceView\DeviceHomePageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

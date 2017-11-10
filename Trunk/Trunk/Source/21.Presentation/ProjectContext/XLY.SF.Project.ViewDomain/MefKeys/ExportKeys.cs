@@ -153,6 +153,15 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         #region 设备提取首页
         public const string DeviceHomeView = "ExportKey_DeviceHomeView";
         public const string DeviceHomeViewModel = "ExportKey_DeviceHomeViewModel";
+
+        /// <summary>
+        /// 设备主页
+        /// </summary>
+        public const string DeviceMainView = "ExportKey_DeviceMainView";
+        /// <summary>
+        /// 设备主页
+        /// </summary>
+        public const string DeviceMainViewModel = "ExportKey_DeviceMainViewModel";
         #endregion
 
         #region 选择控件（路径，文件，打开）
@@ -167,9 +176,10 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         public const string DataDisplayViewModel = "DataDisplayViewModel";
         #endregion
 
-        #region 镜像
-        public const string MirrorView = "MirrorView";        
+        #region
+        public const string MirrorView= "MirrorView";
         #endregion
+
         #endregion
 
         #region 插件

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageResource>
+  <FileServiceLanguage Prompt="镜像语言资源">
+    <File_ZuZhuangFenQuDeWenJianXiTongSh>组装分区[{0}]的文件系统树....</File_ZuZhuangFenQuDeWenJianXiTongSh>
+    <File_SaoMiaoWenJianXiTongJieShuDeDa>扫描文件系统结束, 得到文件/文件夹数:{0}</File_SaoMiaoWenJianXiTongJieShuDeDa>
+    <File_WenJianXiTongZuZhuangWanBi>文件系统组装完毕...</File_WenJianXiTongZuZhuangWanBi>
+    <File_ZhuangZaiXiTongFenQuMingChengM>装载系统分区(名称:{0},描述:{1},大小:{2})失败!</File_ZhuangZaiXiTongFenQuMingChengM>
+    <File_JiaZaiXiTongFenQuLieBiao>加载系统分区列表...</File_JiaZaiXiTongFenQuLieBiao>
+    <File_HuoQuWenJianXiTongMingChengMia>获取文件系统(名称:{0},描述:{1},大小:{2},Mount:{3})时底层dll出错, 信息:{4}, \r\n位置:{5}</File_HuoQuWenJianXiTongMingChengMia>
+    <File_HuoQuRawWenJianLeiXingShiBai>获取Raw文件类型失败！</File_HuoQuRawWenJianLeiXingShiBai>
+    <File_FenQu>分区:</File_FenQu>
+    <File_TiQuWenJianShiDiCengKuFileServ1>提取文件时底层库FileServiceCoreDll.ReadFileByBottom出现异常！信息:{0}, 位置:{1}</File_TiQuWenJianShiDiCengKuFileServ1>
+    <File_TiQuWenJianShiDiCengKuFileServ2>提取文件时底层库FileServiceCoreDll.RecoveryFile失败！错误码:{0}</File_TiQuWenJianShiDiCengKuFileServ2>
+    <File_TiQuWenJianShiDiCengKuFileServ3>提取文件时底层库FileServiceCoreDll.RecoveryFile出现异常！信息:{0}, 位置:{1}</File_TiQuWenJianShiDiCengKuFileServ3>
+    <File_WenJianHuiFuChengGong>文件[{0}]恢复成功!</File_WenJianHuiFuChengGong>
+    <File_KaiShiHuiFuYingYongWenJianLieB>开始恢复应用文件列表数据...</File_KaiShiHuiFuYingYongWenJianLieB>
+    <File_KaiShiHuiFuMeiTiWenJianShuJu>开始恢复媒体文件数据...</File_KaiShiHuiFuMeiTiWenJianShuJu>
+  </FileServiceLanguage>
+</LanguageResource>
+
+

@@ -63,9 +63,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\Json\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>..\..\..\Lib\NHibernate\NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="Noesis.Javascript">
       <HintPath>..\..\..\Lib\Json\Noesis.Javascript.dll</HintPath>
     </Reference>
@@ -99,9 +96,6 @@
     <Compile Include="Common\Guard.cs" />
     <Compile Include="Common\SingleThread.cs" />
     <Compile Include="Data\DBTypeFactory.cs" />
-    <Compile Include="Data\Nhibernate\ISessionManager.cs" />
-    <Compile Include="Data\Nhibernate\SessionManagerFactoryBase.cs" />
-    <Compile Include="Data\Nhibernate\ThreadSessionManager.cs" />
     <Compile Include="Data\Sqlite\SqliteContext.cs" />
     <Compile Include="Data\Sqlite\SQLiteString.cs" />
     <Compile Include="Data\Sqlite\SqlParameter.cs" />
@@ -165,7 +159,6 @@
     <Compile Include="Helper\EmitCreator.cs" />
     <Compile Include="Helper\ExpressionHelper.cs" />
     <Compile Include="Helper\FileHelper.cs" />
-    <Compile Include="Helper\FormatHelper.cs" />
     <Compile Include="Helper\HttpHelper.cs" />
     <Compile Include="Helper\ImageHelper.cs" />
     <Compile Include="Helper\IniConfig.cs" />
@@ -214,15 +207,13 @@
     <Compile Include="Win32\Win32.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XLY.SF.Framework.Language\XLY.SF.Framework.Language.csproj">
-      <Project>{95c796fd-57f1-4d2e-927f-4e34ea75e319}</Project>
-      <Name>XLY.SF.Framework.Language</Name>
-    </ProjectReference>
     <ProjectReference Include="..\XLY.SF.Framework.Log4NetService\XLY.SF.Framework.Log4NetService.csproj">
       <Project>{6e3193b7-7316-415a-b529-0f743d5f267b}</Project>
       <Name>XLY.SF.Framework.Log4NetService</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

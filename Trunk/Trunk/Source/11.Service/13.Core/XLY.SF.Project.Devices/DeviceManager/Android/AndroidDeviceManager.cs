@@ -61,11 +61,11 @@ namespace XLY.SF.Project.Devices
                 p.Name = m.Name;
                 p.Block = m.Block;
                 p.Size = m.Size;
-                if (p.Name.Equals(ConstCodeHelper.PARTITION_DATA)) p.Text = LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_Partition_data);
-                else if (p.Name.Equals(ConstCodeHelper.PARTITION_All)) p.Text = LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_Partition_all);
-                else if (p.Name.EndsWith(ConstCodeHelper.PARTITION_SYSTEM)) p.Text = LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_Partition_system);
-                else if (p.Name.Contains(ConstCodeHelper.PARTITION_SDCARD)) p.Text = LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_Partition_sdcard);
-                else if (p.Name.EndsWith(ConstCodeHelper.PARTITION_CACHE)) p.Text = LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_Partition_cache);
+                if (p.Name.Equals(ConstCodeHelper.PARTITION_DATA)) p.Text = LanguageManager.Current[Languagekeys.DeviceLanguage_Partition_data];
+                else if (p.Name.Equals(ConstCodeHelper.PARTITION_All)) p.Text = LanguageManager.Current[Languagekeys.DeviceLanguage_Partition_all];
+                else if (p.Name.EndsWith(ConstCodeHelper.PARTITION_SYSTEM)) p.Text = LanguageManager.Current[Languagekeys.DeviceLanguage_Partition_system];
+                else if (p.Name.Contains(ConstCodeHelper.PARTITION_SDCARD)) p.Text = LanguageManager.Current[Languagekeys.DeviceLanguage_Partition_sdcard];
+                else if (p.Name.EndsWith(ConstCodeHelper.PARTITION_CACHE)) p.Text = LanguageManager.Current[Languagekeys.DeviceLanguage_Partition_cache];
                 else continue;
                 res.Add(p);
             }
@@ -115,7 +115,7 @@ namespace XLY.SF.Project.Devices
         /// <summary>
         /// 拷贝指定文件
         /// </summary>
-        public string CopyFile(Device device, string source, string targetPath, IAsyncProgress asyn)
+        public string CopyFile(Device device, string source, string targetPath, IAsyncTaskProgress asyn)
         {
             return AndroidHelper.Instance.CopyFile(device, source, targetPath, asyn);
         }

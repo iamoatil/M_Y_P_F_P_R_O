@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using XLY.SF.Framework.Language;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
+using XLY.SF.Framework.Core.Base.ViewModel;
 
 namespace XLY.SF.Project.Domains
 {
@@ -30,17 +31,17 @@ namespace XLY.SF.Project.Domains
             {
                 case EnumDeviceStatus.InUse:
                     //throw new ApplicationException(LanguageHelperSingle.Instance.Language.DeviceLanguage.DeviceUseableValidation_InUse);
-                    throw new ApplicationException(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_DeviceUseableValidation_InUse));
+                    throw new ApplicationException(LanguageManager.Current[Languagekeys.DeviceLanguage_DeviceUseableValidation_InUse]);
                 case EnumDeviceStatus.None:
                 case EnumDeviceStatus.Offline:
                     //throw new ApplicationException(LanguageHelperSingle.Instance.Language.DeviceLanguage.DeviceUseableValidation_Offline);
-                    throw new ApplicationException(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_DeviceUseableValidation_Offline));
+                    throw new ApplicationException(LanguageManager.Current[Languagekeys.DeviceLanguage_DeviceUseableValidation_Offline]);
             }
 
             if (!DeviceManager.IsValid(this))
             {
                 //throw new ApplicationException(LanguageHelperSingle.Instance.Language.DeviceLanguage.DeviceUseableValidation_IsInvalid);
-                throw new ApplicationException(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_DeviceUseableValidation_IsInvalid));
+                throw new ApplicationException(LanguageManager.Current[Languagekeys.DeviceLanguage_DeviceUseableValidation_IsInvalid]);
             }
         }
 
@@ -74,7 +75,7 @@ namespace XLY.SF.Project.Domains
         /// <param name="targetPath">目标拷贝路径</param>
         /// <param name="asyn"></param>
         /// <returns></returns>
-        public string CopyFile(string source, string targetPath, IAsyncProgress asyn)
+        public string CopyFile(string source, string targetPath, SingleTaskReportBase asyn)
         {
             return DeviceManager.CopyFile(this, source, targetPath, asyn);
         }

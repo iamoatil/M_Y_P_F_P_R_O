@@ -4,13 +4,10 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
-                 xmlns:Lang="clr-namespace:XLY.SF.Framework.Language.PageLanguage;assembly=XLY.SF.Framework.Language"
+                 xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                  xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-                 mc:Ignorable="d"
-                 Title="移动到..."
-                 Height="430"
-                 Width="400">
+                 mc:Ignorable="d" Title="移动到...">
     <core:UcViewBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -30,16 +27,16 @@
                 <RowDefinition Height="5" />
                 <RowDefinition Height="40" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0"
+            <TextBlock Grid.Row="0" Foreground="Black"
                        Text="请选择要移动到的案例（移动过程可能需要较长时间）" />
-            <ListBox Grid.Row="2"
+            <ListBox Grid.Row="2" MinHeight="300" MinWidth="450"
                      ItemsSource="{Binding Cases}"
                      SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
                      DisplayMemberPath="Name" />
             <StackPanel Grid.Row="4"
                         HorizontalAlignment="Center"
                         Orientation="Horizontal">
-                <Button Content="确定"
+                <Button Content="确定" 
                         Command="{Binding ConfirmCommand}" />
                 <Button Content="取消"
                         Command="{Binding CancelCommand}" />

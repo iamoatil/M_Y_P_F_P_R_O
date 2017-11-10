@@ -93,6 +93,7 @@ namespace XLY.SF.Framework.Core.Base.MessageBase
             if (!string.IsNullOrEmpty(exportViewkey))
             {
                 var view = IocManagerSingle.Instance.GetViewPart(exportViewkey);
+                NavigationArgs.AddViewKeys(exportViewkey);              //记录所有导航界面Key
                 if (view != null)
                 {
                     //传递参数
@@ -117,6 +118,46 @@ namespace XLY.SF.Framework.Core.Base.MessageBase
                 else
                     LoggerManagerSingle.Instance.Error(string.Format("导入模块Key【{0}】失败", exportViewkey));
             }
+        }
+
+        #endregion
+
+
+        /*
+         * 当前系统导航过的所有界面列表，只保存Key
+         */
+        #region 导航历史
+
+        /// <summary>
+        /// 导航界面历史记录
+        /// </summary>
+        private static List<string> _historyExportKeys = new List<string>();
+
+        /// <summary>
+        /// 添加新导航窗体Key
+        /// </summary>
+        /// <param name="exportKey"></param>
+        public static void AddViewKeys(string exportKey)
+        {
+            _historyExportKeys.Add(exportKey);
+        }
+
+        /// <summary>
+        /// 获取上一个界面Key
+        /// </summary>
+        /// <returns></returns>
+        public static string GetBeforeViewKey()
+        {
+            return _historyExportKeys.LastOrDefault();
+        }
+
+        /// <summary>
+        /// 跳过指定Key获取最后一个界面Key
+        /// </summary>
+        /// <returns></returns>
+        public static string GetBeforeViewKeyBySkipKey(string skipViewKey)
+        {
+            return _historyExportKeys.LastOrDefault((t) => t != skipViewKey);
         }
 
         #endregion

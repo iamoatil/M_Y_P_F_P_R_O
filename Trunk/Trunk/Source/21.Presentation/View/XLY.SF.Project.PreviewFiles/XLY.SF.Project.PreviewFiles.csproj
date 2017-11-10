@@ -47,12 +47,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Language\LanguageHelperSingle.cs" />
-    <Compile Include="Language\PageLanguageHelper.cs" />
-    <Compile Include="Language\Resource1.Designer.cs">
+    <Compile Include="LanguageHelper.cs" />
+    <Compile Include="Language\LanguageTextTeamplate.LanguageElement.cs">
+      <DependentUpon>LanguageTextTeamplate.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Resource1.resx</DependentUpon>
     </Compile>
     <Compile Include="PreviewFile\Decoders\AudioFileDecoder.cs" />
     <Compile Include="PreviewFile\Decoders\BinaryFileDecoder.cs" />
@@ -150,10 +149,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Language\Language_Cn.xml">
+    <EmbeddedResource Include="Language\Language_Cn.xml">
       <SubType>Designer</SubType>
-    </Resource>
-    <Resource Include="Language\Language_En.xml" />
+    </EmbeddedResource>
+    <EmbeddedResource Include="Language\Language_En.xml" />
+    <Content Include="Language\LanguageTextTeamplate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LanguageTextTeamplate.LanguageElement.cs</LastGenOutput>
+    </Content>
     <Content Include="RefDlls\AForge\AForge.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1205,12 +1208,10 @@
     <None Include="RefDlls\Libvlc\libvlc.dll.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Language\Resource1.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
+    <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.Language\XLY.SF.Framework.Language.csproj">
+      <Project>{95c796fd-57f1-4d2e-927f-4e34ea75e319}</Project>
+      <Name>XLY.SF.Framework.Language</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.Log4NetService\XLY.SF.Framework.Log4NetService.csproj">
       <Project>{6e3193b7-7316-415a-b529-0f743d5f267b}</Project>
       <Name>XLY.SF.Framework.Log4NetService</Name>
@@ -1219,6 +1220,9 @@
       <Project>{c4c4fc67-5d56-4426-acc5-b53cd24c6b69}</Project>
       <Name>XLY.SF.Project.Themes</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

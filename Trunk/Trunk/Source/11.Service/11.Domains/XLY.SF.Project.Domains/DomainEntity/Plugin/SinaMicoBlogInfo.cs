@@ -235,7 +235,7 @@ namespace XLY.SF.Project.Domains
         [Display]
         public string ResultDesc
         {
-            get { return ResultType == "0" ? LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_ResultType_YouXiaoShuJu) : LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.OtherLanguage_ResultType_WuXiaoShuJu); }
+            get { return ResultType == "0" ? LanguageManager.Current[Languagekeys.OtherLanguage_ResultType_YouXiaoShuJu] : LanguageManager.Current[Languagekeys.OtherLanguage_ResultType_WuXiaoShuJu]; }
         }
 
         public string ResultType { get; set; }

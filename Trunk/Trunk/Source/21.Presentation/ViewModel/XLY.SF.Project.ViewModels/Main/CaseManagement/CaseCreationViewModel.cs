@@ -143,7 +143,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
             };
             if (!DbService.Add(model))
             {
-                MessageBox.ShowDialogErrorMsg(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ViewLanguage_View_UpdateRecentError));
+                MessageBox.ShowDialogErrorMsg(SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_UpdateRecentError]);
             }
             else
             {

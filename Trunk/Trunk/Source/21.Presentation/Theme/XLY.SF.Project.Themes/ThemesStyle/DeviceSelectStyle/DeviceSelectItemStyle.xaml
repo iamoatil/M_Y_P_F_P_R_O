@@ -16,7 +16,7 @@
     <Style x:Key="labelStyle2" TargetType="{x:Type TextBlock}">
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="FontFamily" Value="Impact"/>
+        <Setter Property="FontFamily" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald"/>
     </Style>
 
     <Style TargetType="{x:Type local:DeviceSelectItemControl}">

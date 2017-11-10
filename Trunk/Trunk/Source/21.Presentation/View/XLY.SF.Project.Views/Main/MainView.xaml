@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:XLY.SF.Project.Views.Main"
 		     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
-		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
-             xmlns:Lang="clr-namespace:XLY.SF.Framework.Language.PageLanguage;assembly=XLY.SF.Framework.Language"
-             xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
+		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                 xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
+                 xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
              xmlns:convert="clr-namespace:XLY.SF.Project.Views.Converters"
              xmlns:sys="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
              mc:Ignorable="d"
@@ -174,7 +174,7 @@
                 <StackPanel>
                     <StackPanel x:Name="gd">
                         <!--任务栏-->
-                        <Grid x:Name="gd_TaskBar" Height="60">
+                        <Grid x:Name="gd_TaskBar" Background="#263455" Height="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="auto"/>
@@ -192,10 +192,10 @@
                             <!--图标-->
                             <Image Width="40" Height="40"></Image>
                             <StackPanel Grid.Column="1" Margin="10 0 10 0" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWinTitle,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" FontSize="20"></TextBlock>
+                                <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWinTitle,Source={x:Static ex:SystemContext.LanguageProvider}}" FontSize="20"></TextBlock>
                             </StackPanel>
                             <!--工具箱-->
-                            <Button Grid.Column="3" Margin="0 3 0 0" Cursor="Hand" VerticalAlignment="Center" HorizontalAlignment="Center" Template="{StaticResource btn_MainTools}" Width="37" Height="35" Content="{Binding XPath=ViewLanguage/View_MainWin_ToolKitName,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></Button>
+                            <Button Grid.Column="3" Margin="0 3 0 0" Cursor="Hand" VerticalAlignment="Center" HorizontalAlignment="Center" Template="{StaticResource btn_MainTools}" Width="37" Height="35" Content="{Binding XPath=ViewLanguage/View_MainWin_ToolKitName,Source={x:Static ex:SystemContext.LanguageProvider}}"></Button>
                             <!--登录用户-->
                             <Grid Grid.Column="4" VerticalAlignment="Center" Margin="40 0 40 0">
                                 <Grid.ColumnDefinitions>
@@ -226,37 +226,37 @@
                                 <ComboBoxItem x:Name="cbi_UserManagement">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/UserManagementIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
-                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuUserManagement,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" VerticalAlignment="Center"></TextBlock>
+                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuUserManagement,Source={x:Static ex:SystemContext.LanguageProvider}}" VerticalAlignment="Center"></TextBlock>
                                     </StackPanel>
                                 </ComboBoxItem>
                                 <ComboBoxItem x:Name="cbi_CaseManagement">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/CaseManagementIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
-                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuCaseManagement,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuCaseManagement,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                     </StackPanel>
                                 </ComboBoxItem>
                                 <ComboBoxItem x:Name="cbi_SysSetting">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/SysSettingsIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
-                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuSysSettings,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuSysSettings,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                     </StackPanel>
                                 </ComboBoxItem>
                                 <ComboBoxItem x:Name="cbi_PluginManagement">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/PluginManagementIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
-                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuPluginManagement,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuPluginManagement,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                     </StackPanel>
                                 </ComboBoxItem>
                                 <ComboBoxItem x:Name="cbi_SysLog">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/SysLogIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
-                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuSysLog,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuSysLog,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                     </StackPanel>
                                 </ComboBoxItem>
                                 <ComboBoxItem x:Name="cbi_SysEmpower">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/SysEmpowerIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
-                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuSysEmpower,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuSysEmpower,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                     </StackPanel>
                                 </ComboBoxItem>
                                 <!--分割线，不用操作-->
@@ -264,58 +264,67 @@
                                 <ComboBoxItem x:Name="cbi_UserFeedback">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/UserFeedback.png" Margin="26 0 10 0" Width="16" Height="16"/>
-                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuUserFeedback,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuUserFeedback,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                     </StackPanel>
                                 </ComboBoxItem>
                                 <ComboBoxItem x:Name="cbi_SysUpdate">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/SysUpdateIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
-                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuSysUpdate,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuSysUpdate,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                     </StackPanel>
                                 </ComboBoxItem>
                                 <ComboBoxItem x:Name="cbi_Help">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/HelpIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
-                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuHelp,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuHelp,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                     </StackPanel>
                                 </ComboBoxItem>
                                 <ComboBoxItem x:Name="cbi_About">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/AboutIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
-                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuAbout,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuAbout,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                     </StackPanel>
                                 </ComboBoxItem>
                                 <ComboBoxItem x:Name="cbi_LogoutSys">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/LogoutSysIcon.png" Margin="26 0 10 0" Width="16" Height="16"/>
-                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuLogout,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"></TextBlock>
+                                        <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWin_MenuLogout,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                     </StackPanel>
                                 </ComboBoxItem>
                             </ComboBox>
                             <!--最小化-->
-                            <Button Grid.Column="6" Click="Button_Click" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_MinSize,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                            <Button Grid.Column="6" Click="Button_Click" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_MinSize,Source={x:Static ex:SystemContext.LanguageProvider}}"
                         Style="{StaticResource btn_Minsize}"/>
                             <!--最大化和还原-->
-                            <ToggleButton Grid.Column="7" IsChecked="True" Margin="10 0 10 0" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_MinSize,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                            <ToggleButton Grid.Column="7" IsChecked="True" Margin="10 0 10 0" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_MinSize,Source={x:Static ex:SystemContext.LanguageProvider}}"
                         Style="{StaticResource tlbtn_MaxsizeAndNormal}"></ToggleButton>
                             <!--关闭-->
-                            <Button Grid.Column="8" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_Close,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" Command="{Binding ShutdownProgramCommand.ViewExecuteCmd}"
+                            <Button Grid.Column="8" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_Close,Source={x:Static ex:SystemContext.LanguageProvider}}" Command="{Binding ShutdownProgramCommand.ViewExecuteCmd}"
                         Style="{StaticResource btn_Close}"></Button>
                         </Grid>
                         <!--当前案例名-->
-                        <Grid Grid.Row="1" Margin="30 0 0 0" Height="66" Visibility="{Binding MainNavigation.IsShowCurCaseNameRow,Converter={StaticResource bTov},FallbackValue=Visible,Mode=TwoWay}" x:Name="gd_CaseName">
+                        <Grid Grid.Row="1" Margin="0 0 0 0" Height="56" Visibility="{Binding MainNavigation.IsShowCurCaseNameRow,Converter={StaticResource bTov},FallbackValue=Visible,Mode=TwoWay}" x:Name="gd_CaseName">
+                            <Grid.Effect>
+                                <DropShadowEffect Color="#181d3a" ShadowDepth="10" Direction="270" BlurRadius="20" Opacity="0.08"/>
+                            </Grid.Effect>
+                            <Grid.Background>
+                                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                    <GradientStop Color="#2c3b5e" Offset="0"/>
+                                    <GradientStop Color="#2c3a5c" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Grid.Background>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition Width="auto"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="66"/>
+                                <RowDefinition Height="56"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <!--案例展开按钮-->
                             <CheckBox x:Name="btn_Expand" Background="Transparent" 
-                                      IsChecked="true" Command="{Binding OpenCaseEditCommand}"
+                                      Command="{Binding OpenCaseEditCommand}"
                                       IsThreeState="False" Cursor="Hand">
                                 <CheckBox.Style>
                                     <Style TargetType="CheckBox">
@@ -330,13 +339,13 @@
                                         </Setter>
                                     </Style>
                                 </CheckBox.Style>
-                                <TextBlock Text="{Binding CurCaseName,FallbackValue=案例名称}" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                                <TextBlock Text="{Binding CurCaseName,FallbackValue=案例名称}" Margin="30 0 0 0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
                             </CheckBox>
                             <Button x:Name="btn_Export" IsEnabled="{Binding IsEnabled,ElementName=btn_Expand}" Grid.Column="1" Style="{StaticResource btn_TransparentBg}" Height="30" Width="90" 
-                        Content="{Binding XPath=ViewLanguage/View_MainWin_DataExport,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" Margin="10 0 10 0"
+                        Content="{Binding XPath=ViewLanguage/View_MainWin_DataExport,Source={x:Static ex:SystemContext.LanguageProvider}}" Margin="10 0 10 0"
                         Command="{Binding ExportCommand.ViewExecuteCmd}"/>
                             <Button x:Name="btn_CloseCase" IsEnabled="{Binding IsEnabled,ElementName=btn_Expand}" Grid.Column="2" Style="{StaticResource btn_Close}" 
-                        ToolTip="{Binding XPath=ViewLanguage/View_MainWin_ToolTipCloseCase,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" 
+                        ToolTip="{Binding XPath=ViewLanguage/View_MainWin_ToolTipCloseCase,Source={x:Static ex:SystemContext.LanguageProvider}}" 
                         Command="{Binding CloseCaseCommand.ViewExecuteCmd}"/>
                         </Grid>
                     </StackPanel>
@@ -366,15 +375,25 @@
                 </Grid.RowDefinitions>
                 <Rectangle Height="{Binding ActualHeight,ElementName=gd}"/>
                 <!--设备列表-->
-                <Grid Grid.Row="1" Height="56" Visibility="{Binding MainNavigation.IsShowDeviceListRow,Converter={StaticResource bTov},FallbackValue=Visible,Mode=TwoWay}"
+                <Grid Grid.Row="1" IsVisibleChanged="gd_Devices_IsVisibleChanged" Visibility="{Binding MainNavigation.IsShowDeviceListRow,Converter={StaticResource bTov},FallbackValue=Visible,Mode=TwoWay}"
                       x:Name="gd_Devices">
-                    <local:DeviceListView Visibility="Visible"/>
+                    <local:DeviceListView Height="56">
+                        <local:DeviceListView.Background>
+                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                <GradientStop Color="#2c3a5c" Offset="0"/>
+                                <GradientStop Color="#2b395b" Offset="1"/>
+                            </LinearGradientBrush>
+                        </local:DeviceListView.Background>
+                        <local:DeviceListView.Effect>
+                            <DropShadowEffect Color="#181d3a" ShadowDepth="10" Direction="270" BlurRadius="20" Opacity="0.08"/>
+                        </local:DeviceListView.Effect>
+                    </local:DeviceListView>
                 </Grid>
 
                 <Rectangle x:Name="rt" Grid.Row="2" RenderTransformOrigin="0.5,0.5">
                     <Rectangle.LayoutTransform>
                         <TransformGroup>
-                            <ScaleTransform ScaleX="1" ScaleY="0"/>
+                            <ScaleTransform ScaleX="1" ScaleY="1"/>
                             <SkewTransform/>
                             <RotateTransform/>
                             <TranslateTransform/>

@@ -6,20 +6,25 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
              xmlns:local="clr-namespace:XLY.SF.Project.DataDisplayView"
+                 xmlns:ctrl="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <Grid  Background="#182038">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="7*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="7*"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <!--数据过滤-->
+        <local:DataFilterControl Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Visibility="Collapsed"/>
+
         <!--数据列表-->
-        <TreeView x:Name="treeDataList" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding DataList}">
+        <TreeView x:Name="treeDataList" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding DataList}">
             <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding TreeNodes}">
                         <TextBlock Text="{Binding Text}"/>
@@ -31,13 +36,29 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </TreeView>
-        <GridSplitter Grid.RowSpan="2" VerticalAlignment="Stretch" Width="4"/>
+        <GridSplitter Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Stretch" Width="2" Background="Transparent"/>
 
         <!--自定义数据展示-->
-        <TabControl x:Name="contentView" Grid.Column="1" Grid.Row="0" ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}"/>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Height="4" VerticalAlignment="Bottom"/>
+        <ctrl:TabControlWithButton x:Name="contentView" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}" Style="{StaticResource TabControlWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithButtonStyle1}" CustomButtonAlignment="Right" IsHideHeaderWhenEmpty="True"></ctrl:TabControlWithButton>
+        <GridSplitter Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Height="2" VerticalAlignment="Bottom" Background="Transparent"/>
         
         <!--自定义数据预览-->
-        <ContentControl x:Name="contentPreview" Grid.Column="1" Grid.Row="1"/>
+        <!--<ContentControl x:Name="contentPreview" Grid.Column="1" Grid.Row="2"/>-->
+        <ctrl:TabControlWithButton x:Name="tabPreview" Grid.Column="1" Grid.Row="2" Style="{StaticResource TabControlWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithButtonStyle1}" CustomButtonAlignment="Right">
+            <ctrl:TabControlWithButton.CustomButtonGroup>
+                <Button x:Name="btnExpanded" Style="{StaticResource btn_GrayIcon}" Width="30" Height="24" Click="btnExpanded_Click">
+                    <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceHome_titleicon.png" Width="13" Height="13"/>
+                </Button>
+                <Button x:Name="btnCollpse" Style="{StaticResource btn_GrayIcon}" Width="30" Height="24" Click="btnCollpse_Click">
+                    <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceHome_titleicon.png" Width="13" Height="13"/>
+                </Button>
+            </ctrl:TabControlWithButton.CustomButtonGroup>
+
+            <TabItem Header="16进制">
+                <Button Width="32" Height="32" Visibility="Visible" Style="{StaticResource loadingControlStyle}"/>
+            </TabItem>
+            <TabItem Header="浏览">22222</TabItem>
+            <TabItem Header="浏览2">3333</TabItem>
+        </ctrl:TabControlWithButton>
     </Grid>
 </core:UcViewBase>

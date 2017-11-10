@@ -40,7 +40,7 @@ namespace XLY.SF.Project.DataReport
 
         private DataReportModulePluginInfo _module = null;
 
-        protected override void Initialize(DataReportPluginArgument arg, IAsyncProgress progress)
+        protected override void Initialize(DataReportPluginArgument arg, IAsyncTaskProgress progress)
         {
             DataReportPluginInfo plugin = (DataReportPluginInfo)PluginInfo;
             if (plugin.Modules.Count == 0)
@@ -55,17 +55,17 @@ namespace XLY.SF.Project.DataReport
             BaseUtility.Helper.FileHelper.CopyDirectory(_module.ZipTempDirectory, arg.ReportPath);      //拷贝模板文件目录
         }
 
-        protected override void ExportData(DataReportPluginArgument arg, IAsyncProgress progress)
+        protected override void ExportData(DataReportPluginArgument arg, IAsyncTaskProgress progress)
         {
             new DataSourceToJsonConverter().ConverterToJsonFile(arg, Path.Combine(arg.ReportPath, "data"));    //在data目录下生成json文件
         }
 
-        protected override void ExportFile(DataReportPluginArgument arg, IAsyncProgress progress)
+        protected override void ExportFile(DataReportPluginArgument arg, IAsyncTaskProgress progress)
         {
 
         }
 
-        protected override string ExportCompleted(DataReportPluginArgument arg, IAsyncProgress progress)
+        protected override string ExportCompleted(DataReportPluginArgument arg, IAsyncTaskProgress progress)
         {
             return Path.Combine(arg.ReportPath, _module.MainFile ?? "");
         }

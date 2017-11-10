@@ -91,6 +91,7 @@ namespace XLY.SF.Project.Devices
             }
         }
 
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public override void DoSelfPretection()
         {
             AndroidDeviceHelper.StopADB();
@@ -109,7 +110,7 @@ namespace XLY.SF.Project.Devices
                 devices = FindCurConnectDevices();
 
                 iRestartAttemptCount++;
-                if (null == devices && iRestartAttemptCount > ConstCodeHelper.MONITOR_ATTEMPTCOUNT)
+                if (null == devices && iRestartAttemptCount >= ConstCodeHelper.MONITOR_ATTEMPTCOUNT)
                 {//如果多次查找都返回null 说明adb连接失败 考虑重启ADB服务
                     AndroidDeviceHelper.StopADB();
                     AndroidDeviceHelper.StartADB();

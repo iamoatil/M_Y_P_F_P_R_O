@@ -259,7 +259,7 @@ namespace XLY.SF.Project.ViewModels.Main
 
         private string ExecuteExportCommand()
         {
-            base.NavigationForMainWindow(ExportKeys.DeviceHomePageView);
+            base.NavigationForMainWindow(ExportKeys.DeviceMainView);
             return "导出案例";
         }
 
@@ -268,7 +268,7 @@ namespace XLY.SF.Project.ViewModels.Main
         {
             SysCommonMsgArgs<string> args = new SysCommonMsgArgs<string>(SystemKeys.ShutdownProgram);
             base.MessageAggregation.SendSysMsg(args);
-            return LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ViewLanguage_View_MainWin_OpLogShutdown);
+            return SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_MainWin_OpLogShutdown];
         }
 
         //关闭按钮
@@ -277,7 +277,7 @@ namespace XLY.SF.Project.ViewModels.Main
             string tmpCaseName = SystemContext.Instance.CurrentCase?.Name;
             SystemContext.Instance.CurrentCase = null;
             base.NavigationForMainWindow(ExportKeys.HomePageView);
-            return string.Format("{0}{1}", LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ViewLanguage_View_MainWin_ToolTipCloseCase), tmpCaseName);
+            return string.Format("{0}{1}", SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_MainWin_ToolTipCloseCase], tmpCaseName);
         }
 
         #endregion

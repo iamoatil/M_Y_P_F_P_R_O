@@ -23,11 +23,11 @@ namespace XLY.SF.Project.Plugin.Adapter.Loader
         public const string JS_EXT = ".js";
         public const string RELEASE_JS_EXT = ".pluginjs";
 
-        protected override void LoadPlugin(IAsyncProgress asyn)
+        protected override void LoadPlugin(IAsyncTaskProgress asyn)
         {
             List<IPlugin> pluginList = new List<IPlugin>();
 
-            string dir = SystemContext.Instance.CurLanguage == LanguageType.Cn ? FileHelper.GetPhysicalPath("\\Script\\cn")
+            string dir = LanguageManager.Current.Type == LanguageType.Cn ? FileHelper.GetPhysicalPath("\\Script\\cn")
                 : FileHelper.GetPhysicalPath("\\Script\\en");
             
             var res = System.Threading.Tasks.Parallel.ForEach(FileHelper.GetFiles(dir, new[] { JS_EXT, RELEASE_JS_EXT }), (s) =>

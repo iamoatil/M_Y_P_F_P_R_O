@@ -13,7 +13,7 @@ namespace XLY.SF.Framework.BaseUtility
         /// <summary>
         /// 转换为短整形数字
         /// </summary>
-        public static Byte ToSafeByte(this string value)
+        public static Byte ToSafeByte(this string value, Byte defaultValue = 0)
         {
             Byte result;
             if (Byte.TryParse(value, out result))
@@ -22,7 +22,7 @@ namespace XLY.SF.Framework.BaseUtility
             }
             else
             {
-                return 0;
+                return defaultValue;
             }
         }
         #endregion
@@ -46,11 +46,11 @@ namespace XLY.SF.Framework.BaseUtility
         /// <summary>
         /// 转换为短整形数字
         /// </summary>
-        public static Int16 ToSafeInt16(this string value)
+        public static Int16 ToSafeInt16(this string value, Int16 defaultValue = 0)
         {
             if (value.IsInvalid())
             {
-                return 0;
+                return defaultValue;
             }
 
             Int16 result;
@@ -60,7 +60,7 @@ namespace XLY.SF.Framework.BaseUtility
             }
             else
             {
-                return 0;
+                return defaultValue;
             }
         }
         #endregion
@@ -84,11 +84,11 @@ namespace XLY.SF.Framework.BaseUtility
         /// <summary>
         /// 转换为安全的Int32类型，默认为0
         /// </summary>
-        public static int ToSafeInt(this string value)
+        public static int ToSafeInt(this string value, int defaultValue = 0)
         {
             if (value.IsInvalid())
             {
-                return 0;
+                return defaultValue;
             }
 
             if (value.Contains(NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
@@ -102,7 +102,7 @@ namespace XLY.SF.Framework.BaseUtility
             }
             else
             {
-                return 0;
+                return defaultValue;
             }
         }
         #endregion
@@ -126,11 +126,11 @@ namespace XLY.SF.Framework.BaseUtility
         /// <summary>
         /// 转换为长整形数字
         /// </summary>
-        public static Int64 ToSafeInt64(this string value)
+        public static Int64 ToSafeInt64(this string value, Int64 defaultValue = 0)
         {
             if (value.IsInvalid())
             {
-                return 0;
+                return defaultValue;
             }
 
             if (value.Contains(NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
@@ -144,7 +144,7 @@ namespace XLY.SF.Framework.BaseUtility
             }
             else
             {
-                return 0;
+                return defaultValue;
             }
         }
 

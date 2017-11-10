@@ -4,6 +4,9 @@ using XLY.SF.Project.Models.Entities;
 
 namespace XLY.SF.Project.Models.Logical
 {
+    /// <summary>
+    /// 最近案例
+    /// </summary>
     public class RecentCaseEntityModel : LogicalModelBase<RecentCase>
     {
         #region Constructors
@@ -24,6 +27,9 @@ namespace XLY.SF.Project.Models.Logical
         [Required]
         public Int32 ID => Entity.ID;
 
+        /// <summary>
+        /// 案例ID 系统生成 保证唯一性
+        /// </summary>
         [Required]
         [StringLength(36)]
         public String CaseID
@@ -32,6 +38,9 @@ namespace XLY.SF.Project.Models.Logical
             set => Entity.CaseID = value;
         }
 
+        /// <summary>
+        /// 案例名称
+        /// </summary>
         [Required]
         [StringLength(100)]
         public String Name
@@ -40,6 +49,9 @@ namespace XLY.SF.Project.Models.Logical
             set => Entity.Name = value;
         }
 
+        /// <summary>
+        /// 案例编号
+        /// </summary>
         [Required]
         [StringLength(100)]
         public String Number
@@ -64,6 +76,9 @@ namespace XLY.SF.Project.Models.Logical
         //    set => Entity.Type = value;
         //}
 
+        /// <summary>
+        /// 创建时间
+        /// </summary>
         [Required]
         public DateTime Timestamp
         {
@@ -71,6 +86,9 @@ namespace XLY.SF.Project.Models.Logical
             set => Entity.Timestamp = value;
         }
 
+        /// <summary>
+        /// 最新打开时间
+        /// </summary>
         [Required]
         public DateTime LastOpenTime
         {
@@ -78,6 +96,9 @@ namespace XLY.SF.Project.Models.Logical
             set => Entity.LastOpenTime = value;
         }
 
+        /// <summary>
+        /// 案例CP文件路径
+        /// </summary>
         [Required]
         public String CaseProjectFile
         {

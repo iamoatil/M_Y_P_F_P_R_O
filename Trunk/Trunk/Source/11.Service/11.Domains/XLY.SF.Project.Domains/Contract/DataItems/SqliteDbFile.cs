@@ -11,6 +11,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
@@ -81,6 +82,10 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         public const string KeyColumnName = "XLYKey";
 
+
+        public const string MD5ColumnName = "MD5";
+        public const string BookmarkColumnName = "BookMarkId";
+
         /// <summary>
         /// Json数据列名
         /// 用户保存C#实体类对象的Json序列化字符串
@@ -96,6 +101,10 @@ namespace XLY.SF.Project.Domains
         /// 数据库连接字符串
         /// </summary>
         public string DbConnectionStr { get { return string.Format("Data Source='{0}'", DbFilePath); } }
+        /// <summary>
+        /// 书签数据库连接字符串
+        /// </summary>
+        public string DbBookmarkConnectionStr { get { return string.Format("Data Source='{0}'", DbFilePath.Insert(DbFilePath.LastIndexOf('.'), "_bmk")); } }
 
         [NonSerialized]
         private SQLiteTransaction _DbTransaction;
@@ -162,19 +171,22 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public string CreateTable<T>() where T : AbstractDataItem
+        public string CreateTable<T>(string defTableName = null) where T : AbstractDataItem
         {
             var dataType = typeof(T);
             var dataTypeName = dataType.FullName;
 
-            string tableName = string.Empty;
+            string tableName = defTableName;
             if (!TableNameCache.Keys.Contains(dataTypeName))
             {
                 lock (LockTableNameCache)
                 {
                     if (!TableNameCache.Keys.Contains(dataTypeName))
                     {
-                        tableName = GetTableName(dataTypeName);
+                        if (string.IsNullOrWhiteSpace(tableName))
+                            tableName = GetTableName(dataTypeName);
+                        else
+                            TableNameCache[dataTypeName] = tableName;
 
                         var disss = DisplayAttributeHelper.FindDisplayAttributes(typeof(T));
 
@@ -206,6 +218,8 @@ namespace XLY.SF.Project.Domains
                         sb.Append(");");
 
                         ExecuteNonQueryWithTransaction(sb.ToString());
+
+                        ExecuteNonQueryBookmark($"CREATE TABLE IF NOT EXISTS {tableName}({MD5ColumnName} CHAR(64) NOT NULL, {BookmarkColumnName} INTEGER, PRIMARY KEY (MD5));");
 
                         //创建索引，会降低插入数据的效率
                         //ExecuteNonQueryWithTran(string.Format("CREATE INDEX {0}_key_index on {0}({1}); ", tableName, s_KeyColumnName));
@@ -245,6 +259,8 @@ namespace XLY.SF.Project.Domains
 
             ExecuteNonQueryWithTransaction(sb.ToString());
 
+            ExecuteNonQueryBookmark($"CREATE TABLE IF NOT EXISTS {tableName}({MD5ColumnName} CHAR(64) NOT NULL, {BookmarkColumnName} INTEGER, PRIMARY KEY (MD5));");
+
             //创建索引，会降低插入数据的效率
             //ExecuteNonQueryWithTran(string.Format("CREATE INDEX {0}_key_index on {0}({1}); ", tableName, s_KeyColumnName));
 
@@ -281,6 +297,10 @@ namespace XLY.SF.Project.Domains
             sb.Append(");");
 
             ExecuteNonQueryWithTransaction(sb.ToString(), parameters.ToArray());
+
+            //添加属性监听事件，在修改其属性时自动更新数据库
+            obj.OnPropertyValueChangedEvent -= Update;     
+            obj.OnPropertyValueChangedEvent += Update;     
         }
 
         public void Add(JObject obj, string key, string tableName, IEnumerable<string> colunms)
@@ -307,6 +327,106 @@ namespace XLY.SF.Project.Domains
             ExecuteNonQueryWithTransaction(sb.ToString(), parameters.ToArray());
         }
 
+        private void Update(object obj, string propertyName, object propertyValue)
+        {
+            if (obj is AbstractDataItem item)
+            {
+                if(propertyName != BookmarkColumnName)
+                {
+                    Update(item);       
+                }
+                else
+                {
+                    UpdateBookmark(item);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 更新数据，使用MD5值作为主键来更新数据；
+        /// 此时MD5不能重新计算,而是在更新完成后自动计算
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        public void Update<T>(T obj) where T : AbstractDataItem
+        {
+            string oldMd5 = obj.MD5;        //使用旧的MD5值作为主键来更新数据
+            obj.Recalculate();      //计算新值，比如新的MD5
+            if(oldMd5 == obj.MD5)
+            {
+                return;
+            }
+            Type type = obj.GetType();
+            
+            var tableName = TableNameCache[type.FullName];
+            List<SQLiteParameter> parameters = new List<SQLiteParameter>();
+
+            var diss = DisplayAttributeHelper.FindDisplayAttributes(type);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendFormat("update {0} set ", tableName);
+            foreach (var dis in diss)
+            {
+                if (dis.Visibility != EnumDisplayVisibility.ShowInUI)
+                {
+                    sb.AppendFormat("{0} = @{0}, ", dis.Key);
+                    parameters.Add(new SQLiteParameter($"@{dis.Key}", System.Data.DbType.String) { Value = dis.GetValue(obj) });
+                }
+            }
+            sb.AppendFormat("{0} = @{0}", JsonColumnName);
+            parameters.Add(new SQLiteParameter($"@{JsonColumnName}", System.Data.DbType.String) { Value = Serializer.JsonSerilize(obj) });
+
+            //sb.AppendFormat(" where {0} = @{0}", MD5ColumnName);
+            //parameters.Add(new SQLiteParameter($"@{MD5ColumnName}", System.Data.DbType.String) { Value = oldMd5 });
+            sb.AppendFormat(" where {0} = '{1}' ", MD5ColumnName, oldMd5);
+            
+            ExecuteNonQueryWithTransaction(sb.ToString(), parameters.ToArray());
+        }
+
+        /// <summary>
+        /// 更新数据的书签，并保存到数据库中
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        public void UpdateBookmark<T>(T obj) where T : AbstractDataItem
+        {
+            ExecuteNonQueryBookmark($"REPLACE INTO {TableNameCache[obj.GetType().FullName]} ({BookmarkColumnName},{MD5ColumnName}) values ({obj.BookMarkId}, '{obj.MD5}');");
+        }
+
+        /// <summary>
+        /// 获取数据列表的书签状态
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="view"></param>
+        public void GetDataItemsBookmark<T>(IEnumerable<T> view) where T : AbstractDataItem
+        {
+            if (view == null || view.Count() == 0)
+            {
+                return;
+            }
+            StringBuilder sb = new StringBuilder(2048);     //数据每个分页约50行数据
+            sb.Append($"select * from {TableNameCache[view.First().GetType().FullName]} where {MD5ColumnName} in (");
+            foreach (var item in view)
+            {
+                sb.Append($"'{item.MD5}', ");
+            }
+            sb.Remove(sb.Length - 2, 2);
+            sb.Append(");");
+            var dt = ExecuteReaderBookmark(sb.ToString());
+            Dictionary<string, int> dicBmk = new Dictionary<string, int>();
+            foreach (DataRow row in dt.Rows)
+            {
+                dicBmk[row[MD5ColumnName].ToString()] = row[BookmarkColumnName].ToSafeString().ToSafeInt(-1);
+            }
+            foreach (var item in view)
+            {
+                item.BookMarkId = dicBmk.ContainsKey(item.MD5) ? dicBmk[item.MD5] : -1;
+
+                //添加属性监听事件，在修改其属性时自动更新数据库
+                item.OnPropertyValueChangedEvent -= Update;
+                item.OnPropertyValueChangedEvent += Update;
+            }
+        }
+
         [MethodImpl(MethodImplOptions.Synchronized)]
         public SQLiteTransaction BeginTransaction()
         {
@@ -326,7 +446,7 @@ namespace XLY.SF.Project.Domains
         {
             if (null != _DbTransaction)
             {
-                DbTransaction?.Commit();
+                DbTransaction.Commit();
                 DbTransaction = null;
             }
         }
@@ -337,6 +457,11 @@ namespace XLY.SF.Project.Domains
             TableNameCache.Add(dataTypeName, tableName);
 
             return tableName;
+        }
+
+        public void SetTableName(string dataTypeName, string tableName)
+        {
+            TableNameCache[dataTypeName] = tableName;
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
@@ -350,6 +475,46 @@ namespace XLY.SF.Project.Domains
                     com.Parameters.AddRange(parameters);
                 }
                 com.ExecuteNonQuery();
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        private void ExecuteNonQueryBookmark(string sql, params SQLiteParameter[] parameters)
+        {
+            using(SQLiteConnection con  = new SQLiteConnection(DbBookmarkConnectionStr))
+            {
+                con.Open();
+                using (var com = new SQLiteCommand(con))
+                {
+                    com.CommandText = sql;
+                    if (parameters.IsValid())
+                    {
+                        com.Parameters.AddRange(parameters);
+                    }
+                    com.ExecuteNonQuery();
+                }
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        private DataTable ExecuteReaderBookmark(string sql, params SQLiteParameter[] parameters)
+        {
+            using (SQLiteConnection con = new SQLiteConnection(DbBookmarkConnectionStr))
+            {
+                con.Open();
+                using (var com = new SQLiteCommand(con))
+                {
+                    com.CommandText = sql;
+                    if (parameters.IsValid())
+                    {
+                        com.Parameters.AddRange(parameters);
+                    }
+                    var reader = com.ExecuteReader();
+                    DataTable dt = new DataTable();
+                    dt.Load(reader);
+                    reader.Close();
+                    return dt;
+                }
             }
         }
     }

@@ -1,13 +1,9 @@
-﻿using ProjectExtend.Context;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using XLY.SF.Framework.BaseUtility;
-using XLY.SF.Framework.Core.Base;
 using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.Domains;
 
@@ -36,7 +32,7 @@ namespace XLY.SF.Project.Services
                 {
                     string filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Format(@"Config\PluginFeatureMathchConfig_{0}.xml", ostype));
 
-                    if (SystemContext.Instance.CurLanguage == LanguageType.En)
+                    if (Framework.Language.LanguageManager.Current.Type == Framework.Language.LanguageType.En)
                     {
                         filepath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, String.Format(@"Config\PluginFeatureMathchConfig_{0}_en.xml", ostype));
                     }

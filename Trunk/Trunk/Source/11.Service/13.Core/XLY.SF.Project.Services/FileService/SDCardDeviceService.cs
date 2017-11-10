@@ -14,7 +14,7 @@ namespace XLY.SF.Project.Services
     {
         #region Constructors
 
-        public SDCardDeviceService(IFileSystemDevice device, IAsyncProgress iAsyn) 
+        public SDCardDeviceService(IFileSystemDevice device, IAsyncTaskProgress iAsyn) 
             : base(device, iAsyn)
         {
         }

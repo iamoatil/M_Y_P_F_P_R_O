@@ -46,7 +46,7 @@ namespace XLY.SF.Project.CaseManagement
                 stream.Close();
                 return true;
             }
-            catch (FormatException ex)
+            catch (FormatException)
             {
                 return false;
             }

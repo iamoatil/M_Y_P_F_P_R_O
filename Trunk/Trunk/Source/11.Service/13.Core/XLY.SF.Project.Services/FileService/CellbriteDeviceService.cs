@@ -24,7 +24,7 @@ namespace XLY.SF.Project.Services
 
         #region Constructors
 
-        public CellbriteDeviceService(IFileSystemDevice device, IAsyncProgress iAsyn) 
+        public CellbriteDeviceService(IFileSystemDevice device, IAsyncTaskProgress iAsyn) 
             : base(device, iAsyn)
         {
         }

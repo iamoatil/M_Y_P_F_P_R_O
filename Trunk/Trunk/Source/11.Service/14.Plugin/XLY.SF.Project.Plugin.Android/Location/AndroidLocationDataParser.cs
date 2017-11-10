@@ -4,7 +4,7 @@ using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.Plugin.Android.Location
 {
-    [Export(PluginExportKeys.PluginKey, typeof(IPlugin))]
+    //[Export(PluginExportKeys.PluginKey, typeof(IPlugin))]
     public class AndroidLocationDataParser:AbstractDataParsePlugin
     {
         public override IPluginInfo PluginInfo { get; set; }
@@ -14,7 +14,7 @@ namespace XLY.SF.Project.Plugin.Android.Location
             PluginInfo = new DataParsePluginInfo();
         }
 
-        public override object Execute(object arg, IAsyncProgress progress)
+        public override object Execute(object arg, IAsyncTaskProgress progress)
         {
             return null;
         }

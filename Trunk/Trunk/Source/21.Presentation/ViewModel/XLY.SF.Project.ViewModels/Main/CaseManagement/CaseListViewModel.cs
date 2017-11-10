@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using ProjectExtend.Context;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Input;
@@ -30,6 +31,8 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         private readonly ProxyRelayCommandBase _selectAllCommandProxy;
 
+        private readonly ProxyRelayCommandBase _deleteBatchCommandProxy;
+
         #endregion
 
         #region Constructors
@@ -38,9 +41,10 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         {
             FilterArgs = new CaseFilterArgs();
             _openCommandProxy = new ProxyRelayCommand<RecentCaseEntityModel>(Open);
-            _deleteCommandProxy = new ProxyRelayCommand(Delete, CanDelete);
+            _deleteCommandProxy = new ProxyRelayCommand<CaseItem>(Delete);
             _searchCommandProxy = new ProxyRelayCommand(Search);
             _selectAllCommandProxy = new ProxyRelayCommand<Boolean>(SelectAll);
+            _deleteBatchCommandProxy = new ProxyRelayCommand(DeletBatch, CanDeleteBatch);
         }
 
         #endregion
@@ -49,8 +53,8 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         
         #region Items
 
-        private IEnumerable<CaseItem> _items;
-        public IEnumerable<CaseItem> Items
+        private ObservableCollection<CaseItem> _items;
+        public ObservableCollection<CaseItem> Items
         {
             get => _items;
             private set
@@ -65,6 +69,8 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         public CaseFilterArgs FilterArgs { get; }
 
         public ICommand OpenCommand => _openCommandProxy.ViewExecuteCmd;
+
+        public ICommand DeleteBatchCommand => _deleteBatchCommandProxy.ViewExecuteCmd;
 
         public ICommand DeleteCommand => _deleteCommandProxy.ViewExecuteCmd;
 
@@ -127,12 +133,29 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
             //PageCount = result.PageCount;
             var result = DbService.RecentCases.ToModels<RecentCase, RecentCaseEntityModel>().ToArray();
             Int32 index = 1;
-            Items = result.OrderByDescending(x=>x.Timestamp).Select(x => new CaseItem(x, index++)).ToArray();
+            var items = result.OrderByDescending(x=>x.Timestamp).Select(x => new CaseItem(x, index++)).ToArray();
+            Items = new ObservableCollection<CaseItem>(items);
         }
 
         #endregion
 
         #region Private
+
+        private String DeletBatch()
+        {
+            if (_items == null) return "案例列表为空";
+            var selected = _items.Where(x => x.IsChecked).ToArray();
+            Case @case = null;
+            foreach (CaseItem item in selected)
+            {
+                Items.Remove(item);
+                @case = Case.Open(item.CaseInfo.CaseProjectFile);
+                if (@case == null) continue;
+                @case.Delete();
+            }
+            DbService.RemoveRange(selected.Select(x => x.CaseInfo).ToArray());
+            return "删除选择的案例";
+        }
 
         private String Open(RecentCaseEntityModel caseInfo)
         {
@@ -151,28 +174,21 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
             }
             else
             {
-                MessageBox.ShowNoticeMsg(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ViewLanguage_View_CaseNotExist));
+                MessageBox.ShowNoticeMsg(SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_CaseNotExist]);
                 return $"打开案例[{currentCase.Name}]失败";
             }
         }
 
-        private String Delete()
+        private String Delete(CaseItem item)
         {
-            if (_items == null) return "案例列表为空";
-            var selected = _items.Where(x => x.IsChecked).ToArray();
-            Case @case = null;
-            foreach (CaseItem item in selected)
-            {
-                @case = Case.Open(item.CaseInfo.CaseProjectFile);
-                if (@case == null) continue;
-                @case.Delete();
-            }
-            DbService.RemoveRange(selected.Select(x=>x.CaseInfo).ToArray());
-            Items = _items.Except(selected).ToArray();
-            return "删除选择的案例";
+            Case @case = Case.Open(item.CaseInfo.CaseProjectFile);
+            @case?.Delete();
+            Items.Remove(item);
+            DbService.Remove(item.CaseInfo);
+            return "删除案例";
         }
 
-        private Boolean CanDelete()
+        private Boolean CanDeleteBatch()
         {
             if (_items == null) return false;
             return _items.Any(x => x.IsChecked);
@@ -220,7 +236,8 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
             }
             RecentCaseEntityModel[] models = result.OrderByDescending(y => y.Timestamp).ToModels<RecentCase, RecentCaseEntityModel>().ToArray();
             Int32 index = 1;
-            Items = models.Select(z => new CaseItem(z, index++));
+            var items = models.Select(z => new CaseItem(z, index++)).ToArray();
+            Items = new ObservableCollection<CaseItem>(items);
             return "查询案例";
         }
 

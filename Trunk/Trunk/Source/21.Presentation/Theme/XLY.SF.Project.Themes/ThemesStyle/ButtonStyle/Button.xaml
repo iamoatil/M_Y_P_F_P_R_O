@@ -1,6 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:XLY.SF.Project.Themes.ThemesStyle.ButtonStyle">
+                    xmlns:ee="http://schemas.microsoft.com/expression/2010/effects"
+                    xmlns:local="clr-namespace:XLY.SF.Project.Themes.CustromControl">
+
+    <BooleanToVisibilityConverter x:Key="bToV"/>
 
     <!--空Btn样式-->
     <ControlTemplate x:Key="btn_EmptyCT" TargetType="Button">
@@ -11,6 +14,17 @@
                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
         </Border>
     </ControlTemplate>
+    
+    <!--自定义控件-->
+
+
+
+
+
+
+
+
+
 
     <!--控件模版-->
     <!--首页按钮-->
@@ -66,7 +80,50 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+    <!--带图标的按钮【移入内容变色效果】-->
+    <ControlTemplate x:Key="btn_IconChangeColorCt" TargetType="local:IconButton">
+        <Border x:Name="br" CornerRadius="4" Background="{TemplateBinding Background}" BorderThickness="1" BorderBrush="{TemplateBinding Background}">
+            <Grid Margin="{TemplateBinding Padding}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Image x:Name="img_Icon" Source="{Binding Icon,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:IconButton}}"
+                                   Width="{Binding IconWidth,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:IconButton}}"
+                                   Height="{Binding IconHeight,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:IconButton}}"
+                                   Margin="{Binding IconPadding,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:IconButton}}"/>
+                <ContentPresenter x:Name="cp" Grid.Column="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="#657192" TargetName="br"/>
+                <Setter Property="Effect" TargetName="img_Icon">
+                    <Setter.Value>
+                        <ee:EmbossedEffect Color="White"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Effect" TargetName="cp">
+                    <Setter.Value>
+                        <ee:EmbossedEffect Color="White"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <!--样式-->
     <!--主界面最小化-->
     <Style x:Key="btn_Minsize" TargetType="Button">
@@ -130,9 +187,9 @@
     <Style x:Key="btn_DeviceSelect"
            TargetType="{x:Type Button}">
         <Setter Property="Background"
-                Value="#41aaeb" />
+                Value="#29b9be" />
         <Setter Property="Border.CornerRadius"
-                Value="16" />
+                Value="5" />
         <Setter Property="Foreground"
                 Value="White" />
         <Setter Property="FontSize"
@@ -148,21 +205,35 @@
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="{TemplateBinding Border.CornerRadius}">
-                        <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                        <StackPanel Orientation="Horizontal">
+                            <Image Margin="15,0,0,0" x:Name="img" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceList_SelectPressed.png" Width="16" Height="18"></Image>
+                            <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          Margin="20,3,20,3"/>
+                                          Margin="10,3,20,3"/>
+                        </StackPanel>
+
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" Value="#28cbcd"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Source" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceList_Select.png" TargetName="img"></Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
     </Style>
     <!--首页导出按钮-->
     <Style x:Key="btn_TransparentBg" TargetType="Button">
         <Setter Property="Template" Value="{StaticResource btn_EmptyCT}"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="#c8cdd7"/>
         <Setter Property="Foreground" Value="#c8cdd7"/>
-        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontSize" Value="14"/>
         <Setter Property="Border.CornerRadius" Value="5"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="true">

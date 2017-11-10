@@ -25,13 +25,13 @@ namespace XLY.SF.Project.DataMirror
         /// </summary>
         /// <param name="mirror"></param>
         /// <param name="asyn"></param>
-        public abstract void Execute(Mirror mirror, IAsyncProgress asyn);
+        public abstract void Execute(Mirror mirror, IAsyncTaskProgress asyn);
 
         /// <summary>
         /// 停止
         /// </summary>
         /// <param name="asyn"></param>
-        public abstract void Stop(IAsyncProgress asyn);
+        public abstract void Stop(IAsyncTaskProgress asyn);
 
         /// <summary>
         /// 是否可以暂停
@@ -50,7 +50,7 @@ namespace XLY.SF.Project.DataMirror
         /// 暂停
         /// </summary>
         /// <param name="asyn"></param>
-        public virtual void Suspend(IAsyncProgress asyn)
+        public virtual void Suspend(IAsyncTaskProgress asyn)
         {
             throw new NotImplementedException();
         }
@@ -59,7 +59,7 @@ namespace XLY.SF.Project.DataMirror
         /// 继续
         /// </summary>
         /// <param name="asyn"></param>
-        public virtual void Continue(IAsyncProgress asyn)
+        public virtual void Continue(IAsyncTaskProgress asyn)
         {
             throw new NotImplementedException();
         }

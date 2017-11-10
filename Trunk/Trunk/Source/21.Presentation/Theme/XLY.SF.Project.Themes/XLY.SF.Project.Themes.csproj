@@ -75,12 +75,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converter\AdditionConverter.cs" />
+    <Compile Include="Converter\EnumDataStateToImageSourceConverter.cs" />
     <Compile Include="CustromControl\ComboBox\ComboBoxEx.cs" />
     <Compile Include="Converter\ImageContentToBoolConverter.cs" />
     <Compile Include="Converter\SubtractionConverter.cs" />
     <Compile Include="CustromControl\DeviceSelectControl\DeviceSelectControl.cs" />
     <Compile Include="CustromControl\DeviceSelectControl\DeviceSelectItemControl.cs" />
     <Compile Include="CustromControl\ComboBox\MenuButton.cs" />
+    <Compile Include="CustromControl\CheckBox\IconCheckBox.cs" />
+    <Compile Include="CustromControl\CheckBox\MenuRadioButton.cs" />
+    <Compile Include="CustromControl\Button\IconButton.cs" />
+    <Compile Include="CustromControl\ToggleButton\IconRadioButton.cs" />
+    <Compile Include="CustromControl\TabControl\TabControlWithButton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -96,7 +102,7 @@
     </Compile>
     <Compile Include="CustromControl\Window\WindowEx.cs" />
     <Compile Include="CustromControl\TextBox\TextBoxEx.cs" />
-    <Compile Include="ThemesConverter\BooleanToCollapseConverter.cs" />
+    <Compile Include="Converter\BooleanToCollapseConverter.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -106,7 +112,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <Resource Include="Resources\IMPACT.TTF" />
+    <Resource Include="Resources\Oswald-Bold.otf" />
+    <Resource Include="Resources\Oswald-Light.otf" />
+    <Resource Include="Resources\Oswald-Regular.otf" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="BaseThemes.xaml">
@@ -137,7 +145,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="ThemesStyle\Listbox\ListboxItemStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ThemesStyle\ScrollViewerStyle\ScrollViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ThemesStyle\TabControlStyle\TabControlWithButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ThemesStyle\TextBoxStyle\TextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ThemesStyle\ToggleButtonStyle\CheckBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ThemesStyle\ToggleButtonStyle\RadioButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -276,6 +304,39 @@
       <Project>{95c796fd-57f1-4d2e-927f-4e34ea75e319}</Project>
       <Name>XLY.SF.Framework.Language</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\CaseCreation_Path.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\CaseCreation_Set.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\DeviceList_SelectPressed.png" />
+    <Resource Include="Resources\Images\DeviceList_Select.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\DevHomePageIcon.png" />
+    <Resource Include="Resources\Images\Icons\DevHomePageIsRootIcon.png" />
+    <Resource Include="Resources\Images\Icons\DevHomePageConnectIcon.png" />
+    <Resource Include="Resources\Images\Icons\DevHomePageResultIcon.png" />
+    <Resource Include="Resources\Images\Icons\DevHomePageFileViewIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\DevHomePageWarningIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\DevHomePageEditIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CustromControl\ProgressBar\" />
+    <Folder Include="ThemesStyle\ProgressBarStyle\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\ArrowIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\DevHomePageText.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

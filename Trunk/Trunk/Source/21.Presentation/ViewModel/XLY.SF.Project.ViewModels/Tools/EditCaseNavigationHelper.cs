@@ -36,9 +36,31 @@ namespace XLY.SF.Project.ViewModels.Tools
             sysArgs.Parameters = curStatus;
             MsgAggregation.Instance.SendSysMsg<SubViewMsgModel>(sysArgs);
 
-            NavigationArgs args = new NavigationArgs(ExportKeys.CaseCreationView, null);
-            MsgAggregation.Instance.SendNavigationMsgForMainView(args);
+            if (isExpanded)
+            {
+                //展开案例编辑界面
+                NavigationArgs args = new NavigationArgs(ExportKeys.CaseCreationView, null);
+                MsgAggregation.Instance.SendNavigationMsgForMainView(args);
+            }
+            else
+            {
+                //折叠，还原为上个界面
+                var beforeViewKey = NavigationArgs.GetBeforeViewKeyBySkipKey(ExportKeys.CaseCreationView);
+                if (!string.IsNullOrWhiteSpace(beforeViewKey))
+                {
+                    NavigationArgs args = new NavigationArgs(NavigationArgs.GetBeforeViewKeyBySkipKey(ExportKeys.CaseCreationView), null);
+                    MsgAggregation.Instance.SendNavigationMsgForMainView(args);
+                }
+            }
             CurEditViewOpenStatus = isExpanded;
+        }
+
+        /// <summary>
+        /// 重置当前案例界面状态【折叠】
+        /// </summary>
+        public static void ResetCurCaseStatus()
+        {
+            CurEditViewOpenStatus = false;
         }
     }
 }

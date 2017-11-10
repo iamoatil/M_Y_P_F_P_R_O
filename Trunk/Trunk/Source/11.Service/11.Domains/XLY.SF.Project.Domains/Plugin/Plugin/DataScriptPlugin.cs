@@ -21,7 +21,7 @@ namespace XLY.SF.Project.Domains
     {
         public override IPluginInfo PluginInfo { get; set; }
 
-        public override object Execute(object arg, IAsyncProgress progress)
+        public override object Execute(object arg, IAsyncTaskProgress progress)
         {
             var context = GetContext();
             if(context == null)

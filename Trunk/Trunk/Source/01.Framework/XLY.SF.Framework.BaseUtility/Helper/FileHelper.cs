@@ -914,7 +914,7 @@ namespace XLY.SF.Project.BaseUtility.Helper
                     }
                 }
             }
-            catch (Exception e)
+            catch 
             {
                 throw;
             }

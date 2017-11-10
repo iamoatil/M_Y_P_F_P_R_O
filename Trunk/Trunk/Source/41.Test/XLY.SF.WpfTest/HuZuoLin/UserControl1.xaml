@@ -6,34 +6,16 @@
              xmlns:local="clr-namespace:XLY.SF.WpfTest.HuZuoLin"
              xmlns:control="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Width="525" Height="600">
+             d:DesignHeight="300" d:DesignWidth="300" Width="525" Height="600" Background="Black">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-        
+
     </UserControl.Resources>
     <Grid>
-        <StackPanel>
-            <control:ComboBoxEx Width="350" IsEnabled="True" Title="测试文字" Height="60" Text="asdflkj " IsEditable="True">
-                <ComboBoxItem Content="测试1"/>
-                <ComboBoxItem Content="测试2"/>
-                <ComboBoxItem Content="测试3"/>
-                <ComboBoxItem Content="测试4"/>
-                <ComboBoxItem Content="测试5"/>
-                <ComboBoxItem Content="测试6"/>
-            </control:ComboBoxEx>
-            <control:ComboBoxEx Width="350" IsEnabled="True" SelectedIndex="2" Title="测试文字" Height="60" Text="asdflkj ">
-                <ComboBoxItem Content="测试1"/>
-                <ComboBoxItem Content="测试2"/>
-                <ComboBoxItem Content="测试3"/>
-                <ComboBoxItem Content="测试4"/>
-                <ComboBoxItem Content="测试5"/>
-                <ComboBoxItem Content="测试6"/>
-            </control:ComboBoxEx>
-            <control:TextBoxEx Width="350" Height="60" Title="测试" Text="adf6540as654df"/>
-        </StackPanel>
+        <CheckBox VerticalAlignment="Center" HorizontalAlignment="Center" Content="测试"  IsThreeState="True"/>
     </Grid>
 </UserControl>

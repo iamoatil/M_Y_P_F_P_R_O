@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Reflection;
+using System.Resources;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using XLY.SF.Framework.Language;
 using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.Models.Logical;
 using XLY.SF.Project.ViewDomain.Model;
@@ -190,6 +193,6 @@ namespace ProjectExtend.Context
             }
         }
 
-        #endregion        
+        #endregion
     }
 }

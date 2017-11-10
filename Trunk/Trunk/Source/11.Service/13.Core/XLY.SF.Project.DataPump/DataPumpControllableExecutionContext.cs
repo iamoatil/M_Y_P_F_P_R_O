@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using XLY.SF.Framework.Core.Base.CoreInterface;
+using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.DataPump
@@ -20,10 +21,9 @@ namespace XLY.SF.Project.DataPump
         /// 初始化类型 XLY.SF.Project.DataPump.DataPumpControllableExecutionContext 实例。
         /// </summary>
         /// <param name="metadata">对任务进行描述的元数据。</param>
-        /// <param name="targetDirectory">数据保存目录。</param>
         /// <param name="source">数据源。如果不需要数据源则设置为null。</param>
-        internal DataPumpControllableExecutionContext(Pump metadata, String targetDirectory, SourceFileItem source)
-            : base(metadata, targetDirectory, source)
+        internal DataPumpControllableExecutionContext(Pump metadata, SourceFileItem source)
+            : base(metadata, source)
         {
         }
 
@@ -33,10 +33,9 @@ namespace XLY.SF.Project.DataPump
         /// 为了保持兼容提供此方法，强烈建议不要使用此构造器，因为它的Source属性不安全。
         /// </summary>
         /// <param name="metadata">对任务进行描述的元数据。</param>
-        /// <param name="targetDirectory">数据保存目录。</param>
         [Obsolete("在以后的版本中会移除该方法")]
-        internal DataPumpControllableExecutionContext(Pump metadata, String targetDirectory)
-            : base(metadata, targetDirectory)
+        internal DataPumpControllableExecutionContext(Pump metadata)
+            : base(metadata)
         {
         }
 
@@ -47,7 +46,7 @@ namespace XLY.SF.Project.DataPump
         /// <summary>
         /// 用于异步通知的报告器。
         /// </summary>
-        public IAsyncProgress Reporter { get; set; }
+        public MultiTaskReportBase Reporter { get; set; }
         
         /// <summary>
         /// 执行取消操作所等待的最大时间间隔。默认为null表示一直等待。
@@ -57,7 +56,7 @@ namespace XLY.SF.Project.DataPump
         /// <summary>
         /// 与上下文关联的任务的当前状态。
         /// </summary>
-        public AsyncProgressState Status => Reporter?.State ?? AsyncProgressState.Idle;
+        public TaskState Status => Reporter?.State ?? TaskState.Idle;
 
         #region CancellationTokenSource
 
@@ -100,7 +99,7 @@ namespace XLY.SF.Project.DataPump
         {
             _cancellationTokenSource.Dispose();
             _cancellationTokenSource = null;
-            Reporter.State = AsyncProgressState.Idle;
+            Reporter.Reset();
         }
 
         #endregion

@@ -25,7 +25,7 @@ namespace XLY.SF.Project.Services
         /// </summary>
         /// <param name="device"></param>
         /// <param name="iAsyn"></param>
-        public MirrorDeviceService(IFileSystemDevice device, IAsyncProgress iAsyn)
+        public MirrorDeviceService(IFileSystemDevice device, IAsyncTaskProgress iAsyn)
             : base(device, iAsyn)
         {
 
@@ -53,7 +53,7 @@ namespace XLY.SF.Project.Services
         {
             try
             {
-                Asyn?.Advance(1, LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.FileServiceLanguage_File_JiaZaiXiTongFenQuLieBiao));
+                //Asyn?.Advance(1, LanguageManager.Current[Languagekeys.FileServiceLanguage_File_JiaZaiXiTongFenQuLieBiao]);
 
                 var rootTable = new DSK_PART_TABLE();
                 var result = FileServiceCoreDll.GetMirrorFilePartitions(ref rootTable, Device.Source.ToString());

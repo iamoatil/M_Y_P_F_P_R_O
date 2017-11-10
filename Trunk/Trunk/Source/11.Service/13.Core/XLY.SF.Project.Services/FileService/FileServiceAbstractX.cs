@@ -44,7 +44,7 @@ namespace XLY.SF.Project.Services
         /// <summary>
         /// 消息通知
         /// </summary>
-        public IAsyncProgress Asyn { get; private set; }
+        public IAsyncTaskProgress Asyn { get; private set; }
 
         /// <summary>
         /// 设备数据
@@ -71,7 +71,7 @@ namespace XLY.SF.Project.Services
         /// </summary>
         /// <param name="device">当前处理的设备</param>
         /// <param name="iAsyn">异步消息通知</param>
-        protected FileServiceAbstractX(IFileSystemDevice device, IAsyncProgress iAsyn)
+        protected FileServiceAbstractX(IFileSystemDevice device, IAsyncTaskProgress iAsyn)
         {
             Asyn = iAsyn;
             Device = device;
@@ -181,7 +181,7 @@ namespace XLY.SF.Project.Services
             foreach (var part in Device.Parts)
             {
                 RunPartition = part;
-                Asyn?.Advance(1 / count, string.Format(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.FileServiceLanguage_File_ZuZhuangFenQuDeWenJianXiTongSh), RunPartition.Name));
+                //Asyn?.Advance(1 / count, string.Format(LanguageManager.Current[Languagekeys.FileServiceLanguage_File_ZuZhuangFenQuDeWenJianXiTongSh], RunPartition.Name));
                 MountDevice();
                 var tree = ScanFileSystem(Device, RunPartition);
                 if (tree == null)
@@ -196,7 +196,7 @@ namespace XLY.SF.Project.Services
                 }
             }
             LoggerManagerSingle.Instance.Info(string.Format("扫描文件系统结束, 得到文件/文件夹数:{0}", AllFileNodeX.Count));
-            Asyn?.Advance(1, LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.FileServiceLanguage_File_WenJianXiTongZuZhuangWanBi));
+            //Asyn?.Advance(1, LanguageManager.Current[Languagekeys.FileServiceLanguage_File_WenJianXiTongZuZhuangWanBi]);
             return fileTree;
         }
 
@@ -288,7 +288,7 @@ namespace XLY.SF.Project.Services
                 if (link.disk_part_info.file_system != 0x00)
                 {
                     var partition = new FileSystemPartition();
-                    partition.Name = LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.FileServiceLanguage_File_FenQu) + ++index;
+                    partition.Name = LanguageManager.Current[Languagekeys.FileServiceLanguage_File_FenQu] + ++index;
                     partition.VolName = link.disk_part_info.vol_name == "userdata" ? "data" : link.disk_part_info.vol_name;
                     partition.FileSystem = link.disk_part_info.file_system;
                     partition.SerialNumber = String.Format("{0:X}", link.disk_part_info.serial_num);
@@ -717,7 +717,7 @@ namespace XLY.SF.Project.Services
 
             RecoveryFile(file, path);
 
-            Asyn?.Advance(0, string.Format(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.FileServiceLanguage_File_WenJianHuiFuChengGong), file.FullPath.TrimEnd(@"\")));
+            //Asyn?.Advance(0, string.Format(LanguageManager.Current[Languagekeys.FileServiceLanguage_File_WenJianHuiFuChengGong], file.FullPath.TrimEnd(@"\")));
 
             var creatime = BaseTypeExtension.ToSafeDateTime(file.Source.CreateTime);
             if (creatime != null)

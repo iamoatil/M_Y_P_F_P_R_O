@@ -94,6 +94,8 @@ namespace XLY.SF.Project.Domains
         public bool IsIncludeInTotal { get; set; } = true;
 
         private int _total = -1;
+
+        [Newtonsoft.Json.JsonIgnore]
         public int Total
         {
             get

@@ -45,23 +45,19 @@ namespace XLY.SF.Project.DataMirrorApp
                 _deviceHandle = AndroidMirrorAPI.OpenDevice(deviceSerialnumber);
                 if (IntPtr.Zero == _deviceHandle)
                 {
-                    Console.WriteLine(string.Format("安卓手机镜像出错！OpenDevice失败，设备ID:{0}", deviceSerialnumber));
-                    _haveErrors = true;
+                    Exception(string.Format("安卓手机镜像出错！OpenDevice失败，设备ID:{0}", deviceSerialnumber));
                     return;
                 }
                 var result = AndroidMirrorAPI.Initialize(_deviceHandle, 61440, (IntPtr)isHtc);
                 if (0 != result)
                 {
-                    Console.WriteLine(string.Format("安卓手机镜像出错！Initialize失败，设备ID:{0} 错误码:{1}", deviceSerialnumber, result));
-                    _haveErrors = true;
+                    Exception(string.Format("安卓手机镜像出错！Initialize失败，设备ID:{0} 错误码:{1}", deviceSerialnumber, result));
                     return;
                 }
             }
             catch (Exception ex)
             {
-                MirrorFile.Close();
-                Console.WriteLine(string.Format("安卓手机镜像出错！设备ID:{0} {1}", deviceSerialnumber, ex));
-                _haveErrors = true;
+                Exception(string.Format("安卓手机镜像出错！设备ID:{0} {1}", deviceSerialnumber, ex));
             }            
         }
 
@@ -72,9 +68,7 @@ namespace XLY.SF.Project.DataMirrorApp
                 var result = AndroidMirrorAPI.ImageDataZone(_deviceHandle, block, 0, -1,ImageDataCallBack);
                 if (0 != result)
                 {
-                    Stop("Exception");
-                    Console.WriteLine(string.Format("安卓手机镜像出错！ImageDataZone失败，设备ID:{0} 错误码:{1}", _deviceSerialnumber, result));
-                    _haveErrors = true;
+                    Exception(string.Format("安卓手机镜像出错！ImageDataZone失败，设备ID:{0} 错误码:{1}", _deviceSerialnumber, result));
                     return;
                 }
                 Stop("Success");
@@ -85,6 +79,13 @@ namespace XLY.SF.Project.DataMirrorApp
         {
             MirrorFile.Close();
             Console.WriteLine("Operate|Stop|"+ msg);
+        }
+
+        private void Exception(string msg)
+        {
+            MirrorFile.Close();
+            Console.WriteLine("Exception|" + msg);
+            _haveErrors = true;
         }
 
         private int ImageDataCallBack(IntPtr data, int datasize, ref int stop)

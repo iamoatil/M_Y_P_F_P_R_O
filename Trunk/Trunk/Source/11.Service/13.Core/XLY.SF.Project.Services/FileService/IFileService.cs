@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XLY.SF.Framework.Core.Base.CoreInterface;
+using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.Services
@@ -47,7 +48,7 @@ namespace XLY.SF.Project.Services
         /// <param name="device">设备</param>
         /// <param name="iAsync">异步消息</param>
         /// <returns></returns>
-        FNodeX GetFileSystem(IFileSystemDevice device, IAsyncProgress iAsync);
+        FNodeX GetFileSystem(IFileSystemDevice device, SingleTaskReportBase iAsync);
 
         /// <summary>
         /// 获取用户数据分区文件列表

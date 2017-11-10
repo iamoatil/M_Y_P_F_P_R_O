@@ -8,6 +8,7 @@ using XLY.SF.Framework.Core.Base.MefIoc;
 using XLY.SF.Framework.Core.Base;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Models;
+using XLY.SF.Framework.Language;
 
 /*
  * 创建人：Bob
@@ -46,6 +47,16 @@ namespace ProjectExtend.Context
         private volatile static SystemContext _instance;
 
         private static object _objLock = new object();
+
+        static SystemContext()
+        {
+            LanguageManager lm = LanguageManager.Current;
+            lm.Switched += (a, b) => LanguageProvider.Document = LanguageManager.Document;
+            LanguageManager = lm;
+#if DEBUG
+            LanguageManager.SwitchAll(LanguageType.Cn);
+#endif
+        }
 
         private SystemContext()
         {

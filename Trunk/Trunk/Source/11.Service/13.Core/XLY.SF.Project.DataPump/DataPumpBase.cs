@@ -31,12 +31,11 @@ namespace XLY.SF.Project.DataPump
         /// 创建执行数据泵时所需的上下文对象。
         /// </summary>
         /// <param name="metadata">元数据。</param>
-        /// <param name="targetDirectory">数据保存目录。</param>
         /// <param name="source">数据源。</param>
         /// <returns>执行上下文。</returns>
-        public virtual DataPumpExecutionContext CreateContext(Pump metadata, String targetDirectory, SourceFileItem source)
+        public virtual DataPumpExecutionContext CreateContext(Pump metadata, SourceFileItem source)
         {
-            return new DataPumpExecutionContext(metadata, targetDirectory, source) { Owner = this };
+            return new DataPumpExecutionContext(metadata, source) { Owner = this };
         }
 
         /// <summary>

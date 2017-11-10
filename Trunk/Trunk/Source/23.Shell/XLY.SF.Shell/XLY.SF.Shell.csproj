@@ -91,7 +91,7 @@
     </Compile>
     <Compile Include="NavigationManager\WindowNavigationHelper.cs" />
     <Compile Include="NavigationManager\WindowHelper.cs" />
-    <Compile Include="SelectService\ConcreateSelectService.cs" />
+    <Compile Include="DialogWindowService\ConcreateDialogWindowtService.cs" />
     <Compile Include="Shell.xaml.cs">
       <DependentUpon>Shell.xaml</DependentUpon>
     </Compile>

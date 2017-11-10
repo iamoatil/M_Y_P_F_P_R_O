@@ -26,7 +26,7 @@ namespace XLY.SF.Project.DataReport
         {
         }
 
-        public object Execute(object arg, IAsyncProgress progress)
+        public object Execute(object arg, IAsyncTaskProgress progress)
         {
             var p = arg as DataReportPluginArgument;
             Initialize(p, progress);
@@ -40,25 +40,25 @@ namespace XLY.SF.Project.DataReport
         /// </summary>
         /// <param name="arg"></param>
         /// <param name="progress"></param>
-        protected virtual void Initialize(DataReportPluginArgument arg, IAsyncProgress progress) { }
+        protected virtual void Initialize(DataReportPluginArgument arg, IAsyncTaskProgress progress) { }
         /// <summary>
         /// 导出数据
         /// </summary>
         /// <param name="arg"></param>
         /// <param name="progress"></param>
-        protected virtual void ExportData(DataReportPluginArgument arg, IAsyncProgress progress) { }
+        protected virtual void ExportData(DataReportPluginArgument arg, IAsyncTaskProgress progress) { }
         /// <summary>
         /// 导出文件
         /// </summary>
         /// <param name="arg"></param>
         /// <param name="progress"></param>
-        protected virtual void ExportFile(DataReportPluginArgument arg, IAsyncProgress progress) { }
+        protected virtual void ExportFile(DataReportPluginArgument arg, IAsyncTaskProgress progress) { }
         /// <summary>
         /// 导出完成，返回导出后的文件或文件夹路径
         /// </summary>
         /// <param name="arg"></param>
         /// <param name="progress"></param>
-        protected virtual string ExportCompleted(DataReportPluginArgument arg, IAsyncProgress progress)
+        protected virtual string ExportCompleted(DataReportPluginArgument arg, IAsyncTaskProgress progress)
         {
             return null;
         }

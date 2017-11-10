@@ -9,6 +9,7 @@ using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using ProjectExtend.Context;
+using XLY.SF.Project.ViewModels.Tools;
 
 
 /*************************************************
@@ -26,83 +27,23 @@ namespace XLY.SF.Project.ViewModels.Main
         public MainNavigationManager()
         {
             SystemContext.Instance.CaseChanged += Instance_CaseChanged;
-
-            ////注册主界面导航消息
-            //MsgAggregation.Instance.RegisterNaviagtionMsg(this, SystemKeys.MainUcNavigation, MainNavigationCallback);
-
-            ////获取附属界面【创建案例界面】
-            //var caseCreationView = IocManagerSingle.Instance.GetViewPart(ExportKeys.CaseCreationView);
-            //caseCreationView.DataSource.LoadViewModel();
-            //SubView = caseCreationView;
         }
 
-        #region 当前界面显示的内容
-
-        //private object _curMainView;
-        ///// <summary>
-        ///// 当前显示的视图
-        ///// </summary>
-        //public object CurMainView
-        //{
-        //    get { return _curMainView; }
-        //    set
-        //    {
-        //        _curMainView = value;
-        //        base.OnPropertyChanged();
-        //    }
-        //}
-
-        #endregion
-
-        //#region 附属界面【目前只有创建案例界面】
-
-        //private object _subView;
-        ///// <summary>
-        ///// 附属界面
-        ///// </summary>
-        //public object SubView
-        //{
-        //    get
-        //    {
-        //        return this._subView;
-        //    }
-
-        //    set
-        //    {
-        //        this._subView = value;
-        //        base.OnPropertyChanged();
-        //    }
-        //}
-
-        //#endregion
-
         #region 主界面导航
-
-        ////主界面导航回调
-        //private void MainNavigationCallback(NavigationArgs args)
-        //{
-        //    CurMainView = args.TargetView;
-        //}
 
         private void Instance_CaseChanged(object sender, PropertyChangedEventArgs<Project.CaseManagement.Case> e)
         {
             if (e.NewValue == null)
-                CollapsedCaseNameRow();
+            {
+                IsShowCurCaseNameRow = false;
+                IsShowDeviceListRow = false;
+                EditCaseNavigationHelper.ResetCurCaseStatus();
+            }
             else
             {
                 IsShowDeviceListRow = true;
                 IsShowCurCaseNameRow = true;
             }
-        }
-
-        /// <summary>
-        /// 影藏案例名称行
-        /// </summary>
-        private void CollapsedCaseNameRow()
-        {
-            IsShowCurCaseNameRow = false;
-            IsShowDeviceListRow = false;
-            SystemContext.Instance.CurrentCase = null;
         }
 
         #endregion

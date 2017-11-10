@@ -44,5 +44,15 @@ namespace XLY.SF.Project.DataDisplayView
                 this.DataContext = value;
             }
         }
+
+        private void btnExpanded_Click(object sender, RoutedEventArgs e)
+        {
+            tabPreview.Height = this.ActualHeight * 0.5;
+        }
+
+        private void btnCollpse_Click(object sender, RoutedEventArgs e)
+        {
+            tabPreview.Height = 40d;
+        }
     }
 }

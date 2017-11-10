@@ -63,5 +63,11 @@
     <Compile Include="IFilterable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.BaseUtility\XLY.SF.Framework.BaseUtility.csproj">
+      <Project>{E58B3BAA-0F89-4E6D-B34E-4607DFA8F805}</Project>
+      <Name>XLY.SF.Framework.BaseUtility</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

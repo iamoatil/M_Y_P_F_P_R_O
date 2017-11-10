@@ -36,12 +36,12 @@ namespace XLY.SF.Project.Devices
 
             ErrorMsgDic = new Dictionary<uint, string>
             {
-                { 338, LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ErrorMessageLanguage_ErrMsg_NotFindTable) },
-                { 340, LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ErrorMessageLanguage_ErrMsg_NotDeviceConnect) },
-                { 321, LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ErrorMessageLanguage_ErrMsg_WriteFileFail) },
-                { 322, LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ErrorMessageLanguage_ErrMsg_PhoneAccessFail) },
-                { 323, LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ErrorMessageLanguage_ErrMsg_NotExistAccessFile) },
-                { 301, LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ErrorMessageLanguage_ErrMsg_ReadFileFail) }
+                { 338, LanguageManager.Current[Languagekeys.ErrorMessageLanguage_ErrMsg_NotFindTable] },
+                { 340, LanguageManager.Current[Languagekeys.ErrorMessageLanguage_ErrMsg_NotDeviceConnect] },
+                { 321, LanguageManager.Current[Languagekeys.ErrorMessageLanguage_ErrMsg_WriteFileFail] },
+                { 322, LanguageManager.Current[Languagekeys.ErrorMessageLanguage_ErrMsg_PhoneAccessFail] },
+                { 323, LanguageManager.Current[Languagekeys.ErrorMessageLanguage_ErrMsg_NotExistAccessFile] },
+                { 301, LanguageManager.Current[Languagekeys.ErrorMessageLanguage_ErrMsg_ReadFileFail] }
             };
         }
 
@@ -66,7 +66,7 @@ namespace XLY.SF.Project.Devices
             }
             else
             {
-                return string.Format("{0}:{1}", LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.ErrorMessageLanguage_ErrMsg_IOSDllErrorID), errorID);
+                return string.Format("{0}:{1}", LanguageManager.Current[Languagekeys.ErrorMessageLanguage_ErrMsg_IOSDllErrorID], errorID);
             }
         }
 
@@ -78,7 +78,7 @@ namespace XLY.SF.Project.Devices
         /// <param name="targetPath"></param>
         /// <param name="asyn"></param>
         /// <returns></returns>
-        public string CopyFile(Device device, string source, string targetPath, IAsyncProgress asyn)
+        public string CopyFile(Device device, string source, string targetPath, IAsyncTaskProgress asyn)
         {
             return CopyUserData(device, targetPath, asyn);
         }
@@ -100,7 +100,7 @@ namespace XLY.SF.Project.Devices
         /// <param name="targetPath">目标路径</param>
         /// <param name="asyn"></param>
         /// <returns></returns>
-        public string CopyUserData(Device device, string targetPath, IAsyncProgress asyn)
+        public string CopyUserData(Device device, string targetPath, IAsyncTaskProgress asyn)
         {
             //1.初始化相关参数
             InitCopyUserData(device, 100, asyn);
@@ -134,7 +134,7 @@ namespace XLY.SF.Project.Devices
         /// <param name="asyn"></param>
         /// <param name="InputPassword">回调方法，如果有密码则调用，在方法内返回密码</param>
         /// <returns></returns>
-        public string CopyUserData(Device device, string targetPath, IAsyncProgress asyn, Func<string> InputPassword)
+        public string CopyUserData(Device device, string targetPath, IAsyncTaskProgress asyn, Func<string> InputPassword)
         {
             //1.初始化相关参数
             InitCopyUserData(device, 100, asyn);
@@ -169,7 +169,7 @@ namespace XLY.SF.Project.Devices
             return Path.Combine(targetPath, device.ID);
         }
 
-        private void InitCopyUserData(Device device, double totalProgress, IAsyncProgress asyn)
+        private void InitCopyUserData(Device device, double totalProgress, IAsyncTaskProgress asyn)
         {
             _CopyUserDataCallback = CopyUserDataCallback;
 
@@ -204,7 +204,7 @@ namespace XLY.SF.Project.Devices
         private string CurrentDeviceName;
         private bool IsCopying;
         private bool IsStop;
-        private IAsyncProgress Asyn;
+        private IAsyncTaskProgress Asyn;
         private double _OneAllProgress;
         private double _OneStepLastProgress;
         private double _TwoAllProgress;
@@ -230,14 +230,14 @@ namespace XLY.SF.Project.Devices
             switch (step)
             {
                 case 1:// 拷贝前初始化 status为进度 0-100
-                    msg = string.Format(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_IOSInitProgress), status);
+                    msg = string.Format(LanguageManager.Current[Languagekeys.DeviceLanguage_IOSInitProgress], status);
                     double reportAProgress = status / 100.0 - _OneStepLastProgress;
                     _OneStepLastProgress = status / 100.0;
                     actualProgress = reportAProgress * _OneAllProgress;
 
                     break;
                 case 2:// 数据拷贝 status为已经拷贝数据大小，单位为Byte
-                    msg = string.Format(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_IOSCopyProgress), (status / 1024.0).ToString("F2"));
+                    msg = string.Format(LanguageManager.Current[Languagekeys.DeviceLanguage_IOSCopyProgress], (status / 1024.0).ToString("F2"));
                     double singleProgress = _TwoAllProgress / 20.0;
                     if (_TwoCumulativeProgress + singleProgress > _TwoAllProgress)
                     {
@@ -250,7 +250,7 @@ namespace XLY.SF.Project.Devices
                 case 3:// 拷贝结束，进行后期合并
                     if (_TwoCumulativeProgress < _TwoAllProgress)
                     {
-                        Asyn.Advance(_TwoAllProgress - _TwoCumulativeProgress, LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_IOSCopyDataOver));
+                        //Asyn?.Advance(_TwoAllProgress - _TwoCumulativeProgress, LanguageManager.Current[Languagekeys.DeviceLanguage_IOSCopyDataOver]);
                         _TwoCumulativeProgress = _TwoAllProgress;
                     }
 
@@ -266,26 +266,26 @@ namespace XLY.SF.Project.Devices
                         {
                             actualProgress = _ThreeAllProgress - _ThreeCumulativeProgress;
                         }
-                        msg = LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_IOSExtractLocalOver);
+                        msg = LanguageManager.Current[Languagekeys.DeviceLanguage_IOSExtractLocalOver];
                     }
                     else
                     {
-                        msg = string.Format(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_IOSLastStepProgress), (status * 300).ToString("F2"));
+                        msg = string.Format(LanguageManager.Current[Languagekeys.DeviceLanguage_IOSLastStepProgress], (status * 300).ToString("F2"));
                     }
 
                     break;
                 default:// 拷贝失败或者用户终止
-                    msg = step == 4 ? LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_IOSCopyError) : LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_IOSUserExit);
-                    Asyn.IsSuccess = false;
+                    msg = step == 4 ? LanguageManager.Current[Languagekeys.DeviceLanguage_IOSCopyError] : LanguageManager.Current[Languagekeys.DeviceLanguage_IOSUserExit];
+                    //Asyn.IsSuccess = false;
                     IsCopying = false;
                     actualProgress = 0;
 
-                    LoggerManagerSingle.Instance.Warn(string.Format(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_IOSDeviceCopyError), uniqueDeviceID, step, msg));
+                    LoggerManagerSingle.Instance.Warn(string.Format(LanguageManager.Current[Languagekeys.DeviceLanguage_IOSDeviceCopyError], uniqueDeviceID, step, msg));
 
                     break;
             }
 
-            Asyn.Advance(actualProgress, string.Format(LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_IOSExtractLocalAppsReport), CurrentDeviceName, msg));
+            //Asyn?.Advance(actualProgress, string.Format(LanguageManager.Current[Languagekeys.DeviceLanguage_IOSExtractLocalAppsReport], CurrentDeviceName, msg));
 
             //返回0则继续拷贝
             return 0;
@@ -367,7 +367,7 @@ namespace XLY.SF.Project.Devices
         {
             var p = new Partition();
             var list = new List<Partition>();
-            p.Text = LanguageHelperSingle.Instance.GetLanguageByKey(Languagekeys.DeviceLanguage_Partition_data);
+            p.Text = LanguageManager.Current[Languagekeys.DeviceLanguage_Partition_data];
             p.Name = "data";
             list.Add(p);
             return list;

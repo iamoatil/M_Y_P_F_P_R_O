@@ -61,7 +61,7 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
         /// <summary>
         /// 监控重试次数
         /// </summary>
-        public const int MONITOR_ATTEMPTCOUNT = 12;
+        public const int MONITOR_ATTEMPTCOUNT = 6;
 
         /// <summary>
         /// adb进程名称

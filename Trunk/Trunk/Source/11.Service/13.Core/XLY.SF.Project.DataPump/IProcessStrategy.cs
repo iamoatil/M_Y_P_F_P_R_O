@@ -19,6 +19,16 @@ namespace XLY.SF.Project.DataPump
     /// </summary>
     public interface IProcessControllableStrategy
     {
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <param name="context"></param>
+        void InitExecution(DataPumpControllableExecutionContext context);
+
+        /// <summary>
+        /// 执行
+        /// </summary>
+        /// <param name="context"></param>
         void Process(DataPumpControllableExecutionContext context);
     }
 }

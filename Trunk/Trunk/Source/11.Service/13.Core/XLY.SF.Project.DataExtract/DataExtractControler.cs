@@ -16,7 +16,9 @@ using System.Threading.Tasks;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Core.Base.MefIoc;
+using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.BaseUtility.Helper;
+using XLY.SF.Project.DataPump;
 using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.DataExtract
@@ -28,11 +30,6 @@ namespace XLY.SF.Project.DataExtract
     {
 
         #region 基础属性和构造器
-
-        /// <summary>
-        /// 保存路径
-        /// </summary>
-        public String SavePath { get; }
 
         /// <summary>
         /// 提取对象
@@ -52,28 +49,27 @@ namespace XLY.SF.Project.DataExtract
         /// <summary>
         /// 异步通知
         /// </summary>
-        public IAsyncProgress Asyn { get; set; }
+        public SingleTaskReportBase Reporter { get; set; }
+
+        static DataExtractControler()
+        {
+            Plugin.Adapter.PluginAdapter.Instance.Initialization(null);
+        }
 
         /// <summary>
         /// 数据提取控制器构造器
         /// </summary>
-        /// <param name="savePath">保存路径</param>
-        /// <param name="source">提取对象</param>
-        /// <param name="extractItems">提取项集合</param>
         /// <param name="asyn">异步通知</param>
         /// <param name="workMode">工作模式</param>
-        public DataExtractControler(String savePath, Pump source, ExtractItemCollection extractItems, IAsyncProgress asyn, EnumDataExtractWorkMode workMode)
+        public DataExtractControler(EnumDataExtractWorkMode workMode= EnumDataExtractWorkMode.HalfAsync)
         {
-            SavePath = savePath;
-            SourcePump = source;
-            Asyn = asyn;
             WorkMode = workMode;
-            ExtractItems = extractItems.GetAllCheckedExtractItem();
-
             MainWorkThread = new SingleThread();
         }
 
         #endregion
+
+        private Boolean _isStarted;
 
         #region 公开方法
 
@@ -83,9 +79,16 @@ namespace XLY.SF.Project.DataExtract
         /// 内部处理异常
         /// 通过异步通知返回进度和提取结果
         /// </summary>
-        public void Start()
+        /// <param name="savePath">保存路径</param>
+        /// <param name="source">提取对象</param>
+        /// <param name="extractItems">提取项集合</param>
+        public void Start(Pump source, List<ExtractItem> extractItems)
         {
+            if (_isStarted) return;
+            SourcePump = source;
+            ExtractItems = extractItems;
             DoStart();
+            _isStarted = true;
         }
 
         /// <summary>
@@ -93,7 +96,9 @@ namespace XLY.SF.Project.DataExtract
         /// </summary>
         public void Stop()
         {
+            if (!_isStarted) return;
             DoStop();
+            _isStarted = false;
         }
 
         #endregion
@@ -108,7 +113,7 @@ namespace XLY.SF.Project.DataExtract
         /// <summary>
         /// 数据泵服务
         /// </summary>
-        //private DataPumpControler PumpControler { get; set; }
+        //private DataPump.DataPumpControler PumpControler { get; set; }
 
         /// <summary>
         /// 插件管理器
@@ -186,10 +191,11 @@ namespace XLY.SF.Project.DataExtract
              * */
 
             //1.获取插件控制器
-            PluginAdapter = IocManagerSingle.Instance.GetPart<IPluginAdapter>("PluginAdapter");
+            //PluginAdapter = IocManagerSingle.Instance.GetPart<IPluginAdapter>("PluginAdapter");
+            PluginAdapter = Plugin.Adapter.PluginAdapter.Instance;
 
             //2.初始化数据文件保存根目录
-            FileHelper.CreateExitsDirectory(SavePath);
+            FileHelper.CreateExitsDirectory(SourcePump.SavePath);
 
             //3.获取数据泵服务
             //PumpControler = new DataPumpControler();
@@ -266,7 +272,7 @@ namespace XLY.SF.Project.DataExtract
                             //执行数据泵服务
                             foreach (var plug in plugs)
                             {
-                                //plug.SourcePath.ForEach(s => PumpControler.Extract(s, Asyn));
+                                plug.SourcePath.ForEach(s => SourcePump.Execute(s, null, extractItem));
                             }
                         }, () =>
                         {
@@ -288,10 +294,11 @@ namespace XLY.SF.Project.DataExtract
                     WaitRunWorkThread(() =>
                         {
                             //1.匹配插件
-                            var plug = PluginAdapter.MatchPluginByApp(plugs, SourcePump, SavePath, GetAppVersion(extractItem));
+                            var plug = PluginAdapter.MatchPluginByApp(plugs, SourcePump, SourcePump.SavePath, GetAppVersion(extractItem));
 
                             //2.执行插件
-                            PluginAdapter.ExecutePlugin(plug, Asyn, (ds) =>
+                            plug.SaveDbPath = System.IO.Path.Combine(SourcePump.SavePath, SourcePump.DbFileName);
+                            PluginAdapter.ExecutePlugin(plug, Reporter, (ds) =>
                                 {//插件执行完处理
                                     FinishExtractItem(extractItem, ds);
                                 });

@@ -123,6 +123,11 @@
     <Compile Include="DeviceManager\Mtp\MtpDeviceManager.cs" />
     <Compile Include="DeviceManager\SDCard\SDCardDeviceMonitor.cs" />
     <Compile Include="DeviceManager\SIMCard\SIMCardDeviceMonitor.cs" />
+    <Compile Include="Language\LanguageTextTeamplate.LanguageElement.cs">
+      <DependentUpon>LanguageTextTeamplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -155,7 +160,23 @@
       <Name>X64Service</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Language\Language_Cn.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Language\Language_En.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Language\LanguageTextTeamplate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LanguageTextTeamplate.LanguageElement.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd /d $(ProjectDir)..\..\..\..\Tools\CopyDll\

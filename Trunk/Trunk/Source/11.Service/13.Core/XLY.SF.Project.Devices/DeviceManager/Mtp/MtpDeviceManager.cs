@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
+using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.Devices.DeviceManager.Mtp
@@ -118,7 +119,7 @@ namespace XLY.SF.Project.Devices.DeviceManager.Mtp
             fileNode.DateAuthored = GetFileDateAuthoredProperty(objectValues);
         }
 
-        public MTPFileNode GetRootFileNode(MTPDevice device, IAsyncProgress asyn)
+        public MTPFileNode GetRootFileNode(MTPDevice device, SingleTaskReportBase asyn)
         {
             MTPFileNode root = new MTPFileNode() { Type = MTPFileNodeType.Root, Name = "Root", Childrens = new List<MTPFileNode>(), Level = -1 };
 
@@ -185,7 +186,7 @@ namespace XLY.SF.Project.Devices.DeviceManager.Mtp
             return root;
         }
 
-        private void CreateTree(MTPFileNode parentNode, IPortableDeviceContent content, IPortableDeviceProperties properties, IAsyncProgress asyn)
+        private void CreateTree(MTPFileNode parentNode, IPortableDeviceContent content, IPortableDeviceProperties properties, IAsyncTaskProgress asyn)
         {
             List<string> objectsId = GetChildrenObjectIds(content, parentNode.Id);
             if (objectsId != null && objectsId.Count > 0)

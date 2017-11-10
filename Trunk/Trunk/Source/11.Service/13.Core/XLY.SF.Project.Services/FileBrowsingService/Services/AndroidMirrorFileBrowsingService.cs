@@ -46,7 +46,7 @@ namespace XLY.SF.Project.Services
             };
         }
 
-        protected override FileBrowingNode DoGetRootNode(IAsyncProgress async)
+        protected override FileBrowingNode DoGetRootNode(IAsyncTaskProgress async)
         {
             if (null == FileServiceX)
             {
@@ -62,7 +62,7 @@ namespace XLY.SF.Project.Services
             };
         }
 
-        protected override List<FileBrowingNode> DoGetChildNodes(FileBrowingNode parentNode, IAsyncProgress async)
+        protected override List<FileBrowingNode> DoGetChildNodes(FileBrowingNode parentNode, IAsyncTaskProgress async)
         {
             if (parentNode.NodeType == FileBrowingNodeType.Root)
             {//根节点，获取分区列表
@@ -140,7 +140,7 @@ namespace XLY.SF.Project.Services
             }
         }
 
-        protected override void DoDownload(FileBrowingNode node, string savePath, bool persistRelativePath, IAsyncProgress async)
+        protected override void DoDownload(FileBrowingNode node, string savePath, bool persistRelativePath, IAsyncTaskProgress async)
         {
             var mPnode = node as AndroidMirrorFileBrowingNode;
 

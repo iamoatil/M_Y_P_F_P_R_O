@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:local="clr-namespace:XLY.SF.Project.DataDisplayView"
+             xmlns:ctrl="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -110,10 +111,10 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </TreeView>
-        <GridSplitter VerticalAlignment="Stretch" Grid.Column="0" Width="3" Visibility="{Binding IsTreeDataSource, Converter={StaticResource booleanToVisibilityConverter}}"/>
+        <GridSplitter VerticalAlignment="Stretch" Grid.Column="0" Width="2" Visibility="{Binding IsTreeDataSource, Converter={StaticResource booleanToVisibilityConverter}}" Background="Transparent"/>
 
         <!--数据显示区域，如果有多个视图方式则加载-->
-        <TabControl Grid.Column="1"  ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}"/>
-
+        <!--<TabControl Grid.Column="1"  ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}"/>-->
+        <ctrl:TabControlWithButton x:Name="tbdetail" Grid.Column="1" ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}" Style="{StaticResource TabControlWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithButtonStyle1}" CustomButtonAlignment="Right" IsHideHeaderWhenEmpty="True"></ctrl:TabControlWithButton>
     </Grid>
 </UserControl>

@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:XLY.SF.Project.Views.Main"
              xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
-             xmlns:Lang="clr-namespace:XLY.SF.Framework.Language.PageLanguage;assembly=XLY.SF.Framework.Language"
-		     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+                 xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
+                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
 		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
              xmlns:control ="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
              mc:Ignorable="d" Height="1020">
@@ -147,6 +147,14 @@
                 </DoubleAnimationUsingKeyFrames>
             </Storyboard>
 
+            <Style x:Key="OpenCbStyle" TargetType="ComboBoxItem">
+                <Setter Property="Height" Value="42"/>
+                <Setter Property="Width" Value="200"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Template" Value="{StaticResource cb_MainMenuItem}"/>
+            </Style>
+
             <LinearGradientBrush x:Key="iconBrush" EndPoint="0,1" StartPoint="0,0">
                 <GradientStop Color="#e9e9e9" Offset="0"/>
                 <GradientStop Color="#d4d4d4" Offset="1"/>
@@ -190,19 +198,20 @@
                 </Grid.RowDefinitions>
                 <StackPanel HorizontalAlignment="Center" Orientation="Vertical" Margin="27 50 30 40">
                     <Button Width="340" Height="82" Template="{StaticResource btn_HomePageCT}"
-                            Content="{Binding XPath=ViewLanguage/View_HomePageCreateCase,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" 
+                            Content="{Binding XPath=ViewLanguage/View_HomePageCreateCase,Source={x:Static ex:SystemContext.LanguageProvider}}" 
                             Margin="0 0 0 20" Padding="50 0 0 12" FontSize="20" FontWeight="Bold" Foreground="White" Command="{Binding CreateCaseCommand.ViewExecuteCmd}"></Button>
-
-                    <control:MenuButton Width="340" Height="82" Padding="50 0 0 12" FontSize="20" FontWeight="Bold" Foreground="White"  
-                                        BtnTest="{Binding XPath=ViewLanguage/View_HomePageOpen,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                    <control:MenuButton Width="340" Height="82" Padding="50 0 0 12" FontSize="20" FontWeight="Bold" Foreground="White"
+                                        BtnTest="{Binding XPath=ViewLanguage/View_HomePageOpen,Source={x:Static ex:SystemContext.LanguageProvider}}"
                                         ClickCommand="{Binding OpenLocalCaseCommand.ViewExecuteCmd}">
-                        <ComboBoxItem>
-                            <Button Content="{Binding XPath=ViewLanguage/View_HomePageOpenAllCase,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
-                                    Command="{Binding OpenAllCaseCommand.ViewExecuteCmd}"/>
+                        <ComboBoxItem x:Name="cbi_OpenAllCase">
+                            <TextBlock Text="{Binding XPath=ViewLanguage/View_HomePageOpenAllCase,Source={x:Static ex:SystemContext.LanguageProvider}}"/>
+                            <!--<Button Content="{Binding XPath=ViewLanguage/View_HomePageOpenAllCase,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                    Command="{Binding OpenAllCaseCommand.ViewExecuteCmd}" Template="{StaticResource btn_EmptyCT}"/>-->
                         </ComboBoxItem>
-                        <ComboBoxItem>
-                            <Button Content="{Binding XPath=ViewLanguage/View_HomePageOpenLocalCase,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
-                                    Command="{Binding OpenLocalCaseCommand.ViewExecuteCmd}"/>
+                        <ComboBoxItem x:Name="cbi_OpenLocalCase">
+                            <TextBlock Text="{Binding XPath=ViewLanguage/View_HomePageOpenLocalCase,Source={x:Static ex:SystemContext.LanguageProvider}}"/>
+                            <!--<Button Content="{Binding XPath=ViewLanguage/View_HomePageOpenLocalCase,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                    Command="{Binding OpenLocalCaseCommand.ViewExecuteCmd}" Template="{StaticResource btn_EmptyCT}"/>-->
                         </ComboBoxItem>
                     </control:MenuButton>
                 </StackPanel>
@@ -216,7 +225,11 @@
                     <Label Margin="41 0 0 0">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/CaseIcon.png" Width="24" Height="20"/>
-                            <TextBlock Foreground="{StaticResource iconBrush}" Margin="10 0 0 0" FontSize="18" FontWeight="Bold" Text="{Binding XPath=ViewLanguage/View_HomePageLatelyCase,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"/>
+                            <TextBlock Foreground="{StaticResource iconBrush}"
+                                       Margin="10 0 0 0"
+                                       FontSize="18"
+                                       FontWeight="Bold"
+                                       Text="{Binding XPath=ViewLanguage/View_HomePageLatelyCase,Source={x:Static ex:SystemContext.LanguageProvider}}"/>
                         </StackPanel>
                     </Label>
                     <!--最近打开案例列表-->
@@ -297,12 +310,12 @@
                         <StackPanel Orientation="Horizontal" Margin="0 0 0 24">
                             <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/HomePageFunIcon.png" VerticalAlignment="Center"/>
                             <TextBlock FontSize="18" FontWeight="Bold" Foreground="{StaticResource iconBrush}" Margin="10 0 0 0"
-                                       Text="{Binding XPath=ViewLanguage/View_HomePageFunctionIllustration,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"/>
+                                       Text="{Binding XPath=ViewLanguage/View_HomePageFunctionIllustration,Source={x:Static ex:SystemContext.LanguageProvider}}"/>
                         </StackPanel>
                     </Label>
                     <Button HorizontalAlignment="Right" FontSize="16" Cursor="Hand" Template="{StaticResource btn_EmptyCT}" Background="Transparent" BorderThickness="0"                            
                             Foreground="{StaticResource iconBrush}" VerticalAlignment="Center" 
-                            FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Impact">
+                            FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald">
                         <TextBlock Text="MORE >" Cursor="Hand" Foreground="{StaticResource iconBrush}"/>
                     </Button>
                     <Grid Grid.Row="1" >
@@ -347,7 +360,7 @@
                                         </TextBlock.Effect>
                                     </TextBlock>
                                     <Border Width="50" Height="20" CornerRadius="10" Background="#37af55" Margin="10 5 0 0">
-                                        <TextBlock Text="NEW" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Impact"/>
+                                        <TextBlock Text="NEW" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="14" FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald"/>
                                     </Border>
                                 </StackPanel>
                                 <TextBlock Grid.Row="2" FontSize="16" VerticalAlignment="Center"
@@ -357,7 +370,7 @@
                                     </TextBlock.Effect>
                                 </TextBlock>
                                 <!--播放按钮-->
-                                <Button Grid.Row="2" Template="{StaticResource btn_HomePagePlay}" Grid.Column="2" Content="PLAY" FontSize="14" FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Impact"/>
+                                <Button Grid.Row="2" Template="{StaticResource btn_HomePagePlay}" Grid.Column="2" Content="PLAY" FontSize="14" FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald"/>
                             </Grid>
                         </Grid>
                         <!--右侧小图-->
@@ -461,7 +474,7 @@
                     </Label>
                     <Button HorizontalAlignment="Right" FontSize="16" Cursor="Hand" Template="{StaticResource btn_EmptyCT}" Background="Transparent" BorderThickness="0"                            
                             Foreground="{StaticResource iconBrush}" VerticalAlignment="Center" 
-                            FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Impact">
+                            FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald">
                         <TextBlock Text="MORE >" Cursor="Hand" Foreground="{StaticResource iconBrush}"/>
                     </Button>
                     <!--QA内容-->
@@ -491,12 +504,12 @@
                         <StackPanel Orientation="Horizontal">
                             <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/HomePageUpdate.png"/>
                             <TextBlock FontSize="18" FontWeight="Bold" Foreground="{StaticResource iconBrush}" Margin="10 0 0 0"
-                                       Text="{Binding XPath=ViewLanguage/View_HomePageUpdateInfo,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"/>
+                                       Text="{Binding XPath=ViewLanguage/View_HomePageUpdateInfo,Source={x:Static ex:SystemContext.LanguageProvider}}"/>
                         </StackPanel>
                     </Label>
                     <Button HorizontalAlignment="Right" FontSize="16" Cursor="Hand" Template="{StaticResource btn_EmptyCT}" Background="Transparent" BorderThickness="0"                            
                             Foreground="{StaticResource iconBrush}" VerticalAlignment="Center" 
-                            FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Impact">
+                            FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald">
                         <TextBlock Text="MORE >" Cursor="Hand" Foreground="{StaticResource iconBrush}"/>
                     </Button>
                     <!--升级详情内容-->
@@ -515,5 +528,16 @@
                 </Grid>
             </Grid>
         </DockPanel>
+
+
+
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Selected" SourceObject="{Binding ElementName=cbi_OpenAllCase}">
+                <i:InvokeCommandAction Command="{Binding DataContext.OpenAllCaseCommand.ViewExecuteCmd,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=core:UcViewBase}}"/>
+            </i:EventTrigger>
+            <i:EventTrigger EventName="Selected" SourceObject="{Binding ElementName=cbi_OpenLocalCase}">
+                <i:InvokeCommandAction Command="{Binding DataContext.OpenLocalCaseCommand.ViewExecuteCmd,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=core:UcViewBase}}"/>
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
     </Grid>
 </core:UcViewBase>

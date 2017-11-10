@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:Lang="clr-namespace:XLY.SF.Project.PreviewFiles.Language"
+             xmlns:local="clr-namespace:XLY.SF.Project.PreviewFiles"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -16,9 +16,9 @@
     </UserControl.Resources>
     
     <TabControl>
-        <TabItem Header="{Binding XPath=FilePreviewLanguage/Preview,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" x:Name="Preview">            
+        <TabItem Header="{Binding XPath=FilePreviewLanguage/Preview,Source={x:Static local:LanguageHelper.LanguageProvider}}" x:Name="Preview">            
         </TabItem>
-        <TabItem Header="{Binding XPath=FilePreviewLanguage/HEX,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"  x:Name="HexPreview">           
+        <TabItem Header="{Binding XPath=FilePreviewLanguage/HEX,Source={x:Static local:LanguageHelper.LanguageProvider}}"  x:Name="HexPreview">           
         </TabItem>
     </TabControl>
 

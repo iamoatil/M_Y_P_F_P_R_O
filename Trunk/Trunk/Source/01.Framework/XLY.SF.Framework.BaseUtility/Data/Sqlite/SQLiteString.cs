@@ -1,5 +1,4 @@
-﻿using NHibernate.Util;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SQLite;
 
 namespace XLY.SF.Framework.BaseUtility

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageResource>
+  <Extraction>
+    <Start>开始提取</Start>
+    <Stop>停止提取</Stop>
+    <Alarm>启用智能预警</Alarm>
+  </Extraction>
+</LanguageResource>
+
+

@@ -32,7 +32,7 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         public DateTime? EndTime { get; set; }
 
-        public abstract object Execute(object arg, IAsyncProgress progress);
+        public abstract object Execute(object arg, IAsyncTaskProgress progress);
 
         public virtual void Dispose()
         {

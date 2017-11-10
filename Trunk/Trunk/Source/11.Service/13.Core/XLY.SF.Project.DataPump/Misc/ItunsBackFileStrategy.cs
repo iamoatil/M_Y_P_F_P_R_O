@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using X64Service;
 using XLY.SF.Framework.BaseUtility;
+using XLY.SF.Project.BaseUtility.Helper;
 
 namespace XLY.SF.Project.DataPump.Misc
 {
@@ -38,7 +35,7 @@ namespace XLY.SF.Project.DataPump.Misc
                     {
                         continue;
                     }
-                    backFilePath = resPath.TrimEnd(key);
+                    backFilePath = new FileInfo(resPath).DirectoryName;
                     return true;
                 }
             }
@@ -61,7 +58,7 @@ namespace XLY.SF.Project.DataPump.Misc
                     {
                         continue;
                     }
-                    backFilePath = resPath.TrimEnd(key);
+                    backFilePath = new FileInfo(resPath).DirectoryName;
                     return true;
                 }
             }
@@ -69,7 +66,7 @@ namespace XLY.SF.Project.DataPump.Misc
             return false;
         }
 
-        public void Process(DataPumpControllableExecutionContext context)
+        public void InitExecution(DataPumpControllableExecutionContext context)
         {
             String destPath = context.GetContextData<String>("destPath");
             String sourcePath = context.GetContextData<String>("sourcePath");
@@ -86,11 +83,7 @@ namespace XLY.SF.Project.DataPump.Misc
                 Marshal.WriteIntPtr(b, pS);
                 return 0;
             });
-            if (0 != res)
-            {
-                // LogHelper.Error(LanguageHelper.Get("LANGKEY_BenDiTiQuHuiFuitunsBeiFenShuJu_01479") + res);
-            }
-            else
+            if (0 == res)
             {
                 string[] files = Directory.GetDirectories(target);
                 foreach (string file in files)
@@ -101,10 +94,25 @@ namespace XLY.SF.Project.DataPump.Misc
                     {
                         var newFileName = fileName.Replace("AppDomain-", "");
                         Directory.Move(Path.Combine(target, fileName), Path.Combine(target, newFileName));
-
-                        //asyn.Advance(0, string.Format(LanguageHelper.Get("LANGKEY_ChuLiAPPWenJianJia_01480"), newFileName));
                     }
                 }
+            }
+        }
+
+        public void Process(DataPumpControllableExecutionContext context)
+        {
+            if (context.Source.ItemType == Domains.SourceFileItemType.NormalPath)
+            {
+                String destPath = context.GetContextData<String>("destPath");
+
+                string path = context.Source.Config.TrimEnd("#F");
+                if (path.StartsWith("/data/data/"))
+                {
+                    path = ("/data/" + path.TrimStart("/data/data/"));
+                }
+                path = path.Replace("/", @"\");
+
+                context.Source.Local = FileHelper.ConnectPath(destPath, "data", path);
             }
         }
 

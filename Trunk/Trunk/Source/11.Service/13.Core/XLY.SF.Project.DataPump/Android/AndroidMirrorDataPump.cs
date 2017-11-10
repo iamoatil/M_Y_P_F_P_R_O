@@ -75,7 +75,7 @@ namespace XLY.SF.Project.DataPump.Android
             IFileSystemDevice device = CreateFileSystemDevice(context);
             if (device == null) return false;
             context.SetContextData(FileSystemDeviceKey, device);
-            return FileService.GetFileSystem(device, context.Reporter) != null;
+            return FileService.GetFileSystem(device, null) != null;
         }
 
         /// <summary>

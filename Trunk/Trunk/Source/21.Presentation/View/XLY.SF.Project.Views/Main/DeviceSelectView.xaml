@@ -52,7 +52,7 @@
             <TextBlock FontSize="16" Foreground="#FFFFFF" HorizontalAlignment="Center">请选择 想要取证的设备</TextBlock>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 20 0 20">
                 <Line Stroke="#9ba5b9" X1="0" X2="24" VerticalAlignment="Center" StrokeThickness="1"/>
-                <TextBlock FontFamily="Impact" FontSize="16" Foreground="#9ba5b9" Margin="10 0 10 0">OR</TextBlock>
+                <TextBlock FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald" FontSize="16" Foreground="#9ba5b9" Margin="10 0 10 0">OR</TextBlock>
                 <Line Stroke="#9ba5b9" X1="0" X2="24"  VerticalAlignment="Center" StrokeThickness="1"/>
             </StackPanel>
             <TextBlock FontSize="16" Foreground="#FFFFFF" HorizontalAlignment="Center">想要导入本地文件/文件夹</TextBlock>

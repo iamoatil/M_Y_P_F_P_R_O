@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
-             xmlns:Lang="clr-namespace:XLY.SF.Framework.Language.PageLanguage;assembly=XLY.SF.Framework.Language"
+                 xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
              mc:Ignorable="d" Width="500" Height="200">
     <core:UcViewBase.InputBindings>
         <KeyBinding Key="F" Command="{Binding ShutdownProgramCommand}"/>
@@ -19,6 +19,6 @@
         </ResourceDictionary>
     </core:UcViewBase.Resources>
     <Grid Background="DarkCyan">
-        <TextBlock Text="{Binding XPath=ViewLanguage/View_Loading,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="35"></TextBlock>
+        <TextBlock Text="{Binding XPath=ViewLanguage/View_Loading,Source={x:Static ex:SystemContext.LanguageProvider}}" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="35"></TextBlock>
     </Grid>
 </core:UcViewBase>

@@ -98,7 +98,7 @@ namespace XLY.SF.Project.Domains
         /// 执行Filter之后，执行该方法可以获取下一页的视图数据。
         /// </summary>
         /// <returns>如果存在下一页数据就返回true；否则返回false。</returns>
-        public Boolean NextPage()
+        public virtual Boolean NextPage()
         {
             if (!_isLocked) return false;
             Expression = CreateExpression(true, Args);
@@ -116,7 +116,7 @@ namespace XLY.SF.Project.Domains
         /// 执行Filter之后，执行该方法可以获取下前一页的视图数据。
         /// </summary>
         /// <returns>如果存在前一页数据就返回true；否则返回false。</returns>
-        public Boolean PreviousPage()
+        public virtual Boolean PreviousPage()
         {
             if (!_isLocked) return false;
             if (Count == 0) return false;
@@ -248,5 +248,40 @@ namespace XLY.SF.Project.Domains
         #endregion
 
         #endregion
+    }
+
+    public class DataAggregationFilterView<T>: AggregationFilterView<T> where T: AbstractDataItem
+    {
+        public DataAggregationFilterView(IFilterable source, string key) : base(source, key)
+        { }
+
+        public override void Filter()
+        {
+            base.Filter();
+        }
+
+        public override bool NextPage()
+        {
+            var rt = base.NextPage();
+            AssociatedBookmark();
+            return rt;
+        }
+
+        public override bool PreviousPage()
+        {
+            var rt = base.PreviousPage();
+            AssociatedBookmark();
+            return rt;
+        }
+
+        public event Action OnAssociatedBookmark;
+
+        /// <summary>
+        /// 关联书签
+        /// </summary>
+        private void AssociatedBookmark()
+        {
+            OnAssociatedBookmark?.Invoke();
+        }
     }
 }

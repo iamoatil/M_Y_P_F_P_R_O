@@ -40,7 +40,7 @@ namespace XLY.SF.Project.DataReport
 
         private string _bcpPath = "";
 
-        protected override void Initialize(DataReportPluginArgument arg, IAsyncProgress progress)
+        protected override void Initialize(DataReportPluginArgument arg, IAsyncTaskProgress progress)
         {
             if (!Directory.Exists(arg.ReportPath))
             {
@@ -48,12 +48,12 @@ namespace XLY.SF.Project.DataReport
             }
         }
 
-        protected override void ExportData(DataReportPluginArgument arg, IAsyncProgress progress)
+        protected override void ExportData(DataReportPluginArgument arg, IAsyncTaskProgress progress)
         {
             _bcpPath = new DataSourceToBcpConverter().ConverterToBcpFile(arg, arg.ReportPath);   
         }
 
-        protected override string ExportCompleted(DataReportPluginArgument arg, IAsyncProgress progress)
+        protected override string ExportCompleted(DataReportPluginArgument arg, IAsyncTaskProgress progress)
         {
             return _bcpPath;
         }
