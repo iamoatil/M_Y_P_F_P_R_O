@@ -16,6 +16,6 @@
 
     </UserControl.Resources>
     <Grid>
-        <CheckBox VerticalAlignment="Center" HorizontalAlignment="Center" Content="测试"  IsThreeState="True"/>
+        <CheckBox VerticalAlignment="Center" HorizontalAlignment="Center" Content="测试" IsThreeState="True"/>
     </Grid>
 </UserControl>

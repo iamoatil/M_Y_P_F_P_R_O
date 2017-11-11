@@ -17,6 +17,10 @@ namespace XLY.SF.Project.Domains
     /// </summary>
     public abstract class AbstractPluginInfo : IPluginInfo
     {
+        public AbstractPluginInfo()
+        {
+            //State = PluginState.Normal;
+        }
         /// <summary>
         /// 插件ID
         /// </summary>
@@ -67,7 +71,7 @@ namespace XLY.SF.Project.Domains
         /// 插件状态
         /// </summary>
         [XmlIgnore]
-        public virtual PluginState State { get; set; }
+        public virtual PluginState State { get; set; } = PluginState.Normal;
 
         /// <summary>
         /// 在读取解析插件后执行，比如有些数据需要重新计算（比如版本号）

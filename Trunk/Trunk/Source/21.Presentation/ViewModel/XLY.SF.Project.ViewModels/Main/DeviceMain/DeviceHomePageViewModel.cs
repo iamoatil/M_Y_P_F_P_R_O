@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
+﻿using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -31,6 +31,63 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         /// </summary>
         public ObservableCollection<string> ToolkitItems { get; private set; }
 
+        #region 设备信息【和设备主页是同一实例】
+
+        private DeviceModel _curDevModel;
+        /// <summary>
+        /// 当前设备信息
+        /// </summary>
+        public DeviceModel CurDevModel
+        {
+            get
+            {
+                return _curDevModel;
+            }
+            set
+            {
+                _curDevModel = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region 当前编辑状态【信息录入】
+
+        private bool _curEditStatus;
+        /// <summary>
+        /// 当前编辑状态
+        /// </summary>
+        public bool CurEditStatus
+        {
+            get
+            {
+                return this._curEditStatus;
+            }
+
+            set
+            {
+                this._curEditStatus = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Commands
+
+        /// <summary>
+        /// 取消编辑
+        /// </summary>
+        public ICommand CancelEditCommand { get; set; }
+
+        /// <summary>
+        /// 手机拍照
+        /// </summary>
+        public ProxyRelayCommand PhoneTakePhotoCommand { get; private set; }
+
         #endregion
 
         public DeviceHomePageViewModel()
@@ -39,6 +96,7 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
             ToolkitItems = new ObservableCollection<string>();
 
             CancelEditCommand = new RelayCommand(ExecuteCancelEditCommand);
+            PhoneTakePhotoCommand = new ProxyRelayCommand(ExecutePhoneTakePhotoCommand);
 
 
 
@@ -68,23 +126,30 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
         protected override void LoadCore(object parameters)
         {
+            CurDevModel = parameters as DeviceModel;
+            CurDevModel = CurDevModel ?? new DeviceModel();
         }
-
-        #endregion
-
-        #region Commands
-
-        /// <summary>
-        /// 取消编辑
-        /// </summary>
-        public ICommand CancelEditCommand { get; set; }
 
         #endregion
 
         #region ExecuteCommands
 
+        private string ExecutePhoneTakePhotoCommand()
+        {
+
+            return string.Empty;
+        }
+
+        //取消编辑状态
         private void ExecuteCancelEditCommand()
         {
+            CurEditStatus = false;
+            //恢复之前的值
+
+
+
+
+
 
         }
 

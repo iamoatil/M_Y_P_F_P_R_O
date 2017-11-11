@@ -36,6 +36,11 @@ namespace XLY.SF.Project.DataDisplayView
         public IEnumerable<AbstractDataViewPlugin> Plugins { get; set; }
 
         /// <summary>
+        /// 当存在多个视图时，是否隐藏默认的表格视图
+        /// </summary>
+        public const bool IsDefaultGridViewVisibleWhenMultiviews = false;
+
+        /// <summary>
         /// 根据当前选择的数据获取视图列表
         /// </summary>
         /// <param name="pluginId"></param>
@@ -48,17 +53,28 @@ namespace XLY.SF.Project.DataDisplayView
                 return new List<AbstractDataViewPlugin>();
             }
             string typeName = (type is Type) ? ((Type)type).Name : type.ToSafeString();
-            //return Plugins.Where(p =>
-            //    ((DataViewPluginInfo)p.PluginInfo).ViewType.Any(v => (v.PluginId.Equals(pluginId) || v.PluginId == "*") && (v.TypeName.Equals(typeName) || v.TypeName == "*")))
-            //    .OrderByDescending(iv => iv.PluginInfo.OrderIndex);
-            return typeName == AbstractDataViewPlugin.XLY_LAYOUT_KEY ? 
+            var views = (typeName == AbstractDataViewPlugin.XLY_LAYOUT_KEY ? 
                 Plugins.Where(p =>
                ((DataViewPluginInfo)p.PluginInfo).ViewType.Any(v => (v.PluginId.Equals(pluginId) || v.PluginId == "*") && (v.TypeName.Equals(typeName))))
                .OrderByDescending(iv => iv.PluginInfo.OrderIndex)
                :
                Plugins.Where(p =>
                ((DataViewPluginInfo)p.PluginInfo).ViewType.Any(v => (v.PluginId.Equals(pluginId) || v.PluginId == "*") && (v.TypeName.Equals(typeName) || v.TypeName == "*")))
-               .OrderByDescending(iv => iv.PluginInfo.OrderIndex);
+               .OrderByDescending(iv => iv.PluginInfo.OrderIndex))
+               .ToList();
+
+            if(views.Count > 1 && !IsDefaultGridViewVisibleWhenMultiviews)  //当存在多个视图时，是否隐藏默认的表格视图
+            {
+                for (int i = views.Count - 1; i >= 0; i--)
+                {
+                    if(views[i].PluginInfo.Guid == "7B51FA8D-F7F6-4EE3-B3B9-780C29B9B778")
+                    {
+                        views.RemoveAt(i);
+                    }
+                }
+            }
+
+            return views;
         }
     }
 }

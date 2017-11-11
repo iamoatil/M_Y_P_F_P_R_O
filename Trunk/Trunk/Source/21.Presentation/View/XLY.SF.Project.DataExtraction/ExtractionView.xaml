@@ -1,109 +1,287 @@
 ﻿<UserControl x:Class="XLY.SF.Project.DataExtraction.ExtractionView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:XLY.SF.Project.DataExtraction"
              xmlns:lang="clr-namespace:XLY.SF.Project.DataExtraction.Language"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:cmd="http://www.galasoft.ch/mvvmlight"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              x:Name="Root"
-             d:DesignHeight="300" d:DesignWidth="300">
+             FontSize="16"
+             d:DesignHeight="300"
+             d:DesignWidth="300">
+    <UserControl.Background>
+        <LinearGradientBrush>
+            <GradientStop Offset="0"
+                          Color="#2a385a" />
+            <GradientStop Offset="0.5"
+                          Color="#212a48" />
+            <GradientStop Offset="1"
+                          Color="#191e37" />
+        </LinearGradientBrush>
+    </UserControl.Background>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <UserControl.Resources>
-        <CollectionViewSource x:Key="ItemsView" Source="{Binding Items,UpdateSourceTrigger=PropertyChanged}">
-            <CollectionViewSource.GroupDescriptions>
-                <PropertyGroupDescription PropertyName="Group" />
-            </CollectionViewSource.GroupDescriptions>
-        </CollectionViewSource>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <local:SelectToForgroundConverter x:Key="SelectToForgroundConverter" />
+            <local:TaskStateToTextConverter x:Key="TaskStateToTextConverter" />
+
+            <CollectionViewSource x:Key="ItemsView"
+                                  Source="{Binding Items,UpdateSourceTrigger=PropertyChanged}">
+                <CollectionViewSource.GroupDescriptions>
+                    <PropertyGroupDescription PropertyName="Group" />
+                </CollectionViewSource.GroupDescriptions>
+            </CollectionViewSource>
+            <Style x:Key="ExpanderStyle"
+                   TargetType="{x:Type Expander}">
+                <Setter Property="IsExpanded"
+                        Value="True" />
+                <Setter Property="Padding"
+                        Value="30,0,0,0" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Expander}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal">
+                                    <CheckBox Content="{Binding Name}"
+                                              Grid.Row="0"
+                                              Padding="14,0,0,0"
+                                              VerticalAlignment="Center"
+                                              Foreground="{Binding IsChecked,RelativeSource={RelativeSource Self},Converter={StaticResource SelectToForgroundConverter}}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Checked">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.SelectGroupCommand,ElementName=Root}"
+                                                                       CommandParameter="{Binding Items}" />
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="Unchecked">
+                                                <i:InvokeCommandAction Command="{Binding DataContext.UnselectGroupCommand,ElementName=Root}"
+                                                                       CommandParameter="{Binding Items}" />
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="Loaded">
+                                                <cmd:EventToCommand Command="{Binding DataContext.HeaderLoadedCommand,ElementName=Root}"
+                                                                    PassEventArgsToCommand="True" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </CheckBox>
+                                    <ToggleButton VerticalAlignment="Center"
+                                                  Margin="18,0,0,0"
+                                                  Style="{StaticResource TriangleToggleButton}"
+                                                  IsChecked="{Binding IsExpanded,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                                                  Content="b"/>
+                                </StackPanel>
+                                <ContentPresenter x:Name="Content" 
+                                                  Grid.Row="1"
+                                                  Margin="{TemplateBinding Padding}"
+                                                  Visibility="Collapsed"/>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsExpanded"
+                                         Value="True">
+                                    <Setter TargetName="Content"
+                                            Property="Visibility"
+                                            Value="Visible" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="GroupItemStyle"
+                   TargetType="{x:Type GroupItem}">
+                <Setter Property="Margin"
+                        Value="0,0,0,20" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type GroupItem}">
+                            <Expander Style="{StaticResource ExpanderStyle}">
+                                <ItemsPresenter />
+                            </Expander>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="ListBoxItemStyle"
+                   TargetType="{x:Type ListBoxItem}">
+                <Setter Property="Margin"
+                        Value="0,20,52,10" />
+                <Setter Property="Foreground"
+                        Value="White" />
+                <Setter Property="FontSize"
+                        Value="16" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition SharedSizeGroup="Title" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition SharedSizeGroup="Count" />
+                                    <ColumnDefinition SharedSizeGroup="State" />
+                                    <ColumnDefinition SharedSizeGroup="Elapsed" />
+                                </Grid.ColumnDefinitions>
+                                <CheckBox x:Name="cb"
+                                          Content="{Binding Name}"
+                                          IsChecked="{Binding IsChecked}"
+                                          Command="{Binding DataContext.SelectItemCommand,ElementName=Root}"
+                                          CommandParameter="{Binding}"
+                                          Foreground="{Binding IsChecked,RelativeSource={RelativeSource Self},Converter={StaticResource SelectToForgroundConverter}}"
+                                          Grid.Column="0"
+                                          Margin="0,0,20,0" />
+                                <ProgressBar Grid.Column="1"
+                                             Minimum="0"
+                                             Maximum="100"
+                                             Value="{Binding Progress}" />
+                                <TextBlock Text="{Binding Count}"
+                                           Grid.Column="2"
+                                           Foreground="{Binding IsChecked,ElementName=cb,Converter={StaticResource SelectToForgroundConverter}}"
+                                           FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald"
+                                           Margin="60,0,0,0" />
+                                <TextBlock Text="{Binding State,Converter={StaticResource TaskStateToTextConverter}}"
+                                           Foreground="{Binding IsChecked,ElementName=cb,Converter={StaticResource SelectToForgroundConverter}}"
+                                           Grid.Column="3"
+                                           Margin="20,0,0,0" />
+                                <TextBlock Text="{Binding Elapsed,StringFormat={}{0:hh}:{0:mm}:{0:ss}}"
+                                           FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald"
+                                           Foreground="{Binding IsChecked,ElementName=cb,Converter={StaticResource SelectToForgroundConverter}}"
+                                           Grid.Column="4"
+                                           Margin="20,0,0,0" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80" />
-            <RowDefinition Height="30" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="76" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="80" />
+            <RowDefinition Height="110" />
         </Grid.RowDefinitions>
-        <DockPanel Grid.Row="1">
+        <StackPanel Orientation="Horizontal">
+            <StackPanel.Effect>
+                <DropShadowEffect Color="#181d3a"
+                                  BlurRadius="4"
+                                  Opacity="0.3" />
+            </StackPanel.Effect>
+            <StackPanel.Background>
+                <LinearGradientBrush>
+                    <GradientStop Offset="0"
+                                  Color="#2b395a" />
+                    <GradientStop Offset="1"
+                                  Color="#2a3758" />
+                </LinearGradientBrush>
+            </StackPanel.Background>
+            <TextBlock Text="自动提取"
+                       Grid.Row="0"
+                       Foreground="White"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       Margin="20,0,0,0" />
+        </StackPanel>
+        <DockPanel Grid.Row="1"
+                   Margin="30,0,30,0"
+                   IsEnabled="{Binding CanSelect}"
+                   Background="Transparent">
             <CheckBox Content="全选"
+                      FontSize="16"
                       IsChecked="{Binding IsSelectAll,Mode=TwoWay}"
-                      DockPanel.Dock="Left"/>
-            <Button Content="添加方案"
+                      Foreground="{Binding IsChecked,RelativeSource={RelativeSource Self},Converter={StaticResource SelectToForgroundConverter}}"
+                      DockPanel.Dock="Left" />
+            <Button Content="添加当前方案"
+                    Width="120"
+                    Height="30"
                     DockPanel.Dock="Right" />
-            <TextBlock Text=""
-                       Width="100"
-                       DockPanel.Dock="Right"
-                       HorizontalAlignment="Right"/>
+            <TextBox Text=""
+                     Width="120"
+                     Height="30"
+                     DockPanel.Dock="Right"
+                     HorizontalAlignment="Right"
+                     Margin="0,0,12,0" />
         </DockPanel>
         <ListBox Grid.Row="2"
+                 Margin="30,0,30,0"
+                 BorderThickness="0"
+                 Background="Transparent"
                  Grid.IsSharedSizeScope="True"
+                 ItemContainerStyle="{StaticResource ListBoxItemStyle}"
                  ItemsSource="{Binding Source={StaticResource ItemsView}}">
+            <ListBox.Style>
+                <Style TargetType="{x:Type ListBox}">
+                    <Style.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
+                                         Color="Transparent" />
+                    </Style.Resources>
+                </Style>
+            </ListBox.Style>
             <ListBox.GroupStyle>
-                <GroupStyle>
-                    <GroupStyle.HeaderTemplate>
-                        <DataTemplate>
-                            <CheckBox Content="{Binding Name}">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="Checked">
-                                        <i:InvokeCommandAction Command="{Binding DataContext.SelectGroupCommand,ElementName=Root}"
-                                                               CommandParameter="{Binding Items}" />
-                                    </i:EventTrigger>
-                                    <i:EventTrigger EventName="Unchecked">
-                                        <i:InvokeCommandAction Command="{Binding DataContext.UnselectGroupCommand,ElementName=Root}"
-                                                               CommandParameter="{Binding Items}" />
-                                    </i:EventTrigger>
-                                    <i:EventTrigger EventName="Loaded">
-                                        <cmd:EventToCommand Command="{Binding DataContext.HeaderLoadedCommand,ElementName=Root}"
-                                                            PassEventArgsToCommand="True" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </CheckBox>
-                        </DataTemplate>
-                    </GroupStyle.HeaderTemplate>
-                </GroupStyle>
+                <GroupStyle ContainerStyle="{StaticResource GroupItemStyle}"/>
             </ListBox.GroupStyle>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition SharedSizeGroup="Title" />
-                            <ColumnDefinition MinWidth="300"
-                                              SharedSizeGroup="Progress" />
-                            <ColumnDefinition SharedSizeGroup="Tip" />
-                        </Grid.ColumnDefinitions>
-                        <CheckBox Content="{Binding Name}"
-                                  IsChecked="{Binding IsChecked}"
-                                  Command="{Binding DataContext.SelectItemCommand,ElementName=Root}"
-                                  CommandParameter="{Binding}"
-                                  Grid.Column="0" 
-                                  Margin="0,0,20,0"/>
-                        <ProgressBar Grid.Column="1"
-                                     Minimum="0"
-                                     Maximum="100"
-                                     Value="{Binding Progress}" />
-                        <TextBlock Text="正在解析..."
-                                   Grid.Column="2" 
-                                   Margin="20,0,0,0"/>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
+            <!--<MultiBinding Converter="">
+                
+            </MultiBinding>-->
         </ListBox>
-        <DockPanel Grid.Row="3">
-            <TextBlock Text="00'52'37"
-                       DockPanel.Dock="Left"
-                       VerticalAlignment="Center"/>
+        <Grid Grid.Row="3"
+              Margin="30,0,30,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="总进度" 
+                       Grid.Row="0"
+                       Grid.Column="0"
+                       VerticalAlignment="Bottom"/>
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="1"
+                        Grid.Column="0">
+                <TextBlock Text="10"
+                           FontSize="50"
+                           FontWeight="Bold"
+                           FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald-Bold"
+                           DockPanel.Dock="Left"
+                           VerticalAlignment="Bottom" />
+                <TextBlock Text="/100"
+                           FontSize="30"
+                           FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald-Light"
+                           DockPanel.Dock="Left"
+                           VerticalAlignment="Bottom" />
 
+                <TextBlock Text="00''52''37"
+                           Margin="14,0,0,0"
+                           FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald"
+                           FontSize="18"
+                           FontWeight="Light"
+                           DockPanel.Dock="Left"
+                           VerticalAlignment="Bottom" />
+            </StackPanel>
             <Button Content="{Binding XPath=Extraction/Start, Source={x:Static lang:LanguageHelper.LanguageProvider}}"
                     Command="{Binding StartCommand}"
-                    DockPanel.Dock="Right" />
-            <CheckBox Content="启用只能预警" 
-                      DockPanel.Dock="Right"/>
-        </DockPanel>
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Width="160"
+                    Height="60"/>
+        </Grid>
     </Grid>
 </UserControl>
 

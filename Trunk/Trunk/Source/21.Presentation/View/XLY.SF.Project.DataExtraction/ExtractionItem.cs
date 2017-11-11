@@ -54,6 +54,60 @@ namespace XLY.SF.Project.DataExtraction
 
         #endregion
 
+        #region Count
+
+        private Int32 _count;
+        /// <summary>
+        /// 提取结果数量。
+        /// </summary>
+        public Int32 Count
+        {
+            get => _count;
+            set
+            {
+                _count = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region State
+
+        private TaskState _state;
+        /// <summary>
+        /// 任务状态。
+        /// </summary>
+        public TaskState State
+        {
+            get => _state;
+            set
+            {
+                _state = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region Elapsed
+
+        private TimeSpan _elapsed;
+        /// <summary>
+        /// 任务耗时。
+        /// </summary>
+        public TimeSpan Elapsed
+        {
+            get => _elapsed;
+            set
+            {
+                _elapsed = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region Progress
 
         private Double _progress;

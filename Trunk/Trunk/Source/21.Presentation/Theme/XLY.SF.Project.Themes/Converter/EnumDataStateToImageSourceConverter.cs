@@ -33,11 +33,11 @@ namespace XLY.SF.Project.Themes
         {
             if (value == null || value.ToString() == "Normal" || value.ToString() == "None")
             {
-                return new BitmapImage(new Uri("pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceHome_titleicon.png", UriKind.RelativeOrAbsolute));
+                return new BitmapImage(new Uri("pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_state_normal.png", UriKind.RelativeOrAbsolute));
             }
             else
             {
-                return new BitmapImage(new Uri("pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceList_Select.png", UriKind.RelativeOrAbsolute));
+                return new BitmapImage(new Uri("pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_state_delete.png", UriKind.RelativeOrAbsolute));
             }
         }
 

@@ -85,13 +85,7 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
 
         public const String DeviceListView = "ExportKey_DeviceListView";
         public const String DeviceListViewModel = "ExportKey_DeviceListViewModel";
-
-        /// <summary>
-        /// 设备主页
-        /// </summary>
-        public const string DeviceHomePageView = "ExportKey_DeviceHomePageView";
-        public const string DeviceHomePageViewModel = "ExportKey_DeviceHomePageViewModel";
-
+        
         #endregion
 
         #region 首页
@@ -151,8 +145,14 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         #endregion
 
         #region 设备提取首页
-        public const string DeviceHomeView = "ExportKey_DeviceHomeView";
-        public const string DeviceHomeViewModel = "ExportKey_DeviceHomeViewModel";
+        /// <summary>
+        /// 设备首页
+        /// </summary>
+        public const string DeviceHomePageView = "ExportKey_DeviceHomePageView";
+        public const string DeviceHomePageViewModel = "ExportKey_DeviceHomePageViewModel";
+        
+        //public const string DeviceHomeView = "ExportKey_DeviceHomeView";
+        //public const string DeviceHomeViewModel = "ExportKey_DeviceHomeViewModel";
 
         /// <summary>
         /// 设备主页

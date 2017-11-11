@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.Domains;
 
@@ -24,6 +25,9 @@ namespace XLY.SF.Project.DataDisplayView
     {
         public IPluginInfo PluginInfo { get; set; }
 
+        /// <summary>
+        /// 表示用于主布局的插件类型（比如想添加手机视图，则可以添加该类型的插件）
+        /// </summary>
         public const string XLY_LAYOUT_KEY = "__LayOut";
 
         public object Execute(object arg, IAsyncTaskProgress progress)
@@ -49,10 +53,30 @@ namespace XLY.SF.Project.DataDisplayView
 
         public abstract FrameworkElement GetControl(DataViewPluginArgument arg);
 
-        public FrameworkElement ToControl(DataViewPluginArgument arg, DelgateDataViewSelectedItemChanged e)
+        public FrameworkElement ToControl(DataViewPluginArgument arg)
         {
-            SelectedDataChanged += e;
-            TabItem ti = new TabItem() { Header = PluginInfo.Name };
+            SelectedDataChanged += arg.OnSelectedItemChanged;
+            TabItem ti = new TabItem();
+            if(!string.IsNullOrWhiteSpace(PluginInfo.Icon))      //设置了图标
+            {
+                try
+                {
+                    Image img = new Image();
+                    img.Source = new BitmapImage(new Uri(PluginInfo.Icon, UriKind.RelativeOrAbsolute));
+                    img.Stretch = System.Windows.Media.Stretch.UniformToFill;
+                    img.Width = img.Height = 16;
+                    img.ToolTip = PluginInfo.Name;
+                    ti.Header = img;
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            if(ti.Header == null)
+            {
+                ti.Header = PluginInfo.Name;
+            }
             ti.Content = GetControl(arg);
             return ti;
         }
@@ -64,6 +88,9 @@ namespace XLY.SF.Project.DataDisplayView
     /// <param name="data"></param>
     public delegate void DelgateDataViewSelectedItemChanged(object data);
 
+    /// <summary>
+    /// 数据展示时传递的参数
+    /// </summary>
     public class DataViewPluginArgument
     {
         public SPFTask Task { get; set; }
@@ -82,5 +109,10 @@ namespace XLY.SF.Project.DataDisplayView
         public IDataItems Items => CurrentData is TreeNode node ? node.Items : 
             CurrentData is SimpleDataSource sp ? sp.Items : 
             null;
+
+        /// <summary>
+        /// 选择了某一项的事件，此时将会更新数据预览项
+        /// </summary>
+        public DelgateDataViewSelectedItemChanged OnSelectedItemChanged { get; set; }
     }
 }

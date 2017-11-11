@@ -45,6 +45,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\23.Shell\XLY.SF.Shell\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Expression.Effects, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.5\Libraries\Microsoft.Expression.Effects.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -70,6 +74,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="SelectToForgroundConverter.cs" />
+    <Compile Include="TaskStateToTextConverter.cs" />
     <Page Include="ExtractionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -156,6 +162,10 @@
     <ProjectReference Include="..\..\..\22.Tools\IsolatedTask\XLY.SF.Project.IsolatedTaskEngine.Common\XLY.SF.Project.IsolatedTaskEngine.Common.csproj">
       <Project>{c31639c3-6e19-4681-8647-46bdd60bfeab}</Project>
       <Name>XLY.SF.Project.IsolatedTaskEngine.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Theme\XLY.SF.Project.Themes\XLY.SF.Project.Themes.csproj">
+      <Project>{c4c4fc67-5d56-4426-acc5-b53cd24c6b69}</Project>
+      <Name>XLY.SF.Project.Themes</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

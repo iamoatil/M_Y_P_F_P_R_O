@@ -54,10 +54,9 @@ namespace XLY.SF.Project.DataDisplayView
             foreach (var v in views)
             {
                 v.SelectedDataChanged += OnSelectedDataChanged;
-                TabItem ti = new TabItem() { Header = v.PluginInfo.Name };
-                ti.Content = v.GetControl(new DataViewPluginArgument() { CurrentData = selNode });
-                tbdetail.Items.Add(ti);
+                tbdetail.Items.Add(v.ToControl(new DataViewPluginArgument() { CurrentData = selNode, DataSource = arg.DataSource }));
             }
+            tbdetail.SelectedIndex = tbdetail.HasItems ? 0 : -1;
 
             OnSelectedDataChanged?.Invoke(lsb1.SelectedValue);
         }

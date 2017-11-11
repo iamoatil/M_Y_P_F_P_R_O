@@ -26,7 +26,7 @@ namespace XLY.SF.Project.DataExtraction
 
         public ExtractionView()
         {
-            InitializeComponent();
+            InitializeComponent(); 
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
                 DataContext = new ExtractionViewModel(); 

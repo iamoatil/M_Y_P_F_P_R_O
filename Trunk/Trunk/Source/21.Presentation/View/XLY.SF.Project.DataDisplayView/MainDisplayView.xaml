@@ -17,7 +17,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="7*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="3*"/>
         </Grid.RowDefinitions>
 
         <!--数据过滤-->
@@ -44,14 +44,14 @@
         
         <!--自定义数据预览-->
         <!--<ContentControl x:Name="contentPreview" Grid.Column="1" Grid.Row="2"/>-->
-        <ctrl:TabControlWithButton x:Name="tabPreview" Grid.Column="1" Grid.Row="2" Style="{StaticResource TabControlWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithButtonStyle1}" CustomButtonAlignment="Right">
+        <ctrl:TabControlWithButton x:Name="tabPreview" Grid.Column="1" Grid.Row="2" Style="{StaticResource TabControlFlatWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithButtonStyle1}" CustomButtonAlignment="Right" Padding="2">
             <ctrl:TabControlWithButton.CustomButtonGroup>
                 <Button x:Name="btnExpanded" Style="{StaticResource btn_GrayIcon}" Width="30" Height="24" Click="btnExpanded_Click">
                     <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceHome_titleicon.png" Width="13" Height="13"/>
                 </Button>
-                <Button x:Name="btnCollpse" Style="{StaticResource btn_GrayIcon}" Width="30" Height="24" Click="btnCollpse_Click">
+                <!--<Button x:Name="btnCollpse" Style="{StaticResource btn_GrayIcon}" Width="30" Height="24" Click="btnCollpse_Click">
                     <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceHome_titleicon.png" Width="13" Height="13"/>
-                </Button>
+                </Button>-->
             </ctrl:TabControlWithButton.CustomButtonGroup>
 
             <TabItem Header="16进制">

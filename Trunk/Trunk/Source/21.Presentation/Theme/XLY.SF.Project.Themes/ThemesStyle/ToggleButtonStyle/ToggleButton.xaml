@@ -70,11 +70,59 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
+    <BitmapImage x:Key="TriangleToggleButtonHoverImage"
+                 UriSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Toggle_Btn_hover.png" />
+    <BitmapImage x:Key="TriangleToggleButtonNormalImage"
+                 UriSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Toggle_Btn_hover.png" />
 
-
-
-
-
+    <Style x:Key="TriangleToggleButton" 
+           TargetType="{x:Type ToggleButton}">
+        <Setter Property="RenderTransformOrigin"
+                Value="0.5,0.5" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Image x:Name="Img"
+                           Stretch="Fill"
+                           RenderTransformOrigin="0.5,0.5"
+                           Source="{StaticResource TriangleToggleButtonNormalImage}">
+                        <Image.RenderTransform>
+                            <RotateTransform />
+                        </Image.RenderTransform>
+                    </Image>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="Img"
+                                    Property="Source"
+                                    Value="{StaticResource TriangleToggleButtonHoverImage}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked"
+                                 Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetProperty="RenderTransform.Angle"
+                                                Storyboard.TargetName="Img">
+                                        <DoubleAnimation To="180"
+                                                         Duration="0:0:0.3" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard Storyboard.TargetProperty="RenderTransform.Angle"
+                                                Storyboard.TargetName="Img">
+                                        <DoubleAnimation To="0"
+                                                         Duration="0:0:0.3" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 
 

@@ -84,7 +84,7 @@
     <View_DevHomePage_SerialNumber>序列号</View_DevHomePage_SerialNumber>
     <View_DevHomePage_Power>权   限</View_DevHomePage_Power>
     <View_DevHomePage_TakePhoto>外观拍照</View_DevHomePage_TakePhoto>
-    <View_DevHomePage_Phone>手机</View_DevHomePage_Phone>
+    <View_DevHomePage_Device>设备</View_DevHomePage_Device>
     <View_DevHomePage_SDCard>SD卡</View_DevHomePage_SDCard>
     <View_DevHomePage_Used>已用</View_DevHomePage_Used>
     <View_DevHomePage_Unused>剩余</View_DevHomePage_Unused>
@@ -101,12 +101,40 @@
     <View_DevHomePage_Edit>编辑</View_DevHomePage_Edit>
     <View_DevHomePage_ClickESCCancel>单击ESC取消</View_DevHomePage_ClickESCCancel>
     <View_DevHomePage_UnConnect>未连接</View_DevHomePage_UnConnect>
+    <View_DevHomePage_FileName>文件名</View_DevHomePage_FileName>
+    <View_DevHomePage_FileType>文件类型</View_DevHomePage_FileType>
+    <View_DevHomePage_FilePath>文件路径</View_DevHomePage_FilePath>
+    <View_DevHomePage_Type>类   型</View_DevHomePage_Type>
+    <View_DevHomePage_Number>编   号</View_DevHomePage_Number>
+    <View_DevHomePage_Port>端   口</View_DevHomePage_Port>
+    <View_DevHomePage_IOSRoot>越狱</View_DevHomePage_IOSRoot>
     
     
     
 
     <!--操作日志-->
     <View_Operation1></View_Operation1>
+
+
+
+
+
+
+
+    
+    <!--公共字库-->
+    <View_Common_HaveNot>未</View_Common_HaveNot>
+    <View_Common_Save>保存</View_Common_Save>
+    <View_Common_Cancel>取消</View_Common_Cancel>
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     <!--消息提示-->
     <View_MessageBox_Error>错误消息</View_MessageBox_Error>

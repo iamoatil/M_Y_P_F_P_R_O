@@ -7,8 +7,8 @@
     <SolidColorBrush x:Key="TabItem.Selected.Background" Color="Transparent"/>
     <SolidColorBrush x:Key="TabItem.Static.Border" Color="#ACACAC"/>
     <SolidColorBrush x:Key="TabItem.Selected.Border" Color="#ACACAC"/>
-    
-    <!--带自定义按钮的TabControl-->
+
+    <!--标题栏为图标的带按钮的TabControl-->
     <Style x:Key="TabControlWithButtonStyle1" TargetType="{x:Type ctrl:TabControlWithButton}">
         <Setter Property="Padding" Value="2"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -29,14 +29,61 @@
                             <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
                             <RowDefinition x:Name="RowDefinition1" Height="*"/>
                         </Grid.RowDefinitions>
-                        <DockPanel x:Name="PART_HeaderBar" Grid.Column="0" LastChildFill="True">
+                        <DockPanel x:Name="PART_HeaderBar" Grid.Column="0" LastChildFill="True" Margin="0 10 0 12">
+                            <TabPanel x:Name="PART_headerPanel" Background="{StaticResource TabItem.Selected.Background}" IsItemsHost="true" Margin="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"  DockPanel.Dock="Left"/>
+                            <Border x:Name="bdButtons" Grid.Row="0" Background="Transparent" DockPanel.Dock="Right">
+                                <StackPanel x:Name="PART_CustomBtns" Orientation="Horizontal" HorizontalAlignment="Right"/>
+                            </Border>
+                        </DockPanel>
+                        <Border x:Name="contentPanel" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="0" KeyboardNavigation.DirectionalNavigation="Contained" Grid.Row="1" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
+                            <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding CustomButtonAlignment, RelativeSource={RelativeSource Self}}" Value="Left">
+                            <Setter Property="DockPanel.Dock" TargetName="PART_headerPanel" Value="Right"/>
+                            <Setter Property="DockPanel.Dock" TargetName="bdButtons" Value="Left"/>
+                            <Setter Property="HorizontalAlignment" TargetName="PART_CustomBtns" Value="Left"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    
+    <!--带自定义按钮的TabControl-->
+    <Style x:Key="TabControlFlatWithButtonStyle1" TargetType="{x:Type ctrl:TabControlWithButton}">
+        <Setter Property="Padding" Value="2"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Background" Value="{StaticResource TabItem.Selected.Background}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource TabItem.Selected.Border}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ctrl:TabControlWithButton}">
+                    <Grid x:Name="templateRoot" ClipToBounds="true" SnapsToDevicePixels="true" KeyboardNavigation.TabNavigation="Local">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Name="ColumnDefinition0"/>
+                            <ColumnDefinition x:Name="ColumnDefinition1" Width="0"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
+                            <RowDefinition x:Name="RowDefinition1" Height="*"/>
+                        </Grid.RowDefinitions>
+                        <DockPanel x:Name="PART_HeaderBar" Grid.Column="0" LastChildFill="True" Margin="{TemplateBinding Padding}">
                             <TabPanel x:Name="PART_headerPanel" Background="{StaticResource TabItem.Selected.Background}" IsItemsHost="true" Margin="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"  DockPanel.Dock="Left"/>
                             <Border x:Name="bdButtons" Grid.Row="0" Background="{StaticResource TabItem.Static.Background}" DockPanel.Dock="Right">
                                 <StackPanel x:Name="PART_CustomBtns" Orientation="Horizontal" HorizontalAlignment="Right"/>
                             </Border>
                         </DockPanel>
                         <Border x:Name="contentPanel" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Grid.Column="0" KeyboardNavigation.DirectionalNavigation="Contained" Grid.Row="1" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
-                            <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                         </Border>
                     </Grid>
                     <ControlTemplate.Triggers>
@@ -101,7 +148,7 @@
     <!--数据展示TabItem样式，为灰色图标-->
     <Style x:Key="TabItemWithGrayIconButtonStyle1" TargetType="{x:Type TabItem}">
         <Setter Property="Foreground" Value="Gray"/>
-        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Background" Value="#263454"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Padding" Value="7 4"/>
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -110,7 +157,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
-                    <Border x:Name="templateRoot" SnapsToDevicePixels="true" Background="{TemplateBinding Background}" CornerRadius="4">
+                    <Border x:Name="templateRoot" SnapsToDevicePixels="true" Background="{TemplateBinding Background}" CornerRadius="4" Margin="4 0">
                         <ContentPresenter x:Name="contentPresenter" ContentSource="Header" Focusable="False" HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"></ContentPresenter>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -118,7 +165,7 @@
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}" Value="true"/>
                             </MultiDataTrigger.Conditions>
-                            <Setter Property="Background" Value="#263454"/>
+                            <Setter Property="Background" Value="#379be6"/>
                             <Setter Property="Effect" TargetName="contentPresenter">
                                 <Setter.Value>
                                     <ee:EmbossedEffect Color="White"></ee:EmbossedEffect>
@@ -129,7 +176,7 @@
                             <MultiDataTrigger.Conditions>
                                 <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
                             </MultiDataTrigger.Conditions>
-                            <Setter Property="Background" Value="#263454"/>
+                            <Setter Property="Background" Value="#379be6"/>
                             <Setter Property="Effect" TargetName="contentPresenter">
                                 <Setter.Value>
                                     <ee:EmbossedEffect Color="White"></ee:EmbossedEffect>

@@ -87,6 +87,7 @@
     <Compile Include="CustromControl\Button\IconButton.cs" />
     <Compile Include="CustromControl\ToggleButton\IconRadioButton.cs" />
     <Compile Include="CustromControl\TabControl\TabControlWithButton.cs" />
+    <Compile Include="CustromControl\TreeView\TreeViewItemEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -170,6 +171,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ThemesStyle\ToggleButtonStyle\ToggleButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ThemesStyle\TreeViewStyle\TreeViewStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -341,6 +346,25 @@
   <ItemGroup>
     <Resource Include="Resources\Images\Mirror_Checked.png" />
     <Resource Include="Resources\Images\Mirror_Partition.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\data_filter_calendar.png" />
+    <Resource Include="Resources\Images\data_filter_clear.png" />
+    <Resource Include="Resources\Images\data_state_delete.png" />
+    <Resource Include="Resources\Images\data_state_normal.png" />
+    <Resource Include="Resources\Images\data_view_conversion.png" />
+    <Resource Include="Resources\Images\data_view_grid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\TreeViewDeleteIcon.png" />
+    <Resource Include="Resources\Images\Icons\TreeViewExpandIcon.png" />
+    <Resource Include="Resources\Images\Icons\TreeViewFolderIcon.png" />
+    <Resource Include="Resources\Images\Icons\TreeViewInformationIcon.png" />
+    <Resource Include="Resources\Images\Icons\TreeViewPutIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Toggle_Btn_hover.png" />
+    <Resource Include="Resources\Images\Toggle_Btn_normal.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

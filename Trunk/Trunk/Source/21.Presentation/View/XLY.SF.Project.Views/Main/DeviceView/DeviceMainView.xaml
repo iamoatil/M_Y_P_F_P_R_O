@@ -42,10 +42,13 @@
                 </Grid.RowDefinitions>
                 <TextBlock Text="{Binding CurDevModel.DevName}" FontSize="16" FontWeight="Bold" TextWrapping="Wrap"/>
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 14 0 0">
-                    <control:IconCheckBox Background="#263454" Height="24" Width="84" Content="ROOT" IsChecked="{Binding DevName.IsRoot}" Visibility="{Binding DevName.HasRoot,Converter={StaticResource bToV}}"
+                    <control:IconCheckBox x:Name="cb_Root" Background="#263454" Height="24" Width="84" Content="ROOT" IsEnabled="False"
+                                          IsChecked="{Binding CurDevModel.IsRoot}" 
+                                          Visibility="{Binding CurDevModel.HasRoot,Converter={StaticResource bToV}}"
                                           Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageIsRootIcon.png" Margin="0 0 2 0"/>
 
-                    <control:IconCheckBox Background="#263454" Height="24" Width="84" Content="{Binding XPath=ViewLanguage/View_DevHomePage_UnConnect, Source={x:Static ex:SystemContext.LanguageProvider}}"
+                    <control:IconCheckBox Background="#263454" Height="24" Width="84" IsEnabled="False" 
+                                          Content="{Binding XPath=ViewLanguage/View_DevHomePage_UnConnect, Source={x:Static ex:SystemContext.LanguageProvider}}"
                                           Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageConnectIcon.png"/>
                 </StackPanel>
             </Grid>
@@ -54,7 +57,7 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <control:MenuRadioButton x:Name="mr" GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_MenuExtract, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageIcon.png" Height="50"/>
+                <control:MenuRadioButton x:Name="mr" IsChecked="True" GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_MenuExtract, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageIcon.png" Height="50"/>
                 <Rectangle Grid.Column="1" Fill="{Binding Background,ElementName=mr}"/>
                 <!--提取状态-->
                 <Button Grid.Column="1" Visibility="Hidden" Style="{StaticResource loadingControlStyle}" Width="24" Height="24" Margin="0 0 35 0"/>
@@ -66,5 +69,14 @@
                 <DropShadowEffect Color="#181D3A" Opacity="0.4" Direction="0" BlurRadius="30" ShadowDepth="4" RenderingBias="Quality"/>
             </StackPanel.Effect>
         </StackPanel>
+
+        <ContentControl Grid.Column="1" Content="{Binding CurDeviceView}"/>
+
+        <i:Interaction.Triggers>
+            <ei:DataTrigger Binding="{Binding CurDevModel.IsAndroid}" Value="False">
+                <ei:ChangePropertyAction PropertyName="Content" TargetObject="{Binding ElementName=cb_Root}" 
+                                         Value="{Binding XPath=ViewLanguage/View_DevHomePage_IOSRoot, Source={x:Static ex:SystemContext.LanguageProvider}}"/>
+            </ei:DataTrigger>
+        </i:Interaction.Triggers>
     </Grid>
 </core:UcViewBase>

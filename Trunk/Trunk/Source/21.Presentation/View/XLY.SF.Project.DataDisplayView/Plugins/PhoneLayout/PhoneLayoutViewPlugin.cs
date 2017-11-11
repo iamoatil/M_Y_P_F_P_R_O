@@ -27,7 +27,14 @@ namespace XLY.SF.Project.DataDisplayView
     {
         public PhoneLayoutViewPlugin()
         {
-            var p = new DataViewPluginInfo() { Guid = "8EEB83BF-FF24-45F5-BFBC-EBB306A16F33", Name = "手机布局", ViewType = new List<DataViewSupportItem>(), OrderIndex = 0, PluginType = PluginType.SpfDataView };
+            var p = new DataViewPluginInfo() {
+                Guid = "8EEB83BF-FF24-45F5-BFBC-EBB306A16F33",
+                Name = "手机布局",
+                ViewType = new List<DataViewSupportItem>(),
+                OrderIndex = 0,
+                PluginType = PluginType.SpfDataView,
+                State = PluginState.Disabled
+            };
             p.ViewType.Add(new DataViewSupportItem() { PluginId = "微信", TypeName = AbstractDataViewPlugin.XLY_LAYOUT_KEY });
             PluginInfo = p;
         }

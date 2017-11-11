@@ -73,11 +73,11 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="43*"/>
+            <ColumnDefinition Width="57*"/>
         </Grid.ColumnDefinitions>
         <ListBox x:Name="lsb1" ItemsSource="{Binding Items.View}" SelectionChanged="lsb1_SelectionChanged" Background="Transparent" ItemContainerStyle="{StaticResource accoutListItemStyle}" BorderThickness="0"></ListBox>
         <GridSplitter VerticalAlignment="Stretch" Width="2" Background="Transparent"/>
-        <ctrl:TabControlWithButton x:Name="tbdetail" Grid.Column="1" Style="{StaticResource TabControlWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithButtonStyle1}" CustomButtonAlignment="Right" IsHideHeaderWhenEmpty="True"></ctrl:TabControlWithButton>
+        <ctrl:TabControlWithButton x:Name="tbdetail" Grid.Column="1" Style="{StaticResource TabControlWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithGrayIconButtonStyle1}" CustomButtonAlignment="Right" IsHideHeaderWhenEmpty="True"></ctrl:TabControlWithButton>
     </Grid>
 </UserControl>

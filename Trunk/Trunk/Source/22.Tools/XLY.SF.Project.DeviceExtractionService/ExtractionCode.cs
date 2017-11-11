@@ -20,12 +20,8 @@ namespace XLY.SF.Project.DeviceExtractionService
         /// </summary>
         Stop = 1,
         /// <summary>
-        /// 错误。
-        /// </summary>
-        Error = 2,
-        /// <summary>
         /// 进度改变。
         /// </summary>
-        ProgressChanged = 5,
+        ProgressChanged = 2,
     }
 }

@@ -37,12 +37,12 @@ namespace XLY.SF.Project.DataExtraction
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            _monitor.Start();
+            //_monitor.Start();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            _monitor.Close();
+            //_monitor.Close();
         }
 
         #endregion

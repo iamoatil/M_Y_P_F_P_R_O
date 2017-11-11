@@ -31,7 +31,7 @@ namespace XLY.SF.Project.DataExtraction
         public ExtractionViewModel()
         {
             LoadedCommand = new RelayCommand(Loaded);
-            StartCommand = new RelayCommand(Start, () => Args != null);
+            StartCommand = new RelayCommand(Start, () => Items != null && Items.Any(x => x.IsChecked));
             SelectGroupCommand = new RelayCommand<IEnumerable<Object>>((o) => SelectGroup(o, true));
             UnselectGroupCommand = new RelayCommand<IEnumerable<Object>>((o) => SelectGroup(o, false));
             SelectItemCommand = new RelayCommand<ExtractionItem>(SelectItem);
@@ -71,19 +71,30 @@ namespace XLY.SF.Project.DataExtraction
 
         #region IsSelectAll
 
-        private Boolean _isSelectAll;
-        public Boolean IsSelectAll
+        private Boolean? _isSelectAll;
+        public Boolean? IsSelectAll
         {
             get
             {
                 if (_headers.Count == 0) return false;
-                return _headers.Values.All(x => x.IsChecked.HasValue && x.IsChecked.Value);
+                if (_headers.Values.All(x => x.IsChecked.HasValue && x.IsChecked.Value))
+                {
+                    return true;
+                }
+                else if (_headers.Values.All(x => x.IsChecked.HasValue && !x.IsChecked.Value))
+                {
+                    return false;
+                }
+                else
+                {
+                    return null;
+                }
             }
             set
             {
                 _isSelectAll = value;
                 OnPropertyChanged();
-                SelectAll(value);
+                SelectAll(value.Value);
             }
         }
 
@@ -100,8 +111,23 @@ namespace XLY.SF.Project.DataExtraction
                 _args = value;
                 if (value != null)
                 {
-                    Items = PluginAdapter.Instance.GetAllExtractItems(value.Pump).Select(x=>new ExtractionItem(x)).ToArray();
+                    Items = PluginAdapter.Instance.GetAllExtractItems(value.Pump).Select(x => new ExtractionItem(x)).ToArray();
                 }
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region IsBusy
+
+        private Boolean _canSelect = true;
+        public Boolean CanSelect
+        {
+            get => _canSelect;
+            set
+            {
+                _canSelect = value;
                 OnPropertyChanged();
             }
         }
@@ -183,15 +209,49 @@ namespace XLY.SF.Project.DataExtraction
 
         private void Loaded()
         {
-            PluginAdapter.Instance.Initialization(null);
-            LaunchService();
+            //PluginAdapter.Instance.Initialization(null);
+            //LaunchService();
+            Items = new ExtractItem[]
+            {
+                new ExtractItem{GroupName="设备信息", Name="基本信息"},
+                new ExtractItem{GroupName="设备信息", Name="安装应用"},
+                new ExtractItem{GroupName="设备信息", Name="SIM卡信息"},
+                new ExtractItem{GroupName="设备信息", Name="蓝牙"},
+                new ExtractItem{GroupName="设备信息", Name="WIFI信息"},
+                new ExtractItem{GroupName="基础数据", Name="联系人"},
+                new ExtractItem{GroupName="基础数据", Name="微信"},
+                new ExtractItem{GroupName="基础数据", Name="QQ"},
+                new ExtractItem{GroupName="基础数据", Name="360浏览器"},
+                new ExtractItem{GroupName="基础数据", Name="王者荣耀"},
+                new ExtractItem{GroupName="基础数据", Name="绝地求生"},
+                new ExtractItem{GroupName="基础数据", Name="腾讯新闻"},
+                new ExtractItem{GroupName="特殊", Name="QQ"},
+                new ExtractItem{GroupName="特殊", Name="360浏览器"},
+                new ExtractItem{GroupName="特殊", Name="王者荣耀"},
+                new ExtractItem{GroupName="特殊", Name="绝地求生"},
+                new ExtractItem{GroupName="特殊", Name="腾讯新闻"},
+            }.Select(x => new ExtractionItem(x)
+            {
+                Count =1025,
+                State = TaskState.Idle,
+                Elapsed = TimeSpan.FromHours(17.25345)
+            }).ToArray();
         }
 
         private void Start()
         {
             Message message = new Message((Int32)ExtractionCode.Start);
             message.SetContent(Args);
-            _proxy.Send(message);
+            //System.Threading.Tasks.Task.Factory.StartNew(() =>
+            //{
+            //    foreach (var item in Items)
+            //    {
+            //        item.State = TaskState.Running;
+            //        System.Threading.Thread.Sleep(2000);
+            //    }
+            //});
+            //_proxy.Send(message);
+            CanSelect = false;
         }
 
         private void LaunchService()
@@ -249,6 +309,7 @@ namespace XLY.SF.Project.DataExtraction
             else if (e.Exception != null)
             {
             }
+            CanSelect = true;
         }
 
         #endregion

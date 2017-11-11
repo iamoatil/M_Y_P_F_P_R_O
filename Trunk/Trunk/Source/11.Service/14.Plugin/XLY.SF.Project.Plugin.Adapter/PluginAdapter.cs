@@ -63,7 +63,7 @@ namespace XLY.SF.Project.Plugin.Adapter
         /// <param name="type">插件类型</param>
         /// <param name="state">插件状态</param>
         /// <returns>满足条件的所有插件</returns>
-        public Dictionary<T, IPlugin> GetPluginsByType<T>(PluginType type = PluginType.SpfDataParse, PluginState state = PluginState.None) where T : AbstractPluginInfo
+        public Dictionary<T, IPlugin> GetPluginsByType<T>(PluginType type = PluginType.SpfDataParse, PluginState state = PluginState.Normal) where T : AbstractPluginInfo
         {
             var plugin = state == PluginState.None ? Plugins.Where(p => p.Key.PluginType == type && p.Key is T) :
                 Plugins.Where(p => p.Key.PluginType == type && p.Key is T && state.HasFlag(p.Key.State));

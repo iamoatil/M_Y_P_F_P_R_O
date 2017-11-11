@@ -11,7 +11,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="lsb1" ItemsSource="{Binding Items.View}" SelectionChanged="lsb1_SelectionChanged" ItemContainerStyle="{StaticResource accoutListItemStyle}" BorderThickness="0">
+        <ListBox x:Name="lsb1" ItemsSource="{Binding Items.View}" SelectionChanged="lsb1_SelectionChanged" ItemContainerStyle="{StaticResource accoutListItemStyle}" BorderThickness="0" Background="Transparent">
             <!--<ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Template">

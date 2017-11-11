@@ -26,7 +26,13 @@ namespace XLY.SF.Project.DataDisplayView
     {
         public ContactMessageViewPlugin()
         {
-            var p = new DataViewPluginInfo() { Guid = "110EDD88-5019-4FC5-99FE-2D6EAC1B370D", Name = "消息视图", ViewType = new List<DataViewSupportItem>(), OrderIndex = 1, PluginType = PluginType.SpfDataView };
+            var p = new DataViewPluginInfo() {
+                Guid = "110EDD88-5019-4FC5-99FE-2D6EAC1B370D",
+                Name = "消息视图",
+                ViewType = new List<DataViewSupportItem>(),
+                OrderIndex = 1,
+                PluginType = PluginType.SpfDataView
+            };
             p.ViewType.Add(new DataViewSupportItem() { PluginId = "*", TypeName = "WeChatFriendShowX" });
             PluginInfo = p;
         }

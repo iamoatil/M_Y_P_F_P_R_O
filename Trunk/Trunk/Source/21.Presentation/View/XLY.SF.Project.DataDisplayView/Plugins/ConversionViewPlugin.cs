@@ -26,7 +26,14 @@ namespace XLY.SF.Project.DataDisplayView
     {
         public ConversionViewPlugin()
         {
-            var p = new DataViewPluginInfo() { Guid = "03987975-D89C-48B5-86D5-ABFE44EA3E71", Name = "对话模式", ViewType = new List<DataViewSupportItem>(), OrderIndex = 1, PluginType = PluginType.SpfDataView };
+            var p = new DataViewPluginInfo() {
+                Guid = "03987975-D89C-48B5-86D5-ABFE44EA3E71",
+                Name = "对话模式",
+                ViewType = new List<DataViewSupportItem>(),
+                OrderIndex = 1,
+                PluginType = PluginType.SpfDataView,
+                Icon = "pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_view_conversion.png"
+            };
             p.ViewType.Add(new DataViewSupportItem() { PluginId = "*", TypeName = "MessageCore" });
             PluginInfo = p;
         }

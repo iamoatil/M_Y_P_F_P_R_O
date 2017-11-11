@@ -115,6 +115,6 @@
 
         <!--数据显示区域，如果有多个视图方式则加载-->
         <!--<TabControl Grid.Column="1"  ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}"/>-->
-        <ctrl:TabControlWithButton x:Name="tbdetail" Grid.Column="1" ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}" Style="{StaticResource TabControlWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithButtonStyle1}" CustomButtonAlignment="Right" IsHideHeaderWhenEmpty="True"></ctrl:TabControlWithButton>
+        <ctrl:TabControlWithButton x:Name="tbdetail" Grid.Column="1" ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}" Style="{StaticResource TabControlWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithGrayIconButtonStyle1}" CustomButtonAlignment="Right" IsHideHeaderWhenEmpty="True"></ctrl:TabControlWithButton>
     </Grid>
 </UserControl>

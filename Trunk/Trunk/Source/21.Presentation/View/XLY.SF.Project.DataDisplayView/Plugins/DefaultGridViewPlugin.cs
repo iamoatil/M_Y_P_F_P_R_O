@@ -27,7 +27,14 @@ namespace XLY.SF.Project.DataDisplayView
     {
         public DefaultGridViewPlugin()
         {
-            var p = new DataViewPluginInfo() { Guid = "7B51FA8D-F7F6-4EE3-B3B9-780C29B9B778", Name = "表格视图", ViewType = new List<DataViewSupportItem>(), OrderIndex = 0, PluginType = PluginType.SpfDataView };
+            var p = new DataViewPluginInfo() {
+                Guid = "7B51FA8D-F7F6-4EE3-B3B9-780C29B9B778",
+                Name = "表格视图",
+                ViewType = new List<DataViewSupportItem>(),
+                OrderIndex = 0,
+                PluginType = PluginType.SpfDataView,
+                Icon = "pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_view_grid.png"
+            };
             p.ViewType.Add(new DataViewSupportItem() { PluginId = "*", TypeName = "*" });
             PluginInfo = p;
         }

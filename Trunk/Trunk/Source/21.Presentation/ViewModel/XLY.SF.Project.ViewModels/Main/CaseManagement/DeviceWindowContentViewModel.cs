@@ -19,7 +19,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         public DeviceWindowContentViewModel()
         {
-            Content = IocManagerSingle.Instance.GetViewPart(ExportKeys.DeviceHomeView);
+            Content = IocManagerSingle.Instance.GetViewPart(ExportKeys.DeviceHomePageView);
         }
 
         #endregion

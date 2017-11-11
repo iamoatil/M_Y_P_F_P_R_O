@@ -5,9 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XLY.SF.Project.DataExtraction"
         xmlns:t="clr-namespace:XLY.SF.Project.DataExtraction"
-        mc:Ignorable="d" Loaded="Window_Loaded"
+        mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Closing="Window_Closing"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow"
+        Height="600"
+        Width="800">
     <Grid>
         <local:ExtractionView x:Name="EV"/>
     </Grid>

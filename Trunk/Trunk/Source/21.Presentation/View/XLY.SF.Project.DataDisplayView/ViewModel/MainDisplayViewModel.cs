@@ -145,7 +145,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                 LayoutViewItems = new ObservableCollection<object>();
                 foreach (var item in DataViewPluginAdapter.Instance.GetView(treeItem.Text, AbstractDataViewPlugin.XLY_LAYOUT_KEY))
                 {
-                    LayoutViewItems.Add(item.ToControl(new DataViewPluginArgument() {  CurrentData = null, DataSource = treeItem.Data as IDataSource}, null));
+                    LayoutViewItems.Add(item.ToControl(new DataViewPluginArgument() {  CurrentData = null, DataSource = treeItem.Data as IDataSource}));
                 }
                 SelectedLayoutViewItem = LayoutViewItems.FirstOrDefault();
             }
@@ -198,7 +198,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                 accouts.Items = new DataItems<WeChatFriendShow>(DB_PATH);
                 for (int j = 0; j < 10; j++)
                 {
-                    accouts.Items.Add(new WeChatFriendShow() { Nick = "昵称" + j, WeChatId = "账号" + j });
+                    accouts.Items.Add(new WeChatFriendShow() { Nick = "昵称" + j, WeChatId = "账号" + j, Remark="XLY_张三" + j });
                 }
 
                 TreeNode accouts2 = new TreeNode();
@@ -209,7 +209,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                 t.TreeNodes.Add(accouts2);
                 for (int j = 0; j < 5; j += 2)
                 {
-                    accouts2.Items.Add(new WeChatFriendShowX() { Nick = "昵称" + j, WeChatId = "账号" + j });
+                    accouts2.Items.Add(new WeChatFriendShowX() { Nick = "昵称" + j, WeChatId = "账号" + j, Remark = "XLY_李四" + j });
                     TreeNode friend = new TreeNode();
                     friend.Text = "昵称" + j;
                     friend.Type = typeof(MessageCore);

@@ -14,18 +14,14 @@ namespace XLY.SF.Project.DataExtraction
         /// <summary>
         /// 开始。
         /// </summary>
-        Start,
+        Start = 0,
         /// <summary>
         /// 停止。
         /// </summary>
-        Stop,
-        /// <summary>
-        /// 错误。
-        /// </summary>
-        Error = 2,
+        Stop = 1,
         /// <summary>
         /// 进度改变。
         /// </summary>
-        ProgressChanged,
+        ProgressChanged = 2,
     }
 }
