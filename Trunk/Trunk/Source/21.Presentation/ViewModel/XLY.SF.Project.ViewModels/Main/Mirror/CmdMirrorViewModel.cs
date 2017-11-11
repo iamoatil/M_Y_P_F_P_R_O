@@ -33,7 +33,10 @@ namespace XLY.SF.Project.ViewModels.Main
                     long totalSize = 0;
                     foreach (var item in SourcePosition.CurrentSelectedDisk.Items)
                     {
-                        totalSize += item.Size;
+                        if(item.IsChecked)
+                        {
+                            totalSize += item.Size;
+                        }                        
                     }
                     ProgressPosition.TotalSize = totalSize;
                     CaculateTime(0);
@@ -74,6 +77,7 @@ namespace XLY.SF.Project.ViewModels.Main
                     CaculateTime(0);                    
                 }
                 SourcePosition.IsMirroring = false;
+                RemainTime = "";
             };
         }
 
@@ -251,9 +255,6 @@ namespace XLY.SF.Project.ViewModels.Main
                 foreach (var item in mirrorBlockInfos)
                 {
                     //以下是构建参数
-                    //Partition part = _mirror.Block;
-                    //string targetPath = _mirror.Target + _mirror.TargetFile;
-                    //string block = _mirror.Block.Block.Replace("\\", @"/");//此处把windows的反斜杠替换成linux的斜杠，否则，镜像时出现size全为0的回调数据
                     string arg = string.Format(@"StartMirror|{0}|{1}|{2}|{3}", _deviceID, _isHtc, item.TargetMirrorFile, item.SourceBlockPath);
 
                     //设置反馈，以及执行命令
@@ -400,14 +401,14 @@ namespace XLY.SF.Project.ViewModels.Main
             {
                 Path = partition.Block.ToString().Replace("\\", @"/");//此处把windows的反斜杠替换成linux的斜杠，否则，镜像时出现size全为0的回调数据
                 Size = partition.Size;
-                ClickCommand = new RelayCommand(new Action(()=> { IsChecked = !IsChecked; }));
-            }           
+                ClickCommand = new RelayCommand(new Action(() => { IsChecked = !IsChecked; }));
+            }
 
             /// <summary>
             /// 分区的路径
             /// </summary>
             public string Path { get; private set; }
-            
+
             /// <summary>
             /// 是否选中
             /// </summary>
@@ -419,15 +420,48 @@ namespace XLY.SF.Project.ViewModels.Main
                     _isChecked = value;
                     OnPropertyChanged();
                 }
-            }           
+            }
 
             private bool _isChecked = false;
 
             /// <summary>
             /// 分区的大小
             /// </summary>
-            public long Size { get { return _size; }set { _size = value; OnPropertyChanged(); } }
+            public long Size
+            {
+                get { return _size; }
+                set
+                {
+                    _size = value;
+                    //把size转换成G或M单位
+                    const int G1 = 1024 * 1024 * 1024;
+                    const int M1 = 1024 * 1024 ;
+                    if (_size > G1)
+                    {
+                        SizeInfo = Math.Round((double)_size / G1,2).ToString()+"G" ;
+                    }
+                    else
+                    {
+                        SizeInfo = Math.Round((double)_size / M1, 2).ToString()+"M";
+                    }
+                    OnPropertyChanged();
+                }
+            }
             private long _size;
+
+            /// <summary>
+            /// 分区
+            /// </summary>
+            public string SizeInfo
+            {
+                get { return _sizeInfo; }
+                set
+                {
+                    _sizeInfo = value;
+                    OnPropertyChanged();
+                }
+            }
+            private string _sizeInfo;
 
             /// <summary>
             /// 点击命令

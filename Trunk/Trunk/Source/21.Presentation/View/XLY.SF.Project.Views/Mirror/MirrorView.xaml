@@ -68,17 +68,17 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="1" Margin="0,0,33,0" HorizontalAlignment="Right" Orientation="Horizontal">
                         <CheckBox HorizontalAlignment="Left" VerticalAlignment="Top"  Command="{Binding SelectAllCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self},Path= IsChecked}"/>
-                        <TextBlock Text="全选" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                        <TextBlock Text="全选" Margin="5,-3,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
                     </StackPanel>
 
                     <ScrollViewer Grid.Row="3" Margin="20,10,10,0" Background="Transparent" Foreground="White">
                         <ItemsControl ItemsSource="{Binding SourcePosition.CurrentSelectedDisk.Items}" >
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button x:Name="ButtonBorder" Width="140" Height="140"  Command="{Binding ClickCommand}" BorderBrush="#379bef" BorderThickness="1" >
+                                    <Button x:Name="ButtonBorder" Command="{Binding ClickCommand}" BorderBrush="#379bef" BorderThickness="1" >
                                         <Button.Template>
                                             <ControlTemplate TargetType="{x:Type Button}">
-                                                <Border Margin="10" CornerRadius="13" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                                <Border Margin="10"  Width="140" Height="140"  CornerRadius="13" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
                                                     <ContentPresenter/>
                                                 </Border>
                                             </ControlTemplate>
@@ -89,7 +89,7 @@
                                             <StackPanel>
                                                 <Image Margin="0,20,0,14" HorizontalAlignment="Center" VerticalAlignment="Center" Source="/XLY.SF.Project.Themes;component/Resources/Images/Mirror_Partition.png" Stretch="None"/>
                                                 <TextBlock Text="{Binding Path}" HorizontalAlignment="Center"  TextWrapping="WrapWithOverflow"/>
-                                                <TextBlock Text="{Binding Size}" HorizontalAlignment="Center" />
+                                                <TextBlock Text="{Binding SizeInfo}" HorizontalAlignment="Center" />
                                             </StackPanel>
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="MouseEnter" >
@@ -159,7 +159,7 @@
                             <GradientStop Color="#FF359CE5" Offset="0"/>
                             <GradientStop Color="#FF23BABE" Offset="1"/>
                         </LinearGradientBrush>
-                    </ProgressBar.Foreground>
+                    </ProgressBar.Foreground>                   
                 </ProgressBar>
             </Grid>
             <TextBlock Text="{Binding RemainTime}" Grid.Row="5" Grid.Column="0" Margin="0,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" FontWeight="Light" />
