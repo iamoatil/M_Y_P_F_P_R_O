@@ -11,13 +11,16 @@
              mc:Ignorable="d" 
             d:DesignHeight="1500" d:DesignWidth="1500" 
     FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald" 
-    Background="#FF1C253F">
+    Foreground="White"
+    Background="#FF1C253F" 
+    UseLayoutRounding="True"
+    SnapsToDevicePixels="True">
     <viewmodel:UcViewBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <themes:BooleanToCollapseConverter x:Key="BoolVisibleConverter"/>
+            <themes:BooleanToCollapseConverter x:Key="BoolVisibleConverter"/>           
         </ResourceDictionary>
     </viewmodel:UcViewBase.Resources>
     <Grid>
@@ -63,13 +66,61 @@
                         <RowDefinition Height="20"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Canvas Grid.Row="1" Margin="0,0,85,0" HorizontalAlignment="Right">
-                        <CheckBox >
-                        </CheckBox>
-                    </Canvas>
+                    <StackPanel Grid.Row="1" Margin="0,0,33,0" HorizontalAlignment="Right" Orientation="Horizontal">
+                        <CheckBox HorizontalAlignment="Left" VerticalAlignment="Top"  Command="{Binding SelectAllCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self},Path= IsChecked}"/>
+                        <TextBlock Text="全选" Margin="5,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    </StackPanel>
 
-                    <ListBox Grid.Row="3" Margin="30,20,20,0" ItemsSource="{Binding SourcePosition.CurrentSelectedDisk.Items}" SelectedItem="{Binding SourcePosition.CurrentSelectedDisk.CurrentSelectedItem}" Background="Transparent" >
-                    </ListBox>
+                    <ScrollViewer Grid.Row="3" Margin="20,10,10,0" Background="Transparent" Foreground="White">
+                        <ItemsControl ItemsSource="{Binding SourcePosition.CurrentSelectedDisk.Items}" >
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button x:Name="ButtonBorder" Width="140" Height="140"  Command="{Binding ClickCommand}" BorderBrush="#379bef" BorderThickness="1" >
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="{x:Type Button}">
+                                                <Border Margin="10" CornerRadius="13" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                                    <ContentPresenter/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                        <Grid >
+                                            <Border x:Name="ButtonBackground"  CornerRadius="13" Opacity="0.06" Background="#a8b4d2"/>
+                                            <Image x:Name="Mirror_Checked" Source="/XLY.SF.Project.Themes;component/Resources/Images/Mirror_Checked.png" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                            <StackPanel>
+                                                <Image Margin="0,20,0,14" HorizontalAlignment="Center" VerticalAlignment="Center" Source="/XLY.SF.Project.Themes;component/Resources/Images/Mirror_Partition.png" Stretch="None"/>
+                                                <TextBlock Text="{Binding Path}" HorizontalAlignment="Center"  TextWrapping="WrapWithOverflow"/>
+                                                <TextBlock Text="{Binding Size}" HorizontalAlignment="Center" />
+                                            </StackPanel>
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="MouseEnter" >
+                                                    <ei:ChangePropertyAction PropertyName="Opacity" TargetName="ButtonBackground" Value="0.08"/>
+                                                </i:EventTrigger>
+                                                <i:EventTrigger EventName="MouseLeave" >
+                                                    <ei:ChangePropertyAction PropertyName="Opacity" TargetName="ButtonBackground" Value="0.06"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </Grid>
+                                    </Button>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding IsChecked}" Value="True">
+                                            <Setter TargetName="Mirror_Checked" Property="Visibility" Value="Visible" />
+                                            <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#379bef" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsChecked}" Value="False">
+                                            <Setter TargetName="Mirror_Checked" Property="Visibility" Value="Hidden" />
+                                            <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{x:Null}" />
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
                 </Grid>
             </Border>
             <Border CornerRadius="0,0,0,4" Grid.Row="2" Grid.Column="0">
@@ -111,7 +162,7 @@
                     </ProgressBar.Foreground>
                 </ProgressBar>
             </Grid>
-            <TextBlock Text="{Binding RemainTime}" Grid.Row="5" Grid.Column="0" Margin="0,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" FontWeight="Light"/>
+            <TextBlock Text="{Binding RemainTime}" Grid.Row="5" Grid.Column="0" Margin="0,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" FontWeight="Light" />
             <Button Content="开始镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,0,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding StartCommand}"/>
             <Button Content="停止镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,0,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding StopCommand}" Visibility="{Binding SourcePosition.IsMirroring, Converter= {StaticResource BoolVisibleConverter}}"/>
             <!--<TextBlock HorizontalAlignment="Center"  Text="物理镜像" VerticalAlignment="Top" Margin="245,0" Grid.ColumnSpan="2" />

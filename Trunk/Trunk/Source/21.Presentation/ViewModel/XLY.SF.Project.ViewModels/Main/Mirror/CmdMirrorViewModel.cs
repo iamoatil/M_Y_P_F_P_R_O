@@ -25,26 +25,37 @@ namespace XLY.SF.Project.ViewModels.Main
     {
         public CmdMirrorViewModel()
         {
-            StartCommand = new RelayCommand(new Action(() => {
+            StartCommand = new RelayCommand(new Action(() =>
+            {
                 if (SourcePosition != null
-                || SourcePosition.CurrentSelectedDisk != null
-                || SourcePosition.CurrentSelectedDisk.CurrentSelectedItem != null)
+                || SourcePosition.CurrentSelectedDisk != null)
                 {
-                    ProgressPosition.TotalSize=SourcePosition.CurrentSelectedDisk.CurrentSelectedItem.Size;
+                    long totalSize = 0;
+                    foreach (var item in SourcePosition.CurrentSelectedDisk.Items)
+                    {
+                        totalSize += item.Size;
+                    }
+                    ProgressPosition.TotalSize = totalSize;
                     CaculateTime(0);
                 }
-                SourcePosition.Start();
+                SourcePosition.Start(TargetPosition.DirPath);
             }));
-            StopCommand = new RelayCommand(new Action(() => { SourcePosition.Stop(); }));           
+            StopCommand = new RelayCommand(new Action(() => { SourcePosition.Stop(); }));
+            SelectAllCommand = new RelayCommand<bool>(new Action<bool>(parmeter =>
+            {
+                foreach (var item in SourcePosition.CurrentSelectedDisk.Items)
+                {
+                    item.IsChecked = parmeter;
+                }
+            }));
         }
 
         
         public void Initialize(SPFTask task)
         {
             IAsyncTaskProgress asyncProgress = new MyDefaultSingleTaskReporter();
-
-            Mirror mirror = GetNewMirror(task);
-            CmdSourcePosition.MirrorControlerBox mirrorControler = new CmdSourcePosition.MirrorControlerBox(task, mirror, asyncProgress);           
+            int isHtc = 0;
+            CmdSourcePosition.MirrorControlerBox mirrorControler = new CmdSourcePosition.MirrorControlerBox(task.Device.ID, isHtc, asyncProgress);           
 
             SourcePosition.SetMirrorControler(mirrorControler);
 
@@ -78,6 +89,8 @@ namespace XLY.SF.Project.ViewModels.Main
 
         public ICommand StopCommand { get; private set; }
 
+        public ICommand SelectAllCommand { get; private set; }
+
         /// <summary>
         /// 剩余时间
         /// </summary>
@@ -103,38 +116,7 @@ namespace XLY.SF.Project.ViewModels.Main
         {
             long estimatedTime = size / (1024 * 1024 * 5);
             RemainTime = TimeSpan.FromSeconds(estimatedTime).ToString();
-        }
-
-        /// <summary>
-        /// 根据Task生成一个Mirror
-        /// </summary>
-        private Mirror GetNewMirror(SPFTask task)
-        {
-            Mirror mirror = new Mirror();
-            mirror.Block = SourcePosition.CurrentSelectedDisk.CurrentSelectedItem;
-            mirror.Source = task.Device;
-            mirror.Target = TargetPosition.DirPath;
-            mirror.TargetFile = DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss")+".bin";
-            EnumDeviceType deviceType = task.Device.DeviceType; 
-            if(deviceType == EnumDeviceType.Chip)
-            {
-                mirror.Type = EnumMirror.Chip;
-            }
-            else if (deviceType == EnumDeviceType.SIM)
-            {
-                mirror.Type = EnumMirror.SIM;
-            }
-            else if (deviceType == EnumDeviceType.SDCard)
-            {
-                mirror.Type = EnumMirror.SDCard;
-            }
-            else 
-            {
-                mirror.Type = EnumMirror.Device;
-            }
-            mirror.MirrorFlag = MirrorFlag.NewMirror;
-            return mirror;
-        }
+        }        
 
         public class MyDefaultSingleTaskReporter : DefaultSingleTaskReporter
         {
@@ -193,18 +175,25 @@ namespace XLY.SF.Project.ViewModels.Main
             {
                 return;
             }
+
             List<Partition> partitions = device.GetPartitons();
+            List<CmdDiskPatitions.PartitionElement> partitionList = new List<CmdDiskPatitions.PartitionElement>();
+            foreach (var item in partitions)
+            {
+                partitionList.Add(new CmdDiskPatitions.PartitionElement(item));
+            }
+
             if(device.DeviceType == EnumDeviceType.Phone)
             {
-                PhoneDisks.Items = partitions;                
+                PhoneDisks.Items = partitionList;                
             }
             else if (device.DeviceType == EnumDeviceType.SIM)
             {
-                SimDisk.Items = partitions;
+                SimDisk.Items = partitionList;
             }
             else if(device.DeviceType == EnumDeviceType.SDCard)
             {
-                SDDisk.Items = partitions;
+                SDDisk.Items = partitionList;
             }            
         }
 
@@ -212,16 +201,22 @@ namespace XLY.SF.Project.ViewModels.Main
         /// 开始执行镜像
         /// 注意：因为执行镜像是一个耗时的过程，可能2,3个小时，所以不能使用主线程调用。所以此处用线程池中的一个线程来执行
         /// </summary>
-        public void Start()
+        public void Start(string targetDir)
         {
             if(_mirrorControlerBox != null)
             {
-                if (CurrentSelectedDisk != null
-                    && CurrentSelectedDisk.CurrentSelectedItem != null)
+                List<MirrorBlockInfo> list = new List<MirrorBlockInfo>();
+                if (CurrentSelectedDisk != null)
                 {
-                    _mirrorControlerBox.UpdateData(CurrentSelectedDisk.CurrentSelectedItem);
+                    foreach (var item in CurrentSelectedDisk.Items)
+                    {
+                        if(item.IsChecked)
+                        {
+                            list.Add(new MirrorBlockInfo(targetDir+DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss")+".bin",item.Path));
+                        }                        
+                    }                    
                 }
-                ThreadPool.QueueUserWorkItem((o)=> { _mirrorControlerBox.Start(); });     
+                ThreadPool.QueueUserWorkItem((o)=> { _mirrorControlerBox.Start(list); });     
             }
         }
 
@@ -240,29 +235,29 @@ namespace XLY.SF.Project.ViewModels.Main
         internal class MirrorControlerBox
         {
             MirrorBackgroundProcess _mirrorBackgroundProcess;
-            SPFTask _task;
-            Mirror _mirror;
+            string _deviceID;
+            int _isHtc;          
             IAsyncTaskProgress _asyn;
-            public MirrorControlerBox(SPFTask task, Mirror mirror, IAsyncTaskProgress asyn)
+            public MirrorControlerBox(string deviceID, int isHtc, IAsyncTaskProgress asyn)
             {
-                _task = task;
-                _mirror = mirror;
+                _deviceID = deviceID;
+                _isHtc = isHtc;                
                 _asyn = asyn;
             }
 
             //此处封装了关键的方法：Start，Stop，Continue，Pause
-            internal void Start()
+            internal void Start(List<MirrorBlockInfo> mirrorBlockInfos)
             {
-                if (_mirror.Block != null)
+                foreach (var item in mirrorBlockInfos)
                 {
                     //以下是构建参数
-                    Partition part = _mirror.Block;
-                    string targetPath = _mirror.Target + _mirror.TargetFile;
-                    string block= _mirror.Block.Block.Replace("\\", @"/");//此处把windows的反斜杠替换成linux的斜杠，否则，镜像时出现size全为0的回调数据
-                    string arg = string.Format(@"StartMirror|{0}|{1}|{2}|{3}", _task.Device.ID,0, targetPath, block);
+                    //Partition part = _mirror.Block;
+                    //string targetPath = _mirror.Target + _mirror.TargetFile;
+                    //string block = _mirror.Block.Block.Replace("\\", @"/");//此处把windows的反斜杠替换成linux的斜杠，否则，镜像时出现size全为0的回调数据
+                    string arg = string.Format(@"StartMirror|{0}|{1}|{2}|{3}", _deviceID, _isHtc, item.TargetMirrorFile, item.SourceBlockPath);
 
                     //设置反馈，以及执行命令
-                    if(_mirrorBackgroundProcess != null)
+                    if (_mirrorBackgroundProcess != null)
                     {
                         _mirrorBackgroundProcess.CallBack -= OnCallBack;
                         _mirrorBackgroundProcess.Close();
@@ -270,7 +265,7 @@ namespace XLY.SF.Project.ViewModels.Main
                     _mirrorBackgroundProcess = new MirrorBackgroundProcess();
                     _mirrorBackgroundProcess.CallBack += OnCallBack;
                     _mirrorBackgroundProcess.ExcuteCmd(arg);
-                }
+                }                
             }
 
             private void OnCallBack(string info)
@@ -335,17 +330,18 @@ namespace XLY.SF.Project.ViewModels.Main
                 {
                     _mirrorBackgroundProcess.ExcuteCmd("PauseMirror");
                 }
-            }
+            }            
+        }
 
-            //每次开始镜像的之前都需要更新数据
-            /// <summary>
-            /// 更新数据
-            /// </summary>
-            /// <param name="currentSelectedItem"></param>
-            internal void UpdateData(Partition currentSelectedItem)
+        public class MirrorBlockInfo
+        {
+            public MirrorBlockInfo(string mirrorFile,string blockPath)
             {
-                _mirror.Block= currentSelectedItem;
+                TargetMirrorFile = mirrorFile;
+                SourceBlockPath = blockPath;
             }
+            public string TargetMirrorFile { get; private set; }
+            public string SourceBlockPath { get; private set; }
         }
     }
 
@@ -377,29 +373,67 @@ namespace XLY.SF.Project.ViewModels.Main
         /// <summary>
         /// 磁盘分区
         /// </summary>
-        private List<Partition> _items;
+        private List<PartitionElement> _items;
 
-        public List<Partition> Items
+        public List<PartitionElement> Items
         {
             get { return _items; }
             set
             {
-                if(_items == null
+                if (_items == null
                     && value != null
-                    && CurrentSelectedItem == null
                     && value.Count > 0)
                 {
-                    CurrentSelectedItem = value[0];
+                    value[0].IsChecked = true;
                 }
-                _items = value;        
+                _items = value;
                 OnPropertyChanged();
             }
         }
 
         /// <summary>
-        /// 当前选择的项目
+        /// 分区界面元素
         /// </summary>
-        public Partition CurrentSelectedItem { get; set; }
+        public class PartitionElement : NotifyPropertyBase
+        {
+            public PartitionElement(Partition partition)
+            {
+                Path = partition.Block.ToString().Replace("\\", @"/");//此处把windows的反斜杠替换成linux的斜杠，否则，镜像时出现size全为0的回调数据
+                Size = partition.Size;
+                ClickCommand = new RelayCommand(new Action(()=> { IsChecked = !IsChecked; }));
+            }           
+
+            /// <summary>
+            /// 分区的路径
+            /// </summary>
+            public string Path { get; private set; }
+            
+            /// <summary>
+            /// 是否选中
+            /// </summary>
+            public bool IsChecked
+            {
+                get { return _isChecked; }
+                set
+                {
+                    _isChecked = value;
+                    OnPropertyChanged();
+                }
+            }           
+
+            private bool _isChecked = false;
+
+            /// <summary>
+            /// 分区的大小
+            /// </summary>
+            public long Size { get { return _size; }set { _size = value; OnPropertyChanged(); } }
+            private long _size;
+
+            /// <summary>
+            /// 点击命令
+            /// </summary>
+            public ICommand ClickCommand { get; private set; }
+        }
     }
 
     /// <summary>
