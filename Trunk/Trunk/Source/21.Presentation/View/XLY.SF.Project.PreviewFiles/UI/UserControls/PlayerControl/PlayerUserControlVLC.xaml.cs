@@ -71,14 +71,14 @@ namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.PlayerControl
         {
             if (this._mediaElement.Position.HasValue)
             {
-                TimeSlider.Value = this._mediaElement.Position.Value.TotalSeconds;
+                TimeSlider.Value = this._mediaElement.Position.Value.TotalMilliseconds;
                 StartTime.Text = _mediaElement.Position.Value.ToString("hh':'mm':'ss");
             }
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            _mediaElement.Position = TimeSpan.FromSeconds(TimeSlider.Value);
+            _mediaElement.Position = TimeSpan.FromMilliseconds(TimeSlider.Value);
         }
         
         private void TimeSlider_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -100,6 +100,7 @@ namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.PlayerControl
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
             _mediaElement.Stop();
+            TimeSlider.Value = 0;
         }        
     }
 }
