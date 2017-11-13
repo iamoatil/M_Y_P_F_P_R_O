@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FilePreviewTest</RootNamespace>
     <AssemblyName>FilePreviewTest</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -96,9 +96,9 @@
       <Project>{28682fe4-ec72-42a3-bb2c-27d19f55e14f}</Project>
       <Name>XLY.SF.Framework.Core.Base</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\11.Service\11.Domains\XLY.SF.Project.Domains\XLY.SF.Project.Domains.csproj">
-      <Project>{68f2d8a3-05a8-4aaa-a9e2-00071188595b}</Project>
-      <Name>XLY.SF.Project.Domains</Name>
+    <ProjectReference Include="..\..\..\..\..\01.Framework\XLY.SF.Framework.Language\XLY.SF.Framework.Language.csproj">
+      <Project>{95c796fd-57f1-4d2e-927f-4e34ea75e319}</Project>
+      <Name>XLY.SF.Framework.Language</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\21.Presentation\View\XLY.SF.Project.PreviewFiles\XLY.SF.Project.PreviewFiles.csproj">
       <Project>{65336a55-e659-4ec8-8bb6-0d99cefba159}</Project>
