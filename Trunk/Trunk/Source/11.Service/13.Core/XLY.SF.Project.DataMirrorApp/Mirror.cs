@@ -78,6 +78,10 @@ namespace XLY.SF.Project.DataMirrorApp
         public void Stop(string msg)
         {
             MirrorFile.Close();
+            if(msg == "Success")
+            {
+                MirrorFile.CreateMD5File();
+            }
             Console.WriteLine("Operate|Stop|"+ msg);
         }
 

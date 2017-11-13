@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,6 +36,11 @@ namespace XLY.SF.Project.DataMirrorApp
         int _curWriteIndex = 0;
 
         /// <summary>
+        /// 镜像的后缀
+        /// </summary>
+        string _mirrorSuffix;
+
+        /// <summary>
         /// 已经写入文件的大小
         /// </summary>
         public int WritedSize { get; private set; }
@@ -42,6 +48,7 @@ namespace XLY.SF.Project.DataMirrorApp
         public MirrorFile(string filePath)
         {
             _path = filePath;
+            _mirrorSuffix = Path.GetExtension(filePath);
             _fileStream = new FileStream(filePath,FileMode.Create);
         }
 
@@ -71,6 +78,29 @@ namespace XLY.SF.Project.DataMirrorApp
             _curWriteIndex = 0;
             _fileStream.Flush();
             _fileStream.Close();
+        }
+
+        /// <summary>
+        /// 生成MD5文件
+        /// </summary>
+        public void CreateMD5File()
+        {
+            StringBuilder sb = new StringBuilder();
+            MD5 md5 = new MD5CryptoServiceProvider();
+           
+            using (FileStream file = new FileStream(_path, FileMode.Open))
+            {
+                var retVal = md5.ComputeHash(file);
+
+                for (int i = 0; i < retVal.Length; i++)
+                {
+                    sb.Append(retVal[i].ToString("x2"));
+                }
+            }
+            string md5String=sb.ToString();
+            //生成MD5文件
+            var md5File = _path.Substring(0, _path.Length - 3) + "md5";
+            File.WriteAllText(md5File, md5String, Encoding.UTF8);
         }
 
         #region IDisposable
