@@ -105,15 +105,15 @@ namespace XLY.SF.Project.ViewModels.Main
             mirror.MirrorFlag = MirrorFlag.NewMirror;
             return mirror;
         }
-    }
 
-    public class MyDefaultSingleTaskReporter : DefaultSingleTaskReporter
-    {
-        public MyDefaultSingleTaskReporter()
+        public class MyDefaultSingleTaskReporter : DefaultSingleTaskReporter
         {
-            State = TaskState.Running;
+            public MyDefaultSingleTaskReporter()
+            {
+                State = TaskState.Running;
+            }
         }
-    }
+    }    
 
     public class SourcePosition
     {

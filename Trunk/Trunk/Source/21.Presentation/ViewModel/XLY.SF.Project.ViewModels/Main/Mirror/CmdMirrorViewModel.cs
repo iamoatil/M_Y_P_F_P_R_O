@@ -124,7 +124,10 @@ namespace XLY.SF.Project.ViewModels.Main
 
         public class MyDefaultSingleTaskReporter : DefaultSingleTaskReporter
         {
-            public MyDefaultSingleTaskReporter()
+            /// <summary>
+            /// 准备开始
+            /// </summary>
+            public void PrepareStart()
             {
                 State = TaskState.Running;
             }
@@ -265,6 +268,11 @@ namespace XLY.SF.Project.ViewModels.Main
                     }
                     _mirrorBackgroundProcess = new MirrorBackgroundProcess();
                     _mirrorBackgroundProcess.CallBack += OnCallBack;
+
+                    //todo 此处要
+                    ((CmdMirrorViewModel.MyDefaultSingleTaskReporter)_asyn).PrepareStart();
+                    ((CmdMirrorViewModel.MyDefaultSingleTaskReporter)_asyn).ChangeProgress(0);
+
                     _mirrorBackgroundProcess.ExcuteCmd(arg);
                 }                
             }
