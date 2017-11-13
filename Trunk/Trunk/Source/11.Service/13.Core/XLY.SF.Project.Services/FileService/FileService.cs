@@ -60,7 +60,7 @@ namespace XLY.SF.Project.Services
         /// <param name="device"></param>
         /// <param name="iAsync"></param>
         /// <returns></returns>
-        public FNodeX GetFileSystem(IFileSystemDevice device, SingleTaskReportBase iAsync)
+        public FNodeX GetFileSystem(IFileSystemDevice device, SingleTaskReporterBase iAsync)
         {
             IAsync = iAsync;
             CreateFileServiceAbstractX(device, iAsync);
@@ -72,7 +72,7 @@ namespace XLY.SF.Project.Services
             return _systemTree;
         }
 
-        private void CreateFileServiceAbstractX(IFileSystemDevice device, SingleTaskReportBase iAsync)
+        private void CreateFileServiceAbstractX(IFileSystemDevice device, SingleTaskReporterBase iAsync)
         {
             if (device is MirrorDevice)
             {

@@ -75,7 +75,7 @@ namespace XLY.SF.Project.Domains
         /// <param name="targetPath">目标拷贝路径</param>
         /// <param name="asyn"></param>
         /// <returns></returns>
-        public string CopyFile(string source, string targetPath, SingleTaskReportBase asyn)
+        public string CopyFile(string source, string targetPath, SingleTaskReporterBase asyn)
         {
             return DeviceManager.CopyFile(this, source, targetPath, asyn);
         }

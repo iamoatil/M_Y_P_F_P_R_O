@@ -10,7 +10,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
     /// <summary>
     /// 提供任务进度报告的基类。
     /// </summary>
-    public abstract class SingleTaskReportBase : IAsyncTaskProgress
+    public abstract class SingleTaskReporterBase : IAsyncTaskProgress
     {
         #region Event
 
@@ -57,7 +57,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <summary>
         /// 初始化类型 ProgressReportBase 实例。
         /// </summary>
-        protected SingleTaskReportBase()
+        protected SingleTaskReporterBase()
         {
             Id = Guid.NewGuid().ToString();
         }

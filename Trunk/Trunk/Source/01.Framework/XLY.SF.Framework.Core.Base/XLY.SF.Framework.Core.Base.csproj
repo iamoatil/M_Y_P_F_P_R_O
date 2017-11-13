@@ -110,11 +110,11 @@
     <Compile Include="ViewModel\TaskState.cs" />
     <Compile Include="ViewModel\TaskEventArgs.cs" />
     <Compile Include="ViewModel\TaskTerminateEventArgs.cs" />
-    <Compile Include="ViewModel\MultiTaskReportBase.cs" />
+    <Compile Include="ViewModel\MultiTaskReporterBase.cs" />
     <Compile Include="ViewModel\DefaultMultiTaskReporter.cs" />
     <Compile Include="ViewModel\NavigationTypeEnum.cs" />
     <Compile Include="ViewModel\NotifyPropertyBase.cs" />
-    <Compile Include="ViewModel\SingleTaskReportBase.cs" />
+    <Compile Include="ViewModel\SingleTaskReporterBase.cs" />
     <Compile Include="ViewModel\DefaultSingleTaskReporter.cs" />
     <Compile Include="ViewModel\UcViewBase.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />

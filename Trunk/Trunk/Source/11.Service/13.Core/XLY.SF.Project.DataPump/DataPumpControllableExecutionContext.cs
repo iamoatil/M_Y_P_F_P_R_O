@@ -46,7 +46,7 @@ namespace XLY.SF.Project.DataPump
         /// <summary>
         /// 用于异步通知的报告器。
         /// </summary>
-        public MultiTaskReportBase Reporter { get; set; }
+        public MultiTaskReporterBase Reporter { get; set; }
         
         /// <summary>
         /// 执行取消操作所等待的最大时间间隔。默认为null表示一直等待。

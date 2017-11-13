@@ -9,7 +9,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
     /// <summary>
     /// 提供多任务进度报告的基类。
     /// </summary>
-    public abstract class MultiTaskReportBase
+    public abstract class MultiTaskReporterBase
     {
         #region Event
 
@@ -56,7 +56,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <summary>
         /// 初始化类型 MultiProgressReportBase 实例。
         /// </summary>
-        protected MultiTaskReportBase()
+        protected MultiTaskReporterBase()
         {
 
         }

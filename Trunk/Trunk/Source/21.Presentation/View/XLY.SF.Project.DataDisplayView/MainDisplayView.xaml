@@ -32,8 +32,8 @@
             </TreeView.Resources>-->
             <ctrl:TreeViewEx.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding TreeNodes}" >
-                    <!--<ctrl:TreeViewItemEx Header="{Binding Text}"/>-->
-                    <TextBlock Text="{Binding Text}"/>
+                    <ctrl:TreeViewItemEx Header="{Binding Text}" IsItemStyle="{Binding IsItemStyle}"/>
+                    <!--<TextBlock Text="{Binding Text}"/>-->
                 </HierarchicalDataTemplate>
             </ctrl:TreeViewEx.ItemTemplate>
             <i:Interaction.Triggers>

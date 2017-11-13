@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using GalaSoft.MvvmLight.Threading;
+using System.Windows;
 
 namespace XLY.SF.Project.DataExtraction
 {
@@ -7,5 +8,9 @@ namespace XLY.SF.Project.DataExtraction
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            DispatcherHelper.Initialize();
+        }
     }
 }

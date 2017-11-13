@@ -9,11 +9,11 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
     /// <summary>
     /// 多任务进度报告器。
     /// </summary>
-    public class DefaultMultiTaskReporter : MultiTaskReportBase
+    public class DefaultMultiTaskReporter : MultiTaskReporterBase
     {
         #region Fields
 
-        private readonly Dictionary<String, SingleTaskReportBase> _reporters = new Dictionary<String, SingleTaskReportBase>();
+        private readonly Dictionary<String, SingleTaskReporterBase> _reporters = new Dictionary<String, SingleTaskReporterBase>();
 
         #endregion
 
@@ -169,7 +169,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// </summary>
         public override void StopAll()
         {
-            foreach (SingleTaskReportBase reporter in _reporters.Values)
+            foreach (SingleTaskReporterBase reporter in _reporters.Values)
             {
                 reporter.Stop();
             }

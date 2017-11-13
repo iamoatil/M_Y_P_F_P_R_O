@@ -33,13 +33,13 @@ namespace XLY.SF.UnitTest
         #endregion
 
         [TestMethod]
-        public void TestExecuteMethod(Pump pump, SourceFileItem source, MultiTaskReportBase reporter, params ExtractItem[] items)
+        public void TestExecuteMethod(Pump pump, SourceFileItem source, MultiTaskReporterBase reporter, params ExtractItem[] items)
         {
             DataPumpExecutionContext context = pump.Execute(source, reporter, items);
         }
 
         [TestMethod]
-        public void TestCancelMethod(Pump pump, SourceFileItem source, MultiTaskReportBase reporter, params ExtractItem[] items)
+        public void TestCancelMethod(Pump pump, SourceFileItem source, MultiTaskReporterBase reporter, params ExtractItem[] items)
         {
             DataPumpExecutionContext context = pump.Execute(source, reporter, items);
             context.Cancel();

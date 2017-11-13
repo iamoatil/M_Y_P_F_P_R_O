@@ -32,7 +32,7 @@ namespace XLY.SF.Project.DataPump
         /// <param name="reporter">异步通知器。</param>
         /// <param name="items">提取项列表。</param>
         /// <returns>数据泵任务执行上下文。</returns>
-        public static DataPumpExecutionContext Execute(this Pump pump, SourceFileItem source, MultiTaskReportBase reporter, params ExtractItem[] items)
+        public static DataPumpExecutionContext Execute(this Pump pump, SourceFileItem source, MultiTaskReporterBase reporter, params ExtractItem[] items)
         {
             DataPumpBase dataPump = pump.GetDataPump();
             DataPumpExecutionContext context = dataPump.CreateContext(pump, source);

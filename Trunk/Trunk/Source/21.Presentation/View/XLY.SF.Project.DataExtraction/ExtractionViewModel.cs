@@ -1,9 +1,11 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Threading;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Configuration;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -226,12 +228,23 @@ namespace XLY.SF.Project.DataExtraction
             _proxy.Send(message);
         }
 
+        private String GetServicePath()
+        {
+            String file = ConfigurationManager.AppSettings["extractionService"];
+            if (String.IsNullOrWhiteSpace(file))
+            {
+                file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Services\Extraction", "XLY.SF.Project.DeviceExtractionService.exe");
+            }
+            return file;
+        }
+
         private void LaunchService()
         {
             Process process = Process.GetProcessesByName("XLY.SF.Project.DeviceExtractionService").FirstOrDefault();
             if (process == null)
             {
-                ProcessStartInfo info = new ProcessStartInfo(@"F:\Source\Workspaces\SPF-PRO\Trunk\Trunk\Source\22.Tools\XLY.SF.Project.DeviceExtractionService\bin\Debug\XLY.SF.Project.DeviceExtractionService.exe")
+                String exeFile = GetServicePath();
+                ProcessStartInfo info = new ProcessStartInfo(exeFile)
                 {
                     UseShellExecute = false,
                     //CreateNoWindow = true
@@ -285,6 +298,14 @@ namespace XLY.SF.Project.DataExtraction
         private void _proxy_ActivatorError(object sender, ActivatorErrorEventArgs e)
         {
             CanSelect = true;
+            DispatcherHelper.CheckBeginInvokeOnUI(() =>
+            {
+                Window win = new Window();
+                win.Width = 400;
+                win.Height = 300;
+                win.Content = e.Exception.ToString();
+                win.ShowDialog();
+            });
         }
 
         #endregion

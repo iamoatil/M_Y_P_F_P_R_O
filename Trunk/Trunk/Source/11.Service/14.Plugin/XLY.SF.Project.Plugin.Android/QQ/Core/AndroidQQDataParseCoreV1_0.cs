@@ -1460,7 +1460,7 @@ namespace XLY.SF.Project.Plugin.Android
                     XmlNodeList userInfoNodeList1 = doc.SelectNodes("map//string[@name='imsi']");
                     if (userInfoNodeList1 != null && userInfoNodeList1.Count > 0)
                     {
-                        string key = userInfoNodeList[0].InnerText;
+                        string key = userInfoNodeList1[0].InnerText;
                         if (key.IsValid())
                         {
                             list.Add(key);

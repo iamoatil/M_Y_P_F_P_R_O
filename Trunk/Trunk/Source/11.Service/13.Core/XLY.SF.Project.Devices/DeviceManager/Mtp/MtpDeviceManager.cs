@@ -119,7 +119,7 @@ namespace XLY.SF.Project.Devices.DeviceManager.Mtp
             fileNode.DateAuthored = GetFileDateAuthoredProperty(objectValues);
         }
 
-        public MTPFileNode GetRootFileNode(MTPDevice device, SingleTaskReportBase asyn)
+        public MTPFileNode GetRootFileNode(MTPDevice device, SingleTaskReporterBase asyn)
         {
             MTPFileNode root = new MTPFileNode() { Type = MTPFileNodeType.Root, Name = "Root", Childrens = new List<MTPFileNode>(), Level = -1 };
 

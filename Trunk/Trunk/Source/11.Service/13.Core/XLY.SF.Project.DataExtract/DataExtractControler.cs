@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -49,7 +50,7 @@ namespace XLY.SF.Project.DataExtract
         /// <summary>
         /// 异步通知
         /// </summary>
-        public MultiTaskReportBase Reporter { get; set; }
+        public MultiTaskReporterBase Reporter { get; set; }
 
         static DataExtractControler()
         {
@@ -254,7 +255,7 @@ namespace XLY.SF.Project.DataExtract
 
                 //2.异步执行插件
                 CancelToken.Token.ThrowIfCancellationRequested();
-                //DoDataPlug(item.Key, item.Value);
+                await DoDataPlug(item.Key, item.Value);
             }
         }
 
@@ -318,15 +319,23 @@ namespace XLY.SF.Project.DataExtract
         private void FinishExtractItem(ExtractItem extractItem, IDataSource ds)
         {
             //1.处理IDataSource
-            //SourcePump.ResultPath
+            String fileName = Path.Combine(SourcePump.ResultPath, $"{extractItem.GUID}_{extractItem.AppName}.ds");
+            Serializer.SerializeToBinary(ds, fileName);
             //2.结尾处理
             extractItem.IsFinish = true;
 
             //3.判断是否全部提取完成
-            if (ExtractItems.All(e => e.IsFinish))
-            {//全部提取完成
-
+            foreach (var item in ExtractItems)
+            {
+                if (item.IsFinish)
+                {
+                    Reporter?.Finish(item.GUID);
+                }
             }
+            //if (ExtractItems.All(e => e.IsFinish))
+            //{//全部提取完成
+
+            //}
         }
 
         /// <summary>

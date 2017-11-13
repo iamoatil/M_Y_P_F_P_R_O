@@ -18,7 +18,7 @@ namespace XLY.SF.Project.DeviceExtractionService
 
         private readonly DataExtractControler _controler;
 
-        private readonly MultiTaskReportBase _reporter;
+        private readonly MultiTaskReporterBase _reporter;
 
         #endregion
 
@@ -83,6 +83,9 @@ namespace XLY.SF.Project.DeviceExtractionService
 
         private void _reporter_ProgressChanged(object sender, TaskProgressEventArgs e)
         {
+            Message message = new Message((Int32)ExtractionCode.ProgressChanged);
+            message.SetContent(e);
+            OnSend(message);
         }
 
         private void Start(Message message)

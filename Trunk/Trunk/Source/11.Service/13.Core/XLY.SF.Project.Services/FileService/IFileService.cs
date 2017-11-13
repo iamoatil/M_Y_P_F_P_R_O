@@ -48,7 +48,7 @@ namespace XLY.SF.Project.Services
         /// <param name="device">设备</param>
         /// <param name="iAsync">异步消息</param>
         /// <returns></returns>
-        FNodeX GetFileSystem(IFileSystemDevice device, SingleTaskReportBase iAsync);
+        FNodeX GetFileSystem(IFileSystemDevice device, SingleTaskReporterBase iAsync);
 
         /// <summary>
         /// 获取用户数据分区文件列表

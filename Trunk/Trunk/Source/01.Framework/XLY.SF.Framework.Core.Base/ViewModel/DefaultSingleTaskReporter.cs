@@ -9,7 +9,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
     /// <summary>
     /// 任务进度报告器。
     /// </summary>
-    public class DefaultSingleTaskReporter : SingleTaskReportBase
+    public class DefaultSingleTaskReporter : SingleTaskReporterBase
     {
         #region Constructors
 
