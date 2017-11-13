@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:XLY.SF.Project.PreviewFiles"
+             xmlns:local="clr-namespace:XLY.SF.Project.PreviewFiles"             
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="173.591">
     <Grid>
         <Grid.RowDefinitions>
@@ -13,12 +13,12 @@
             <RowDefinition Height="15"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <TextBlock x:Name="Title"/>
+        <TextBlock x:Name="Title" Foreground="Black"/>
         <Grid Grid.Row="1" x:Name="MediaElementContainer" Background="Black"/>      
         <Slider Grid.Row="2" x:Name="TimeSlider" ValueChanged="Slider_ValueChanged" PreviewMouseDown="TimeSlider_PreviewMouseDown"/>
         <Grid Grid.Row="3">
-            <TextBlock x:Name="StartTime" Text="00:00:00" />
-            <TextBlock x:Name="TotalTime" Text="00:00:00" HorizontalAlignment="Right"/>
+            <TextBlock x:Name="StartTime" Text="00:00:00" Foreground="Black"/>
+            <TextBlock x:Name="TotalTime" Text="00:00:00" HorizontalAlignment="Right" Foreground="Black"/>
         </Grid>
         <Grid Grid.Row="4">
             <Button Content="{Binding XPath=FilePreviewLanguage/Start,Source={x:Static local:LanguageHelper.LanguageProvider}}" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="75" Click="Start_Click"  />
