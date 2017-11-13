@@ -251,11 +251,11 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
             treeSource.Filter<AbstractDataItem>();
 
             DataList = new ObservableCollection<DataExtactionTreeItem>() {
-                new DataExtactionTreeItem(){Text = "自动提取", TreeNodes = new ObservableCollection<DataExtactionTreeItem>(){
-                    new DataExtactionTreeItem(){Text = "基础信息", TreeNodes = new ObservableCollection<DataExtactionTreeItem>(){
-                       new DataExtactionTreeItem(){Text = "短信",Data = sms, TreeNodes = new ObservableCollection<DataExtactionTreeItem>() }
-                } }, new DataExtactionTreeItem(){Text = "社交聊天", TreeNodes = new ObservableCollection<DataExtactionTreeItem>(){
-                       new DataExtactionTreeItem(){Text = "微信", Data = treeSource, TreeNodes = new ObservableCollection<DataExtactionTreeItem>() }
+                new DataExtactionTreeItem(){Text = "自动提取", IsItemStyle=true, TreeNodes = new ObservableCollection<DataExtactionTreeItem>(){
+                    new DataExtactionTreeItem(){Text = "基础信息", IsItemStyle=false,TreeNodes = new ObservableCollection<DataExtactionTreeItem>(){
+                       new DataExtactionTreeItem(){Text = "短信",Data = sms, IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionTreeItem>() }
+                } }, new DataExtactionTreeItem(){Text = "社交聊天", IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionTreeItem>(){
+                       new DataExtactionTreeItem(){Text = "微信", IsItemStyle=false, Data = treeSource, TreeNodes = new ObservableCollection<DataExtactionTreeItem>() }
                 }}}}
             };
         }
@@ -267,6 +267,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         public string Text { get; set; }
         public object Data { get; set; }
         public bool IsHideChildren { get; set; }
+        public bool IsItemStyle { get; set; }
         public ObservableCollection<DataExtactionTreeItem> TreeNodes { get; set; }
     }
 

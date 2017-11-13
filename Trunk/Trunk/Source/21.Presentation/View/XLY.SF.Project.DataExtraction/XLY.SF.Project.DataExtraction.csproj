@@ -50,6 +50,7 @@
       <HintPath>C:\Program Files (x86)\Microsoft SDKs\Expression\Blend\.NETFramework\v4.5\Libraries\Microsoft.Expression.Effects.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -74,6 +75,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CanSelectToVisibleConverter.cs" />
     <Compile Include="SelectToForgroundConverter.cs" />
     <Compile Include="TaskStateToTextConverter.cs" />
     <Page Include="ExtractionView.xaml">
@@ -177,6 +179,7 @@
     <EmbeddedResource Include="Language\Language_En.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\flash.png" />
     <Content Include="Language\LanguageTextTeamplate.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>LanguageTextTeamplate.LanguageElement.cs</LastGenOutput>

@@ -18,13 +18,13 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <summary>
         /// 任务进度改变事件。
         /// </summary>
-        public event EventHandler<MultiTaskProgressEventArg> ProgressChanged;
+        public event EventHandler<TaskProgressEventArgs> ProgressChanged;
 
         /// <summary>
         /// 触发ProgressChanged事件。
         /// </summary>
         /// <param name="args">事件参数。。</param>
-        protected void OnProgressChanged(MultiTaskProgressEventArg args)
+        protected void OnProgressChanged(TaskProgressEventArgs args)
         {
             ProgressChanged?.Invoke(this, args);
         }
@@ -36,13 +36,13 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <summary>
         /// 任务结束事件。
         /// </summary>
-        public event EventHandler<MultiTaskTerminateEventArgs> Ternimated;
+        public event EventHandler<TaskTerminateEventArgs> Ternimated;
 
         /// <summary>
         /// 触发Ternimate事件。
         /// </summary>
         /// <param name="args">事件参数。。</param>
-        protected void OnTernimate(MultiTaskTerminateEventArgs args)
+        protected void OnTernimate(TaskTerminateEventArgs args)
         {
             Ternimated?.Invoke(this, args);
         }

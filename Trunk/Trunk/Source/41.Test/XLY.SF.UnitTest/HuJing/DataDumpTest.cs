@@ -47,37 +47,39 @@ namespace XLY.SF.UnitTest
 
         #region Private
 
-        private static Pump CreatePump(IDevice device, out SourceFileItem souce)
+        private Pump CreatePump(String savePath,String dbFileName, IDevice device, out SourceFileItem souce)
         {
-            Pump pump = null;
-            switch (device.DeviceType)
-            {
-                case EnumDeviceType.SDCard:
-                    pump = new Pump { OSType = EnumOSType.SDCard, Type = EnumPump.SDCard };
-                    break;
-                case EnumDeviceType.SIM:
-                    pump = new Pump { OSType = EnumOSType.SIMCard, Type = EnumPump.SIMCard };
-                    break;
-                case EnumDeviceType.Phone when device is Device dev:
-                    pump = new Pump { OSType = dev.OSType, Type = EnumPump.Mirror };
-                    break;
-                default:
-                    souce = null;
-                    return null;
-            }
             SourceFileItem item = new SourceFileItem();
             item.ItemType = SourceFileItemType.NormalPath;
             item.Config = @"/system/build.prop";
             souce = item;
+
+            Pump pump = new Pump(savePath, dbFileName);
+            switch (device.DeviceType)
+            {
+                case EnumDeviceType.SDCard:
+                    pump.OSType = EnumOSType.SDCard;
+                    pump.Type = EnumPump.SDCard;
+                    break;
+                case EnumDeviceType.SIM:
+                    pump.OSType = EnumOSType.SIMCard;
+                    pump.Type = EnumPump.SIMCard;
+                    break;
+                case EnumDeviceType.Phone when device is Device dev:
+                    pump.OSType = dev.OSType;
+                    pump.Type = EnumPump.USB;
+                    break;
+                default:
+                    return null;
+            }
             pump.Source = device;
-            pump.ScanModel = ScanFileModel.Quick;
-            pump.SavePath = @"F:\Temp";
+            pump.ScanModel = ScanFileModel.Expert;
             return pump;
         }
 
         private void Connected(IDevice device)
         {
-            Pump pump = CreatePump(device, out SourceFileItem item);
+            Pump pump = CreatePump(@"F:\Temp", "a.db", device, out SourceFileItem item);
             if (pump == null) return;
             TestExecuteMethod(pump, item, null);
         }

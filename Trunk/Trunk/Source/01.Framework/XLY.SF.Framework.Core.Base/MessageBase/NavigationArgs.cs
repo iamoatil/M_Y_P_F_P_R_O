@@ -35,14 +35,9 @@ namespace XLY.SF.Framework.Core.Base.MessageBase
         public UcViewBase TargetView { get; private set; }
 
         /// <summary>
-        /// 是否有返回结果
+        /// 初始化时参数
         /// </summary>
-        public bool HasResult { get; private set; }
-
-        /// <summary>
-        /// 是否创建成功
-        /// </summary>
-        public bool IsSuccess => TargetView != null;
+        public object InitParameter { get; private set; }
 
         #region 窗体控制属性
 
@@ -54,7 +49,7 @@ namespace XLY.SF.Framework.Core.Base.MessageBase
         /// <summary>
         /// 是否置顶
         /// </summary>
-        public bool TopMost { get; set; }
+        public bool TopMost { get; private set; }
 
         #endregion
 
@@ -62,11 +57,9 @@ namespace XLY.SF.Framework.Core.Base.MessageBase
         /// View关闭消息
         /// </summary>
         /// <param name="openedViewModelID">要关闭的ViewModelID</param>
-        /// <param name="hasResult">是否有返回值</param>
-        public NavigationArgs(Guid openedViewModelID, bool hasResult = false)
+        public NavigationArgs(Guid openedViewModelID)
         {
             this.ViewModelID = openedViewModelID;
-            this.HasResult = hasResult;
         }
 
         /// <summary>
@@ -75,8 +68,9 @@ namespace XLY.SF.Framework.Core.Base.MessageBase
         /// <param name="exportViewkey">显示的View</param>
         /// <param name="parameter">创建View时的参数</param>
         /// <param name="showInTaskBar">是否显示任务条</param>
-        public NavigationArgs(string exportViewkey, object parameter, bool showInTaskBar = false)
+        public NavigationArgs(string exportViewkey, object parameter, bool showInTaskBar = false, bool isTopMost = false)
         {
+            ShowInTaskBar = showInTaskBar;
             ShowInTaskBar = showInTaskBar;
             CreateParameter(exportViewkey, parameter);
         }

@@ -23,7 +23,7 @@ namespace XLY.SF.UnitTest
             Console.WriteLine("开始启动服务");
             PluginAdapter.Instance.Initialization(null);
 
-            var pump = new Pump() { OSType = EnumOSType.Android, Type = EnumPump.USB };
+            var pump = new Pump(@"F:\Temp","a.db") { OSType = EnumOSType.Android, Type = EnumPump.USB };
 
             var allexts = PluginAdapter.Instance.GetAllExtractItems(pump);
 

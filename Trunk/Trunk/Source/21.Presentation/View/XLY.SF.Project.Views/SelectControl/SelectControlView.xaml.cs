@@ -36,12 +36,11 @@ namespace XLY.SF.Project.Views.SelectControl
         {
             get
             {
-                return this.DataContext as ViewModelBase;
+                return base.DataSource;
             }
             set
             {
-                value.SetViewContainer(this);
-                this.DataContext = value;
+                base.DataSource = value;
             }
         }
     }

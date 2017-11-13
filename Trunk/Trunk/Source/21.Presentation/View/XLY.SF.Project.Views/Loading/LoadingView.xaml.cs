@@ -35,11 +35,11 @@ namespace XLY.SF.Project.Views.Loading
         {
             get
             {
-                return this.DataContext as ViewModelBase;
+                return base.DataSource;
             }
             set
             {
-                this.DataContext = value;
+                base.DataSource = value;
             }
         }
     }

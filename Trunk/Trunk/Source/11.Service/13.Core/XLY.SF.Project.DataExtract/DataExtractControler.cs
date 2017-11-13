@@ -49,7 +49,7 @@ namespace XLY.SF.Project.DataExtract
         /// <summary>
         /// 异步通知
         /// </summary>
-        public SingleTaskReportBase Reporter { get; set; }
+        public MultiTaskReportBase Reporter { get; set; }
 
         static DataExtractControler()
         {
@@ -173,6 +173,7 @@ namespace XLY.SF.Project.DataExtract
             {
                 MainWorkThread.Stop();
             }
+            Reporter?.StopAll();
         }
 
         /// <summary>
@@ -195,7 +196,7 @@ namespace XLY.SF.Project.DataExtract
             PluginAdapter = Plugin.Adapter.PluginAdapter.Instance;
 
             //2.初始化数据文件保存根目录
-            FileHelper.CreateExitsDirectory(SourcePump.SavePath);
+            FileHelper.CreateExitsDirectory(SourcePump.SourceStorePath);
 
             //3.获取数据泵服务
             //PumpControler = new DataPumpControler();
@@ -297,8 +298,8 @@ namespace XLY.SF.Project.DataExtract
                             var plug = PluginAdapter.MatchPluginByApp(plugs, SourcePump, SourcePump.SavePath, GetAppVersion(extractItem));
 
                             //2.执行插件
-                            plug.SaveDbPath = System.IO.Path.Combine(SourcePump.SavePath, SourcePump.DbFileName);
-                            PluginAdapter.ExecutePlugin(plug, Reporter, (ds) =>
+                            plug.SaveDbPath = SourcePump.DbFilePath;
+                            PluginAdapter.ExecutePlugin(plug, null, (ds) =>
                                 {//插件执行完处理
                                     FinishExtractItem(extractItem, ds);
                                 });
@@ -317,7 +318,7 @@ namespace XLY.SF.Project.DataExtract
         private void FinishExtractItem(ExtractItem extractItem, IDataSource ds)
         {
             //1.处理IDataSource
-
+            //SourcePump.ResultPath
             //2.结尾处理
             extractItem.IsFinish = true;
 

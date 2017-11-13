@@ -10,13 +10,15 @@ using XLY.SF.Framework.Core.Base;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using ProjectExtend.Context;
 using XLY.SF.Project.ViewModels.Tools;
+using XLY.SF.Framework.Core.Base.ViewModel;
+using XLY.SF.Framework.Log4NetService;
 
 
 /*************************************************
  * 创建人：Bob
  * 创建时间：2017/5/10 15:53:45
  * 类功能说明：
- * 1.主要管理主界面内的导航
+ * 1.管理主界面内的导航
  * 
  *************************************************/
 
@@ -24,12 +26,70 @@ namespace XLY.SF.Project.ViewModels.Main
 {
     public class MainNavigationManager : XLY.SF.Framework.Core.Base.ViewModel.NotifyPropertyBase
     {
+        #region Properties
+
+        #region 主界面View
+
+        private object _mainView;
+        /// <summary>
+        /// 子界面
+        /// </summary>
+        public object MainView
+        {
+            get
+            {
+                return _mainView;
+            }
+            set
+            {
+                _mainView = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region 程序缓存View
+
+        /// <summary>
+        /// 当前缓存View
+        /// </summary>
+        private Dictionary<Guid, UcViewBase> _cacheViews;
+
+        #endregion
+
+        #endregion
+
         public MainNavigationManager()
         {
+            _cacheViews = new Dictionary<Guid, UcViewBase>();
+
             SystemContext.Instance.CaseChanged += Instance_CaseChanged;
+
+            //注册主界面导航消息
+            MsgAggregation.Instance.RegisterNaviagtionMsg(this, SystemKeys.MainUcNavigation, MainNavigationCallback);
         }
 
         #region 主界面导航
+
+        //主界面导航回调
+        private void MainNavigationCallback(NavigationArgs args)
+        {
+            MainView = args.TargetView;
+            ///*
+            // * 由于ViewModel未引用WPF类库，所以无法用UcViewBase来做比较
+            // * 此处使用object来判断是否导航成功
+            // */
+            //UcViewBase targetView;
+            //if (Navigationhelper.CreateNavigationView(args, out targetView))
+            //{
+            //    MainView = targetView;
+            //}
+        }
+
+        #endregion
+
+        #region 【案例更新】
 
         private void Instance_CaseChanged(object sender, PropertyChangedEventArgs<Project.CaseManagement.Case> e)
         {
@@ -48,7 +108,7 @@ namespace XLY.SF.Project.ViewModels.Main
 
         #endregion
 
-        #region 界面显示调整
+        #region 界面显示调整【此处设计不是很好】
 
         private bool _isShowCurCaseNameRow;
         /// <summary>
@@ -88,6 +148,5 @@ namespace XLY.SF.Project.ViewModels.Main
         }
 
         #endregion
-
     }
 }

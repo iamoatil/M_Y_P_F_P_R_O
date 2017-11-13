@@ -26,7 +26,7 @@ using XLY.SF.Project.ViewModels.Tools;
 namespace XLY.SF.Project.ViewModels.Main
 {
     [Export(ExportKeys.ModuleMainViewModel, typeof(ViewModelBase))]
-    [PartCreationPolicy(CreationPolicy.Shared)]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class MainViewModel : ViewModelBase
     {
         #region Properties
@@ -259,7 +259,6 @@ namespace XLY.SF.Project.ViewModels.Main
 
         private string ExecuteExportCommand()
         {
-            base.NavigationForMainWindow(ExportKeys.DeviceMainView);
             return "导出案例";
         }
 

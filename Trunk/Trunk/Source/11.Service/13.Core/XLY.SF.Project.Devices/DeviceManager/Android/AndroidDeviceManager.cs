@@ -12,6 +12,7 @@ namespace XLY.SF.Project.Devices
     /// <summary>
     /// 安卓设备管理
     /// </summary>
+    [Serializable]
     public sealed class AndroidDeviceManager : IDeviceManager
     {
         [Obsolete("请使用AndroidDeviceManager.Instance获取实例！")]

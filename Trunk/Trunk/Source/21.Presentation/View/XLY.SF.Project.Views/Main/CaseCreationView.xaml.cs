@@ -8,7 +8,7 @@ namespace XLY.SF.Project.Views.Main
     /// CaseCreationView.xaml 的交互逻辑
     /// </summary>
     [Export(ExportKeys.CaseCreationView, typeof(UcViewBase))]
-    [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class CaseCreationView : UcViewBase
     {
         public CaseCreationView()
@@ -21,12 +21,11 @@ namespace XLY.SF.Project.Views.Main
         {
             get
             {
-                return this.DataContext as ViewModelBase;
+                return base.DataSource;
             }
             set
             {
-                value.SetViewContainer(this);
-                this.DataContext = value;
+                base.DataSource = value;
             }
         }
     }

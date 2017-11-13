@@ -31,7 +31,7 @@ namespace XLY.SF.Project.DataPump
             PumpDescriptor = pumpDescriptor ?? throw new ArgumentNullException("metadata");
             if (String.IsNullOrWhiteSpace(pumpDescriptor.SavePath)) throw new ArgumentNullException("targetDirectory");
             Source = source;
-            TargetDirectory = pumpDescriptor.SavePath;
+            TargetDirectory = pumpDescriptor.SourceStorePath;
         }
 
         /// <summary>

@@ -35,7 +35,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
             if (State != TaskState.Idle) return;
             State = TaskState.Starting;
             Progress = 0;
-            OnProgressChanged(new TaskProgressEventArgs(0, message));
+            OnProgressChanged(new TaskProgressEventArgs(Id, 0, message));
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
             if (State != TaskState.Running) return;
             State = TaskState.Running;
             Progress = progress;
-            OnProgressChanged(new TaskProgressEventArgs(progress, message));
+            OnProgressChanged(new TaskProgressEventArgs(Id, progress, message));
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
             if (State != TaskState.Running) return;
             State = TaskState.Completed;
             Progress = 100;
-            OnTernimate(new TaskTerminateEventArgs(true));
+            OnTernimate(new TaskTerminateEventArgs(Id, true));
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
             if (((Int32)State & 0xFF00) == 0x0100)
             {
                 State = TaskState.Stopping;
-                OnTernimate(new TaskTerminateEventArgs(false));
+                OnTernimate(new TaskTerminateEventArgs(Id, false));
             }
         }
 
@@ -83,7 +83,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         {
             if (State != TaskState.Running) return;
             State = TaskState.Failed;
-            OnTernimate(new TaskTerminateEventArgs(ex, message));
+            OnTernimate(new TaskTerminateEventArgs(Id, ex, message));
         }
 
         /// <summary>

@@ -191,6 +191,7 @@ namespace XLY.SF.Project.ViewModels.Device
         #endregion
 
         #region 方法
+
         /// <summary>
         /// 创建一个设备，如果设备已经存在，则跳转到该设备
         /// </summary>
@@ -207,13 +208,18 @@ namespace XLY.SF.Project.ViewModels.Device
             if (dev == null)     //不存在则创建新设备
             {
                 dev = SystemContext.Instance.CurrentCase.CreateDeviceExtraction(device.Name, device.DeviceType.ToString());
+                dea.Target = dev;
                 dea.Device = device;
                 dea.Save();
             }
-            dea.Target = dev;
+            else
+            {
+                dea.Target = dev;
+            }
             //跳转到设备
             MessageAggregation.SendGeneralMsg(new GeneralArgs<DeviceExtractionAdorner>(ExportKeys.DeviceAddedMsg) { Parameters = dea });
         }
+
         #endregion
     }
 }

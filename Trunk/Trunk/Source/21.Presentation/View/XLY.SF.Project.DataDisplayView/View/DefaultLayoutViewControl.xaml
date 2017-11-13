@@ -10,7 +10,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
-        <Style TargetType="{x:Type TreeView}">
+        <!--<Style TargetType="{x:Type TreeView}">
             <Setter Property="ItemTemplate">
                 <Setter.Value>
                     <HierarchicalDataTemplate ItemsSource="{Binding TreeNodes}">
@@ -18,9 +18,9 @@
                     </HierarchicalDataTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
+        </Style>-->
 
-        <Style TargetType="{x:Type TreeViewItem}">
+        <!--<Style TargetType="{x:Type TreeViewItem}">
             <Setter Property="MinHeight" Value="25" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -32,13 +32,11 @@
                             <Border x:Name="Bd" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}"
                                 MinHeight="{TemplateBinding MinHeight}" UseLayoutRounding="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-                                <!--多层级间隔，暂缓-->
                                 <Grid Margin="{TemplateBinding Margin}" VerticalAlignment="Stretch">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition MinWidth="18" Width="Auto" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <!--展开收缩按钮-->
                                     <ToggleButton x:Name="ExpanderBtn" 
                                               IsChecked="{Binding Path=IsExpanded, RelativeSource={x:Static RelativeSource.TemplatedParent}, Mode=TwoWay}"
                                               ClickMode="Press" >
@@ -53,7 +51,6 @@
                                             <TextBlock x:Name="ExpanderIcon"  Text="+" Foreground="{TemplateBinding Foreground}"  />
                                         </ToggleButton.Content>
                                     </ToggleButton>
-                                    <!--内容-->
                                     <ContentPresenter x:Name="PART_Header" Grid.Column="1" ContentSource="Header"
                                                   SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
                                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -95,7 +92,7 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
+        </Style>-->
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -105,6 +102,11 @@
 
         <!--左侧的树形菜单，TreeDataSource下可见-->
         <TreeView Grid.Column="0" ItemsSource="{Binding TreeNodes}" MinWidth="200" Visibility="{Binding IsTreeDataSource, Converter={StaticResource booleanToVisibilityConverter}}" >
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding TreeNodes}" >
+                    <TextBlock Text="{Binding Text}"/>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectedItemChanged">
                     <i:InvokeCommandAction Command="{Binding SelecedNodeChanged}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeView}}, Path=SelectedValue}"/>
@@ -114,7 +116,6 @@
         <GridSplitter VerticalAlignment="Stretch" Grid.Column="0" Width="2" Visibility="{Binding IsTreeDataSource, Converter={StaticResource booleanToVisibilityConverter}}" Background="Transparent"/>
 
         <!--数据显示区域，如果有多个视图方式则加载-->
-        <!--<TabControl Grid.Column="1"  ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}"/>-->
         <ctrl:TabControlWithButton x:Name="tbdetail" Grid.Column="1" ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}" Style="{StaticResource TabControlWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithGrayIconButtonStyle1}" CustomButtonAlignment="Right" IsHideHeaderWhenEmpty="True"></ctrl:TabControlWithButton>
     </Grid>
 </UserControl>

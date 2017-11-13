@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 using XLY.SF.Project.Domains;
 
 namespace X64Service
@@ -12,30 +9,31 @@ namespace X64Service
     {
         static FileServiceCoreDll()
         {
-            System.IO.Directory.SetCurrentDirectory(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin"));
+            System.IO.Directory.SetCurrentDirectory(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Lib\vcdllX64\Mirror\"));
         }
 
         #region DLL名称配置
+
         //DLL的目录
         private const string _DllDir = @"Lib\vcdllX64\Mirror\";
 
-        private const string _Hd = _DllDir+@"hd.dll";
+        private const string _Hd = _DllDir + @"hd.dll";
 
-        private const string _Hd0 = _DllDir+@"hd0.dll";
+        private const string _Hd0 = _DllDir + @"hd0.dll";
 
-        private const string _DskFsMaster = _DllDir+@"dsk_fs_master.dll";
+        private const string _DskFsMaster = _DllDir + @"dsk_fs_master.dll";
 
-        private const string _FileTypTPL = _DllDir+@"file_type_tpl.dll";
+        private const string _FileTypTPL = _DllDir + @"file_type_tpl.dll";
 
-        private const string _SnapShotDLL = _DllDir+@"blk_fdt_snapshot.dll";
+        private const string _SnapShotDLL = _DllDir + @"blk_fdt_snapshot.dll";
 
-        private const string _TimeConverter = _DllDir+@"xtime_convert.dll";
+        private const string _TimeConverter = _DllDir + @"xtime_convert.dll";
 
-        private const string _RaidEx = _DllDir+@"rdEx.dll";
+        private const string _RaidEx = _DllDir + @"rdEx.dll";
 
-        private const string _diskDll_hd1 = _DllDir+@"hd1.dll";
+        private const string _diskDll_hd1 = _DllDir + @"hd1.dll";
 
-        private const string _dev_flsh_krnl = _DllDir+@"dev_flsh_krnl.dll";
+        private const string _dev_flsh_krnl = _DllDir + @"dev_flsh_krnl.dll";
 
         #endregion
 
@@ -165,7 +163,7 @@ namespace X64Service
         /// <param name="vbi">分区参数基本信息</param>
         /// <returns></returns>
         [DllImport(_DskFsMaster, EntryPoint = "fs_fun_15")]
-        public static extern Int32 GetPartInfo(IntPtr mountHandle,ref VOL_BPB_INFO vbi);
+        public static extern Int32 GetPartInfo(IntPtr mountHandle, ref VOL_BPB_INFO vbi);
 
         /// <summary>
         /// 释放目录文件节点链表空间(不会释放自己定义的顶层节点空间)

@@ -16,10 +16,11 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <summary>
         /// 初始化类型 AsyncProgressEventArgs 实例。
         /// </summary>
+        /// <param name="taskId">任务标识。</param>
         /// <param name="progress">进度。</param>
         /// <param name="exception">异常信息。</param>
-        public TaskProgressEventArgs(Double progress, String message)
-            : base(message)
+        public TaskProgressEventArgs(String taskId, Double progress, String message)
+            : base(taskId, message)
         {
             Progress = progress;
         }

@@ -138,8 +138,26 @@
 
 
 
-
-
+    <!--书签标记复选框样式-->
+    <Style x:Key="bookmarkCheckboxStyle" TargetType="CheckBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Border BorderThickness="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <Image x:Name="img" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/bookmark_no.png" Width="17"/>
+                            <ContentPresenter VerticalAlignment="Center" Margin="5 0 0 0"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Source" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/bookmark_yes.png" TargetName="img"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 
 

@@ -64,7 +64,7 @@ namespace XLY.SF.Project.Themes.CustromControl
 
         // 控制TreeViewItemEx的前台两种展现方式
         public static readonly DependencyProperty IsItemStyleProperty =
-            DependencyProperty.Register("IsItemStyle", typeof(bool), typeof(TreeViewItemEx), new PropertyMetadata(true));
+            DependencyProperty.Register("IsItemStyle", typeof(bool), typeof(TreeViewItemEx), new PropertyMetadata(false));
 
 
 

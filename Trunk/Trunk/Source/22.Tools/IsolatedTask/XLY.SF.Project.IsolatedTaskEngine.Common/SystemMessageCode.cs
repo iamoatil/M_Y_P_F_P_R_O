@@ -14,6 +14,10 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <summary>
         /// 任务结束事件的消息码。
         /// </summary>
-        TaskOverEvent=-1,
+        TaskOverEvent = -1,
+        /// <summary>
+        /// 激活器错误事件的消息码。
+        /// </summary>
+        ActivatorErrorEvent = -2,
     }
 }

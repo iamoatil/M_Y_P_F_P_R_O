@@ -21,6 +21,7 @@ namespace XLY.SF.Project.Devices
     /// <summary>
     /// 黑莓设备管理
     /// </summary>
+    [Serializable]
     public sealed class BlackBerryDeviceManager : IDeviceManager
     {
         [Obsolete("请使用BlackBerryDeviceManager..Instance获取实例！")]

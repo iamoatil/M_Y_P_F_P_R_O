@@ -412,6 +412,9 @@
             <ei:DataTrigger Binding="{Binding IsChecked,ElementName=tb_Edit}" Value="True">
                 <ei:ChangePropertyAction PropertyName="Content" Value="{Binding XPath=ViewLanguage/View_Common_Save, Source={x:Static ex:SystemContext.LanguageProvider}}" TargetObject="{Binding ElementName=tb_Edit}"/>
             </ei:DataTrigger>
+            <ei:DataTrigger Binding="{Binding IsChecked,ElementName=tb_Edit}" Value="false">
+                <ei:ChangePropertyAction PropertyName="Content" Value="{Binding XPath=ViewLanguage/View_DevHomePage_Edit, Source={x:Static ex:SystemContext.LanguageProvider}}" TargetObject="{Binding ElementName=tb_Edit}"/>
+            </ei:DataTrigger>
 
         </i:Interaction.Triggers>
     </Grid>

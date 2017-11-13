@@ -29,7 +29,7 @@ namespace XLY.SF.Project.Views.Main
     /// MainView.xaml 的交互逻辑
     /// </summary>
     [Export(ExportKeys.ModuleMainUcView, typeof(UcViewBase))]
-    [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.Shared)]
+    [PartCreationPolicy(System.ComponentModel.Composition.CreationPolicy.NonShared)]
     public partial class MainView : UcViewBase
     {
         /// <summary>
@@ -59,12 +59,11 @@ namespace XLY.SF.Project.Views.Main
         {
             get
             {
-                return this.DataContext as ViewModelBase;
+                return base.DataSource;
             }
             set
             {
-                value.SetViewContainer(this);
-                this.DataContext = value;
+                base.DataSource = value;
             }
         }
 
@@ -79,8 +78,8 @@ namespace XLY.SF.Project.Views.Main
             _sbOnExpandCreateCaseBack = this.Resources["OnExpandCreateCaseBack"] as Storyboard;
 
             _winContainer = Window.GetWindow(this);
-            //注册主界面导航消息
-            MsgAggregation.Instance.RegisterNaviagtionMsg(this, SystemKeys.MainUcNavigation, MainNavigationCallback);
+            ////注册主界面导航消息
+            //MsgAggregation.Instance.RegisterNaviagtionMsg(this, SystemKeys.MainUcNavigation, MainNavigationCallback);
             //监听子界面展开消息
             MsgAggregation.Instance.RegisterSysMsg<SubViewMsgModel>(this, SystemKeys.SetSubViewStatus, OpenSubViewCallback);
 
@@ -93,16 +92,6 @@ namespace XLY.SF.Project.Views.Main
             updateTime.Interval = TimeSpan.FromSeconds(1);
             updateTime.Tick += UpdateTime_Tick;
             updateTime.Start();
-        }
-
-        #endregion
-
-        #region 主界面导航切换效果
-
-        //主界面导航回调
-        private void MainNavigationCallback(NavigationArgs args)
-        {
-            cc_MainContent.Content = args.TargetView;
         }
 
         #endregion

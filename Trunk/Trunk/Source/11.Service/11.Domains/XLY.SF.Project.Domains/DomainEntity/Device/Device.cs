@@ -8,8 +8,7 @@ namespace XLY.SF.Project.Domains
     [Serializable]
     public partial class Device
     {
-        [NonSerialized]
-        public IDeviceManager DeviceManager;
+        public IDeviceManager DeviceManager { get; set; }
         //public HTCUSBINFO HtcNoUsbInfo = null;
 
         [NonSerialized]

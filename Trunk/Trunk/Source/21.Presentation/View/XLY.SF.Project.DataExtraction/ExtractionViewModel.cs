@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
@@ -10,7 +11,6 @@ using System.Windows.Data;
 using System.Windows.Input;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.DataExtract;
-using XLY.SF.Project.Domains;
 using XLY.SF.Project.IsolatedTaskEngine.Common;
 using XLY.SF.Project.Plugin.Adapter;
 
@@ -32,6 +32,7 @@ namespace XLY.SF.Project.DataExtraction
         {
             LoadedCommand = new RelayCommand(Loaded);
             StartCommand = new RelayCommand(Start, () => Items != null && Items.Any(x => x.IsChecked));
+            StopCommand = new RelayCommand(Stop);
             SelectGroupCommand = new RelayCommand<IEnumerable<Object>>((o) => SelectGroup(o, true));
             UnselectGroupCommand = new RelayCommand<IEnumerable<Object>>((o) => SelectGroup(o, false));
             SelectItemCommand = new RelayCommand<ExtractionItem>(SelectItem);
@@ -59,6 +60,8 @@ namespace XLY.SF.Project.DataExtraction
 
         public ICommand StartCommand { get; }
 
+        public ICommand StopCommand { get; }
+
         public ICommand LoadedCommand { get; }
 
         public ICommand SelectGroupCommand { get; }
@@ -68,6 +71,8 @@ namespace XLY.SF.Project.DataExtraction
         public ICommand SelectItemCommand { get; }
 
         public ICommand HeaderLoadedCommand { get; }
+
+        internal Boolean IsSelfHost { get; set; }
 
         #region IsSelectAll
 
@@ -119,7 +124,7 @@ namespace XLY.SF.Project.DataExtraction
 
         #endregion
 
-        #region IsBusy
+        #region CanSelect
 
         private Boolean _canSelect = true;
         public Boolean CanSelect
@@ -137,15 +142,6 @@ namespace XLY.SF.Project.DataExtraction
         #endregion
 
         #region Methods
-
-        #region Protected
-
-        protected override void LoadCore(Object parameters)
-        {
-            Args = parameters as DataExtractionParams;
-        }
-
-        #endregion
 
         #region Private
 
@@ -209,49 +205,25 @@ namespace XLY.SF.Project.DataExtraction
 
         private void Loaded()
         {
-            //PluginAdapter.Instance.Initialization(null);
-            //LaunchService();
-            Items = new ExtractItem[]
+            if (!IsSelfHost)
             {
-                new ExtractItem{GroupName="设备信息", Name="基本信息"},
-                new ExtractItem{GroupName="设备信息", Name="安装应用"},
-                new ExtractItem{GroupName="设备信息", Name="SIM卡信息"},
-                new ExtractItem{GroupName="设备信息", Name="蓝牙"},
-                new ExtractItem{GroupName="设备信息", Name="WIFI信息"},
-                new ExtractItem{GroupName="基础数据", Name="联系人"},
-                new ExtractItem{GroupName="基础数据", Name="微信"},
-                new ExtractItem{GroupName="基础数据", Name="QQ"},
-                new ExtractItem{GroupName="基础数据", Name="360浏览器"},
-                new ExtractItem{GroupName="基础数据", Name="王者荣耀"},
-                new ExtractItem{GroupName="基础数据", Name="绝地求生"},
-                new ExtractItem{GroupName="基础数据", Name="腾讯新闻"},
-                new ExtractItem{GroupName="特殊", Name="QQ"},
-                new ExtractItem{GroupName="特殊", Name="360浏览器"},
-                new ExtractItem{GroupName="特殊", Name="王者荣耀"},
-                new ExtractItem{GroupName="特殊", Name="绝地求生"},
-                new ExtractItem{GroupName="特殊", Name="腾讯新闻"},
-            }.Select(x => new ExtractionItem(x)
-            {
-                Count =1025,
-                State = TaskState.Idle,
-                Elapsed = TimeSpan.FromHours(17.25345)
-            }).ToArray();
+                MessageAggregation.RegisterGeneralMsg<DataExtractionParams>(this, "SetDataExtractionParamsMsg", (a) => Args = a.Parameters);
+            }
+            LaunchService();
         }
 
         private void Start()
         {
             Message message = new Message((Int32)ExtractionCode.Start);
             message.SetContent(Args);
-            //System.Threading.Tasks.Task.Factory.StartNew(() =>
-            //{
-            //    foreach (var item in Items)
-            //    {
-            //        item.State = TaskState.Running;
-            //        System.Threading.Thread.Sleep(2000);
-            //    }
-            //});
-            //_proxy.Send(message);
             CanSelect = false;
+            _proxy.Send(message);
+        }
+
+        private void Stop()
+        {
+            Message message = new Message((Int32)ExtractionCode.Stop);
+            _proxy.Send(message);
         }
 
         private void LaunchService()
@@ -273,6 +245,7 @@ namespace XLY.SF.Project.DataExtraction
                 ReceiveCallback = Receive
             };
             _proxy.TaskOver += _proxy_TaskOver;
+            _proxy.ActivatorError += _proxy_ActivatorError;
             _proxy.Init();
         }
 
@@ -282,12 +255,9 @@ namespace XLY.SF.Project.DataExtraction
             switch (code)
             {
                 case ExtractionCode.Start:
-                    if (message.GetContent<Boolean>())
-                    {
-                    }
-                    else
-                    {
-                    }
+                    CanSelect = !message.GetContent<Boolean>();
+                    break;
+                case ExtractionCode.Stop:
                     break;
                 case ExtractionCode.ProgressChanged:
                     break;
@@ -309,6 +279,11 @@ namespace XLY.SF.Project.DataExtraction
             else if (e.Exception != null)
             {
             }
+            CanSelect = true;
+        }
+
+        private void _proxy_ActivatorError(object sender, ActivatorErrorEventArgs e)
+        {
             CanSelect = true;
         }
 

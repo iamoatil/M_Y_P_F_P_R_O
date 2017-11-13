@@ -19,27 +19,49 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <summary>
         /// 触发任务结束事件。
         /// </summary>
-        protected void OnTaskOver(Boolean isCompleted)
+        /// <param name="taskId">任务标识。</param>
+        /// <param name="isCompleted">是否取消。如果为true表示正常完成，否表示取消。</param>
+        protected void OnTaskOver(String taskId, Boolean isCompleted)
         {
-            TaskOver?.Invoke(this, new TaskOverEventArgs(isCompleted));
+            TaskOver?.Invoke(this, new TaskOverEventArgs(taskId, isCompleted));
         }
 
         /// <summary>
         /// 触发任务结束事件。。
         /// </summary>
+        /// <param name="taskId">任务标识。</param>
         /// <param name="ex">异常信息。</param>
-        protected void OnTaskOver(Exception ex)
+        protected void OnTaskOver(String taskId, Exception ex)
         {
-            TaskOver?.Invoke(this, new TaskOverEventArgs(ex));
+            TaskOver?.Invoke(this, new TaskOverEventArgs(taskId, ex));
         }
 
         /// <summary>
         /// 触发任务结束事件。
         /// </summary>
+        /// <param name="taskId">任务标识。</param>
         /// <param name="errorMessage">错误消息。</param>
-        protected void OnTaskOver(String errorMessage)
+        protected void OnTaskOver(String taskId, String errorMessage)
         {
-            TaskOver?.Invoke(this, new TaskOverEventArgs(errorMessage));
+            TaskOver?.Invoke(this, new TaskOverEventArgs(taskId, errorMessage));
+        }
+
+        #endregion
+
+        #region ActivatorError
+
+        /// <summary>
+        /// 任务激活错误事件。
+        /// </summary>
+        public event EventHandler<ActivatorErrorEventArgs> ActivatorError;
+
+        /// <summary>
+        /// 触发任务激活器错误事件。
+        /// </summary>
+        /// <param name="ex">异常信息。</param>
+        protected void OnActivatorError(Exception ex)
+        {
+            ActivatorError?.Invoke(this, new ActivatorErrorEventArgs(ex));
         }
 
         #endregion

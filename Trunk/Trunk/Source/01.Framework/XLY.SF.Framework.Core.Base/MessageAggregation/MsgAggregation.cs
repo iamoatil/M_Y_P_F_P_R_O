@@ -52,35 +52,17 @@ namespace XLY.SF.Framework.Core.Base.MessageAggregation
         #region 消息发送
 
         #region 导航（UI线程）
-
-        /// <summary>
-        /// 导航到新窗口【模式对话框】
-        /// </summary>
-        /// <param name="args">参数</param>
-        public void SendNavigationMsgForDialogWindow(NavigationArgs args)
-        {
-            if (args.IsSuccess)
-            {
-                GalaSoft.MvvmLight.Threading.DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                {
-                    GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<NavigationArgs>(args, SystemKeys.OpenNewDialogWindow);
-                });
-            }
-        }
-
+        
         /// <summary>
         /// 导航到新窗口
         /// </summary>
         /// <param name="args">参数</param>
         public void SendNavigationMsgForWindow(NavigationArgs args)
         {
-            if (args.IsSuccess)
+            GalaSoft.MvvmLight.Threading.DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                GalaSoft.MvvmLight.Threading.DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                {
-                    GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<NavigationArgs>(args, SystemKeys.OpenNewWindow);
-                });
-            }
+                GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<NavigationArgs>(args, SystemKeys.OpenNewWindow);
+            });
         }
 
         /// <summary>
@@ -89,13 +71,10 @@ namespace XLY.SF.Framework.Core.Base.MessageAggregation
         /// <param name="args">参数</param>
         public void SendNavigationMsgForMainView(NavigationArgs args)
         {
-            if (args.IsSuccess)
+            GalaSoft.MvvmLight.Threading.DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                GalaSoft.MvvmLight.Threading.DispatcherHelper.CheckBeginInvokeOnUI(() =>
-                {
-                    GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<NavigationArgs>(args, SystemKeys.MainUcNavigation);
-                });
-            }
+                GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<NavigationArgs>(args, SystemKeys.MainUcNavigation);
+            });
         }
 
         /// <summary>

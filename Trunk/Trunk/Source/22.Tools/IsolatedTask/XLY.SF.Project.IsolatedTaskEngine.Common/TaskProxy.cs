@@ -23,9 +23,28 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <summary>
         /// 触发任务结束事件。
         /// </summary>
-        protected void OnTaskOver(TaskOverEventArgs args)
+        /// <param name="args">事件参数。</param>
+        private void OnTaskOver(TaskOverEventArgs args)
         {
             TaskOver?.Invoke(this, args);
+        }
+
+        #endregion
+
+        #region ActivatorError
+
+        /// <summary>
+        /// 任务激活错误事件。
+        /// </summary>
+        public event EventHandler<ActivatorErrorEventArgs> ActivatorError;
+
+        /// <summary>
+        /// 触发任务激活器错误事件。
+        /// </summary>
+        /// <param name="args">事件参数。</param>
+        private void OnActivatorError(ActivatorErrorEventArgs args)
+        {
+            ActivatorError?.Invoke(this, args);
         }
 
         #endregion
@@ -138,9 +157,17 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
                     switch (message.Code)
                     {
                         case (Int32)SystemMessageCode.TaskOverEvent:
-                            Terminate();
-                            TaskOverEventArgs args = message.GetContent<TaskOverEventArgs>();
-                            OnTaskOver(args);
+                            {
+                                Terminate();
+                                TaskOverEventArgs args = message.GetContent<TaskOverEventArgs>();
+                                OnTaskOver(args);
+                            }
+                            break;
+                        case (Int32)SystemMessageCode.ActivatorErrorEvent:
+                            {
+                                ActivatorErrorEventArgs args = message.GetContent<ActivatorErrorEventArgs>();
+                                OnActivatorError(args);
+                            }
                             break;
                         default:
                             ReceiveCallback?.Invoke(message);

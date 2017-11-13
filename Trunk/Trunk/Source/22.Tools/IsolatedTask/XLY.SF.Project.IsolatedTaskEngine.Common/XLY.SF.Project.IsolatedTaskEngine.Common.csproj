@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActivatorErrorEventArgs.cs" />
     <Compile Include="MessageClientTransceiver.cs" />
     <Compile Include="SystemMessageCode.cs" />
     <Compile Include="TaskActivator.cs" />

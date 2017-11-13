@@ -4,17 +4,24 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:XLY.SF.Project.DataDisplayView.View.Controls"
+             xmlns:theme="clr-namespace:XLY.SF.Project.Themes;assembly=XLY.SF.Project.Themes"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <DataGrid CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding Items.View}" SelectionChanged="DataGrid_SelectionChanged">
-        <!--<DataGrid.ItemContainerStyle>
-            <Style TargetType="DataGridRow">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsVisible}" Value="False">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </DataGrid.ItemContainerStyle>-->
-    </DataGrid>
+    <UserControl.Resources>
+        <theme:BookmarkToBooleanConverter x:Key="bmkConverter"/>
+
+        <DataGridTemplateColumn x:Key="bookmarkColumnTemplate">
+            <DataGridTemplateColumn.HeaderTemplate>
+                <DataTemplate>
+                    <CheckBox x:Name="CheckAll" Click="CheckAll_Click" Style="{DynamicResource bookmarkCheckboxStyle}">标记</CheckBox>
+                </DataTemplate>
+            </DataGridTemplateColumn.HeaderTemplate>
+            <DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+                    <CheckBox IsChecked="{Binding BookMarkId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, Converter={StaticResource bmkConverter}}" Width="42" Style="{DynamicResource bookmarkCheckboxStyle}"></CheckBox>
+                </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+    </UserControl.Resources>
+    <DataGrid x:Name="dg" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding Items.View}" SelectionChanged="DataGrid_SelectionChanged"></DataGrid>
 </UserControl>

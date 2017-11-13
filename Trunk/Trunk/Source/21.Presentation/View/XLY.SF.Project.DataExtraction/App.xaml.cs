@@ -1,15 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Data;
-using XLY.SF.Framework.Language;
-using XLY.SF.Project.DataExtraction.Language;
-using XLY.SF.Project.Devices;
-using XLY.SF.Project.Domains;
+﻿using System.Windows;
 
 namespace XLY.SF.Project.DataExtraction
 {

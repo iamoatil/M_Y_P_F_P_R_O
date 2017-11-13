@@ -64,7 +64,6 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
                         if (!value.Existed) throw new InvalidOperationException("Target is not existed");
                         Id = value.Id;
                         Type = value.Type;
-                        _name = GetValue("Name");
                     }
                 }
             }
@@ -129,6 +128,8 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
                         SetValue(item.Key, item.Value);
                     }
                     _device = value;
+
+                    _name = GetValue("Name");
                 }
             }
         }

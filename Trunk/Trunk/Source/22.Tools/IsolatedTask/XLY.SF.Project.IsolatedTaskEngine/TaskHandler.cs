@@ -31,6 +31,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
             TaskActivator activator = (TaskActivator)Activator.CreateInstance(setup.EntryType);
             activator.RequestSendMessageCallback = (m) => _transceiver.Send(m);
             activator.TaskOver += (a, b) => TerminateTask(b);
+            activator.ActivatorError += (a, b) => OnActivatorError(b);
             _activator = activator;
         }
 
@@ -75,12 +76,12 @@ namespace XLY.SF.Project.IsolatedTaskEngine
                     }
                     else
                     {
-                        TerminateTask(new TaskOverEventArgs("Launch task failed"));
+                        OnActivatorError(new ActivatorErrorEventArgs("Launch task failed"));
                     }
                 }
                 catch (Exception ex)
                 {
-                    TerminateTask(new TaskOverEventArgs(ex));
+                    OnActivatorError(new ActivatorErrorEventArgs(ex));
                 }
             }
             else
@@ -122,7 +123,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
                 }
                 catch (Exception ex)
                 {
-                    TerminateTask(new TaskOverEventArgs(ex));
+                    OnActivatorError(new ActivatorErrorEventArgs(ex));
                 }
             }
         }
@@ -144,6 +145,16 @@ namespace XLY.SF.Project.IsolatedTaskEngine
             _transceiver.Close();
             IsDisposed = true;
             _taskOverCallback(this, e);
+        }
+
+        /// <summary>
+        /// 给代理发送激活器错误事件。
+        /// </summary>
+        /// <param name="e">事件参数。</param>
+        private void OnActivatorError(ActivatorErrorEventArgs e)
+        {
+            Message message = Message.CreateSystemMessage((Int32)SystemMessageCode.ActivatorErrorEvent, e);
+            _transceiver.Send(message);
         }
 
         #endregion

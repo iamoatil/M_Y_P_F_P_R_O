@@ -18,6 +18,7 @@
         <ResourceDictionary Source="ThemesStyle/Listbox/ListboxItemStyle.xaml"/>
         <ResourceDictionary Source="ThemesStyle/Listbox/ConversionListBoxStyle.xaml"/>
         <ResourceDictionary Source="ThemesStyle/DataGridStyle/DataGridStyle.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/TreeViewStyle/TreeViewStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <!--系统默认样式加载-->
@@ -154,6 +155,10 @@
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Background" Value="#2382cd"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Background" Value="#4d556d"></Setter>
+                <Setter Property="Foreground" Value="#9ba5b9"></Setter>
             </Trigger>
         </Style.Triggers>
     </Style>

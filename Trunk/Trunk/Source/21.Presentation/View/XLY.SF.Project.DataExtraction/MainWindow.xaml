@@ -12,6 +12,7 @@
         Height="600"
         Width="800">
     <Grid>
-        <local:ExtractionView x:Name="EV"/>
+        <local:ExtractionView x:Name="EV"
+                              IsSelftHost="True" />
     </Grid>
 </Window>

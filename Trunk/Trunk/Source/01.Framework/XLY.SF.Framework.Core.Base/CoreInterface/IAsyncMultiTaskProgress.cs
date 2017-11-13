@@ -15,11 +15,11 @@ namespace XLY.SF.Framework.Core.Base.CoreInterface
         /// <summary>
         /// 任务进度改变事件。
         /// </summary>
-        event EventHandler<MultiTaskProgressEventArg> ProgressChanged;
+        event EventHandler<TaskProgressEventArgs> ProgressChanged;
 
         /// <summary>
         /// 任务结束事件。
         /// </summary>
-        event EventHandler<MultiTaskTerminateEventArgs> Ternimated;
+        event EventHandler<TaskTerminateEventArgs> Ternimated;
     }
 }

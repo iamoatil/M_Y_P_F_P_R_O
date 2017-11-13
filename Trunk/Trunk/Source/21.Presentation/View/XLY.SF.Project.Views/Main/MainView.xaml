@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:XLY.SF.Project.Views.Main"
 		     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
 		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-                 xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
-                 xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
+             xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
+             xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
              xmlns:convert="clr-namespace:XLY.SF.Project.Views.Converters"
              xmlns:sys="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
              mc:Ignorable="d"
@@ -362,7 +362,7 @@
                             <TranslateTransform/>
                         </TransformGroup>
                     </Grid.RenderTransform>
-                    <ContentControl x:Name="cc_MainContent" Margin="0"></ContentControl>
+                    <ContentControl x:Name="cc_MainContent" Margin="0" Content="{Binding MainNavigation.MainView}"></ContentControl>
                 </Grid>
             </Grid>
 

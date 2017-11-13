@@ -15,6 +15,7 @@ namespace XLY.SF.Project.Devices
     /// <summary>
     /// IOS设备管理服务
     /// </summary>
+    [Serializable]
     public sealed class IOSDeviceManager : IDeviceManager
     {
         /// <summary>

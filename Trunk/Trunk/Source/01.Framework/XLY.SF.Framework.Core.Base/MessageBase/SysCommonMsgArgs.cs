@@ -20,11 +20,6 @@ namespace XLY.SF.Framework.Core.Base.MessageBase
     /// </summary>
     public class SysCommonMsgArgs : ArgsBase
     {
-        /// <summary>
-        /// 系统消息类型
-        /// </summary>
-        //public string SysKey { get; private set; }
-
         public SysCommonMsgArgs(string sysKey)
         {
             base.MsgToken = sysKey;

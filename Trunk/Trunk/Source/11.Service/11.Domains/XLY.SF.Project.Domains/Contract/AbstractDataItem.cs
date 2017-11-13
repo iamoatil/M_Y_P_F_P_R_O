@@ -62,7 +62,15 @@ namespace XLY.SF.Project.Domains
         /// 加入书签的编号，小于0则未加入书签
         /// </summary>
         [Display]
-        public int BookMarkId { get => _bookMarkId; set { _bookMarkId = value; OnPropertyChanged(); } }
+        public int BookMarkId
+        {
+            get => _bookMarkId;
+            set
+            {
+                _bookMarkId = value;
+                OnPropertyChanged();
+            }
+        }
 
         private bool _isVisible = true;
         /// <summary>

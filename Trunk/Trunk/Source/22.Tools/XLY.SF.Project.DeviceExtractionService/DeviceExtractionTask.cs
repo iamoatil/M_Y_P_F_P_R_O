@@ -18,7 +18,7 @@ namespace XLY.SF.Project.DeviceExtractionService
 
         private readonly DataExtractControler _controler;
 
-        private readonly DefaultSingleTaskReporter _reporter;
+        private readonly MultiTaskReportBase _reporter;
 
         #endregion
 
@@ -26,7 +26,7 @@ namespace XLY.SF.Project.DeviceExtractionService
 
         public DeviceExtractionTask()
         {
-            _reporter = new DefaultSingleTaskReporter();
+            _reporter = new DefaultMultiTaskReporter();
             _reporter.ProgressChanged += _reporter_ProgressChanged;
             _reporter.Ternimated += _reporter_Ternimated;
             _controler = new DataExtractControler()
@@ -53,9 +53,6 @@ namespace XLY.SF.Project.DeviceExtractionService
         protected override void OnReceive(Message message)
         {
             ExtractionCode code = (ExtractionCode)message.Code;
-#if DEBUG
-            Console.WriteLine(message);
-#endif
             switch (code)
             {
                 case ExtractionCode.Start:
@@ -81,7 +78,7 @@ namespace XLY.SF.Project.DeviceExtractionService
 
         private void _reporter_Ternimated(object sender, TaskTerminateEventArgs e)
         {
-            OnTaskOver(e.IsCompleted);
+            OnTaskOver(e.TaskId, e.IsCompleted);
         }
 
         private void _reporter_ProgressChanged(object sender, TaskProgressEventArgs e)
@@ -94,27 +91,12 @@ namespace XLY.SF.Project.DeviceExtractionService
             Pump pump = @params.Pump;
             if (@params != null && pump != null)
             {
-                if (pump.TypeFullName != null)
-                {
-                    Assembly assembly = Assembly.Load(pump.AssemblyFullName);
-                    if (assembly != null)
-                    {
-                        Type type = assembly.GetType(pump.TypeFullName);
-                        if (type != null)
-                        {
-                            Object o = Message.DeserializeObject(@params.Pump.Source?.ToString(), type);
-                            pump.Source = o;
-                            _controler.Start(@params.Pump, @params.Items);
-                            OnSend(message.CreateResponse(true));
-                        }
-                    }
-                }
-                OnTaskOver(new TypeLoadException($"Can't load to type {pump.TypeFullName};{pump.AssemblyFullName} "));
-                return;
+                _controler.Start(@params.Pump, @params.Items);
+                OnSend(message.CreateResponse(true));
             }
             else
             {
-                OnTaskOver(new ArgumentException("Can't convert to type 'DataExtractionParams' "));
+                OnActivatorError(new ArgumentException("Can't convert to type 'DataExtractionParams' "));
             }
         }
 

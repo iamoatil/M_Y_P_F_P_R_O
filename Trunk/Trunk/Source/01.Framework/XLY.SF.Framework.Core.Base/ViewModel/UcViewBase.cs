@@ -21,13 +21,25 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
     {
         public UcViewBase()
         {
-
+            ViewID = Guid.NewGuid();
         }
 
         /// <summary>
         /// 绑定DataContext
         /// </summary>
-        public abstract ViewModelBase DataSource { get; set; }
+        public virtual ViewModelBase DataSource
+        {
+            get
+            {
+                return this.DataContext as ViewModelBase;
+            }
+            set
+            {
+                if (value != null)
+                    value.SetViewContainer(this);
+                this.DataContext = value;
+            }
+        }
 
         #region 显示的标题
 
@@ -61,6 +73,26 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// 是否最大化显示
         /// </summary>
         public bool IsMaxView { get; set; }
+
+        #endregion
+
+        #region 是否缓存
+
+        /// <summary>
+        /// 是否需要缓存
+        /// 如果缓存，下次打开界面不再创建实例
+        /// 当清除后才会重新创建
+        /// </summary>
+        public bool HasCache { get; protected set; }
+
+        #endregion
+
+        #region 当前ViewID
+
+        /// <summary>
+        /// 当前ViewID
+        /// </summary>
+        public Guid ViewID { get; }
 
         #endregion
     }

@@ -26,6 +26,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
             {
                  ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                  PreserveReferencesHandling = PreserveReferencesHandling.None,
+                TypeNameHandling = TypeNameHandling.All,
             };
             DefaultContractResolver resolver = new DefaultContractResolver();
             resolver.DefaultMembersSearchFlags |= System.Reflection.BindingFlags.NonPublic;
@@ -141,6 +142,25 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
             {
                 if (json == null) return null;
                 return JsonConvert.DeserializeObject(json, type, Message.JsonSettings);
+            }
+            catch (JsonException)
+            {
+                return null;
+            }
+        }
+
+
+        /// <summary>
+        /// 反序列化JSON字符串。
+        /// </summary>
+        /// <param name="json">JSON字符串。</param>
+        /// <returns>实例。</returns>
+        public static Object DeserializeObject(String json)
+        {
+            try
+            {
+                if (json == null) return null;
+                return JsonConvert.DeserializeObject(json, Message.JsonSettings);
             }
             catch (JsonException)
             {

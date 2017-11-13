@@ -17,9 +17,10 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <summary>
         /// 初始化类型 TaskFailedEventArgs 实例。
         /// </summary>
+        /// <param name="taskId">任务标识。</param>
         /// <param name="ex">异常信息。</param>
-        public TaskOverEventArgs(Exception ex)
-            : this(ex.Message)
+        public TaskOverEventArgs(String taskId, Exception ex)
+            : this(taskId, ex.Message)
         {
             Exception = ex;
         }
@@ -27,9 +28,10 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <summary>
         /// 初始化类型 TaskFailedEventArgs 实例。
         /// </summary>
+        /// <param name="taskId">任务标识。</param>
         /// <param name="errorMessage">错误消息。</param>
-        public TaskOverEventArgs(String errorMessage)
-            :this(false)
+        public TaskOverEventArgs(String taskId, String errorMessage)
+            :this(taskId,false)
         {
             ErrorMessage = errorMessage;
         }
@@ -37,9 +39,11 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <summary>
         /// 初始化类型 TaskFailedEventArgs 实例。
         /// </summary>
+        /// <param name="taskId">任务标识。</param>
         /// <param name="isCompleted">是否完成。</param>
-        public TaskOverEventArgs(Boolean isCompleted)
+        public TaskOverEventArgs(String taskId, Boolean isCompleted)
         {
+            TaskId = taskId ?? throw new ArgumentNullException("taskId");
             IsCompleted = isCompleted;
         }
 
@@ -53,6 +57,11 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// 任务标识。
+        /// </summary>
+        public String TaskId { get; private set; }
 
         /// <summary>
         /// 异常信息。

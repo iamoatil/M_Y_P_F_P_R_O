@@ -16,10 +16,11 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <summary>
         /// 初始化类型 AsyncTaskTerminateEventArgs 实例。
         /// </summary>
+        /// <param name="taskId">任务标识。</param>
         /// <param name="exception">异常信息。</param>
         /// <param name="message">消息。</param>
-        public TaskTerminateEventArgs(Exception exception, String message)
-            : base(message)
+        public TaskTerminateEventArgs(String taskId, Exception exception, String message)
+            : base(taskId, message)
         {
             Exception = exception ?? throw new ArgumentNullException("exception");
         }
@@ -27,8 +28,10 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <summary>
         /// 初始化类型 AsyncTaskTerminateEventArgs 实例。
         /// </summary>
+        /// <param name="taskId">任务标识。</param>
         /// <param name="isCompleted">是否完成。如果为false，表示在未完成的情况下停止任务。</param>
-        public TaskTerminateEventArgs(Boolean isCompleted)
+        public TaskTerminateEventArgs(String taskId, Boolean isCompleted)
+            : base(taskId)
         {
             if (isCompleted)
             {

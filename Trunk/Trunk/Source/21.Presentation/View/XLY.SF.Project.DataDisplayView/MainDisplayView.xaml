@@ -24,18 +24,24 @@
         <local:DataFilterControl Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Visibility="Collapsed"/>
 
         <!--数据列表-->
-        <TreeView x:Name="treeDataList" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding DataList}">
-            <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding TreeNodes}">
-                        <TextBlock Text="{Binding Text}"/>
-                    </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
+        <ctrl:TreeViewEx x:Name="treeDataList" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding DataList}">
+            <!--<TreeView.Resources>
+                <Style TargetType="ctrl:TreeViewItemEx">
+                    <Setter Property="Template" Value="{StaticResource TreeViewItemLevel1}"></Setter>
+                </Style>
+            </TreeView.Resources>-->
+            <ctrl:TreeViewEx.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding TreeNodes}" >
+                    <!--<ctrl:TreeViewItemEx Header="{Binding Text}"/>-->
+                    <TextBlock Text="{Binding Text}"/>
+                </HierarchicalDataTemplate>
+            </ctrl:TreeViewEx.ItemTemplate>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectedItemChanged">
                     <i:InvokeCommandAction Command="{Binding SelecedAppChanged}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeView}}, Path=SelectedValue}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-        </TreeView>
+        </ctrl:TreeViewEx>
         <GridSplitter Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Stretch" Width="2" Background="Transparent"/>
 
         <!--自定义数据展示-->

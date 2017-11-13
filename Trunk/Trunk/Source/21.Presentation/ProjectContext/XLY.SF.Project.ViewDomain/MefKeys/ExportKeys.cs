@@ -162,6 +162,17 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         /// 设备主页
         /// </summary>
         public const string DeviceMainViewModel = "ExportKey_DeviceMainViewModel";
+
+        /// <summary>
+        /// 设置数据提取参数。
+        /// </summary>
+        public const string SetDataExtractionParamsMsg = "SetDataExtractionParamsMsg";
+
+        /// <summary>
+        /// 提取展示页
+        /// </summary>
+        public const string ExtractionView = "ExportKey_ExtractionView";
+
         #endregion
 
         #region 选择控件（路径，文件，打开）

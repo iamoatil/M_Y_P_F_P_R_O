@@ -132,8 +132,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
             bool showInTaskBar = false,
             bool topMost = false)
         {
-            NavigationArgs args = new NavigationArgs(exportKey, param, showInTaskBar);
-            args.TopMost = topMost;
+            NavigationArgs args = new NavigationArgs(exportKey, param, showInTaskBar, topMost);
             MsgAggregation.Instance.SendNavigationMsgForWindow(args);
         }
 
