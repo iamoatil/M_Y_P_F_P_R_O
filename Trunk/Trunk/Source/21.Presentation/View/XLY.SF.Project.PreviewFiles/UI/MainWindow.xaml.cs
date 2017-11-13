@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using XLY.SF.Project.UserControls.PreviewFile;
+using System.Windows.Forms;
 
 namespace XLY.SF.Project.PreviewFiles.UI
 {
@@ -13,7 +14,22 @@ namespace XLY.SF.Project.PreviewFiles.UI
         public MainWindow()
         {
             NextCommand = new RelayCommand(Next);
-            PreviousCommand = new RelayCommand(Previous);          
+            PreviousCommand = new RelayCommand(Previous);
+            SetDirectoryCommand = new RelayCommand(new System.Action(() =>
+            {
+                FolderBrowserDialog dialog = new FolderBrowserDialog();
+                DialogResult dr=dialog.ShowDialog();
+                if(System.Windows.Forms.DialogResult.OK == dr)
+                {
+                    string[] files = Directory.GetFiles(dialog.SelectedPath, "*.*");
+                    _fileCollection.Reset();
+                    _fileCollection.AddPaths(files);
+                    if(files.Length > 0)
+                    {
+                        previewControl.ReplaceContent(files[0]);
+                    }                    
+                }
+            }));
 
             InitializeComponent();
 
@@ -24,27 +40,41 @@ namespace XLY.SF.Project.PreviewFiles.UI
             }
             string[] filesPath = Directory.GetFiles(dir, "*.*");
             _fileCollection.AddPaths(filesPath);
-            previewControl.ReplaceContent(filesPath[0]);
+            if(filesPath.Length > 0)
+            {
+                previewControl.ReplaceContent(filesPath[0]);
+            }            
         }        
 
         public ICommand NextCommand { get; private set; }
 
         public ICommand PreviousCommand { get; private set; }
 
+        /// <summary>
+        /// 设置目录
+        /// </summary>
+        public ICommand SetDirectoryCommand { get; private set; }
+
         private readonly PathCollection _fileCollection = new PathCollection();
 
         private void Next()
         {
             string filePath = _fileCollection.GetNextPath();
-            previewControl.ReplaceContent(filePath);
-            this.Title = filePath;
+            if(filePath != null)
+            {
+                previewControl.ReplaceContent(filePath);
+                this.Title = filePath;
+            }           
         }
 
         private void Previous()
         {
             string filePath = _fileCollection.GetPreviousPath();
-            previewControl.ReplaceContent(filePath);
-            this.Title = filePath;
+            if(filePath != null)
+            {
+                previewControl.ReplaceContent(filePath);
+                this.Title = filePath;
+            }            
         }
     }
 }

@@ -6,6 +6,7 @@
     <Start>开始</Start>
     <Pause>暂停</Pause>
     <Stop>停止</Stop>
+    <OpenFolder>打开目录</OpenFolder>
   </FilePreviewLanguage>
 </LanguageResource>
 

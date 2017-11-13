@@ -3,15 +3,20 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:pre="clr-namespace:XLY.SF.Project.PreviewFiles.UI"
         Title="MainWindow" Height="350" Width="525"
-    DataContext="{Binding RelativeSource={RelativeSource Self}}">
+       xmlns:local="clr-namespace:XLY.SF.Project.PreviewFiles"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="277*"/>
-            <RowDefinition Height="42*"/>
+            <RowDefinition Height="15" />
+            <RowDefinition Height="9*"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <pre:PreViewControl x:Name="previewControl"/>
-        <Button Content="《《" HorizontalAlignment="Left" Margin="40,10,0,0" VerticalAlignment="Top" Width="75" Grid.Row="1" Command="{Binding PreviousCommand}"/>
-        <Button Content="》》" HorizontalAlignment="Left" Margin="395,10,0,0" VerticalAlignment="Top" Width="75" Grid.Row="1" Command="{Binding NextCommand}"/>
+        <pre:PreViewControl x:Name="previewControl" Grid.Row="1"/>
+        <Button Content="《《" HorizontalAlignment="Left" Margin="40,10,0,0" VerticalAlignment="Top" Width="75" Grid.Row="2" Command="{Binding PreviousCommand}"/>
+        <Button Content="》》" HorizontalAlignment="Left" Margin="395,10,0,0" VerticalAlignment="Top" Width="75" Grid.Row="2" Command="{Binding NextCommand}"/>
+        <Menu Height="18" VerticalAlignment="Top" >
+            <MenuItem Header="{Binding XPath=FilePreviewLanguage/OpenFolder,Source={x:Static local:LanguageHelper.LanguageProvider}}" Command="{Binding SetDirectoryCommand}"/>
+        </Menu>
 
     </Grid>
 </Window>

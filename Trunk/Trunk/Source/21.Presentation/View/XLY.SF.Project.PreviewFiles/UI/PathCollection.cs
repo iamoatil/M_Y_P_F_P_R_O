@@ -24,14 +24,12 @@ namespace XLY.SF.Project.UserControls.PreviewFile
         }
 
         /// <summary>
-        /// 从集合中删除Path
+        ///重置集合中的路径
         /// </summary>
-        public void DeletePaths(string[] paths)
+        public void Reset()
         {
-            foreach (var item in paths)
-            {
-                _listPath.Remove(item);
-            }
+            _listPath.Clear();
+            _curIndex = 0;
         }
 
         /// <summary>
