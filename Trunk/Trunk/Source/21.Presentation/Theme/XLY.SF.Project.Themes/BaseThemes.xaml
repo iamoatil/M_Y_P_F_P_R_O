@@ -16,6 +16,8 @@
         <ResourceDictionary Source="ThemesStyle/ScrollViewerStyle/ScrollViewer.xaml"/>
         <ResourceDictionary Source="ThemesStyle/TabControlStyle/TabControlWithButton.xaml"/>
         <ResourceDictionary Source="ThemesStyle/Listbox/ListboxItemStyle.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/Listbox/ConversionListBoxStyle.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/DataGridStyle/DataGridStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <!--系统默认样式加载-->
@@ -62,17 +64,6 @@
         <Setter Property="Background" Value="#0fffffff"/>
         <Setter Property="Template" Value="{DynamicResource rb_IconHasArrowCt}"/>
     </Style>
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     <!--系统控件-->
     <Style TargetType="TextBlock">

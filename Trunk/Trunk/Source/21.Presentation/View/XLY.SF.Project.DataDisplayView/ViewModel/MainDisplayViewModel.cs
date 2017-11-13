@@ -207,9 +207,9 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                 accouts2.Type = typeof(WeChatFriendShowX);
                 accouts2.Items = new DataItems<WeChatFriendShowX>(DB_PATH);
                 t.TreeNodes.Add(accouts2);
-                for (int j = 0; j < 5; j += 2)
+                for (int j = 0; j < 15; j += 2)
                 {
-                    accouts2.Items.Add(new WeChatFriendShowX() { Nick = "昵称" + j, WeChatId = "账号" + j, Remark = "XLY_李四" + j });
+                    accouts2.Items.Add(new WeChatFriendShowX() { DataState = j % 3 == 0 ? EnumDataState.Deleted : EnumDataState.Normal, Nick = "昵称" + j, WeChatId = "账号" + j, Remark = "XLY_李四" + j });
                     TreeNode friend = new TreeNode();
                     friend.Text = "昵称" + j;
                     friend.Type = typeof(MessageCore);
@@ -218,9 +218,9 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
 
                     for (int k = 0; k < 100; k++)
                     {
-                        MessageCore msg = new MessageCore() { SenderName = friend.Text, SenderImage = "images/zds.png", Receiver = t.Text, Content = "消息内容" + k, MessageType = k % 4 == 0 ? "图片" : "文本", SendState = EnumSendState.Send };
+                        MessageCore msg = new MessageCore() { SenderName = friend.Text, SenderImage = "images/zds.png", Receiver = t.Text, Content = "消息内容" + k, MessageType = k % 4 == 0 ? "图片" : "文本", SendState = EnumSendState.Send, Date = DateTime.Now.AddHours(k * 3) };
                         friend.Items.Add(msg);
-                        MessageCore msg2 = new MessageCore() { Receiver = friend.Text, SenderImage = "images/zjq.png", SenderName = t.Text, Content = "返回消息内容" + k, MessageType = k % 5 == 0 ? "图片" : "文本", SendState = EnumSendState.Receive };
+                        MessageCore msg2 = new MessageCore() { Receiver = friend.Text, SenderImage = "images/zjq.png", SenderName = t.Text, Content = "返回消息内容" + k, MessageType = k % 5 == 0 ? "图片" : "文本", SendState = EnumSendState.Receive, Date = DateTime.Now.AddHours(k * 3) };
                         friend.Items.Add(msg2);
                     }
                 }

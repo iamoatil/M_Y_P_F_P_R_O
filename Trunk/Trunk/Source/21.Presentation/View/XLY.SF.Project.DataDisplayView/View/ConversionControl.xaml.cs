@@ -24,11 +24,25 @@ namespace XLY.SF.Project.DataDisplayView
         public ConversionControl()
         {
             InitializeComponent();
+
+            this.Loaded += ConversionControl_Loaded;
         }
+
+        private void ConversionControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            CollectionViewSource converisonList = (CollectionViewSource)this.FindResource("conversionCollectionViewSource");
+            converisonList.Source = (this.DataContext as DataViewPluginArgument)?.Items?.View;
+        }
+
         public event DelgateDataViewSelectedItemChanged OnSelectedDataChanged;
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             OnSelectedDataChanged?.Invoke(lsb1.SelectedValue);
+        }
+
+        private void CollectionViewSource_Filter(object sender, FilterEventArgs e)
+        {
+            e.Accepted = true;
         }
     }
 

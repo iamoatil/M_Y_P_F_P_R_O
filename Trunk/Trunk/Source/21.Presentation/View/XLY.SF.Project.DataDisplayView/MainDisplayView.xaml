@@ -54,9 +54,7 @@
                 </Button>-->
             </ctrl:TabControlWithButton.CustomButtonGroup>
 
-            <TabItem Header="16进制">
-                <Button Width="32" Height="32" Visibility="Visible" Style="{StaticResource loadingControlStyle}"/>
-            </TabItem>
+            <TabItem Header="16进制"></TabItem>
             <TabItem Header="浏览">22222</TabItem>
             <TabItem Header="浏览2">3333</TabItem>
         </ctrl:TabControlWithButton>

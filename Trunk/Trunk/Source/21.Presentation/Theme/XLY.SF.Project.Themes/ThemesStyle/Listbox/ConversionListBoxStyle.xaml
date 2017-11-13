@@ -1,0 +1,199 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:XLY.SF.Project.Themes">
+
+    <!--日期分组转换器-->
+    <local:DateTimeToDateStringConverter x:Key="dateTimeToDateConverter"/>
+    <!--图片资源转换器-->
+    <local:StringToImageConverter x:Key="stringToImageConverter"/>
+    <!--百分比宽度转换器-->
+    <local:PercentWidthConverter x:Key="percentWidthConverter"/>
+
+
+    <!--分组日期样式-->
+    <Style x:Key="conversionGroupHeadStyle" TargetType="{x:Type GroupItem}">
+        <Setter Property="Background" Value="#0CFFFFFF"/>
+        <Setter Property="Foreground" Value="#6e7891"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Margin" Value="0 40 0 0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type GroupItem}">
+                    <StackPanel Orientation="Vertical">
+                        <Border Background="{TemplateBinding Background}" Padding="16 4" CornerRadius="2" Width="140">
+                            <TextBlock Text="{Binding Path=Name}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ItemsPresenter />
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--头像-->
+    <Style x:Key="converionHeadStyle" TargetType="Button">
+        <Setter Property="Width" Value="34"/>
+        <Setter Property="Height" Value="34"/>
+        <Setter Property="Background" Value="#6E7990"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border CornerRadius="2" Background="{TemplateBinding Background}" Padding="4">
+                        <Image Source="{Binding SenderImage, Converter={StaticResource stringToImageConverter}}" Stretch="UniformToFill"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--文本内容模板-->
+    <ControlTemplate x:Key="stringContentTemplate">
+        <TextBlock Text="{Binding Content}" TextWrapping="Wrap"/>
+    </ControlTemplate>
+
+    <!--超链接内容模板-->
+    <ControlTemplate x:Key="urlContentTemplate">
+        <Label Padding="0" Margin="0">
+            <Hyperlink NavigateUri="http://www.baidu.com" Foreground="Blue">
+                <TextBlock Text="{Binding Content}" TextWrapping="Wrap"/>
+            </Hyperlink>
+        </Label>
+    </ControlTemplate>
+
+    <!--图片内容模板-->
+    <ControlTemplate x:Key="imageContentTemplate">
+        <Image Source="{Binding Content, Converter={StaticResource stringToImageConverter}}"/>
+    </ControlTemplate>
+
+    <!--红包内容模板-->
+    <ControlTemplate x:Key="redPackContentTemplate">
+        <Grid Background="Red">
+            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/chat_WeChatRedPackItem.jpg" Width="280" Height="130" Stretch="Fill"/>
+            <TextBlock Text="{Binding Content}" Width="170" TextWrapping="Wrap" Margin="70,20,0,0"/>
+        </Grid>
+    </ControlTemplate>
+
+    <!--语音内容模板-->
+    <ControlTemplate x:Key="audioContentTemplate">
+        <Grid>
+            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/player_volice.png" Stretch="None" HorizontalAlignment="Left" />
+            <TextBlock Width="120" TextWrapping="Wrap" TextAlignment="Right" />
+        </Grid>
+    </ControlTemplate>
+
+    <!--设置内容的模板-->
+    <Style x:Key="contentStyle" TargetType="ContentControl">
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Type}" Value="String">
+                <Setter Property="Template" Value="{StaticResource stringContentTemplate}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="URL">
+                <Setter Property="Template" Value="{StaticResource urlContentTemplate}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="Image">
+                <Setter Property="Template" Value="{StaticResource imageContentTemplate}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="WeChatRedPack">
+                <Setter Property="Template" Value="{StaticResource redPackContentTemplate}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Type}" Value="Audio">
+                <Setter Property="Template" Value="{StaticResource audioContentTemplate}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--左侧内容边框-->
+    <Style x:Key="contentLeftBorderStyle" TargetType="Button">
+        <Setter Property="Background" Value="#6e7891"/>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Border CornerRadius="2" Background="{TemplateBinding Background}" Padding="8"  Margin="5 0 0 0">
+                            <ContentControl  HorizontalAlignment="Left" VerticalAlignment="Center" Style="{StaticResource contentStyle}"/>
+                        </Border>
+                        <Canvas Width="5" Height="10" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,15,0,0" Background="Transparent">
+                            <Path Stroke="Black" StrokeThickness="0" Fill="{TemplateBinding Background}">
+                                <Path.Data>
+                                    <PathGeometry Figures="M 5,0 L 5,0,0,2.5 L 0,2.5,10,10 "/>
+                                </Path.Data>
+                            </Path>
+                        </Canvas>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--右侧内容边框-->
+    <Style x:Key="contentRightBorderStyle" TargetType="Button">
+        <Setter Property="Background" Value="#379be6"/>
+        <Setter Property="Foreground" Value="#FFFFFF"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Border CornerRadius="2" Background="{TemplateBinding Background}" Padding="8"  Margin="0 0 5 0">
+                            <ContentControl  HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource contentStyle}"/>
+                        </Border>
+                        <Canvas Width="5" Height="10" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,0,0" Background="Transparent">
+                            <Path Stroke="Black" StrokeThickness="0" Fill="{TemplateBinding Background}">
+                                <Path.Data>
+                                    <PathGeometry Figures="M 0,0 L 0,0,5,2.5 L 5,2.5,0,5"/>
+                                </Path.Data>
+                            </Path>
+                        </Canvas>
+                    </Grid>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--左侧内容显示-->
+    <ControlTemplate x:Key="leftContentTemplate">
+        <StackPanel Orientation="Horizontal">
+            <Button VerticalAlignment="Top" Style="{StaticResource converionHeadStyle}" Margin="30 0 10 0"/>
+            <Button Style="{StaticResource contentLeftBorderStyle}" MaxWidth="{Binding Path=ActualWidth, Converter={StaticResource percentWidthConverter}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}}"></Button>
+        </StackPanel>
+    </ControlTemplate>
+
+    <!--右侧内容显示-->
+    <ControlTemplate x:Key="rightContentTemplate">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Style="{StaticResource contentRightBorderStyle}" MaxWidth="{Binding Path=ActualWidth, Converter={StaticResource percentWidthConverter}, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}}"></Button>
+            <Button VerticalAlignment="Top" Style="{StaticResource converionHeadStyle}" Margin="10 0 30 0"/>
+        </StackPanel>
+    </ControlTemplate>
+
+    <!--列表项总体样式，发送左侧样式，接收右侧样式-->
+    <Style x:Key="conversionListBoxItemStyle" TargetType="ListBoxItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Margin" Value="0 30 0 0"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding SendState}" Value="Send">
+                <Setter Property="Template" Value="{StaticResource leftContentTemplate}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding SendState}" Value="None">
+                <Setter Property="Template" Value="{StaticResource leftContentTemplate}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding SendState}" Value="Receive">
+                <Setter Property="Template" Value="{StaticResource rightContentTemplate}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--对话模式ListBox样式-->
+    <Style x:Key="conversionListBoxStyle" TargetType="ListBox">
+        <Setter Property="Background" Value="#05FFFFFF"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource conversionListBoxItemStyle}"/>
+    </Style>
+</ResourceDictionary>

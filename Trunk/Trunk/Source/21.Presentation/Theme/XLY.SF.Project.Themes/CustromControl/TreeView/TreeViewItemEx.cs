@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace XLY.SF.Project.Themes.CustromControl
 {
-    class TreeViewItemEx : TreeViewItem
+    public class TreeViewItemEx : TreeViewItem
     {
 
         public TreeViewItemEx()

@@ -59,6 +59,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.Expression.Drawing, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Expression.Effects, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -75,7 +76,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converter\AdditionConverter.cs" />
+    <Compile Include="Converter\DateTimeToDateStringConverter.cs" />
     <Compile Include="Converter\EnumDataStateToImageSourceConverter.cs" />
+    <Compile Include="Converter\PercentWidthConverter.cs" />
+    <Compile Include="Converter\StringToImageConverter.cs" />
     <Compile Include="CustromControl\ComboBox\ComboBoxEx.cs" />
     <Compile Include="Converter\ImageContentToBoolConverter.cs" />
     <Compile Include="Converter\SubtractionConverter.cs" />
@@ -134,6 +138,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ThemesStyle\DataGridStyle\DataGridStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ThemesStyle\DeviceSelectStyle\DeviceLoadingStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -145,6 +153,10 @@
     <Page Include="ThemesStyle\DeviceSelectStyle\DeviceSelectStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ThemesStyle\Listbox\ConversionListBoxStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ThemesStyle\Listbox\ListboxItemStyle.xaml">
       <SubType>Designer</SubType>
@@ -365,6 +377,19 @@
   <ItemGroup>
     <Resource Include="Resources\Images\Toggle_Btn_hover.png" />
     <Resource Include="Resources\Images\Toggle_Btn_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\chat_WeChatRedPackItem.jpg" />
+    <Resource Include="Resources\Images\chat_WeChatTransfer_ok.jpg" />
+    <Resource Include="Resources\Images\chat_WeChatTransfer_send.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\player_volice.png" />
+    <Resource Include="Resources\Images\player_volice_close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\grid_sort_asc.png" />
+    <Resource Include="Resources\Images\grid_sort_desc.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

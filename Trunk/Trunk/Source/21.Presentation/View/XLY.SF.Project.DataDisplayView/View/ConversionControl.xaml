@@ -46,9 +46,22 @@
                                        StyleLeft="{StaticResource left_style}" 
                                        StyleRight="{StaticResource right_style}">
         </local:ConversionStyleSelector>
+
+        <!--列表分组数据源-->
+        <CollectionViewSource x:Key="conversionCollectionViewSource" Filter="CollectionViewSource_Filter">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Date" Converter="{StaticResource dateTimeToDateConverter}"/>
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
     </UserControl.Resources>
     
     <Grid>
-        <ListBox x:Name="lsb1" ItemsSource="{Binding Items.View}" ItemTemplateSelector="{StaticResource tmSelector}" ItemContainerStyleSelector="{StaticResource conSelector}" SelectionChanged="ListBox_SelectionChanged"></ListBox> 
+        <!--<ListBox x:Name="lsb1" ItemsSource="{Binding Items.View}" ItemTemplateSelector="{StaticResource tmSelector}" ItemContainerStyleSelector="{StaticResource conSelector}" SelectionChanged="ListBox_SelectionChanged"></ListBox>-->
+
+        <ListBox x:Name="lsb1" ItemsSource="{Binding Source={StaticResource ResourceKey=conversionCollectionViewSource}}" Style="{StaticResource conversionListBoxStyle}">
+            <ListBox.GroupStyle>
+                <GroupStyle ContainerStyle="{StaticResource conversionGroupHeadStyle}"/>
+            </ListBox.GroupStyle>
+        </ListBox>
     </Grid>
 </UserControl>
