@@ -14,6 +14,10 @@ namespace XLY.SF.Project.PreviewFiles.UI
         public PreViewControl()
         {
             InitializeComponent();
+            if(System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
+            {
+                return;
+            }
             _decoderCollection = new FileDecoderCollection();
             _binaryDecoder = _decoderCollection.GetFileDecoder(FileDecoderTypes.Bin);
         }
