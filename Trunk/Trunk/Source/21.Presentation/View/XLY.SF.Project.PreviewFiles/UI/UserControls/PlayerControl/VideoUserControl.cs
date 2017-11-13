@@ -8,14 +8,6 @@
 
 namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.PlayerControl
 {
-    class VideoUserControl : PlayerUserControl
-    {
-        public VideoUserControl()
-        {
-            this.VerticalAlignment = VerticalAlignment.Stretch;            
-        }
-    }
-
     class VideoUserControlVLC : PlayerUserControlVLC
     {
         public VideoUserControlVLC() 

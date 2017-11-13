@@ -125,9 +125,6 @@
     </Compile>
     <Compile Include="UI\UserControls\LargeFileTextBox\PresentBuffer.cs" />
     <Compile Include="UI\UserControls\PlayerControl\AudioUserControl.cs" />
-    <Compile Include="UI\UserControls\PlayerControl\PlayerUserControl.xaml.cs">
-      <DependentUpon>PlayerUserControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UI\UserControls\PlayerControl\PlayerUserControlVLC.xaml.cs">
       <DependentUpon>PlayerUserControlVLC.xaml</DependentUpon>
     </Compile>
@@ -156,10 +153,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\UserControls\LargeFileTextBox\LargeFileTextBoxUserControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UI\UserControls\PlayerControl\PlayerUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

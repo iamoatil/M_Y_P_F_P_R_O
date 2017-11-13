@@ -9,24 +9,6 @@ using XLY.SF.Project.UserControls.PreviewFile.MatchDecoder;
 
 namespace XLY.SF.Project.UserControls.PreviewFile.FileDecode
 {
-    //[PartCreationPolicy(CreationPolicy.NonShared)]
-    //[ExportFileDecoder(FileDecoderType = FileDecoderTypes.Audio)]
-    class AudioSuffixFileDecoder : ISuffixFileDecoder
-    {
-        public IFileDecoder FileDecoder
-        {
-            get { return _fileDecoder; }
-        }
-        private readonly AudioFileDecoder _fileDecoder=new AudioFileDecoder();
-
-        public IMatched SuffixMatcher
-        {
-            get { return _selector; }
-        }
-
-        private readonly SuffixMatcher _selector = new SuffixMatcher(".mp3|.wma|.ape|.flac|.aac|.ac3|.mmf|.amr|.m4a|.m4r|.ogg|.wav|.mp2");
-    }
-
     [PartCreationPolicy(CreationPolicy.NonShared)]
     [ExportFileDecoder(FileDecoderType = FileDecoderTypes.AudioVLC)]
     class AudioVLCSuffixFileDecoder : ISuffixFileDecoder
@@ -113,25 +95,7 @@ namespace XLY.SF.Project.UserControls.PreviewFile.FileDecode
         }
 
         private readonly SuffixMatcher _selector = new SuffixMatcher(".txt|.ini");
-    }
-
-    //[PartCreationPolicy(CreationPolicy.NonShared)]
-    //[ExportFileDecoder(FileDecoderType = FileDecoderTypes.Video)]
-    class VideoSuffixFileDecoder : ISuffixFileDecoder
-    {
-        public IFileDecoder FileDecoder
-        {
-            get { return _fileDecoder; }
-        }
-        private readonly VideoFileDecoder _fileDecoder = new VideoFileDecoder();
-
-        public IMatched SuffixMatcher
-        {
-            get { return _selector; }
-        }
-
-        private readonly SuffixMatcher _selector = new SuffixMatcher(".avi|.rmvb|.rm|.mp4|.mkv|.webM|.3gp|.WMV|.MPG|.vob|.mov|.flv|.swf");
-    }
+    }    
 
     [PartCreationPolicy(CreationPolicy.NonShared)]
     [ExportFileDecoder(FileDecoderType = FileDecoderTypes.VideoVLC)]
