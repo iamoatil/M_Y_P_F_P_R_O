@@ -15,7 +15,6 @@ namespace XLY.SF.Project.Domains
     /// 脚本插件
     /// </summary>
     [ExportMetadata("PluginType", PluginType.SpfDataParse)]
-    [Export(PluginExportKeys.PluginScriptKey, typeof(IPlugin))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class DataScriptPlugin : AbstractDataParsePlugin
     {

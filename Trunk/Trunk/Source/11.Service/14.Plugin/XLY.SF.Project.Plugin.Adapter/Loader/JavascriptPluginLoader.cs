@@ -15,8 +15,7 @@ using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.Plugin.Adapter.Loader
 {
-    //[Export("PluginLoader", typeof(IPluginLoader))]
-    public class JavascriptPluginLoader : AbstractPluginLoader
+    internal class JavascriptPluginLoader : AbstractPluginLoader
     {
         public const string DESKEY = "#s^XLY_DESKEY_1986,11+15";
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XLY.SF.Framework.Core.Base.CoreInterface;
+using XLY.SF.Project.Domains.Plugin;
 
 /* ==============================================================================
 * Assembly   ：	XLY.SF.Project.Domains.IPlugin

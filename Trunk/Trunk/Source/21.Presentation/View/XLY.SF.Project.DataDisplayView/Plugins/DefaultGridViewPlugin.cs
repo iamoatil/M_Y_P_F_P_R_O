@@ -22,7 +22,6 @@ namespace XLY.SF.Project.DataDisplayView
     /// <summary>
     /// 默认表格视图
     /// </summary>
-    [Export(PluginExportKeys.PluginKey, typeof(IPlugin))]
     public class DefaultGridViewPlugin : AbstractDataViewPlugin
     {
         public DefaultGridViewPlugin()

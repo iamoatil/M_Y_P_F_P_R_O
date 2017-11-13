@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using XLY.SF.Framework.Core.Base.MefIoc;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.ViewDomain.MefKeys;
@@ -74,6 +75,28 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
         #endregion
 
+        #region 设备首页导航内容
+
+        private object _devHomePageSubView;
+        /// <summary>
+        /// 设备首页导航内容
+        /// </summary>
+        public object DevHomePageSubView
+        {
+            get
+            {
+                return this._devHomePageSubView;
+            }
+
+            set
+            {
+                this._devHomePageSubView = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Commands
@@ -82,6 +105,11 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         /// 取消编辑
         /// </summary>
         public ICommand CancelEditCommand { get; set; }
+        
+        /// <summary>
+        /// 自动提取
+        /// </summary>
+        public ICommand AutoExtractCommand { get; set; }
 
         /// <summary>
         /// 手机拍照
@@ -97,7 +125,7 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
             CancelEditCommand = new RelayCommand(ExecuteCancelEditCommand);
             PhoneTakePhotoCommand = new ProxyRelayCommand(ExecutePhoneTakePhotoCommand);
-
+            AutoExtractCommand = new RelayCommand(ExecuteAutoExtractCommand);
 
 
 
@@ -133,6 +161,11 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         #endregion
 
         #region ExecuteCommands
+
+        private void ExecuteAutoExtractCommand()
+        {
+            DevHomePageSubView = IocManagerSingle.Instance.GetViewPart(ExportKeys.ExtractionView);
+        }
 
         private string ExecutePhoneTakePhotoCommand()
         {

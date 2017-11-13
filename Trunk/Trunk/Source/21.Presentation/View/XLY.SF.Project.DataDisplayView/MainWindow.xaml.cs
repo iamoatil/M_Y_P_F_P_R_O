@@ -35,11 +35,11 @@ namespace XLY.SF.Project.DataDisplayView
 
             PluginAdapter.Instance.Initialization(null);
 
-            var plugin = IocManagerSingle.Instance.GetMetaParts<IPlugin, IMetaPluginType>(PluginExportKeys.PluginScriptKey);
-            foreach (var loader in plugin)
-            {
+            //var plugin = IocManagerSingle.Instance.GetMetaParts<IPlugin, IMetaPluginType>(PluginExportKeys.PluginScriptKey);
+            //foreach (var loader in plugin)
+            //{
 
-            }
+            //}
             var pls = DataViewPluginAdapter.Instance.Plugins;
         }
     }

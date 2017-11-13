@@ -22,7 +22,6 @@ namespace XLY.SF.Project.DataDisplayView
     /// <summary>
     /// 手机布局视图
     /// </summary>
-    [Export(PluginExportKeys.PluginKey, typeof(IPlugin))]
     public class PhoneLayoutViewPlugin : AbstractDataViewPlugin
     {
         public PhoneLayoutViewPlugin()
@@ -35,7 +34,7 @@ namespace XLY.SF.Project.DataDisplayView
                 PluginType = PluginType.SpfDataView,
                 State = PluginState.Disabled
             };
-            p.ViewType.Add(new DataViewSupportItem() { PluginId = "微信", TypeName = AbstractDataViewPlugin.XLY_LAYOUT_KEY });
+            p.ViewType.Add(new DataViewSupportItem() { PluginId = "微信", TypeName = DataViewConfigure.XLY_LAYOUT_KEY });
             PluginInfo = p;
         }
 

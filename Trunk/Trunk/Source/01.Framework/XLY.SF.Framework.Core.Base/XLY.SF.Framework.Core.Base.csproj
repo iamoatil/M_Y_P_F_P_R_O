@@ -65,6 +65,10 @@
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\23.Shell\XLY.SF.Shell\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Json\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -104,6 +108,7 @@
     <Compile Include="MessageBase\SysCommonMsgArgs.cs" />
     <Compile Include="ModuleBase\IModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StartupArgument\StartupArgment.cs" />
     <Compile Include="SystemKeys\SysKeyEnum.cs" />
     <Compile Include="ValidationBase\ValidateBase.cs" />
     <Compile Include="ViewModel\TaskProgressEventArgs.cs" />

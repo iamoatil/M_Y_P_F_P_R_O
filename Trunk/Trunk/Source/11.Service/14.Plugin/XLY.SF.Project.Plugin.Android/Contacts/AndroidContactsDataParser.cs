@@ -7,7 +7,6 @@ using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.Plugin.Android
 {
-    [Export(PluginExportKeys.PluginKey, typeof(IPlugin))]
     public class AndroidContactsDataParser : AbstractDataParsePlugin
     {
         public override IPluginInfo PluginInfo { get; set; }

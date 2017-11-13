@@ -30,8 +30,7 @@ namespace XLY.SF.Project.Plugin.Adapter
     /// <summary>
     /// 脚本插件加载器
     /// </summary>
-    [Export(PluginExportKeys.PluginLoaderKey, typeof(IPluginLoader))]
-    public class ZipPluginLoader : AbstractPluginLoader
+    internal class ZipPluginLoader : AbstractPluginLoader
     {
         public const string DebugScriptExtension = ".zip";          //未加密的脚本文件后缀
         public const string ReleaseScriptExtension = ".xlyx";         //已加密的脚本文件后缀
@@ -289,14 +288,14 @@ namespace XLY.SF.Project.Plugin.Adapter
 
         private IPlugin GetPlugin(AbstractPluginInfo pluginInfo)
         {
-            var plugin = IocManagerSingle.Instance.GetMetaParts<IPlugin, IMetaPluginType>(PluginExportKeys.PluginScriptKey);
-            foreach (var loader in plugin)
-            {
-                if(pluginInfo.PluginType == loader.Metadata.PluginType)
-                {
-                    return loader.Value;
-                }
-            }
+            //var plugin = IocManagerSingle.Instance.GetMetaParts<IPlugin, IMetaPluginType>(PluginExportKeys.PluginScriptKey);
+            //foreach (var loader in plugin)
+            //{
+            //    if(pluginInfo.PluginType == loader.Metadata.PluginType)
+            //    {
+            //        return loader.Value;
+            //    }
+            //}
             throw new Exception("未匹配到合适的插件！");
         }
     }

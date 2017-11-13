@@ -7,6 +7,7 @@ using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.BaseUtility.Helper;
+using XLY.SF.Project.BaseUtility;
 
 namespace XLY.SF.Project.Devices.AdbSocketManagement
 {
@@ -67,7 +68,7 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
         private LSFile ProcessLine(string line)
         {
             if (!line.IsValid()) return null;
-            var m = Regex.Match(line.Trim(),LS_PATTERN_EX, RegexOptions.Compiled);
+            var m = Regex.Match(line.TrimStart("OKAY").Trim(),LS_PATTERN_EX, RegexOptions.Compiled);
             if (!m.Success) return null;
             LSFile file = new LSFile();
             file.Name = m.Groups[9].Value;

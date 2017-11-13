@@ -22,7 +22,6 @@ namespace XLY.SF.Project.DataDisplayView
     /// <summary>
     /// 默认布局视图
     /// </summary>
-    [Export(PluginExportKeys.PluginKey, typeof(IPlugin))]
     public class DefaultLayoutViewPlugin : AbstractDataViewPlugin
     {
         public DefaultLayoutViewPlugin()
@@ -34,7 +33,7 @@ namespace XLY.SF.Project.DataDisplayView
                 OrderIndex = 0,
                 PluginType = PluginType.SpfDataView
             };
-            p.ViewType.Add(new DataViewSupportItem() { PluginId = "*", TypeName = AbstractDataViewPlugin.XLY_LAYOUT_KEY });
+            p.ViewType.Add(new DataViewSupportItem() { PluginId = "*", TypeName = DataViewConfigure.XLY_LAYOUT_KEY });
             PluginInfo = p;
         }
 

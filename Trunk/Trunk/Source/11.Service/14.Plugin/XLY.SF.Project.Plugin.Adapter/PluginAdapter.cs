@@ -8,6 +8,7 @@ using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Core.Base.MefIoc;
 using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Adapter.Loader;
 using XLY.SF.Project.Services;
 
 namespace XLY.SF.Project.Plugin.Adapter
@@ -15,8 +16,7 @@ namespace XLY.SF.Project.Plugin.Adapter
     /// <summary>
     /// 插件控制器
     /// </summary>
-    [Export("PluginAdapter", typeof(IPluginAdapter))]
-    public class PluginAdapter : IPluginAdapter
+    public class PluginAdapter
     {
         public static PluginAdapter Instance => SingleWrapperHelper<PluginAdapter>.Instance;
 
@@ -29,7 +29,7 @@ namespace XLY.SF.Project.Plugin.Adapter
 
         static PluginAdapter()
         {
-            IocManagerSingle.Instance.LoadParts();
+
         }
 
         /// <summary>
@@ -38,10 +38,11 @@ namespace XLY.SF.Project.Plugin.Adapter
         public void Initialization(IAsyncTaskProgress asyn)
         {
             Plugins = new Dictionary<AbstractPluginInfo, IPlugin>();
-            var pluginLoaders = IocManagerSingle.Instance.GetParts<IPluginLoader>(PluginExportKeys.PluginLoaderKey);
+            var pluginLoaders = new List<IPluginLoader>() { new JavascriptPluginLoader(), new NetPluginLoader(), new ZipPluginLoader() };
+
             foreach (var loader in pluginLoaders)
             {
-                var pls = loader.Value.Load(asyn);
+                var pls = loader.Load(asyn);
 
                 foreach (var pl in pls)
                 {
@@ -257,6 +258,8 @@ namespace XLY.SF.Project.Plugin.Adapter
             {
                 pl.StartTime = DateTime.Now;
                 var ds = pl.Execute(null, asyn) as IDataSource;
+                ds?.BuildParent();
+
                 pl.EndTime = DateTime.Now;
                 callback?.Invoke(ds);
             }

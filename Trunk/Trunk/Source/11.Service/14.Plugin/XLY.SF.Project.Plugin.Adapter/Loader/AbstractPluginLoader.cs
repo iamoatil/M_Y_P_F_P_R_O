@@ -18,7 +18,7 @@ namespace XLY.SF.Project.Plugin.Adapter
     /// <summary>
     /// 插件加载器抽象类
     /// </summary>
-    public abstract class AbstractPluginLoader : IPluginLoader
+    internal abstract class AbstractPluginLoader : IPluginLoader
     {
         /// <summary>
         /// 加载插件
@@ -44,7 +44,7 @@ namespace XLY.SF.Project.Plugin.Adapter
         /// <summary>
         /// 插件列表
         /// </summary>
-        public virtual IEnumerable<IPlugin> Plugins { get; set; }
+        public virtual ICollection<IPlugin> Plugins { get; set; }
 
         /// <summary>
         /// 加载插件

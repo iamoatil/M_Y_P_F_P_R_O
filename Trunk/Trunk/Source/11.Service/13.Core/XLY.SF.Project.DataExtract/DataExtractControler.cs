@@ -21,6 +21,7 @@ using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.DataPump;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Adapter;
 
 namespace XLY.SF.Project.DataExtract
 {
@@ -112,14 +113,9 @@ namespace XLY.SF.Project.DataExtract
         private SingleThread MainWorkThread { get; set; }
 
         /// <summary>
-        /// 数据泵服务
-        /// </summary>
-        //private DataPump.DataPumpControler PumpControler { get; set; }
-
-        /// <summary>
         /// 插件管理器
         /// </summary>
-        private IPluginAdapter PluginAdapter { get; set; }
+        private PluginAdapter ThePluginAdapter { get; set; }
 
         /// <summary>
         /// CancelToken
@@ -159,9 +155,6 @@ namespace XLY.SF.Project.DataExtract
             //取消
             CancelToken.Cancel();
 
-            //停止数据泵服务
-            //PumpControler.Stop();
-
             //停止工作线程池
             lock (WorkThreadPoolLock)
             {
@@ -186,29 +179,20 @@ namespace XLY.SF.Project.DataExtract
              * 初始化数据提取控制器
              * 1.获取插件控制器
              * 2.初始化数据文件保存根目录
-             * 3.获取数据泵服务
-             * 4.初始化数据泵服务
-             * 5.初始化异步取消token
-             * 6.初始化工作线程池
+             * 3.初始化异步取消token
+             * 4.初始化工作线程池
              * */
 
             //1.获取插件控制器
-            //PluginAdapter = IocManagerSingle.Instance.GetPart<IPluginAdapter>("PluginAdapter");
-            PluginAdapter = Plugin.Adapter.PluginAdapter.Instance;
+            ThePluginAdapter = PluginAdapter.Instance;
 
             //2.初始化数据文件保存根目录
             FileHelper.CreateExitsDirectory(SourcePump.SourceStorePath);
 
-            //3.获取数据泵服务
-            //PumpControler = new DataPumpControler();
-
-            //4.初始化数据泵服务
-            //PumpControler.Init(SourcePump, ExtractItems, RootSourceDataPath, Asyn);
-
-            //5.初始化异步取消token
+            //3.初始化异步取消token
             CancelToken = new CancellationTokenSource();
 
-            //6.初始化工作线程池
+            //4.初始化工作线程池
             WorkThreadPool = new List<SingleThread>();
             WorkThreadPoolLock = new object();
         }
@@ -228,7 +212,7 @@ namespace XLY.SF.Project.DataExtract
              * 
              * */
 
-            var items = PluginAdapter.MatchPluginByPump(SourcePump, ExtractItems);
+            var items = ThePluginAdapter.MatchPluginByPump(SourcePump, ExtractItems);
 
             switch (WorkMode)
             {
@@ -255,7 +239,7 @@ namespace XLY.SF.Project.DataExtract
 
                 //2.异步执行插件
                 CancelToken.Token.ThrowIfCancellationRequested();
-                await DoDataPlug(item.Key, item.Value);
+                DoDataPlug(item.Key, item.Value);
             }
         }
 
@@ -296,11 +280,11 @@ namespace XLY.SF.Project.DataExtract
                     WaitRunWorkThread(() =>
                         {
                             //1.匹配插件
-                            var plug = PluginAdapter.MatchPluginByApp(plugs, SourcePump, SourcePump.SavePath, GetAppVersion(extractItem));
+                            var plug = ThePluginAdapter.MatchPluginByApp(plugs, SourcePump, SourcePump.SavePath, GetAppVersion(extractItem));
 
                             //2.执行插件
                             plug.SaveDbPath = SourcePump.DbFilePath;
-                            PluginAdapter.ExecutePlugin(plug, null, (ds) =>
+                            ThePluginAdapter.ExecutePlugin(plug, null, (ds) =>
                                 {//插件执行完处理
                                     FinishExtractItem(extractItem, ds);
                                 });
@@ -318,24 +302,13 @@ namespace XLY.SF.Project.DataExtract
         /// <param name="extractItem"></param>
         private void FinishExtractItem(ExtractItem extractItem, IDataSource ds)
         {
-            //1.处理IDataSource
-            String fileName = Path.Combine(SourcePump.ResultPath, $"{extractItem.GUID}_{extractItem.AppName}.ds");
-            Serializer.SerializeToBinary(ds, fileName);
-            //2.结尾处理
-            extractItem.IsFinish = true;
-
-            //3.判断是否全部提取完成
-            foreach (var item in ExtractItems)
+            if (ds != null)
             {
-                if (item.IsFinish)
-                {
-                    Reporter?.Finish(item.GUID);
-                }
+                //1.处理IDataSource
+                String fileName = Path.Combine(SourcePump.ResultPath, $"{extractItem.GUID}_{extractItem.Name}.ds");
+                Serializer.SerializeToBinary(ds, fileName);
             }
-            //if (ExtractItems.All(e => e.IsFinish))
-            //{//全部提取完成
-
-            //}
+            Reporter?.Finish(extractItem.GUID);
         }
 
         /// <summary>

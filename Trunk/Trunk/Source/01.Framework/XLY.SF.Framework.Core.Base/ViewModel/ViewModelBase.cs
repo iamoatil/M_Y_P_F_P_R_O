@@ -70,6 +70,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         {
             //注销所有消息
             MsgAggregation.Instance.UnRegisterMsgAll(this);
+            DialogResult = false;
             Closed();
         }
 
@@ -136,19 +137,14 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
             MsgAggregation.Instance.SendNavigationMsgForWindow(args);
         }
 
-        ///// <summary>
-        ///// 打开新窗体【模式对话框】
-        ///// </summary>
-        ///// <param name="exportKey"></param>
-        //public void NavigationForNewDislogWindow(string exportKey, object param = null)
-        //{
-        //    NavigationArgs args = new NavigationArgs(exportKey, param);
-        //    MsgAggregation.Instance.SendNavigationMsgForDialogWindow(args);
-        //}
-
         #endregion
 
         #region 返回结果【需要时重载】
+        
+        /// <summary>
+        /// 是否有模式对话框返回值
+        /// </summary>
+        public bool DialogResult { get; protected set; }
 
         /// <summary>
         /// 返回当前界面结果

@@ -61,6 +61,10 @@ namespace XLY.SF.Project.Domains
         /// 导出报表插件
         /// </summary>
         SpfReport,
+        /// <summary>
+        /// 公共资源插件
+        /// </summary>
+        Resource,
     }
 
     /// <summary>

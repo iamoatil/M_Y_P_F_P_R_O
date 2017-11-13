@@ -25,11 +25,6 @@ namespace XLY.SF.Project.DataDisplayView
     {
         public IPluginInfo PluginInfo { get; set; }
 
-        /// <summary>
-        /// 表示用于主布局的插件类型（比如想添加手机视图，则可以添加该类型的插件）
-        /// </summary>
-        public const string XLY_LAYOUT_KEY = "__LayOut";
-
         public object Execute(object arg, IAsyncTaskProgress progress)
         {
             return GetControl(arg as DataViewPluginArgument);
@@ -114,5 +109,21 @@ namespace XLY.SF.Project.DataDisplayView
         /// 选择了某一项的事件，此时将会更新数据预览项
         /// </summary>
         public DelgateDataViewSelectedItemChanged OnSelectedItemChanged { get; set; }
+    }
+
+    /// <summary>
+    /// 视图获取时的配置项
+    /// </summary>
+    public class DataViewConfigure
+    {
+        /// <summary>
+        /// 表示用于主布局的插件类型（比如想添加手机视图，则可以添加该类型的插件）
+        /// </summary>
+        public const string XLY_LAYOUT_KEY = "__LayOut";
+
+        /// <summary>
+        /// 当存在多视图时，是否隐藏默认的表格视图，默认为隐藏
+        /// </summary>
+        public bool IsDefaultGridViewVisibleWhenMultiviews { get; set; } = false;
     }
 }

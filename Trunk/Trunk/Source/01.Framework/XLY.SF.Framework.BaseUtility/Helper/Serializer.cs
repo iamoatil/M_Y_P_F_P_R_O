@@ -84,6 +84,11 @@ namespace XLY.SF.Framework.BaseUtility
             //创建二进制序列化对象
             BinaryFormatter serializer = new BinaryFormatter();
 
+            String directory = Path.GetDirectoryName(fileName);
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
             //创建文件流
             using (FileStream fs = new FileStream(fileName, FileMode.Create))
             {

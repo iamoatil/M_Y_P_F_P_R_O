@@ -14,7 +14,6 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// JavaScript脚本插件
     /// </summary>
-    [Export(PluginExportKeys.PluginScriptKey, typeof(IPlugin))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class DataJSScriptPlugin : AbstractDataParsePlugin
     {

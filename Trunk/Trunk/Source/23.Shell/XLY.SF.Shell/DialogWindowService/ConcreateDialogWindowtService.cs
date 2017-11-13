@@ -44,7 +44,11 @@ namespace XLY.SF.Shell.DialogWindowService
             view.DataSource.LoadViewModel(filter);
             var viewContainer = WindowHelper.Instance.CreateShellWindow(view, false, Application.Current.MainWindow);
             viewContainer.ShowDialog();
-            result = view.DataSource.GetResult()?.ToString();
+            if (view.DataSource.DialogResult)
+            {
+                result = view.DataSource.GetResult()?.ToString();
+            }
+
             return result;
         }
 
@@ -60,10 +64,15 @@ namespace XLY.SF.Shell.DialogWindowService
         /// <returns></returns>
         public object ShowDialogWindow(string exportKey, object parameters, bool showInTaskBar)
         {
+            object result = null;
             var viewArgs = CreateNavigationArgs(exportKey, parameters);
             var viewContainer = WindowHelper.Instance.CreateShellWindow(viewArgs.TargetView, showInTaskBar, Application.Current.MainWindow);
             viewContainer.ShowDialog();
-            return viewArgs.TargetView.DataSource.GetResult();
+            if (viewArgs.TargetView.DataSource.DialogResult)
+            {
+                result = viewArgs.TargetView.DataSource.GetResult()?.ToString();
+            }
+            return result;
         }
 
         #endregion

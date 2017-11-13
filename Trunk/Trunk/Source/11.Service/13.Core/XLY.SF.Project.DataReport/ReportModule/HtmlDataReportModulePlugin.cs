@@ -20,7 +20,6 @@ namespace XLY.SF.Project.DataReport
     /// </summary>
     //[Export(PluginExportKeys.PluginKey, typeof(IPlugin))]
     [ExportMetadata("PluginType", PluginType.SpfReportModule)]
-    [Export(PluginExportKeys.PluginScriptKey, typeof(IPlugin))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class HtmlDataReportModulePlugin : AbstractDataReportModulePlugin
     {

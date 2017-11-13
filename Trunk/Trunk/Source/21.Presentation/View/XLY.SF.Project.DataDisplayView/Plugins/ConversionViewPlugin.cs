@@ -21,7 +21,6 @@ namespace XLY.SF.Project.DataDisplayView
     /// <summary>
     /// ConversionViewPlugin
     /// </summary>
-    [Export(PluginExportKeys.PluginKey, typeof(IPlugin))]
     public class ConversionViewPlugin : AbstractDataViewPlugin
     {
         public ConversionViewPlugin()

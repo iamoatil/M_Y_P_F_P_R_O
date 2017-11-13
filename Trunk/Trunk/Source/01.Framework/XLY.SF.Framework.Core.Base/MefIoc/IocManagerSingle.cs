@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
+using System.ComponentModel.Composition.Primitives;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -67,7 +69,9 @@ namespace XLY.SF.Framework.Core.Base.MefIoc
             {
                 AggregateCatalog agg = new AggregateCatalog();
                 DirectoryCatalog catalog = new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory, "XLY.*.dll");
+                DirectoryCatalog toolKitExe = new DirectoryCatalog(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "XlyToolkit"),"*.exe");
                 agg.Catalogs.Add(catalog);
+                agg.Catalogs.Add(toolKitExe);
                 AssemblyCatalog ac = new AssemblyCatalog(this.GetType().Assembly);
                 agg.Catalogs.Add(ac);
 
@@ -79,19 +83,30 @@ namespace XLY.SF.Framework.Core.Base.MefIoc
                     }
                 }
 
-                if(com == null)
-                {
-                    com = new CompositionContainer(agg, true);
-                    com.ComposeParts(this);
-                }
-                else
-                {
-                    com.Catalog.Concat(agg);
-                }
+                com = new CompositionContainer(agg, true);
+                com.ComposeParts(this);
             }
             catch (Exception ex)
             {
                 LoggerManagerSingle.Instance.Error(ex);
+            }
+        }
+
+        /// <summary>
+        /// 添加导出模块
+        /// </summary>
+        /// <param name="ass"></param>
+        public void AddExportModule(params Assembly[] ass)
+        {
+            if (com == null)
+            {
+                foreach (var item in ass)
+                {
+                    AssemblyCatalog tmpAss = new AssemblyCatalog(item);
+                    //com.com
+                }
+                //com.
+                //com.Compose(s);
             }
         }
 

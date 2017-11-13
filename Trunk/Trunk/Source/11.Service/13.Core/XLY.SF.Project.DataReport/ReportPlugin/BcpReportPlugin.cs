@@ -20,7 +20,6 @@ namespace XLY.SF.Project.DataReport
     /// <summary>
     /// Bcp格式的数据导出插件
     /// </summary>
-    [Export(PluginExportKeys.PluginKey, typeof(IPlugin))]
     public class BcpReportPlugin : AbstractDataReportPlugin
     {
         public BcpReportPlugin()

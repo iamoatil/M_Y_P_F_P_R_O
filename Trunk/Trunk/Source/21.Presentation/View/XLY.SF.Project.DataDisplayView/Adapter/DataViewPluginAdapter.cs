@@ -36,24 +36,19 @@ namespace XLY.SF.Project.DataDisplayView
         public IEnumerable<AbstractDataViewPlugin> Plugins { get; set; }
 
         /// <summary>
-        /// 当存在多个视图时，是否隐藏默认的表格视图
-        /// </summary>
-        public const bool IsDefaultGridViewVisibleWhenMultiviews = false;
-
-        /// <summary>
         /// 根据当前选择的数据获取视图列表
         /// </summary>
         /// <param name="pluginId"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public IEnumerable<AbstractDataViewPlugin> GetView(string pluginId, object type)
+        public IEnumerable<AbstractDataViewPlugin> GetView(string pluginId, object type, DataViewConfigure config = null)
         {
             if (type == null)
             {
                 return new List<AbstractDataViewPlugin>();
             }
             string typeName = (type is Type) ? ((Type)type).Name : type.ToSafeString();
-            var views = (typeName == AbstractDataViewPlugin.XLY_LAYOUT_KEY ? 
+            var views = (typeName == DataViewConfigure.XLY_LAYOUT_KEY ? 
                 Plugins.Where(p =>
                ((DataViewPluginInfo)p.PluginInfo).ViewType.Any(v => (v.PluginId.Equals(pluginId) || v.PluginId == "*") && (v.TypeName.Equals(typeName))))
                .OrderByDescending(iv => iv.PluginInfo.OrderIndex)
@@ -63,11 +58,11 @@ namespace XLY.SF.Project.DataDisplayView
                .OrderByDescending(iv => iv.PluginInfo.OrderIndex))
                .ToList();
 
-            if(views.Count > 1 && !IsDefaultGridViewVisibleWhenMultiviews)  //当存在多个视图时，是否隐藏默认的表格视图
+            if(views.Count > 1 && (config == null || !config.IsDefaultGridViewVisibleWhenMultiviews))  //当存在多个视图时，是否隐藏默认的表格视图
             {
                 for (int i = views.Count - 1; i >= 0; i--)
                 {
-                    if(views[i].PluginInfo.Guid == "7B51FA8D-F7F6-4EE3-B3B9-780C29B9B778")
+                    if(views[i].PluginInfo.Guid == "7B51FA8D-F7F6-4EE3-B3B9-780C29B9B778") //移除默认的表格视图
                     {
                         views.RemoveAt(i);
                     }

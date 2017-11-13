@@ -21,7 +21,6 @@ namespace XLY.SF.Project.DataDisplayView
     /// <summary>
     /// 联系人详细信息视图
     /// </summary>
-    [Export(PluginExportKeys.PluginKey, typeof(IPlugin))]
     public class ContactDetailViewPlugin : AbstractDataViewPlugin
     {
         public ContactDetailViewPlugin()

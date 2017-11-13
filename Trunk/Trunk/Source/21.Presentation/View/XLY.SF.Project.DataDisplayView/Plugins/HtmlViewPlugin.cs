@@ -24,7 +24,6 @@ namespace XLY.SF.Project.DataDisplayView
     /// Html数据视图插件，为通过脚本编辑器自定义的视图
     /// </summary>
     [ExportMetadata("PluginType", PluginType.SpfDataView)]
-    [Export(PluginExportKeys.PluginScriptKey, typeof(IPlugin))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class HtmlViewPlugin : AbstractDataViewPlugin
     {

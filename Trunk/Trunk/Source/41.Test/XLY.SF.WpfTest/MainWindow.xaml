@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XLY.SF.WpfTest.HuZuoLin"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="525" >
+        Title="MainWindow" Height="600" Width="525">
     <Window.Resources>
         <local:UserControl1 x:Key="Hzl"/>
     </Window.Resources>
     <Grid>
-        <ContentControl Content="{Binding Source={StaticResource Hzl}}"/>
+
     </Grid>
 </Window>

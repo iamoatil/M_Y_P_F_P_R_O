@@ -21,7 +21,6 @@ namespace XLY.SF.Project.DataDisplayView
     /// <summary>
     /// ContactMessageViewPlugin
     /// </summary>
-    [Export(PluginExportKeys.PluginKey, typeof(IPlugin))]
     public class ContactMessageViewPlugin : AbstractDataViewPlugin
     {
         public ContactMessageViewPlugin()

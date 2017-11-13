@@ -212,7 +212,10 @@ namespace XLY.SF.Project.ViewModels.SelectControl
                 else
                 {
                     if (File.Exists(CurSelectedItemInFolder.FullPath))
+                    {
+                        base.DialogResult = true;
                         CloseView();
+                    }
                     else
                     {
                         //不存在提示
@@ -233,9 +236,9 @@ namespace XLY.SF.Project.ViewModels.SelectControl
             else
             {
                 //选中文件
+                base.DialogResult = true;
                 _curSelectedItem = obj;
                 base.CloseView();
-                //CloseView(true);
             }
         }
 

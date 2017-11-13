@@ -28,11 +28,6 @@ namespace XLY.SF.Project.Domains
         public string GroupName { get; set; }
 
         /// <summary>
-        /// 是否提取完成
-        /// </summary>
-        public bool IsFinish { get; set; }
-
-        /// <summary>
         /// 图标路径
         /// </summary>
         public string Icon { get; set; }

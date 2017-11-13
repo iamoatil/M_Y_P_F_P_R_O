@@ -166,7 +166,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LanguageTextTeamplate.tt</DependentUpon>
     </Compile>
-    <Compile Include="Plugin\ExportKeys\PluginExportKeys.cs" />
     <Compile Include="Plugin\IScriptContext.cs" />
     <Compile Include="Plugin\Meta\IMetaPluginType.cs" />
     <Compile Include="Plugin\Meta\IMetaScriptLanguage.cs" />
@@ -214,7 +213,7 @@
     <Compile Include="Plugin\Plugin\DataJSScriptPlugin.cs" />
     <Compile Include="Plugin\Plugin\DataScriptPlugin.cs" />
     <Compile Include="Plugin\Plugin\IPlugin.cs" />
-    <Compile Include="Plugin\Adapter\IPluginAdapter.cs" />
+    <Compile Include="Plugin\Plugin\PluginAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Contract\View.cs" />
     <Compile Include="Contract\TreeDataSource.cs" />

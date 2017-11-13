@@ -325,7 +325,8 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <control:IconRadioButton GroupName="DevStrategy" Height="180" Content="自动提取" Padding="40 64 40 64" Foreground="White" FontSize="24"  
+            <control:IconRadioButton GroupName="DevStrategy" Height="180" Content="自动提取" Padding="40 64 40 64" Foreground="White" FontSize="24" 
+                                     Command="{Binding AutoExtractCommand}"
                                 Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/DevHomePageIcon.png"/>
             <!--推荐方案-->
             <ItemsControl Grid.Row="1" ItemsSource="{Binding StrategyRecommendItems}" Margin=" 0 20 0 20">
@@ -377,6 +378,9 @@
 
             <Image Grid.Row="1" MaxWidth="485" MaxHeight="212" HorizontalAlignment="Left" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DevHomePageText.png"/>
         </Grid>
+        
+        <!--设备首页导航内容-->
+        <ContentControl Grid.Column="1" Grid.ColumnSpan="2" Content="{Binding DevHomePageSubView}"/>
 
         <!--触发器-->
         <i:Interaction.Triggers>

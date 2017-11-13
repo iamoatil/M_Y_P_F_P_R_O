@@ -49,7 +49,7 @@ namespace XLY.SF.Project.DataDisplayView
                 return ;
             }
             var selNode = nodes.TreeNodes.FirstOrDefault(t => t.Text == accout.Nick);
-            var views = DataViewPluginAdapter.Instance.GetView(arg.DataSource.PluginInfo.Guid, selNode.Type);
+            var views = DataViewPluginAdapter.Instance.GetView(arg.DataSource.PluginInfo.Guid, selNode.Type, new DataViewConfigure() { IsDefaultGridViewVisibleWhenMultiviews = true });
             tbdetail.Items.Clear();
             foreach (var v in views)
             {

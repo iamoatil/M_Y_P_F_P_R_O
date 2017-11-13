@@ -22,6 +22,8 @@ namespace XLY.SF.Project.DataExtraction
     {
         #region Fields
 
+        private const String ServerExeName = "XLY.SF.Project.DeviceExtractionService.exe";
+
         private TaskProxy _proxy;
 
         private readonly Dictionary<Object, CheckBox> _headers = new Dictionary<Object, CheckBox>();
@@ -233,7 +235,11 @@ namespace XLY.SF.Project.DataExtraction
             String file = ConfigurationManager.AppSettings["extractionService"];
             if (String.IsNullOrWhiteSpace(file))
             {
-                file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Services\Extraction", "XLY.SF.Project.DeviceExtractionService.exe");
+                file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Services\Extraction", ServerExeName);
+            }
+            else if (!Path.IsPathRooted(file))
+            {
+                file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ServerExeName);
             }
             return file;
         }

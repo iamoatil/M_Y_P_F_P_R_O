@@ -72,18 +72,11 @@ namespace XLY.SF.Project.Domains
             }
         }
 
-        private bool _isVisible = true;
+        private int _sensitiveId = -1;
         /// <summary>
-        /// 是否可见，如果不满足过滤条件，则为false
+        /// 敏感数据序号，比如包含了“涉黄、涉毒”等信息
         /// </summary>
-        [Display]
-        public bool IsVisible { get => _isVisible; set { _isVisible = value; OnPropertyChanged(); } }
-
-        private bool _isSensitive = false;
-        /// <summary>
-        /// 是否是敏感数据，比如包含了“东突”等暴恐信息
-        /// </summary>
-        public bool IsSensitive { get => _isSensitive; set { _isSensitive = value; OnPropertyChanged(); } }
+        public int SensitiveId { get => _sensitiveId; set { _sensitiveId = value; OnPropertyChanged(); } }
 
         /// <summary>
         /// 属性改变时的事件

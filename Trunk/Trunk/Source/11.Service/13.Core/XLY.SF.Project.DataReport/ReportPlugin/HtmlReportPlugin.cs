@@ -20,7 +20,6 @@ namespace XLY.SF.Project.DataReport
     /// <summary>
     /// HtmlReportPlugin
     /// </summary>
-    [Export(PluginExportKeys.PluginKey, typeof(IPlugin))]
     public class HtmlReportPlugin : AbstractDataReportPlugin
     {
         public HtmlReportPlugin()

@@ -13,12 +13,14 @@ using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
 using System.Security;
 using XLY.SF.Framework.Core.Base.CoreInterface;
+using XLY.SF.Project.Domains.Plugin;
 
 namespace XLY.SF.Project.Domains
 {
     /// <summary>
     /// C#数据解析插件虚基类
     /// </summary>
+    [Plugin]
     public abstract class AbstractDataParsePlugin:IPlugin
     {
         public abstract IPluginInfo PluginInfo { get; set; }

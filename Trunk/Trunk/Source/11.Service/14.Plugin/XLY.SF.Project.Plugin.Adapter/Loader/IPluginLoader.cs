@@ -7,7 +7,7 @@ namespace XLY.SF.Project.Plugin.Adapter
     /// <summary>
     /// 插件加载器接口
     /// </summary>
-    public interface IPluginLoader
+    internal interface IPluginLoader
     {
         /// <summary>
         /// 加载插件

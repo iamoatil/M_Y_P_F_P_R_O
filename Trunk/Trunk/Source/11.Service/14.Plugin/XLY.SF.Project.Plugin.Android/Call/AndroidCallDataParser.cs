@@ -7,7 +7,6 @@ using XLY.SF.Project.BaseUtility.Helper;
 
 namespace XLY.SF.Project.Plugin.Android
 {
-    [Export(PluginExportKeys.PluginKey, typeof(IPlugin))]
     public class AndroidCallDataParser : AbstractDataParsePlugin
     {
         public override IPluginInfo PluginInfo { get; set; }

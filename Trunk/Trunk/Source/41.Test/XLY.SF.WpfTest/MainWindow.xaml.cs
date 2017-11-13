@@ -34,5 +34,10 @@ namespace XLY.SF.WpfTest
         {
 
         }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

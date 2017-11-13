@@ -8,7 +8,7 @@ namespace XLY.SF.Project.DataExtraction
     /// <summary>
     /// ExtractionView.xaml 的交互逻辑
     /// </summary>
-    [Export("ExtractionView", typeof(UcViewBase))]
+    [Export("ExportKey_ExtractionView", typeof(UcViewBase))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class ExtractionView : UcViewBase
     {

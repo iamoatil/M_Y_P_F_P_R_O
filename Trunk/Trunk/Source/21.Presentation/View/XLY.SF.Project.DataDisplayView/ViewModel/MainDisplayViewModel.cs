@@ -143,7 +143,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
             if(app is DataExtactionTreeItem treeItem && treeItem.Data != null)
             {
                 LayoutViewItems = new ObservableCollection<object>();
-                foreach (var item in DataViewPluginAdapter.Instance.GetView(treeItem.Text, AbstractDataViewPlugin.XLY_LAYOUT_KEY))
+                foreach (var item in DataViewPluginAdapter.Instance.GetView(treeItem.Text, DataViewConfigure.XLY_LAYOUT_KEY))
                 {
                     LayoutViewItems.Add(item.ToControl(new DataViewPluginArgument() {  CurrentData = null, DataSource = treeItem.Data as IDataSource}));
                 }
