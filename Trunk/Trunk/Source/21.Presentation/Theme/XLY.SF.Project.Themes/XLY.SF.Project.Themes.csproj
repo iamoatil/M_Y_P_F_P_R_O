@@ -89,6 +89,7 @@
     <Compile Include="CustromControl\CheckBox\IconCheckBox.cs" />
     <Compile Include="CustromControl\CheckBox\MenuRadioButton.cs" />
     <Compile Include="CustromControl\Button\IconButton.cs" />
+    <Compile Include="CustromControl\ProgressBar\ProgressBarWithCorner.cs" />
     <Compile Include="CustromControl\ToggleButton\IconRadioButton.cs" />
     <Compile Include="CustromControl\TabControl\TabControlWithButton.cs" />
     <Compile Include="CustromControl\TreeView\TreeViewItemEx.cs" />
@@ -346,7 +347,6 @@
     <Resource Include="Resources\Images\Icons\DevHomePageEditIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CustromControl\ProgressBar\" />
     <Folder Include="ThemesStyle\ProgressBarStyle\" />
   </ItemGroup>
   <ItemGroup>

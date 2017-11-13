@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"             
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-    xmlns:custromcontrol="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
+    xmlns:control="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
     xmlns:themes="clr-namespace:XLY.SF.Project.Themes;assembly=XLY.SF.Project.Themes"
     x:Class="XLY.SF.Project.Views.Mirror.MirrorView"             
              mc:Ignorable="d" 
@@ -147,20 +147,13 @@
                         <ColumnDefinition Width="211*"/>
                         <ColumnDefinition Width="20*"/>
                     </Grid.ColumnDefinitions>
-                    <custromcontrol:TextBoxEx Title="存放路径：" TitlePadding="20,0,0,0"  Grid.ColumnSpan="2" Text="{Binding TargetPosition.DirPath}"/>
+                    <control:TextBoxEx Title="存放路径：" TitlePadding="20,0,0,0"  Grid.ColumnSpan="2" Text="{Binding TargetPosition.DirPath}"/>
                     <Button Content=". . ." Grid.Column="1" Margin="0,0,0,5" Background="Transparent" Foreground="Wheat" Command="{Binding TargetPosition.SetTargetPathCommand}" VerticalAlignment="Center"/>
                 </Grid>
             </Border>
 
             <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3">
-                <ProgressBar Height="15" LargeChange="0.1" Maximum="{Binding ProgressPosition.TotalSize}" Value="{Binding ProgressPosition.FinishedSize}" Background="#FF252F46" BorderThickness="0">
-                    <ProgressBar.Foreground>
-                        <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
-                            <GradientStop Color="#FF359CE5" Offset="0"/>
-                            <GradientStop Color="#FF23BABE" Offset="1"/>
-                        </LinearGradientBrush>
-                    </ProgressBar.Foreground>                   
-                </ProgressBar>
+                <control:ProgressBarWithCorner LargeChange="0.1" Maximum="{Binding ProgressPosition.TotalSize}" Value="{Binding ProgressPosition.FinishedSize}" />
             </Grid>
             <TextBlock Text="{Binding RemainTime}" Grid.Row="5" Grid.Column="0" Margin="0,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" FontWeight="Light" />
             <Button Content="开始镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,0,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding StartCommand}"/>
