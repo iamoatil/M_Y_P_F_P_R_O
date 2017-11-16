@@ -78,6 +78,7 @@
     <Compile Include="ViewModel\CmdTargetPosition.cs" />
     <Compile Include="ViewModel\MessageBoxEx.cs" />
     <Compile Include="ViewModel\MirrorBackgroundProcess.cs" />
+    <Compile Include="ViewModel\MirrorCommands.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
