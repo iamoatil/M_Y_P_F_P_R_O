@@ -83,8 +83,31 @@ namespace XLY.SF.Project.Plugin.Adapter
 
             //插件过滤 根据提取方式和操作系统
             var filtetResult = GetPluginsByType<DataParsePluginInfo>(PluginType.SpfDataParse).Keys.Where(p => p.Pump.HasFlag(source.Type) &&
-                                                            p.DeviceOSType.HasFlag(source.OSType));
+                                                            p.DeviceOSType.HasFlag(source.OSType)).ToList();
 
+            //排序
+            filtetResult.Sort((l, r) =>
+                {
+                    if (l.GroupIndex > r.GroupIndex)
+                    {
+                        return 1;
+                    }
+                    else if (l.GroupIndex < r.GroupIndex)
+                    {
+                        return -1;
+                    }
+                    else if (l.OrderIndex > r.OrderIndex)
+                    {
+                        return 1;
+                    }
+                    else if (l.OrderIndex < r.OrderIndex)
+                    {
+                        return -1;
+                    }
+
+                    return 0;
+                });
+            
             foreach (var plug in filtetResult)
             {
                 if (!extracts.Any(e => e.AppName == plug.AppName && e.Name == plug.Name && e.GroupName == plug.Group))

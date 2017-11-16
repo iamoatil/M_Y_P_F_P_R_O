@@ -50,5 +50,11 @@ namespace XLY.SF.Project.Domains
             item.Icon = Icon;
             return item;
         }
+
+        public override string ToString()
+        {
+            return $"{GroupName}-{AppName}";
+        }
+
     }
 }
