@@ -11,6 +11,9 @@ set buildType=Debug
 set CurrentDir=%~dp0
 set SourceDir=%CurrentDir%
 
+::还原nuget包
+nuget restore 23.Shell\XLY.SF.Shell\XLY.SF.Shell.sln
+
 ::编译主程序
 cd /d %SourceDir%\23.Shell\XLY.SF.Shell\
 for %%f in (*.sln) do %msbuild% "%%f"  /t:Rebuild /p:Configuration=%buildType%
