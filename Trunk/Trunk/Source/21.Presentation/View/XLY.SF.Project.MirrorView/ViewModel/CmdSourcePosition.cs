@@ -171,17 +171,17 @@ namespace XLY.SF.Project.MirrorView
                 {
                     info = "Exception|MirrorBackgroundProcessError";
                 }
-                if (info.StartsWith("Operate"))
+                if (info.StartsWith("Operate",StringComparison.OrdinalIgnoreCase))
                 {
                     string operateStr = info.Substring("Operate|".Length);
-                    if (operateStr.StartsWith("Stop"))
+                    if (operateStr.StartsWith("Stop", StringComparison.OrdinalIgnoreCase))
                     {
                         string argStr = operateStr.Substring("Stop|".Length);
-                        if (argStr == "Success")
+                        if (string.Equals(argStr,"Success",StringComparison.OrdinalIgnoreCase))
                         {
                             defalutAsyn.Finish();
                         }
-                        else if (argStr == "UserStoped")
+                        else if (string.Equals(argStr , "UserStoped", StringComparison.OrdinalIgnoreCase))
                         {
                             defalutAsyn.Stop();
                         }
@@ -190,7 +190,7 @@ namespace XLY.SF.Project.MirrorView
                         _mirrorBackgroundProcess.Close();
                     }
                 }
-                else if (info.StartsWith("Progress"))
+                else if (info.StartsWith("Progress", StringComparison.OrdinalIgnoreCase))
                 {
                     string finisedSizeStr = info.Substring("Progress|".Length);
                     int finisedSize = 0;
@@ -199,7 +199,7 @@ namespace XLY.SF.Project.MirrorView
                         defalutAsyn.ChangeProgress(finisedSize);
                     }
                 }
-                else if (info.StartsWith("Exception|"))
+                else if (info.StartsWith("Exception|", StringComparison.OrdinalIgnoreCase))
                 {
                     defalutAsyn.Defeat(info);
                     _mirrorBackgroundProcess.CallBack -= OnCallBack;

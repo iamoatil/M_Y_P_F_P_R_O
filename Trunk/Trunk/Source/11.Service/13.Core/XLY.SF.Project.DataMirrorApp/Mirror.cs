@@ -78,7 +78,7 @@ namespace XLY.SF.Project.DataMirrorApp
         public void Stop(string msg)
         {
             MirrorFile.Close();
-            if(msg == "Success")
+            if(string.Equals(msg,"Success",StringComparison.OrdinalIgnoreCase))
             {
                 MirrorFile.CreateMD5File();
             }

@@ -32,7 +32,7 @@ namespace XLY.SF.Project.MirrorView
             curProcess = Process.Start(start);
             curProcess.BeginErrorReadLine();
             curProcess.BeginOutputReadLine();
-            curProcess.OutputDataReceived += new DataReceivedEventHandler(OnOutputDataReceived);
+            curProcess.OutputDataReceived += new DataReceivedEventHandler(OnOutputDataReceived);            
         }
 
         private void OnOutputDataReceived(object sender, DataReceivedEventArgs e)
