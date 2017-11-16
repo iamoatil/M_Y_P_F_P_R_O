@@ -4,7 +4,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.LargeFileTextBox
+namespace XLY.SF.Project.PreviewFilesView.UI
 {
     /// <summary>
     /// richTextBoxUserControl.xaml 的交互逻辑

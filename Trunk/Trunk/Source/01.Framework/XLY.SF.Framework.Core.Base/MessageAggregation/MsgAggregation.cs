@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base;
 using XLY.SF.Framework.Log4NetService;
+using XLY.SF.Framework.Core.Base.MessageBase.Navigation;
 
 
 /*************************************************
@@ -193,7 +194,6 @@ namespace XLY.SF.Framework.Core.Base.MessageAggregation
         /// <param name="msgCallback">消息回调</param>
         public void RegisterSysMsg(object recipient, object token, Action<SysCommonMsgArgs> msgCallback)
         {
-            //GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<SysCommonMsgArgs>(recipient, token, msgCallback);
             RegisterMsg<SysCommonMsgArgs>(recipient, token, msgCallback);
         }
 
@@ -205,7 +205,6 @@ namespace XLY.SF.Framework.Core.Base.MessageAggregation
         /// <param name="msgCallback">消息回调</param>
         public void RegisterSysMsg<TParam>(object recipient, object token, Action<SysCommonMsgArgs<TParam>> msgCallback)
         {
-            //GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<SysCommonMsgArgs<TParam>>(recipient, token, msgCallback);
             RegisterMsg<SysCommonMsgArgs<TParam>>(recipient, token, msgCallback);
         }
 
@@ -221,7 +220,6 @@ namespace XLY.SF.Framework.Core.Base.MessageAggregation
         /// <param name="msgCallback">消息回调</param>
         public void RegisterGeneralMsg(object recipient, string token, Action<GeneralArgs> msgCallback)
         {
-            //GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<GeneralArgs>(recipient, token, msgCallback);
             RegisterMsg<GeneralArgs>(recipient, token, msgCallback);
         }
 
@@ -233,7 +231,6 @@ namespace XLY.SF.Framework.Core.Base.MessageAggregation
         /// <param name="msgCallback">消息回调</param>
         public void RegisterGeneralMsg<TParam>(object recipient, string token, Action<GeneralArgs<TParam>> msgCallback)
         {
-            //GalaSoft.MvvmLight.Messaging.Messenger.Default.Register<GeneralArgs<TParam>>(recipient, token, msgCallback);
             RegisterMsg<GeneralArgs<TParam>>(recipient, token, msgCallback);
         }
 

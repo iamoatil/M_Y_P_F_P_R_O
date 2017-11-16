@@ -14,12 +14,6 @@ namespace XLY.SF.Project.DataPump
     /// </summary>
     public static class DataPumpExtensions
     {
-        #region Fields
-
-        private static readonly Dictionary<Int32, DataPumpBase> DataPumpCaches = new Dictionary<Int32, DataPumpBase>();
-
-        #endregion
-
         #region Methods
 
         #region Public
@@ -100,14 +94,6 @@ namespace XLY.SF.Project.DataPump
             context[name] = value;
         }
 
-        /// <summary>
-        /// 释放占用的静态资源。
-        /// </summary>
-        public static void Release()
-        {
-            DataPumpCaches.Clear();
-        }
-
         #endregion
 
         #region Internal
@@ -155,8 +141,6 @@ namespace XLY.SF.Project.DataPump
 
         private static DataPumpBase GetUsbDataDataPump(Pump key, Int32 hash)
         {
-            if (DataPumpCaches.ContainsKey(hash)) return DataPumpCaches[hash];
-
             var device = (Device)key.Source;
             DataPumpBase dataPump = null;
             switch (key.OSType)
@@ -181,14 +165,11 @@ namespace XLY.SF.Project.DataPump
                 default:
                     throw new NotSupportedException(key.OSType.ToString());
             }
-            DataPumpCaches.Add(hash, dataPump);
             return dataPump;
         }
 
         private static DataPumpBase GetMirrorDataPump(Pump key, Int32 hash)
         {
-            if (DataPumpCaches.ContainsKey(hash)) return DataPumpCaches[hash];
-
             DataPumpBase dataPump = null;
             switch (key.OSType)
             {
@@ -201,7 +182,6 @@ namespace XLY.SF.Project.DataPump
                 default:
                     throw new NotSupportedException(key.OSType.ToString());
             }
-            DataPumpCaches.Add(hash, dataPump);
             return dataPump;
         }
 

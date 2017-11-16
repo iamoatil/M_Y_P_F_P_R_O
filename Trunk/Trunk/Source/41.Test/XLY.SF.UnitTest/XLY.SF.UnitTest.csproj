@@ -78,6 +78,10 @@
       <Project>{28682FE4-EC72-42A3-BB2C-27D19F55E14F}</Project>
       <Name>XLY.SF.Framework.Core.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\11.Service\12.Persistable\XLY.SF.Project.Persistable\XLY.SF.Project.Persistable.csproj">
+      <Project>{E65AA84E-A943-4197-8D2B-631A7CD8565E}</Project>
+      <Name>XLY.SF.Project.Persistable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\11.Service\13.Core\DllService\X64DllService\X64Service\X64Service.csproj">
       <Project>{CC75B75F-FDED-448F-8AC4-AC5E1E520CC7}</Project>
       <Name>X64Service</Name>

@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using XLY.SF.Project.UserControls.PreviewFile.MatchDecoder;
+using XLY.SF.Project.PreviewFilesView.PreviewFile.MatchDecoder;
 
-namespace XLY.SF.Project.UserControls.PreviewFile.Decoders
+namespace XLY.SF.Project.PreviewFilesView.PreviewFile
 {
     /// <summary>
     /// 文件解码器接口

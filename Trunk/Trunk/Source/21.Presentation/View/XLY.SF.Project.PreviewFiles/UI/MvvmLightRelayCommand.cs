@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
-namespace XLY.SF.Project.PreviewFiles.UI
+namespace XLY.SF.Project.PreviewFilesView.UI
 {
     /// <summary>
     /// A command whose sole purpose is to relay its functionality to other

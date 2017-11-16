@@ -19,7 +19,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <param name="taskId">任务标识。</param>
         public TaskEventArgs(String taskId)
         {
-
+            TaskId = taskId ?? throw new ArgumentNullException("taskId");
         }
 
         /// <summary>
@@ -28,6 +28,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <param name="taskId">任务标识。</param>
         /// <param name="message">事件消息。</param>
         public TaskEventArgs(String taskId, String message)
+            : this(taskId)
         {
             Message = message;
         }
@@ -39,12 +40,12 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <summary>
         /// 任务标识。
         /// </summary>
-        public String TaskId { get; }
+        public String TaskId { get; private set; }
 
         /// <summary>
         /// 消息。
         /// </summary>
-        public String Message { get; }
+        public String Message { get; private set; }
 
         #endregion
     }

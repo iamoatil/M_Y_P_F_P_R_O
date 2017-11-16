@@ -177,5 +177,15 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template" Value="{DynamicResource cb_Default}"/>
     </Style>
-   
+
+    <FontFamily x:Key="OswaldFont">
+        pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald
+    </FontFamily>
+    <FontFamily x:Key="OswaldBoldFont">
+        pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#OswaldBold
+    </FontFamily>
+    <FontFamily x:Key="OswaldLightFont">
+        pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#OswaldLight
+    </FontFamily>
+
 </ResourceDictionary>

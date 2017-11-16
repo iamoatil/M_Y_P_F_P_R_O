@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.LargeFileTextBox
+namespace XLY.SF.Project.PreviewFilesView.UI
 {
     /// <summary>
     /// 内存文件

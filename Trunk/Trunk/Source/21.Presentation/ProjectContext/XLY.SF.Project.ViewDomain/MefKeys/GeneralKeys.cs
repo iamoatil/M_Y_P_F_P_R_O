@@ -27,6 +27,15 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         /// </summary>
         public const string SetSubViewStatus = "GeneralKeys_SetSubViewStatus";
 
+        /// <summary>
+        /// 设置数据提取参数。
+        /// </summary>
+        public const string SetDataExtractionParamsMsg = "SetDataExtractionParamsMsg";
+        /// <summary>
+        /// 提取任务完成消息
+        /// </summary>
+        public const string ExtractTaskCompleteMsg = "GeneralKeys_TaskCompleteMsg";
+
         #endregion
     }
 }

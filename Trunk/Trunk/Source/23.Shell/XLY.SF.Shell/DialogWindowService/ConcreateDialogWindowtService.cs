@@ -65,8 +65,8 @@ namespace XLY.SF.Shell.DialogWindowService
         public object ShowDialogWindow(string exportKey, object parameters, bool showInTaskBar)
         {
             object result = null;
-            var viewArgs = CreateNavigationArgs(exportKey, parameters);
-            var viewContainer = WindowHelper.Instance.CreateShellWindow(viewArgs.TargetView, showInTaskBar, Application.Current.MainWindow);
+            var viewArgs = CreateNavigationArgs(exportKey, parameters, showInTaskBar);
+            var viewContainer = WindowHelper.Instance.CreateShellWindow(viewArgs.TargetView, viewArgs.ShowInTaskBar, Application.Current.MainWindow);
             viewContainer.ShowDialog();
             if (viewArgs.TargetView.DataSource.DialogResult)
             {
@@ -85,11 +85,11 @@ namespace XLY.SF.Shell.DialogWindowService
         /// <param name="exportKey"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        private NavigationArgs CreateNavigationArgs(string exportKey, object parameters)
+        private NavigationArgs CreateNavigationArgs(string exportKey, object parameters, bool showInTaskBar)
         {
             if (string.IsNullOrWhiteSpace(exportKey))
                 throw new NullReferenceException(string.Format("导航目标窗体Key【{0}】为空", exportKey));
-            NavigationArgs result = new NavigationArgs(exportKey, parameters);
+            NavigationArgs result = NavigationArgs.CreateWindowNavigationArgs(exportKey, parameters, showInTaskBar);
             return result;
         }
 

@@ -100,8 +100,7 @@ namespace XLY.SF.Project.ViewModels.Main
                     }
                     else
                     {
-                        //NavigationForMainWindow(ExportKeys.DeviceHomeView, value);
-                        NavigationForMainWindow(ExportKeys.DeviceHomePageView, value.Device);
+                        NavigationForMainWindow(ExportKeys.DeviceMainView, value);
                     }
                 }
             }
@@ -118,6 +117,7 @@ namespace XLY.SF.Project.ViewModels.Main
         protected override void LoadCore(object parameters)
         {
             SystemContext.Instance.CaseChanged += Instance_CaseChanged;
+            MessageAggregation.UnRegisterMsg<GeneralArgs<DeviceExtractionAdorner>>(this, ExportKeys.DeviceAddedMsg, AddDevice);
             MessageAggregation.RegisterGeneralMsg<DeviceExtractionAdorner>(this, ExportKeys.DeviceAddedMsg, AddDevice);
         }
 
@@ -146,10 +146,8 @@ namespace XLY.SF.Project.ViewModels.Main
         private void AddDevice(GeneralArgs<DeviceExtractionAdorner> args)
         {
             DeviceExtractionAdorner de = args.Parameters;
-            if (!Items.Contains(de))
-            {
-                Items.Add(de);
-            }
+            if (Items.Any(x => x.Device.ID == de.Device.ID)) return;
+            Items.Add(de);
             SelectedItem = de;
         }
 
@@ -176,6 +174,7 @@ namespace XLY.SF.Project.ViewModels.Main
         private void BackToList(DeviceExtractionAdorner de)
         {
             Items.Add(de);
+            SelectedItem = de;
         }
 
         /// <summary>

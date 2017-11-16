@@ -14,11 +14,14 @@ namespace XLY.SF.Project.Plugin.Android
         public AndroidContactsDataParser()
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
+            pluginInfo.Guid = "{8DB88FCD-F725-4F9D-864F-78E13EF6BCE1}";
             pluginInfo.Name = "联系人";
             pluginInfo.Group = "基本信息";
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror;
+            pluginInfo.GroupIndex = 0;
+            pluginInfo.OrderIndex = 1;
 
             pluginInfo.AppName = "com.android.providers.contacts";
             pluginInfo.Icon = "\\icons\\contact.png";
@@ -32,7 +35,6 @@ namespace XLY.SF.Project.Plugin.Android
         public override object Execute(object arg, IAsyncTaskProgress progress)
         {
             ContactDataSource ds = null;
-
             try
             {
                 var pi = PluginInfo as DataParsePluginInfo;
@@ -58,6 +60,10 @@ namespace XLY.SF.Project.Plugin.Android
             catch
             {//TODO:异常处理
 
+            }
+            finally
+            {
+                ds?.BuildParent();
             }
 
             return ds;

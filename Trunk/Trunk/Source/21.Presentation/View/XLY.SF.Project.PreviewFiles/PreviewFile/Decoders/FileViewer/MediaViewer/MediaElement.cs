@@ -5,11 +5,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using XLY.SF.Project.UserControls.PreviewFile.Decoders.FileViewer.MediaViewer.Lib;
-using XLY.SF.Project.UserControls.PreviewFile.Decoders.FileViewer.MediaViewer.Presentation;
-using MediaPlayer = XLY.SF.Project.UserControls.PreviewFile.Decoders.FileViewer.MediaViewer.Lib.MediaPlayer;
+using XLY.SF.Project.PreviewFilesView.PreviewFile.Lib;
+using MediaPlayer = XLY.SF.Project.PreviewFilesView.PreviewFile.Lib.MediaPlayer;
 
-namespace XLY.SF.Project.UserControls.PreviewFile.Decoders.FileViewer.MediaViewer
+namespace XLY.SF.Project.PreviewFilesView.PreviewFile
 {
     //****************************************************************************
     /// <summary>

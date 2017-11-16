@@ -145,14 +145,12 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         #endregion
 
         #region 设备提取首页
+
         /// <summary>
         /// 设备首页
         /// </summary>
         public const string DeviceHomePageView = "ExportKey_DeviceHomePageView";
         public const string DeviceHomePageViewModel = "ExportKey_DeviceHomePageViewModel";
-        
-        //public const string DeviceHomeView = "ExportKey_DeviceHomeView";
-        //public const string DeviceHomeViewModel = "ExportKey_DeviceHomeViewModel";
 
         /// <summary>
         /// 设备主页
@@ -162,11 +160,6 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         /// 设备主页
         /// </summary>
         public const string DeviceMainViewModel = "ExportKey_DeviceMainViewModel";
-
-        /// <summary>
-        /// 设置数据提取参数。
-        /// </summary>
-        public const string SetDataExtractionParamsMsg = "SetDataExtractionParamsMsg";
 
         /// <summary>
         /// 提取展示页
@@ -188,7 +181,9 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         #endregion
 
         #region
-        public const string MirrorView= "MirrorView";
+
+        public const string MirrorView= "ExportKey_MirrorView";
+
         #endregion
 
         #endregion

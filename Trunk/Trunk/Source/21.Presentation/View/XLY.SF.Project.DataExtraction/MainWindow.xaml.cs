@@ -52,19 +52,14 @@ namespace XLY.SF.Project.DataExtraction
 
         private void Connected(IDevice device)
         {
-            Pump pump = CreatePump(@"F:\Test\Extraction", "test.db", device);
+            Pump pump = CreatePump(@"F:\Test\Extraction", "data.db", device);
             if (pump == null) return;
             var allexts = PluginAdapter.Instance.GetAllExtractItems(pump);
 
-            DataExtractionParams @params = new DataExtractionParams
-            {
-                Pump = pump,
-                Items = new List<ExtractItem>(allexts),
-            };
             Dispatcher.BeginInvoke((Action)delegate()
             {
                 ExtractionViewModel vm = (ExtractionViewModel)EV.DataContext;
-                vm.Args = @params;
+                vm.Pump = pump;
             });
         }
 

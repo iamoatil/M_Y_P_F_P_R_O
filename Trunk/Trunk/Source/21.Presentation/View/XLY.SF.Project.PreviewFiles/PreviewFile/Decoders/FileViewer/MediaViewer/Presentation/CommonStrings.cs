@@ -1,4 +1,4 @@
-﻿namespace XLY.SF.Project.UserControls.PreviewFile.Decoders.FileViewer.MediaViewer.Presentation
+﻿namespace XLY.SF.Project.PreviewFilesView.PreviewFile
 {
     public static class CommonStrings
     {

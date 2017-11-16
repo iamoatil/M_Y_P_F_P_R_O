@@ -202,6 +202,8 @@ namespace XLY.SF.Project.Domains
 
     }
 
+    public class WeChatFriendShowX : WeChatFriendShow { }
+
     /// <summary>
     /// 微信好友类型
     /// </summary>

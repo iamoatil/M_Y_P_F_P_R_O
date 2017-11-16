@@ -7,12 +7,15 @@ using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.DataExtract;
+using XLY.SF.Project.Domains;
 using XLY.SF.Project.IsolatedTaskEngine.Common;
 using XLY.SF.Project.Plugin.Adapter;
 
@@ -28,6 +31,12 @@ namespace XLY.SF.Project.DataExtraction
 
         private readonly Dictionary<Object, CheckBox> _headers = new Dictionary<Object, CheckBox>();
 
+        private readonly Dictionary<String, ExtractionItem> _executeItems = new Dictionary<String, ExtractionItem>();
+
+        private static readonly TimeSpan Interval = TimeSpan.FromSeconds(1);
+
+        private readonly Timer _timer;
+
         #endregion
 
         #region Constructors
@@ -41,6 +50,9 @@ namespace XLY.SF.Project.DataExtraction
             UnselectGroupCommand = new RelayCommand<IEnumerable<Object>>((o) => SelectGroup(o, false));
             SelectItemCommand = new RelayCommand<ExtractionItem>(SelectItem);
             HeaderLoadedCommand = new RelayCommand<RoutedEventArgs>(LoadHeader);
+            IsSelfHost = false;
+            _timer = new Timer(Interval.TotalMilliseconds);
+            _timer.Elapsed += _timer_Elapsed;
         }
 
         #endregion
@@ -76,7 +88,57 @@ namespace XLY.SF.Project.DataExtraction
 
         public ICommand HeaderLoadedCommand { get; }
 
-        internal Boolean IsSelfHost { get; set; }
+        public Int32 TotalProgress
+        {
+            get
+            {
+                if (_executeItems.Count == 0) return 0;
+                Double total = 0;
+                foreach (ExtractionItem item in _executeItems.Values)
+                {
+                    total += item.Progress;
+                }
+                total = total / _executeItems.Count * 100;
+                return (Int32)total;
+            }
+        }
+
+        #region TotalElapsed
+
+        private TimeSpan _totalElapsed = TimeSpan.Zero;
+        public TimeSpan TotalElapsed
+        {
+            get => _totalElapsed;
+            private set
+            {
+                _totalElapsed = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region IsSelfHost
+
+        private Boolean _isSelfHost;
+        internal Boolean IsSelfHost
+        {
+            get => _isSelfHost;
+            set
+            {
+                _isSelfHost = value;
+                if (value)
+                {
+                    MessageAggregation.UnRegisterMsg<GeneralArgs<Pump>>(this, "SetDataExtractionParamsMsg", SetPump);
+                }
+                else
+                {
+                    MessageAggregation.RegisterGeneralMsg<Pump>(this, "SetDataExtractionParamsMsg", SetPump);
+                }
+            }
+        }
+
+        #endregion
 
         #region IsSelectAll
 
@@ -109,20 +171,26 @@ namespace XLY.SF.Project.DataExtraction
 
         #endregion
 
-        #region Args
+        #region Pump
 
-        private DataExtractionParams _args;
-        public DataExtractionParams Args
+        private Pump _pump;
+        public Pump Pump
         {
-            get => _args;
+            get => _pump;
             set
             {
-                _args = value;
-                if (value != null)
+                if (_pump != value)
                 {
-                    Items = PluginAdapter.Instance.GetAllExtractItems(value.Pump).Select(x => new ExtractionItem(x)).ToArray();
+                    _pump = value;
+                    if (value != null)
+                    {
+                        Items = PluginAdapter.Instance.GetAllExtractItems(value).Select(x => new ExtractionItem(x)).ToArray();
+                    }
+                    else
+                    {
+                        Items = null;
+                    }
                 }
-                OnPropertyChanged();
             }
         }
 
@@ -209,23 +277,49 @@ namespace XLY.SF.Project.DataExtraction
 
         private void Loaded()
         {
-            if (!IsSelfHost)
-            {
-                MessageAggregation.RegisterGeneralMsg<DataExtractionParams>(this, "SetDataExtractionParamsMsg", (a) => Args = a.Parameters);
-            }
             LaunchService();
+        }
+
+        private void SetPump(GeneralArgs<Pump> args)
+        {
+            Pump = args.Parameters;
         }
 
         private void Start()
         {
+            ExtractItem[] items = InitStart();
             Message message = new Message((Int32)ExtractionCode.Start);
-            message.SetContent(Args);
+            DataExtractionParams @params = new DataExtractionParams(Pump, items);
+            message.SetContent(@params);
             CanSelect = false;
             _proxy.Send(message);
+            _timer.Start();
+        }
+
+        private ExtractItem[] InitStart()
+        {
+            _proxy = CreateProxy();
+            _executeItems.Clear();
+            OnPropertyChanged("TotalProgress");
+            TotalElapsed = TimeSpan.Zero;
+            List<ExtractItem> eis = new List<ExtractItem>();
+            foreach (ExtractionItem item in Items)
+            {
+                item.Reset();
+                if (!item.IsChecked) continue;
+                eis.Add(item.Target);
+                _executeItems.Add(item.Target.GUID, item);
+            }
+            return eis.ToArray();
         }
 
         private void Stop()
         {
+            var items = _executeItems.Values.Where(x => x.State == TaskState.Starting || x.State == TaskState.Running);
+            foreach (var item in items)
+            {
+                item.State = TaskState.Stopping;
+            }
             Message message = new Message((Int32)ExtractionCode.Stop);
             _proxy.Send(message);
         }
@@ -239,33 +333,20 @@ namespace XLY.SF.Project.DataExtraction
             }
             else if (!Path.IsPathRooted(file))
             {
-                file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ServerExeName);
+                file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, file);
             }
             return file;
         }
 
         private void LaunchService()
         {
-            Process process = Process.GetProcessesByName("XLY.SF.Project.DeviceExtractionService").FirstOrDefault();
-            if (process == null)
+            String exeFile = GetServicePath();
+            ProcessStartInfo info = new ProcessStartInfo(exeFile)
             {
-                String exeFile = GetServicePath();
-                ProcessStartInfo info = new ProcessStartInfo(exeFile)
-                {
-                    UseShellExecute = false,
-                    //CreateNoWindow = true
-                };
-                process = Process.Start(info);
-            }
-            String name = ConfigurationManager.AppSettings["taskProxy"];
-            _proxy = new TaskProxy(name)
-            {
-                DisconnectCallback = Disconnect,
-                ReceiveCallback = Receive
+                UseShellExecute = false,
+                CreateNoWindow = true
             };
-            _proxy.TaskOver += _proxy_TaskOver;
-            _proxy.ActivatorError += _proxy_ActivatorError;
-            _proxy.Init();
+            Process.Start(info);
         }
 
         private void Receive(Message message)
@@ -279,9 +360,47 @@ namespace XLY.SF.Project.DataExtraction
                 case ExtractionCode.Stop:
                     break;
                 case ExtractionCode.ProgressChanged:
+                    ChangeProgress(message);
+                    break;
+                case ExtractionCode.Terminate:
+                    Terminate(message);
                     break;
                 default:
                     break;
+            }
+        }
+
+        private void ChangeProgress(Message message)
+        {
+            TaskProgressEventArgs args = message.GetContent<TaskProgressEventArgs>();
+            ExtractionItem item = _executeItems[args.TaskId];
+            item.Progress = args.Progress;
+            if (args.Progress == 0)
+            {
+                item.State = TaskState.Starting;
+            }
+            else
+            {
+                item.State = TaskState.Running;
+            }
+            OnPropertyChanged("TotalProgress");
+        }
+
+        private void Terminate(Message message)
+        {
+            TaskTerminateEventArgs args = message.GetContent<TaskTerminateEventArgs>();
+            ExtractionItem item = _executeItems[args.TaskId];
+            if (args.IsCompleted)
+            {
+                item.State = TaskState.Completed;
+            }
+            else if (args.IsFailed)
+            {
+                item.State = TaskState.Failed;
+            }
+            else
+            {
+                item.State = TaskState.Stopped;
             }
         }
 
@@ -292,17 +411,17 @@ namespace XLY.SF.Project.DataExtraction
 
         private void _proxy_TaskOver(object sender, TaskOverEventArgs e)
         {
-            if (e.IsCompleted)
-            {
-            }
-            else if (e.Exception != null)
-            {
-            }
+            _timer.Stop();
             CanSelect = true;
+            MessageAggregation.SendGeneralMsg<Boolean>(new GeneralArgs<Boolean>("ExtractTaskCompleteMsg")
+            {
+                Parameters = !e.IsFailed
+            });
         }
 
         private void _proxy_ActivatorError(object sender, ActivatorErrorEventArgs e)
         {
+            _timer.Stop();
             CanSelect = true;
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
@@ -312,6 +431,32 @@ namespace XLY.SF.Project.DataExtraction
                 win.Content = e.Exception.ToString();
                 win.ShowDialog();
             });
+        }
+
+        private TaskProxy CreateProxy()
+        {
+            String name = ConfigurationManager.AppSettings["taskProxy"];
+            TaskProxy proxy = new TaskProxy(name)
+            {
+                DisconnectCallback = Disconnect,
+                ReceiveCallback = Receive
+            };
+            proxy.TaskOver += _proxy_TaskOver;
+            proxy.ActivatorError += _proxy_ActivatorError;
+            proxy.Init();
+            return proxy;
+        }
+
+        private void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            foreach (ExtractionItem item in _executeItems.Values)
+            {
+                if (item.State == TaskState.Running || item.State == TaskState.Starting)
+                {
+                    item.Elapsed += Interval;
+                }
+            }
+            TotalElapsed += Interval;
         }
 
         #endregion

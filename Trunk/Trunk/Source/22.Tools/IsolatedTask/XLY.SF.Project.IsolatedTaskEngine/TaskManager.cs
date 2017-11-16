@@ -40,6 +40,8 @@ namespace XLY.SF.Project.IsolatedTaskEngine
 
         public Boolean IsRuning { get; private set; }
 
+        public EngineSetup Setup => _setup;
+
         #endregion
 
         #region Methods
@@ -74,7 +76,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
             {
                 _semaphore.WaitOne();
                 if (_requestStop) break;
-                TaskHandler newHandler = new TaskHandler(_setup, TaskOverCallback);
+                TaskHandler newHandler = new TaskHandler(this);
                 newHandler.Launch();
                 if (newHandler.IsLaunched)
                 {
@@ -92,7 +94,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
             IsRuning = false;
         }
 
-        private void TaskOverCallback(TaskHandler sender, TaskOverEventArgs e)
+        internal void ReleaseTask(TaskHandler sender)
         {
             if (_requestStop) return;
             lock (_tasks)

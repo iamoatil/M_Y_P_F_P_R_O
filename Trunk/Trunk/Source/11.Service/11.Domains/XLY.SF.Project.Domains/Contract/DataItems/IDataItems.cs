@@ -15,7 +15,7 @@ namespace XLY.SF.Project.Domains
 
         SqliteDbFile DbInstance { get; }
 
-        string DbFilePath { get; }
+        string DbFilePath { get; set; }
 
         string DbTableName { get; }
 
@@ -28,6 +28,8 @@ namespace XLY.SF.Project.Domains
         void Commit();
 
         void Filter(params FilterArgs[] args);
+
+        void ResetTableName();
     }
 
     public interface IDataItems<out T> : IDataItems

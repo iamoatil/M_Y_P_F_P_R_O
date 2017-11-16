@@ -57,12 +57,16 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <control:MenuRadioButton x:Name="mr" IsChecked="True" GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_MenuExtract, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageIcon.png" Height="50"/>
+                <control:MenuRadioButton x:Name="mr" IsChecked="True" GroupName="devHomePage" 
+                                         Content="{Binding XPath=ViewLanguage/View_DevHomePage_MenuExtract, Source={x:Static ex:SystemContext.LanguageProvider}}" 
+                                         Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageIcon.png" Height="50"
+                                         Command="{Binding DeviceHomePageCommand.ViewExecuteCmd}"/>
                 <Rectangle Grid.Column="1" Fill="{Binding Background,ElementName=mr}"/>
                 <!--提取状态-->
                 <Button Grid.Column="1" Visibility="Hidden" Style="{StaticResource loadingControlStyle}" Width="24" Height="24" Margin="0 0 35 0"/>
             </Grid>
-            <control:MenuRadioButton GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_MenuResult, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageResultIcon.png" Height="50" Margin="0 5 0 5"/>
+            <control:MenuRadioButton GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_MenuResult, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageResultIcon.png" Height="50" Margin="0 5 0 5"
+                                     Command="{Binding ExtractionResultCommand.ViewExecuteCmd}"/>
             <control:MenuRadioButton GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_FileView, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageFileViewIcon.png" Height="50" Margin="0 0 0 5"/>
             <control:MenuRadioButton GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_Warning, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageWarningIcon.png" Height="50"/>
             <StackPanel.Effect>

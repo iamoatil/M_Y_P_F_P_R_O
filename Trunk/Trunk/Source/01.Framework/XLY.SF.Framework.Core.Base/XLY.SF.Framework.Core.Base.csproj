@@ -102,9 +102,12 @@
     <Compile Include="MefIoc\IocManagerSingle.cs" />
     <Compile Include="MessageAggregation\MsgAggregation.cs" />
     <Compile Include="MessageBase\ArgsBase.cs" />
-    <Compile Include="MessageBase\Navigationhelper.cs" />
     <Compile Include="MessageBase\GeneralArgs .cs" />
     <Compile Include="MessageBase\NavigationArgs.cs" />
+    <Compile Include="MessageBase\Navigation\NavigationCacheManager.cs" />
+    <Compile Include="MessageBase\Navigation\NavigationLogElement.cs" />
+    <Compile Include="MessageBase\Navigation\NavigationLogHelper.cs" />
+    <Compile Include="MessageBase\Navigation\NavigationViewElement.cs" />
     <Compile Include="MessageBase\SysCommonMsgArgs.cs" />
     <Compile Include="ModuleBase\IModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

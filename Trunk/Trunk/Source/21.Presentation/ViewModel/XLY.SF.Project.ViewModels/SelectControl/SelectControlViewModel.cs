@@ -273,20 +273,6 @@ namespace XLY.SF.Project.ViewModels.SelectControl
 
         #region Tools
 
-        /// <summary>
-        /// 关闭选择界面
-        /// </summary>
-        /// <param name="isComplete">是否选择完成</param>
-        private void CloseView(bool isComplete)
-        {
-            //GeneralArgs<bool> closeSelectViewArgs = new GeneralArgs<bool>(GeneralKeys.CloseSelectView);
-            //closeSelectViewArgs.Parameters = isComplete;
-            //base.MessageAggregation.SendGeneralMsg<bool>(closeSelectViewArgs);
-
-            //注销所有消息
-            //base.MessageAggregation.UnRegisterMsgAll(this);
-        }
-
         private void LoadFolders()
         {
             //桌面

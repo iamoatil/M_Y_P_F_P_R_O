@@ -42,5 +42,7 @@ namespace XLY.SF.Project.Domains
         int Total { get; }
 
         IEnumerable<T> Filter<T>(params FilterArgs[] args);
+
+        void SetCurrentPath(string path);
     }
 }

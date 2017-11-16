@@ -24,6 +24,7 @@ namespace XLY.SF.Project.Domains
         public ContactDataSource(string dbFilePath)
         {
             Items = new DataItems<Contact>(dbFilePath);
+            Type = typeof(Contact);
         }
     }
 }

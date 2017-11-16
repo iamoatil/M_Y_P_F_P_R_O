@@ -28,7 +28,7 @@ namespace XLY.SF.Project.DeviceExtractionService
         {
             _reporter = new DefaultMultiTaskReporter();
             _reporter.ProgressChanged += _reporter_ProgressChanged;
-            _reporter.Ternimated += _reporter_Ternimated;
+            _reporter.Terminate += _reporter_Terminated;
             _controler = new DataExtractControler()
             {
                 Reporter = _reporter
@@ -76,31 +76,41 @@ namespace XLY.SF.Project.DeviceExtractionService
 
         #region Private
 
-        private void _reporter_Ternimated(object sender, TaskTerminateEventArgs e)
+        private void _reporter_Terminated(object sender, TaskTerminateEventArgs e)
         {
-            OnTaskOver(e.TaskId, e.IsCompleted);
+            SendMessage(ExtractionCode.Terminate, e);
+            if (_controler.IsBusy) return;
+            OnTerminateActivator(new TaskOverEventArgs());
         }
 
         private void _reporter_ProgressChanged(object sender, TaskProgressEventArgs e)
         {
-            Message message = new Message((Int32)ExtractionCode.ProgressChanged);
-            message.SetContent(e);
-            OnSend(message);
+            SendMessage(ExtractionCode.ProgressChanged, e);
         }
 
         private void Start(Message message)
         {
             DataExtractionParams @params = message.GetContent<DataExtractionParams>();
             Pump pump = @params.Pump;
-            if (@params != null && pump != null)
+            if (pump != null && @params.Items.Length != 0)
             {
                 _controler.Start(@params.Pump, @params.Items);
                 OnSend(message.CreateResponse(true));
             }
             else
             {
-                OnActivatorError(new ArgumentException("Can't convert to type 'DataExtractionParams' "));
+                throw new ArgumentException("Can't convert to type 'DataExtractionParams' ");
             }
+        }
+
+        private void SendMessage(ExtractionCode code,Object obj)
+        {
+            Message message = new Message((Int32)code);
+            if (obj != null)
+            {
+                message.SetContent(obj);
+            }
+            OnSend(message);
         }
 
         #endregion

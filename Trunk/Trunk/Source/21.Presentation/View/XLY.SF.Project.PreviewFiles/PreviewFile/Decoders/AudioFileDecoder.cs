@@ -1,11 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using XLY.SF.Project.UserControls.PreviewFile.UserControls.PlayerControl;
-using MediaViewer = XLY.SF.Project.UserControls.PreviewFile.Decoders.FileViewer.MediaViewer;
+using XLY.SF.Project.PreviewFilesView.UI;
 
-namespace XLY.SF.Project.UserControls.PreviewFile.Decoders
+namespace XLY.SF.Project.PreviewFilesView.PreviewFile
 {
     class AudioVLCFileDecoder : IFileDecoder
     {
@@ -18,7 +15,7 @@ namespace XLY.SF.Project.UserControls.PreviewFile.Decoders
         }
 
         readonly AudioUserControlVLC _audioUserControl = new AudioUserControlVLC();
-        readonly MediaViewer.MediaElement _mediaElement = new MediaViewer.MediaElement();
+        readonly MediaElement _mediaElement = new MediaElement();
 
         public void Decode(string path)
         {

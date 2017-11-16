@@ -4,10 +4,9 @@ using System.ComponentModel.Composition.Hosting;
 using System.IO;
 using System.Reflection;
 using System.Windows;
-using XLY.SF.Project.UserControls.PreviewFile.Decoders;
-using XLY.SF.Project.UserControls.PreviewFile.MatchDecoder;
+using XLY.SF.Project.PreviewFilesView.PreviewFile.MatchDecoder;
 
-namespace XLY.SF.Project.UserControls.PreviewFile.FileDecode
+namespace XLY.SF.Project.PreviewFilesView.PreviewFile.FileDecode
 {
     /// <summary>
     /// 文件解码器集合

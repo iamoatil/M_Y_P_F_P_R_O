@@ -106,8 +106,17 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         public string DbBookmarkConnectionStr { get { return string.Format("Data Source='{0}'", DbFilePath.Insert(DbFilePath.LastIndexOf('.'), "_bmk")); } }
 
+        /// <summary>
+        /// 数据库事务
+        /// </summary>
         [NonSerialized]
         private SQLiteTransaction _DbTransaction;
+
+        /// <summary>
+        /// 数据库事务关联的数据库连接
+        /// </summary>
+        [NonSerialized]
+        private SQLiteConnection _DbTransactionConn;
 
         /// <summary>
         /// 数据库事务
@@ -430,24 +439,35 @@ namespace XLY.SF.Project.Domains
         [MethodImpl(MethodImplOptions.Synchronized)]
         public SQLiteTransaction BeginTransaction()
         {
-            var conn = new SQLiteConnection(DbConnectionStr);
-            conn.Open();
+            _DbTransactionConn = new SQLiteConnection(DbConnectionStr);
+            _DbTransactionConn.Open();
 
             if (IsUseVirtualTable)
             {
-                s_Tokenizer.RegisterMe(conn);
+                s_Tokenizer.RegisterMe(_DbTransactionConn);
             }
 
-            return conn.BeginTransaction();
+            return _DbTransactionConn.BeginTransaction();
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void Commit()
         {
-            if (null != _DbTransaction)
+            var tran = _DbTransaction;
+
+            if (null != tran)
             {
-                DbTransaction.Commit();
-                DbTransaction = null;
+                lock (_DbTransaction)
+                {
+                    _DbTransaction = null;
+
+                    tran.Commit();
+                    tran.Dispose();
+                    tran = null;
+
+                    _DbTransactionConn.Dispose();
+                    _DbTransactionConn = null;
+                }
             }
         }
 

@@ -45,6 +45,8 @@ namespace XLY.SF.Shell
         {
             //加载IOC容器
             IocManagerSingle.Instance.LoadParts(GetType().Assembly);
+
+            //IocManagerSingle.Instance.AddExportModule(this.GetType().Assembly);
             //创建窗体导航服务
             _navigationManager = new WindowNavigationHelper();
             //错误监听

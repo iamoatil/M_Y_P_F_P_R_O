@@ -24,6 +24,7 @@ namespace XLY.SF.Project.Domains
         public CallDataSource(string dbFilePath)
         {
             Items = new DataItems<Call>(dbFilePath);
+            Type = typeof(Call);
         }
     }
 }

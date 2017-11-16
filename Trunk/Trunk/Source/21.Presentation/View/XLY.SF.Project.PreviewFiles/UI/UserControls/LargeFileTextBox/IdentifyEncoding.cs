@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XLY.SF.Project.UserControls.PreviewFile
+namespace XLY.SF.Project.PreviewFilesView.UI
 {
         #region Class IdentifyEncoding.....
         /// <summary>

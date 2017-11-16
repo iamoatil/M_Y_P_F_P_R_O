@@ -3,9 +3,9 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
-using MediaElement=XLY.SF.Project.UserControls.PreviewFile.Decoders.FileViewer.MediaViewer.MediaElement;
+using MediaElement = XLY.SF.Project.PreviewFilesView.PreviewFile.MediaElement;
 
-namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.PlayerControl
+namespace XLY.SF.Project.PreviewFilesView.UI
 {
     /// <summary>
     /// AudioUserControl.xaml 的交互逻辑

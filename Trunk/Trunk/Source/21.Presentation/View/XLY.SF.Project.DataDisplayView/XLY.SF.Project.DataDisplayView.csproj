@@ -38,7 +38,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\..\31.Build\Debug\solution\DataDisplay\</OutputPath>
+    <OutputPath>..\..\..\31.Build\Debug\XlyToolkits\DataDisplay\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -98,47 +98,11 @@
     <Compile Include="DataFilterControl.xaml.cs">
       <DependentUpon>DataFilterControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\PhoneLayout\WeChatLoginPhoneViewModel.cs" />
-    <Compile Include="View\PoneLayout\PhoneLayoutControl.xaml.cs">
-      <DependentUpon>PhoneLayoutControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModel\DefaultLayoutViewModel.cs" />
-    <Compile Include="View\DefaultLayoutViewControl.xaml.cs">
-      <DependentUpon>DefaultLayoutViewControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainDisplayView.xaml.cs">
       <DependentUpon>MainDisplayView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Plugins\PhoneLayout\PhoneLayoutViewPlugin.cs" />
-    <Compile Include="Plugins\DefaultLayoutViewPlugin.cs" />
     <Compile Include="ViewModel\MainDisplayViewModel.cs" />
-    <Compile Include="View\ContactDetailControl.xaml.cs">
-      <DependentUpon>ContactDetailControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\ContactMessageUserControl.xaml.cs">
-      <DependentUpon>ContactMessageUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\ConversionControl.xaml.cs">
-      <DependentUpon>ConversionControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\DefaultGridViewControl.xaml.cs">
-      <DependentUpon>DefaultGridViewControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\HtmlViewControl.xaml.cs">
-      <DependentUpon>HtmlViewControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\PoneLayout\WeChat\WeChatLoginPhoneControl.xaml.cs">
-      <DependentUpon>WeChatLoginPhoneControl.xaml</DependentUpon>
-    </Compile>
     <Page Include="DataFilterControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\PoneLayout\PhoneLayoutControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\DefaultLayoutViewControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -150,8 +114,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="Adapter\AbstractDataViewPlugin.cs" />
-    <Compile Include="Adapter\DataViewPluginAdapter.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -160,37 +122,8 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="View\ContactDetailControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\ContactMessageUserControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\ConversionControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\DefaultGridViewControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\HtmlViewControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\PoneLayout\WeChat\WeChatLoginPhoneControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Plugins\ContactDetailViewPlugin.cs" />
-    <Compile Include="Plugins\ContactMessageViewPlugin.cs" />
-    <Compile Include="Plugins\ConversionViewPlugin.cs" />
-    <Compile Include="Plugins\DefaultGridViewPlugin.cs" />
-    <Compile Include="Plugins\HtmlViewPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -216,9 +149,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="View\PoneLayout\WeChat\weixin.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.BaseUtility\XLY.SF.Framework.BaseUtility.csproj">
@@ -256,6 +186,10 @@
     <ProjectReference Include="..\..\Theme\XLY.SF.Project.Themes\XLY.SF.Project.Themes.csproj">
       <Project>{c4c4fc67-5d56-4426-acc5-b53cd24c6b69}</Project>
       <Name>XLY.SF.Project.Themes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XLY.SF.Project.Plugin.DataView\XLY.SF.Project.Plugin.DataView.csproj">
+      <Project>{F082BD5C-9B42-4749-AF88-CC5804BF50A1}</Project>
+      <Name>XLY.SF.Project.Plugin.DataView</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -17,21 +17,18 @@ namespace XLY.SF.Project.IsolatedTaskEngine
 
         private readonly MessageServerTransceiver _transceiver;
 
-        private readonly Action<TaskHandler, TaskOverEventArgs> _taskOverCallback;
-
         #endregion
 
         #region Cosntructors
 
-        public TaskHandler(EngineSetup setup, Action<TaskHandler, TaskOverEventArgs> taskOverCallback)
+        public TaskHandler(TaskManager owner)
         {
-            _taskOverCallback = taskOverCallback;
-            _transceiver = new MessageServerTransceiver(setup.TransceiverName, setup.MaxParallelTask);
-            _transceiver.Disconnect += (a, b) => TerminateTask(null);
-            TaskActivator activator = (TaskActivator)Activator.CreateInstance(setup.EntryType);
+            Owner = owner;
+            _transceiver = new MessageServerTransceiver(owner.Setup.TransceiverName, owner.Setup.MaxParallelTask);
+            _transceiver.Disconnect += (a, b) => TerminateTask();
+            TaskActivator activator = (TaskActivator)Activator.CreateInstance(owner.Setup.EntryType);
             activator.RequestSendMessageCallback = (m) => _transceiver.Send(m);
-            activator.TaskOver += (a, b) => TerminateTask(b);
-            activator.ActivatorError += (a, b) => OnActivatorError(b);
+            activator.RequestTerminateTask = () => TerminateTask();
             _activator = activator;
         }
 
@@ -53,6 +50,11 @@ namespace XLY.SF.Project.IsolatedTaskEngine
             private set;
         }
 
+        /// <summary>
+        /// 拥有者。
+        /// </summary>
+        public TaskManager Owner { get; }
+
         #endregion
 
         #region Methods
@@ -72,21 +74,21 @@ namespace XLY.SF.Project.IsolatedTaskEngine
                     if (_activator.Launch())
                     {
                         _isRuning = true;
-                        Task.Factory.StartNew(Handle, TaskCreationOptions.LongRunning);
+                        Task.Factory.StartNew(Handle, TaskCreationOptions.LongRunning | TaskCreationOptions.AttachedToParent);
                     }
                     else
                     {
-                        OnActivatorError(new ActivatorErrorEventArgs("Launch task failed"));
+                        OnActivatorError(new Exception("Launch task failed"));
                     }
                 }
                 catch (Exception ex)
                 {
-                    OnActivatorError(new ActivatorErrorEventArgs(ex));
+                    OnActivatorError(ex);
                 }
             }
             else
             {
-                Close();
+                TerminateTask();
             }
         }
 
@@ -95,7 +97,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         /// </summary>
         public void Dispose()
         {
-            TerminateTask(null);
+            TerminateTask();
         }
 
         /// <summary>
@@ -123,37 +125,32 @@ namespace XLY.SF.Project.IsolatedTaskEngine
                 }
                 catch (Exception ex)
                 {
-                    OnActivatorError(new ActivatorErrorEventArgs(ex));
+                    OnActivatorError(ex);
+                    break;
                 }
             }
+            Owner.ReleaseTask(this);
         }
 
         /// <summary>
         /// 终止任务。
         /// </summary>
-        /// <param name="e">如果e为null，表示客户端断开连接而导致的任务终止。否则，由注入的业务触发。</param>
-        private void TerminateTask(TaskOverEventArgs e)
+        private void TerminateTask()
         {
             if (IsDisposed) return;
             _isRuning = false;
-            if (e != null)
-            {
-                Message message = Message.CreateSystemMessage((Int32)SystemMessageCode.TaskOverEvent, e);
-                _transceiver.Send(message);
-            }
             _activator.Dispose();
             _transceiver.Close();
             IsDisposed = true;
-            _taskOverCallback(this, e);
         }
 
         /// <summary>
-        /// 给代理发送激活器错误事件。
+        /// 触发任务激活器错误事件。
         /// </summary>
-        /// <param name="e">事件参数。</param>
-        private void OnActivatorError(ActivatorErrorEventArgs e)
+        /// <param name="ex">异常信息。</param>
+        private void OnActivatorError(Exception ex)
         {
-            Message message = Message.CreateSystemMessage((Int32)SystemMessageCode.ActivatorErrorEvent, e);
+            Message message = Message.CreateSystemMessage((Int32)SystemMessageCode.ActivatorErrorEvent, new ActivatorErrorEventArgs(ex));
             _transceiver.Send(message);
         }
 

@@ -96,7 +96,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <summary>
         /// 代理是否已经关闭。
         /// </summary>
-        public Boolean IsTernimated => _requestStop;
+        public Boolean IsTerminated => _requestStop;
 
         #endregion
 
@@ -165,6 +165,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
                             break;
                         case (Int32)SystemMessageCode.ActivatorErrorEvent:
                             {
+                                Terminate();
                                 ActivatorErrorEventArgs args = message.GetContent<ActivatorErrorEventArgs>();
                                 OnActivatorError(args);
                             }

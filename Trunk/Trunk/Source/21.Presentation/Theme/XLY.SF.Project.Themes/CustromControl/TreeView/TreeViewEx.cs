@@ -46,14 +46,9 @@ namespace XLY.SF.Project.Themes.CustromControl
     /// </summary>
     public class TreeViewEx : TreeView
     {
-        static TreeViewEx()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(TreeViewEx), new FrameworkPropertyMetadata(typeof(TreeViewEx)));
-        }
         protected override DependencyObject GetContainerForItemOverride()
         {
             return new TreeViewItemEx();
-            //return base.GetContainerForItemOverride();
         }
 
         protected override bool IsItemItsOwnContainerOverride(object item)

@@ -131,13 +131,18 @@
                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition SharedSizeGroup="Title" />
+                                    <ColumnDefinition Width="120"
+                                                      SharedSizeGroup="Title" />
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition SharedSizeGroup="Count" />
-                                    <ColumnDefinition SharedSizeGroup="State" />
-                                    <ColumnDefinition SharedSizeGroup="Elapsed" />
+                                    <ColumnDefinition Width="100" 
+                                                      SharedSizeGroup="Count" />
+                                    <ColumnDefinition Width="100"
+                                                      SharedSizeGroup="State" />
+                                    <ColumnDefinition Width="100"
+                                                      SharedSizeGroup="Elapsed" />
                                 </Grid.ColumnDefinitions>
                                 <CheckBox x:Name="cb"
+                                          ToolTip="{Binding Name}"
                                           Content="{Binding Name}"
                                           IsChecked="{Binding IsChecked}"
                                           Command="{Binding DataContext.SelectItemCommand,ElementName=Root}"
@@ -147,17 +152,18 @@
                                           Margin="0,0,20,0" />
                                 <ProgressBar Grid.Column="1"
                                              Minimum="0"
-                                             Maximum="100"
-                                             Value="{Binding Progress}" />
+                                             Maximum="1"
+                                             Value="{Binding Progress}"
+                                             Margin="10,0,10,0"/>
                                 <TextBlock Text="{Binding Count}"
                                            Grid.Column="2"
                                            Foreground="{Binding IsChecked,ElementName=cb,Converter={StaticResource SelectToForgroundConverter}}"
                                            FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald"
-                                           Margin="60,0,0,0" />
+                                           Margin="30,0,0,0" />
                                 <TextBlock Text="{Binding State,Converter={StaticResource TaskStateToTextConverter}}"
                                            Foreground="{Binding IsChecked,ElementName=cb,Converter={StaticResource SelectToForgroundConverter}}"
                                            Grid.Column="3"
-                                           Margin="20,0,0,0" />
+                                           Margin="10,0,0,0" />
                                 <TextBlock Text="{Binding Elapsed,StringFormat={}{0:hh}:{0:mm}:{0:ss}}"
                                            FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald"
                                            Foreground="{Binding IsChecked,ElementName=cb,Converter={StaticResource SelectToForgroundConverter}}"
@@ -252,15 +258,15 @@
               Margin="30,0,30,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="10" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="3" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBlock Text="总进度" 
+            <TextBlock Text="{Binding XPath=Extraction/TotalProgress, Source={x:Static lang:LanguageHelper.LanguageProvider}}" 
                        Grid.Row="0"
                        Grid.Column="0"
                        FontSize="12"
@@ -268,22 +274,20 @@
                        VerticalAlignment="Bottom"/>
             <StackPanel Orientation="Horizontal"
                         Grid.Row="1"
-                        Margin="0,5,0,10"
                         Grid.Column="0">
-                <TextBlock Text="10"
+                <TextBlock Text="{Binding TotalProgress}"
                            FontSize="50"
-                           FontWeight="Bold"
-                           FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald-Bold"
+                           FontFamily="{StaticResource OswaldBoldFont}"
                            VerticalAlignment="Bottom" />
                 <TextBlock Text="/100" 
                            Height="45"
                            FontSize="30"
-                           FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald-Light"
+                           FontFamily="{StaticResource OswaldLightFont}"
                            VerticalAlignment="Bottom" />
-                <TextBlock Text="00''52''37"
+                <TextBlock Text="{Binding TotalElapsed,StringFormat={}{0:hh}:{0:mm}:{0:ss}}"
                            Height="35"
                            Margin="14,0,0,0"
-                           FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald-Light"
+                           FontFamily="{StaticResource OswaldLightFont}"
                            FontSize="18"
                            VerticalAlignment="Bottom" />
             </StackPanel>

@@ -99,7 +99,7 @@ namespace XLY.SF.Project.DataMirrorApp
             }
             string md5String=sb.ToString();
             //生成MD5文件
-            var md5File = _path.Substring(0, _path.Length - 3) + "md5";
+            var md5File = _path.Substring(0, _path.Length - _mirrorSuffix.Length - 1) + ".md5.txt";
             File.WriteAllText(md5File, md5String, Encoding.UTF8);
         }
 

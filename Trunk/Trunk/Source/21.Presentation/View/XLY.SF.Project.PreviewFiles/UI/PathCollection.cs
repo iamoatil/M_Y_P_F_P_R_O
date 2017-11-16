@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace XLY.SF.Project.UserControls.PreviewFile
+namespace XLY.SF.Project.PreviewFilesView.UI
 {
     /// <summary>
     /// Path集合

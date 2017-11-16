@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace XLY.SF.Project.UserControls.PreviewFile.Decoders.FileViewer.MediaViewer.Lib
+namespace XLY.SF.Project.PreviewFilesView.PreviewFile.Lib
 {
 
     //****************************************************************************

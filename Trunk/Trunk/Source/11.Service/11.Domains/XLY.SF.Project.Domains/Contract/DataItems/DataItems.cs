@@ -34,13 +34,46 @@ namespace XLY.SF.Project.Domains
     {
         #region Fields
 
+        //[NonSerialized]
+        //private readonly DataAggregationFilterView<T> _filterView;
         [NonSerialized]
-        private readonly DataAggregationFilterView<T> _filterView;
+        private DataAggregationFilterView<T> _filterViewInstance;
+        private DataAggregationFilterView<T> _filterView
+        {
+            get
+            {
+                if(_filterViewInstance == null)
+                {
+                    _filterViewInstance = new DataAggregationFilterView<T>(this, Key);
+                    _filterViewInstance.OnAssociatedBookmark += _filterView_OnAssociatedBookmark;
+                }
+                return _filterViewInstance;
+            }
+            set
+            {
+                _filterViewInstance = value;
+            }
+        }
 
         private readonly T[] _empty;
 
         [NonSerialized]
-        private readonly IFilterDataProvider _provider;
+        private IFilterDataProvider _providerInstance;
+        private IFilterDataProvider _provider
+        {
+            get
+            {
+                if (_providerInstance == null)
+                {
+                    _providerInstance = new SQLiteFilterDataProvider(DbFilePath, DbTableName);
+                }
+                return _providerInstance;
+            }
+            set
+            {
+                _providerInstance = value;
+            }
+        }
 
         #endregion
 
@@ -63,9 +96,9 @@ namespace XLY.SF.Project.Domains
             {
                 DbInstance.SetTableName(typeof(T).FullName, DbTableName);
             }
-            _provider = new SQLiteFilterDataProvider(dbFilePath, DbTableName);
-            _filterView = new DataAggregationFilterView<T>(this, Key);
-            _filterView.OnAssociatedBookmark += _filterView_OnAssociatedBookmark;
+            //_provider = new SQLiteFilterDataProvider(dbFilePath, DbTableName);
+            //_filterView = new DataAggregationFilterView<T>(this, Key);
+            //_filterView.OnAssociatedBookmark += _filterView_OnAssociatedBookmark;
             _empty = new T[0];
         }
 
@@ -81,6 +114,11 @@ namespace XLY.SF.Project.Domains
         public string Key { get; set; }
 
         public string DbTableName { get; set; }
+      
+        public void ResetTableName()
+        {
+            DbInstance.SetTableName(typeof(T).FullName, DbTableName);
+        }
 
         public string DbFilePath { get; set; }
 

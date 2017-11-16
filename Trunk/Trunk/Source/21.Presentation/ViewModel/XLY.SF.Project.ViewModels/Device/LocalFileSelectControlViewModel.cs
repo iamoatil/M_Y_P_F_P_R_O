@@ -14,6 +14,7 @@ using XLY.SF.Project.Domains;
 using XLY.SF.Project.ProxyService;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Framework.BaseUtility;
+using XLY.SF.Framework.Core.Base.MessageBase;
 
 /* ==============================================================================
 * Assembly   ：	XLY.SF.Project.ViewModels.Device.LocalFileSelectControlViewModel
@@ -158,7 +159,8 @@ namespace XLY.SF.Project.ViewModels.Device
                 _selectedFile.CottageFlshType = _dicFlshType[selectPlatform].Item1;
                 _selectedFile.CottageDevType = _dicFlshType[selectPlatform].Item2;
             }
-            MsgAggregation.Instance.SendNavigationMsgForCloseWindow(new Framework.Core.Base.MessageBase.NavigationArgs(ExportKeys.DeviceSelectFileView, _selectedFile));
+            base.DialogResult = true;
+            base.CloseView();
         }
 
         #region 点击了取消按钮
@@ -171,7 +173,7 @@ namespace XLY.SF.Project.ViewModels.Device
         private void DoCancelCommond()
         {
             _selectedFile = null;
-            MsgAggregation.Instance.SendNavigationMsgForCloseWindow(new Framework.Core.Base.MessageBase.NavigationArgs(ExportKeys.DeviceSelectFileView, null));
+            base.CloseView();
         }
         #endregion
 

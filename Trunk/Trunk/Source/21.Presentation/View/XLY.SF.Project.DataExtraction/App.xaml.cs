@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Threading;
 using System.Windows;
+using XLY.SF.Project.DataExtraction.Language;
 
 namespace XLY.SF.Project.DataExtraction
 {
@@ -10,6 +11,7 @@ namespace XLY.SF.Project.DataExtraction
     {
         public App()
         {
+            LanguageHelper.LanguageManager.Switch(Framework.Language.LanguageType.Cn);
             DispatcherHelper.Initialize();
         }
     }

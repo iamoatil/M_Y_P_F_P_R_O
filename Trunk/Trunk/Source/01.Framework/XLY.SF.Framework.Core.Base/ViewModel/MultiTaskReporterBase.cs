@@ -31,20 +31,20 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
 
         #endregion
 
-        #region Ternimate
+        #region Terminate
 
         /// <summary>
         /// 任务结束事件。
         /// </summary>
-        public event EventHandler<TaskTerminateEventArgs> Ternimated;
+        public event EventHandler<TaskTerminateEventArgs> Terminate;
 
         /// <summary>
-        /// 触发Ternimate事件。
+        /// Terminate。
         /// </summary>
         /// <param name="args">事件参数。。</param>
-        protected void OnTernimate(TaskTerminateEventArgs args)
+        protected void OnTerminate(TaskTerminateEventArgs args)
         {
-            Ternimated?.Invoke(this, args);
+            Terminate?.Invoke(this, args);
         }
 
         #endregion

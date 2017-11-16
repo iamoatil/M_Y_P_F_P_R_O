@@ -14,11 +14,14 @@ namespace XLY.SF.Project.Plugin.Android
         public AndroidCallDataParser()
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
+            pluginInfo.Guid = "{EE9D9548-1206-45EA-B2D3-98B1CCF055A2}";
             pluginInfo.Name = "通话记录";
             pluginInfo.Group = "基本信息";
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror;
+            pluginInfo.GroupIndex = 0;
+            pluginInfo.OrderIndex = 2;
 
             pluginInfo.AppName = "com.android.providers.contacts";
             pluginInfo.Icon = "\\icons\\call.png";
@@ -32,7 +35,6 @@ namespace XLY.SF.Project.Plugin.Android
         public override object Execute(object arg, IAsyncTaskProgress progress)
         {
             CallDataSource ds = null;
-
             try
             {
                 var pi = PluginInfo as DataParsePluginInfo;
@@ -58,6 +60,10 @@ namespace XLY.SF.Project.Plugin.Android
             catch
             {//TODO:异常处理
 
+            }
+            finally
+            {
+                ds?.BuildParent();
             }
 
             return ds;

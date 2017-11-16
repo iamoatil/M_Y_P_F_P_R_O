@@ -280,7 +280,7 @@ namespace XLY.SF.Project.Devices
                     throw new ApplicationException(receiver.Data);
                 }
             }
-            catch 
+            catch
             {
                 flag = false;
                 //如果默认路径安装失败，则尝试拷贝到SDCard安装
@@ -525,7 +525,7 @@ namespace XLY.SF.Project.Devices
                 ExecuteRemoteAutoCommand(string.Format("ls -l {0}", path), device, receiver);
                 return true;
             }
-            catch 
+            catch
             {
                 return false;
             }
@@ -1467,6 +1467,11 @@ namespace XLY.SF.Project.Devices
                     target = FileHelper.ConnectPath(targetPath, FilterLinuxFileName(sourceFile).Replace("/", "\\").Split('\\').LastOrDefault());
                 }
 
+                if (FileHelper.IsValid(target))
+                {
+                    return target;
+                }
+
                 FileHelper.CreateDirectory(FileHelper.GetFilePath(target));
 
                 DoPullFile(device, sourceFile, target);
@@ -1477,8 +1482,7 @@ namespace XLY.SF.Project.Devices
             }
             catch (Exception ex)
             {
-                System.IO.File.Delete(target);
-                LoggerManagerSingle.Instance.Error(ex, "重设被拷贝文件失败" + sourceFile);
+                LoggerManagerSingle.Instance.Error(ex, "从设备拷贝文件失败" + sourceFile);
             }
             return string.Empty;
         }

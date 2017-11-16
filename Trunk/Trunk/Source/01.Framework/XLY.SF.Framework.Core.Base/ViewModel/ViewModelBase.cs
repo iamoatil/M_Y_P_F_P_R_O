@@ -70,7 +70,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         {
             //注销所有消息
             MsgAggregation.Instance.UnRegisterMsgAll(this);
-            DialogResult = false;
+            //DialogResult = false;
             Closed();
         }
 
@@ -86,7 +86,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// </summary>
         protected void CloseView()
         {
-            NavigationArgs args = new NavigationArgs(this.ViewModelID);
+            NavigationArgs args = NavigationArgs.CreateCloseNavigationArgs(this.ViewModelID);
             //发送关闭View消息
             MsgAggregation.Instance.SendNavigationMsgForCloseWindow(args);
         }
@@ -120,7 +120,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <param name="exportKey"></param>
         public void NavigationForMainWindow(string exportKey, object param = null)
         {
-            NavigationArgs args = new NavigationArgs(exportKey, param);
+            NavigationArgs args = NavigationArgs.CreateMainViewNavigationArgs(exportKey, param);
             MsgAggregation.Instance.SendNavigationMsgForMainView(args);
         }
 
@@ -133,7 +133,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
             bool showInTaskBar = false,
             bool topMost = false)
         {
-            NavigationArgs args = new NavigationArgs(exportKey, param, showInTaskBar, topMost);
+            NavigationArgs args = NavigationArgs.CreateWindowNavigationArgs(exportKey, param, showInTaskBar, topMost);
             MsgAggregation.Instance.SendNavigationMsgForWindow(args);
         }
 

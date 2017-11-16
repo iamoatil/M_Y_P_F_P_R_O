@@ -1,4 +1,4 @@
-﻿namespace XLY.SF.Project.UserControls.PreviewFile.Decoders.FileViewer
+﻿namespace XLY.SF.Project.PreviewFilesView.PreviewFile
 {
     /// <summary>
     /// 文件预览接口

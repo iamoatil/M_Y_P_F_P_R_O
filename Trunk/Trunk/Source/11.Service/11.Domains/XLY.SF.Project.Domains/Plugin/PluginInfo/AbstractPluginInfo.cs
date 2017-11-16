@@ -15,6 +15,7 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// 提供所有插件结构定义的基类
     /// </summary>
+    [Serializable]
     public abstract class AbstractPluginInfo : IPluginInfo
     {
         public AbstractPluginInfo()

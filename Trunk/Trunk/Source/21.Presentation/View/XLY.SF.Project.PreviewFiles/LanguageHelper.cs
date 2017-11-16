@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
+﻿using System.Windows.Data;
 using XLY.SF.Framework.Language;
 
-namespace XLY.SF.Project.PreviewFiles
+namespace XLY.SF.Project.PreviewFilesView
 {
     internal static class LanguageHelper
     {

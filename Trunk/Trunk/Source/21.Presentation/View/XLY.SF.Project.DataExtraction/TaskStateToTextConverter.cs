@@ -17,7 +17,9 @@ namespace XLY.SF.Project.DataExtraction
                 case TaskState.Starting:
                     return "开始提取...";
                 case TaskState.Stopping:
-                    return "停止提取";
+                    return "正在停止...";
+                case TaskState.Stopped:
+                    return "停止解析";
                 case TaskState.Completed:
                     return "提取完成";
                 case TaskState.Failed:

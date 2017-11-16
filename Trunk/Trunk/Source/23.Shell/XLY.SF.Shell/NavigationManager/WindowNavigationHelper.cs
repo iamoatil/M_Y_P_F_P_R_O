@@ -115,7 +115,7 @@ namespace XLY.SF.Shell.NavigationManager
 
             var loginView = IocManagerSingle.Instance.GetViewPart(ExportKeys.ModuleLoginView);
             loginView.DataSource.LoadViewModel(XLY.SF.Shell.Properties.Resources.ProposedSolutionConfig);         //传递推荐配置内容
-            var loginWindow = WindowHelper.Instance.CreateShellWindow(loginView, false);
+            var loginWindow = WindowHelper.Instance.CreateShellWindow(loginView, true);
             loginWindow.Show();
         }
 

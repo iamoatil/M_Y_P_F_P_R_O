@@ -7,67 +7,6 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
     /// </summary>
     public abstract class TaskActivator : ITaskActivator
     {
-        #region Events
-
-        #region TaskOver
-
-        /// <summary>
-        /// 任务结束事件。
-        /// </summary>
-        public event EventHandler<TaskOverEventArgs> TaskOver;
-
-        /// <summary>
-        /// 触发任务结束事件。
-        /// </summary>
-        /// <param name="taskId">任务标识。</param>
-        /// <param name="isCompleted">是否取消。如果为true表示正常完成，否表示取消。</param>
-        protected void OnTaskOver(String taskId, Boolean isCompleted)
-        {
-            TaskOver?.Invoke(this, new TaskOverEventArgs(taskId, isCompleted));
-        }
-
-        /// <summary>
-        /// 触发任务结束事件。。
-        /// </summary>
-        /// <param name="taskId">任务标识。</param>
-        /// <param name="ex">异常信息。</param>
-        protected void OnTaskOver(String taskId, Exception ex)
-        {
-            TaskOver?.Invoke(this, new TaskOverEventArgs(taskId, ex));
-        }
-
-        /// <summary>
-        /// 触发任务结束事件。
-        /// </summary>
-        /// <param name="taskId">任务标识。</param>
-        /// <param name="errorMessage">错误消息。</param>
-        protected void OnTaskOver(String taskId, String errorMessage)
-        {
-            TaskOver?.Invoke(this, new TaskOverEventArgs(taskId, errorMessage));
-        }
-
-        #endregion
-
-        #region ActivatorError
-
-        /// <summary>
-        /// 任务激活错误事件。
-        /// </summary>
-        public event EventHandler<ActivatorErrorEventArgs> ActivatorError;
-
-        /// <summary>
-        /// 触发任务激活器错误事件。
-        /// </summary>
-        /// <param name="ex">异常信息。</param>
-        protected void OnActivatorError(Exception ex)
-        {
-            ActivatorError?.Invoke(this, new ActivatorErrorEventArgs(ex));
-        }
-
-        #endregion
-
-        #endregion
-
         #region Constructors
 
         /// <summary>
@@ -81,7 +20,15 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
 
         #region Properties
 
+        /// <summary>
+        /// 请求引擎将消息发送给客户端。
+        /// </summary>
         internal Action<Message> RequestSendMessageCallback { get; set; }
+
+        /// <summary>
+        /// 请求引擎终止任务并通知客户端。
+        /// </summary>
+        internal Action RequestTerminateTask { get; set; }
 
         /// <summary>
         /// 对象占用的资源是否已经被释放。
@@ -131,12 +78,23 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         }
 
         /// <summary>
-        /// 客户进程发送消息时执行该方法。
+        /// 请求引擎将消息发送给客户端。
         /// </summary>
         /// <param name="message">消息。</param>
         protected void OnSend(Message message)
         {
-            RequestSendMessageCallback?.Invoke(message);
+            RequestSendMessageCallback.Invoke(message);
+        }
+
+        /// <summary>
+        /// 通知引擎所有任务已经完成。这将导致客户端收到任务结束事件，并回收该任务激活器。
+        /// </summary>
+        /// <param name="args">任务结束事件参数。</param>
+        protected void OnTerminateActivator(TaskOverEventArgs args)
+        {
+            Message message = Message.CreateSystemMessage((Int32)SystemMessageCode.TaskOverEvent, args);
+            OnSend(message);
+            RequestTerminateTask.Invoke();
         }
 
         #endregion

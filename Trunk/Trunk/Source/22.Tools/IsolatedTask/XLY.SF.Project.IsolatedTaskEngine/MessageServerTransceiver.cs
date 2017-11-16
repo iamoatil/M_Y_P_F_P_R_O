@@ -22,7 +22,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         /// <param name="name">消息收发器名称。客户进程使用相同名称的消息收发器与之通信。</param>
         /// <param name="maxParallel">最大并行任务数。</param>
         public MessageServerTransceiver(String name, Int32 maxParallel)
-            : base(new NamedPipeServerStream(name, PipeDirection.InOut, maxParallel, PipeTransmissionMode.Message, PipeOptions.None, 1024, 256))
+            : base(new NamedPipeServerStream(name, PipeDirection.InOut, maxParallel, PipeTransmissionMode.Message, PipeOptions.Asynchronous, 1024, 256))
         {
 
         }

@@ -43,6 +43,8 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
             }
         }
 
+        private TaskTerminateEventArgs():base("") { }
+
         #endregion
 
         #region Properties
@@ -50,17 +52,17 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <summary>
         /// 是否完成。
         /// </summary>
-        public Boolean IsCompleted { get; }
+        public Boolean IsCompleted { get; private set; }
 
         /// <summary>
         /// 是否停止。
         /// </summary>
-        public Boolean IsStopped { get; }
+        public Boolean IsStopped { get; private set; }
 
         /// <summary>
         /// 异常信息。
         /// </summary>
-        public Exception Exception { get; }
+        public Exception Exception { get; private set; }
 
         /// <summary>
         /// 是否失败。

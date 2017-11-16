@@ -20,6 +20,7 @@ using System.Security.Cryptography;
 using System;
 using System.Text;
 using XLY.SF.Framework.Language;
+using XLY.SF.Project.Plugin.Adapter;
 
 
 /*************************************************
@@ -50,6 +51,7 @@ namespace XLY.SF.Project.ViewModels.Login
         #endregion
 
         #region Commands
+
         protected override void LoadCore(object parameters)
         {
             //执行加载
@@ -71,6 +73,9 @@ namespace XLY.SF.Project.ViewModels.Login
 
             //开启设备监听服务
             ProxyFactory.DeviceMonitor.OpenDeviceService();
+
+            //加载插件
+            PluginAdapter.Instance.Initialization(null);
 
             //加载一次数据库
             _dbService.UserInfos.FirstOrDefault();

@@ -127,5 +127,21 @@ namespace XLY.SF.Project.DataExtraction
         #endregion
 
         #endregion
+
+        #region Methods
+
+        #region Public
+
+        public void Reset()
+        {
+            Progress = 0;
+            Count = 0;
+            State = TaskState.Idle;
+            Elapsed = TimeSpan.Zero;
+        }
+
+        #endregion
+
+        #endregion
     }
 }

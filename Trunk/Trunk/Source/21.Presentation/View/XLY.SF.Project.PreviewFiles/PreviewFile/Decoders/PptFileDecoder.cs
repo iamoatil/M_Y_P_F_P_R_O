@@ -1,10 +1,7 @@
-﻿
-using System;
-using System.Windows;
-using System.Windows.Controls;
-using XLY.SF.Project.UserControls.PreviewFile.UserControls.LargeFileTextBox;
+﻿using System.Windows;
+using XLY.SF.Project.PreviewFilesView.UI;
 
-namespace XLY.SF.Project.UserControls.PreviewFile.Decoders
+namespace XLY.SF.Project.PreviewFilesView.PreviewFile
 {
     class PptFileDecoder : IFileDecoder
     {

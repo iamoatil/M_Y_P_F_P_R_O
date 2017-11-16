@@ -46,12 +46,8 @@ namespace MirrorTest
 
         private void DeviceMonitor_OnDeviceConnected(IDevice dev, bool isOnline)
         {
-            _mirrorViewModel.SourcePosition.RefreshPartitions(dev);
-        
-            SPFTask task = new SPFTask();
-            task.Name = "TestName";
-            task.Device = (Device)dev;            
-            _mirrorViewModel.Initialize(task);
+            _mirrorViewModel.SourcePosition.RefreshPartitions(dev);          
+            _mirrorViewModel.Initialize(((Device)dev).ID);
         }
     }
 }

@@ -27,20 +27,12 @@ namespace XLY.SF.Project.DataDisplayView
         public MainWindow()
         {
             InitializeComponent();
+            PluginAdapter.Instance.Initialization(null);
 
             IocManagerSingle.Instance.LoadParts(GetType().Assembly);
             var view = IocManagerSingle.Instance.GetViewPart(ExportKeys.DataDisplayView);
             view.DataSource.LoadViewModel();
-            Content = view;
-
-            PluginAdapter.Instance.Initialization(null);
-
-            //var plugin = IocManagerSingle.Instance.GetMetaParts<IPlugin, IMetaPluginType>(PluginExportKeys.PluginScriptKey);
-            //foreach (var loader in plugin)
-            //{
-
-            //}
-            var pls = DataViewPluginAdapter.Instance.Plugins;
+            content.Content = view;
         }
     }
 }

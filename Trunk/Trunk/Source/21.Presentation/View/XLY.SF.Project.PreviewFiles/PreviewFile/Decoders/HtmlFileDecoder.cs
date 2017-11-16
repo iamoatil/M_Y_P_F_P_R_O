@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace XLY.SF.Project.UserControls.PreviewFile.Decoders
+namespace XLY.SF.Project.PreviewFilesView.PreviewFile
 {
     class HtmlFileDecoder : IFileDecoder
     {

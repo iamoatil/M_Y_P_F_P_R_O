@@ -24,6 +24,7 @@ namespace XLY.SF.Project.Domains
         public SmsDataSource(string dbFilePath)
         {
             Items = new DataItems<SMS>(dbFilePath);
+            Type = typeof(SMS);
         }
     }
 }

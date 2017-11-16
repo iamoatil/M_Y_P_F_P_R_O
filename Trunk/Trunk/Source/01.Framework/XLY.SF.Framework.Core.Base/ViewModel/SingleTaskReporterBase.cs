@@ -32,20 +32,20 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
 
         #endregion
 
-        #region Ternimate
+        #region Terminate
 
         /// <summary>
         /// 任务结束事件。
         /// </summary>
-        public event EventHandler<TaskTerminateEventArgs> Ternimated;
+        public event EventHandler<TaskTerminateEventArgs> Terminated;
 
         /// <summary>
-        /// 触发Ternimate事件。
+        /// 触发任务结束事件。
         /// </summary>
         /// <param name="args">事件参数。。</param>
-        protected void OnTernimate(TaskTerminateEventArgs args)
+        protected void OnTerminate(TaskTerminateEventArgs args)
         {
-            Ternimated?.Invoke(this, args);
+            Terminated?.Invoke(this, args);
         }
 
         #endregion
@@ -60,6 +60,15 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         protected SingleTaskReporterBase()
         {
             Id = Guid.NewGuid().ToString();
+        }
+
+        /// <summary>
+        /// 初始化类型 ProgressReportBase 实例。
+        /// </summary>
+        /// <param name="taskId">任务Id。</param>
+        protected SingleTaskReporterBase(String taskId)
+        {
+            Id = taskId ?? throw new ArgumentNullException("taskId");
         }
 
         #endregion

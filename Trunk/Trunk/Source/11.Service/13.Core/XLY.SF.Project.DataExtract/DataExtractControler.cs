@@ -11,12 +11,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using XLY.SF.Framework.BaseUtility;
-using XLY.SF.Framework.Core.Base.CoreInterface;
-using XLY.SF.Framework.Core.Base.MefIoc;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.DataPump;
@@ -30,177 +28,144 @@ namespace XLY.SF.Project.DataExtract
     /// </summary>
     public class DataExtractControler
     {
+        #region Fields
 
-        #region 基础属性和构造器
+        private Task _mainTask;
 
-        /// <summary>
-        /// 提取对象
-        /// </summary>
-        public Pump SourcePump { get; set; }
+        private CancellationTokenSource _cancelTokenSource;
 
-        /// <summary>
-        /// 提取项集合
-        /// </summary>
-        public IEnumerable<ExtractItem> ExtractItems { get; set; }
+        private CancellationToken _cancelToken;
+        
+        private IEnumerable<ExtractItem> _extractItems;
 
-        /// <summary>
-        /// 工作模式
-        /// </summary>
-        public EnumDataExtractWorkMode WorkMode { get; set; }
+        private PluginAdapter _pluginAdapter;
 
-        /// <summary>
-        /// 异步通知
-        /// </summary>
-        public MultiTaskReporterBase Reporter { get; set; }
+        private Int32 _concurrentCount = 0;
 
-        static DataExtractControler()
-        {
-            Plugin.Adapter.PluginAdapter.Instance.Initialization(null);
-        }
+        #endregion
+
+        #region Constructors
 
         /// <summary>
-        /// 数据提取控制器构造器
+        /// 初始化类型 DataExtractControler 实例。
         /// </summary>
         /// <param name="asyn">异步通知</param>
         /// <param name="workMode">工作模式</param>
-        public DataExtractControler(EnumDataExtractWorkMode workMode= EnumDataExtractWorkMode.HalfAsync)
+        public DataExtractControler(EnumDataExtractWorkMode workMode = EnumDataExtractWorkMode.HalfAsync)
         {
             WorkMode = workMode;
-            MainWorkThread = new SingleThread();
         }
 
         #endregion
 
-        private Boolean _isStarted;
-
-        #region 公开方法
+        #region 基础属性和构造器
 
         /// <summary>
-        /// 开始数据提取
-        /// 异步执行
-        /// 内部处理异常
-        /// 通过异步通知返回进度和提取结果
+        /// 提取信息。
         /// </summary>
-        /// <param name="savePath">保存路径</param>
-        /// <param name="source">提取对象</param>
-        /// <param name="extractItems">提取项集合</param>
-        public void Start(Pump source, List<ExtractItem> extractItems)
+        public Pump Pump { get; private set; }
+
+        /// <summary>
+        /// 工作模式。
+        /// </summary>
+        public EnumDataExtractWorkMode WorkMode { get; }
+
+        /// <summary>
+        /// 多任务进度报告器。
+        /// </summary>
+        public MultiTaskReporterBase Reporter { get; set; }
+
+        /// <summary>
+        /// 当前是否正在执行任务。
+        /// </summary>
+        public Boolean IsBusy
         {
-            if (_isStarted) return;
-            SourcePump = source;
-            ExtractItems = extractItems;
-            DoStart();
-            _isStarted = true;
+            get
+            {
+                Int32 count = Interlocked.CompareExchange(ref _concurrentCount, 0, 0);
+                return count != 0;
+            }
+        }
+
+        #endregion
+
+        #region Methods
+
+        #region Public
+
+        /// <summary>
+        /// 开始。
+        /// </summary>
+        /// <param name="pump">提取信息。</param>
+        /// <param name="extractItems">提取项列表。</param>
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void Start(Pump pump, ExtractItem[] extractItems)
+        {
+            if (IsBusy) return;
+            if (Initialization(pump, extractItems))
+            {
+                _concurrentCount = 0;
+                _mainTask = Task.Factory.StartNew(() =>
+                {
+                    ExtractData();
+                }, _cancelToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+            }
         }
 
         /// <summary>
         /// 停止数据提取
         /// </summary>
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Stop()
         {
-            if (!_isStarted) return;
-            DoStop();
-            _isStarted = false;
+            if (!IsBusy) return;
+            //取消
+            _cancelTokenSource.Cancel();
+            try
+            {
+                _mainTask.Wait();
+            }
+            catch(AggregateException)
+            {
+                //注意：此处只捕获异常但不处理，
+                //每个任务各自的异常将通过Reporter
+                //报告给观察者
+            }
+            finally
+            {
+                _mainTask.Dispose();
+                _mainTask = null;
+            }
         }
 
         #endregion
 
-        #region 私有方法和私有属性
-
-        /// <summary>
-        /// 后台工作主线程
-        /// </summary>
-        private SingleThread MainWorkThread { get; set; }
-
-        /// <summary>
-        /// 插件管理器
-        /// </summary>
-        private PluginAdapter ThePluginAdapter { get; set; }
-
-        /// <summary>
-        /// CancelToken
-        /// </summary>
-        private CancellationTokenSource CancelToken { get; set; }
-
-        /// <summary>
-        /// 数据泵和插件工作线程池
-        /// </summary>
-        private List<SingleThread> WorkThreadPool { get; set; }
-
-        /// <summary>
-        /// 工作线程池锁
-        /// </summary>
-        private object WorkThreadPoolLock { get; set; }
-
-        /// <summary>
-        /// 开始
-        /// </summary>
-        private void DoStart()
-        {
-            MainWorkThread.Start(() =>
-                {
-                    //初始化
-                    Initialization();
-
-                    //开始提取
-                    DoDataExtract().Wait();
-                });
-        }
-
-        /// <summary>
-        /// 停止
-        /// </summary>
-        private void DoStop()
-        {
-            //取消
-            CancelToken.Cancel();
-
-            //停止工作线程池
-            lock (WorkThreadPoolLock)
-            {
-                WorkThreadPool.ForEach(st => st.Stop());
-                WorkThreadPool = null;
-            }
-
-            //停止后台工作主线程
-            if (MainWorkThread.IsAlive)
-            {
-                MainWorkThread.Stop();
-            }
-            Reporter?.StopAll();
-        }
+        #region Private
 
         /// <summary>
         /// 初始化
         /// </summary>
-        private void Initialization()
+        /// <param name="pump">提取信息。</param>
+        /// <param name="extractItems">提取项列表。</param>
+        private Boolean Initialization(Pump pump, ExtractItem[] extractItems)
         {
-            /*
-             * 初始化数据提取控制器
-             * 1.获取插件控制器
-             * 2.初始化数据文件保存根目录
-             * 3.初始化异步取消token
-             * 4.初始化工作线程池
-             * */
-
-            //1.获取插件控制器
-            ThePluginAdapter = PluginAdapter.Instance;
-
-            //2.初始化数据文件保存根目录
-            FileHelper.CreateExitsDirectory(SourcePump.SourceStorePath);
-
-            //3.初始化异步取消token
-            CancelToken = new CancellationTokenSource();
-
-            //4.初始化工作线程池
-            WorkThreadPool = new List<SingleThread>();
-            WorkThreadPoolLock = new object();
+            if (pump == null) return false;
+            if (extractItems == null || extractItems.Length == 0) return false;
+            _pluginAdapter = PluginAdapter.Instance;
+            if (_pluginAdapter == null) return false;
+            Pump = pump;
+            _extractItems = extractItems;
+            _cancelTokenSource = new CancellationTokenSource();
+            _cancelToken = _cancelTokenSource.Token;
+            FileHelper.CreateExitsDirectory(pump.SourceStorePath);
+            Reporter?.Reset();
+            return true;
         }
 
         /// <summary>
         /// 执行数据提取
         /// </summary>
-        private async Task DoDataExtract()
+        private void ExtractData()
         {
             /*
              * APP数据提取流程：
@@ -212,184 +177,151 @@ namespace XLY.SF.Project.DataExtract
              * 
              * */
 
-            var items = ThePluginAdapter.MatchPluginByPump(SourcePump, ExtractItems);
-
+            var items = _pluginAdapter.MatchPluginByPump(Pump, _extractItems);
             switch (WorkMode)
             {
                 case EnumDataExtractWorkMode.HalfAsync:
-                    await DoHalfAsyncDataExtract(items);
+                    ExtractDataByHalfAsync(items);
                     break;
                 default:
                     throw new NotImplementedException();
             }
-
         }
 
-        /// <summary>
-        /// 半异步提取方式
-        /// </summary>
-        /// <returns></returns>
-        private async Task DoHalfAsyncDataExtract(Dictionary<ExtractItem, List<DataParsePluginInfo>> Items)
+        private void ExtractDataByHalfAsync(Dictionary<ExtractItem, List<DataParsePluginInfo>> Items)
         {
             foreach (var item in Items)
             {
-                //1.同步执行数据泵服务
-                CancelToken.Token.ThrowIfCancellationRequested();
-                await DoDataPump(item.Key, item.Value);
-
-                //2.异步执行插件
-                CancelToken.Token.ThrowIfCancellationRequested();
-                DoDataPlug(item.Key, item.Value);
+                Interlocked.Increment(ref _concurrentCount);
+                Reporter?.Start(item.Key.GUID);
+                //如果收到取消请求，则执行统一的扫尾工作，以此来标识一个任务的结束。
+                if (_cancelToken.IsCancellationRequested)
+                {
+                    Task.Factory.StartNew(() => RoundOffwork(true, item.Key.GUID));
+                }
+                else
+                {
+                    try
+                    {
+                        DoDataPump(item.Key, item.Value);
+                        Task.Factory.StartNew(() => DoDataPlugin(item.Key, item.Value), _cancelToken,
+                            TaskCreationOptions.AttachedToParent | TaskCreationOptions.LongRunning,
+                            TaskScheduler.Default).ContinueWith((t) => RoundOffwork(t, item.Key.GUID));
+                    }//如果在执行数据泵期间捕获到异常，则执行统一的扫尾工作，以此来标识一个任务的结束。
+                    catch (Exception ex)
+                    {
+                        Task.Factory.StartNew(() => RoundOffwork(ex, item.Key.GUID));
+                    }
+                }
             }
         }
 
-        /// <summary>
-        /// 执行数据泵服务
-        /// </summary>
-        /// <param name="extractItem"></param>
-        /// <param name="plugs"></param>
-        /// <returns></returns>
-        private async Task DoDataPump(ExtractItem extractItem, IEnumerable<DataParsePluginInfo> plugs)
+        private void DoExtract(KeyValuePair<ExtractItem, List<DataParsePluginInfo>> item)
         {
-            await Task.Run(() =>
-                {
-                    WaitRunWorkThread(() =>
-                        {
-                            //执行数据泵服务
-                            foreach (var plug in plugs)
-                            {
-                                plug.SourcePath.ForEach(s => SourcePump.Execute(s, null, extractItem));
-                            }
-                        }, () =>
-                        {
-                            //TODO:取消执行数据泵服务后处理
-                        });
-                });
+            //注意：必须报告一次进度才能使状态切换到Runing
+            Reporter?.ChangeProgress(item.Key.GUID, 0);
+            if (_cancelToken.IsCancellationRequested) return;
+            //在此统一检测CancelToken
+            DoDataPump(item.Key, item.Value);
+            if (!_cancelToken.IsCancellationRequested)
+            {
+                DoDataPlugin(item.Key, item.Value);
+            }
         }
 
-        /// <summary>
-        /// 执行插件
-        /// </summary>
-        /// <param name="extractItem"></param>
-        /// <param name="plugs"></param>
-        /// <returns></returns>
-        private async Task DoDataPlug(ExtractItem extractItem, IEnumerable<DataParsePluginInfo> plugs)
+        private void DoDataPump(ExtractItem extractItem, IEnumerable<DataParsePluginInfo> plugins)
         {
-            await Task.Run(() =>
+            //执行数据泵服务
+            foreach (var plugin in plugins)
+            {
+                foreach (var s in plugin.SourcePath)
                 {
-                    WaitRunWorkThread(() =>
-                        {
-                            //1.匹配插件
-                            var plug = ThePluginAdapter.MatchPluginByApp(plugs, SourcePump, SourcePump.SavePath, GetAppVersion(extractItem));
-
-                            //2.执行插件
-                            plug.SaveDbPath = SourcePump.DbFilePath;
-                            ThePluginAdapter.ExecutePlugin(plug, null, (ds) =>
-                                {//插件执行完处理
-                                    FinishExtractItem(extractItem, ds);
-                                });
-
-                        }, () =>
-                        {
-                            //TODO:取消插件执行后处理
-                        });
-                });
+                    if (_cancelToken.IsCancellationRequested)
+                    {
+                        return;
+                    }
+                    Pump.Execute(s, null, extractItem);
+                }
+            }
+            Reporter?.ChangeProgress(extractItem.GUID, 0.33);
         }
 
-        /// <summary>
-        /// 提取项执行完毕
-        /// </summary>
-        /// <param name="extractItem"></param>
+        private void DoDataPlugin(ExtractItem extractItem, IEnumerable<DataParsePluginInfo> plugs)
+        {
+            if (_cancelToken.IsCancellationRequested) return;
+            //1.匹配插件
+            var plug = _pluginAdapter.MatchPluginByApp(plugs, Pump, Pump.SourceStorePath, GetAppVersion(extractItem));
+            //2.执行插件
+            plug.SaveDbPath = Pump.DbFilePath;
+            _pluginAdapter.ExecutePlugin(plug, null, (ds) =>
+            {
+                FinishExtractItem(extractItem, ds);
+            });
+            if (_cancelToken.IsCancellationRequested) return;
+            Reporter?.ChangeProgress(extractItem.GUID, 0.85);
+        }
+
         private void FinishExtractItem(ExtractItem extractItem, IDataSource ds)
         {
             if (ds != null)
             {
                 //1.处理IDataSource
-                String fileName = Path.Combine(SourcePump.ResultPath, $"{extractItem.GUID}_{extractItem.Name}.ds");
+                String fileName = Path.Combine(Pump.ResultPath, $"{extractItem.GUID}_{extractItem.Name}.ds");
                 Serializer.SerializeToBinary(ds, fileName);
             }
-            Reporter?.Finish(extractItem.GUID);
         }
 
         /// <summary>
-        /// 获取提取项APP版本号
+        /// 执行统一的扫尾工作。向前端汇报完成。
         /// </summary>
-        /// <param name="extractItem"></param>
-        /// <returns></returns>
+        /// <param name="t">任务。</param>
+        /// <param name="taskId">任务Id。</param>
+        private void RoundOffwork(Task t, String taskId)
+        {
+            if (t.IsFaulted)
+            {
+                RoundOffwork(t.Exception, taskId);
+            }
+            else
+            {
+                RoundOffwork(t.IsCanceled, taskId);
+            }
+        }
+
+        /// <summary>
+        /// 在非异常结束的情况下执行统一的扫尾工作。向前端汇报完成。
+        /// </summary>
+        /// <param name="t">任务。</param>
+        /// <param name="taskId">任务Id。</param>
+        private void RoundOffwork(Boolean isCancelled,String taskId)
+        {
+            Interlocked.Decrement(ref _concurrentCount);
+            if (_cancelToken.IsCancellationRequested)
+            {
+                Reporter?.Stop(taskId);
+            }
+            else
+            {
+                Reporter?.ChangeProgress(taskId, 1);
+                Reporter?.Finish(taskId);
+            }
+        }
+
+        /// <summary>
+        /// 在异常结束的情况下执行统一的扫尾工作。向前端汇报完成。
+        /// </summary>
+        /// <param name="t">任务。</param>
+        /// <param name="taskId">任务Id。</param>
+        private void RoundOffwork(Exception ex, String taskId)
+        {
+            Interlocked.Decrement(ref _concurrentCount);
+            Reporter.Defeat(taskId, ex);
+        }
+
         private Version GetAppVersion(ExtractItem extractItem)
         {
             //TODO:获取APP版本信息
             return null;
-        }
-
-        #region 工作线程辅助方法
-
-        /// <summary>
-        /// 在后台工作线程中干活
-        /// </summary>
-        /// <param name="dowork">工作内容</param>
-        /// <param name="abortCallback">工作取消后续处理</param>
-        private void WaitRunWorkThread(Action dowork, Action abortCallback = null)
-        {
-            var st = CreateWorkThread();
-            if (null == st)
-            {
-                return;
-            }
-
-            st.Start(() =>
-            {
-                try
-                {
-                    dowork();
-                }
-                catch (ThreadAbortException)
-                {
-                    abortCallback?.Invoke();
-                }
-            });
-
-            st.Wait(() =>
-            {
-                RemoveWorkThread(st);
-            });
-        }
-
-        /// <summary>
-        /// 创建新的工作线程
-        /// </summary>
-        /// <returns></returns>
-        private SingleThread CreateWorkThread()
-        {
-            lock (WorkThreadPoolLock)
-            {
-                if (null == WorkThreadPool)
-                {
-                    return null;
-                }
-
-                var st = new SingleThread();
-                WorkThreadPool.Add(st);
-
-                return st;
-            }
-        }
-
-        /// <summary>
-        /// 移除工作线程
-        /// </summary>
-        /// <param name="st"></param>
-        private void RemoveWorkThread(SingleThread st)
-        {
-            if (null != st)
-            {
-                st.Wait();
-
-                lock (WorkThreadPoolLock)
-                {
-                    WorkThreadPool?.Remove(st);
-                }
-            }
         }
 
         #endregion

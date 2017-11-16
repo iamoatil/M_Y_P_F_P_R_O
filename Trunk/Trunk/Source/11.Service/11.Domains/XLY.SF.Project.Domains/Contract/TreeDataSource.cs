@@ -74,5 +74,18 @@ namespace XLY.SF.Project.Domains
             }
             return result;
         }
+        public override void SetCurrentPath(string path)
+        {
+            base.SetCurrentPath(path);
+            if(TreeNodes != null)
+            {
+                foreach (var item in TreeNodes)
+                {
+                    item.SetCurrentPath(path);
+                    //Items?.ResetTableName();
+                }
+            }
+        }
+       
     }
 }

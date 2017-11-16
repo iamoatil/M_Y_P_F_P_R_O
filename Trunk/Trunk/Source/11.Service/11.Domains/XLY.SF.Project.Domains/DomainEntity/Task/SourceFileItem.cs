@@ -8,6 +8,7 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// 源文件路径配置项
     /// </summary>
+    [Serializable]
     public class SourceFileItem
     {
         /// <summary>
@@ -79,6 +80,7 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// 源文件路径集合
     /// </summary>
+    [Serializable]
     public class SourceFileItems : List<SourceFileItem>
     {
         /// <summary>

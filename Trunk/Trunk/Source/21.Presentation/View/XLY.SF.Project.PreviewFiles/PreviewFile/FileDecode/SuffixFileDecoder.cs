@@ -1,13 +1,12 @@
-﻿using System.ComponentModel.Composition;
-/* ==============================================================================
+﻿/* ==============================================================================
 * Description：SuffixFileDecoder  
 * Author     ：litao
 * Create Date：2017/10/26 11:34:03
 * ==============================================================================*/
-using XLY.SF.Project.UserControls.PreviewFile.Decoders;
-using XLY.SF.Project.UserControls.PreviewFile.MatchDecoder;
+using System.ComponentModel.Composition;
+using XLY.SF.Project.PreviewFilesView.PreviewFile.MatchDecoder;
 
-namespace XLY.SF.Project.UserControls.PreviewFile.FileDecode
+namespace XLY.SF.Project.PreviewFilesView.PreviewFile.FileDecode
 {
     [PartCreationPolicy(CreationPolicy.NonShared)]
     [ExportFileDecoder(FileDecoderType = FileDecoderTypes.AudioVLC)]

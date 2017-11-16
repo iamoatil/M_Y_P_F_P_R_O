@@ -12,17 +12,17 @@ namespace XLY.SF.Project.DataExtraction.Language
     {
         static LanguageHelper()
         {
+            LanguageManager lm = LanguageManager.Current;
             LanguageProvider = new XmlDataProvider
             {
-                XPath = "LanguageResource"
+                XPath = "LanguageResource",
+                Document = lm.Document
             };
-
-            LanguageManager lm = LanguageManager.Current;
-            lm.Switched += (a, b) => LanguageProvider.Document = LanguageManager.Document;
+            lm.Switched += (a, b) =>
+            {
+                LanguageProvider.Document = LanguageManager.Document;
+            };
             LanguageManager = lm;
-#if DEBUG
-            lm.Switch(LanguageType.Cn);
-#endif
         }
 
         public static LanguageManager LanguageManager { get; }

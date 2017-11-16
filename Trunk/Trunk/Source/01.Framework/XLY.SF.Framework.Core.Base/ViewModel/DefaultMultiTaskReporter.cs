@@ -109,23 +109,16 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         {
             if (!_reporters.ContainsKey(id))
             {
-                DefaultSingleTaskReporter reporter = new DefaultSingleTaskReporter();
+                DefaultSingleTaskReporter reporter = new DefaultSingleTaskReporter(id);
                 reporter.ProgressChanged += (a, b) =>
                 {
                     DefaultSingleTaskReporter r = (DefaultSingleTaskReporter)a;
-                    OnProgressChanged(new TaskProgressEventArgs(r.Id, r.Progress, b.Message));
+                    OnProgressChanged(b);
                 };
-                reporter.Ternimated += (a, b) =>
+                reporter.Terminated += (a, b) =>
                   {
                       DefaultSingleTaskReporter r = (DefaultSingleTaskReporter)a;
-                      if (b.IsFailed)
-                      {
-                          OnTernimate(new TaskTerminateEventArgs(r.Id, b.Exception, b.Message));
-                      }
-                      else
-                      {
-                          OnTernimate(new TaskTerminateEventArgs(r.Id, b.IsCompleted));
-                      }
+                      OnTerminate(b);
                   };
                 _reporters.Add(id, reporter);
                 reporter.Start(message);

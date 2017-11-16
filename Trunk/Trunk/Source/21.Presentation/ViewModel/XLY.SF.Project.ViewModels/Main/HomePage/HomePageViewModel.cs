@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,6 +32,11 @@ namespace XLY.SF.Project.ViewModels.Main
         [ImportingConstructor]
         public HomePageViewModel(IDatabaseContext dbService, IPopupWindowService service)
         {
+            MainFunDepict = Path.Combine(Environment.CurrentDirectory, "CacheData\\FunctionDepict\\首页-样图_03.png");
+            Sub1FunDepict = Path.Combine(Environment.CurrentDirectory, "CacheData\\FunctionDepict\\首页-样图_05.png");
+            Sub2FunDepict = Path.Combine(Environment.CurrentDirectory, "CacheData\\FunctionDepict\\首页-样图_08.png");
+            Sub3FunDepict = Path.Combine(Environment.CurrentDirectory, "CacheData\\FunctionDepict\\首页-样图_10.png");
+
             _dbService = dbService;
             _winService = service;
 
@@ -67,7 +73,7 @@ namespace XLY.SF.Project.ViewModels.Main
 
         #endregion
 
-        #region Propertes
+        #region Properties
 
         #region Private
 
@@ -82,6 +88,15 @@ namespace XLY.SF.Project.ViewModels.Main
         /// 最近案例
         /// </summary>
         public ObservableCollection<RecentCaseEntityModel> RecentCaseItems { get; set; }
+
+        #region 暂用
+
+        public string MainFunDepict { get; private set; }
+        public string Sub1FunDepict { get; private set; }
+        public string Sub2FunDepict { get; private set; }
+        public string Sub3FunDepict { get; private set; }
+
+        #endregion
 
         #endregion
 

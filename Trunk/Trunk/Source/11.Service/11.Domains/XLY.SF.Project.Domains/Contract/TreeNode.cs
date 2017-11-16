@@ -122,6 +122,7 @@ namespace XLY.SF.Project.Domains
 
         public void BuildParent()
         {
+            Commit();
             if (this.TreeNodes.Any())
             {
                 this.TreeNodes.ForEach((n) =>
@@ -195,5 +196,17 @@ namespace XLY.SF.Project.Domains
         }
         #endregion
 
+        public void SetCurrentPath(string path)
+        {
+            if (Items != null)
+            {
+                Items.DbFilePath = System.IO.Path.Combine(path, "data.db");
+                Items.ResetTableName();
+            }
+            foreach (var item in TreeNodes)
+            {
+                item.SetCurrentPath(path);
+            }
+        }
     }
 }

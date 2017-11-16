@@ -228,7 +228,14 @@ namespace XLY.SF.Project.Plugin.Android
             MainDbContext = new SqliteContext(recoverDbPath);
 
             //发送的文件列表
-            LsFileManager = MainDbContext.Find("SELECT uniseq,strFilePath,strThumbPath,nFileType FROM mr_fileManager").ToList();
+            if (MainDbContext.ExistTable("mr_fileManager"))
+            {
+                LsFileManager = MainDbContext.Find("SELECT uniseq,strFilePath,strThumbPath,nFileType FROM mr_fileManager").ToList();
+            }
+            else
+            {
+                LsFileManager = new List<dynamic>();
+            }
 
             //好友列表
             BuildQQFriendTree(accountTree);
@@ -270,13 +277,16 @@ namespace XLY.SF.Project.Plugin.Android
             accountTree.TreeNodes.Add(friendRootSet);
 
             //获取好友分组信息
-            MainDbContext.UsingSafeConnection("SELECT group_id,group_name,group_friend_count,XLY_DataType FROM Groups ORDER BY seqid", (r) =>
-                {
-                    while (r.Read())
+            if (MainDbContext.ExistTable("Groups"))
+            {
+                MainDbContext.UsingSafeConnection("SELECT group_id,group_name,group_friend_count,XLY_DataType FROM Groups ORDER BY seqid", (r) =>
                     {
-                        LoadFriendGroup(friendRootSet, r.ToDynamic());
-                    }
-                });
+                        while (r.Read())
+                        {
+                            LoadFriendGroup(friendRootSet, r.ToDynamic());
+                        }
+                    });
+            }
 
             //陌生人/黑名单特殊处理
             var OtherFriendTree = new TreeNode()
@@ -351,7 +361,21 @@ namespace XLY.SF.Project.Plugin.Android
             };
             accountTree.TreeNodes.Add(troopMemberTree);
 
-            var sql = @"SELECT
+            string tableName = "";
+            if (MainDbContext.ExistTable("TroopInfo"))
+            {
+                tableName = "TroopInfo";
+            }
+            else if (MainDbContext.ExistTable("TroopInfoV2"))
+            {
+                tableName = "TroopInfoV2";
+            }
+            else
+            {
+                return;
+            }
+
+            var sql = string.Format(@"SELECT
                         	t.troopuin,
                         	t.troopname,
                         	t.troopmemo,
@@ -364,9 +388,9 @@ namespace XLY.SF.Project.Plugin.Android
                         	t.wMemberNum,
                         	t.XLY_DataType
                         FROM
-                        	TroopInfo t
+                        	{0} t
                         LEFT JOIN TroopMemberInfo m ON t.troopuin = m.troopuin
-                        AND t.troopowneruin = m.memberuin";
+                        AND t.troopowneruin = m.memberuin", tableName);
 
             MainDbContext.UsingSafeConnection(sql, (r) =>
              {
@@ -491,6 +515,11 @@ namespace XLY.SF.Project.Plugin.Android
                 Items = new DataItems<QQDiscussShow>(DbFilePath)
             };
             accountTree.TreeNodes.Add(discussMemberTree);
+
+            if (!MainDbContext.ExistTable("DiscussionMemberInfo"))
+            {
+                return;
+            }
 
             var sql = @"SELECT
                         	d.uin,
@@ -622,6 +651,11 @@ namespace XLY.SF.Project.Plugin.Android
             };
             accountTree.TreeNodes.Add(recentTree);
 
+            if (!MainDbContext.ExistTable("recent"))
+            {
+                return;
+            }
+
             MainDbContext.UsingSafeConnection("SELECT uin,troopUin,displayName,lastmsgtime FROM recent WHERE XLY_DataType = 2 ORDER BY lastmsgtime DESC", (r) =>
              {
                  dynamic recentDy;
@@ -730,7 +764,9 @@ namespace XLY.SF.Project.Plugin.Android
                       	Friends f
                       LEFT JOIN ExtensionInfo i ON f.uin == i.uin";
 
-            MainDbContext.UsingSafeConnection(sql, (r) =>
+            if (MainDbContext.ExistTable("Friends"))
+            {
+                MainDbContext.UsingSafeConnection(sql, (r) =>
                 {
                     dynamic friendDy;
                     QQFriendShow friendShow;
@@ -796,6 +832,7 @@ namespace XLY.SF.Project.Plugin.Android
                         }
                     }
                 });
+            }
 
             //2.其他好友
             foreach (var uinmd5 in LsFriendMsgTables.Select(s => s.TrimStart("mr_friend_").TrimEnd("_New").ToUpper()).Distinct().ToList())
@@ -984,6 +1021,11 @@ namespace XLY.SF.Project.Plugin.Android
         {
             var tableName = LsFriendMsgTables.FirstOrDefault(s => s.Contains(CryptographyHelper.MD5FromStringUpper(friend.QQNumber)));
 
+            if(tableName.IsInvalid())
+            {
+                return;
+            }
+
             var friendName = friend.FullName;
             var myName = CurQQAccount.FullName;
 
@@ -1045,6 +1087,11 @@ namespace XLY.SF.Project.Plugin.Android
         private void LoadTroopMsg(TreeNode groupMsgTree, QQGroupShow group)
         {
             var tableName = LsTroopMsgTables.FirstOrDefault(s => s.Contains(CryptographyHelper.MD5FromStringUpper(group.QQNumber)));
+
+            if (tableName.IsInvalid())
+            {
+                return;
+            }
 
             var groupName = group.FullName;
             var myName = CurQQAccount.FullName;
@@ -1122,6 +1169,11 @@ namespace XLY.SF.Project.Plugin.Android
         private void LoadDiscussMsg(TreeNode groupMsgTree, QQDiscussShow discuss)
         {
             var tableName = LsTroopMsgTables.FirstOrDefault(s => s.Contains(CryptographyHelper.MD5FromStringUpper(discuss.QQNumber)));
+
+            if (tableName.IsInvalid())
+            {
+                return;
+            }
 
             var discussName = discuss.FullName;
             var myName = CurQQAccount.FullName;
@@ -1372,14 +1424,19 @@ namespace XLY.SF.Project.Plugin.Android
                 dynamic data = null;
                 foreach (var qqfile in qqFiles)
                 {
-                    var content = new SqliteContext(qqfile.FullName);
-                    var datas = content.Find("SELECT * FROM Friends limit 1");
-
-                    content.Dispose();
-                    if (datas.IsValid())
+                    using (var content = new SqliteContext(qqfile.FullName))
                     {
-                        data = datas.First();
-                        break;
+                        if (!content.ExistTable("Friends"))
+                        {
+                            continue;
+                        }
+                        var datas = content.Find("SELECT * FROM Friends limit 1");
+
+                        if (datas.IsValid())
+                        {
+                            data = datas.First();
+                            break;
+                        }
                     }
                 }
 
@@ -1549,7 +1606,7 @@ namespace XLY.SF.Project.Plugin.Android
             LsDiscussMsgTables = new List<string>();
 
             var tablesBuilder = new StringBuilder();
-            string[] baseTables = { "Card", "Friends", "ExtensionInfo", "Groups", "TroopInfo", "TroopMemberInfo", "DiscussionInfo", "DiscussionMemberInfo", "mr_fileManager", "recent" };
+            string[] baseTables = { "Card", "Friends", "ExtensionInfo", "Groups", "TroopInfo", "TroopInfoV2", "TroopMemberInfo", "DiscussionInfo", "DiscussionMemberInfo", "mr_fileManager", "recent" };
 
             List<string> dbAllTables = SqliteRecoveryHelper.ButtomGetAllTables(oldDbPath);
             foreach (var baseTable in baseTables)

@@ -210,7 +210,11 @@ namespace XLY.SF.Project.Persistable.Primitive
                 var name = Path.GetFileName(sourcedb);
                 var path = Path.GetDirectoryName(sourcedb);
                 var ext = Path.GetExtension(sourcedb);
-                var newfile = Path.Combine(path, string.Format("{0}_recovery.{1}", name.TrimEnd(ext.ToArray()).TrimEnd('.'), ext.TrimStart('.'))).TrimEnd('.');
+                var newfile = Path.Combine(path,
+                    string.Format("{0}_recovery.{1}.{2}",
+                                    name.TrimEnd(ext.ToArray()).TrimEnd('.'),
+                                    Guid.NewGuid().ToString("N").Substring(0, 6),
+                                    ext.TrimStart('.'))).TrimEnd('.');
 
                 if (File.Exists(newfile))
                 {

@@ -20,6 +20,6 @@ namespace XLY.SF.Framework.Core.Base.CoreInterface
         /// <summary>
         /// 任务结束事件。
         /// </summary>
-        event EventHandler<TaskTerminateEventArgs> Ternimated;
+        event EventHandler<TaskTerminateEventArgs> Terminated;
     }
 }

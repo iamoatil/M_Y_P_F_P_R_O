@@ -338,8 +338,10 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <control:IconRadioButton GroupName="DevStrategy" Height="108" Margin="0 0 0 1" FontSize="18" VerticalContentAlignment="Center"
-                                            Content="{Binding SolutionStrategyName}" Foreground="White" Padding="70 0 28 0"
-                                            Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/DevHomePageIcon.png"/>
+                                                 Content="{Binding SolutionStrategyName}" Foreground="White" Padding="70 0 28 0" 
+                                                 Command="{Binding DataContext.StrategyRecommendCommand.ViewExecuteCmd,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                                 CommandParameter="{Binding }"
+                                                 Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/DevHomePageIcon.png"/>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -379,8 +381,8 @@
             <Image Grid.Row="1" MaxWidth="485" MaxHeight="212" HorizontalAlignment="Left" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DevHomePageText.png"/>
         </Grid>
         
-        <!--设备首页导航内容-->
-        <ContentControl Grid.Column="1" Grid.ColumnSpan="2" Content="{Binding DevHomePageSubView}"/>
+        <!--设备首页导航内容【只用于推荐方案】-->
+        <ContentControl Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding DevHomePageSubView}"/>
 
         <!--触发器-->
         <i:Interaction.Triggers>

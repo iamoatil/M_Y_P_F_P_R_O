@@ -27,28 +27,29 @@ namespace XLY.SF.Project.Plugin.Adapter
 
         #region 初始化控制器
 
-        static PluginAdapter()
-        {
-
-        }
+        private bool _Isloaded = false;
 
         /// <summary>
         /// 初始化
         /// </summary>
         public void Initialization(IAsyncTaskProgress asyn)
         {
-            Plugins = new Dictionary<AbstractPluginInfo, IPlugin>();
-            var pluginLoaders = new List<IPluginLoader>() { new JavascriptPluginLoader(), new NetPluginLoader(), new ZipPluginLoader() };
-
-            foreach (var loader in pluginLoaders)
+            if (!_Isloaded)
             {
-                var pls = loader.Load(asyn);
+                _Isloaded = true;
+                Plugins = new Dictionary<AbstractPluginInfo, IPlugin>();
+                var pluginLoaders = new List<IPluginLoader>() { new JavascriptPluginLoader(), new NetPluginLoader(), new ZipPluginLoader() };
 
-                foreach (var pl in pls)
+                foreach (var loader in pluginLoaders)
                 {
-                    if (null != pl.PluginInfo)
+                    var pls = loader.Load(asyn);
+
+                    foreach (var pl in pls)
                     {
-                        Plugins.Add(pl.PluginInfo as AbstractPluginInfo, pl);
+                        if (null != pl.PluginInfo)
+                        {
+                            Plugins.Add(pl.PluginInfo as AbstractPluginInfo, pl);
+                        }
                     }
                 }
             }
@@ -259,7 +260,10 @@ namespace XLY.SF.Project.Plugin.Adapter
                 pl.StartTime = DateTime.Now;
                 var ds = pl.Execute(null, asyn) as IDataSource;
                 ds?.BuildParent();
-
+                if(ds != null)
+                {
+                    ds.PluginInfo = plugin;
+                }
                 pl.EndTime = DateTime.Now;
                 callback?.Invoke(ds);
             }

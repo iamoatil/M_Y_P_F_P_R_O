@@ -4,7 +4,7 @@
 * Create Date：2017/10/26 10:39:30
 * ==============================================================================*/
 
-namespace XLY.SF.Project.UserControls.PreviewFile.MatchDecoder
+namespace XLY.SF.Project.PreviewFilesView.PreviewFile.MatchDecoder
 {
     /// <summary>
     /// IMatched

@@ -33,7 +33,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace XLY.SF.Project.UserControls.PreviewFile.Decoders.FileViewer.MediaViewer.Lib
+namespace XLY.SF.Project.PreviewFilesView.PreviewFile.Lib
 {
 
   //****************************************************************************

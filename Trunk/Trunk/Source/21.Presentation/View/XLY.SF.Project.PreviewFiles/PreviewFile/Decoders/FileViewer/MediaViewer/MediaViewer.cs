@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace XLY.SF.Project.UserControls.PreviewFile.Decoders.FileViewer.MediaViewer
+namespace XLY.SF.Project.PreviewFilesView.PreviewFile
 {
     /// <summary>
     /// 播放组建

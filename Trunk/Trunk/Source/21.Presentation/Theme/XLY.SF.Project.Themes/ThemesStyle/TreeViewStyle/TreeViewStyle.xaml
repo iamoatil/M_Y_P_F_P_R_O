@@ -3,33 +3,94 @@
                      xmlns:ee="http://schemas.microsoft.com/expression/2010/effects"
                      xmlns:local="clr-namespace:XLY.SF.Project.Themes.CustromControl"
                     >
-    
-    <!--TreeView默认样式-->
-    <Style  TargetType="{x:Type local:TreeViewEx}">
-        <Setter Property="Background" Value="#516394"/>
-        <!--<Setter Property="BorderBrush" Value="{StaticResource ListBorder}"/>-->
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Padding" Value="0"/>
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-        <Setter Property="ScrollViewer.PanningMode" Value="Both"/>
-        <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+    <ControlTemplate x:Key="TreeViewItemLevel2" TargetType="{x:Type local:TreeViewItemEx}" >
+        <Grid Background="Transparent">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid x:Name="gr" Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"></ColumnDefinition>
+                    <ColumnDefinition Width="20"></ColumnDefinition>
+                    <ColumnDefinition Width="24"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Rectangle x:Name="moveBackGround" Fill="Transparent" Width="10" HorizontalAlignment="Left" />
+                <Image Grid.Column="1" x:Name="img1" Width="10" Height="10" HorizontalAlignment="Left"  Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/TreeViewExpandIcon.png"/>
+                <Image Grid.Column="2" x:Name="img2"  Width="14" Height="14" HorizontalAlignment="Left"  Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/TreeViewFolderIcon.png"/>
+                <ContentPresenter x:Name="PART_Header" Grid.Column="3"  ContentSource="Header" HorizontalAlignment="Left"  VerticalAlignment="Center"   SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+            </Grid>
+            <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" />
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True" SourceName="gr">
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Background" Value="#19000000" TargetName="gr"/>
+                <Setter Property="Effect" TargetName="img1">
+                    <Setter.Value>
+                        <ee:ColorToneEffect DarkColor="White" LightColor="White" ToneAmount="1"/>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Effect" TargetName="img2">
+                    <Setter.Value>
+                        <ee:ColorToneEffect DarkColor="White" LightColor="White" ToneAmount="1"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="HasItems" Value="False">
+                <Setter Property="Visibility" Value="Collapsed" TargetName="img1"></Setter>
+                <Setter Property="Source" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/TreeViewInformationIcon.png" TargetName="img2"></Setter>
+            </Trigger>
+            <Trigger Property="IsExpanded" Value="false">
+                <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <Style  x:Key="stTreeViewItem" TargetType="{x:Type  local:TreeViewItemEx}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <Setter Property="Padding" Value="1,0,0,0"/>
+        <Setter Property="FontSize" Value="16"></Setter>
+        <Setter Property="Foreground" Value="#9ba5b9"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type  local:TreeViewEx}">
-                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
-                        <ScrollViewer x:Name="_tv_scrollviewer_" Template="{DynamicResource ScrollViewerNoBtnCt}" Background="{TemplateBinding Background}" CanContentScroll="false" Focusable="false" HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
-                            <ItemsPresenter/>
-                        </ScrollViewer>
+                <ControlTemplate TargetType="{x:Type local:TreeViewItemEx}">
+                    <Border BorderBrush="#233256" BorderThickness="0,0,0,1">
+                        <Grid Background="Transparent">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="70"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid x:Name="gr" Background="Transparent">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="20"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="14"></ColumnDefinition>
+                                    <ColumnDefinition Width="20"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Rectangle x:Name="moveBackGround" Fill="Transparent" Width="10" HorizontalAlignment="Left" />
+                                <ContentPresenter x:Name="PART_Header" Grid.Column="1"  ContentSource="Header" HorizontalAlignment="Left"  VerticalAlignment="Center"  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                <Image x:Name="img"  Grid.Column="2" Width="14" Height="14" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/TreeViewDeleteIcon.png" HorizontalAlignment="Right"/>
+                            </Grid>
+                            <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" />
+
+                        </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                        <Trigger Property="IsMouseOver" Value="True" SourceName="gr">
+                            <Setter Property="Foreground" Value="White" />
+                            <Setter Property="Background" Value="#19000000" TargetName="gr"/>
+                            <Setter Property="Effect" TargetName="img">
+                                <Setter.Value>
+                                    <ee:ColorToneEffect DarkColor="White" LightColor="White" ToneAmount="1"/>
+                                </Setter.Value>
+                            </Setter>
                         </Trigger>
-                        <Trigger Property="VirtualizingPanel.IsVirtualizing" Value="true">
-                            <Setter Property="CanContentScroll" TargetName="_tv_scrollviewer_" Value="true"/>
+                        <Trigger Property="IsExpanded" Value="false">
+                            <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -45,219 +106,9 @@
                     </Setter.Value>
                 </Setter>
             </Trigger>
-        </Style.Triggers>
-    </Style>
-    <!--TreeViewItem模版-->
-    <ControlTemplate x:Key="TreeViewItemLevel2" TargetType="{x:Type local:TreeViewItemEx}">
-        <Grid >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="20" Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <ToggleButton x:Name="Expander" Grid.ColumnSpan="3" Content="{Binding Header, RelativeSource={RelativeSource Mode=TemplatedParent}}" ClickMode="Press" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}">
-                <ToggleButton.Style>
-                    <Style TargetType="{x:Type ToggleButton}" >
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="Foreground" Value="#9ba5b9"/>
-                        <Setter Property="FontSize" Value="14"/>
-                        <Setter Property="HorizontalContentAlignment" Value="Left" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ToggleButton}">
-                                    <Border  BorderThickness="0" Background="{TemplateBinding Background}">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition  Width="10"/>
-                                                <ColumnDefinition  Width="10"/>
-                                                <ColumnDefinition  Width="10"/>
-                                                <ColumnDefinition  Width="10"/>
-                                                <ColumnDefinition  Width="14"/>
-                                                <ColumnDefinition  Width="10"/>
-
-                                                <ColumnDefinition  Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Rectangle x:Name="moveBackGround" Fill="Transparent"/>
-                                            <Image Grid.Column="2" x:Name="img1" Width="10" Height="10"  Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/TreeViewExpandIcon.png"/>
-                                            <Image Grid.Column="4" x:Name="img2"  Width="14" Height="14"  Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/TreeViewFolderIcon.png"/>
-                                            <ContentPresenter Grid.Column="6" x:Name="PART_Header"  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                        </Grid>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <DataTrigger Binding="{Binding HasItems,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:TreeViewItemEx}}" Value="False">
-                                            <Setter Property="Visibility" Value="Collapsed" TargetName="img1"></Setter>
-                                            <Setter Property="Source" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/TreeViewInformationIcon.png" TargetName="img2"></Setter>
-                                        </DataTrigger>
-                                        <Trigger Property="IsChecked" Value="True">
-                                            <Setter Property="Source" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/TreeViewPutIcon.png" TargetName="img1"></Setter>
-                                        </Trigger>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Effect" TargetName="img1">
-                                                <Setter.Value>
-                                                    <ee:ColorToneEffect DarkColor="White" LightColor="White" ToneAmount="1"/>
-                                                </Setter.Value>
-                                            </Setter>
-                                            <Setter Property="Effect" TargetName="img2">
-                                                <Setter.Value>
-                                                    <ee:ColorToneEffect DarkColor="White" LightColor="White" ToneAmount="1"/>
-                                                </Setter.Value>
-                                            </Setter>
-                                            <Setter Property="Foreground" Value="White" />
-                                            <Setter Property="Background" Value="#19000000"/>
-                                        </Trigger>
-                                        <DataTrigger Binding="{Binding IsSelectedStyle,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:TreeViewItemEx}}" Value="1">
-                                            <Setter Property="Effect" TargetName="img1">
-                                                <Setter.Value>
-                                                    <ee:ColorToneEffect DarkColor="White" LightColor="White" ToneAmount="1"/>
-                                                </Setter.Value>
-                                            </Setter>
-                                            <Setter Property="Effect" TargetName="img2">
-                                                <Setter.Value>
-                                                    <ee:ColorToneEffect DarkColor="White" LightColor="White" ToneAmount="1"/>
-                                                </Setter.Value>
-                                            </Setter>
-                                            <Setter Property="Fill" Value="#379be6" TargetName="moveBackGround"/>
-                                            <Setter Property="Foreground" Value="White" />
-                                            <Setter Property="FontWeight" Value="Bold"/>
-                                            <Setter Property="Background" Value="#19000000"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsSelectedStyle,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:TreeViewItemEx}}" Value="2">
-                                            <Setter Property="Foreground" Value="White" />
-                                            <Setter Property="FontWeight" Value="Bold"/>
-                                            <Setter Property="Effect" TargetName="img1">
-                                                <Setter.Value>
-                                                    <ee:ColorToneEffect DarkColor="White" LightColor="White" ToneAmount="1"/>
-                                                </Setter.Value>
-                                            </Setter>
-                                            <Setter Property="Effect" TargetName="img2">
-                                                <Setter.Value>
-                                                    <ee:ColorToneEffect DarkColor="White" LightColor="White" ToneAmount="1"/>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </DataTrigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ToggleButton.Style>
-            </ToggleButton>
-            <ItemsPresenter x:Name="ItemsHost" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"/>
-        </Grid>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsExpanded" Value="false">
-                <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-    <!--TreViewItem的默认样式-->
-    <Style TargetType="{x:Type local:TreeViewItemEx}">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-        <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-        <Setter Property="Padding" Value="1,0,0,0"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:TreeViewItemEx}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition MinWidth="20" Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="70"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <ContentPresenter Grid.Column="2" x:Name="PART_Header"  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                        <ToggleButton x:Name="Expander" Grid.ColumnSpan="3" Grid.Row="0"  Content="{Binding Header, RelativeSource={RelativeSource Mode=TemplatedParent}}" ClickMode="Press" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}">
-                            <ToggleButton.Style>
-                                <Style TargetType="{x:Type ToggleButton}">
-                                    <Setter Property="Background"  Value="Transparent"/>
-                                    <Setter Property="Foreground" Value="#9ba5b9"/>
-                                    <Setter Property="FontSize" Value="16"/>
-                                    <Setter Property="HorizontalContentAlignment" Value="Left" />
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type ToggleButton}">
-                                                <Border  BorderThickness="0,0,0,1" BorderBrush="#19000000"  Background="{TemplateBinding Background}">
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition  Width="10"/>
-                                                            <ColumnDefinition  Width="10"/>
-                                                            <ColumnDefinition  Width="*" />
-                                                            <ColumnDefinition  Width="14"/>
-                                                            <ColumnDefinition  Width="20"/>
-                                                        </Grid.ColumnDefinitions>
-                                                        <Rectangle x:Name="moveBackGround" Fill="Transparent"/>
-                                                        <ContentPresenter Grid.Column="2" x:Name="PART_Header"  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                                                        <Image x:Name="img"  Grid.Column="3" Width="14" Height="14" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/TreeViewDeleteIcon.png" HorizontalAlignment="Right"/>
-                                                    </Grid>
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="Effect" TargetName="img">
-                                                            <Setter.Value>
-                                                                <ee:ColorToneEffect DarkColor="White" LightColor="White" ToneAmount="1"/>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                        <Setter Property="Foreground" Value="White" />
-                                                        <Setter Property="Background" Value="#19000000"/>
-                                                    </Trigger>
-                                                    <DataTrigger Binding="{Binding IsSelectedStyle,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:TreeViewItemEx}}" Value="1">
-                                                        <Setter Property="Effect" TargetName="img">
-                                                            <Setter.Value>
-                                                                <ee:ColorToneEffect DarkColor="White" LightColor="White" ToneAmount="1"/>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                        <Setter Property="Fill" Value="#379be6" TargetName="moveBackGround"/>
-                                                        <Setter Property="Foreground" Value="White" />
-                                                        <Setter Property="FontWeight" Value="Bold"/>
-                                                        <Setter Property="Background" Value="#19000000"/>
-                                                        <Setter Property="FontFamily" Value="0swald"></Setter>
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding IsSelectedStyle,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=local:TreeViewItemEx}}" Value="2">
-                                                        <Setter Property="Foreground" Value="White" />
-                                                        <Setter Property="FontWeight" Value="Bold"/>
-                                                        <Setter Property="Effect" TargetName="img">
-                                                            <Setter.Value>
-                                                                <ee:ColorToneEffect DarkColor="White" LightColor="White" ToneAmount="1"/>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                    </DataTrigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </ToggleButton.Style>
-                        </ToggleButton>
-                        <ItemsPresenter x:Name="ItemsHost" Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="1"/>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsExpanded" Value="false">
-                            <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
-                        </Trigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsSelected" Value="true"/>
-                                <Condition Property="IsSelectionActive" Value="false"/>
-                            </MultiTrigger.Conditions>
-                            <Setter Property="Background" TargetName="Expander" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
-                        </MultiTrigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Style.Triggers>
             <Trigger Property="IsItemStyle" Value="False">
                 <Setter Property="Template" Value="{StaticResource TreeViewItemLevel2}"></Setter>
+                <Setter Property="FontSize" Value="14"></Setter>
             </Trigger>
         </Style.Triggers>
     </Style>

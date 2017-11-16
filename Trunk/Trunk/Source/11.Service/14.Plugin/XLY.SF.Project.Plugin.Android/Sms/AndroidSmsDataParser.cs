@@ -14,11 +14,14 @@ namespace XLY.SF.Project.Plugin.Android
         public AndroidSmsDataParser()
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
+            pluginInfo.Guid = "{DAB60C73-4A35-488F-A0FA-3620F6924B0F}";
             pluginInfo.Name = "短信";
             pluginInfo.Group = "基本信息";
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror;
+            pluginInfo.GroupIndex = 0;
+            pluginInfo.OrderIndex = 3;
 
             pluginInfo.AppName = "com.android.providers.telephony";
             pluginInfo.Icon = "\\icons\\sms.png";
@@ -65,6 +68,10 @@ namespace XLY.SF.Project.Plugin.Android
             catch
             {//TODO:异常处理
 
+            }
+            finally
+            {
+                ds?.BuildParent();
             }
 
             return ds;

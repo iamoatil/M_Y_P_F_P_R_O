@@ -1,14 +1,17 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Command;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XLY.SF.Framework.Core.Base.MefIoc;
+using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Project.ViewDomain.VModel.DevHomePage;
+using XLY.SF.Project.ViewModels.Main.CaseManagement;
 
 namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 {
@@ -63,34 +66,62 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
         #endregion
 
+        #region Commands
+
+        /// <summary>
+        /// 数据提取结果
+        /// </summary>
+        public ProxyRelayCommand ExtractionResultCommand { get; private set; }
+        /// <summary>
+        /// 跳转到设备首页
+        /// </summary>
+        public ProxyRelayCommand DeviceHomePageCommand { get; private set; }
+
+        #endregion
+
+        public DeviceMainViewModel()
+        {
+            base.MessageAggregation.RegisterGeneralMsg<bool>(this, GeneralKeys.ExtractTaskCompleteMsg, TaskCompleteCallback);
+            ExtractionResultCommand = new ProxyRelayCommand(ExeucteExtractionResultCommand);
+            DeviceHomePageCommand = new ProxyRelayCommand(ExecuteDeviceHomePageCommand);
+        }
+
         protected override void LoadCore(object parameters)
         {
             if (parameters != null)
             {
-                var _curDevice = parameters as IDevice;
+                var _curDevice = parameters as DeviceExtractionAdorner;
                 if (_curDevice == null)
                     throw new NullReferenceException(string.Format("当前设备为NULL"));
                 CreateDeviceByType(_curDevice);
             }
 
-            #region 测试代码
-
-            CurDevModel = new PhoneDevModel()
-            {
-                Name = "测试阿斯蒂芬",
-                IsAndroid = true,
-                IsRoot = true
-            };
-
-            #endregion
-
-
-
-
             //首次加载使用设备首页
             CurDeviceView = IocManagerSingle.Instance.GetViewPart(ExportKeys.DeviceHomePageView);
             CurDeviceView.DataSource.LoadViewModel(CurDevModel);
         }
+
+        #region ExecuteCommands
+
+        private string ExecuteDeviceHomePageCommand()
+        {
+            var a = IocManagerSingle.Instance.GetViewPart(ExportKeys.DeviceHomePageView);
+            a.DataSource.LoadViewModel(CurDevModel);
+
+            CurDeviceView = a;
+            return string.Empty;
+        }
+
+        private string ExeucteExtractionResultCommand()
+        {
+            var a = IocManagerSingle.Instance.GetViewPart(ExportKeys.DataDisplayView);
+            var b = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
+            a.DataSource.LoadViewModel(b.Target.Path);
+            CurDeviceView = a;
+            return string.Empty;
+        }
+
+        #endregion
 
         #region Tools
 
@@ -100,9 +131,9 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         /// 根据类型获取对应的设备信息
         /// </summary>
         /// <param name="idev"></param>
-        private void CreateDeviceByType(IDevice idev)
+        private void CreateDeviceByType(DeviceExtractionAdorner idev)
         {
-            switch (idev.DeviceType)
+            switch (idev.Device.DeviceType)
             {
                 case EnumDeviceType.None:
                     break;
@@ -122,12 +153,12 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
             }
         }
 
-        private DeviceModel GetPhoneDevice(IDevice idev)
+        private DeviceModel GetPhoneDevice(DeviceExtractionAdorner idev)
         {
-            var tmpDev = idev as XLY.SF.Project.Domains.Device;
+            var tmpDev = idev.Device as XLY.SF.Project.Domains.Device;
             DeviceModel targetDev = new PhoneDevModel()
             {
-                Name = "测试阿斯蒂芬",
+                Name = idev.Name,
                 DevModel = tmpDev.Model,
                 IMEI = tmpDev.IMEI,
                 IsRoot = tmpDev.IsRoot,
@@ -146,41 +177,60 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
 
 
+                 
 
-
-
-                IDevSource = idev
+                DeviceExtractionAdorner = idev,
+                IDevSource = idev.Device
             };
             return targetDev;
         }
 
-        private DeviceModel GetLocalFileDevice(IDevice idev)
+        private DeviceModel GetLocalFileDevice(DeviceExtractionAdorner idev)
         {
-            var lfDev = idev as XLY.SF.Project.Domains.LocalFileDevice;
+            var lfDev = idev.Device as XLY.SF.Project.Domains.LocalFileDevice;
             DeviceModel targetDev = new LocalFileDevModel()
             {
-                Name = "测试阿斯蒂芬",
+                Name = idev.Name,
                 FilePath = lfDev.PathName,
                 FileTypeName = "默认类型",
-                IDevSource = idev
+                DeviceExtractionAdorner = idev,
+                IDevSource = idev.Device
             };
             return targetDev;
         }
 
-        private DeviceModel GetMemoryCardDevice(IDevice idev)
+        private DeviceModel GetMemoryCardDevice(DeviceExtractionAdorner idev)
         {
-            var sdCDev = idev as XLY.SF.Project.Domains.SDCardDevice;
+            var sdCDev = idev.Device as XLY.SF.Project.Domains.SDCardDevice;
             DeviceModel targetDev = new MemoryCardDevModel()
             {
-                Name = "测试阿斯蒂芬",
+                Name = idev.Name,
                 MemoryCardTypeName = "",
                 Number = sdCDev.DiskNumber.ToString(),
-                IDevSource = idev
+                DeviceExtractionAdorner = idev,
+                IDevSource = idev.Device
             };
             return targetDev;
         }
 
         #endregion
+
+        #endregion
+
+        #region 任务完成回调
+
+        //自动提取完成
+        private void TaskCompleteCallback(GeneralArgs<bool> args)
+        {
+            if (args.Parameters)
+            {
+                //跳转
+                var a = IocManagerSingle.Instance.GetViewPart(ExportKeys.DataDisplayView);
+                var b = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
+                a.DataSource.LoadViewModel(b.Target.Path);
+                CurDeviceView = a;
+            }
+        }
 
         #endregion
     }

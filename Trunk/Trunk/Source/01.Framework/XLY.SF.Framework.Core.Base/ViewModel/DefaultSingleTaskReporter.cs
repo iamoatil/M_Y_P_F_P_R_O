@@ -20,6 +20,16 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         {
         }
 
+        /// <summary>
+        /// 初始化类型 ProgressReporter 实例。
+        /// </summary>
+        /// <param name="taskId">任务Id。</param>
+        public DefaultSingleTaskReporter(String taskId)
+            : base(taskId)
+        {
+
+        }
+
         #endregion
 
         #region Methods
@@ -45,10 +55,12 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <param name="message">消息。</param>
         public override void ChangeProgress(Double progress, String message = null)
         {
-            if (State != TaskState.Running) return;
-            State = TaskState.Running;
-            Progress = progress;
-            OnProgressChanged(new TaskProgressEventArgs(Id, progress, message));
+            if (((Int32)State & 0xFF00) == 0x0100)
+            {
+                State = TaskState.Running;
+                Progress = progress;
+                OnProgressChanged(new TaskProgressEventArgs(Id, progress, message));
+            }
         }
 
         /// <summary>
@@ -59,7 +71,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
             if (State != TaskState.Running) return;
             State = TaskState.Completed;
             Progress = 100;
-            OnTernimate(new TaskTerminateEventArgs(Id, true));
+            OnTerminate(new TaskTerminateEventArgs(Id, true));
         }
 
         /// <summary>
@@ -70,7 +82,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
             if (((Int32)State & 0xFF00) == 0x0100)
             {
                 State = TaskState.Stopping;
-                OnTernimate(new TaskTerminateEventArgs(Id, false));
+                OnTerminate(new TaskTerminateEventArgs(Id, false));
             }
         }
 
@@ -83,7 +95,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         {
             if (State != TaskState.Running) return;
             State = TaskState.Failed;
-            OnTernimate(new TaskTerminateEventArgs(Id, ex, message));
+            OnTerminate(new TaskTerminateEventArgs(Id, ex, message));
         }
 
         /// <summary>

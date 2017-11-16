@@ -1,6 +1,6 @@
-﻿using XLY.SF.Project.UserControls.PreviewFile.Decoders.FileViewer.MediaViewer.Lib;
+﻿using XLY.SF.Project.PreviewFilesView.PreviewFile.Lib;
 
-namespace XLY.SF.Project.UserControls.PreviewFile.Decoders.FileViewer.MediaViewer.Presentation
+namespace XLY.SF.Project.PreviewFilesView.PreviewFile
 {
     //****************************************************************************
     /// <summary>

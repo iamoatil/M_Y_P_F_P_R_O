@@ -30,8 +30,8 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         #region Item
 
-        private DeviceExtraction _item;
-        public DeviceExtraction Item
+        private DeviceExtractionAdorner _item;
+        public DeviceExtractionAdorner Item
         {
             get => _item;
             private set
@@ -51,13 +51,13 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         protected override void LoadCore(object parameters)
         {
-            Item = parameters as DeviceExtraction;
+            Item = parameters as DeviceExtractionAdorner;
             Content?.DataSource.LoadViewModel(parameters);
         }
 
         protected override void Closed()
         {
-            MessageAggregation.SendGeneralMsg(new GeneralArgs<DeviceExtraction>(ExportKeys.DeviceWindowClosedMsg) { Parameters = Item });
+            MessageAggregation.SendGeneralMsg(new GeneralArgs<DeviceExtractionAdorner>(ExportKeys.DeviceWindowClosedMsg) { Parameters = Item });
         }
 
         #endregion

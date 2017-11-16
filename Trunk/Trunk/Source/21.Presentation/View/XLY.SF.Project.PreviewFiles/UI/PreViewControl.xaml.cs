@@ -1,10 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using XLY.SF.Framework.Log4NetService;
-using XLY.SF.Project.UserControls.PreviewFile.Decoders;
-using XLY.SF.Project.UserControls.PreviewFile.FileDecode;
+using XLY.SF.Project.PreviewFilesView.PreviewFile;
+using XLY.SF.Project.PreviewFilesView.PreviewFile.FileDecode;
 
-namespace XLY.SF.Project.PreviewFiles.UI
+namespace XLY.SF.Project.PreviewFilesView.UI
 {
     /// <summary>
     /// PreViewControl.xaml 的交互逻辑

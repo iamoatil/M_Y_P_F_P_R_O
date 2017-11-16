@@ -5,18 +5,18 @@ using XLY.SF.Project.Domains;
 namespace XLY.SF.Project.Plugin.Android.Location
 {
     //[Export(PluginExportKeys.PluginKey, typeof(IPlugin))]
-    public class AndroidLocationDataParser:AbstractDataParsePlugin
-    {
-        public override IPluginInfo PluginInfo { get; set; }
+    //public class AndroidLocationDataParser:AbstractDataParsePlugin
+    //{
+    //    public override IPluginInfo PluginInfo { get; set; }
 
-        public AndroidLocationDataParser()
-        {
-            PluginInfo = new DataParsePluginInfo();
-        }
+    //    public AndroidLocationDataParser()
+    //    {
+    //        PluginInfo = new DataParsePluginInfo();
+    //    }
 
-        public override object Execute(object arg, IAsyncTaskProgress progress)
-        {
-            return null;
-        }
-    }
+    //    public override object Execute(object arg, IAsyncTaskProgress progress)
+    //    {
+    //        return null;
+    //    }
+    //}
 }

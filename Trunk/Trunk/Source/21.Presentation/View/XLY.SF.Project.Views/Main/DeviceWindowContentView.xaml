@@ -8,7 +8,7 @@
                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
 		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
              mc:Ignorable="d"
-                 Title="{Binding Item[Name],UpdateSourceTrigger=PropertyChanged}"
+                 Title="{Binding Item.Name,UpdateSourceTrigger=PropertyChanged}"
                  MinWidth="800"
                  MinHeight="600">
     <core:UcViewBase.Resources>
@@ -21,7 +21,7 @@
 
         </ResourceDictionary>
     </core:UcViewBase.Resources>
-    <Grid Background="Red">
+    <Grid>
         <ContentPresenter Content="{Binding Content}" />
     </Grid>
 </core:UcViewBase>

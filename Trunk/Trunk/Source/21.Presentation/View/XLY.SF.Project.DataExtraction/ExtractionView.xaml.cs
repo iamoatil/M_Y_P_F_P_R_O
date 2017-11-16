@@ -17,7 +17,7 @@ namespace XLY.SF.Project.DataExtraction
             InitializeComponent();
             if (!DesignerProperties.GetIsInDesignMode(this))
             {
-                DataSource = new ExtractionViewModel();
+                DataSource = new ExtractionViewModel(); 
             }
         }
 

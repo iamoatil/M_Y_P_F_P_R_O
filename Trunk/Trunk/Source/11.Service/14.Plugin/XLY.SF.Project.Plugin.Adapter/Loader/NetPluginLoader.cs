@@ -32,11 +32,17 @@ namespace XLY.SF.Project.Plugin.Adapter
             {
                 Plugins = new List<IPlugin>();
 
-                var files = System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "XLY.SF.Project.Plugin.*.dll");
+                var files = System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "XLY.SF.Project.Plugin.*.dll", System.IO.SearchOption.AllDirectories);
+                List<string> existList = new List<string>();
                 foreach (var dllFile in files)
                 {
+                    if(existList.Contains(System.IO.Path.GetFileName(dllFile)))
+                    {
+                        continue;
+                    }
+                    existList.Add(System.IO.Path.GetFileName(dllFile));
                     var ass = Assembly.LoadFile(dllFile);
-                    foreach (var cla in ass.GetTypes().Where(t => t.GetCustomAttribute<PluginAttribute>() != null))
+                    foreach (var cla in ass.GetTypes().Where(t => t.GetCustomAttribute<PluginAttribute>() != null  && !t.IsAbstract && !t.IsInterface))
                     {
                         var plu = ass.CreateInstance(cla.FullName) as IPlugin;
                         if (null != plu)

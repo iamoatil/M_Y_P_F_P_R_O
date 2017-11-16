@@ -86,6 +86,18 @@ namespace XLY.SF.Project.Domains
             }
         }
 
+        #region 读取数据后补齐路径
+        public virtual void SetCurrentPath(string path)
+        {
+            CurrentTaskPath = path;
+            if(Items != null)
+            {
+                Items.DbFilePath = System.IO.Path.Combine(path, "data.db");
+                Items.ResetTableName();
+            }
+        }
+        #endregion
+
         #region 数据查询
 
         public virtual IEnumerable<T> Filter<T>(params FilterArgs[] args)

@@ -14,11 +14,14 @@ namespace XLY.SF.Project.Plugin.Android
         public AndroidQQDataParser()
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
+            pluginInfo.Guid = "{7BFC4BE3-EBAC-41C3-8D0D-2C7AD659C9AB}";
             pluginInfo.Name = "QQ";
             pluginInfo.Group = "社交聊天";
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror;
+            pluginInfo.GroupIndex = 1;
+            pluginInfo.OrderIndex = 1;
 
             pluginInfo.AppName = "com.tencent.mobileqq";
             pluginInfo.Icon = "\\icons\\Icon-qq.png";
@@ -41,7 +44,7 @@ namespace XLY.SF.Project.Plugin.Android
 
                 if (!FileHelper.IsValidDictory(databasesPath))
                 {
-                    return null;
+                    return ds;
                 }
 
                 //com.tencent.mobileqq文件夹路径
@@ -59,6 +62,10 @@ namespace XLY.SF.Project.Plugin.Android
             catch
             {//TODO:异常处理
 
+            }
+            finally
+            {
+                ds?.BuildParent();
             }
 
             return ds;

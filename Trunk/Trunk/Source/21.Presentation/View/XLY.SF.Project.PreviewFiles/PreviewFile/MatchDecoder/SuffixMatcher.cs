@@ -6,7 +6,7 @@
 * Create Date：2017/10/26 10:40:25
 * ==============================================================================*/
 
-namespace XLY.SF.Project.UserControls.PreviewFile.MatchDecoder
+namespace XLY.SF.Project.PreviewFilesView.PreviewFile.MatchDecoder
 {
     /// <summary>
     /// 后缀匹配器。他根据文件的后缀来选择使用解码器

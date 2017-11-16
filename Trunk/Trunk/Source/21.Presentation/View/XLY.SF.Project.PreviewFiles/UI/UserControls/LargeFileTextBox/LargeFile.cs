@@ -7,7 +7,7 @@ using System.IO;
 * Create Date：2017/10/16 11:05:18
 * ==============================================================================*/
 
-namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.LargeFileTextBox
+namespace XLY.SF.Project.PreviewFilesView.UI
 {
     /// <summary>
     /// 大文件

@@ -174,6 +174,15 @@ namespace XLY.SF.Project.ViewDomain.VModel.DevHomePage
 
         #endregion
 
+        #region DeviceExtractionAdorner
+
+        /// <summary>
+        /// DeviceExtractionAdorner
+        /// </summary>
+        public object DeviceExtractionAdorner { get; set; }
+
+        #endregion
+
         #endregion
 
         #region 录入信息

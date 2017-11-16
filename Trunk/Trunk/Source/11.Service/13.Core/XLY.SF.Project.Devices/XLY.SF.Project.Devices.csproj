@@ -180,6 +180,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>cd /d $(ProjectDir)..\..\..\..\Tools\CopyDll\
-CopyDll.exe</PreBuildEvent>
+set parameterFile=config.cfg
+if $(ConfigurationName) == Release  set parameterFile=config_Release.cfg
+CopyDll.exe /f %25parameterFile%25</PreBuildEvent>
   </PropertyGroup>
 </Project>

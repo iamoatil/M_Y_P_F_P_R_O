@@ -316,9 +316,199 @@ public class Languagekeys
 		public const string ViewLanguage_View_CaseListIndex = "LanguageResource/ViewLanguage/View_CaseListIndex";
 				
         /// <summary>
+        /// 提取主页
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_MenuExtract = "LanguageResource/ViewLanguage/View_DevHomePage_MenuExtract";
+				
+        /// <summary>
+        /// 提取结果
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_MenuResult = "LanguageResource/ViewLanguage/View_DevHomePage_MenuResult";
+				
+        /// <summary>
+        /// 文件浏览
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_FileView = "LanguageResource/ViewLanguage/View_DevHomePage_FileView";
+				
+        /// <summary>
+        /// 智能预警
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_Warning = "LanguageResource/ViewLanguage/View_DevHomePage_Warning";
+				
+        /// <summary>
+        /// 设备名
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_DevName = "LanguageResource/ViewLanguage/View_DevHomePage_DevName";
+				
+        /// <summary>
+        /// 型   号
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_Model = "LanguageResource/ViewLanguage/View_DevHomePage_Model";
+				
+        /// <summary>
+        /// 系   统
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_System = "LanguageResource/ViewLanguage/View_DevHomePage_System";
+				
+        /// <summary>
+        /// 序列号
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_SerialNumber = "LanguageResource/ViewLanguage/View_DevHomePage_SerialNumber";
+				
+        /// <summary>
+        /// 权   限
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_Power = "LanguageResource/ViewLanguage/View_DevHomePage_Power";
+				
+        /// <summary>
+        /// 外观拍照
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_TakePhoto = "LanguageResource/ViewLanguage/View_DevHomePage_TakePhoto";
+				
+        /// <summary>
+        /// 设备
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_Device = "LanguageResource/ViewLanguage/View_DevHomePage_Device";
+				
+        /// <summary>
+        /// SD卡
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_SDCard = "LanguageResource/ViewLanguage/View_DevHomePage_SDCard";
+				
+        /// <summary>
+        /// 已用
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_Used = "LanguageResource/ViewLanguage/View_DevHomePage_Used";
+				
+        /// <summary>
+        /// 剩余
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_Unused = "LanguageResource/ViewLanguage/View_DevHomePage_Unused";
+				
+        /// <summary>
+        /// 检材编号
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_No = "LanguageResource/ViewLanguage/View_DevHomePage_No";
+				
+        /// <summary>
+        /// 持有人
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_Holder = "LanguageResource/ViewLanguage/View_DevHomePage_Holder";
+				
+        /// <summary>
+        /// 证件类型
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_CredentialsType = "LanguageResource/ViewLanguage/View_DevHomePage_CredentialsType";
+				
+        /// <summary>
+        /// 持有人证件号
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_HolderCredentialsNo = "LanguageResource/ViewLanguage/View_DevHomePage_HolderCredentialsNo";
+				
+        /// <summary>
+        /// 送检人
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_CensorshipPerson = "LanguageResource/ViewLanguage/View_DevHomePage_CensorshipPerson";
+				
+        /// <summary>
+        /// 单位名称
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_UnitName = "LanguageResource/ViewLanguage/View_DevHomePage_UnitName";
+				
+        /// <summary>
+        /// 送检人证件号
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_CensorshipPersonCredentialsNo = "LanguageResource/ViewLanguage/View_DevHomePage_CensorshipPersonCredentialsNo";
+				
+        /// <summary>
+        /// 采集人
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_Operator = "LanguageResource/ViewLanguage/View_DevHomePage_Operator";
+				
+        /// <summary>
+        /// 证件号
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_CredentialsNo = "LanguageResource/ViewLanguage/View_DevHomePage_CredentialsNo";
+				
+        /// <summary>
+        /// 说明
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_Desciption = "LanguageResource/ViewLanguage/View_DevHomePage_Desciption";
+				
+        /// <summary>
+        /// 编辑
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_Edit = "LanguageResource/ViewLanguage/View_DevHomePage_Edit";
+				
+        /// <summary>
+        /// 单击ESC取消
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_ClickESCCancel = "LanguageResource/ViewLanguage/View_DevHomePage_ClickESCCancel";
+				
+        /// <summary>
+        /// 未连接
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_UnConnect = "LanguageResource/ViewLanguage/View_DevHomePage_UnConnect";
+				
+        /// <summary>
+        /// 文件名
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_FileName = "LanguageResource/ViewLanguage/View_DevHomePage_FileName";
+				
+        /// <summary>
+        /// 文件类型
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_FileType = "LanguageResource/ViewLanguage/View_DevHomePage_FileType";
+				
+        /// <summary>
+        /// 文件路径
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_FilePath = "LanguageResource/ViewLanguage/View_DevHomePage_FilePath";
+				
+        /// <summary>
+        /// 类   型
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_Type = "LanguageResource/ViewLanguage/View_DevHomePage_Type";
+				
+        /// <summary>
+        /// 编   号
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_Number = "LanguageResource/ViewLanguage/View_DevHomePage_Number";
+				
+        /// <summary>
+        /// 端   口
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_Port = "LanguageResource/ViewLanguage/View_DevHomePage_Port";
+				
+        /// <summary>
+        /// 越狱
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_IOSRoot = "LanguageResource/ViewLanguage/View_DevHomePage_IOSRoot";
+				
+        /// <summary>
         /// 
         /// </summary>
 		public const string ViewLanguage_View_Operation1 = "LanguageResource/ViewLanguage/View_Operation1";
+				
+        /// <summary>
+        /// 未
+        /// </summary>
+		public const string ViewLanguage_View_Common_HaveNot = "LanguageResource/ViewLanguage/View_Common_HaveNot";
+				
+        /// <summary>
+        /// 保存
+        /// </summary>
+		public const string ViewLanguage_View_Common_Save = "LanguageResource/ViewLanguage/View_Common_Save";
+				
+        /// <summary>
+        /// 取消
+        /// </summary>
+		public const string ViewLanguage_View_Common_Cancel = "LanguageResource/ViewLanguage/View_Common_Cancel";
+				
+        /// <summary>
+        /// 自动提取
+        /// </summary>
+		public const string ViewLanguage_View_StrategyRecommend_AutoExtraction = "LanguageResource/ViewLanguage/View_StrategyRecommend_AutoExtraction";
 				
         /// <summary>
         /// 错误消息
@@ -449,6 +639,26 @@ public class Languagekeys
         /// 安装包信息解析失败：
         /// </summary>
 		public const string MessageLanguage_Notes_AnZhuangBaoJieXiSB = "LanguageResource/MessageLanguage/Notes_AnZhuangBaoJieXiSB";
+				
+        /// <summary>
+        /// 弹出
+        /// </summary>
+		public const string DeviceLanguage_Device_PopUp = "LanguageResource/DeviceLanguage/Device_PopUp";
+				
+        /// <summary>
+        /// 移动
+        /// </summary>
+		public const string DeviceLanguage_Device_Move = "LanguageResource/DeviceLanguage/Device_Move";
+				
+        /// <summary>
+        /// 删除
+        /// </summary>
+		public const string DeviceLanguage_Device_Delete = "LanguageResource/DeviceLanguage/Device_Delete";
+				
+        /// <summary>
+        /// 关闭
+        /// </summary>
+		public const string DeviceLanguage_Device_Close = "LanguageResource/DeviceLanguage/Device_Close";
 				
         /// <summary>
         /// 未找到表

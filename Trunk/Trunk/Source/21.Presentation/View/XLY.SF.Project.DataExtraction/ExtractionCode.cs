@@ -23,5 +23,9 @@ namespace XLY.SF.Project.DataExtraction
         /// 进度改变。
         /// </summary>
         ProgressChanged = 2,
+        /// <summary>
+        /// 任务结束。
+        /// </summary>
+        Terminate = 3,
     }
 }

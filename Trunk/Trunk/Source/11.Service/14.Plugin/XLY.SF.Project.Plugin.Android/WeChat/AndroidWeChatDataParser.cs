@@ -14,11 +14,14 @@ namespace XLY.SF.Project.Plugin.Android
         public AndroidWeChatDataParser()
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
+            pluginInfo.Guid = "{986488FD-952F-49AC-A5F6-CEA9528709F3}";
             pluginInfo.Name = "微信";
             pluginInfo.Group = "社交聊天";
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror;
+            pluginInfo.GroupIndex = 1;
+            pluginInfo.OrderIndex = 0;
 
             pluginInfo.AppName = "com.tencent.mm";
             pluginInfo.Icon = "\\icons\\weixin.png";
@@ -40,7 +43,7 @@ namespace XLY.SF.Project.Plugin.Android
 
                 if (!FileHelper.IsValidDictory(databasesPath))
                 {
-                    return null;
+                    return ds;
                 }
 
                 //com.tencent.mm文件夹路径
@@ -58,6 +61,10 @@ namespace XLY.SF.Project.Plugin.Android
             catch
             {//TODO:异常处理
 
+            }
+            finally
+            {
+                ds?.BuildParent();
             }
 
             return ds;

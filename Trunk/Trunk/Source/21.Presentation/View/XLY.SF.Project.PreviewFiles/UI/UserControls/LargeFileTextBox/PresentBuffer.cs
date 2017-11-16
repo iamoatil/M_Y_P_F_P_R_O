@@ -4,7 +4,7 @@
 * Create Date：2017/10/16 11:40:14
 * ==============================================================================*/
 
-namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.LargeFileTextBox
+namespace XLY.SF.Project.PreviewFilesView.UI
 {
     public class PresentBuffer
     {

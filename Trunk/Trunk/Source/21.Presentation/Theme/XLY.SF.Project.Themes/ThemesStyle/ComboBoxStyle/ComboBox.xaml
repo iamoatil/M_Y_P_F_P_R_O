@@ -239,7 +239,7 @@
                             </Border>
                         </Grid>
                     </Popup>
-                    <TextBox Grid.Column="1" x:Name="PART_EditableTextBox" Background="{Binding DataContext.Background,RelativeSource={RelativeSource Mode=TemplatedParent}}" Foreground="White" Template="{DynamicResource tb_EmptyCt}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" VerticalContentAlignment="Center"/>
+                    <TextBox Grid.Column="1" x:Name="PART_EditableTextBox" Background="{Binding Background,RelativeSource={RelativeSource Mode=TemplatedParent}}" Foreground="White" Template="{DynamicResource tb_EmptyCt}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" VerticalContentAlignment="Center"/>
                     <ToggleButton Grid.Column="2" Margin="5" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Template="{DynamicResource tb_CbDefaultCt}"/>
                 </Grid>
             </Border>
@@ -302,7 +302,7 @@
                             </Border>
                         </Grid>
                     </Popup>
-                    <TextBox Grid.Column="1" x:Name="PART_EditableTextBox" Background="{Binding DataContext.Background,RelativeSource={RelativeSource Mode=TemplatedParent}}" Foreground="White" Template="{DynamicResource tb_EmptyCt}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" VerticalContentAlignment="Center"/>
+                    <TextBox Grid.Column="1" x:Name="PART_EditableTextBox" Background="{Binding Background,RelativeSource={RelativeSource Mode=TemplatedParent}}" Foreground="White" Template="{DynamicResource tb_EmptyCt}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" VerticalContentAlignment="Center"/>
                     <ToggleButton Grid.Column="2" Margin="5" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Template="{DynamicResource tb_CbDefaultCt}"/>
                 </Grid>
             </Border>

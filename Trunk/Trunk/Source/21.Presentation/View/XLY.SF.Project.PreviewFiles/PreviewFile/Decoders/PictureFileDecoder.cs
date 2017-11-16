@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
-namespace XLY.SF.Project.UserControls.PreviewFile.Decoders
+namespace XLY.SF.Project.PreviewFilesView.PreviewFile
 {
     class PictureFileDecoder : IFileDecoder
     {

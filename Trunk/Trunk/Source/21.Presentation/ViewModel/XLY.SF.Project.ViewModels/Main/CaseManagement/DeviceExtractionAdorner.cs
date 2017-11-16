@@ -24,6 +24,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         public DeviceExtractionAdorner(DeviceExtraction target)
         {
             Target = target?? throw new ArgumentNullException("target");
+            _name = target["Name"];
         }
 
         /// <summary>
@@ -50,9 +51,9 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
             get => _target;
             set
             {
-                _target = value;
                 if (_target != value)
                 {
+                    _target = value;
                     if (value == null)
                     {
                         Id = null;
@@ -123,13 +124,13 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
             {
                 if (_device != value)
                 {
-                    foreach (var item in value.Save())
+                    Dictionary<String, String> dic = value.Save();
+                    foreach (var item in dic)
                     {
                         SetValue(item.Key, item.Value);
                     }
                     _device = value;
-
-                    _name = GetValue("Name");
+                    _name = dic["Name"];
                 }
             }
         }

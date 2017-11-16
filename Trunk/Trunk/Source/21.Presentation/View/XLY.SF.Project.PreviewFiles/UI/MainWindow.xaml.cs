@@ -1,10 +1,9 @@
 ﻿using System.IO;
 using System.Windows;
-using System.Windows.Input;
-using XLY.SF.Project.UserControls.PreviewFile;
 using System.Windows.Forms;
+using System.Windows.Input;
 
-namespace XLY.SF.Project.PreviewFiles.UI
+namespace XLY.SF.Project.PreviewFilesView.UI
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑

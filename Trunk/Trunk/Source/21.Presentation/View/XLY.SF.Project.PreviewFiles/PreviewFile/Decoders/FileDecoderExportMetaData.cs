@@ -7,7 +7,7 @@ using System.ComponentModel.Composition;
 * Create Date：2017/10/25 19:50:41
 * ==============================================================================*/
 
-namespace XLY.SF.Project.UserControls.PreviewFile.Decoders
+namespace XLY.SF.Project.PreviewFilesView.PreviewFile
 {
     /// <summary>
     /// 导出文件解码器的特性

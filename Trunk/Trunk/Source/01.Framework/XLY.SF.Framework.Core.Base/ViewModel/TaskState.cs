@@ -32,8 +32,12 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// </summary>
         Stopping = 0x0203,
         /// <summary>
+        /// 已停止。
+        /// </summary>
+        Stopped = 0x0204,
+        /// <summary>
         /// 失败。
         /// </summary>
-        Failed = 0x0204,
+        Failed = 0x0205,
     }
 }

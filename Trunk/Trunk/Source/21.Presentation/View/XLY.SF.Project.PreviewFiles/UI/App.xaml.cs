@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace XLY.SF.Project.PreviewFiles.UI
+namespace XLY.SF.Project.PreviewFilesView.UI
 {
     /// <summary>
     /// App.xaml 的交互逻辑

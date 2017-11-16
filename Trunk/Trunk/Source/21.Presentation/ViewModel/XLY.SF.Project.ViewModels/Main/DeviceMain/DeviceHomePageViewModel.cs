@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using ProjectExtend.Context;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,11 +9,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using XLY.SF.Framework.Core.Base.MefIoc;
+using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base.ViewModel;
+using XLY.SF.Framework.Language;
+using XLY.SF.Project.DataExtract;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Project.ViewDomain.Model;
 using XLY.SF.Project.ViewDomain.VModel.DevHomePage;
+using XLY.SF.Project.ViewModels.Main.CaseManagement;
 
 namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 {
@@ -105,7 +110,7 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         /// 取消编辑
         /// </summary>
         public ICommand CancelEditCommand { get; set; }
-        
+
         /// <summary>
         /// 自动提取
         /// </summary>
@@ -116,6 +121,11 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         /// </summary>
         public ProxyRelayCommand PhoneTakePhotoCommand { get; private set; }
 
+        /// <summary>
+        /// 推荐方案
+        /// </summary>
+        public ProxyRelayCommand<StrategyElement> StrategyRecommendCommand { get; private set; }
+
         #endregion
 
         public DeviceHomePageViewModel()
@@ -123,8 +133,9 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
             StrategyRecommendItems = new ObservableCollection<StrategyElement>();
             ToolkitItems = new ObservableCollection<string>();
 
-            CancelEditCommand = new RelayCommand(ExecuteCancelEditCommand);
             PhoneTakePhotoCommand = new ProxyRelayCommand(ExecutePhoneTakePhotoCommand);
+            StrategyRecommendCommand = new ProxyRelayCommand<StrategyElement>(ExecuteStrategyRecommendCommand);
+            CancelEditCommand = new RelayCommand(ExecuteCancelEditCommand);
             AutoExtractCommand = new RelayCommand(ExecuteAutoExtractCommand);
 
 
@@ -155,16 +166,42 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         protected override void LoadCore(object parameters)
         {
             CurDevModel = parameters as DeviceModel;
-            CurDevModel = CurDevModel ?? new DeviceModel();
+            if (CurDevModel == null)
+                throw new NullReferenceException($"CurDevModel为null");
         }
 
         #endregion
 
         #region ExecuteCommands
 
+        //执行推荐方案
+        private string ExecuteStrategyRecommendCommand(StrategyElement arg)
+        {
+            //物理镜像【测试代码】
+            var a = IocManagerSingle.Instance.GetViewPart(ExportKeys.MirrorView);
+            a.DataSource.LoadViewModel(CurDevModel.IDevSource);
+            DevHomePageSubView = a;
+
+
+            return $"执行推荐方案{arg.SolutionStrategyName}";
+        }
+
         private void ExecuteAutoExtractCommand()
         {
             DevHomePageSubView = IocManagerSingle.Instance.GetViewPart(ExportKeys.ExtractionView);
+
+
+
+            GeneralArgs<Pump> args = new GeneralArgs<Pump>(GeneralKeys.SetDataExtractionParamsMsg);
+            var adorner = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
+            XLY.SF.Project.CaseManagement.ExtractItem ei = 
+                adorner.Target.CreateExtract(SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_StrategyRecommend_AutoExtraction], 
+                                            SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_StrategyRecommend_AutoExtraction]);
+            args.Parameters = new Pump(ei.Path, "data.db");
+            args.Parameters.Type = EnumPump.USB;
+            args.Parameters.OSType = EnumOSType.Android;
+            args.Parameters.Source = CurDevModel.IDevSource;
+            base.MessageAggregation.SendGeneralMsg<Pump>(args);
         }
 
         private string ExecutePhoneTakePhotoCommand()

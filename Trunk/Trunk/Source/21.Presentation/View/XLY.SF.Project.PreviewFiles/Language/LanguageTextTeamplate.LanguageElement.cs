@@ -1,10 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace XLY.SF.Framework.Language
+﻿namespace XLY.SF.Project.PreviewFilesView
 {
 
 internal class Languagekeys
@@ -34,6 +28,11 @@ internal class Languagekeys
         /// 停止
         /// </summary>
 		public const string FilePreviewLanguage_Stop = "LanguageResource/FilePreviewLanguage/Stop";
+				
+        /// <summary>
+        /// 打开目录
+        /// </summary>
+		public const string FilePreviewLanguage_OpenFolder = "LanguageResource/FilePreviewLanguage/OpenFolder";
 		}
 
 

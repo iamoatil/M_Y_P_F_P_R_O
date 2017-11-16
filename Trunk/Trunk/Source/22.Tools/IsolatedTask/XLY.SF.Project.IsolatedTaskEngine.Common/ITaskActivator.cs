@@ -11,12 +11,6 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
     /// </summary>
     internal interface ITaskActivator : IDisposable
     {
-        #region Events
-
-        event EventHandler<TaskOverEventArgs> TaskOver;
-
-        #endregion
-
         #region Methods
 
         /// <summary>

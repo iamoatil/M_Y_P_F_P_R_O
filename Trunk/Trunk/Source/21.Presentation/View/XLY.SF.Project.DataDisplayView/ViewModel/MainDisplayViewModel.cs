@@ -3,15 +3,19 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Adapter;
+using XLY.SF.Project.Plugin.DataView;
 using XLY.SF.Project.ViewDomain.MefKeys;
 
 /* ==============================================================================
-* Assembly   ：	XLY.SF.Project.DataDisplayView.ViewModel.MainDisplayViewModel
+* Assembly   ：	XLY.SF.Project.Plugin.DataView.ViewModel.MainDisplayViewModel
 * Description：	  
 * Author     ：	fhjun
 * Create Date：	2017/10/30 13:27:09
@@ -35,6 +39,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         protected override void LoadCore(object parameters)
         {
             string devicePath = parameters?.ToString();
+            LoadPlugin();
             LoadData(devicePath);
         }
         #endregion
@@ -126,6 +131,24 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         }
         #endregion
 
+        #region 当前数据是否为空，是则显示提示信息
+        private bool _hasData = false;
+
+        /// <summary>
+        /// 当前数据是否为空，是则显示提示信息
+        /// </summary>	
+        public bool HasData
+        {
+            get { return _hasData; }
+            set
+            {
+                _hasData = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
+
         #endregion
 
         #region Commond
@@ -149,6 +172,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                 }
                 SelectedLayoutViewItem = LayoutViewItems.FirstOrDefault();
             }
+            HasData = SelectedLayoutViewItem != null;
         }
         #endregion
 
@@ -176,100 +200,160 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         #endregion
 
         #region 方法
+        private void LoadPlugin()
+        {
+            if(DataViewPluginAdapter.Instance.Plugins == null || DataViewPluginAdapter.Instance.Plugins.Count() == 0)
+            {
+                DataViewPluginAdapter.Instance.Plugins = PluginAdapter.Instance.GetPluginsByType<DataViewPluginInfo>(PluginType.SpfDataView).ToList().ConvertAll(p => (AbstractDataViewPlugin)p.Value);
+            }
+        }
         private void LoadData(string devicePath)
         {
-            string DB_PATH = @"C:\Users\fhjun\Desktop\test.db";
+            //string DB_PATH = @"C:\Users\fhjun\Desktop\test.db";
 
-            var treeSource = new TreeDataSource();
-            treeSource.TreeNodes = new List<TreeNode>();
-            treeSource.PluginInfo = new DataParsePluginInfo() { Guid = "微信", Name = "微信" };
+            //var treeSource = new TreeDataSource();
+            //treeSource.TreeNodes = new List<TreeNode>();
+            //treeSource.PluginInfo = new DataParsePluginInfo() { Guid = "微信", Name = "微信" };
 
-            for (int i = 0; i < 2; i++)
+            //for (int i = 0; i < 2; i++)
+            //{
+            //    TreeNode t = new TreeNode();
+            //    t.Text = "账号" + i;
+            //    treeSource.TreeNodes.Add(t);
+
+            //    TreeNode accouts = new TreeNode();
+            //    accouts.Text = "好友列表";
+            //    accouts.IsHideChildren = true;
+            //    t.TreeNodes.Add(accouts);
+            //    accouts.Type = typeof(WeChatFriendShow);
+            //    accouts.Items = new DataItems<WeChatFriendShow>(DB_PATH);
+            //    for (int j = 0; j < 10; j++)
+            //    {
+            //        accouts.Items.Add(new WeChatFriendShow() { Nick = "昵称" + j, WeChatId = "账号" + j, Remark = "XLY_张三" + j });
+            //    }
+
+            //    TreeNode accouts2 = new TreeNode();
+            //    accouts2.Text = "聊天记录";
+            //    accouts2.IsHideChildren = i % 2 == 0;
+            //    accouts2.Type = typeof(WeChatFriendShowX);
+            //    accouts2.Items = new DataItems<WeChatFriendShowX>(DB_PATH);
+            //    t.TreeNodes.Add(accouts2);
+            //    for (int j = 0; j < 15; j += 2)
+            //    {
+            //        accouts2.Items.Add(new WeChatFriendShowX() { DataState = j % 3 == 0 ? EnumDataState.Deleted : EnumDataState.Normal, Nick = "昵称" + j, WeChatId = "账号" + j, Remark = "XLY_李四" + j });
+            //        TreeNode friend = new TreeNode();
+            //        friend.Text = "昵称" + j;
+            //        friend.Type = typeof(MessageCore);
+            //        friend.Items = new DataItems<MessageCore>(DB_PATH);
+            //        accouts2.TreeNodes.Add(friend);
+
+            //        for (int k = 0; k < 100; k++)
+            //        {
+            //            MessageCore msg = new MessageCore() { SenderName = friend.Text, SenderImage = "images/zds.png", Receiver = t.Text, Content = "消息内容" + k, MessageType = k % 4 == 0 ? "图片" : "文本", SendState = EnumSendState.Send, Date = DateTime.Now.AddHours(k * 3) };
+            //            friend.Items.Add(msg);
+            //            MessageCore msg2 = new MessageCore() { Receiver = friend.Text, SenderImage = "images/zjq.png", SenderName = t.Text, Content = "返回消息内容" + k, MessageType = k % 5 == 0 ? "图片" : "文本", SendState = EnumSendState.Receive, Date = DateTime.Now.AddHours(k * 3) };
+            //            friend.Items.Add(msg2);
+            //        }
+            //    }
+
+            //    TreeNode accouts3 = new TreeNode();
+            //    accouts3.Text = "群消息";
+            //    accouts3.IsHideChildren = true;
+            //    t.TreeNodes.Add(accouts3);
+
+            //    TreeNode accouts4 = new TreeNode();
+            //    accouts4.Text = "发现";
+            //    accouts4.IsHideChildren = true;
+            //    t.TreeNodes.Add(accouts4);
+            //}
+            //treeSource.BuildParent();
+
+            //var sms = new SimpleDataSource();
+            //sms.PluginInfo = new DataParsePluginInfo() { Guid = "短信", Name = "短信" };
+            //sms.Type = typeof(SMS);
+            //sms.Items = new DataItems<SMS>(DB_PATH);
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    sms.Items.Add(new SMS() { StartDate = DateTime.Now.AddDays(i), Content = "短信内容内容" + i });
+            //}
+            //sms.BuildParent();
+
+            //sms.Filter<AbstractDataItem>();
+            //treeSource.Filter<AbstractDataItem>();
+
+            //DataList = new ObservableCollection<DataExtactionTreeItem>() {
+            //    new DataExtactionTreeItem(){Text = "自动提取", IsItemStyle=true, TreeNodes = new ObservableCollection<DataExtactionTreeItem>(){
+            //        new DataExtactionTreeItem(){Text = "基础信息", IsItemStyle=false,TreeNodes = new ObservableCollection<DataExtactionTreeItem>(){
+            //           new DataExtactionTreeItem(){Text = "短信",Data = sms, IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionTreeItem>() }
+            //    } }, new DataExtactionTreeItem(){Text = "社交聊天", IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionTreeItem>(){
+            //           new DataExtactionTreeItem(){Text = "微信", IsItemStyle=false, Data = treeSource, TreeNodes = new ObservableCollection<DataExtactionTreeItem>() }
+            //    }}}}
+            //};
+            //devicePath = @"C:\Users\fhjun\Desktop\默认案例_20171115[081055]\默认案例_20171115[081055]\R7007_20171115[081055]";
+            DataList = new ObservableCollection<DataExtactionTreeItem>();
+            if (!Directory.Exists(devicePath))
             {
-                TreeNode t = new TreeNode();
-                t.Text = "账号" + i;
-                treeSource.TreeNodes.Add(t);
-
-                TreeNode accouts = new TreeNode();
-                accouts.Text = "好友列表";
-                accouts.IsHideChildren = true;
-                t.TreeNodes.Add(accouts);
-                accouts.Type = typeof(WeChatFriendShow);
-                accouts.Items = new DataItems<WeChatFriendShow>(DB_PATH);
-                for (int j = 0; j < 10; j++)
+                return;
+            }
+            foreach (var dir in Directory.GetDirectories(devicePath))
+            {
+                if (!Directory.Exists(Path.Combine(dir, "Result")))     //如果包含了Result文件夹，则认为是测试数据
                 {
-                    accouts.Items.Add(new WeChatFriendShow() { Nick = "昵称" + j, WeChatId = "账号" + j, Remark="XLY_张三" + j });
+                    continue;
                 }
+                DirectoryInfo d = new DirectoryInfo(dir);
+                DataExtactionTreeItem extact = new DataExtactionTreeItem() { Text = d.Name, IsItemStyle = true, TreeNodes = new ObservableCollection<DataExtactionTreeItem>() };
+                DataList.Add(extact);
 
-                TreeNode accouts2 = new TreeNode();
-                accouts2.Text = "聊天记录";
-                accouts2.IsHideChildren = i % 2 == 0;
-                accouts2.Type = typeof(WeChatFriendShowX);
-                accouts2.Items = new DataItems<WeChatFriendShowX>(DB_PATH);
-                t.TreeNodes.Add(accouts2);
-                for (int j = 0; j < 15; j += 2)
+                List<DataExtactionTreeItem> ls = new List<DataExtactionTreeItem>();
+                foreach (var bin in Directory.GetFiles(Path.Combine(dir, "Result"), "*.ds"))        //ds为IDataSource二进制序列化包
                 {
-                    accouts2.Items.Add(new WeChatFriendShowX() { DataState = j % 3 == 0 ? EnumDataState.Deleted : EnumDataState.Normal, Nick = "昵称" + j, WeChatId = "账号" + j, Remark = "XLY_李四" + j });
-                    TreeNode friend = new TreeNode();
-                    friend.Text = "昵称" + j;
-                    friend.Type = typeof(MessageCore);
-                    friend.Items = new DataItems<MessageCore>(DB_PATH);
-                    accouts2.TreeNodes.Add(friend);
-
-                    for (int k = 0; k < 100; k++)
+                    try
                     {
-                        MessageCore msg = new MessageCore() { SenderName = friend.Text, SenderImage = "images/zds.png", Receiver = t.Text, Content = "消息内容" + k, MessageType = k % 4 == 0 ? "图片" : "文本", SendState = EnumSendState.Send, Date = DateTime.Now.AddHours(k * 3) };
-                        friend.Items.Add(msg);
-                        MessageCore msg2 = new MessageCore() { Receiver = friend.Text, SenderImage = "images/zjq.png", SenderName = t.Text, Content = "返回消息内容" + k, MessageType = k % 5 == 0 ? "图片" : "文本", SendState = EnumSendState.Receive, Date = DateTime.Now.AddHours(k * 3) };
-                        friend.Items.Add(msg2);
+                        IDataSource ds = Serializer.DeSerializeFromBinary<IDataSource>(bin);
+                        ds.SetCurrentPath(dir);     //修改数据中的当前任务路径，因为原始数据中存储的是绝对路径
+                        if (ds != null)
+                        {
+                            ds.Filter<dynamic>();
+                            ls.Add(new DataExtactionTreeItem() {
+                                Text = ds.PluginInfo?.Name,
+                                Index = ds.PluginInfo == null ? 0 : ds.PluginInfo.OrderIndex,
+                                Group = ds.PluginInfo?.Group,
+                                Data = ds,
+                                IsItemStyle = false,
+                                TreeNodes = new ObservableCollection<DataExtactionTreeItem>()
+                            });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        
                     }
                 }
-
-                TreeNode accouts3 = new TreeNode();
-                accouts3.Text = "群消息";
-                accouts3.IsHideChildren = true;
-                t.TreeNodes.Add(accouts3);
-
-                TreeNode accouts4 = new TreeNode();
-                accouts4.Text = "发现";
-                accouts4.IsHideChildren = true;
-                t.TreeNodes.Add(accouts4);
+                foreach (var group in ls.GroupBy(g => g.Group))
+                {
+                    DataExtactionTreeItem g = new DataExtactionTreeItem() { Text = group.Key, IsItemStyle = false, TreeNodes = new ObservableCollection<DataExtactionTreeItem>() };
+                    g.TreeNodes.AddRange(group.ToList().OrderBy(p=>p.Index));       //添加该分组的所有插件，并按照序号排序
+                    extact.TreeNodes.Add(g);
+                }
             }
-            treeSource.BuildParent();
-
-            var sms = new SimpleDataSource();
-            sms.PluginInfo = new DataParsePluginInfo() { Guid = "短信", Name = "短信" };
-            sms.Type = typeof(SMS);
-            sms.Items = new DataItems<SMS>(DB_PATH);
-            for (int i = 0; i < 10; i++)
-            {
-                sms.Items.Add(new SMS() { StartDate = DateTime.Now.AddDays(i), Content = "短信内容内容" + i });
-            }
-            sms.BuildParent();
-
-            sms.Filter<AbstractDataItem>();
-            treeSource.Filter<AbstractDataItem>();
-
-            DataList = new ObservableCollection<DataExtactionTreeItem>() {
-                new DataExtactionTreeItem(){Text = "自动提取", IsItemStyle=true, TreeNodes = new ObservableCollection<DataExtactionTreeItem>(){
-                    new DataExtactionTreeItem(){Text = "基础信息", IsItemStyle=false,TreeNodes = new ObservableCollection<DataExtactionTreeItem>(){
-                       new DataExtactionTreeItem(){Text = "短信",Data = sms, IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionTreeItem>() }
-                } }, new DataExtactionTreeItem(){Text = "社交聊天", IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionTreeItem>(){
-                       new DataExtactionTreeItem(){Text = "微信", IsItemStyle=false, Data = treeSource, TreeNodes = new ObservableCollection<DataExtactionTreeItem>() }
-                }}}}
-            };
         }
         #endregion
     }
 
+    /// <summary>
+    /// 用于界面树的绑定
+    /// </summary>
     public class DataExtactionTreeItem
     {
         public string Text { get; set; }
+        public string Group { get; set; }
+        public int Index { get; set; }
         public object Data { get; set; }
         public bool IsHideChildren { get; set; }
         public bool IsItemStyle { get; set; }
         public ObservableCollection<DataExtactionTreeItem> TreeNodes { get; set; }
     }
 
-    public class WeChatFriendShowX : WeChatFriendShow { }
+    
 }

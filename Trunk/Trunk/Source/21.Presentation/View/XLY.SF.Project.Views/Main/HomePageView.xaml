@@ -205,13 +205,9 @@
                                         ClickCommand="{Binding OpenLocalCaseCommand.ViewExecuteCmd}">
                         <ComboBoxItem x:Name="cbi_OpenAllCase">
                             <TextBlock Text="{Binding XPath=ViewLanguage/View_HomePageOpenAllCase,Source={x:Static ex:SystemContext.LanguageProvider}}"/>
-                            <!--<Button Content="{Binding XPath=ViewLanguage/View_HomePageOpenAllCase,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                                    Command="{Binding OpenAllCaseCommand.ViewExecuteCmd}" Template="{StaticResource btn_EmptyCT}"/>-->
                         </ComboBoxItem>
                         <ComboBoxItem x:Name="cbi_OpenLocalCase">
                             <TextBlock Text="{Binding XPath=ViewLanguage/View_HomePageOpenLocalCase,Source={x:Static ex:SystemContext.LanguageProvider}}"/>
-                            <!--<Button Content="{Binding XPath=ViewLanguage/View_HomePageOpenLocalCase,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                                    Command="{Binding OpenLocalCaseCommand.ViewExecuteCmd}" Template="{StaticResource btn_EmptyCT}"/>-->
                         </ComboBoxItem>
                     </control:MenuButton>
                 </StackPanel>
@@ -332,7 +328,7 @@
                         </Rectangle>
                         <!--大图-->
                         <Grid x:Name="gd_MainImage" ClipToBounds="True">
-                            <Image x:Name="img_MainImage" Stretch="Fill" Source="E:\XLY\SpfData\CacheDatas\首页-样图_03.png" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
+                            <Image x:Name="img_MainImage" Stretch="Fill" Source="{Binding MainFunDepict}" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
                                 <Image.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -383,7 +379,7 @@
                                     </Rectangle.Effect>
                                 </Rectangle>
                                 <Grid x:Name="gd_SubView1" ClipToBounds="True">
-                                    <Image x:Name="img_SubView1" Source="E:\XLY\SpfData\CacheDatas\首页-样图_05.png" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
+                                    <Image x:Name="img_SubView1" Source="{Binding Sub1FunDepict}" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
                                         <Image.RenderTransform>
                                             <TransformGroup>
                                                 <ScaleTransform/>
@@ -410,7 +406,7 @@
                                     </Rectangle.Effect>
                                 </Rectangle>
                                 <Grid x:Name="gd_SubView2" ClipToBounds="True">
-                                    <Image x:Name="img_SubView2" Source="E:\XLY\SpfData\CacheDatas\首页-样图_08.png" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
+                                    <Image x:Name="img_SubView2" Source="{Binding Sub2FunDepict}" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
                                         <Image.RenderTransform>
                                             <TransformGroup>
                                                 <ScaleTransform/>
@@ -437,7 +433,7 @@
                                     </Rectangle.Effect>
                                 </Rectangle>
                                 <Grid x:Name="gd_SubView3" ClipToBounds="True">
-                                    <Image x:Name="img_SubView3" Source="E:\XLY\SpfData\CacheDatas\首页-样图_10.png" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
+                                    <Image x:Name="img_SubView3" Source="{Binding Sub3FunDepict}" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
                                         <Image.RenderTransform>
                                             <TransformGroup>
                                                 <ScaleTransform/>

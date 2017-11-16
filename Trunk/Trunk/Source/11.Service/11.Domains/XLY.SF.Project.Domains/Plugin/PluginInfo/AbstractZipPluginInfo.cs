@@ -15,6 +15,7 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// zip压缩插件的基本数据结构
     /// </summary>
+    [Serializable]
     public abstract class AbstractZipPluginInfo : AbstractPluginInfo
     {
         /// <summary>

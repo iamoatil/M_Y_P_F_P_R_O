@@ -54,5 +54,6 @@ namespace XLY.SF.Project.DataDisplayView
         {
             tabPreview.Height = 40d;
         }
+        
     }
 }

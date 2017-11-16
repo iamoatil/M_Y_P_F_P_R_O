@@ -79,6 +79,7 @@
     <Compile Include="Converter\DateTimeToDateStringConverter.cs" />
     <Compile Include="Converter\EnumDataStateToImageSourceConverter.cs" />
     <Compile Include="Converter\PercentWidthConverter.cs" />
+    <Compile Include="Converter\ReverseConverter.cs" />
     <Compile Include="Converter\StringToImageConverter.cs" />
     <Compile Include="CustromControl\ComboBox\ComboBoxEx.cs" />
     <Compile Include="Converter\ImageContentToBoolConverter.cs" />
@@ -119,8 +120,8 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <Resource Include="Resources\Oswald-Bold.otf" />
-    <Resource Include="Resources\Oswald-Light.otf" />
+    <Resource Include="Resources\Oswald-Bold.TTF" />
+    <Resource Include="Resources\Oswald-Light.TTF" />
     <Resource Include="Resources\Oswald-Regular.otf" />
   </ItemGroup>
   <ItemGroup>

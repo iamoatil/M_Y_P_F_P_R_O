@@ -69,9 +69,17 @@ namespace XLY.SF.Framework.Core.Base.MefIoc
             {
                 AggregateCatalog agg = new AggregateCatalog();
                 DirectoryCatalog catalog = new DirectoryCatalog(AppDomain.CurrentDomain.BaseDirectory, "XLY.*.dll");
-                DirectoryCatalog toolKitExe = new DirectoryCatalog(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "XlyToolkit"),"*.exe");
                 agg.Catalogs.Add(catalog);
-                agg.Catalogs.Add(toolKitExe);
+                string toolkitsFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "XlyToolkits");
+                if (Directory.Exists(toolkitsFolder))
+                {
+                    var toolkitPath = Directory.GetDirectories(toolkitsFolder);
+                    foreach (var item in toolkitPath)
+                    {
+                        DirectoryCatalog toolKitExe = new DirectoryCatalog(item, "*.exe");
+                        agg.Catalogs.Add(toolKitExe);
+                    }
+                }
                 AssemblyCatalog ac = new AssemblyCatalog(this.GetType().Assembly);
                 agg.Catalogs.Add(ac);
 
@@ -96,18 +104,30 @@ namespace XLY.SF.Framework.Core.Base.MefIoc
         /// 添加导出模块
         /// </summary>
         /// <param name="ass"></param>
-        public void AddExportModule(params Assembly[] ass)
+        public bool AddExportModule(params Assembly[] ass)
         {
-            if (com == null)
+            if (com != null)
             {
-                foreach (var item in ass)
+                try
                 {
-                    AssemblyCatalog tmpAss = new AssemblyCatalog(item);
-                    //com.com
+                    CompositionBatch comBatch = new CompositionBatch();
+                    foreach (var item in ass)
+                    {
+                        AssemblyCatalog tmpAss = new AssemblyCatalog(item);
+                        foreach (var partItem in tmpAss)
+                        {
+                            comBatch.AddPart(partItem);
+                        }
+                    }
+                    com.Compose(comBatch);
+                    return true;
                 }
-                //com.
-                //com.Compose(s);
+                catch (Exception ex)
+                {
+                    LoggerManagerSingle.Instance.Error(ex);
+                }
             }
+            return false;
         }
 
         #endregion

@@ -8,7 +8,7 @@ using System.Text;
 * Create Date：2017/10/20 11:42:59
 * ==============================================================================*/
 
-namespace XLY.SF.Project.UserControls.PreviewFile.UserControls.LargeFileTextBox
+namespace XLY.SF.Project.PreviewFilesView.UI
 {
     /// <summary>
     /// CstEncoding

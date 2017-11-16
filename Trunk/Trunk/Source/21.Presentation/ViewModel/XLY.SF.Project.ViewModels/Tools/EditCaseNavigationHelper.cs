@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using XLY.SF.Framework.Core.Base;
 using XLY.SF.Framework.Core.Base.MessageAggregation;
 using XLY.SF.Framework.Core.Base.MessageBase;
+using XLY.SF.Framework.Core.Base.MessageBase.Navigation;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Project.ViewDomain.Model.MessageElement;
 
@@ -39,16 +40,16 @@ namespace XLY.SF.Project.ViewModels.Tools
             if (isExpanded)
             {
                 //展开案例编辑界面
-                NavigationArgs args = new NavigationArgs(ExportKeys.CaseCreationView, null);
+                NavigationArgs args = NavigationArgs.CreateMainViewNavigationArgs(ExportKeys.CaseCreationView, null);
                 MsgAggregation.Instance.SendNavigationMsgForMainView(args);
             }
             else
             {
                 //折叠，还原为上个界面
-                var beforeViewKey = NavigationArgs.GetBeforeViewKeyBySkipKey(ExportKeys.CaseCreationView);
+                var beforeViewKey = NavigationLogHelper.GetBeforeViewKeyBySkipKeyAtMainView(ExportKeys.CaseCreationView);
                 if (!string.IsNullOrWhiteSpace(beforeViewKey))
                 {
-                    NavigationArgs args = new NavigationArgs(NavigationArgs.GetBeforeViewKeyBySkipKey(ExportKeys.CaseCreationView), null);
+                    NavigationArgs args = NavigationArgs.CreateMainViewNavigationArgs(NavigationLogHelper.GetBeforeViewKeyBySkipKeyAtMainView(ExportKeys.CaseCreationView), null);
                     MsgAggregation.Instance.SendNavigationMsgForMainView(args);
                 }
             }

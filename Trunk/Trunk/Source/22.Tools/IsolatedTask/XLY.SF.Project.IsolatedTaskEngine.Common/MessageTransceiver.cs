@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.IO.Pipes;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 
@@ -97,25 +98,28 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <param name="message">消息。</param>
         public void Send(Message message)
         {
-            try
+            lock (_writer)
             {
-                if (_pipe.IsConnected)
+                try
                 {
-                    String json = message.ToString();
-                    _writer.WriteLine(json);
-                    _writer.Flush();
+                    if (_pipe.IsConnected)
+                    {
+                        String json = message.ToString();
+                        _writer.WriteLine(json);
+                        _writer.Flush();
+                    }
                 }
-            }
-            catch (ObjectDisposedException)
-            {
-                OnDisconnect();
-            }
-            catch (IOException)
-            {
-                OnDisconnect();
-            }
-            catch (Exception)
-            {
+                catch (ObjectDisposedException)
+                {
+                    OnDisconnect();
+                }
+                catch (IOException)
+                {
+                    OnDisconnect();
+                }
+                catch (Exception)
+                {
+                }
             }
         }
 

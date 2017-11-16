@@ -441,7 +441,7 @@ namespace XLY.SF.Framework.BaseUtility
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception(string.Format("SQLite database [{0}] occurse errors", DataSource), ex);
+                        Log4NetService.LoggerManagerSingle.Instance.Error(ex, string.Format("SQLite database [{0}] occurse errors", DataSource));
                     }
                     finally
                     {
@@ -469,7 +469,7 @@ namespace XLY.SF.Framework.BaseUtility
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception(string.Format("SQLite database [{0}] occurse errors", DataSource), ex);
+                        Log4NetService.LoggerManagerSingle.Instance.Error(ex, string.Format("SQLite database [{0}] occurse errors", DataSource));
                     }
                     finally
                     {
@@ -499,7 +499,7 @@ namespace XLY.SF.Framework.BaseUtility
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception(string.Format("SQLite database [{0}] occurse errors", DataSource), ex);
+                        Log4NetService.LoggerManagerSingle.Instance.Error(ex, string.Format("SQLite database [{0}] occurse errors", DataSource));
                     }
                     finally
                     {

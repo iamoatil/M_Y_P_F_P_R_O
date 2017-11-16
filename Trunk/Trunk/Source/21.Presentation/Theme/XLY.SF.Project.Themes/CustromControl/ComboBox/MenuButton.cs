@@ -58,6 +58,7 @@ namespace XLY.SF.Project.Themes.CustromControl
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
+            SelectionChanged += MenuButton_SelectionChanged;
             _btnOpen = this.Template.FindName("btn_Open", this) as Button;
             _poMenu = this.Template.FindName("PART_Popup", this) as Popup;
             _btnOpen.Click += _btnOpen_Click;
@@ -67,6 +68,12 @@ namespace XLY.SF.Project.Themes.CustromControl
         {
             _poMenu.IsOpen = false;
             ClickCommand?.Execute(null);
+        }
+
+        //由于目前用的是ComboBox来做的菜单，所以需要每次选择后将SelectedIndex重置
+        private void MenuButton_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.SelectedIndex = -1;
         }
 
         #region 按钮内容

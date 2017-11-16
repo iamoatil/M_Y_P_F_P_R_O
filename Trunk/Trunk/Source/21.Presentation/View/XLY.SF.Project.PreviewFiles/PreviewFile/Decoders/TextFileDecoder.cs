@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using XLY.SF.Project.UserControls.PreviewFile.UserControls.LargeFileTextBox;
+using XLY.SF.Project.PreviewFilesView.UI;
 
-namespace XLY.SF.Project.UserControls.PreviewFile.Decoders
+namespace XLY.SF.Project.PreviewFilesView.PreviewFile
 {
     class TextFileDecoder : IFileDecoder
     {

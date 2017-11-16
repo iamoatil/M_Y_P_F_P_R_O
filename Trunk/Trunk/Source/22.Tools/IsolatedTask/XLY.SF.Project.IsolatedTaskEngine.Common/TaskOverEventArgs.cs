@@ -17,34 +17,19 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <summary>
         /// 初始化类型 TaskFailedEventArgs 实例。
         /// </summary>
-        /// <param name="taskId">任务标识。</param>
+        /// <param name="message">消息。</param>
+        public TaskOverEventArgs(String message = null)
+        {
+            Message = message;
+        }
+
+        /// <summary>
+        /// 初始化类型 TaskFailedEventArgs 实例。
+        /// </summary>
         /// <param name="ex">异常信息。</param>
-        public TaskOverEventArgs(String taskId, Exception ex)
-            : this(taskId, ex.Message)
+        public TaskOverEventArgs(Exception ex)
         {
             Exception = ex;
-        }
-
-        /// <summary>
-        /// 初始化类型 TaskFailedEventArgs 实例。
-        /// </summary>
-        /// <param name="taskId">任务标识。</param>
-        /// <param name="errorMessage">错误消息。</param>
-        public TaskOverEventArgs(String taskId, String errorMessage)
-            :this(taskId,false)
-        {
-            ErrorMessage = errorMessage;
-        }
-
-        /// <summary>
-        /// 初始化类型 TaskFailedEventArgs 实例。
-        /// </summary>
-        /// <param name="taskId">任务标识。</param>
-        /// <param name="isCompleted">是否完成。</param>
-        public TaskOverEventArgs(String taskId, Boolean isCompleted)
-        {
-            TaskId = taskId ?? throw new ArgumentNullException("taskId");
-            IsCompleted = isCompleted;
         }
 
         /// <summary>
@@ -59,9 +44,9 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         #region Properties
 
         /// <summary>
-        /// 任务标识。
+        /// 消息。
         /// </summary>
-        public String TaskId { get; private set; }
+        public String Message { get; private set; }
 
         /// <summary>
         /// 异常信息。
@@ -69,14 +54,9 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         public Exception Exception { get; private set; }
 
         /// <summary>
-        /// 错误消息。
+        /// 是否失败。
         /// </summary>
-        public String ErrorMessage { get; private set; }
-
-        /// <summary>
-        /// 任务是否完成。
-        /// </summary>
-        public Boolean IsCompleted { get; private set; }
+        public Boolean IsFailed => Exception != null;
 
         #endregion
     }
