@@ -39,7 +39,11 @@
                                     CornerRadius="8"
                                     BorderBrush="#283550"
                                     BorderThickness="0">
-                                <DockPanel>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="40" />
+                                    </Grid.ColumnDefinitions>
                                     <TextBlock Margin="20,3,0,3"
                                                Foreground="White"
                                                Text="{Binding Name}"
@@ -47,20 +51,33 @@
                                                TextTrimming="CharacterEllipsis"
                                                TextWrapping="WrapWithOverflow"
                                                VerticalAlignment="Center"
-                                               HorizontalAlignment="Left" />
-                                    <ComboBox Template="{DynamicResource cb_MainCt}" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                               HorizontalAlignment="Left"
+                                               Grid.Column="0" />
+                                    <ComboBox Template="{DynamicResource cb_MainCt}"
+                                              BorderThickness="0"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              Grid.Column="1">
                                         <ComboBox.Resources>
                                             <Style TargetType="ComboBoxItem">
-                                                <Setter Property="Height" Value="42"/>
-                                                <Setter Property="Width" Value="120"/>
-                                                <Setter Property="VerticalContentAlignment" Value="Center"/>
-                                                <Setter Property="Background" Value="Transparent"/>
-                                                <Setter Property="Padding" Value="0"/>
-                                                <Setter Property="Template" Value="{StaticResource cb_MainMenuItem}"/>
+                                                <Setter Property="Height"
+                                                        Value="42" />
+                                                <Setter Property="Width"
+                                                        Value="120" />
+                                                <Setter Property="VerticalContentAlignment"
+                                                        Value="Center" />
+                                                <Setter Property="Background"
+                                                        Value="Transparent" />
+                                                <Setter Property="Padding"
+                                                        Value="0" />
+                                                <Setter Property="Template"
+                                                        Value="{StaticResource cb_MainMenuItem}" />
                                             </Style>
                                             <Style TargetType="TextBlock">
-                                                <Setter Property="FontSize" Value="14"/>
-                                                <Setter Property="Foreground" Value="White"/>
+                                                <Setter Property="FontSize"
+                                                        Value="14" />
+                                                <Setter Property="Foreground"
+                                                        Value="White" />
                                             </Style>
                                         </ComboBox.Resources>
                                         <ComboBoxItem x:Name="device_PopUp">
@@ -69,7 +86,7 @@
                                         </ComboBoxItem>
                                         <ComboBoxItem x:Name="device_Move">
                                             <TextBlock  Margin="24,0,0,0"
-                                                       Text="{Binding XPath=DeviceLanguage/Device_Move,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
+                                                        Text="{Binding XPath=DeviceLanguage/Device_Move,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                         </ComboBoxItem>
                                         <ComboBoxItem x:Name="device_Delete">
                                             <TextBlock Margin="24,0,0,0"
@@ -81,32 +98,45 @@
                                         </ComboBoxItem>
                                         <!--界面触发器-->
                                         <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp" SourceObject="{Binding ElementName=device_PopUp}">
+                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp"
+                                                            SourceObject="{Binding ElementName=device_PopUp}">
                                                 <i:InvokeCommandAction Command="{Binding DataContext.PopupCommand,ElementName=Root}"
-                                                          CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                                       CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}" />
                                             </i:EventTrigger>
-                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp" SourceObject="{Binding ElementName=device_Move}">
+                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp"
+                                                            SourceObject="{Binding ElementName=device_Move}">
                                                 <i:InvokeCommandAction Command="{Binding DataContext.MoveToCommand,ElementName=Root}"
-                                                          CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                                       CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}" />
                                             </i:EventTrigger>
-                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp" SourceObject="{Binding ElementName=device_Delete}">
+                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp"
+                                                            SourceObject="{Binding ElementName=device_Delete}">
                                                 <i:InvokeCommandAction Command="{Binding DataContext.DeleteCommand,ElementName=Root}"
-                                                          CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                                       CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}" />
                                             </i:EventTrigger>
-                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp" SourceObject="{Binding ElementName=device_Close}">
+                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp"
+                                                            SourceObject="{Binding ElementName=device_Close}">
                                                 <i:InvokeCommandAction Command="{Binding DataContext.CloseCommand,ElementName=Root}"
-                                                          CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                                       CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}" />
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                     </ComboBox>
-                                </DockPanel>
+                                </Grid>
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver"
                                          Value="True">
                                     <Setter Property="BorderBrush"
                                             TargetName="bd"
-                                            Value="#3d9ad6"/>
+                                            Value="#3d9ad6" />
+                                    <Setter Property="BorderThickness"
+                                            TargetName="bd"
+                                            Value="1" />
+                                </Trigger>
+                                <Trigger Property="IsSelected"
+                                         Value="True">
+                                    <Setter Property="BorderBrush"
+                                            TargetName="bd"
+                                            Value="#3d9ad6" />
                                     <Setter Property="BorderThickness"
                                             TargetName="bd"
                                             Value="1" />

@@ -131,7 +131,7 @@ namespace XLY.SF.Project.Services
             {
             return pluginList.FirstOrDefault();
             }
-            var appName = pluginList.FirstOrDefault().AppName;  //因为传过来的appName都一样的，所以直接取第一个的就行了
+            var appName = pluginList.First().AppName;  //因为传过来的appName都一样的，所以直接取第一个的就行了
             //从所有的特征库里面，取出匹配的特征库
             var res = PluginFeatureMathchService.TryFeatureMathch(appSourePath, pump.OSType, appName).Where((f) => f.IsSuccessed);
             if (res.IsValid())

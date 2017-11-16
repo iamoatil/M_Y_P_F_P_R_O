@@ -11,7 +11,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
     {
         #region Fields
 
-        private static readonly JsonSerializerSettings JsonSettings;
+        public static readonly JsonSerializerSettings JsonSettings;
 
         #endregion
 
@@ -26,7 +26,8 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
             {
                  ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                  PreserveReferencesHandling = PreserveReferencesHandling.None,
-                TypeNameHandling = TypeNameHandling.All,
+                 TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Full,
+                 TypeNameHandling = TypeNameHandling.Auto
             };
             DefaultContractResolver resolver = new DefaultContractResolver();
             resolver.DefaultMembersSearchFlags |= System.Reflection.BindingFlags.NonPublic;

@@ -197,7 +197,7 @@ namespace XLY.SF.Project.DataExtract
                 //如果收到取消请求，则执行统一的扫尾工作，以此来标识一个任务的结束。
                 if (_cancelToken.IsCancellationRequested)
                 {
-                    Task.Factory.StartNew(() => RoundOffwork(true, item.Key.GUID));
+                    RoundOffwork(true, item.Key.GUID);
                 }
                 else
                 {
@@ -210,7 +210,7 @@ namespace XLY.SF.Project.DataExtract
                     }//如果在执行数据泵期间捕获到异常，则执行统一的扫尾工作，以此来标识一个任务的结束。
                     catch (Exception ex)
                     {
-                        Task.Factory.StartNew(() => RoundOffwork(ex, item.Key.GUID));
+                        RoundOffwork(ex, item.Key.GUID);
                     }
                 }
             }
@@ -296,7 +296,7 @@ namespace XLY.SF.Project.DataExtract
         private void RoundOffwork(Boolean isCancelled,String taskId)
         {
             Interlocked.Decrement(ref _concurrentCount);
-            if (_cancelToken.IsCancellationRequested)
+            if (isCancelled)
             {
                 Reporter?.Stop(taskId);
             }

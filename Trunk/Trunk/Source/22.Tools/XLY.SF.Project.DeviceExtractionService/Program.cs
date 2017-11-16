@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using XLY.SF.Project.IsolatedTaskEngine;
+using XLY.SF.Project.IsolatedTaskEngine.Common;
 using XLY.SF.Project.Plugin.Adapter;
 
 namespace XLY.SF.Project.DeviceExtractionService

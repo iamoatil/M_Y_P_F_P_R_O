@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MirrorTest", "MirrorTest\MirrorTest.csproj", "{B89ABBAA-E1AE-4F4E-99C3-573293FE63FB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DllClient", "..\..\..\..\11.Service\13.Core\DllService\DllClient\DllClient.csproj", "{A6CC8605-4108-43ED-987A-DBA25059805B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DllServerHost", "..\..\..\..\11.Service\13.Core\DllService\DllServerHost\DllServerHost.csproj", "{8FCDB07B-6F81-4C8C-85F9-1BBBBB73C744}"
@@ -51,6 +49,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mirror", "Mirror", "{9BF958
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.MirrorBackgroundApp", "..\..\..\..\11.Service\13.Core\XLY.SF.Project.DataMirrorApp\XLY.SF.Project.MirrorBackgroundApp.csproj", "{C238AB12-8943-4CCD-B701-472F97FE5665}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.MirrorView", "..\..\..\..\21.Presentation\View\XLY.SF.Project.MirrorView\XLY.SF.Project.MirrorView.csproj", "{475A3B8A-1E15-4BB3-8BFD-B5932A80C5A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,18 +61,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B89ABBAA-E1AE-4F4E-99C3-573293FE63FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B89ABBAA-E1AE-4F4E-99C3-573293FE63FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B89ABBAA-E1AE-4F4E-99C3-573293FE63FB}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B89ABBAA-E1AE-4F4E-99C3-573293FE63FB}.Debug|x64.Build.0 = Debug|Any CPU
-		{B89ABBAA-E1AE-4F4E-99C3-573293FE63FB}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{B89ABBAA-E1AE-4F4E-99C3-573293FE63FB}.Debug|x86.Build.0 = Debug|Any CPU
-		{B89ABBAA-E1AE-4F4E-99C3-573293FE63FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B89ABBAA-E1AE-4F4E-99C3-573293FE63FB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B89ABBAA-E1AE-4F4E-99C3-573293FE63FB}.Release|x64.ActiveCfg = Release|Any CPU
-		{B89ABBAA-E1AE-4F4E-99C3-573293FE63FB}.Release|x64.Build.0 = Release|Any CPU
-		{B89ABBAA-E1AE-4F4E-99C3-573293FE63FB}.Release|x86.ActiveCfg = Release|Any CPU
-		{B89ABBAA-E1AE-4F4E-99C3-573293FE63FB}.Release|x86.Build.0 = Release|Any CPU
 		{A6CC8605-4108-43ED-987A-DBA25059805B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A6CC8605-4108-43ED-987A-DBA25059805B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6CC8605-4108-43ED-987A-DBA25059805B}.Debug|x64.ActiveCfg = Debug|x64
@@ -313,6 +301,18 @@ Global
 		{C238AB12-8943-4CCD-B701-472F97FE5665}.Release|x64.Build.0 = Release|Any CPU
 		{C238AB12-8943-4CCD-B701-472F97FE5665}.Release|x86.ActiveCfg = Release|Any CPU
 		{C238AB12-8943-4CCD-B701-472F97FE5665}.Release|x86.Build.0 = Release|Any CPU
+		{475A3B8A-1E15-4BB3-8BFD-B5932A80C5A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{475A3B8A-1E15-4BB3-8BFD-B5932A80C5A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{475A3B8A-1E15-4BB3-8BFD-B5932A80C5A7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{475A3B8A-1E15-4BB3-8BFD-B5932A80C5A7}.Debug|x64.Build.0 = Debug|Any CPU
+		{475A3B8A-1E15-4BB3-8BFD-B5932A80C5A7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{475A3B8A-1E15-4BB3-8BFD-B5932A80C5A7}.Debug|x86.Build.0 = Debug|Any CPU
+		{475A3B8A-1E15-4BB3-8BFD-B5932A80C5A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{475A3B8A-1E15-4BB3-8BFD-B5932A80C5A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{475A3B8A-1E15-4BB3-8BFD-B5932A80C5A7}.Release|x64.ActiveCfg = Release|Any CPU
+		{475A3B8A-1E15-4BB3-8BFD-B5932A80C5A7}.Release|x64.Build.0 = Release|Any CPU
+		{475A3B8A-1E15-4BB3-8BFD-B5932A80C5A7}.Release|x86.ActiveCfg = Release|Any CPU
+		{475A3B8A-1E15-4BB3-8BFD-B5932A80C5A7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -333,94 +333,8 @@ Global
 		{9EB7A2CF-AE03-47EE-B850-88A0FCCDD0BD} = {9BF95808-E499-43EB-8576-EBED6B5A6B6B}
 		{9E9B358E-6067-41B9-B986-E58E09210FC5} = {9BF95808-E499-43EB-8576-EBED6B5A6B6B}
 		{22FCD4A7-053E-4FFB-AB33-4CA9A93903EE} = {A529F940-C866-465F-BB01-603A863D918D}
-		{C238AB12-8943-4CCD-B701-472F97FE5665} = {81698BA0-AC38-4988-A749-51579795F4A0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {135685B8-AE31-46D3-904D-37762D78A646}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 22
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.0.16:8080/tfs/xlyteamprojects
-		SccProjectUniqueName0 = ..\\..\\..\\..\\11.Service\\13.Core\\DllService\\DllServerHost\\DllServerHost.csproj
-		SccProjectTopLevelParentUniqueName0 = MirrorTest.sln
-		SccProjectName0 = ../../../../11.Service/13.Core/DllService/DllServerHost
-		SccLocalPath0 = ..\\..\\..\\..\\11.Service\\13.Core\\DllService\\DllServerHost
-		SccProjectUniqueName1 = ..\\..\\..\\..\\11.Service\\13.Core\\DllService\\X64DllService\\X64Service\\X64Service.csproj
-		SccProjectTopLevelParentUniqueName1 = MirrorTest.sln
-		SccProjectName1 = ../../../../11.Service/13.Core/DllService/X64DllService/X64Service
-		SccLocalPath1 = ..\\..\\..\\..\\11.Service\\13.Core\\DllService\\X64DllService\\X64Service
-		SccProjectUniqueName2 = ..\\..\\..\\..\\11.Service\\13.Core\\DllService\\X86DllServer\\X86DllServer.csproj
-		SccProjectTopLevelParentUniqueName2 = MirrorTest.sln
-		SccProjectName2 = ../../../../11.Service/13.Core/DllService/X86DllServer
-		SccLocalPath2 = ..\\..\\..\\..\\11.Service\\13.Core\\DllService\\X86DllServer
-		SccProjectUniqueName3 = ..\\..\\..\\..\\11.Service\\11.Domains\\XLY.SF.Project.Domains\\XLY.SF.Project.Domains.csproj
-		SccProjectTopLevelParentUniqueName3 = MirrorTest.sln
-		SccProjectName3 = ../../../../11.Service/11.Domains/XLY.SF.Project.Domains
-		SccLocalPath3 = ..\\..\\..\\..\\11.Service\\11.Domains\\XLY.SF.Project.Domains
-		SccProjectUniqueName4 = ..\\..\\..\\..\\01.Framework\\XLY.SF.Framework.Language\\XLY.SF.Framework.Language.csproj
-		SccProjectTopLevelParentUniqueName4 = MirrorTest.sln
-		SccProjectName4 = ../../../../01.Framework/XLY.SF.Framework.Language
-		SccLocalPath4 = ..\\..\\..\\..\\01.Framework\\XLY.SF.Framework.Language
-		SccProjectUniqueName5 = ..\\..\\..\\..\\01.Framework\\XLY.SF.Framework.Core.Base\\XLY.SF.Framework.Core.Base.csproj
-		SccProjectTopLevelParentUniqueName5 = MirrorTest.sln
-		SccProjectName5 = ../../../../01.Framework/XLY.SF.Framework.Core.Base
-		SccLocalPath5 = ..\\..\\..\\..\\01.Framework\\XLY.SF.Framework.Core.Base
-		SccProjectUniqueName6 = ..\\..\\..\\..\\01.Framework\\XLY.SF.Framework.BaseUtility\\XLY.SF.Framework.BaseUtility.csproj
-		SccProjectTopLevelParentUniqueName6 = MirrorTest.sln
-		SccProjectName6 = ../../../../01.Framework/XLY.SF.Framework.BaseUtility
-		SccLocalPath6 = ..\\..\\..\\..\\01.Framework\\XLY.SF.Framework.BaseUtility
-		SccProjectUniqueName7 = ..\\..\\..\\..\\11.Service\\13.Core\\XLY.SF.Project.DataFilter\\XLY.SF.Project.DataFilter.csproj
-		SccProjectTopLevelParentUniqueName7 = MirrorTest.sln
-		SccProjectName7 = ../../../../11.Service/13.Core/XLY.SF.Project.DataFilter
-		SccLocalPath7 = ..\\..\\..\\..\\11.Service\\13.Core\\XLY.SF.Project.DataFilter
-		SccProjectUniqueName8 = ..\\..\\..\\..\\21.Presentation\\View\\XLY.SF.Project.Views\\XLY.SF.Project.Views.csproj
-		SccProjectName8 = ../../../../21.Presentation/View/XLY.SF.Project.Views
-		SccLocalPath8 = ..\\..\\..\\..\\21.Presentation\\View\\XLY.SF.Project.Views
-		SccProjectUniqueName9 = ..\\..\\..\\..\\01.Framework\\XLY.SF.Framework.Log4NetService\\XLY.SF.Framework.Log4NetService.csproj
-		SccProjectTopLevelParentUniqueName9 = MirrorTest.sln
-		SccProjectName9 = ../../../../01.Framework/XLY.SF.Framework.Log4NetService
-		SccLocalPath9 = ..\\..\\..\\..\\01.Framework\\XLY.SF.Framework.Log4NetService
-		SccProjectUniqueName10 = ..\\..\\..\\..\\21.Presentation\\ViewModel\\XLY.SF.Project.ViewModels\\XLY.SF.Project.ViewModels.csproj
-		SccProjectName10 = ../../../../21.Presentation/ViewModel/XLY.SF.Project.ViewModels
-		SccLocalPath10 = ..\\..\\..\\..\\21.Presentation\\ViewModel\\XLY.SF.Project.ViewModels
-		SccProjectUniqueName11 = ..\\..\\..\\..\\21.Presentation\\ProjectContext\\XLY.SF.Project.ViewDomain\\XLY.SF.Project.ViewDomain.csproj
-		SccProjectName11 = ../../../../21.Presentation/ProjectContext/XLY.SF.Project.ViewDomain
-		SccLocalPath11 = ..\\..\\..\\..\\21.Presentation\\ProjectContext\\XLY.SF.Project.ViewDomain
-		SccProjectUniqueName12 = ..\\..\\..\\..\\21.Presentation\\ProjectContext\\ProjectExtend\\XLY.SF.Project.Extension.csproj
-		SccProjectTopLevelParentUniqueName12 = MirrorTest.sln
-		SccProjectName12 = ../../../../21.Presentation/ProjectContext/ProjectExtend
-		SccLocalPath12 = ..\\..\\..\\..\\21.Presentation\\ProjectContext\\ProjectExtend
-		SccProjectUniqueName13 = ..\\..\\..\\..\\21.Presentation\\Theme\\XLY.SF.Project.Themes\\XLY.SF.Project.Themes.csproj
-		SccProjectTopLevelParentUniqueName13 = MirrorTest.sln
-		SccProjectName13 = ../../../../21.Presentation/Theme/XLY.SF.Project.Themes
-		SccLocalPath13 = ..\\..\\..\\..\\21.Presentation\\Theme\\XLY.SF.Project.Themes
-		SccProjectUniqueName14 = ..\\..\\..\\..\\11.Service\\13.Core\\XLY.SF.Project.DataMirror\\XLY.SF.Project.DataMirror.csproj
-		SccProjectTopLevelParentUniqueName14 = MirrorTest.sln
-		SccProjectName14 = ../../../../11.Service/13.Core/XLY.SF.Project.DataMirror
-		SccLocalPath14 = ..\\..\\..\\..\\11.Service\\13.Core\\XLY.SF.Project.DataMirror
-		SccProjectUniqueName15 = ..\\..\\..\\..\\21.Presentation\\ProjectContext\\XLY.SF.Project.Proxy\\XLY.SF.Project.ProxyService\\XLY.SF.Project.ProxyService.csproj
-		SccProjectTopLevelParentUniqueName15 = MirrorTest.sln
-		SccProjectName15 = ../../../../21.Presentation/ProjectContext/XLY.SF.Project.Proxy/XLY.SF.Project.ProxyService
-		SccLocalPath15 = ..\\..\\..\\..\\21.Presentation\\ProjectContext\\XLY.SF.Project.Proxy\\XLY.SF.Project.ProxyService
-		SccProjectUniqueName16 = ..\\..\\..\\..\\11.Service\\13.Core\\DllService\\DllClient\\DllClient.csproj
-		SccProjectTopLevelParentUniqueName16 = MirrorTest.sln
-		SccProjectName16 = ../../../../11.Service/13.Core/DllService/DllClient
-		SccLocalPath16 = ..\\..\\..\\..\\11.Service\\13.Core\\DllService\\DllClient
-		SccProjectUniqueName17 = ..\\..\\..\\..\\11.Service\\13.Core\\XLY.SF.Project.Devices\\XLY.SF.Project.Devices.csproj
-		SccProjectTopLevelParentUniqueName17 = MirrorTest.sln
-		SccProjectName17 = ../../../../11.Service/13.Core/XLY.SF.Project.Devices
-		SccLocalPath17 = ..\\..\\..\\..\\11.Service\\13.Core\\XLY.SF.Project.Devices
-		SccProjectUniqueName18 = ..\\..\\..\\..\\11.Service\\13.Core\\XLY.SF.Project.DataMirrorApp\\XLY.SF.Project.MirrorBackgroundApp.csproj
-		SccProjectTopLevelParentUniqueName18 = MirrorTest.sln
-		SccProjectName18 = ../../../../11.Service/13.Core/XLY.SF.Project.DataMirrorApp
-		SccLocalPath18 = ..\\..\\..\\..\\11.Service\\13.Core\\XLY.SF.Project.DataMirrorApp
-		SccLocalPath19 = .
-		SccProjectUniqueName20 = MirrorTest\\MirrorTest.csproj
-		SccProjectName20 = MirrorTest
-		SccLocalPath20 = MirrorTest
-		SccProjectUniqueName21 = ..\\TestHelper\\TestHelper\\TestHelper.csproj
-		SccProjectName21 = ../TestHelper/TestHelper
-		SccLocalPath21 = ..\\TestHelper\\TestHelper
 	EndGlobalSection
 EndGlobal

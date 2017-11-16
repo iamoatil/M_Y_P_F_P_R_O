@@ -201,7 +201,7 @@ namespace XLY.SF.Project.MirrorView
                 }
                 else if (info.StartsWith("Exception|"))
                 {
-                    defalutAsyn.Defeat("Exception");
+                    defalutAsyn.Defeat(info);
                     _mirrorBackgroundProcess.CallBack -= OnCallBack;
                     _mirrorBackgroundProcess.Close();
                     //todo 此处应该有提示
