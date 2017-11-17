@@ -79,6 +79,7 @@
     <Compile Include="ViewModel\MessageBoxEx.cs" />
     <Compile Include="ViewModel\MirrorBackgroundProcess.cs" />
     <Compile Include="ViewModel\MirrorCommands.cs" />
+    <Compile Include="ViewModel\MyReporter.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

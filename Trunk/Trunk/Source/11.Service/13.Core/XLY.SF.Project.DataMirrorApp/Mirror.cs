@@ -71,20 +71,24 @@ namespace XLY.SF.Project.DataMirrorApp
                     Exception(string.Format("安卓手机镜像出错！ImageDataZone失败，设备ID:{0} 错误码:{1}", _deviceSerialnumber, result));
                     return;
                 }
-                Stop(CmdStrings.SuccessStopState);
+                MirrorFile.CreateMD5File();
+                SendSate(CmdStrings.FinishState);
             }
         }
 
-        public void Stop(CmdString cmd)
+        /// <summary>
+        /// 发送状态到调用端
+        /// </summary>
+        public void SendSate(CmdString cmd)
         {
             MirrorFile.Close();
-            if(cmd.Match(CmdStrings.SuccessStopState))
-            {
-                MirrorFile.CreateMD5File();
-            }
-            Console.WriteLine(string.Format("{0}|{1}|{2}",CmdStrings.State, CmdStrings.StopState,cmd));
+            Console.WriteLine(string.Format("{0}",cmd));
         }
 
+        /// <summary>
+        /// 发送异常状态到调用端
+        /// </summary>
+        /// <param name="msg"></param>
         private void Exception(string msg)
         {
             MirrorFile.Close();
@@ -92,6 +96,10 @@ namespace XLY.SF.Project.DataMirrorApp
             _haveErrors = true;
         }
 
+        /// <summary>
+        /// 保存镜像数据，并且发送进度信息到调用端
+        /// </summary>
+        /// <returns></returns>
         private int ImageDataCallBack(IntPtr data, int datasize, ref int stop)
         {
             var buff = new byte[datasize];

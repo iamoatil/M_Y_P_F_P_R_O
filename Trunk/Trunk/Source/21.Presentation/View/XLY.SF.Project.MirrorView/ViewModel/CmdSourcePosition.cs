@@ -125,17 +125,19 @@ namespace XLY.SF.Project.MirrorView
             MirrorBackgroundProcess _mirrorBackgroundProcess;
             string _deviceID;
             int _isHtc;
-            IAsyncTaskProgress _asyn;
-            public MirrorControlerBox(string deviceID, int isHtc, IAsyncTaskProgress asyn)
+            IStateReporter<CmdString> _stateReporter;
+            CmdString _curState;
+            public MirrorControlerBox(string deviceID, int isHtc,IStateReporter<CmdString> stateReporter)
             {
                 _deviceID = deviceID;
                 _isHtc = isHtc;
-                _asyn = asyn;
+                _stateReporter = stateReporter;
             }
 
             //此处封装了关键的方法：Start，Stop，Continue，Pause
             internal void Start(List<MirrorBlockInfo> mirrorBlockInfos)
             {
+                _curState = null;
                 //设置反馈，以及执行命令
                 if (_mirrorBackgroundProcess != null)
                 {
@@ -144,76 +146,54 @@ namespace XLY.SF.Project.MirrorView
                 }
                 _mirrorBackgroundProcess = new MirrorBackgroundProcess();
                 _mirrorBackgroundProcess.CallBack += OnCallBack;
-                //todo 此处要
-                ((CmdMirrorViewModel.MyDefaultSingleTaskReporter)_asyn).PrepareStart();
-                ((CmdMirrorViewModel.MyDefaultSingleTaskReporter)_asyn).ChangeProgress(0);
 
                 bool isInitialized=_mirrorBackgroundProcess.Initialize();
                 if(!isInitialized)
                 {
                     return;
-                }                
+                }
 
                 foreach (var item in mirrorBlockInfos)
                 {
                     //以下是构建参数
                     string arg = string.Format(@"{0}|{1}|{2}|{3}|{4}", CmdStrings.StartMirror, _deviceID, _isHtc, item.TargetMirrorFile, item.SourceBlockPath);
-                    CmdString startCmd =new CmdString(arg);
+                    CmdString startCmd = new CmdString(arg);
                     _mirrorBackgroundProcess.ExcuteCmd(startCmd);
-                    //todo 此处有问题 等待任务完成
-                    TaskState state = ((CmdMirrorViewModel.MyDefaultSingleTaskReporter)_asyn).State;
-                    while (state != TaskState.Completed
-                        && state != TaskState.Failed
-                        && state != TaskState.Stopped)
+
+                    while (true)
                     {
+                        if (_curState != null)
+                        {
+                            if (_curState.Match(CmdStrings.FinishState))
+                            {
+                                break;
+                            }
+                            else if (_curState.Match(CmdStrings.StopMirror)
+                            || _curState.Match(CmdStrings.Exception))
+                            {
+                                return;
+                            }
+                        }
+
                         Thread.Sleep(1000);
                     }
                 }
+
+                _mirrorBackgroundProcess.CallBack -= OnCallBack;
+                _mirrorBackgroundProcess.Close();
+                _stateReporter.Report(CmdStrings.AllFinishState);
             }
 
             private void OnCallBack(string info)
             {
-                DefaultSingleTaskReporter defalutAsyn = (DefaultSingleTaskReporter)_asyn;
-                if (info == null)
+                CmdString cmd = CmdStrings.UnknowException;
+                if (info != null)
                 {
-                    info = "Exception|MirrorBackgroundProcessError";
+                    cmd = new CmdString(info);
                 }
-                CmdString cmd = new CmdString(info);
-                if (cmd.IsType(CmdStrings.State))
-                {
-                    CmdString state = cmd.GetChildCmd(CmdStrings.State);
-                    if (state.IsType(CmdStrings.StopState))
-                    {
-                        CmdString arg = state.GetChildCmd(CmdStrings.StopState);
-                        if (arg.Match(CmdStrings.SuccessStopState))
-                        {
-                            defalutAsyn.Finish();
-                        }
-                        else if (arg.Match(CmdStrings.UserStopedState))
-                        {
-                            defalutAsyn.Stop();
-                        }
 
-                        _mirrorBackgroundProcess.CallBack -= OnCallBack;
-                        _mirrorBackgroundProcess.Close();
-                    }
-                }
-                else if (cmd.IsType(CmdStrings.Progress))
-                {
-                    CmdString progress = cmd.GetChildCmd(CmdStrings.Progress);
-                    int finisedSize = 0;
-                    if (int.TryParse(progress.ToString(), out finisedSize))
-                    {
-                        defalutAsyn.ChangeProgress(finisedSize);
-                    }
-                }
-                else if (cmd.IsType(CmdStrings.Exception))
-                {
-                    defalutAsyn.Defeat(cmd.ToString());
-                    _mirrorBackgroundProcess.CallBack -= OnCallBack;
-                    _mirrorBackgroundProcess.Close();
-                    //todo 此处应该有提示
-                }
+                _curState = cmd;
+                _stateReporter.Report(cmd);
             }
 
             internal void Stop()

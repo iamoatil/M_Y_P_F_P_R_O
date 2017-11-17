@@ -20,16 +20,7 @@
                 <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <themes:BooleanToCollapseConverter x:Key="BoolVisibleConverter"/>
-            <themes:BoolReverseConverter x:Key="BoolReverse"/>
-            <FontFamily x:Key="OswaldFont">
-                pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald
-            </FontFamily>
-            <FontFamily x:Key="OswaldBoldFont">
-                pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#OswaldBold
-            </FontFamily>
-            <FontFamily x:Key="OswaldLightFont">
-                pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#OswaldLight
-            </FontFamily>
+            <themes:BoolReverseConverter x:Key="BoolReverse"/>           
         </ResourceDictionary>
     </viewmodel:UcViewBase.Resources>
     <Grid>

@@ -91,10 +91,9 @@ namespace XLY.SF.Project.DataMirrorApp
             }
             else if (operateCmd.Match(CmdStrings.StopMirror))
             {
-                _mirror.Stop(CmdStrings.UserStopedState);
+                _mirror.SendSate(operateCmd);
                 _thread.Abort(); 
                 _isStop = true;
-
             }
             else if (operateCmd.Match(CmdStrings.PauseMirror))
             {

@@ -79,13 +79,9 @@ namespace XLY.SF.Project.DataMirrorApp
     class CmdStrings
     {
         //此段定义Background反馈上来的状态。
-        //主要有3类，State，Progress，Exception
-        //其中State又分为StopState,PauseState.
-        //StopState 又分为SuccessStopState，UserStopedState
-        public static readonly CmdString State = new CmdString("State");
-        public static readonly CmdString StopState = new CmdString("StopState");       
-        public static readonly CmdString SuccessStopState = new CmdString("SuccessStopState");
-        public static readonly CmdString UserStopedState = new CmdString("UserStopedState");
+        //主要有3类，FinishState，Progress，Exception 。
+        //统一使用SendSate发送状态
+        public static readonly CmdString FinishState = new CmdString("FinishState");
         public static readonly CmdString Progress = new CmdString("Progress");
         public static readonly CmdString Exception = new CmdString("Exception");
 
@@ -94,5 +90,8 @@ namespace XLY.SF.Project.DataMirrorApp
         public static readonly CmdString StopMirror = new CmdString("StopMirror");
         public static readonly CmdString ContinueMirror = new CmdString("ContinueMirror");
         public static readonly CmdString PauseMirror = new CmdString("PauseMirror");
+
+        //临时状态
+        public static readonly CmdString AllFinishState = new CmdString("AllFinishState");
     }
 }

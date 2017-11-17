@@ -42,15 +42,15 @@ namespace XLY.SF.Project.MirrorView
 
         public void Initialize(string deviceID)
         {
-            MyDefaultSingleTaskReporter asyncProgress = new MyDefaultSingleTaskReporter();
+            StateReporter stateReporter = new StateReporter();
+
             int isHtc = 0;
-            CmdSourcePosition.MirrorControlerBox mirrorControler = new CmdSourcePosition.MirrorControlerBox(deviceID, isHtc, asyncProgress);
+            CmdSourcePosition.MirrorControlerBox mirrorControler = new CmdSourcePosition.MirrorControlerBox(deviceID, isHtc, stateReporter);
 
             SourcePosition.SetMirrorControler(mirrorControler);
 
-            //进度事件
-            asyncProgress.Terminated += (o, e) => DispatcherHelper.RunAsync(() => AsyncProgress_Terminated(o, e));
-            asyncProgress.ProgressChanged += AsyncProgress_ProgressChanged;
+            //进度事件           
+            stateReporter.Reported += StateChanged;
         }
 
         /// <summary>
@@ -58,21 +58,19 @@ namespace XLY.SF.Project.MirrorView
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void AsyncProgress_ProgressChanged(object sender, TaskProgressEventArgs e)
+        private void ProgressChanged(long progress)
         {
-            ProgressPosition.FinishedSize = (int)e.Progress;
+            ProgressPosition.FinishedSize = progress;
             ProgressPosition.OnProgress(ProgressPosition.TotalSize - ProgressPosition.FinishedSize);
             SourcePosition.IsMirroring = true;
         }
 
         /// <summary>
-        /// 进度结束事件
+        /// 状态变化事件
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void AsyncProgress_Terminated(object sender, TaskTerminateEventArgs e)
+        private void StateChanged(CmdString state)
         {
-            if (e.IsCompleted)
+            if (state.Match(CmdStrings.AllFinishState))
             {
                 ProgressPosition.FinishedSize = ProgressPosition.TotalSize;
                 ProgressPosition.Stop();
@@ -81,15 +79,24 @@ namespace XLY.SF.Project.MirrorView
             ProgressPosition.RemainTime = "";
             ProgressPosition.UsedTime = "";
 
-            if (e.IsCompleted)
+            if (state.IsType(CmdStrings.Progress))
+            {
+                CmdString progress = state.GetChildCmd();
+                int finisedSize = 0;
+                if (int.TryParse(progress.ToString(), out finisedSize))
+                {
+                    ProgressChanged(finisedSize);
+                }
+            }
+            else if (state.Match(CmdStrings.AllFinishState))
             {
                 _msgBox.ShowNoticeMsg("镜像完成");
             }
-            else if (e.IsFailed)
+            else if (state.IsType(CmdStrings.Exception))
             {
-                _msgBox.ShowNoticeMsg("镜像失败" + e.Exception.ToString());
+                _msgBox.ShowNoticeMsg("镜像失败" + state.GetChildCmd());
             }
-            else if (e.IsStopped)
+            else if (state.Match(CmdStrings.StopMirror))
             {
                 _msgBox.ShowNoticeMsg("镜像停止");
             }
@@ -130,18 +137,7 @@ namespace XLY.SF.Project.MirrorView
         private void SetAllCheckState(bool isChecked)
         {
             SourcePosition.CurrentSelectedDisk.SetAllCheckState(isChecked);
-        }
-
-        public class MyDefaultSingleTaskReporter : DefaultSingleTaskReporter
-        {
-            /// <summary>
-            /// 准备开始
-            /// </summary>
-            public void PrepareStart()
-            {
-                State = TaskState.Running;
-            }
-        }
+        }  
     }
 }
 
