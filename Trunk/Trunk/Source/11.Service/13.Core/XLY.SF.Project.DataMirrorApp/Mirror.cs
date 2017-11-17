@@ -71,24 +71,24 @@ namespace XLY.SF.Project.DataMirrorApp
                     Exception(string.Format("安卓手机镜像出错！ImageDataZone失败，设备ID:{0} 错误码:{1}", _deviceSerialnumber, result));
                     return;
                 }
-                Stop(CmdStrings.Success);
+                Stop(CmdStrings.SuccessStopState);
             }
         }
 
         public void Stop(CmdString cmd)
         {
             MirrorFile.Close();
-            if(cmd.Match(CmdStrings.Success))
+            if(cmd.Match(CmdStrings.SuccessStopState))
             {
                 MirrorFile.CreateMD5File();
             }
-            Console.WriteLine(string.Format("{0}|{1}|{2}",CmdStrings.Operate, CmdStrings.Stop,cmd));
+            Console.WriteLine(string.Format("{0}|{1}|{2}",CmdStrings.State, CmdStrings.StopState,cmd));
         }
 
         private void Exception(string msg)
         {
             MirrorFile.Close();
-            Console.WriteLine("{0}|{1}|{2}",CmdStrings.Exception, msg);
+            Console.WriteLine("{0}|{1}",CmdStrings.Exception, msg);
             _haveErrors = true;
         }
 
@@ -98,7 +98,7 @@ namespace XLY.SF.Project.DataMirrorApp
             Marshal.Copy(data, buff, 0, datasize);
 
             MirrorFile.Write(buff);
-            Console.WriteLine("{0}|{1}|{2}", CmdStrings.Progress,MirrorFile.WritedSize.ToString()) ;
+            Console.WriteLine("{0}|{1}", CmdStrings.Progress,MirrorFile.WritedSize.ToString()) ;
             return 0;
         }
     }

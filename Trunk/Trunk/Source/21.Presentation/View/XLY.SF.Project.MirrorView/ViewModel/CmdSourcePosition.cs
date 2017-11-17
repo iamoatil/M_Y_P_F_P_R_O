@@ -148,10 +148,16 @@ namespace XLY.SF.Project.MirrorView
                 ((CmdMirrorViewModel.MyDefaultSingleTaskReporter)_asyn).PrepareStart();
                 ((CmdMirrorViewModel.MyDefaultSingleTaskReporter)_asyn).ChangeProgress(0);
 
+                bool isInitialized=_mirrorBackgroundProcess.Initialize();
+                if(!isInitialized)
+                {
+                    return;
+                }                
+
                 foreach (var item in mirrorBlockInfos)
                 {
                     //以下是构建参数
-                    string arg = string.Format(@"StartMirror|{0}|{1}|{2}|{3}", _deviceID, _isHtc, item.TargetMirrorFile, item.SourceBlockPath);
+                    string arg = string.Format(@"{0}|{1}|{2}|{3}|{4}", CmdStrings.StartMirror, _deviceID, _isHtc, item.TargetMirrorFile, item.SourceBlockPath);
                     CmdString startCmd =new CmdString(arg);
                     _mirrorBackgroundProcess.ExcuteCmd(startCmd);
                     //todo 此处有问题 等待任务完成
@@ -173,17 +179,17 @@ namespace XLY.SF.Project.MirrorView
                     info = "Exception|MirrorBackgroundProcessError";
                 }
                 CmdString cmd = new CmdString(info);
-                if (cmd.IsType(CmdStrings.Operate))
+                if (cmd.IsType(CmdStrings.State))
                 {
-                    CmdString operate = cmd.Substring(CmdStrings.Operate);
-                    if (operate.IsType(CmdStrings.Stop))
+                    CmdString state = cmd.GetChildCmd(CmdStrings.State);
+                    if (state.IsType(CmdStrings.StopState))
                     {
-                        CmdString arg = operate.Substring(CmdStrings.Stop);
-                        if (arg.Match(CmdStrings.Success))
+                        CmdString arg = state.GetChildCmd(CmdStrings.StopState);
+                        if (arg.Match(CmdStrings.SuccessStopState))
                         {
                             defalutAsyn.Finish();
                         }
-                        else if (arg.Match(CmdStrings.UserStoped))
+                        else if (arg.Match(CmdStrings.UserStopedState))
                         {
                             defalutAsyn.Stop();
                         }
@@ -194,7 +200,7 @@ namespace XLY.SF.Project.MirrorView
                 }
                 else if (cmd.IsType(CmdStrings.Progress))
                 {
-                    CmdString progress = cmd.Substring(CmdStrings.Progress);
+                    CmdString progress = cmd.GetChildCmd(CmdStrings.Progress);
                     int finisedSize = 0;
                     if (int.TryParse(progress.ToString(), out finisedSize))
                     {
@@ -214,8 +220,7 @@ namespace XLY.SF.Project.MirrorView
             {
                 if (_mirrorBackgroundProcess != null)
                 {
-                    _mirrorBackgroundProcess.ExcuteCmd(CmdStrings.Stop);
-                    _mirrorBackgroundProcess.Close();
+                    _mirrorBackgroundProcess.ExcuteCmd(CmdStrings.StopMirror);
                 }
             }
 

@@ -50,8 +50,8 @@ namespace XLY.SF.Project.DataMirrorApp
                 return true;
             }
             return false;
-        }
-
+        }        
+        
         /// <summary>
         /// 命令是不是cmd类型
         /// </summary>
@@ -78,14 +78,18 @@ namespace XLY.SF.Project.DataMirrorApp
    /// </summary>
     class CmdStrings
     {
-        public static readonly CmdString Operate = new CmdString("Operate");
-        public static readonly CmdString Start = new CmdString("Start");
-        public static readonly CmdString Stop = new CmdString("Stop");       
-        public static readonly CmdString Success = new CmdString("Success");
-        public static readonly CmdString UserStoped = new CmdString("UserStoped");
+        //此段定义Background反馈上来的状态。
+        //主要有3类，State，Progress，Exception
+        //其中State又分为StopState,PauseState.
+        //StopState 又分为SuccessStopState，UserStopedState
+        public static readonly CmdString State = new CmdString("State");
+        public static readonly CmdString StopState = new CmdString("StopState");       
+        public static readonly CmdString SuccessStopState = new CmdString("SuccessStopState");
+        public static readonly CmdString UserStopedState = new CmdString("UserStopedState");
         public static readonly CmdString Progress = new CmdString("Progress");
         public static readonly CmdString Exception = new CmdString("Exception");
 
+        // 此段定义操作命令
         public static readonly CmdString StartMirror = new CmdString("StartMirror");
         public static readonly CmdString StopMirror = new CmdString("StopMirror");
         public static readonly CmdString ContinueMirror = new CmdString("ContinueMirror");

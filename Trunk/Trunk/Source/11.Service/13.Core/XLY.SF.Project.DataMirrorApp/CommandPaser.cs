@@ -31,6 +31,10 @@ namespace XLY.SF.Project.DataMirrorApp
             while (true)
             {
                 var arg = Console.ReadLine();
+                if(arg == null)//当正在镜像时，关闭客户端arg就会为空
+                {
+                    break;
+                }
 
                 Console.WriteLine("收到arg:" + arg);
                 string operateStr = ParseArgs(arg);
@@ -74,7 +78,7 @@ namespace XLY.SF.Project.DataMirrorApp
 
         private void CmdExecute(CmdString operateCmd)
         {        
-            if (operateCmd.Equals(CmdStrings.StartMirror))
+            if (operateCmd.Match(CmdStrings.StartMirror))
             {
                 _mirror.Initialize(deviceSerialnumber, isHtc, path);
                 _thread = new Thread(
@@ -85,12 +89,19 @@ namespace XLY.SF.Project.DataMirrorApp
                 _thread.IsBackground = true;
                 _thread.Start();
             }
-            else if (operateCmd.Equals(CmdStrings.StopMirror))
+            else if (operateCmd.Match(CmdStrings.StopMirror))
             {
-                _thread.Abort();
-                _mirror.Stop(CmdStrings.UserStoped);
-
+                _mirror.Stop(CmdStrings.UserStopedState);
+                _thread.Abort(); 
                 _isStop = true;
+
+            }
+            else if (operateCmd.Match(CmdStrings.PauseMirror))
+            {
+
+            }
+            else if (operateCmd.Match(CmdStrings.ContinueMirror))
+            {
 
             }
         }
