@@ -120,15 +120,6 @@ namespace XLY.SF.Project.MirrorView
             }
             SourcePosition.Start(TargetPosition.DirPath);
             SourcePosition.IsMirroring = true;
-            ThreadPool.QueueUserWorkItem(state =>
-            {
-                Thread.Sleep(10 * 1000);
-                if (ProgressPosition.FinishedSize == 0)
-                {
-                    SourcePosition.IsMirroring = false;
-                    DispatcherHelper.RunAsync(() => { _msgBox.ShowErrorMsg("镜像启动失败。设备可能需要先root。"); });
-                }
-            });
         }
 
         private void Stop()

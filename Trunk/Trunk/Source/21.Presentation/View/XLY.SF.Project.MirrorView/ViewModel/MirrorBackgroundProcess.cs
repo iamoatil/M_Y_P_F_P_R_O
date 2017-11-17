@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using XLY.SF.Framework.Log4NetService;
 
 /* ==============================================================================
 * Description：MirrorBackgroundProcess  
@@ -13,11 +12,17 @@ namespace XLY.SF.Project.MirrorView
 {
     class MirrorBackgroundProcess
     {
-        Process curProcess;
-        string _backgroundAppPath = AppDir.BackgroundAppDir+@"XLY.SF.Project.DataMirrorApp.exe";        
+        Process _curProcess;
+        string _backgroundAppPath = AppDir.BackgroundAppDir+@"XLY.SF.Project.DataMirrorApp.exe";
+        bool _isInitialized;
 
+        /// <summary>
+        /// 初始化。此为关键方法。初始化失败时，此类大多数功能将无法执行
+        /// </summary>
+        /// <returns></returns>
         public bool Initialize()
         {
+            _isInitialized = true;
             ProcessStartInfo start = new ProcessStartInfo(_backgroundAppPath);
             start.CreateNoWindow = true;                //不显示dos命令行窗口   
             start.RedirectStandardOutput = true;
@@ -28,13 +33,14 @@ namespace XLY.SF.Project.MirrorView
             if (!File.Exists(_backgroundAppPath))
             {
                 OnCallBack(string.Format("{0}|file:{1} is not existed!", CmdStrings.Exception, _backgroundAppPath));
-                return false;
+                _isInitialized = false;
+                return _isInitialized;
             }
-            curProcess = Process.Start(start);
-            curProcess.BeginErrorReadLine();
-            curProcess.BeginOutputReadLine();
-            curProcess.OutputDataReceived += (o, e) => { OnCallBack(e.Data); };
-            return true;
+            _curProcess = Process.Start(start);
+            _curProcess.BeginErrorReadLine();
+            _curProcess.BeginOutputReadLine();
+            _curProcess.OutputDataReceived += (o, e) => { OnCallBack(e.Data); };
+            return _isInitialized;
         }
 
         private void OnCallBack(string msg)
@@ -56,14 +62,10 @@ namespace XLY.SF.Project.MirrorView
         /// <param name="cmd"></param>
         public void ExcuteCmd(CmdString cmd)
         {
-            try
+            if(_isInitialized)
             {
-                curProcess.StandardInput.WriteLine(cmd.ToString());
-            }
-            catch (Exception ex)
-            {
-                OnCallBack(string.Format("{0}|{1}",CmdStrings.Exception ,ex.Message));
-            }            
+                _curProcess.StandardInput.WriteLine(cmd.ToString());
+            }           
         }
 
         public void Close()
