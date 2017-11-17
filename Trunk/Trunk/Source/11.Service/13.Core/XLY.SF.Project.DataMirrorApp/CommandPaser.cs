@@ -33,8 +33,9 @@ namespace XLY.SF.Project.DataMirrorApp
                 var arg = Console.ReadLine();
 
                 Console.WriteLine("收到arg:" + arg);
-                string operateCmd = ParseArgs(arg);
-                CmdExecute(operateCmd);
+                string operateStr = ParseArgs(arg);
+                CmdString operate = new CmdString(operateStr);
+                CmdExecute(operate);
 
                 if(_isStop)
                 {
@@ -71,9 +72,9 @@ namespace XLY.SF.Project.DataMirrorApp
             return operateCmd;
         }
 
-        private void CmdExecute(string operateCmd)
+        private void CmdExecute(CmdString operateCmd)
         {        
-            if (operateCmd == "StartMirror")
+            if (operateCmd.Equals(CmdStrings.StartMirror))
             {
                 _mirror.Initialize(deviceSerialnumber, isHtc, path);
                 _thread = new Thread(
@@ -84,10 +85,10 @@ namespace XLY.SF.Project.DataMirrorApp
                 _thread.IsBackground = true;
                 _thread.Start();
             }
-            else if (operateCmd == "StopMirror")
+            else if (operateCmd.Equals(CmdStrings.StopMirror))
             {
                 _thread.Abort();
-                _mirror.Stop("UserStoped");
+                _mirror.Stop(CmdStrings.UserStoped);
 
                 _isStop = true;
 

@@ -6,7 +6,7 @@
 
 using System;
 
-namespace XLY.SF.Project.MirrorView
+namespace XLY.SF.Project.DataMirrorApp
 {
 
     /// <summary>

@@ -50,6 +50,7 @@
     <Compile Include="AndroidMirrorAPI.cs" />
     <Compile Include="CommandPaser.cs" />
     <Compile Include="Mirror.cs" />
+    <Compile Include="MirrorCommands.cs" />
     <Compile Include="MirrorFile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

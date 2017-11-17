@@ -152,7 +152,8 @@ namespace XLY.SF.Project.MirrorView
                 {
                     //以下是构建参数
                     string arg = string.Format(@"StartMirror|{0}|{1}|{2}|{3}", _deviceID, _isHtc, item.TargetMirrorFile, item.SourceBlockPath);
-                    _mirrorBackgroundProcess.ExcuteCmd(arg);
+                    CmdString startCmd =new CmdString(arg);
+                    _mirrorBackgroundProcess.ExcuteCmd(startCmd);
                     //todo 此处有问题 等待任务完成
                     TaskState state = ((CmdMirrorViewModel.MyDefaultSingleTaskReporter)_asyn).State;
                     while (state != TaskState.Completed
@@ -171,17 +172,18 @@ namespace XLY.SF.Project.MirrorView
                 {
                     info = "Exception|MirrorBackgroundProcessError";
                 }
-                if (info.StartsWith("Operate",StringComparison.OrdinalIgnoreCase))
+                CmdString cmd = new CmdString(info);
+                if (cmd.IsType(CmdStrings.Operate))
                 {
-                    string operateStr = info.Substring("Operate|".Length);
-                    if (operateStr.StartsWith("Stop", StringComparison.OrdinalIgnoreCase))
+                    CmdString operate = cmd.Substring(CmdStrings.Operate);
+                    if (operate.IsType(CmdStrings.Stop))
                     {
-                        string argStr = operateStr.Substring("Stop|".Length);
-                        if (string.Equals(argStr,"Success",StringComparison.OrdinalIgnoreCase))
+                        CmdString arg = operate.Substring(CmdStrings.Stop);
+                        if (arg.Match(CmdStrings.Success))
                         {
                             defalutAsyn.Finish();
                         }
-                        else if (string.Equals(argStr , "UserStoped", StringComparison.OrdinalIgnoreCase))
+                        else if (arg.Match(CmdStrings.UserStoped))
                         {
                             defalutAsyn.Stop();
                         }
@@ -190,28 +192,29 @@ namespace XLY.SF.Project.MirrorView
                         _mirrorBackgroundProcess.Close();
                     }
                 }
-                else if (info.StartsWith("Progress", StringComparison.OrdinalIgnoreCase))
+                else if (cmd.IsType(CmdStrings.Progress))
                 {
-                    string finisedSizeStr = info.Substring("Progress|".Length);
+                    CmdString progress = cmd.Substring(CmdStrings.Progress);
                     int finisedSize = 0;
-                    if (int.TryParse(finisedSizeStr, out finisedSize))
+                    if (int.TryParse(progress.ToString(), out finisedSize))
                     {
                         defalutAsyn.ChangeProgress(finisedSize);
                     }
                 }
-                else if (info.StartsWith("Exception|", StringComparison.OrdinalIgnoreCase))
+                else if (cmd.IsType(CmdStrings.Exception))
                 {
-                    defalutAsyn.Defeat(info);
+                    defalutAsyn.Defeat(cmd.ToString());
                     _mirrorBackgroundProcess.CallBack -= OnCallBack;
                     _mirrorBackgroundProcess.Close();
                     //todo 此处应该有提示
                 }
             }
+
             internal void Stop()
             {
                 if (_mirrorBackgroundProcess != null)
                 {
-                    _mirrorBackgroundProcess.ExcuteCmd("StopMirror");
+                    _mirrorBackgroundProcess.ExcuteCmd(CmdStrings.Stop);
                     _mirrorBackgroundProcess.Close();
                 }
             }
@@ -220,7 +223,7 @@ namespace XLY.SF.Project.MirrorView
             {
                 if (_mirrorBackgroundProcess != null)
                 {
-                    _mirrorBackgroundProcess.ExcuteCmd("ContinueMirror");
+                    _mirrorBackgroundProcess.ExcuteCmd(CmdStrings.ContinueMirror);
                 }
             }
 
@@ -228,7 +231,7 @@ namespace XLY.SF.Project.MirrorView
             {
                 if (_mirrorBackgroundProcess != null)
                 {
-                    _mirrorBackgroundProcess.ExcuteCmd("PauseMirror");
+                    _mirrorBackgroundProcess.ExcuteCmd(CmdStrings.PauseMirror);
                 }
             }
         }

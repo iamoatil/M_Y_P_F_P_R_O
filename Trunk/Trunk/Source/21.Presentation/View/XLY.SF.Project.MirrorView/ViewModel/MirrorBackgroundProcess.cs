@@ -52,9 +52,9 @@ namespace XLY.SF.Project.MirrorView
         /// 执行命令
         /// </summary>
         /// <param name="cmd"></param>
-        public void ExcuteCmd(string cmd)
+        public void ExcuteCmd(CmdString cmd)
         {
-            curProcess.StandardInput.WriteLine(cmd) ;
+            curProcess.StandardInput.WriteLine(cmd.ToString()) ;
         }
 
         public void Close()
