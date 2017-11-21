@@ -6,6 +6,7 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// 日历
     /// </summary>
+    [Serializable]
     public class Calendar:AbstractDataItem
     {
         /// <summary>

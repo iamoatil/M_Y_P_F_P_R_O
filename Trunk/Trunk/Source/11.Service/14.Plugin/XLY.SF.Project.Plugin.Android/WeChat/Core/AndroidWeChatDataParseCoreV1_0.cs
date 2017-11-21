@@ -1851,7 +1851,6 @@ namespace XLY.SF.Project.Plugin.Android
         /// <param name="friend"></param>
         private void DealLvbuff(dynamic data, WeChatFriendShow friend)
         {
-            //TODO：获取描述信息
             try
             {
                 byte[] lvbuff = data.lvbuff as byte[];

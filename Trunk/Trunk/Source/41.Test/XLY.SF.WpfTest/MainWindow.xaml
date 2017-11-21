@@ -10,6 +10,6 @@
         <local:UserControl1 x:Key="Hzl"/>
     </Window.Resources>
     <Grid>
-
+        <local:UserControl1/>
     </Grid>
 </Window>

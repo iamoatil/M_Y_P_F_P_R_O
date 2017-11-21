@@ -27,7 +27,7 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
         /// </summary>
         public PullFileReceiver(string local)
         {
-            this._Local = local;
+            _Local = local;
         }
 
         #endregion
@@ -41,9 +41,9 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
             //read check result
             byte[] pullResult = new byte[8];
             AdbSocketHelper.Read(socket, pullResult);
-            this.CheckPullFileResult(pullResult);
-            byte[] data = new byte[this.BufferSize];
-            FileInfo f = new FileInfo(this._Local);
+            CheckPullFileResult(pullResult);
+            byte[] data = new byte[BufferSize];
+            FileInfo f = new FileInfo(_Local);
             FileStream fos = fos = new FileStream(f.FullName, System.IO.FileMode.Create, FileAccess.Write);
             using (fos)
             {
@@ -76,10 +76,7 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
                         throw new ApplicationException("Writing local file failed!", e);
                     }
                     //receive event
-                    if (this.OnReceiveData != null)
-                    {
-                        this.OnReceiveData(data, 0, length);
-                    }
+                    OnReceiveData?.Invoke(data, 0, length);
                 }
                 //flush
                 try

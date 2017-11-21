@@ -21,6 +21,7 @@ namespace XLY.SF.Project.DataMirrorApp
         int isHtc = 0;
         string path = "";
         string block = "";
+        long startedPos = 0;
 
         readonly Mirror _mirror = new Mirror();
         bool _isStop;
@@ -31,7 +32,7 @@ namespace XLY.SF.Project.DataMirrorApp
             while (true)
             {
                 var arg = Console.ReadLine();
-                if(arg == null)//当正在镜像时，关闭客户端arg就会为空
+                if (arg == null)//当正在镜像时，关闭客户端arg就会为空
                 {
                     break;
                 }
@@ -39,9 +40,17 @@ namespace XLY.SF.Project.DataMirrorApp
                 Console.WriteLine("收到arg:" + arg);
                 string operateStr = ParseArgs(arg);
                 CmdString operate = new CmdString(operateStr);
-                CmdExecute(operate);
+                try
+                {
+                    CmdExecute(operate);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("{0}|{1}", CmdStrings.Exception, ex.Message);
+                    throw ex;
+                }
 
-                if(_isStop)
+                if (_isStop)
                 {
                     break;
                 }
@@ -57,13 +66,18 @@ namespace XLY.SF.Project.DataMirrorApp
             string[] cmds = arg.Split('|');
 
             string operateCmd = "";
-            if (cmds.Length == 5)
+            if (cmds.Length == 6)
             {
                 operateCmd = cmds[0];
                 deviceSerialnumber = cmds[1];
                 isHtc = int.Parse(cmds[2]);
                 path = cmds[3];
                 block = cmds[4];
+                bool ret=long.TryParse(cmds[5],out startedPos);
+                if(ret == false)
+                {
+                    Console.WriteLine("startedPos输入的参数不正确");
+                }
             }
             else if (cmds.Length == 1)
             {
@@ -77,33 +91,36 @@ namespace XLY.SF.Project.DataMirrorApp
         }
 
         private void CmdExecute(CmdString operateCmd)
-        {        
-            if (operateCmd.Match(CmdStrings.StartMirror))
+        {
+            if (operateCmd.Match(CmdStrings.StartMirror)
+                || operateCmd.Match(CmdStrings.ContinueMirror))
             {
                 _mirror.Initialize(deviceSerialnumber, isHtc, path);
                 _thread = new Thread(
                     o =>
                     {
-                        _mirror.Start(block);
+                        _mirror.Start(block, startedPos);
                     });
                 _thread.IsBackground = true;
                 _thread.Start();
             }
-            else if (operateCmd.Match(CmdStrings.StopMirror))
+            else if (operateCmd.Match(CmdStrings.StopMirror)
+                || operateCmd.Match(CmdStrings.PauseMirror))
             {
-                _mirror.SendSate(operateCmd);
-                _thread.Abort(); 
+                _thread.Abort();
                 _isStop = true;
             }
-            else if (operateCmd.Match(CmdStrings.PauseMirror))
-            {
 
-            }
-            else if (operateCmd.Match(CmdStrings.ContinueMirror))
-            {
-
-            }
+            //返回当前状态
+            SendSate(operateCmd);
         }
-        
+
+        /// <summary>
+        /// 发送状态到调用端
+        /// </summary>
+        public void SendSate(CmdString cmd)
+        {
+            Console.WriteLine(string.Format("{0}", cmd));
+        }
     }
 }

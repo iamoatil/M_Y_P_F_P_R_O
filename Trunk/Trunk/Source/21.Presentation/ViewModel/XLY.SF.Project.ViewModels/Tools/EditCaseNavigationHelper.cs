@@ -7,6 +7,7 @@ using XLY.SF.Framework.Core.Base;
 using XLY.SF.Framework.Core.Base.MessageAggregation;
 using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base.MessageBase.Navigation;
+using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Project.ViewDomain.Model.MessageElement;
 
@@ -27,10 +28,16 @@ namespace XLY.SF.Project.ViewModels.Tools
         }
 
         /// <summary>
+        /// 展开前的界面
+        /// </summary>
+        private static object beforeViewOnIsExpanded;
+
+        /// <summary>
         /// 设置子界面状态
         /// </summary>
-        /// <param name="status">是否展开创建案例界面</param>
-        public static void SetEditCaseViewStatus(bool isExpanded)
+        /// <param name="isExpanded">是否展开创建案例界面</param>
+        /// <param name="exportKey">收回案例编辑页，跳转到目标页</param>
+        public static void SetEditCaseViewStatus(bool isExpanded, string exportKey = null)
         {
             SubViewMsgModel curStatus = new SubViewMsgModel(isExpanded);
             SysCommonMsgArgs<SubViewMsgModel> sysArgs = new SysCommonMsgArgs<SubViewMsgModel>(SystemKeys.SetSubViewStatus);
@@ -40,20 +47,41 @@ namespace XLY.SF.Project.ViewModels.Tools
             if (isExpanded)
             {
                 //展开案例编辑界面
-                NavigationArgs args = NavigationArgs.CreateMainViewNavigationArgs(ExportKeys.CaseCreationView, null);
+                NormalNavigationArgs args = NormalNavigationArgs.CreateMainViewNavigationArgs(ExportKeys.CaseCreationView, null);
                 MsgAggregation.Instance.SendNavigationMsgForMainView(args);
             }
             else
             {
+                /*
+                 * TODO
+                 * 此处特殊处理
+                 * 因为案例编辑界面是固定的子界面
+                 * 同时为了防止返回时界面状态丢失
+                 * 所以将打开案例管理界面之前的界面缓存
+                 * 在发送导航消息时【参数就是缓存的上一个界面】
+                 * 
+                 * beforeViewOnIsExpanded==null：刚启动程序，登录进入主界面。由于逻辑问题会在登录后执行一次返回
+                 * 
+                 */
+
                 //折叠，还原为上个界面
                 var beforeViewKey = NavigationLogHelper.GetBeforeViewKeyBySkipKeyAtMainView(ExportKeys.CaseCreationView);
                 if (!string.IsNullOrWhiteSpace(beforeViewKey))
                 {
-                    NavigationArgs args = NavigationArgs.CreateMainViewNavigationArgs(NavigationLogHelper.GetBeforeViewKeyBySkipKeyAtMainView(ExportKeys.CaseCreationView), null);
+                    NormalNavigationArgs args = beforeViewOnIsExpanded == null ?
+                        NormalNavigationArgs.CreateMainViewNavigationArgs(beforeViewKey, null) : NormalNavigationArgs.CreateMainViewNavigationArgs(beforeViewKey, beforeViewOnIsExpanded, true);
                     MsgAggregation.Instance.SendNavigationMsgForMainView(args);
                 }
             }
             CurEditViewOpenStatus = isExpanded;
+        }
+
+        /// <summary>
+        /// 记录展开前的界面【用于案例界面返回】
+        /// </summary>
+        public static void RecordBeforeViewOnisExpanded(object beforeViewOnIsExpanded)
+        {
+            EditCaseNavigationHelper.beforeViewOnIsExpanded = beforeViewOnIsExpanded;
         }
 
         /// <summary>

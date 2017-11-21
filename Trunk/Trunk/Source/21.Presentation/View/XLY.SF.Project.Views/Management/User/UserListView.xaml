@@ -1,0 +1,70 @@
+﻿<core:UcViewBase x:Class="XLY.SF.Project.Views.Management.User.UserListView"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
+                 xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
+                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                 mc:Ignorable="d">
+    <core:UcViewBase.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--此处以下添加自己的引用-->
+
+        </ResourceDictionary>
+    </core:UcViewBase.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    FlowDirection="RightToLeft">
+            <Button Content="{Binding XPath=ViewLanguage/Management/User/Search,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                    Command="{Binding SearchCommand}"
+                    CommandParameter="{Binding Text,ElementName=condition}" />
+            <TextBox x:Name="condition"
+                     Width="200" />
+        </StackPanel>
+        <DataGrid x:Name="dataGrids"
+                  Grid.Row="1"
+                  SelectedItem="{Binding SelectedItem,Mode=OneWayToSource}"
+                  ItemsSource="{Binding Users}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/Management/User/Number,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                    Binding="{Binding Number,Mode=OneTime}" />
+                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/Management/User/Account,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                    Binding="{Binding LoginUserName,Mode=OneWay}" />
+                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/Management/User/Name,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                    Binding="{Binding UserName,Mode=OneWay}" />
+                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/Management/User/Phone,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                    Binding="{Binding PhoneNumber,Mode=OneWay}" />
+                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/Management/User/Unit,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                    Binding="{Binding WorkUnit,Mode=OneWay}" />
+                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/Management/User/Id,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                    Binding="{Binding IdNumber,Mode=OneWay}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <DockPanel Grid.Row="2"
+                   LastChildFill="False">
+            <Button Content="{Binding XPath=ViewLanguage/Management/User/Close,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                    DockPanel.Dock="Right" />
+            <Button Content="{Binding XPath=ViewLanguage/Management/User/Add,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                    DockPanel.Dock="Left"
+                    Command="{Binding AddCommand}" />
+            <Button Content="{Binding XPath=ViewLanguage/Management/User/Remove,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                    DockPanel.Dock="Left"
+                    Command="{Binding RemoveCommand}" />
+            <Button Content="{Binding XPath=ViewLanguage/Management/User/Update,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                    DockPanel.Dock="Left"
+                    Command="{Binding UpdateCommand}" />
+        </DockPanel>
+    </Grid>
+</core:UcViewBase>

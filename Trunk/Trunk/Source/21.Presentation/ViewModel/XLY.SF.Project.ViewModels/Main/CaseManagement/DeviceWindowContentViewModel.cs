@@ -49,7 +49,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         #region Protected
 
-        protected override void LoadCore(object parameters)
+        protected override void InitLoad(object parameters)
         {
             Item = parameters as DeviceExtractionAdorner;
             Content?.DataSource.LoadViewModel(parameters);

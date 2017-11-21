@@ -25,6 +25,8 @@ namespace XLY.SF.Project.Domains
 
         void Add(object obj);
 
+        void AddRange(IEnumerable<object> list);
+
         void Commit();
 
         void Filter(params FilterArgs[] args);

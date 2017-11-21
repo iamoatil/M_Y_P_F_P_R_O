@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using XLY.SF.Framework.Language;
 using XLY.SF.Framework.BaseUtility;
+using System.Linq;
 
 namespace XLY.SF.Project.Domains
 {
@@ -281,78 +282,214 @@ namespace XLY.SF.Project.Domains
 
         public string EntryType { get; set; }
 
-
-        /// <summary>
-        /// 搜索记录
-        /// </summary>
-        [Serializable]
-        public class TwitterSearchEntry : AbstractTwitterEntity
+        public static TwitterConverstationEntry DyConvert(TwitterAccount masterAccount, dynamic data)
         {
+            TwitterConverstationEntry entriy = new TwitterConverstationEntry();
 
-            [Display]
-            public DateTime? SearchTime { get; set; }
+            //entriy.EntryId = DynamicConvert.ToSafeString(data.entry_id);
+            entriy.UserID = DynamicConvert.ToSafeString(data.user_id);
+            entriy.UserName = DynamicConvert.ToSafeString(data.username);
+            entriy.NickName = DynamicConvert.ToSafeString(data.name);
+            entriy.CreateTime = DynamicConvert.ToSafeFromUnixTime(data.created, 1000);
+            //entriy.CreateTimeDesc = DynamicConvert.ToSafeString(data.created);
+            entriy.EntryType = DynamicConvert.ToSafeString(data.entry_type);
+            entriy.IsSend = entriy.UserID == masterAccount.UserId;
+            entriy.DataState = DynamicConvert.ToEnumByValue<EnumDataState>(data.XLY_DataType, EnumDataState.Normal);
 
-            [Display]
-            public string Context { get; set; }
+            GetContext(entriy, DynamicConvert.ToSafeString(data.request_id), data.data as byte[]);
 
-            [Display]
-            public string ResultDesc
+            return entriy;
+        }
+
+        private static readonly byte[] _endByte = { 0X49, 0X49 };
+        private static void GetContext(TwitterConverstationEntry entriy, string request_id, byte[] data)
+        {
+            byte[] request = System.Text.Encoding.UTF8.GetBytes(request_id);
+            var startIndex = FindSubByteArray(data, request);
+            if (-1 == startIndex)
             {
-                get { return ResultType == "0" ? LanguageManager.Current[Languagekeys.OtherLanguage_ResultType_YouXiaoShuJu] : LanguageManager.Current[Languagekeys.OtherLanguage_ResultType_WuXiaoShuJu]; }
+                return;
             }
 
-            public string ResultType { get; set; }
+            startIndex += request.Length;
 
+            byte[] head = data.Skip(startIndex).Take(5).ToArray();
+
+            //entriy.HeadByte = string.Join(" ", head.Select(b => Convert.ToString(b, 16)));
+
+            if (head[0] == 0X30 && head[1] == 0X30 && head[2] == 0X11)
+            {
+                entriy.ContextType = "文本消息";
+            }
+            else if (head[0] == 0X30 && head[1] == 0X31 && head[2] == 0X12)
+            {
+                entriy.ContextType = "表情";
+            }
+            else
+            {
+                entriy.ContextType = "其他";
+            }
+
+            startIndex += 5;
+
+            var endIndex = FindSubByteArray(data.Skip(startIndex).ToArray(), _endByte);//暂时使用0X49 0X49作为结束标志
+            if (-1 != endIndex)
+            {
+                entriy.Context = System.Text.Encoding.UTF8.GetString(data, startIndex, endIndex);
+                //entriy.ContextLength = endIndex;
+            }
+            else
+            {
+                entriy.Context = System.Text.Encoding.UTF8.GetString(data.Skip(startIndex).ToArray());
+            }
         }
 
         /// <summary>
-        /// 查询列表
+        /// 从原字节数组中查找子数组，找到则返回子数组起始位置，否则返回-1
         /// </summary>
-        [Serializable]
-        public class TwitterViewEntry : AbstractTwitterEntity
+        /// <param name="srcBytes"></param>
+        /// <param name="searchBytes"></param>
+        /// <returns></returns>
+        private static int FindSubByteArray(byte[] srcBytes, byte[] searchBytes)
         {
-            public string ID { get; set; }
+            if (srcBytes.IsInvalid() || searchBytes.IsInvalid() || srcBytes.Length < searchBytes.Length)
+            {
+                return -1;
+            }
 
-            [Display]
-            public string OwnerID { get; set; }
-
-            [Display]
-            public string OwnerName { get; set; }
-
-            [Display]
-            public string Title { get; set; }
-
-            [Display]
-            public string Subtitle { get; set; }
-
-        }
-
-        /// <summary>
-        /// 瞬间
-        /// </summary>
-        [Serializable]
-        public class TwitterMomentEntry : AbstractTwitterEntity
-        {
-            public string ID { get; set; }
-
-            [Display]
-            public string Title { get; set; }
-
-            [Display]
-            public string Subcategory { get; set; }
-
-            [Display]
-            public string SubcategoryUrl { get; set; }
-
-            [Display]
-            public string Description { get; set; }
-
-            [Display]
-            public string MomentUrl { get; set; }
-
-            [Display]
-            public DateTime? Time { get; set; }
-
+            for (int i = 0; i < srcBytes.Length - searchBytes.Length; i++)
+            {
+                if (srcBytes[i] == searchBytes[0])
+                {
+                    if (searchBytes.Length == 1) { return i; }
+                    bool flag = true;
+                    for (int j = 1; j < searchBytes.Length; j++)
+                    {
+                        if (srcBytes[i + j] != searchBytes[j])
+                        {
+                            flag = false;
+                            break;
+                        }
+                    }
+                    if (flag) { return i; }
+                }
+            }
+            return -1;
         }
     }
+
+    /// <summary>
+    /// 搜索记录
+    /// </summary>
+    [Serializable]
+    public class TwitterSearchEntry : AbstractTwitterEntity
+    {
+
+        [Display]
+        public DateTime? SearchTime { get; set; }
+
+        [Display]
+        public string Context { get; set; }
+
+        [Display]
+        public string ResultDesc
+        {
+            get { return ResultType == "0" ? LanguageManager.Current[Languagekeys.OtherLanguage_ResultType_YouXiaoShuJu] : LanguageManager.Current[Languagekeys.OtherLanguage_ResultType_WuXiaoShuJu]; }
+        }
+
+        public string ResultType { get; set; }
+
+        public static TwitterSearchEntry DyConvert(dynamic data)
+        {
+            TwitterSearchEntry entry = new TwitterSearchEntry();
+
+            entry.Context = DynamicConvert.ToSafeString(data.name);
+            entry.SearchTime = DynamicConvert.ToSafeFromUnixTime(data.time, 1000);
+            entry.ResultType = DynamicConvert.ToSafeString(data.type);
+            entry.DataState = EnumDataState.Normal;
+
+            return entry;
+        }
+    }
+
+    /// <summary>
+    /// 查询列表
+    /// </summary>
+    [Serializable]
+    public class TwitterViewEntry : AbstractTwitterEntity
+    {
+        public string ID { get; set; }
+
+        [Display]
+        public string OwnerID { get; set; }
+
+        [Display]
+        public string OwnerName { get; set; }
+
+        [Display]
+        public string Title { get; set; }
+
+        [Display]
+        public string Subtitle { get; set; }
+
+
+        public static TwitterViewEntry DyConvert(dynamic data)
+        {
+            TwitterViewEntry entry = new TwitterViewEntry();
+
+            entry.ID = DynamicConvert.ToSafeString(data.topics_ev_id);
+            entry.OwnerID = DynamicConvert.ToSafeString(data.topics_ev_owner_id);
+            entry.OwnerName = DynamicConvert.ToSafeString(data.topics_ev_query);
+            entry.Title = DynamicConvert.ToSafeString(data.topics_ev_title);
+            entry.Subtitle = DynamicConvert.ToSafeString(data.topics_ev_subtitle);
+            entry.DataState = EnumDataState.Normal;
+
+            return entry;
+        }
+    }
+
+    /// <summary>
+    /// 瞬间
+    /// </summary>
+    [Serializable]
+    public class TwitterMomentEntry : AbstractTwitterEntity
+    {
+        public string ID { get; set; }
+
+        [Display]
+        public string Title { get; set; }
+
+        [Display]
+        public string Subcategory { get; set; }
+
+        [Display]
+        public string SubcategoryUrl { get; set; }
+
+        [Display]
+        public string Description { get; set; }
+
+        [Display]
+        public string MomentUrl { get; set; }
+
+        [Display]
+        public DateTime? Time { get; set; }
+
+        public static TwitterMomentEntry DyConvert(dynamic data)
+        {
+            TwitterMomentEntry entry = new TwitterMomentEntry();
+
+            entry.ID = DynamicConvert.ToSafeString(data.id);
+            entry.Title = DynamicConvert.ToSafeString(data.title);
+            entry.Subcategory = DynamicConvert.ToSafeString(data.subcategory_string);
+            entry.SubcategoryUrl = DynamicConvert.ToSafeString(data.subcategory_favicon_url);
+            entry.Description = DynamicConvert.ToSafeString(data.description);
+            entry.MomentUrl = DynamicConvert.ToSafeString(data.moment_url);
+            entry.Time = DynamicConvert.ToSafeFromUnixTime(data.capsule_content_version, 1000);
+            entry.DataState = EnumDataState.Normal;
+
+            return entry;
+        }
+
+    }
+
 }

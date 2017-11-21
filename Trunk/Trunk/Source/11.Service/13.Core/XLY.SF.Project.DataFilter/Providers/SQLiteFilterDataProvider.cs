@@ -62,20 +62,33 @@ namespace XLY.SF.Project.DataFilter.Providers
         /// <param name="expression">表达式。</param>
         /// <param name="count">集合的大小。</param>
         /// <returns>数据。</returns>
-        public override IEnumerable<T> Query<T>(Expression expression, out Int32 count)
+        public override IEnumerable<T> Query<T>(Expression expression)
         {
             SQLiteConnection connection = new SQLiteConnection(ConnectionString);
             connection.Flags = SQLiteConnectionFlags.UseConnectionPool;
             connection.Open();
 
             SQLiteCommand command = connection.CreateCommand();
-            command.CommandText = SQLExpressionConverter.GetCountSql(expression, TableName);
-            count = (Int32)(Int64)command.ExecuteScalar();
-            if (count == 0) return new T[0];
-
             command.CommandText = SQLExpressionConverter.GetSelectionSql(expression, TableName);
             DbDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection);
             return new DbEnumerableDataReader<T>(reader);
+        }
+
+        /// <summary>
+        /// 查询数量。
+        /// </summary>
+        /// <param name="expression">表达式。</param>
+        /// <returns>集合的大小。</returns>
+        public override Int32 GetCount(Expression expression)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Flags = SQLiteConnectionFlags.UseConnectionPool;
+                connection.Open();
+                SQLiteCommand command = connection.CreateCommand();
+                command.CommandText = SQLExpressionConverter.GetCountSql(expression, TableName);
+                return (Int32)(Int64)command.ExecuteScalar();
+            }
         }
 
         #endregion

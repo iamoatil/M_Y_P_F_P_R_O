@@ -29,6 +29,8 @@ namespace XLY.SF.Project.DataDisplayView
         public MainDisplayView()
         {
             InitializeComponent();
+
+            AsyncOperator.LoadAsyncOperation(this);
         }
 
         [Import(ExportKeys.DataDisplayViewModel, typeof(ViewModelBase))]

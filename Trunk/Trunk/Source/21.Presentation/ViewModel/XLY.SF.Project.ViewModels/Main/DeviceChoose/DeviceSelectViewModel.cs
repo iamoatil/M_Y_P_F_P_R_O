@@ -160,7 +160,7 @@ namespace XLY.SF.Project.ViewModels.Device
             ProxyFactory.DeviceMonitor.OnDeviceConnected -= DeviceMonitor_OnDeviceConnected;
         }
 
-        protected override void LoadCore(object parameters)
+        protected override void InitLoad(object parameters)
         {
             Devices.Clear();
             Devices.AddRange(ProxyFactory.DeviceMonitor.GetCurConnectedDevices());

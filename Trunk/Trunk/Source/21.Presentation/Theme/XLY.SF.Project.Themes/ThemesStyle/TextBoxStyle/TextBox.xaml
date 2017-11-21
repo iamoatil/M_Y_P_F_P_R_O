@@ -28,6 +28,7 @@
                            Foreground="{Binding TitleForeground,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}" 
                            Margin="{Binding TitlePadding,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
                            Text="{Binding Title,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}" />
+                    <TextBlock x:Name="tb_Watermark" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="Gray" Opacity="0.5" Text="{Binding Watermark,RelativeSource={RelativeSource AncestorType=local:TextBoxEx}}"/>
                     <ScrollViewer Grid.Column="1" x:Name="PART_ContentHost" Foreground="{TemplateBinding Foreground}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                     <Image x:Name="img_Icon" Grid.Column="2" Width="{Binding IconWidth,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}" 
                        Height="{Binding IconHeight,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
@@ -68,6 +69,7 @@
                            Foreground="{Binding TitleForeground,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}" 
                            Margin="{Binding TitlePadding,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
                            Text="{Binding Title,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}" />
+                    <TextBlock x:Name="tb_Watermark" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="Gray" Opacity="0.5" Text="{Binding Watermark,RelativeSource={RelativeSource AncestorType=local:TextBoxEx}}"/>
                     <ScrollViewer Grid.Column="1" x:Name="PART_ContentHost" Foreground="{TemplateBinding Foreground}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                     <Image x:Name="img_Icon" Grid.Column="2" Width="{Binding IconWidth,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}" 
                        Height="{Binding IconHeight,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
@@ -95,9 +97,9 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
-    
-    
-    
+
+
+
 
 
 

@@ -19,11 +19,10 @@ namespace XLY.SF.Project.DataFilter.Views
         /// </summary>
         /// <typeparam name="TResult">筛选结果的类型。</typeparam>
         /// <param name="source">实现了 IFilterable 接口的类型实例。</param>
-        /// <param name="count">集合的大小。</param>
         /// <returns>筛选结果。</returns>
-        public static IEnumerable<TResult> FilterByNone<TResult>(this IFilterable source, out Int32 count)
+        public static IEnumerable<TResult> FilterByNone<TResult>(this IFilterable source)
         {
-            return source.Provider.Query<TResult>(Expression.Constant(null), out count);
+            return source.Provider.Query<TResult>(Expression.Constant(null));
         }
 
         /// <summary>
@@ -31,10 +30,9 @@ namespace XLY.SF.Project.DataFilter.Views
         /// </summary>
         /// <typeparam name="TResult">筛选结果的类型。</typeparam>
         /// <param name="source">实现了 IFilterable 接口的类型实例。</param>
-        /// <param name="count">集合的大小。</param>
         /// <param name="keyWords">属性名与值组成的键值对。</param>
         /// <returns>筛选结果。</returns>
-        public static IEnumerable<TResult> FilterByKeywords<TResult>(this IFilterable source, out Int32 count, KeyValuePair<String, String>[] keyWords, params String[] fields)
+        public static IEnumerable<TResult> FilterByKeywords<TResult>(this IFilterable source, KeyValuePair<String, String>[] keyWords, params String[] fields)
         {
             StringBuilder sb = new StringBuilder();
             if (keyWords != null && keyWords.Length != 0)
@@ -45,7 +43,7 @@ namespace XLY.SF.Project.DataFilter.Views
                 }
                 sb = sb.Remove(0, 2);
             }
-            return source.Provider.Query<TResult>(Expression.Constant(sb.ToString()), out count);
+            return source.Provider.Query<TResult>(Expression.Constant(sb.ToString()));
         }
 
         /// <summary>
@@ -53,10 +51,9 @@ namespace XLY.SF.Project.DataFilter.Views
         /// </summary>
         /// <typeparam name="TResult">筛选结果的类型。</typeparam>
         /// <param name="source">实现了 IFilterable 接口的类型实例。</param>
-        /// <param name="count">集合的大小。</param>
         /// <param name="keyWords">属性名与值组成的键值对。</param>
         /// <returns>筛选结果。</returns>
-        public static IEnumerable<TResult> FilterAllTextByKeywords<TResult>(this IFilterable source, out Int32 count, String[] keyWords, params String[] fields)
+        public static IEnumerable<TResult> FilterAllTextByKeywords<TResult>(this IFilterable source, String[] keyWords, params String[] fields)
         {
             StringBuilder sb = new StringBuilder();
             if (keyWords != null && keyWords.Length != 0)
@@ -67,7 +64,7 @@ namespace XLY.SF.Project.DataFilter.Views
                 }
                 sb = sb.Remove(0, 2);
             }
-            return source.Provider.Query<TResult>(Expression.Constant(sb.ToString()), out count);
+            return source.Provider.Query<TResult>(Expression.Constant(sb.ToString()));
         }
 
         /// <summary>
@@ -75,10 +72,9 @@ namespace XLY.SF.Project.DataFilter.Views
         /// </summary>
         /// <typeparam name="TResult">筛选结果的类型。</typeparam>
         /// <param name="source">实现了 IFilterable 接口的类型实例。</param>
-        /// <param name="count">集合的大小。</param>
         /// <param name="pattern">正则表达式。</param>
         /// <returns>筛选结果。</returns>
-        public static IEnumerable<TResult> FilterByRegex<TResult>(this IFilterable source, out Int32 count, KeyValuePair<String, String>[] pattern, params String[] fields)
+        public static IEnumerable<TResult> FilterByRegex<TResult>(this IFilterable source, KeyValuePair<String, String>[] pattern, params String[] fields)
         {
             StringBuilder sb = new StringBuilder();
             if (pattern != null && pattern.Length != 0)
@@ -89,7 +85,7 @@ namespace XLY.SF.Project.DataFilter.Views
                 }
                 sb = sb.Remove(0, 2);
             }
-            return source.Provider.Query<TResult>(Expression.Constant(sb.ToString()), out count);
+            return source.Provider.Query<TResult>(Expression.Constant(sb.ToString()));
         }
 
         /// <summary>
@@ -97,10 +93,9 @@ namespace XLY.SF.Project.DataFilter.Views
         /// </summary>
         /// <typeparam name="TResult">筛选结果的类型。</typeparam>
         /// <param name="source">实现了 IFilterable 接口的类型实例。</param>
-        /// <param name="count">集合的大小。</param>
         /// <param name="keyWords">属性名与值组成的键值对。</param>
         /// <returns>筛选结果。</returns>
-        public static IEnumerable<TResult> FilterAllTextByRegex<TResult>(this IFilterable source, out Int32 count, String[] patterns, params String[] fields)
+        public static IEnumerable<TResult> FilterAllTextByRegex<TResult>(this IFilterable source, String[] patterns, params String[] fields)
         {
             StringBuilder sb = new StringBuilder();
             if (patterns != null && patterns.Length != 0)
@@ -111,7 +106,7 @@ namespace XLY.SF.Project.DataFilter.Views
                 }
                 sb = sb.Remove(0, 2);
             }
-            return source.Provider.Query<TResult>(Expression.Constant(sb.ToString()), out count);
+            return source.Provider.Query<TResult>(Expression.Constant(sb.ToString()));
         }
 
 

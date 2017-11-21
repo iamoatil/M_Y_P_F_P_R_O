@@ -66,6 +66,12 @@ namespace XLY.SF.Project.Domains
         public List<DataView> DataView { get; set; }
 
         /// <summary>
+        /// 提取的手机，用于插件
+        /// </summary>
+        [XmlIgnore]
+        public Device Phone { get; set; }
+
+        /// <summary>
         /// 插件文件名，相对路径，表示解析器调用的主插件
         /// </summary>
         public override string ScriptFile => "main.py";

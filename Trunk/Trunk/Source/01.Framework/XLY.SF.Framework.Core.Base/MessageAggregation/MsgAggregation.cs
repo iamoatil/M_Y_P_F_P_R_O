@@ -58,11 +58,11 @@ namespace XLY.SF.Framework.Core.Base.MessageAggregation
         /// 导航到新窗口
         /// </summary>
         /// <param name="args">参数</param>
-        public void SendNavigationMsgForWindow(NavigationArgs args)
+        public void SendNavigationMsgForWindow(NormalNavigationArgs args)
         {
             GalaSoft.MvvmLight.Threading.DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<NavigationArgs>(args, SystemKeys.OpenNewWindow);
+                GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<NormalNavigationArgs>(args, SystemKeys.OpenNewWindow);
             });
         }
 
@@ -70,11 +70,11 @@ namespace XLY.SF.Framework.Core.Base.MessageAggregation
         /// 主界面导航
         /// </summary>
         /// <param name="args">参数</param>
-        public void SendNavigationMsgForMainView(NavigationArgs args)
+        public void SendNavigationMsgForMainView(NormalNavigationArgs args)
         {
             GalaSoft.MvvmLight.Threading.DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<NavigationArgs>(args, SystemKeys.MainUcNavigation);
+                GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<NormalNavigationArgs>(args, SystemKeys.MainUcNavigation);
             });
         }
 
@@ -82,11 +82,11 @@ namespace XLY.SF.Framework.Core.Base.MessageAggregation
         /// 关闭窗口
         /// </summary>
         /// <param name="args">参数</param>
-        public void SendNavigationMsgForCloseWindow(NavigationArgs args)
+        public void SendNavigationMsgForCloseWindow(CloseViewOfNewWindowArgs args)
         {
             GalaSoft.MvvmLight.Threading.DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
-                GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<NavigationArgs>(args, SystemKeys.CloseWindow);
+                GalaSoft.MvvmLight.Messaging.Messenger.Default.Send<CloseViewOfNewWindowArgs>(args, SystemKeys.CloseWindow);
             });
         }
 
@@ -244,9 +244,20 @@ namespace XLY.SF.Framework.Core.Base.MessageAggregation
         /// <param name="recipient">消息的接受者</param>
         /// <param name="token">消息标识</param>
         /// <param name="msgCallback">消息回调</param>
-        public void RegisterNaviagtionMsg(object recipient, string token, Action<NavigationArgs> msgCallback)
+        public void RegisterNaviagtionMsg(object recipient, string token, Action<NormalNavigationArgs> msgCallback)
         {
-            RegisterMsg<NavigationArgs>(recipient, token, msgCallback);
+            RegisterMsg<NormalNavigationArgs>(recipient, token, msgCallback);
+        }
+
+        /// <summary>
+        /// 注册关闭窗体消息
+        /// </summary>
+        /// <param name="recipient">消息的接受者</param>
+        /// <param name="token">消息标识</param>
+        /// <param name="msgCallback">消息回调</param>
+        public void RegisterNavigationOfCloseWindow(object recipient, Action<CloseViewOfNewWindowArgs> msgCallback)
+        {
+            RegisterMsg<CloseViewOfNewWindowArgs>(recipient, SystemKeys.CloseWindow, msgCallback);
         }
 
         #endregion

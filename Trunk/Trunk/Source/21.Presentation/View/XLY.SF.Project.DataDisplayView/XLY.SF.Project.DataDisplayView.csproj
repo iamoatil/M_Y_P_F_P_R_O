@@ -95,12 +95,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AsyncOperator.cs" />
     <Compile Include="DataFilterControl.xaml.cs">
       <DependentUpon>DataFilterControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainDisplayView.xaml.cs">
       <DependentUpon>MainDisplayView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MessageKeys.cs" />
+    <Compile Include="ViewModel\DataFilterViewModel.cs" />
     <Compile Include="ViewModel\MainDisplayViewModel.cs" />
     <Page Include="DataFilterControl.xaml">
       <SubType>Designer</SubType>

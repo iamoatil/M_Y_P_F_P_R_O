@@ -200,9 +200,15 @@ namespace XLY.SF.Project.DataFilter.Providers
         /// 获取数据。
         /// </summary>
         /// <param name="expression">表达式。</param>
-        /// <param name="count">集合的大小。</param>
         /// <returns>数据。</returns>
-        public abstract IEnumerable<T> Query<T>(Expression expression,out Int32 count);
+        public abstract IEnumerable<T> Query<T>(Expression expression);
+
+        /// <summary>
+        /// 查询数量。
+        /// </summary>
+        /// <param name="expression">表达式。</param>
+        /// <returns>集合的大小。</returns>
+        public abstract Int32 GetCount(Expression expression);
 
         #endregion
 

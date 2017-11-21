@@ -16,11 +16,9 @@ using XLY.SF.Project.Domains;
 namespace XLY.SF.Project.DataReport
 {
     /// <summary>
-    /// HtmlDataReportModulePlugin
+    /// 报表模板插件
     /// </summary>
-    //[Export(PluginExportKeys.PluginKey, typeof(IPlugin))]
-    [ExportMetadata("PluginType", PluginType.SpfReportModule)]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
+    [PluginContainer(PluginType.SpfReportModule)]
     public class HtmlDataReportModulePlugin : AbstractDataReportModulePlugin
     {
         public HtmlDataReportModulePlugin()

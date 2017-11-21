@@ -6,6 +6,7 @@
              xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
                  xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
                  xmlns:cc="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
+                 xmlns:behavior="clr-namespace:XLY.SF.Project.Views.Behavior"
 		     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
 		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
              mc:Ignorable="d" IsMaxView="False" Width="360" Height="480" d:DesignHeight="480" d:DesignWidth="360">
@@ -170,8 +171,12 @@
                         <ColumnDefinition Width="70"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <cc:ComboBoxEx  IsEnabled="True"
-                                    Title="{Binding XPath=ViewLanguage/View_Login_UserName,Source={x:Static ex:SystemContext.LanguageProvider}}" Grid.ColumnSpan="2"  IsEditable="True" ItemsSource="{Binding AllUser,Mode=OneWay}" SelectedIndex="0" DisplayMemberPath="LoginUserName" Background="#FF414B69" FontSize="14" />
-                    <PasswordBox Grid.Row="2" Grid.ColumnSpan="2" Style="{StaticResource LoginPasswordBoxStyle}" Password="123456"></PasswordBox>
+                                    Title="{Binding XPath=ViewLanguage/View_Login_UserName,Source={x:Static ex:SystemContext.LanguageProvider}}" Text="{Binding CurLoginUser.LoginUserName}" Grid.ColumnSpan="2"  IsEditable="True" ItemsSource="{Binding AllUser,Mode=OneWay}" SelectedIndex="0" DisplayMemberPath="LoginUserName" Background="#FF414B69" FontSize="14" />
+                    <PasswordBox Grid.Row="2" Grid.ColumnSpan="2" Style="{StaticResource LoginPasswordBoxStyle}">
+                        <i:Interaction.Behaviors>
+                            <behavior:PasswordBoxBehavior PasswordString="{Binding CurLoginUser.LoginPassword,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                        </i:Interaction.Behaviors>
+                    </PasswordBox>
                     <Button Grid.Row="4"
                             Content="{Binding XPath=ViewLanguage/View_Login,Source={x:Static ex:SystemContext.LanguageProvider}}"
                 HorizontalAlignment="Left" Width="199" Height="46" Command="{Binding LoginCommand.ViewExecuteCmd}" ></Button>

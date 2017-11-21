@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 /* ==============================================================================
 * Description：MirrorFile  
@@ -49,7 +46,7 @@ namespace XLY.SF.Project.DataMirrorApp
         {
             _path = filePath;
             _mirrorSuffix = Path.GetExtension(filePath);
-            _fileStream = new FileStream(filePath,FileMode.Create);
+            _fileStream = new FileStream(filePath,FileMode.Append);
         }
 
         /// <summary>
@@ -58,14 +55,18 @@ namespace XLY.SF.Project.DataMirrorApp
         /// <param name="bytes"></param>
         public void Write(byte[] bytes)
         {
-            bytes.CopyTo(_buffer,_curWriteIndex);
+            if (_fileStream == null)
+            {
+                return;
+            }
+            bytes.CopyTo(_buffer, _curWriteIndex);
             _curWriteIndex += bytes.Length;
-            WritedSize+= bytes.Length;
+            WritedSize += bytes.Length;
             if (_curWriteIndex > M10)
             {
-                _fileStream.Write(_buffer,0, _curWriteIndex);
+                _fileStream.Write(_buffer, 0, _curWriteIndex);
                 _fileStream.Flush();
-               _curWriteIndex = 0;               
+                _curWriteIndex = 0;
             }
         }
 
@@ -74,10 +75,14 @@ namespace XLY.SF.Project.DataMirrorApp
         /// </summary>
         public void Close()
         {
-            _fileStream.Write(_buffer, 0, _curWriteIndex);
-            _curWriteIndex = 0;
-            _fileStream.Flush();
-            _fileStream.Close();
+            if(_fileStream != null)
+            {
+                _fileStream.Write(_buffer, 0, _curWriteIndex);
+                _curWriteIndex = 0;
+                _fileStream.Flush();
+                _fileStream.Close();
+                _fileStream = null;
+            }            
         }
 
         /// <summary>

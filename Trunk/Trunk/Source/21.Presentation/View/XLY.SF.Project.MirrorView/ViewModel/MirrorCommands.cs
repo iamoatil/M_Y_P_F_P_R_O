@@ -18,21 +18,36 @@ namespace XLY.SF.Project.MirrorView
         public CmdString(string cmd)
         {
             _cmdString = cmd;
-        }    
+
+            HasChild = false;
+            CmdHeaderLength = -1;
+            int index = cmd.IndexOf('|');
+            if (index > 1)
+            {
+                HasChild = true;
+                CmdHeaderLength = index;
+            }
+        }
+        
         /// <summary>
-        ///命令中符串的长度。eg：“Start”的长度
+        /// 是否有孩子命令
         /// </summary>
-        public int CmdLength
+        public bool HasChild { get; private set; }
+
+        /// <summary>
+        ///命令中头部字符串的长度。eg：“Start”的长度
+        /// </summary>
+        public int CmdHeaderLength
         {
-            get { return _cmdString.Length; }
+            get;private set;
         }
 
         /// <summary>
-        /// 命令区域的长度。eg：“Start|”的长度
+        /// 命令中头部区域的长度。eg：“Start|”的长度
         /// </summary>
-        public int CmdAreaLength
+        public int CmdHeaderAreaLength
         {
-            get { return _cmdString.Length + 1; }
+            get { return CmdHeaderLength + 1; }
         }
 
         public override string ToString()
@@ -73,7 +88,7 @@ namespace XLY.SF.Project.MirrorView
         /// <returns></returns>
         internal CmdString GetChildCmd()
         {
-            string str=_cmdString.Substring(CmdAreaLength);
+            string str=_cmdString.Substring(CmdHeaderAreaLength);
             return new CmdString(str);
         }
     }
@@ -98,7 +113,8 @@ namespace XLY.SF.Project.MirrorView
 
         //临时状态
         public static readonly CmdString AllFinishState = new CmdString("AllFinishState");
-        public static readonly CmdString UnknowException = new CmdString("Exception|MirrorBackgroundProcessError");
-        
+        public static readonly CmdString UnknowException = new CmdString("Exception|UnknowException");
+        public static readonly CmdString NoSelectedPartition = new CmdString("NoSelectedPartition");
+
     }
 }

@@ -80,6 +80,7 @@
     <Compile Include="Function\StrategyRecommend\StrategyProposed.cs" />
     <Compile Include="Function\StrategyRecommend\SolutionProposedManager.cs" />
     <Compile Include="Helper\FoundationHelper.cs" />
+    <Compile Include="Helper\NavigationViewCreater.cs" />
     <Compile Include="Language\LanguageTextTeamplate.LanguageElement.cs">
       <DependentUpon>LanguageTextTeamplate.tt</DependentUpon>
       <AutoGen>True</AutoGen>

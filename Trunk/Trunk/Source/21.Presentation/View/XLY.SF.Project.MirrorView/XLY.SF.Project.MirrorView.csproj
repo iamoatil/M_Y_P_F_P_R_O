@@ -74,12 +74,16 @@
     <Compile Include="AppDir.cs" />
     <Compile Include="ViewModel\CmdMirrorViewModel.cs" />
     <Compile Include="ViewModel\CmdProgressPosition.cs" />
-    <Compile Include="ViewModel\CmdSourcePosition.cs" />
+    <Compile Include="ViewModel\SourcePosition\CmdSourcePosition.cs" />
     <Compile Include="ViewModel\CmdTargetPosition.cs" />
     <Compile Include="ViewModel\MessageBoxEx.cs" />
     <Compile Include="ViewModel\MirrorBackgroundProcess.cs" />
     <Compile Include="ViewModel\MirrorCommands.cs" />
+    <Compile Include="ViewModel\MyDriverInfo.cs" />
     <Compile Include="ViewModel\MyReporter.cs" />
+    <Compile Include="ViewModel\SourcePosition\MirrorControlerBox.cs" />
+    <Compile Include="ViewModel\SourcePosition\PartitionInfo.cs" />
+    <Compile Include="ViewModel\SourcePosition\PauseInfo.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

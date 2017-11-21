@@ -54,7 +54,7 @@ namespace XLY.SF.Project.Domains
 
         #region PageSize
 
-        private Int32 _pageSize = 2;
+        private Int32 _pageSize = 50;
 
         public Int32 PageSize
         {
@@ -74,7 +74,7 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 指示该行数据属于哪个节点
         /// </summary>
-        public string Key { get; set; }
+        public String Key { get; }
 
         #endregion
 
@@ -85,11 +85,11 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 开始一次新的过滤。 执行该方法后，可以调用NextPage获取下一页的视图数据。
         /// </summary>
-        public override void Filter()
+        public override void Initialize()
         {
             _isLocked = true;
             Expression = CreateExpression(false, Args ?? throw new ArgumentNullException("Args"));
-            base.Filter();
+            base.Initialize();
             PageCount = (Count + PageSize - 1) / PageSize;
             NextPage();
         }
@@ -217,21 +217,21 @@ namespace XLY.SF.Project.Domains
                 {
                     foreach (String str in dateColumnsName)
                     {
-                        sb.AppendFormat($"AND {str} < '{end.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
+                        sb.AppendFormat($"AND REPLACE({str},'/','-') < '{end.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
                     }
                 }
                 else if (start != null && end == null)
                 {
                     foreach (String str in dateColumnsName)
                     {
-                        sb.AppendFormat($"AND {str} >= '{start.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
+                        sb.AppendFormat($"AND REPLACE({str},'/','-') >= '{start.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
                     }
                 }
                 else
                 {
                     foreach (String str in dateColumnsName)
                     {
-                        sb.AppendFormat($"AND {str} >= '{start.Value.ToString("yyyy-MM-dd HH:mm:ss")}'AND {str} < '{end.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
+                        sb.AppendFormat($"AND REPLACE({str},'/','-') >= '{start.Value.ToString("yyyy-MM-dd HH:mm:ss")}'AND REPLACE({str},'/','-') < '{end.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
                     }
                 }
             }
@@ -250,15 +250,12 @@ namespace XLY.SF.Project.Domains
         #endregion
     }
 
-    public class DataAggregationFilterView<T>: AggregationFilterView<T> where T: AbstractDataItem
+    public class DataAggregationFilterView<T> : AggregationFilterView<T> 
+        where T : AbstractDataItem
     {
-        public DataAggregationFilterView(IFilterable source, string key) : base(source, key)
+        public DataAggregationFilterView(IFilterable source, string key) 
+            : base(source, key)
         { }
-
-        public override void Filter()
-        {
-            base.Filter();
-        }
 
         public override bool NextPage()
         {

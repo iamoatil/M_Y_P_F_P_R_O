@@ -283,4 +283,32 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <!--灰色图标按钮，移动上去后变成白色，并填充背景色-->
+    <Style x:Key="btn_GrayIcon" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Padding" Value="7 4"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="templateRoot" SnapsToDevicePixels="true" Background="{TemplateBinding Background}" CornerRadius="4">
+                        <ContentPresenter x:Name="contentPresenter" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"></ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="true"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Background" Value="#263454"/>
+                            <Setter Property="Effect" TargetName="contentPresenter">
+                                <Setter.Value>
+                                    <ee:EmbossedEffect Color="White"></ee:EmbossedEffect>
+                                </Setter.Value>
+                            </Setter>
+                        </MultiDataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

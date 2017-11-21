@@ -66,14 +66,25 @@
   <ItemGroup>
     <Compile Include="Call\Core\IOSCallDataParseCoreV1_0.cs" />
     <Compile Include="Call\Core\IOSCallDataParseCoreV2_0.cs" />
+    <Compile Include="Call\IOSCallDataParser.cs" />
     <Compile Include="Contacts\Core\IOSContactsDataParseCoreV1_0.cs" />
+    <Compile Include="Contacts\IOSContactsDataParser.cs" />
+    <Compile Include="DeviceProperty\IOSDevicePropertyDataParser.cs" />
+    <Compile Include="InstalledApp\IOSInstalledAppDataParser.cs" />
+    <Compile Include="Mms\Core\IOSMmsDataParseCoreV1_0.cs" />
+    <Compile Include="Mms\IOSMmsDataParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QQ\Core\IOSQQDataParseCoreV1_0.cs" />
+    <Compile Include="QQ\IOSEntQQDataParser.cs" />
+    <Compile Include="QQ\IOSEimDataParser.cs" />
+    <Compile Include="QQ\IOSQQDataParser.cs" />
     <Compile Include="Sms\Core\IOSSMSDataParseCoreV1_0.cs" />
+    <Compile Include="Sms\IOSSmsDataParser.cs" />
     <Compile Include="WeChat\Core\IOSWeChatDataParseCoreV1_0.cs" />
     <Compile Include="WeChat\Core\MessageToImage.cs" />
     <Compile Include="WeChat\Core\MessageToVideo.cs" />
     <Compile Include="WeChat\Core\MessageToVoice.cs" />
+    <Compile Include="WeChat\IOSWechatDataParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.BaseUtility\XLY.SF.Framework.BaseUtility.csproj">
@@ -83,6 +94,10 @@
     <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.Core.Base\XLY.SF.Framework.Core.Base.csproj">
       <Project>{28682fe4-ec72-42a3-bb2c-27d19f55e14f}</Project>
       <Name>XLY.SF.Framework.Core.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.Log4NetService\XLY.SF.Framework.Log4NetService.csproj">
+      <Project>{6E3193B7-7316-415A-B529-0F743D5F267B}</Project>
+      <Name>XLY.SF.Framework.Log4NetService</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\11.Domains\XLY.SF.Project.Domains\XLY.SF.Project.Domains.csproj">
       <Project>{68f2d8a3-05a8-4aaa-a9e2-00071188595b}</Project>

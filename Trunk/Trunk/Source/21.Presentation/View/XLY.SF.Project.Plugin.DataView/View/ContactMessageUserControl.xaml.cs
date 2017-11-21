@@ -53,6 +53,10 @@ namespace XLY.SF.Project.Plugin.DataView
             tbdetail.Items.Clear();
             foreach (var v in views)
             {
+                if(v.PluginInfo.Name == "消息视图")
+                {
+                    continue;
+                }
                 v.SelectedDataChanged += OnSelectedDataChanged;
                 tbdetail.Items.Add(v.ToControl(new DataViewPluginArgument() { CurrentData = selNode, DataSource = arg.DataSource }));
             }

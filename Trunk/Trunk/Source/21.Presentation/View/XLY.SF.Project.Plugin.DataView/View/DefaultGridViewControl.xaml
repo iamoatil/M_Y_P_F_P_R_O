@@ -10,6 +10,7 @@
     <UserControl.Resources>
         <theme:BookmarkToBooleanConverter x:Key="bmkConverter"/>
 
+        <!--书签列模板-->
         <DataGridTemplateColumn x:Key="bookmarkColumnTemplate">
             <DataGridTemplateColumn.HeaderTemplate>
                 <DataTemplate>
@@ -22,6 +23,15 @@
                 </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
+
+        <!--图片列模板-->
+        <!--<DataGridTemplateColumn x:Key="imageColumnTemplate">
+            <DataGridTemplateColumn.CellTemplate>
+                <DataTemplate>
+                    <Image Width="17" Height="17" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
+                </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>-->
     </UserControl.Resources>
     <DataGrid x:Name="dg" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding Items.View}" SelectionChanged="DataGrid_SelectionChanged"></DataGrid>
 </UserControl>

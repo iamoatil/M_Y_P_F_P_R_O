@@ -44,7 +44,7 @@ namespace X86DllServer.Service
             {
                 _clientCallback.ImageDataCallBack(buff, ref stop);
             }
-            catch (Exception ex)
+            catch 
             {
                 Thread.CurrentThread.Abort();
             }            

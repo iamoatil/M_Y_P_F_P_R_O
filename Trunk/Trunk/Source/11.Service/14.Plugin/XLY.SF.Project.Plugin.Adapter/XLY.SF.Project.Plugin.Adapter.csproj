@@ -84,6 +84,7 @@
     <Compile Include="Loader\NetPluginLoader.cs" />
     <Compile Include="Loader\ZipPluginLoader.cs" />
     <Compile Include="PluginAdapter.cs" />
+    <Compile Include="PluginContainerAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

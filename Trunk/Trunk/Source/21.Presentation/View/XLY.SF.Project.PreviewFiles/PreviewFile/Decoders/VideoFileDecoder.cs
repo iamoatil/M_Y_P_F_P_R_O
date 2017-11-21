@@ -15,13 +15,11 @@ namespace XLY.SF.Project.PreviewFilesView.PreviewFile
         }
 
         readonly VideoUserControlVLC _videoUserControl = new VideoUserControlVLC();
-        readonly MediaElement _mediaElement = new MediaElement();
 
         public void Decode(string path)
         {
             path = Path.GetFullPath(path);
-            _mediaElement.Open(path);
-            _videoUserControl.SetMediaElement(_mediaElement);
+            _videoUserControl.Open(path);
         }
     }
 }

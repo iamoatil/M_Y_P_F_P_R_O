@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using XLY.SF.Project.DataDisplayView.ViewModel;
 
 namespace XLY.SF.Project.DataDisplayView
 {
@@ -23,6 +24,8 @@ namespace XLY.SF.Project.DataDisplayView
         public DataFilterControl()
         {
             InitializeComponent();
+
+            this.DataContext = new DataFilterViewModel();
         }
     }
 }

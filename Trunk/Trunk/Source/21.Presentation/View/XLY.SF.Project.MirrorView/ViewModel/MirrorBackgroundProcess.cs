@@ -22,7 +22,8 @@ namespace XLY.SF.Project.MirrorView
         /// <returns></returns>
         public bool Initialize()
         {
-            _isInitialized = true;
+            _isInitialized = false;
+
             ProcessStartInfo start = new ProcessStartInfo(_backgroundAppPath);
             start.CreateNoWindow = true;                //不显示dos命令行窗口   
             start.RedirectStandardOutput = true;
@@ -36,10 +37,31 @@ namespace XLY.SF.Project.MirrorView
                 _isInitialized = false;
                 return _isInitialized;
             }
-            _curProcess = Process.Start(start);
-            _curProcess.BeginErrorReadLine();
-            _curProcess.BeginOutputReadLine();
-            _curProcess.OutputDataReceived += (o, e) => { OnCallBack(e.Data); };
+            try
+            {
+                _curProcess = Process.Start(start);
+                _curProcess.BeginErrorReadLine();
+                _curProcess.BeginOutputReadLine();
+                _curProcess.OutputDataReceived += (o, e) =>
+                {
+                    //当镜像进程关闭的时候，会触发一个null的e.Data数据过来。此处用_curProcess.HasExited排除掉
+                    if (!((Process)o).HasExited)
+                    {
+                        OnCallBack(e.Data);
+                    }   
+                    else
+                    {
+
+                    }
+                };
+            }
+            catch (Exception ex)
+            {
+                OnCallBack(string.Format("{0}|:{1}", CmdStrings.Exception, ex.Message));
+                return _isInitialized;
+            }
+
+            _isInitialized = true;
             return _isInitialized;
         }
 
@@ -48,7 +70,7 @@ namespace XLY.SF.Project.MirrorView
             if(CallBack != null )
             {
                 CallBack(msg);
-            }
+            }            
         }
 
         /// <summary>

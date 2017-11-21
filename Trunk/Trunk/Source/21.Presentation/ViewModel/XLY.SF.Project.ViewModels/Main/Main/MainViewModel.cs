@@ -210,7 +210,7 @@ namespace XLY.SF.Project.ViewModels.Main
 
         }
 
-        protected override void LoadCore(object parameters)
+        protected override void InitLoad(object parameters)
         {
             MainInfo = new MainModel()
             {
@@ -239,6 +239,7 @@ namespace XLY.SF.Project.ViewModels.Main
         //用户管理
         private string ExecuteUserManagementCommand()
         {
+            base.NavigationForNewWindow(ExportKeys.ManagementUserListView);
             return "打开用户管理";
         }
 

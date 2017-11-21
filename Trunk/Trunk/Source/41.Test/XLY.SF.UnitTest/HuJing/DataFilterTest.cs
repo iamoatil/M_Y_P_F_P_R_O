@@ -21,8 +21,7 @@ namespace XLY.SF.UnitTest
                 new KeyValuePair<String, String>("Type", "检测" ),
             };
             var dataSource = CreateDataSource();
-            IEnumerable<dynamic> result = dataSource[1].Items.FilterByKeywords<dynamic>(out Int32 count, kvs);
-            Console.WriteLine($"----{count}----");
+            IEnumerable<dynamic> result = dataSource[1].Items.FilterByKeywords<dynamic>(kvs);
             foreach (var a in result)
             {
                 Console.WriteLine(a);
@@ -39,8 +38,7 @@ namespace XLY.SF.UnitTest
                 new KeyValuePair<String, String>("Type", "^*.检测$" ),
             };
             var dataSource = CreateDataSource();
-            IEnumerable<dynamic> result = dataSource[1].Items.FilterByRegex<dynamic>(out Int32 count, kvs);
-            Console.WriteLine($"----{count}----");
+            IEnumerable<dynamic> result = dataSource[1].Items.FilterByRegex<dynamic>( kvs);
             foreach (var a in result)
             {
                 Console.WriteLine(a);

@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using XLY.SF.Project.Domains;
+using XLY.SF.Framework.BaseUtility;
 
 namespace XLY.SF.Project.Domains
 {
     [Serializable]
-    public class TencentMapEntity
+    public class TencentMapAddress
     {
         /// <summary>
         /// 地址
@@ -35,6 +31,11 @@ namespace XLY.SF.Project.Domains
         {
             get;
             set;
+        }
+
+        public override string ToString()
+        {
+            return Address.IsValid() ? string.Format("{0}\r\n经度:{1} 纬度:{2}", Address, Lon, Lat) : string.Empty;
         }
     }
 
@@ -72,39 +73,24 @@ namespace XLY.SF.Project.Domains
             set;
         }
 
-        [Display]
-        public string LastLoginTimeDesc
-        {
-            get { return null != LastLoginTime ? LastLoginTime.Value.ToString("yyyy-MM-dd HH:mm:ss") : ""; }
-        }
-
         /// <summary>
         /// 最后登录时间
         /// </summary>
+        [Display]
         public DateTime? LastLoginTime
         {
             get;
             set;
         }
 
-        [Display]
-        public string LastLoginCityDesc
-        {
-            get { return LastLoginCity.ToString(); }
-        }
-
         /// <summary>
         /// 最后登录城市
         /// </summary>
-        public TencentMapEntity LastLoginCity
+        [Display]
+        public string LastLoginCity
         {
             get;
             set;
-        }
-
-        public TencentMapAccount()
-        {
-            LastLoginCity = new TencentMapEntity();
         }
     }
 
@@ -121,30 +107,20 @@ namespace XLY.SF.Project.Domains
             set;
         }
 
-        [Display]
-        public string ResultDesc
-        {
-            get { return ResultAddress.ToString(); }
-        }
-
         /// <summary>
         /// 搜索结果
         /// </summary>
-        public TencentMapEntity ResultAddress
+        [Display]
+        public string ResultAddress
         {
             get;
             set;
         }
 
-        [Display]
-        public string LastTimeDesc
-        {
-            get { return null != LastTime ? LastTime.Value.ToString("yyyy-MM-dd HH:mm:ss") : ""; }
-        }
-
         /// <summary>
         /// 最后搜索时间
         /// </summary>
+        [Display]
         public DateTime? LastTime
         {
             get;
@@ -156,11 +132,6 @@ namespace XLY.SF.Project.Domains
         {
             get;
             set;
-        }
-
-        public TencentMapSearchAddress()
-        {
-            ResultAddress = new TencentMapEntity();
         }
     }
 
@@ -177,45 +148,30 @@ namespace XLY.SF.Project.Domains
             set;
         }
 
-        [Display]
-        public string RouteFromDesc
-        {
-            get { return RouteFrom.ToString(); }
-        }
-
         /// <summary>
         /// 搜索起点
         /// </summary>
-        public TencentMapEntity RouteFrom
+        [Display]
+        public string RouteFrom
         {
             get;
             set;
-        }
-
-        [Display]
-        public string RouteToDesc
-        {
-            get { return RouteTo.ToString(); }
         }
 
         /// <summary>
         /// 搜索终点
         /// </summary>
-        public TencentMapEntity RouteTo
+        [Display]
+        public string RouteTo
         {
             get;
             set;
         }
 
-        [Display]
-        public string LastTimeDesc
-        {
-            get { return null != LastTime ? LastTime.Value.ToString("yyyy-MM-dd HH:mm:ss") : ""; }
-        }
-
         /// <summary>
         /// 最后搜索时间
         /// </summary>
+        [Display]
         public DateTime? LastTime
         {
             get;
@@ -228,13 +184,6 @@ namespace XLY.SF.Project.Domains
             get;
             set;
         }
-
-        public TencentMapSearchRoute()
-        {
-            RouteFrom = new TencentMapEntity();
-            RouteTo = new TencentMapEntity();
-        }
-
     }
 
     /// <summary>
@@ -251,11 +200,6 @@ namespace XLY.SF.Project.Domains
         }
 
         [Display]
-        public string TimeDesc
-        {
-            get { return null != Time ? Time.Value.ToString("yyyy-MM-dd HH:mm:ss") : string.Empty; }
-        }
-
         public DateTime? Time
         {
             get;
@@ -347,17 +291,11 @@ namespace XLY.SF.Project.Domains
         }
 
         [Display]
-        public string TimeDesc
-        {
-            get { return null != Time ? Time.Value.ToString("yyyy-MM-dd HH:mm:ss") : string.Empty; }
-        }
-
         public DateTime? Time
         {
             get;
             set;
         }
-
 
         [Display]
         public string FileInfo
@@ -365,7 +303,6 @@ namespace XLY.SF.Project.Domains
             get;
             set;
         }
-
     }
 
     /// <summary>
@@ -381,7 +318,6 @@ namespace XLY.SF.Project.Domains
             set;
         }
 
-
         [Display]
         public string Sender
         {
@@ -390,11 +326,6 @@ namespace XLY.SF.Project.Domains
         }
 
         [Display]
-        public string TimeDesc
-        {
-            get { return null != Time ? Time.Value.ToString("yyyy-MM-dd HH:mm:ss") : string.Empty; }
-        }
-
         public DateTime? Time
         {
             get;

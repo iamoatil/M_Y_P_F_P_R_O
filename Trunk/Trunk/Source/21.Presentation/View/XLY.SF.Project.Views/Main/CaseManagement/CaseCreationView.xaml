@@ -1,0 +1,156 @@
+﻿<core:UcViewBase x:Class="XLY.SF.Project.Views.Main.CaseCreationView"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:c="clr-namespace:XLY.SF.Project.Views.Converters"
+                 xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
+                 xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
+                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                 xmlns:cc="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
+                 mc:Ignorable="d"
+                 FontSize="13">
+    <core:UcViewBase.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--此处以下添加自己的引用-->
+            <c:IsEnableToVisibilityConverter x:Key="IsEnableToVisibilityConverter" />
+        </ResourceDictionary>
+    </core:UcViewBase.Resources>
+    <core:UcViewBase.Background>
+        <ImageBrush ImageSource="/XLY.SF.Project.Themes;component/Resources/Images/CaseCreation_Back.png"
+                    Stretch="Uniform">
+            <ImageBrush.RelativeTransform>
+                <TransformGroup>
+                    <TranslateTransform Y="-0.13" />
+                </TransformGroup>
+            </ImageBrush.RelativeTransform>
+        </ImageBrush>
+    </core:UcViewBase.Background>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="282" />
+            <ColumnDefinition Width="356" />
+            <ColumnDefinition Width="404" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="282" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="164" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="272" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="1"
+              Grid.Row="1"
+              HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="28" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="32" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="304" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Text="案例编辑"
+                       FontSize="72"
+                       FontWeight="Black"
+                       Grid.Row="0" />
+            <Border Height="6"
+                    Width="80"
+                    Background="#379be6" 
+                    HorizontalAlignment="Left"
+                    Grid.Row="2" />
+            <TextBlock Grid.Row="4"
+                       TextTrimming="None"
+                       TextWrapping="Wrap"
+                       FontSize="16"
+                       Text="请在右方填入相应的案例信息，选择跳过则默认为当前案例信息" />
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="6">
+                <TextBlock FontSize="26"
+                           FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald"
+                           Text="INFORMATION" />
+                <Image Margin="10,0,0,0"
+                       Source="/XLY.SF.Project.Themes;component/Resources/Images/CaseCreation_Footer.png" />
+            </StackPanel>
+        </Grid>
+        <StackPanel Grid.Column="3"
+                    Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="60" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!--<TextBlock Text="{Binding XPath=ViewLanguage/View_CaseType,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                           Grid.Row="4"
+                           HorizontalAlignment="Right" />
+                <TextBlock Text="{Binding XPath=ViewLanguage/View_CaseCreateTime,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                           Grid.Row="8"
+                           HorizontalAlignment="Right" />
+                <TextBlock Text="{Binding XPath=ViewLanguage/View_StorePath,Source={x:Static Lang:PageLanguageHelper.XmlProvider}}"
+                           Grid.Row="10"
+                           HorizontalAlignment="Right" />-->
+
+                <cc:TextBoxEx Grid.Row="0" Width="560" Grid.Column="0"
+                              Title="{Binding XPath=ViewLanguage/View_CaseName,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                              VerticalContentAlignment="Center"
+                              Text="{Binding CaseInfo.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                <cc:TextBoxEx Grid.Row="2" Width="560" Grid.Column="0"
+                              Title="{Binding XPath=ViewLanguage/View_CaseNumber,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                              VerticalContentAlignment="Center"
+                              IsEnabled="{Binding IsEnable,Mode=OneWay,UpdateSourceTrigger=PropertyChanged}"
+                              Text="{Binding CaseInfo.Number,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                <cc:ComboBoxEx Grid.Row="4" Width="560" Grid.Column="0"
+                               VerticalContentAlignment="Center"
+                               Title="{Binding XPath=ViewLanguage/View_CaseType,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                          SelectedItem="{Binding CaseInfo.Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                <cc:TextBoxEx Grid.Row="6" Width="560" Grid.Column="0"
+                              Title="{Binding XPath=ViewLanguage/View_CaseAuthor,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                              VerticalContentAlignment="Center"
+                              Text="{Binding CaseInfo.Author,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                <cc:TextBoxEx  Grid.Row="8" Width="560" Grid.Column="0" 
+                               IsReadOnly="True"
+                               Title="{Binding XPath=ViewLanguage/View_CaseCreateTime,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                               Text="{Binding CaseInfo.Timestamp,Mode=OneWay,StringFormat='yyyy-MM-dd HH:mm:ss'}" />
+                <cc:TextBoxEx  Grid.Row="10" Width="560" Grid.Column="0" 
+                               Title="{Binding XPath=ViewLanguage/View_StorePath,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                               Text="{Binding CaseInfo.Path,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                               Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/CaseCreation_Path.png" IconWidth="18" IconHeight="18"
+                               ToolTip="{Binding CaseInfo.Path,Mode=OneWay}"/>
+                <Button Grid.Row="4" Command="{Binding UpdateCaseTypeCommand}"
+                        Grid.Column="3" Width="14" Height="14" Background="Transparent" HorizontalAlignment="Left" Margin="20,0,0,0">
+                    <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/CaseCreation_Set.png"></Image>
+                </Button>
+            </Grid>
+            <StackPanel Margin="0,28,0,0">
+                <Button Content="{Binding XPath=ViewLanguage/View_CaseCreationConfirm,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                        Command="{Binding ConfirmConmmand}" 
+                        Height="60" Width="560" HorizontalAlignment="Left"/>
+                <Button Content="{Binding XPath=ViewLanguage/View_CaseCreationSkip,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                        Command="{Binding SkipConmmand}"
+                        Style="{StaticResource btn_TransparentBg}"
+                        Margin="0,10,0,0" HorizontalAlignment="Left"
+                        Height="60" Width="560"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</core:UcViewBase>

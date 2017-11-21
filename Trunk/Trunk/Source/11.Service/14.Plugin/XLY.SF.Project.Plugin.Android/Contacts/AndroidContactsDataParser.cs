@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.Composition;
-using System.IO;
+﻿using System.IO;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
@@ -19,9 +17,9 @@ namespace XLY.SF.Project.Plugin.Android
             pluginInfo.Group = "基本信息";
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
-            pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror;
+            pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
             pluginInfo.GroupIndex = 0;
-            pluginInfo.OrderIndex = 1;
+            pluginInfo.OrderIndex = 2;
 
             pluginInfo.AppName = "com.android.providers.contacts";
             pluginInfo.Icon = "\\icons\\contact.png";
@@ -57,9 +55,9 @@ namespace XLY.SF.Project.Plugin.Android
                 var paser = new AndroidContactsDataParseCoreV1_0(contacts2dbFile);
                 paser.BuildData(ds);
             }
-            catch
-            {//TODO:异常处理
-
+            catch (System.Exception ex)
+            {
+                Framework.Log4NetService.LoggerManagerSingle.Instance.Error("提取安卓联系人数据出错！", ex);
             }
             finally
             {

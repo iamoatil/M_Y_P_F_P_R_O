@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.Composition;
-using System.IO;
+﻿using System.IO;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
@@ -19,7 +17,7 @@ namespace XLY.SF.Project.Plugin.Android
             pluginInfo.Group = "社交聊天";
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
-            pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror;
+            pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
             pluginInfo.GroupIndex = 1;
             pluginInfo.OrderIndex = 0;
 
@@ -58,9 +56,9 @@ namespace XLY.SF.Project.Plugin.Android
                     ds.TreeNodes.Add(qqNode);
                 }
             }
-            catch
-            {//TODO:异常处理
-
+            catch (System.Exception ex)
+            {
+                Framework.Log4NetService.LoggerManagerSingle.Instance.Error("提取安卓微信数据出错！", ex);
             }
             finally
             {

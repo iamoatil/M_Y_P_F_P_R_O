@@ -167,6 +167,9 @@
             <TextBlock Text="{Binding ProgressPosition.UsedTime}" Grid.Row="5" Grid.Column="0" Margin="0,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"  FontFamily="{StaticResource OswaldLightFont}" FontSize="14" />
             <Button Content="开始镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,0,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding StartCommand}"/>
             <Button Content="停止镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,0,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding StopCommand}" Visibility="{Binding SourcePosition.IsMirroring, Converter= {StaticResource BoolVisibleConverter}}" />
+
+            <Button Content="继续镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,110,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding ContinueCommand}" Visibility="{Binding SourcePosition.CanContinue, Converter= {StaticResource BoolVisibleConverter}}"/>
+            <Button Content="暂停镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,110,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding PauseCommand}" Visibility="{Binding SourcePosition.CanPause, Converter= {StaticResource BoolVisibleConverter}}"/>
             <!--<TextBlock HorizontalAlignment="Center"  Text="物理镜像" VerticalAlignment="Top" Margin="245,0" Grid.ColumnSpan="2" />
         <GroupBox x:Name="groupBox" Header="镜像源" Margin="0,0,20,0" Grid.Row="1">
             <Grid>

@@ -162,10 +162,19 @@ namespace XLY.SF.Project.Domains
             this.Add(obj as T);
         }
 
+        public void AddRange(IEnumerable<object> list)
+        {
+            foreach (var obj in list)
+            {
+                this.Add(obj as T);
+            }
+        }
+
         public void Filter(params FilterArgs[] args)
         {
+            _filterView.Reset();
             _filterView.Args = args;
-            _filterView.Filter();
+            _filterView.Initialize();
             OnPropertyChanged("View");
             OnPropertyChanged("Count");
         }

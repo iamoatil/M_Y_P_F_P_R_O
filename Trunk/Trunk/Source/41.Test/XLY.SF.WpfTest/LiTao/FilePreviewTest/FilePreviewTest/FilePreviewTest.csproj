@@ -16,7 +16,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -100,13 +100,9 @@
       <Project>{95c796fd-57f1-4d2e-927f-4e34ea75e319}</Project>
       <Name>XLY.SF.Framework.Language</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\21.Presentation\View\XLY.SF.Project.PreviewFiles\XLY.SF.Project.PreviewFiles.csproj">
+    <ProjectReference Include="..\..\..\..\..\21.Presentation\View\XLY.SF.Project.PreviewFiles\XLY.SF.Project.PreviewFilesView.csproj">
       <Project>{65336a55-e659-4ec8-8bb6-0d99cefba159}</Project>
-      <Name>XLY.SF.Project.PreviewFiles</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\TestHelper\TestHelper\TestHelper.csproj">
-      <Project>{87d036b6-410d-4d13-8c3f-dc81c43da496}</Project>
-      <Name>TestHelper</Name>
+      <Name>XLY.SF.Project.PreviewFilesView</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

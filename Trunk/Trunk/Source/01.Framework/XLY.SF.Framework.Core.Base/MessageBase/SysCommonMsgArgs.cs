@@ -21,8 +21,9 @@ namespace XLY.SF.Framework.Core.Base.MessageBase
     public class SysCommonMsgArgs : ArgsBase
     {
         public SysCommonMsgArgs(string sysKey)
+            :base(sysKey)
         {
-            base.MsgToken = sysKey;
+
         }
     }
 

@@ -29,21 +29,15 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 数据状态，正常还是删除
         /// </summary>
-        [Display(Visibility = EnumDisplayVisibility.ShowInDatabase)]
+        [Display(ColumnIndex = -1)]
         public EnumDataState DataState { get; set; } = EnumDataState.Normal;
-
-        /// <summary>
-        /// 数据状态描述，正常还是删除
-        /// </summary>
-        [Display(Visibility = EnumDisplayVisibility.ShowInUI)]
-        public string DataStateDesc => DataState.GetDescription();
 
         private string _md5 = null;
 
         /// <summary>
         /// 单行数据的MD5值
         /// </summary>
-        [Display]
+        [Display(ColumnIndex = 99)]
         public string MD5
         {
             get
@@ -61,7 +55,7 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 加入书签的编号，小于0则未加入书签
         /// </summary>
-        [Display]
+        [Display(Visibility = EnumDisplayVisibility.ShowInDatabase)]
         public int BookMarkId
         {
             get => _bookMarkId;

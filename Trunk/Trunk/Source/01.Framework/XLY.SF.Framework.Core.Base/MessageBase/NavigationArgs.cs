@@ -21,38 +21,33 @@ using XLY.SF.Framework.Log4NetService.LoggerEnum;
 namespace XLY.SF.Framework.Core.Base.MessageBase
 {
     /// <summary>
-    /// 导航消息
+    /// 普通导航消息
     /// </summary>
-    public class NavigationArgs : ArgsBase
+    public class NormalNavigationArgs : ArgsBase
     {
         #region Properties
 
         /// <summary>
-        /// 目前待定
-        /// </summary>
-        public Guid ViewModelID { get; private set; }
-
-        /// <summary>
-        /// 导航目标视图
-        /// </summary>
-        public UcViewBase TargetView { get; private set; }
-
-        /// <summary>
         /// 初始化时参数
         /// </summary>
-        public object InitParameter { get; private set; }
+        public object Parameter { get; set; }
+
+        /// <summary>
+        /// 是否为返回消息【返回上一个界面】
+        /// </summary>
+        public bool IsBackArgs { get; set; }
 
         #region 窗体控制属性
 
         /// <summary>
         /// 是否显示任务条
         /// </summary>
-        public bool ShowInTaskBar { get; private set; }
+        public bool ShowInTaskBar { get; set; }
 
         /// <summary>
         /// 是否置顶
         /// </summary>
-        public bool TopMost { get; private set; }
+        public bool TopMost { get; set; }
 
         #endregion
 
@@ -61,24 +56,20 @@ namespace XLY.SF.Framework.Core.Base.MessageBase
         #region 构造【私有】
 
         /// <summary>
-        /// View关闭消息
-        /// </summary>
-        /// <param name="openedViewModelID">要关闭的ViewModelID</param>
-        private NavigationArgs(Guid openedViewModelID)
-        {
-            this.ViewModelID = openedViewModelID;
-        }
-
-        /// <summary>
         /// 带参数的导航消息
         /// </summary>
         /// <param name="exportViewkey">显示的View</param>
         /// <param name="parameter">创建View时的参数</param>
         /// <param name="showInTaskBar">是否显示任务条</param>
-        private NavigationArgs(string exportViewkey, object parameter, bool showInTaskBar = false, bool isTopMost = false)
+        private NormalNavigationArgs(string exportViewkey,
+                                object parameter,
+                                bool showInTaskBar = false,
+                                bool isTopMost = false)
+            : base(exportViewkey)
         {
             ShowInTaskBar = showInTaskBar;
-            CreateView(exportViewkey, parameter);
+            TopMost = isTopMost;
+            Parameter = parameter;
         }
 
         #endregion
@@ -90,82 +81,50 @@ namespace XLY.SF.Framework.Core.Base.MessageBase
         /// </summary>
         /// <param name="exportViewkey">显示的View</param>
         /// <param name="parameter">创建View时的参数</param>
+        /// <param name="isBackArgs">是否为返回消息</param>
         /// <returns></returns>
-        public static NavigationArgs CreateMainViewNavigationArgs(string exportViewkey, object parameter)
+        public static NormalNavigationArgs CreateMainViewNavigationArgs(string exportViewkey, object parameter, bool isBackArgs = false)
         {
-            NavigationArgs argsResult = new NavigationArgs(exportViewkey, parameter);
+            NormalNavigationArgs argsResult = new NormalNavigationArgs(exportViewkey, parameter);
+            argsResult.IsBackArgs = isBackArgs;
             //记录导航日志
             NavigationLogHelper.AddNavigationLog(argsResult, false);
             return argsResult;
         }
 
         /// <summary>
-        /// 创建窗体导航消息
+        /// 创建新窗体导航消息
         /// </summary>
         /// <param name="exportViewkey">显示的View</param>
         /// <param name="parameter">创建View时的参数</param>
         /// <param name="showInTaskBar">是否显示任务条</param>
         /// <param name="isTopMost">是否置顶显示</param>
         /// <returns></returns>
-        public static NavigationArgs CreateWindowNavigationArgs(string exportViewkey, object parameter, bool showInTaskBar = false, bool isTopMost = false)
+        public static NormalNavigationArgs CreateWindowNavigationArgs(string exportViewkey, object parameter, bool showInTaskBar = false, bool isTopMost = false)
         {
-            NavigationArgs argsResult = new NavigationArgs(exportViewkey, parameter, showInTaskBar, isTopMost);
+            NormalNavigationArgs argsResult = new NormalNavigationArgs(exportViewkey, parameter, showInTaskBar, isTopMost);
             //记录导航日志
             NavigationLogHelper.AddNavigationLog(argsResult, true);
             return argsResult;
         }
 
-        /// <summary>
-        /// 创建关闭导航消息
-        /// </summary>
-        /// <param name="openedViewModelID"></param>
-        /// <returns></returns>
-        public static NavigationArgs CreateCloseNavigationArgs(Guid openedViewModelID)
+        #endregion
+    }
+
+    /// <summary>
+    /// 关闭打开窗体消息
+    /// </summary>
+    public class CloseViewOfNewWindowArgs : ArgsBase
+    {
+        public CloseViewOfNewWindowArgs(Guid closeViewModelID)
+            : base(SystemKeys.CloseWindow)
         {
-            NavigationArgs argsResult = new NavigationArgs(openedViewModelID);
-            return argsResult;
+            CloseViewModelID = closeViewModelID;
         }
 
-        #endregion
-
-        #region 创建消息【创建View】
-
         /// <summary>
-        /// 创建消息参数
+        /// 要关闭的ViewModelID
         /// </summary>
-        /// <param name="exportViewkey"></param>
-        /// <param name="parameter">传递的参数</param>
-        private void CreateView(string exportViewkey, object parameter = null)
-        {
-            if (!string.IsNullOrEmpty(exportViewkey))
-            {
-                var view = IocManagerSingle.Instance.GetViewPart(exportViewkey);
-                if (view != null)
-                {
-                    //传递参数
-                    if (!view.DataSource.IsLoaded)
-                    {
-                        try
-                        {
-                            view.DataSource.LoadViewModel(parameter);
-                        }
-                        catch (Exception ex)
-                        {
-                            LoggerManagerSingle.Instance.Error(ex, string.Format("加载模块Key【{0}】失败", exportViewkey));
-                            return;
-                        }
-                    }
-                    this.ViewModelID = view.DataSource.ViewModelID;
-                    //加载ViewContainer
-                    view.DataSource.SetViewContainer(view);
-                    this.TargetView = view;
-                    base.MsgToken = exportViewkey;
-                }
-                else
-                    LoggerManagerSingle.Instance.Error(string.Format("导入模块Key【{0}】失败", exportViewkey));
-            }
-        }
-
-        #endregion
+        public Guid CloseViewModelID { get; }
     }
 }

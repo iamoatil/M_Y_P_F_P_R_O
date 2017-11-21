@@ -58,10 +58,21 @@ namespace XLY.SF.Project.DataFilter.Views
         /// <summary>
         /// 执行一次过滤。
         /// </summary>
-        public virtual void Filter()
+        public virtual void Initialize()
         {
-            View = Source.Provider.Query<T>(Expression,out Int32 count);
-            Count = count;
+            Count = Source.Provider.GetCount(Expression);
+        }
+
+        #endregion
+
+        #region Protected
+
+        /// <summary>
+        /// 使用特定的表达式过滤数据。
+        /// </summary>
+        protected virtual void Filter()
+        {
+            View = Source.Provider.Query<T>(Expression);
         }
 
         #endregion

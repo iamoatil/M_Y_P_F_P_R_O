@@ -8,8 +8,5 @@ namespace XLY.SF.Project.PreviewFilesView.UI
 {
     class VideoUserControlVLC : PlayerUserControlVLC
     {
-        public VideoUserControlVLC() 
-        {
-        }
     }
 }

@@ -86,13 +86,37 @@
     <Compile Include="Contacts\Core\KupaiContactsDataParseCoreV1_0.cs" />
     <Compile Include="Contacts\Core\HuaweiContactsDataParseCoreV1_0.cs" />
     <Compile Include="Contacts\Core\AndroidContactsDataParseCoreV1_0.cs" />
-    <Compile Include="Location\AndroidLocationDataParser.cs" />
-    <Compile Include="Map\AndroidTencentMapDataParser.cs" />
-    <Compile Include="Map\AndroidTencentMapDataParserCoreV1_0.cs">
+    <Compile Include="DeviceProperty\AndroidSwitchTimeDataParser.cs" />
+    <Compile Include="DeviceProperty\AndroidCalendarDataParser.cs" />
+    <Compile Include="DeviceProperty\AndroidWIFIDataParser.cs" />
+    <Compile Include="DeviceProperty\AndroidBluetoothDataParser.cs" />
+    <Compile Include="DeviceProperty\AndroidDevicePropertyDataParser.cs" />
+    <Compile Include="DeviceProperty\AndroidMirrorDevicePropertyDataParser.cs" />
+    <Compile Include="InstalledApp\AndroidInstalledAppDataParser.cs" />
+    <Compile Include="InstalledApp\AndroidMirrorInstalledAppDataParser.cs" />
+    <Compile Include="Mms\AndroidMMSDataParser.cs" />
+    <Compile Include="Other\Android163EmailDataParser.cs" />
+    <Compile Include="Other\AndroidLocalBrowseDataParser.cs" />
+    <Compile Include="Other\AndroidQQBrowseDataParser.cs" />
+    <Compile Include="Other\AndroidQqEmailDataParser.cs" />
+    <Compile Include="Other\AndroidTwitterDataParser.cs" />
+    <Compile Include="Other\AndroidTencentMapDataParser.cs" />
+    <Compile Include="Other\AndroidTencentMapDataParserCoreV1_0.cs">
       <DependentUpon>AndroidTencentMapDataParser.cs</DependentUpon>
     </Compile>
+    <Compile Include="Other\AndroidTwitterDataParserCoreV1_0.cs">
+      <DependentUpon>AndroidTwitterDataParser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Other\AndroidUCBrowseDataParser.cs" />
+    <Compile Include="Other\AndroidUCBrowseDataParserCoreV11_2_0_880.cs">
+      <DependentUpon>AndroidUCBrowseDataParser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QQ\AndroidQQEimDataParser.cs" />
+    <Compile Include="QQ\AndroidQQLiteDataParser.cs" />
     <Compile Include="QQ\AndroidQQDataParser.cs" />
+    <Compile Include="QQ\Core\AndroidQQLiteDataParseCoreV1_0.cs" />
+    <Compile Include="QQ\Core\AndroidQQEimDataParseCoreV1_0.cs" />
     <Compile Include="QQ\Core\AndroidQQDataParseCoreV1_0.cs" />
     <Compile Include="Sms\AndroidSmsDataParser.cs" />
     <Compile Include="Sms\Core\AndroidSmsDataParseCoreV1_0.cs" />

@@ -45,14 +45,13 @@ namespace XLY.SF.Project.ViewModels.Login
             MessageBox = messageBox;
             LoginCommand = new ProxyRelayCommand(ExecuteLoginCommand, GetViewContainer, null);
             ExitSysCommand = new RelayCommand(ExeucteExitSysCommand);
-            CurLoginUser = new UserInfoEntityModel() { LoginUserName = "admin", LoginPassword = "123456" };
         }
 
         #endregion
 
         #region Commands
 
-        protected override void LoadCore(object parameters)
+        protected override void InitLoad(object parameters)
         {
             //执行加载
             ExecuteSysLoad(parameters.ToString());
@@ -131,7 +130,26 @@ namespace XLY.SF.Project.ViewModels.Login
 
         #region Model
 
-        public UserInfoEntityModel CurLoginUser { get; set; }
+        private UserInfoEntityModel _curLoginUser;
+        /// <summary>
+        /// 当前登录用户
+        /// </summary>
+        public UserInfoEntityModel CurLoginUser
+        {
+            get {
+                if (_curLoginUser == null)
+                {
+                    _curLoginUser = new UserInfoEntityModel();
+                }
+                return _curLoginUser;
+            }
+            set {
+                _curLoginUser = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        //public UserInfoEntityModel CurLoginUser { get; set; }
 
         #endregion
 
@@ -192,7 +210,6 @@ namespace XLY.SF.Project.ViewModels.Login
 
             MD5CryptoServiceProvider md5Psd = new MD5CryptoServiceProvider();
             String newPsd = BitConverter.ToString(md5Psd.ComputeHash(Encoding.ASCII.GetBytes(CurLoginUser.LoginPassword)));
-
             var loginUser = _dbService.UserInfos.FirstOrDefault((t) => t.LoginUserName == CurLoginUser.LoginUserName && t.LoginPassword== newPsd).ToModel<UserInfo, UserInfoEntityModel>();
             if (loginUser == default(UserInfoEntityModel))
             {
