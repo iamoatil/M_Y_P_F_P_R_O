@@ -19,10 +19,14 @@
         <ResourceDictionary Source="ThemesStyle/Listbox/ConversionListBoxStyle.xaml"/>
         <ResourceDictionary Source="ThemesStyle/DataGridStyle/DataGridStyle.xaml"/>
         <ResourceDictionary Source="ThemesStyle/TreeViewStyle/TreeViewStyle.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/HyperlinkStyle/HyperlinkStyle.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/ProgressBarStyle/ProgressBar.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/PopupControlStyle/PopupControlStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <!--系统默认样式加载-->
     <!--自定义控件-->
+    <!--输入框-->
     <Style TargetType="{x:Type control:TextBoxEx}">
         <Setter Property="TitleForeground" Value="#9ba5b9"/>
         <Setter Property="Foreground" Value="White"/>
@@ -33,6 +37,7 @@
         <Setter Property="TitlePadding" Value="10 0 10 0"/>
         <Setter Property="Template" Value="{StaticResource tb_DefaultCt}"/>
     </Style>
+    <!--下拉框-->
     <Style TargetType="{x:Type control:ComboBoxEx}">
         <Setter Property="Background" Value="#414b69"/>
         <Setter Property="TitleForeground" Value="#9ba5b9"/>
@@ -50,78 +55,6 @@
                 <Setter Property="Template" Value="{DynamicResource ComboBoxEditableCt}"/>
             </Trigger>
         </Style.Triggers>
-    </Style>
-    <!--自定义控件      ProgressBarWithCorner-->
-    <Style TargetType="{x:Type control:ProgressBarWithCorner}">
-        <Setter Property="Foreground">
-            <Setter.Value>
-                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                    <GradientStop Color="#379be6"  Offset="0" />
-                    <GradientStop Color="#23b9be"  Offset="1" />
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Background" Value="White"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Height" Value="14"/>
-        <Setter Property="CornerRadius" Value="7"/>
-        <Setter Property="BackgroundOpacity" Value="0.04"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type control:ProgressBarWithCorner}">
-                    <Border>
-                    <Grid x:Name="TemplateRoot">
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Determinate"/>
-                                <VisualState x:Name="Indeterminate">
-                                    <Storyboard RepeatBehavior="Forever">
-                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="Animation">
-                                            <EasingDoubleKeyFrame KeyTime="0" Value="0.25"/>
-                                            <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0.25"/>
-                                            <EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.25"/>
-                                        </DoubleAnimationUsingKeyFrames>
-                                        <PointAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)" Storyboard.TargetName="Animation">
-                                            <EasingPointKeyFrame KeyTime="0" Value="-0.5,0.5"/>
-                                            <EasingPointKeyFrame KeyTime="0:0:1" Value="0.5,0.5"/>
-                                            <EasingPointKeyFrame KeyTime="0:0:2" Value="1.5,0.5"/>
-                                        </PointAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}"  CornerRadius="{TemplateBinding CornerRadius}"  Opacity="{TemplateBinding BackgroundOpacity}"/>
-                        <Rectangle x:Name="PART_Track"/>
-                        <Grid x:Name="PART_Indicator" ClipToBounds="true" HorizontalAlignment="Left">
-                                <Border x:Name="Indicator" Background="{TemplateBinding Foreground}" BorderThickness="0"  CornerRadius="{TemplateBinding CornerRadius}" />
-                                <Border x:Name="Animation" Background="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5"  BorderThickness="0"  CornerRadius="{TemplateBinding CornerRadius}" >
-                                <Border.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform/>
-                                        <SkewTransform/>
-                                        <RotateTransform/>
-                                        <TranslateTransform/>
-                                    </TransformGroup>
-                                </Border.RenderTransform>
-                            </Border>
-                        </Grid>
-                    </Grid>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="Orientation" Value="Vertical">
-                            <Setter Property="LayoutTransform" TargetName="TemplateRoot">
-                                <Setter.Value>
-                                    <RotateTransform Angle="-90"/>
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                        <Trigger Property="IsIndeterminate" Value="true">
-                            <Setter Property="Visibility" TargetName="Indicator" Value="Collapsed"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
     </Style>
     <!--带图标按钮-->
     <Style TargetType="{x:Type control:IconButton}">
@@ -178,6 +111,7 @@
         <Setter Property="Template" Value="{DynamicResource cb_Default}"/>
     </Style>
 
+    <!--字体-->
     <FontFamily x:Key="OswaldFont">
         pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald
     </FontFamily>

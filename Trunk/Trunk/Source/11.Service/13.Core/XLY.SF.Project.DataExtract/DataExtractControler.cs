@@ -35,7 +35,7 @@ namespace XLY.SF.Project.DataExtract
         private CancellationTokenSource _cancelTokenSource;
 
         private CancellationToken _cancelToken;
-        
+
         private IEnumerable<ExtractItem> _extractItems;
 
         private PluginAdapter _pluginAdapter;
@@ -49,11 +49,9 @@ namespace XLY.SF.Project.DataExtract
         /// <summary>
         /// 初始化类型 DataExtractControler 实例。
         /// </summary>
-        /// <param name="asyn">异步通知</param>
-        /// <param name="workMode">工作模式</param>
-        public DataExtractControler(EnumDataExtractWorkMode workMode = EnumDataExtractWorkMode.HalfAsync)
+        public DataExtractControler()
         {
-            WorkMode = workMode;
+
         }
 
         #endregion
@@ -64,11 +62,6 @@ namespace XLY.SF.Project.DataExtract
         /// 提取信息。
         /// </summary>
         public Pump Pump { get; private set; }
-
-        /// <summary>
-        /// 工作模式。
-        /// </summary>
-        public EnumDataExtractWorkMode WorkMode { get; }
 
         /// <summary>
         /// 多任务进度报告器。
@@ -125,7 +118,7 @@ namespace XLY.SF.Project.DataExtract
             {
                 _mainTask.Wait();
             }
-            catch(AggregateException)
+            catch (AggregateException)
             {
                 //注意：此处只捕获异常但不处理，
                 //每个任务各自的异常将通过Reporter
@@ -178,17 +171,11 @@ namespace XLY.SF.Project.DataExtract
              * */
 
             var items = _pluginAdapter.MatchPluginByPump(Pump, _extractItems);
-            switch (WorkMode)
-            {
-                case EnumDataExtractWorkMode.HalfAsync:
-                    ExtractDataByHalfAsync(items);
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
+
+            ExtractData(items);
         }
 
-        private void ExtractDataByHalfAsync(Dictionary<ExtractItem, List<DataParsePluginInfo>> Items)
+        private void ExtractData(Dictionary<ExtractItem, List<DataParsePluginInfo>> Items)
         {
             foreach (var item in Items)
             {
@@ -253,6 +240,8 @@ namespace XLY.SF.Project.DataExtract
             var plug = _pluginAdapter.MatchPluginByApp(plugs, Pump, Pump.SourceStorePath, GetAppVersion(extractItem));
             //2.执行插件
             plug.SaveDbPath = Pump.DbFilePath;
+            plug.Phone = Pump.Source as Device;
+
             _pluginAdapter.ExecutePlugin(plug, null, (ds) =>
             {
                 FinishExtractItem(extractItem, ds);
@@ -293,7 +282,7 @@ namespace XLY.SF.Project.DataExtract
         /// </summary>
         /// <param name="t">任务。</param>
         /// <param name="taskId">任务Id。</param>
-        private void RoundOffwork(Boolean isCancelled,String taskId)
+        private void RoundOffwork(Boolean isCancelled, String taskId)
         {
             Interlocked.Decrement(ref _concurrentCount);
             if (isCancelled)

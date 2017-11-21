@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XLY.SF.Framework.Core.Base.MefIoc;
 using XLY.SF.Framework.Core.Base.MessageBase;
+using XLY.SF.Framework.Core.Base.MessageBase.Navigation;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.ViewDomain.MefKeys;
@@ -86,7 +87,7 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
             DeviceHomePageCommand = new ProxyRelayCommand(ExecuteDeviceHomePageCommand);
         }
 
-        protected override void LoadCore(object parameters)
+        protected override void InitLoad(object parameters)
         {
             if (parameters != null)
             {
@@ -94,11 +95,12 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
                 if (_curDevice == null)
                     throw new NullReferenceException(string.Format("当前设备为NULL"));
                 CreateDeviceByType(_curDevice);
-            }
 
-            //首次加载使用设备首页
-            CurDeviceView = IocManagerSingle.Instance.GetViewPart(ExportKeys.DeviceHomePageView);
-            CurDeviceView.DataSource.LoadViewModel(CurDevModel);
+
+                //首次加载使用设备首页
+                CurDeviceView = IocManagerSingle.Instance.GetViewPart(ExportKeys.DeviceHomePageView);
+                CurDeviceView.DataSource.LoadViewModel(CurDevModel);
+            }
         }
 
         #region ExecuteCommands
@@ -177,7 +179,7 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
 
 
-                 
+
 
                 DeviceExtractionAdorner = idev,
                 IDevSource = idev.Device

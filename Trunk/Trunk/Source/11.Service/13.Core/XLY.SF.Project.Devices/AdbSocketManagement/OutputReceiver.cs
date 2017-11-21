@@ -34,7 +34,7 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
         /// </summary>
         public AbstractOutputReceiver()
         {
-            this.Lines = new List<string>();
+            Lines = new List<string>();
         }
 
         #endregion
@@ -61,7 +61,7 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
             System.Threading.Thread.Sleep(15);
 
             if (String.IsNullOrWhiteSpace(s)) return;
-            this.stringBuilder.Append(s);
+            stringBuilder.Append(s);
         }
 
         /// <summary>
@@ -70,14 +70,14 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
         /// </summary>
         public virtual void Flush()
         {
-            this.Data = this.stringBuilder.ToString();
-            this.stringBuilder.Clear();
+            Data = stringBuilder.ToString();
+            stringBuilder.Clear();
             //now we split the data
-            this.Lines = this.Data.Split(new string[] { "\r\n", "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            Lines = Data.Split(new string[] { "\r\n", "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries).ToList();
 
-            if (IsValid(this.Lines))
+            if (IsValid(Lines))
             {
-                this.DoResolver();
+                DoResolver();
             }
         }
 

@@ -126,7 +126,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         #region Protected
 
-        protected override void LoadCore(object parameters)
+        protected override void InitLoad(object parameters)
         {
             //PagingRequest paging = new PagingRequest(1, 100);
             //var result = DbService.QueryOfPaging<RecentCaseEntity, RecentCaseEntityModel>(paging, (e) => true);

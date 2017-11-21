@@ -72,9 +72,6 @@ namespace XLY.SF.Project.Plugin.Android
 
                 var contactList = GetContactList();
 
-                bool isExistDataSent = ValidateTableFieldExist(createSmsSql, "date_sent INTEGER");
-                bool isExistReceiveDate = ValidateTableFieldExist(createSmsSql, "receive_date INTEGER");
-
                 SMS item;
                 foreach (var sms in smssList)
                 {
@@ -84,7 +81,6 @@ namespace XLY.SF.Project.Plugin.Android
 
                         item.Content = DynamicConvert.ToSafeString(sms.content);
                         item.Content = FragmentHelper.RemoveNullityDataNew(item.Content);
-
 
                         // 验证内容是否为空
                         if (FragmentHelper.IsEmptyString(item.Content))
@@ -107,19 +103,9 @@ namespace XLY.SF.Project.Plugin.Android
                         {
                             item.DataState = EnumDataState.Deleted;
                         }
-                        //item.StartDate = DynamicConvert.ToSafeDateTime(sms.date);
 
+                        item.StartDate = DynamicConvert.ToSafeDateTime(sms.date);
                         item.ReadState = DynamicConvert.ToSafeInt(sms.read) == 0 ? EnumReadState.Unread : EnumReadState.Read;
-
-                        // 如果存在receive_date字段，取其作为发送时间，否则取date_sent字段
-                        if (isExistReceiveDate)
-                        {
-                            item.StartDate = DynamicConvert.ToSafeDateTime(sms.receive_date);
-                        }
-                        else if (isExistDataSent)
-                        {
-                            item.StartDate = DynamicConvert.ToSafeDateTime(sms.date_sent);
-                        }
 
                         datasource.Items.Add(item);
                     }

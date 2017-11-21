@@ -85,7 +85,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         #region Protected
 
-        protected override void LoadCore(object parameters)
+        protected override void InitLoad(object parameters)
         {
             SystemContext.Instance.CaseChanged += Instance_CaseChanged;
             CaseInfo = NewCaseInfo();

@@ -46,9 +46,21 @@ namespace XLY.SF.Project.Themes.CustromControl
     /// </summary>
     public class TextBoxEx : TextBox
     {
+        /// <summary>
+        /// 水印
+        /// </summary>
+        private TextBlock _tbWatermark;
+
         static TextBoxEx()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(TextBoxEx), new FrameworkPropertyMetadata(typeof(TextBoxEx)));
+        }
+
+        public override void OnApplyTemplate()
+        {
+            base.OnApplyTemplate();
+            _tbWatermark = this.Template.FindName("tb_Watermark", this) as TextBlock;
+            TextChanged += TextBoxEx_TextChanged;
         }
 
         #region Title
@@ -96,7 +108,7 @@ namespace XLY.SF.Project.Themes.CustromControl
         // Using a DependencyProperty as the backing store for Icon.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IconProperty =
             DependencyProperty.Register("Icon", typeof(ImageSource), typeof(TextBoxEx), new PropertyMetadata(null));
-        
+
         public double IconWidth
         {
             get { return (double)GetValue(IconWidthProperty); }
@@ -116,6 +128,34 @@ namespace XLY.SF.Project.Themes.CustromControl
         // Using a DependencyProperty as the backing store for IconHeight.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty IconHeightProperty =
             DependencyProperty.Register("IconHeight", typeof(double), typeof(TextBoxEx), new PropertyMetadata(16d));
+
+        #endregion
+
+        #region 水印
+
+        public string Watermark
+        {
+            get { return (string)GetValue(WatermarkProperty); }
+            set { SetValue(WatermarkProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Watermark.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty WatermarkProperty =
+            DependencyProperty.Register("Watermark", typeof(string), typeof(TextBoxEx), new PropertyMetadata(string.Empty));
+
+        #endregion
+
+        #region 文字改变判断是否显示水印
+
+        private void TextBoxEx_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(Text))
+                //显示水印
+                _tbWatermark.Visibility = Visibility.Visible;
+            else
+                //关闭水印
+                _tbWatermark.Visibility = Visibility.Hidden;
+        }
 
         #endregion
     }

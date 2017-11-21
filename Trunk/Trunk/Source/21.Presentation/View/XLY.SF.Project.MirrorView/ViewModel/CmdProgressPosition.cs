@@ -39,6 +39,7 @@ namespace XLY.SF.Project.MirrorView
         private long _finishedSize = 0;
 
         private long _lastChangedValue = 0;
+        private long _lastTimeValue = 0;
 
         /// <summary>
         /// 总共大小
@@ -101,11 +102,30 @@ namespace XLY.SF.Project.MirrorView
         }
 
         /// <summary>
+        /// 获取相对于上一次的间隔
+        /// </summary>
+        /// <returns></returns>
+        public long GetIntervalToLastTime(long curValue)
+        {
+            if(_lastTimeValue > curValue)
+            {
+                _lastTimeValue = curValue;
+                return curValue;
+            }
+            long ret= curValue - _lastTimeValue;
+            _lastTimeValue = curValue;
+            return ret;
+        }
+
+        /// <summary>
         /// 开始时设置Progress状态
         /// </summary>
         public void Start()
         {
             _startedDateTime = DateTime.Now;
+            FinishedSize = 0;
+            RemainTime = "00:00:00";
+            UsedTime = "00:00:00";
         }
 
         /// <summary>

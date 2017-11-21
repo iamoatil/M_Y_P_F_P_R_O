@@ -76,17 +76,6 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
 
         #endregion
 
-        #region 是否缓存
-
-        /// <summary>
-        /// 是否需要缓存
-        /// 如果缓存，下次打开界面不再创建实例
-        /// 当清除后才会重新创建
-        /// </summary>
-        public bool HasCache { get; protected set; }
-
-        #endregion
-
         #region 当前ViewID
 
         /// <summary>

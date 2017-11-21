@@ -11,6 +11,7 @@ using XLY.SF.Framework.Core.Base.MefIoc;
 using XLY.SF.Framework.Core.Base.MessageAggregation;
 using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base.ViewModel;
+using XLY.SF.Project.Extension.Helper;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Shell.NavigationManager;
 
@@ -45,9 +46,7 @@ namespace XLY.SF.Shell.DialogWindowService
             var viewContainer = WindowHelper.Instance.CreateShellWindow(view, false, Application.Current.MainWindow);
             viewContainer.ShowDialog();
             if (view.DataSource.DialogResult)
-            {
                 result = view.DataSource.GetResult()?.ToString();
-            }
 
             return result;
         }
@@ -65,13 +64,14 @@ namespace XLY.SF.Shell.DialogWindowService
         public object ShowDialogWindow(string exportKey, object parameters, bool showInTaskBar)
         {
             object result = null;
-            var viewArgs = CreateNavigationArgs(exportKey, parameters, showInTaskBar);
-            var viewContainer = WindowHelper.Instance.CreateShellWindow(viewArgs.TargetView, viewArgs.ShowInTaskBar, Application.Current.MainWindow);
+            UcViewBase targetView;
+            var viewArgs = CreateNavigationArgs(exportKey, parameters, showInTaskBar, out targetView);
+
+            var viewContainer = WindowHelper.Instance.CreateShellWindow(targetView, viewArgs.ShowInTaskBar, Application.Current.MainWindow);
             viewContainer.ShowDialog();
-            if (viewArgs.TargetView.DataSource.DialogResult)
-            {
-                result = viewArgs.TargetView.DataSource.GetResult()?.ToString();
-            }
+            if (targetView.DataSource.DialogResult)
+                result = targetView.DataSource.GetResult()?.ToString();
+
             return result;
         }
 
@@ -85,11 +85,12 @@ namespace XLY.SF.Shell.DialogWindowService
         /// <param name="exportKey"></param>
         /// <param name="parameters"></param>
         /// <returns></returns>
-        private NavigationArgs CreateNavigationArgs(string exportKey, object parameters, bool showInTaskBar)
+        private NormalNavigationArgs CreateNavigationArgs(string exportKey, object parameters, bool showInTaskBar, out UcViewBase targetView)
         {
             if (string.IsNullOrWhiteSpace(exportKey))
                 throw new NullReferenceException(string.Format("导航目标窗体Key【{0}】为空", exportKey));
-            NavigationArgs result = NavigationArgs.CreateWindowNavigationArgs(exportKey, parameters, showInTaskBar);
+            NormalNavigationArgs result = NormalNavigationArgs.CreateWindowNavigationArgs(exportKey, parameters, showInTaskBar);
+            targetView = NavigationViewCreater.CreateView(result.MsgToken, result.Parameter);
             return result;
         }
 

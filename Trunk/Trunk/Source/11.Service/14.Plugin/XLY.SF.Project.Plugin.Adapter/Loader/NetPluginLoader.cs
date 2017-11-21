@@ -36,18 +36,25 @@ namespace XLY.SF.Project.Plugin.Adapter
                 List<string> existList = new List<string>();
                 foreach (var dllFile in files)
                 {
-                    if(existList.Contains(System.IO.Path.GetFileName(dllFile)))
+                    if (existList.Contains(System.IO.Path.GetFileName(dllFile)))
                     {
                         continue;
                     }
                     existList.Add(System.IO.Path.GetFileName(dllFile));
                     var ass = Assembly.LoadFile(dllFile);
-                    foreach (var cla in ass.GetTypes().Where(t => t.GetCustomAttribute<PluginAttribute>() != null  && !t.IsAbstract && !t.IsInterface))
+                    foreach (var cla in ass.GetTypes().Where(t => t.GetCustomAttribute<PluginAttribute>() != null && !t.IsAbstract && !t.IsInterface))
                     {
                         var plu = ass.CreateInstance(cla.FullName) as IPlugin;
-                        if (null != plu)
+                        if (null != plu && null != plu.PluginInfo)
                         {
-                            Plugins.Add(plu);
+                            if (Plugins.Any(p => p.PluginInfo.Guid == plu.PluginInfo.Guid))
+                            {
+                                LoggerManagerSingle.Instance.Error($"C#插件加载出错！重复的Guid：{plu.PluginInfo.Guid}");
+                            }
+                            else
+                            {
+                                Plugins.Add(plu);
+                            }
                         }
                     }
                 }

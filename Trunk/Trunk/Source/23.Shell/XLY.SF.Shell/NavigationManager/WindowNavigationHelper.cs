@@ -14,6 +14,7 @@ using XLY.SF.Project.Models;
 using XLY.SF.Project.Themes;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Shell.CommWindow;
+using XLY.SF.Project.Extension.Helper;
 
 
 /*************************************************
@@ -45,7 +46,7 @@ namespace XLY.SF.Shell.NavigationManager
             //注册打开新窗口事件
             MsgAggregation.Instance.RegisterNaviagtionMsg(this, SystemKeys.OpenNewWindow, OpenNewWindowCallback);
             //注册关闭窗口事件
-            MsgAggregation.Instance.RegisterNaviagtionMsg(this, SystemKeys.CloseWindow, CloseWindowCallback);
+            MsgAggregation.Instance.RegisterNavigationOfCloseWindow(this, CloseWindowCallback);
         }
 
         #region 弹窗导航
@@ -53,11 +54,12 @@ namespace XLY.SF.Shell.NavigationManager
         #region 关闭窗体
 
         //通过消息关闭打开的窗体
-        private void CloseWindowCallback(NavigationArgs args)
+        private void CloseWindowCallback(CloseViewOfNewWindowArgs args)
         {
-            WindowHelper.Instance.RemoveOpenedWindowAndCleanUp(args.ViewModelID, true);
+            WindowHelper.Instance.RemoveOpenedWindowAndCleanUp(args.CloseViewModelID, true);
         }
 
+        //直接关闭窗体触发
         private void NewWindow_Closed(object sender, EventArgs e)
         {
             var curWin = sender as Shell;
@@ -70,9 +72,10 @@ namespace XLY.SF.Shell.NavigationManager
         #endregion
 
         //打开非模式对话框
-        private void OpenNewWindowCallback(NavigationArgs args)
+        private void OpenNewWindowCallback(NormalNavigationArgs args)
         {
-            var newWindow = WindowHelper.Instance.CreateShellWindow(args.TargetView, args.ShowInTaskBar, Application.Current.MainWindow);
+            var targetView = NavigationViewCreater.CreateView(args.MsgToken,args.Parameter);
+            var newWindow = WindowHelper.Instance.CreateShellWindow(targetView, args.ShowInTaskBar, Application.Current.MainWindow);
             newWindow.Closed += NewWindow_Closed;
             newWindow.Show();
         }

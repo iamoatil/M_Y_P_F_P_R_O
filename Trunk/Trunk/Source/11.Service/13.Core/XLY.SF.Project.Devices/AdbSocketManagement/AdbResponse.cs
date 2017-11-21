@@ -32,7 +32,7 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
         /// </summary>
         public AdbResponse(string data)
         {
-            this.Data = data;
+            Data = data;
         }
     }
 }

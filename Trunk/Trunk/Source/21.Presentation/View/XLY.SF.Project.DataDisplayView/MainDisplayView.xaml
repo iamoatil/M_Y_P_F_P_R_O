@@ -13,7 +13,8 @@
     <core:UcViewBase.Resources>
         <theme:BooleanToCollapseConverter x:Key="boolToCollapseConverter"/>
     </core:UcViewBase.Resources>
-    <Grid  Background="Transparent">
+    <Grid>
+        <Grid  Background="Transparent" Visibility="{Binding HasDataList, Converter={StaticResource boolToCollapseConverter}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="310*"/>
             <ColumnDefinition Width="1258*"/>
@@ -25,7 +26,6 @@
         </Grid.RowDefinitions>
 
         <!--数据过滤-->
-        <local:DataFilterControl Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Visibility="Collapsed"/>
         <Border Grid.ColumnSpan="2" Height="60">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -36,6 +36,7 @@
             <Border.Effect>
                 <DropShadowEffect Color="#181d3a" ShadowDepth="10" Direction="270" BlurRadius="20" Opacity="0.08"/>
             </Border.Effect>
+            <local:DataFilterControl />
         </Border>
 
         <!--数据列表-->
@@ -83,5 +84,26 @@
                 <TextBlock FontSize="18" Text="请尝试其他方案" Foreground="#9ba5b9" HorizontalAlignment="Center"></TextBlock>
             </StackPanel>
         </Border>
+      
+        <!--正在筛选数据-->
+        <Grid Grid.ColumnSpan="2" Grid.RowSpan="3" Background="#0AFFFFFF" Visibility="{Binding IsFiltering, Converter={StaticResource boolToCollapseConverter}, ConverterParameter=False}">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                <Button Style="{StaticResource loadingControlStyle}" Width="38" Height="58" HorizontalAlignment="Center"/>
+                <TextBlock FontSize="18" Text="正在查询数据..." Foreground="#9ba5b9" HorizontalAlignment="Center"></TextBlock>
+            </StackPanel>
+        </Grid>
+      
     </Grid>
+        <Grid>
+            <!--数据列表为空时显示-->
+            <Border Visibility="{Binding HasDataList, Converter={StaticResource boolToCollapseConverter}, ConverterParameter=True}">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock FontSize="30" Text="当前没有数据" Foreground="#9ba5b9" HorizontalAlignment="Center"></TextBlock>
+                    <TextBlock FontSize="18" Text="请尝试其他方案" Foreground="#9ba5b9" HorizontalAlignment="Center"></TextBlock>
+                </StackPanel>
+            </Border>
+
+        </Grid>
+    </Grid>
+
 </core:UcViewBase>

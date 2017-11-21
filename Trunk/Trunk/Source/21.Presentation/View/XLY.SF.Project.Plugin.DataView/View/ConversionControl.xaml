@@ -58,7 +58,7 @@
     <Grid>
         <!--<ListBox x:Name="lsb1" ItemsSource="{Binding Items.View}" ItemTemplateSelector="{StaticResource tmSelector}" ItemContainerStyleSelector="{StaticResource conSelector}" SelectionChanged="ListBox_SelectionChanged"></ListBox>-->
 
-        <ListBox x:Name="lsb1" ItemsSource="{Binding Source={StaticResource ResourceKey=conversionCollectionViewSource}}" Style="{StaticResource conversionListBoxStyle}">
+        <ListBox x:Name="lsb1" ItemsSource="{Binding Source={StaticResource ResourceKey=conversionCollectionViewSource}}" Style="{StaticResource conversionListBoxStyle}" SelectionChanged="ListBox_SelectionChanged">
             <ListBox.GroupStyle>
                 <GroupStyle ContainerStyle="{StaticResource conversionGroupHeadStyle}"/>
             </ListBox.GroupStyle>

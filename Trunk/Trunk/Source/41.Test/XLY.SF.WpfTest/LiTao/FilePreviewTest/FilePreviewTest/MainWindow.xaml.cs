@@ -1,8 +1,7 @@
 ﻿using System.IO;
 using System.Windows;
 using System.Windows.Input;
-using TestHelper;
-using XLY.SF.Project.UserControls.PreviewFile;
+using XLY.SF.Project.PreviewFilesView.UI;
 
 namespace FilePreviewTest
 {

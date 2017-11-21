@@ -163,7 +163,7 @@ namespace XLY.SF.Project.ViewModels.SelectControl
             return _curSelectedItem?.FullPath;
         }
 
-        protected override void LoadCore(object parameters)
+        protected override void InitLoad(object parameters)
         {
             if (parameters != null)
             {

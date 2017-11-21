@@ -223,7 +223,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             //数据库恢复
             string recoverTables = GetRecoverTables(qqFile.FullName);
-            string charatorPath = @"";
+            string charatorPath = @"chalib\Android_QQ\qq.db.charactor";
             string recoverDbPath = SqliteRecoveryHelper.DataRecovery(qqFile.FullName, charatorPath, recoverTables);
             MainDbContext = new SqliteContext(recoverDbPath);
 
@@ -327,6 +327,10 @@ namespace XLY.SF.Project.Plugin.Android
 
             foreach (var friend in AllFrineds)
             {
+                if (!friend.QQNumber.IsMatch(@"^\d+$"))
+                {
+                    continue;
+                }
                 if (!LsFriendMsgTables.Any(s => s.Contains(CryptographyHelper.MD5FromStringUpper(friend.QQNumber))))
                 {//没有该好友的聊天消息表
                     continue;
@@ -376,21 +380,26 @@ namespace XLY.SF.Project.Plugin.Android
             }
 
             var sql = string.Format(@"SELECT
-                        	t.troopuin,
-                        	t.troopname,
-                        	t.troopmemo,
-                        	t.fingertroopmemo,
-                        	t.troopCreateTime,
-                        	t.troopowneruin,
-                        	m.friendnick,
-                        	m.troopnick,
-                        	t.Administrator,
-                        	t.wMemberNum,
-                        	t.XLY_DataType
-                        FROM
-                        	{0} t
-                        LEFT JOIN TroopMemberInfo m ON t.troopuin = m.troopuin
-                        AND t.troopowneruin = m.memberuin", tableName);
+                                     	t.troopuin,
+                                     	t.troopname,
+                                     	t.troopmemo,
+                                     	t.fingertroopmemo,
+                                     	t.troopCreateTime,
+                                     	t.troopowneruin,
+                                     (SELECT friendnick FROM TroopMemberInfo m
+                                     WHERE
+                                     	t.troopuin = m.troopuin
+                                     AND t.troopowneruin = m.memberuin) as friendnick,
+                                     (SELECT troopnick FROM TroopMemberInfo m
+                                     WHERE
+                                     	t.troopuin = m.troopuin
+                                     AND t.troopowneruin = m.memberuin) as troopnick,
+                                     	t.Administrator,
+                                     	t.wMemberNum,
+                                     	t.XLY_DataType
+                                     FROM
+                                     	{0} t", tableName);
+            var allTroopMemberInfo = MainDbContext.Find("SELECT troopuin,memberuin,friendnick,troopnick,XLY_DataType FROM TroopMemberInfo");
 
             MainDbContext.UsingSafeConnection(sql, (r) =>
              {
@@ -440,29 +449,27 @@ namespace XLY.SF.Project.Plugin.Android
                          DataState = groupShow.DataState
                      };
 
-                     string troopuin = DynamicConvert.ToSafeString(troopDy.troopuin);
-                     MainDbContext.UsingSafeConnection(string.Format("SELECT memberuin,friendnick,troopnick,XLY_DataType FROM TroopMemberInfo WHERE troopuin = '{0}'", troopuin), (rr) =>
-                      {
-                          dynamic member;
-                          QQFriendShow friendShow;
-
-                          while (rr.Read())
-                          {
-                              member = rr.ToDynamic();
-
-                              friendShow = new QQFriendShow()
-                              {
-                                  QQNumber = Decrypt(DynamicConvert.ToSafeString(member.memberuin)),
-                                  Nick = Decrypt(DynamicConvert.ToSafeString(member.friendnick)),
-                                  Alias = Decrypt(DynamicConvert.ToSafeString(member.troopnick)),
-                                  DataState = DynamicConvert.ToEnumByValue(member.XLY_DataType, EnumDataState.Normal)
-                              };
-                              memberTree.Items.Add(friendShow);
-                          }
-                      });
-
                      troopMemberTree.TreeNodes.Add(memberTree);
                      troopMemberTree.Items.Add(groupShow);
+
+                     if (!groupShow.QQNumber.IsMatch(@"^\d+$"))
+                     {
+                         continue;
+                     }
+
+                     string troopuin = DynamicConvert.ToSafeString(troopDy.troopuin);
+                     QQFriendShow friendShow;
+                     foreach (var member in allTroopMemberInfo.Where(m => m.troopuin == troopuin))
+                     {
+                         friendShow = new QQFriendShow()
+                         {
+                             QQNumber = Decrypt(DynamicConvert.ToSafeString(member.memberuin)),
+                             Nick = Decrypt(DynamicConvert.ToSafeString(member.friendnick)),
+                             Alias = Decrypt(DynamicConvert.ToSafeString(member.troopnick)),
+                             DataState = DynamicConvert.ToEnumByValue(member.XLY_DataType, EnumDataState.Normal)
+                         };
+                         memberTree.Items.Add(friendShow);
+                     }
                  }
              });
         }
@@ -482,6 +489,10 @@ namespace XLY.SF.Project.Plugin.Android
 
             foreach (var group in AllGroups)
             {
+                if (!group.QQNumber.IsMatch(@"^\d+$"))
+                {
+                    continue;
+                }
                 if (!LsTroopMsgTables.Any(s => s.Contains(CryptographyHelper.MD5FromStringUpper(group.QQNumber))))
                 {//没有该群组的聊天消息表
                     continue;
@@ -524,36 +535,37 @@ namespace XLY.SF.Project.Plugin.Android
             var sql = @"SELECT
                         	d.uin,
                         	d.ownerUin,
-                        	m.memberName,
-                        	m.inteRemark,
+                        (SELECT memberName FROM DiscussionMemberInfo m WHERE d.uin = m.discussionUin
+                        AND d.ownerUin = m.memberUin) as memberName,
+                        (SELECT inteRemark FROM DiscussionMemberInfo m WHERE d.uin = m.discussionUin
+                        AND d.ownerUin = m.memberUin) as inteRemark,
                         	d.discussionName,
                         	d.createTime
                         FROM
-                        	DiscussionInfo d
-                        LEFT JOIN DiscussionMemberInfo m ON d.uin = m.discussionUin
-                        AND d.ownerUin = m.memberUin";
+                        	DiscussionInfo d";
+            var allDiscussionMemberInfo = MainDbContext.Find("SELECT discussionUin,memberUin,memberName,inteRemark,XLY_DataType FROM DiscussionMemberInfo");
 
             MainDbContext.UsingSafeConnection(sql, (r) =>
             {
-                dynamic troopDy;
+                dynamic discussDy;
                 QQDiscussShow discussShow;
 
                 while (r.Read())
                 {
-                    troopDy = r.ToDynamic();
+                    discussDy = r.ToDynamic();
 
                     //讨论组信息
                     discussShow = new QQDiscussShow()
                     {
-                        QQNumber = Decrypt(DynamicConvert.ToSafeString(troopDy.uin)),
-                        Name = Decrypt(DynamicConvert.ToSafeString(troopDy.discussionName)),
-                        CreateTime = DynamicConvert.ToSafeFromUnixTime(troopDy.createTime, 1),
-                        DataState = DynamicConvert.ToEnumByValue(troopDy.XLY_DataType, EnumDataState.Normal)
+                        QQNumber = Decrypt(DynamicConvert.ToSafeString(discussDy.uin)),
+                        Name = Decrypt(DynamicConvert.ToSafeString(discussDy.discussionName)),
+                        CreateTime = DynamicConvert.ToSafeFromUnixTime(discussDy.createTime, 1),
+                        DataState = DynamicConvert.ToEnumByValue(discussDy.XLY_DataType, EnumDataState.Normal)
                     };
 
-                    string createid = Decrypt(DynamicConvert.ToSafeString(troopDy.ownerUin));
-                    string memberName = Decrypt(DynamicConvert.ToSafeString(troopDy.memberName));
-                    string inteRemark = Decrypt(DynamicConvert.ToSafeString(troopDy.inteRemark));
+                    string createid = Decrypt(DynamicConvert.ToSafeString(discussDy.ownerUin));
+                    string memberName = Decrypt(DynamicConvert.ToSafeString(discussDy.memberName));
+                    string inteRemark = Decrypt(DynamicConvert.ToSafeString(discussDy.inteRemark));
                     if (inteRemark.IsValid())
                     {
                         discussShow.Creator = string.Format("{0}({1})", inteRemark, createid);
@@ -578,28 +590,27 @@ namespace XLY.SF.Project.Plugin.Android
                         DataState = discussShow.DataState
                     };
 
-                    string uin = DynamicConvert.ToSafeString(troopDy.uin);
-                    MainDbContext.UsingSafeConnection(string.Format("SELECT memberUin,memberName,inteRemark,XLY_DataType FROM DiscussionMemberInfo WHERE discussionUin = '{0}'", uin), (rr) =>
-                    {
-                        dynamic member;
-                        QQFriendShow friendShow;
-                        while (rr.Read())
-                        {
-                            member = rr.ToDynamic();
-
-                            friendShow = new QQFriendShow()
-                            {
-                                QQNumber = Decrypt(DynamicConvert.ToSafeString(member.memberUin)),
-                                Nick = Decrypt(DynamicConvert.ToSafeString(member.memberName)),
-                                Remark = Decrypt(DynamicConvert.ToSafeString(member.inteRemark)),
-                                DataState = DynamicConvert.ToEnumByValue(member.XLY_DataType, EnumDataState.Normal)
-                            };
-                            memberTree.Items.Add(friendShow);
-                        }
-                    });
-
                     discussMemberTree.TreeNodes.Add(memberTree);
                     discussMemberTree.Items.Add(discussShow);
+
+                    if (!discussShow.QQNumber.IsMatch(@"^\d+$"))
+                    {
+                        continue;
+                    }
+
+                    string uin = DynamicConvert.ToSafeString(discussDy.uin);
+                    QQFriendShow friendShow;
+                    foreach (var member in allDiscussionMemberInfo.Where(d => d.discussionUin == uin))
+                    {
+                        friendShow = new QQFriendShow()
+                        {
+                            QQNumber = Decrypt(DynamicConvert.ToSafeString(member.memberUin)),
+                            Nick = Decrypt(DynamicConvert.ToSafeString(member.memberName)),
+                            Remark = Decrypt(DynamicConvert.ToSafeString(member.inteRemark)),
+                            DataState = DynamicConvert.ToEnumByValue(member.XLY_DataType, EnumDataState.Normal)
+                        };
+                        memberTree.Items.Add(friendShow);
+                    }
                 }
             });
         }
@@ -619,6 +630,10 @@ namespace XLY.SF.Project.Plugin.Android
 
             foreach (var discuss in AllDiscusss)
             {
+                if (!discuss.QQNumber.IsMatch(@"^\d+$"))
+                {
+                    continue;
+                }
                 if (!LsDiscussMsgTables.Any(s => s.Contains(CryptographyHelper.MD5FromStringUpper(discuss.QQNumber))))
                 {//没有该讨论组的聊天消息表
                     continue;
@@ -1097,19 +1112,20 @@ namespace XLY.SF.Project.Plugin.Android
             var myName = CurQQAccount.FullName;
 
             var sql = string.Format(@"SELECT
-                                      	m.senderuin,
-                                      	mem.friendnick,
-                                      	mem.troopnick,
-                                      	m.msgData,
-                                      	m.time,
-                                      	m.msgtype,
-                                      	m.uniseq,
-                                      	m.XLY_DataType
-                                      FROM
-                                      	{0} m
-                                      LEFT JOIN TroopMemberInfo mem ON m.frienduin = mem.troopuin
-                                      AND m.senderuin = mem.memberuin
-                                      ORDER BY m.time", tableName);
+                                     	m.senderuin,
+                                     (SELECT friendnick FROM TroopMemberInfo mem WHERE m.frienduin = mem.troopuin
+                                     AND m.senderuin = mem.memberuin) as friendnick,
+                                     (SELECT troopnick FROM TroopMemberInfo mem WHERE m.frienduin = mem.troopuin
+                                     AND m.senderuin = mem.memberuin) as troopnick,
+                                     	m.msgData,
+                                     	m.time,
+                                     	m.msgtype,
+                                     	m.uniseq,
+                                     	m.XLY_DataType
+                                     FROM
+                                     	{0} m
+                                     ORDER BY
+                                     	m.time", tableName);
 
             MainDbContext.UsingSafeConnection(sql, (r) =>
              {
@@ -1180,7 +1196,8 @@ namespace XLY.SF.Project.Plugin.Android
 
             var sql = string.Format(@"SELECT
                                       	m.senderuin,
-                                      	mem.inteRemark,
+                                      	(SELECT inteRemark FROM DiscussionMemberInfo mem WHERE m.frienduin = mem.discussionUin
+                                            AND m.senderuin = mem.memberuin) as inteRemark,
                                       	m.msgData,
                                       	m.time,
                                       	m.msgtype,
@@ -1188,8 +1205,6 @@ namespace XLY.SF.Project.Plugin.Android
                                       	m.XLY_DataType
                                       FROM
                                       	{0} m
-                                      LEFT JOIN DiscussionMemberInfo mem ON m.frienduin = mem.discussionUin
-                                      AND m.senderuin = mem.memberuin
                                       ORDER BY
                                       	m.time", tableName);
 

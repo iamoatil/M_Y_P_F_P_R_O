@@ -21,6 +21,8 @@ namespace XLY.SF.Project.Themes
     /// </summary>
     public class EnumDataStateToImageSourceConverter : IValueConverter
     {
+        private static object _normalImage = null;
+        private static object _deleteImage = null;
         /// <summary>
         /// 将数据状态值（正常、删除）转换为控件的ImageSource
         /// </summary>
@@ -33,11 +35,19 @@ namespace XLY.SF.Project.Themes
         {
             if (value == null || value.ToString() == "Normal" || value.ToString() == "None")
             {
-                return new BitmapImage(new Uri("pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_state_normal.png", UriKind.RelativeOrAbsolute));
+                if(_normalImage == null)
+                {
+                    _normalImage = new BitmapImage(new Uri("pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_state_normal.png", UriKind.RelativeOrAbsolute)); 
+                }
+                return _normalImage;
             }
             else
             {
-                return new BitmapImage(new Uri("pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_state_delete.png", UriKind.RelativeOrAbsolute));
+                if (_deleteImage == null)
+                {
+                    _deleteImage = new BitmapImage(new Uri("pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_state_delete.png", UriKind.RelativeOrAbsolute));
+                }
+                return _deleteImage;
             }
         }
 

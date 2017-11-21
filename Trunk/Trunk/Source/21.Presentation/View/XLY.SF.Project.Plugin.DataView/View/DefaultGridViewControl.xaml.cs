@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Themes;
 
 namespace XLY.SF.Project.Plugin.DataView.View.Controls
 {
@@ -67,6 +68,8 @@ namespace XLY.SF.Project.Plugin.DataView.View.Controls
             }
         }
 
+        private const string PROPERTY_NAME = "$PropertyName$";
+
         /// <summary>
         /// 动态生成表格列
         /// </summary>
@@ -84,12 +87,35 @@ namespace XLY.SF.Project.Plugin.DataView.View.Controls
 
             if (type is Type t)
             {
-                foreach(var attr in DisplayAttributeHelper.FindDisplayAttributes(t))
+                foreach(var attr in DisplayAttributeHelper.FindDisplayAttributes(t).OrderBy(d=>d.ColumnIndex))
                 {
-                    DataGridTextColumn col = new DataGridTextColumn();
-                    col.Header = attr.Text;
-                    col.Binding = new Binding(attr.Owner.Name);
-                    dg.Columns.Add(col);
+                    if (attr.Visibility == EnumDisplayVisibility.ShowInDatabase)        //该属性不需要显示在界面上
+                        continue;
+
+                    if(attr.Owner.Name == "DataState")      //如果是状态列，则单独处理
+                    {
+                        DataGridTemplateColumn stateCol = new DataGridTemplateColumn() { Header = attr.Text };
+                        stateCol.CellTemplate = XamlResouceReader.ToDataTemplate<DataTemplate>("ThemesStyle.DataGridStyle.DataGridDataStateColumnTemplate.xaml", c => c.Replace(PROPERTY_NAME, attr.Owner.Name));
+                        dg.Columns.Add(stateCol);
+                    }
+                    else if (attr.ColumnType == EnumColumnType.URL)
+                    {
+                        DataGridTemplateColumn col = new DataGridTemplateColumn() { Header = attr.Text };
+                        col.CellTemplate = XamlResouceReader.ToDataTemplate<DataTemplate>("ThemesStyle.DataGridStyle.DataGridUrlColumnTemplate.xaml", c => c.Replace(PROPERTY_NAME, attr.Owner.Name));
+                        dg.Columns.Add(col);
+                    }
+                    else if (attr.ColumnType == EnumColumnType.Image)
+                    {
+                        DataGridTemplateColumn col = new DataGridTemplateColumn() { Header = attr.Text };
+                        col.CellTemplate = XamlResouceReader.ToDataTemplate<DataTemplate>("ThemesStyle.DataGridStyle.DataGridImageColumnTemplate.xaml", c => c.Replace(PROPERTY_NAME, attr.Owner.Name));
+                        dg.Columns.Add(col);
+                    }
+                    else
+                    {
+                        DataGridBoundColumn col = new DataGridTextColumn() { Header = attr.Text, Binding = new Binding(attr.Owner.Name), Width = attr.Width, MinWidth = 50 };
+                        dg.Columns.Add(col);
+                    }
+
                 }
             }
             else if(type is string)

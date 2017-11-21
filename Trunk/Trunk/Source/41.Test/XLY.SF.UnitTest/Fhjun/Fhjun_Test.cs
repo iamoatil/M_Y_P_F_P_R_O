@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 using X64Service;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.MefIoc;
-using XLY.SF.Project.DataReport;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Plugin.Adapter;
+using XLY.SF.Project.Plugin.DataReport;
 
 /* ==============================================================================
 * Assembly   ：	XLY.SF.UnitTest.Fhjun_Test
@@ -135,9 +135,18 @@ namespace XLY.SF.UnitTest
         {
             Load();
             Log("开始测试");
-            var p = DataReportAdapter.Instance.Plugins;
-            Assert.IsTrue(p.Any());
-            var destPath = p.FirstOrDefault(pl => pl.PluginInfo.Name.Contains("Html报表")).Execute(new DataReportPluginArgument()
+            var pluginModules = PluginAdapter.Instance.GetPluginsByType<DataReportModulePluginInfo>(PluginType.SpfReportModule).ToList().ConvertAll(p => (AbstractDataReportModulePlugin)p.Value)
+                .ConvertAll(m => m.PluginInfo as DataReportModulePluginInfo).OrderBy(m => m.OrderIndex);
+            var  reportPlugins = PluginAdapter.Instance.GetPluginsByType<DataReportPluginInfo>(PluginType.SpfReport).ToList().ConvertAll(p => (AbstractDataReportPlugin)p.Value);
+            foreach (var p in reportPlugins)   //添加报表模板信息
+            {
+                if (p.PluginInfo is DataReportPluginInfo rp)
+                {
+                    rp.Modules = pluginModules.Where(m => m != null && m.ReportId == rp.Guid).ToList();
+                }
+            }
+            Assert.IsTrue(reportPlugins.Any());
+            var destPath = reportPlugins.FirstOrDefault(pl => pl.PluginInfo.Name.Contains("Html报表")).Execute(new DataReportPluginArgument()
             {
                 DataPool = CreateDataSource(DeskPath(@"")),
                 ReportModuleName = "Html模板2(Bootstrap)",
@@ -170,9 +179,18 @@ namespace XLY.SF.UnitTest
         {
             Load();
             Log("开始测试");
-            var p = DataReportAdapter.Instance.Plugins;
-            Assert.IsTrue(p.Any());
-            var destPath = p.FirstOrDefault(pl => pl.PluginInfo.Name.Contains("BCP")).Execute(new DataReportPluginArgument()
+            var pluginModules = PluginAdapter.Instance.GetPluginsByType<DataReportModulePluginInfo>(PluginType.SpfReportModule).ToList().ConvertAll(p => (AbstractDataReportModulePlugin)p.Value)
+                .ConvertAll(m => m.PluginInfo as DataReportModulePluginInfo).OrderBy(m => m.OrderIndex);
+            var reportPlugins = PluginAdapter.Instance.GetPluginsByType<DataReportPluginInfo>(PluginType.SpfReport).ToList().ConvertAll(p => (AbstractDataReportPlugin)p.Value);
+            foreach (var p in reportPlugins)   //添加报表模板信息
+            {
+                if (p.PluginInfo is DataReportPluginInfo rp)
+                {
+                    rp.Modules = pluginModules.Where(m => m != null && m.ReportId == rp.Guid).ToList();
+                }
+            }
+            Assert.IsTrue(reportPlugins.Any());
+            var destPath = reportPlugins.FirstOrDefault(pl => pl.PluginInfo.Name.Contains("BCP")).Execute(new DataReportPluginArgument()
             {
                 DataPool = CreateDataSource(DeskPath(@"")),
                 ReportModuleName = null,

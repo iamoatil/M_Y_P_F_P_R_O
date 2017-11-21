@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.Composition;
-using System.IO;
+﻿using System.IO;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
@@ -19,9 +17,9 @@ namespace XLY.SF.Project.Plugin.Android
             pluginInfo.Group = "基本信息";
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
-            pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror;
+            pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
             pluginInfo.GroupIndex = 0;
-            pluginInfo.OrderIndex = 3;
+            pluginInfo.OrderIndex = 4;
 
             pluginInfo.AppName = "com.android.providers.telephony";
             pluginInfo.Icon = "\\icons\\sms.png";
@@ -65,9 +63,9 @@ namespace XLY.SF.Project.Plugin.Android
                 var paser = new AndroidSmsDataParseCoreV1_0(smsdbFile, contactsdbFile);
                 paser.BuildData(ds);
             }
-            catch
-            {//TODO:异常处理
-
+            catch (System.Exception ex)
+            {
+                Framework.Log4NetService.LoggerManagerSingle.Instance.Error("提取安卓短信数据出错！", ex);
             }
             finally
             {

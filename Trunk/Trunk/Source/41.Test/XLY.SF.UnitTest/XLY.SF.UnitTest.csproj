@@ -90,6 +90,10 @@
       <Project>{a6ac1722-6e18-4d53-8f34-19d32d93854d}</Project>
       <Name>XLY.SF.Project.Plugin.Android</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\11.Service\14.Plugin\XLY.SF.Project.Plugin.DataReport\XLY.SF.Project.Plugin.DataReport.csproj">
+      <Project>{CDB4F4F4-7131-4A29-828D-CC9F5A43536D}</Project>
+      <Name>XLY.SF.Project.Plugin.DataReport</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\11.Service\14.Plugin\XLY.SF.Project.Plugin.IOS\XLY.SF.Project.Plugin.IOS.csproj">
       <Project>{4eafdbb2-a575-4c73-9135-a4a226752425}</Project>
       <Name>XLY.SF.Project.Plugin.IOS</Name>
@@ -109,10 +113,6 @@
     <ProjectReference Include="..\..\11.Service\13.Core\XLY.SF.Project.DataPump\XLY.SF.Project.DataPump.csproj">
       <Project>{90F36552-0B97-41CB-8D2B-BA66225DC3CB}</Project>
       <Name>XLY.SF.Project.DataPump</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\11.Service\13.Core\XLY.SF.Project.DataReport\XLY.SF.Project.DataReport.csproj">
-      <Project>{03285108-4bf0-40e8-8f85-7d783f6e6fa1}</Project>
-      <Name>XLY.SF.Project.DataReport</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\11.Service\13.Core\XLY.SF.Project.Devices\XLY.SF.Project.Devices.csproj">
       <Project>{9EB7A2CF-AE03-47EE-B850-88A0FCCDD0BD}</Project>

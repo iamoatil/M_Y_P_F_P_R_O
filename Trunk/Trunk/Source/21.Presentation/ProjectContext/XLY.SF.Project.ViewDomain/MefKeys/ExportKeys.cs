@@ -180,6 +180,22 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         public const string DataDisplayViewModel = "DataDisplayViewModel";
         #endregion
 
+        #region 管理
+
+        #region 用户
+
+        public const String ManagementUserListView = "ExportKey_Management_UserListView";
+
+        public const String ManagementUserListViewModel = "ExportKey_Management_UserListViewModel";
+
+        public const String ManagementUserInfoView = "ExportKey_Management_UserInfoView";
+
+        public const String ManagementUserInfoViewModel = "ExportKey_Management_UserInfoViewModel";
+
+        #endregion
+
+        #endregion
+
         #region
 
         public const string MirrorView= "ExportKey_MirrorView";

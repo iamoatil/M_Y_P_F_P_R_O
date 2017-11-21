@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:XLY.SF.Project.Themes">
+                    xmlns:local="clr-namespace:XLY.SF.Project.Themes"
+                    xmlns:ctrl="clr-namespace:XLY.SF.Project.Themes.CustromControl">
 
     <!--日期分组转换器-->
     <local:DateTimeToDateStringConverter x:Key="dateTimeToDateConverter"/>
@@ -53,11 +54,7 @@
 
     <!--超链接内容模板-->
     <ControlTemplate x:Key="urlContentTemplate">
-        <Label Padding="0" Margin="0">
-            <Hyperlink NavigateUri="http://www.baidu.com" Foreground="Blue">
-                <TextBlock Text="{Binding Content}" TextWrapping="Wrap"/>
-            </Hyperlink>
-        </Label>
+        <ctrl:HyperlinkControl Url="{Binding Content}" Foreground="Blue"/>
     </ControlTemplate>
 
     <!--图片内容模板-->
@@ -194,6 +191,10 @@
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
+        <Setter Property="VirtualizingPanel.VirtualizationMode" Value="Recycling"/>
+        <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
+        <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True"/>
+        <Setter Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="True"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource conversionListBoxItemStyle}"/>
     </Style>
 </ResourceDictionary>

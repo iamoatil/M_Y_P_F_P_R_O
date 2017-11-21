@@ -86,7 +86,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// </summary>
         protected void CloseView()
         {
-            NavigationArgs args = NavigationArgs.CreateCloseNavigationArgs(this.ViewModelID);
+            CloseViewOfNewWindowArgs args = new CloseViewOfNewWindowArgs(ViewModelID);
             //发送关闭View消息
             MsgAggregation.Instance.SendNavigationMsgForCloseWindow(args);
         }
@@ -102,10 +102,22 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         {
             if (IsLoaded) return;
             IsLoaded = true;
-            LoadCore(parameters);
+            InitLoad(parameters);
         }
 
-        protected virtual void LoadCore(object parameters)
+        /// <summary>
+        /// 初始化时加载
+        /// </summary>
+        /// <param name="parameters"></param>
+        protected virtual void InitLoad(object parameters)
+        {
+
+        }
+
+        /// <summary>
+        /// 接收参数
+        /// </summary>
+        protected virtual void ReceiveParameters(object parameters)
         {
 
         }
@@ -120,7 +132,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <param name="exportKey"></param>
         public void NavigationForMainWindow(string exportKey, object param = null)
         {
-            NavigationArgs args = NavigationArgs.CreateMainViewNavigationArgs(exportKey, param);
+            NormalNavigationArgs args = NormalNavigationArgs.CreateMainViewNavigationArgs(exportKey, param);
             MsgAggregation.Instance.SendNavigationMsgForMainView(args);
         }
 
@@ -133,7 +145,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
             bool showInTaskBar = false,
             bool topMost = false)
         {
-            NavigationArgs args = NavigationArgs.CreateWindowNavigationArgs(exportKey, param, showInTaskBar, topMost);
+            NormalNavigationArgs args = NormalNavigationArgs.CreateWindowNavigationArgs(exportKey, param, showInTaskBar, topMost);
             MsgAggregation.Instance.SendNavigationMsgForWindow(args);
         }
 

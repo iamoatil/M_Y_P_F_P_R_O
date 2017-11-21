@@ -80,6 +80,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behavior\PasswordBoxBehavior.cs" />
     <Compile Include="Behavior\TreeViewExpandedBehavior.cs" />
     <Compile Include="Converters\ContraryBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\IsEnableToVisibilityConverter.cs" />
@@ -98,13 +99,13 @@
     <Compile Include="Login\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Main\CaseCreationView.xaml.cs">
+    <Compile Include="Main\CaseManagement\CaseCreationView.xaml.cs">
       <DependentUpon>CaseCreationView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Main\CaseListView.xaml.cs">
+    <Compile Include="Main\CaseManagement\CaseListView.xaml.cs">
       <DependentUpon>CaseListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Main\CaseSelectionView.xaml.cs">
+    <Compile Include="Main\CaseManagement\CaseSelectionView.xaml.cs">
       <DependentUpon>CaseSelectionView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Main\DeviceView\DeviceHomePageView.xaml.cs">
@@ -121,6 +122,12 @@
     </Compile>
     <Compile Include="Main\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Management\User\UserInfoView.xaml.cs">
+      <DependentUpon>UserInfoView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Management\User\UserListView.xaml.cs">
+      <DependentUpon>UserListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -173,15 +180,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Main\CaseCreationView.xaml">
+    <Page Include="Main\CaseManagement\CaseCreationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Main\CaseListView.xaml">
+    <Page Include="Main\CaseManagement\CaseListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Main\CaseSelectionView.xaml">
+    <Page Include="Main\CaseManagement\CaseSelectionView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -202,6 +209,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Main\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Management\User\UserInfoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Management\User\UserListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -237,6 +252,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Management\Settings\" />
     <Folder Include="PathSelection\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

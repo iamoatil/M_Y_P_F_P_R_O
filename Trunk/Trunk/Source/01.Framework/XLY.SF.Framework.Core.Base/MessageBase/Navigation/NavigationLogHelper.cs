@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace XLY.SF.Framework.Core.Base.MessageBase.Navigation
 {
     /// <summary>
-    /// 导航日志记录【Key】
+    /// 导航记录
     /// </summary>
     public static class NavigationLogHelper
     {
@@ -22,7 +22,7 @@ namespace XLY.SF.Framework.Core.Base.MessageBase.Navigation
         /// 添加导航记录
         /// </summary>
         /// <param name="navigation">导航消息</param>
-        public static void AddNavigationLog(NavigationArgs navigation, bool showInNewWindow)
+        public static void AddNavigationLog(NormalNavigationArgs navigation, bool showInNewWindow)
         {
             NavigationLogStatus logEmt = new NavigationLogStatus(showInNewWindow, navigation.MsgToken);
             _historyExportKeys.Add(logEmt);

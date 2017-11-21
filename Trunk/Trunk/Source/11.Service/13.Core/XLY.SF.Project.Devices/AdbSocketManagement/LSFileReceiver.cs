@@ -31,20 +31,20 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
         /// </summary>
         public override void DoResolver()
         {
-            if (this.Source == null) return;
-            var files = this.ProcessLines(this.Lines, this.Source);
+            if (Source == null) return;
+            var files = ProcessLines(Lines, Source);
             if (files.Count == 1)
             {
                 var f = files.First();
                 //if folder
-                var name = FileHelper.GetLinuxFileName(this.Source);
+                var name = FileHelper.GetLinuxFileName(Source);
                 if (!f.IsFolder && f.Name == name)
                 {
-                    f.Path = FileHelper.GetLinuxFilePath(this.Source);
+                    f.Path = FileHelper.GetLinuxFilePath(Source);
                     f.IsRootFile = true;
                 }
             }
-            this.Files = files;
+            Files = files;
         }
 
         /****************** private methods ******************/
@@ -55,7 +55,7 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
             if (!lines.IsValid() || path == null) return files;
             foreach (var line in lines)
             {
-                var f = this.ProcessLine(line);
+                var f = ProcessLine(line);
                 if (f == null) continue;
                 f.Path = path;
                 files.Add(f);
@@ -91,7 +91,7 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
                     break;
                 case 'l':
                     file.Type = "Link";
-                    this.ProcessLink(file.Name, file);
+                    ProcessLink(file.Name, file);
                     break;
                 case 's':
                     file.Type = "Socket";

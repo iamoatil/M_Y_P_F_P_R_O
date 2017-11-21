@@ -36,6 +36,8 @@ namespace XLY.SF.Project.Plugin.Adapter
         {
             if (!_Isloaded)
             {
+                PluginContainerAdapter.Instance.Initialization(asyn);
+
                 _Isloaded = true;
                 Plugins = new Dictionary<AbstractPluginInfo, IPlugin>();
                 var pluginLoaders = new List<IPluginLoader>() { new JavascriptPluginLoader(), new NetPluginLoader(), new ZipPluginLoader() };

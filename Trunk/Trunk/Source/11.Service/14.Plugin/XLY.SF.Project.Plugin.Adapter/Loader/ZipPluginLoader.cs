@@ -296,7 +296,8 @@ namespace XLY.SF.Project.Plugin.Adapter
             //        return loader.Value;
             //    }
             //}
-            throw new Exception("未匹配到合适的插件！");
+            return PluginContainerAdapter.Instance.GetPlugin<IPlugin>(pluginInfo.PluginType);
+            //throw new Exception("未匹配到合适的插件！");
         }
     }
 }

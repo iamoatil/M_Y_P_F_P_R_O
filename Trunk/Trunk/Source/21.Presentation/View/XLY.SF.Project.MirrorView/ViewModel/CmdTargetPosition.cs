@@ -35,12 +35,7 @@ namespace XLY.SF.Project.MirrorView
                 _dirPath = value;
                 OnPropertyChanged();
             }
-        }
-
-        private void OnPropertyChanged()
-        {
-            throw new NotImplementedException();
-        }
+        }        
 
         public ICommand SetTargetPathCommand { get; private set; }
 

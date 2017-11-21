@@ -35,6 +35,10 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         /// 提取任务完成消息
         /// </summary>
         public const string ExtractTaskCompleteMsg = "GeneralKeys_TaskCompleteMsg";
+        /// <summary>
+        /// 删除缓存视图
+        /// </summary>
+        public const string DeleteCacheView = "GeneralKeys_DeleteCacheView";
 
         #endregion
     }

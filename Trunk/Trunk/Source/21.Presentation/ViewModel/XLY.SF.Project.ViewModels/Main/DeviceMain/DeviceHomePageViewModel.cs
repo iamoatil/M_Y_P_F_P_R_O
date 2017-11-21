@@ -163,7 +163,7 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
         #region 重载
 
-        protected override void LoadCore(object parameters)
+        protected override void InitLoad(object parameters)
         {
             CurDevModel = parameters as DeviceModel;
             if (CurDevModel == null)
@@ -194,12 +194,12 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
             GeneralArgs<Pump> args = new GeneralArgs<Pump>(GeneralKeys.SetDataExtractionParamsMsg);
             var adorner = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
-            XLY.SF.Project.CaseManagement.ExtractItem ei = 
-                adorner.Target.CreateExtract(SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_StrategyRecommend_AutoExtraction], 
+            XLY.SF.Project.CaseManagement.ExtractItem ei =
+                adorner.Target.CreateExtract(SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_StrategyRecommend_AutoExtraction],
                                             SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_StrategyRecommend_AutoExtraction]);
             args.Parameters = new Pump(ei.Path, "data.db");
             args.Parameters.Type = EnumPump.USB;
-            args.Parameters.OSType = EnumOSType.Android;
+            args.Parameters.OSType = (CurDevModel.IDevSource as Domains.Device).OSType;
             args.Parameters.Source = CurDevModel.IDevSource;
             base.MessageAggregation.SendGeneralMsg<Pump>(args);
         }

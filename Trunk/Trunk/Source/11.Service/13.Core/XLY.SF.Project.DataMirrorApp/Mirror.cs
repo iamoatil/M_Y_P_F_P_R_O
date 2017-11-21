@@ -29,15 +29,16 @@ namespace XLY.SF.Project.DataMirrorApp
         public MirrorFile MirrorFile { get; private set; }
 
         /// <summary>
-        /// 是否有错误
+        /// 可否执行
         /// </summary>
-        bool _haveErrors = false;        
+        bool _canExecute = false;
 
         /// <summary>
         /// 在Initialize方法中打开设备，并且初始化
         /// </summary>
         public void Initialize(string deviceSerialnumber,int isHtc,string path)
-        {            
+        {
+            _canExecute = false;
             try
             {
                 MirrorFile = new MirrorFile(path);
@@ -58,31 +59,37 @@ namespace XLY.SF.Project.DataMirrorApp
             catch (Exception ex)
             {
                 Exception(string.Format("安卓手机镜像出错！设备ID:{0} {1}", deviceSerialnumber, ex));
-            }            
+                return;
+            }
+
+            _canExecute = true;
         }
 
-        public void Start(string block)
+        public void Start(string block,long startedPos)
         {
-            if(_haveErrors == false)
+            if(_canExecute == true)
             {
-                var result = AndroidMirrorAPI.ImageDataZone(_deviceHandle, block, 0, -1,ImageDataCallBack);
-                if (0 != result)
+                try
                 {
-                    Exception(string.Format("安卓手机镜像出错！ImageDataZone失败，设备ID:{0} 错误码:{1}", _deviceSerialnumber, result));
+                    var result = AndroidMirrorAPI.ImageDataZone(_deviceHandle, block, startedPos/512, -1, ImageDataCallBack);
+                    if (0 != result)
+                    {
+                        Exception(string.Format("安卓手机镜像出错！ImageDataZone失败，设备ID:{0} 错误码:{1}", _deviceSerialnumber, result));
+                        return;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MirrorFile.Close();
+                    Console.WriteLine("{0}|{1}", CmdStrings.Progress, MirrorFile.WritedSize.ToString());
+                    Exception(string.Format("镜像异常，设备ID:{0} 错误码:{1}", _deviceSerialnumber, ex));
                     return;
                 }
+                
+                MirrorFile.Close();
                 MirrorFile.CreateMD5File();
-                SendSate(CmdStrings.FinishState);
+                Console.WriteLine(CmdStrings.FinishState);
             }
-        }
-
-        /// <summary>
-        /// 发送状态到调用端
-        /// </summary>
-        public void SendSate(CmdString cmd)
-        {
-            MirrorFile.Close();
-            Console.WriteLine(string.Format("{0}",cmd));
         }
 
         /// <summary>
@@ -93,7 +100,7 @@ namespace XLY.SF.Project.DataMirrorApp
         {
             MirrorFile.Close();
             Console.WriteLine("{0}|{1}",CmdStrings.Exception, msg);
-            _haveErrors = true;
+            _canExecute = false;
         }
 
         /// <summary>
@@ -106,8 +113,8 @@ namespace XLY.SF.Project.DataMirrorApp
             Marshal.Copy(data, buff, 0, datasize);
 
             MirrorFile.Write(buff);
-            Console.WriteLine("{0}|{1}", CmdStrings.Progress,MirrorFile.WritedSize.ToString()) ;
+            Console.WriteLine("{0}|{1}", CmdStrings.Progress, MirrorFile.WritedSize.ToString());
             return 0;
         }
-    }
+    }    
 }

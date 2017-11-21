@@ -85,7 +85,7 @@ namespace XLY.SF.Project.Models.Logical
 
         #region LoginPassword
 
-        private String _loginPassword;
+        private String _loginPassword=string.Empty;
         [Required]
         public virtual String LoginPassword
         {

@@ -20,8 +20,9 @@ namespace XLY.SF.Framework.Core.Base.MessageBase
     public class GeneralArgs : ArgsBase
     {
         public GeneralArgs(string generalKey)
+            :base(generalKey)
         {
-            base.MsgToken = generalKey;
+
         }
     }
 

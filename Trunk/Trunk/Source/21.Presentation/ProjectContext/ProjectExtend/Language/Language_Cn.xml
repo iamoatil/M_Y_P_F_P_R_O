@@ -108,9 +108,29 @@
     <View_DevHomePage_Number>编   号</View_DevHomePage_Number>
     <View_DevHomePage_Port>端   口</View_DevHomePage_Port>
     <View_DevHomePage_IOSRoot>越狱</View_DevHomePage_IOSRoot>
-    
-    
-    
+
+    <!--管理-->
+    <Management>
+      <User>
+        <Search>搜索</Search>
+        <Number>编号</Number>
+        <Account>用户名</Account>
+        <Name>姓名</Name>
+        <Phone>电话</Phone>
+        <Unit>工作单位</Unit>
+        <Id>证件号</Id>
+        <Add>添加</Add>
+        <Remove>删除</Remove>
+        <Update>修改</Update>
+        <InputPassword>输入密码</InputPassword>
+        <ConfirmPassword>确认密码</ConfirmPassword>
+        <Close>关闭</Close>
+        <Cancel>取消</Cancel>
+        <Confirm>确认</Confirm>
+      </User>
+    </Management>
+
+
 
     <!--操作日志-->
     <View_Operation1></View_Operation1>

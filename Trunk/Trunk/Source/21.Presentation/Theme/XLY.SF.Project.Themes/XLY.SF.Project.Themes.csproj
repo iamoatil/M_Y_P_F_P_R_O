@@ -90,6 +90,8 @@
     <Compile Include="CustromControl\CheckBox\IconCheckBox.cs" />
     <Compile Include="CustromControl\CheckBox\MenuRadioButton.cs" />
     <Compile Include="CustromControl\Button\IconButton.cs" />
+    <Compile Include="CustromControl\Hyperlink\HyperlinkControl.cs" />
+    <Compile Include="CustromControl\PopupControl\PopupControl.cs" />
     <Compile Include="CustromControl\ProgressBar\ProgressBarWithCorner.cs" />
     <Compile Include="CustromControl\ToggleButton\IconRadioButton.cs" />
     <Compile Include="CustromControl\TabControl\TabControlWithButton.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="CustromControl\Window\WindowEx.cs" />
     <Compile Include="CustromControl\TextBox\TextBoxEx.cs" />
     <Compile Include="Converter\BooleanToCollapseConverter.cs" />
+    <Compile Include="Converter\XamlResouceReader.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -141,6 +144,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <EmbeddedResource Include="ThemesStyle\DataGridStyle\DataGridImageColumnTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ThemesStyle\DataGridStyle\DataGridDataStateColumnTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ThemesStyle\DataGridStyle\DataGridUrlColumnTemplate.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Page Include="ThemesStyle\DataGridStyle\DataGridStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -157,11 +172,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="ThemesStyle\HyperlinkStyle\HyperlinkStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ThemesStyle\Listbox\ConversionListBoxStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ThemesStyle\Listbox\ListboxItemStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ThemesStyle\PopupControlStyle\PopupControlStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ThemesStyle\ProgressBarStyle\ProgressBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -349,7 +376,8 @@
     <Resource Include="Resources\Images\Icons\DevHomePageEditIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ThemesStyle\ProgressBarStyle\" />
+    <Resource Include="Resources\Images\Icons\drop_down.png" />
+    <Resource Include="Resources\Images\Icons\drop_up.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Icons\ArrowIcon.png" />

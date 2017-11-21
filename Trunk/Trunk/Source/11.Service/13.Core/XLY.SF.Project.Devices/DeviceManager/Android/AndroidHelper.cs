@@ -48,8 +48,7 @@ namespace XLY.SF.Project.Devices
             get { return SingleWrapperHelper<AndroidHelper>.Instance; }
         }
 
-        [Obsolete("请使用AndroidHelper.Instance获取实例！")]
-        public AndroidHelper()
+        private AndroidHelper()
         {
             HostAddress = IPAddress.Loopback;
             SocketAddress = new IPEndPoint(HostAddress, ConstCodeHelper.ADB_PORT);
@@ -880,19 +879,44 @@ namespace XLY.SF.Project.Devices
                 throw new ArgumentException("The command or device is invalid");
             }
 
-            using (AdbSocketOperator adbOperator = new AdbSocketOperator())
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            try
             {
-                if (ConnectDevice(adbOperator, device) && ExecuteAdbCommand(command, device, adbOperator))
+                socket.Connect(SocketAddress);
+                socket.ReceiveTimeout = maxtimeout;
+                socket.SendTimeout = maxtimeout;
+                socket.ReceiveBufferSize = buffersize;
+                SetDevice(socket, device);
+                //reqest
+                var request = AdbSocketHelper.CmdToBytes("shell:" + command);
+                AdbSocketHelper.Write(socket, request);
+                //response
+                var res = AdbSocketHelper.ReadResponse(socket);
+                if (!res.IsOkay)
                 {
-                    adbOperator.Read(receiver, buffersize);
+                    throw new ApplicationException(string.Format("device[{0}] response error:{1}", device.SerialNumber, res.Data));
+                }
+                //read
+                AdbSocketHelper.Read(socket, receiver, buffersize);
+                //验证输出是否合法
+                //determines weahter the output is valid
+                var tdata = receiver.Data.ToSafeString().Trim();
 
-                    return receiver.Data.ToString().Trim();
-                }
-                else
-                {
-                    return string.Empty;
-                }
+                return tdata;
             }
+            catch (DoneWithReadException)
+            {
+            }
+            catch (SocketException)
+            {
+                throw new ApplicationException(string.Format("The shell command\"{0} \" has become unresponsive! ,max timeout:{1}", command, maxtimeout));
+            }
+            finally
+            {
+                DisposeSocket(socket);
+            }
+
+            return string.Empty;
         }
 
         /// <summary>

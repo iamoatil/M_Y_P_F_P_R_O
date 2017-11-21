@@ -24,9 +24,14 @@ namespace XLY.SF.Framework.Core.Base.MessageBase
 
     public class ArgsBase
     {
+        internal ArgsBase(string msgToken)
+        {
+            MsgToken = msgToken;
+        }
+
         /// <summary>
         /// 消息标识
         /// </summary>
-        public string MsgToken { get; internal set; }
+        public string MsgToken { get; }
     }
 }

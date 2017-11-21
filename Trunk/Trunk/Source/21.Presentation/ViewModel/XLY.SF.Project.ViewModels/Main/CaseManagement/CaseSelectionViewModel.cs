@@ -66,7 +66,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         #region Protected
 
-        protected override void LoadCore(Object parameters)
+        protected override void InitLoad(Object parameters)
         {
             Cases = DbService.RecentCases.OrderByDescending(x => x.Timestamp).ToModels<RecentCase, RecentCaseEntityModel>().ToArray();
         }

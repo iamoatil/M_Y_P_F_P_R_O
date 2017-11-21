@@ -16,6 +16,6 @@
 
     </UserControl.Resources>
     <Grid>
-        <CheckBox VerticalAlignment="Center" HorizontalAlignment="Center" Content="测试" IsThreeState="True"/>
+        <control:TextBoxEx Width="300" Height="30" Title="测试文字" Watermark="我是水印" Text=""/>
     </Grid>
 </UserControl>

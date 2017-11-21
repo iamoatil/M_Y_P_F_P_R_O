@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.Composition;
-using System.IO;
+﻿using System.IO;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
@@ -19,7 +17,7 @@ namespace XLY.SF.Project.Plugin.Android
             pluginInfo.Group = "社交聊天";
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
-            pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror;
+            pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
             pluginInfo.GroupIndex = 1;
             pluginInfo.OrderIndex = 1;
 
@@ -50,7 +48,7 @@ namespace XLY.SF.Project.Plugin.Android
                 //com.tencent.mobileqq文件夹路径
                 var qqPath = new DirectoryInfo(databasesPath).Parent.FullName;
 
-                var parser = new AndroidQQDataParseCoreV1_0(pi.SaveDbPath, "安卓QQ", qqPath, null);
+                var parser = new AndroidQQDataParseCoreV1_0(pi.SaveDbPath, "安卓QQ", qqPath, "");
 
                 var qqNode = parser.BuildTree();
 
@@ -59,9 +57,9 @@ namespace XLY.SF.Project.Plugin.Android
                     ds.TreeNodes.Add(qqNode);
                 }
             }
-            catch
-            {//TODO:异常处理
-
+            catch (System.Exception ex)
+            {
+                Framework.Log4NetService.LoggerManagerSingle.Instance.Error("提取安卓QQ数据出错！", ex);
             }
             finally
             {

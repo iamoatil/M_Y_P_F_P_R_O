@@ -12,6 +12,9 @@ using ProjectExtend.Context;
 using XLY.SF.Project.ViewModels.Tools;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Framework.Log4NetService;
+using XLY.SF.Framework.Core.Base.MessageBase.Navigation;
+using XLY.SF.Project.ViewModels.Main.CaseManagement;
+using XLY.SF.Project.Extension.Helper;
 
 
 /*************************************************
@@ -68,23 +71,59 @@ namespace XLY.SF.Project.ViewModels.Main
 
             //注册主界面导航消息
             MsgAggregation.Instance.RegisterNaviagtionMsg(this, SystemKeys.MainUcNavigation, MainNavigationCallback);
+            //注册清理缓存视图消息
+            MsgAggregation.Instance.RegisterGeneralMsg<string>(this, GeneralKeys.DeleteCacheView, DeleteCacheViewCallback);
         }
 
-        #region 主界面导航
+        #region 导航相关
+
+        //清楚缓存【设备主页】
+        private void DeleteCacheViewCallback(GeneralArgs<string> obj)
+        {
+            NavigationCacheManager<string>.RemoveViewCache(obj.Parameters);
+        }
 
         //主界面导航回调
-        private void MainNavigationCallback(NavigationArgs args)
+        private void MainNavigationCallback(NormalNavigationArgs args)
         {
-            MainView = args.TargetView;
-            ///*
-            // * 由于ViewModel未引用WPF类库，所以无法用UcViewBase来做比较
-            // * 此处使用object来判断是否导航成功
-            // */
-            //UcViewBase targetView;
-            //if (Navigationhelper.CreateNavigationView(args, out targetView))
-            //{
-            //    MainView = targetView;
-            //}
+            /*
+             * TODO
+             * 由于设备主页是整个程序共享的
+             * 所以在跳转的时候，需要先判断缓存中是否有对应Token的缓存界面
+             * 没有则创建新的设备主页
+             * 
+             */
+            UcViewBase targetView = null;
+            if (args.IsBackArgs)
+            {
+                //返回前一个界面
+                targetView = args.Parameter as UcViewBase;
+            }
+            else
+            {
+                //缓存设备首页视图
+                if (args.MsgToken == ExportKeys.DeviceMainView)
+                {
+                    var devTmp = args.Parameter as DeviceExtractionAdorner;
+                    if (devTmp != null)
+                    {
+                        if (!NavigationCacheManager<string>.TryGetFirstView(devTmp.Device.ID, out targetView))
+                        {
+                            targetView = NavigationViewCreater.CreateView(args.MsgToken, args.Parameter);
+                            NavigationCacheManager<string>.AddViewCache(devTmp.Device.ID, targetView);
+                        }
+                    }
+                }
+                else
+                {
+                    //记录打开案例编辑界面之前的页面，方便返回使用
+                    EditCaseNavigationHelper.RecordBeforeViewOnisExpanded(MainView);
+
+                    targetView = NavigationViewCreater.CreateView(args.MsgToken, args.Parameter);
+                }
+            }
+
+            MainView = targetView;
         }
 
         #endregion
@@ -98,6 +137,8 @@ namespace XLY.SF.Project.ViewModels.Main
                 IsShowCurCaseNameRow = false;
                 IsShowDeviceListRow = false;
                 EditCaseNavigationHelper.ResetCurCaseStatus();
+                //清除界面缓存
+                NavigationCacheManager<string>.Clear();
             }
             else
             {

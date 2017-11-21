@@ -57,6 +57,16 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         public String Text { get; set; }
 
+        /// <summary>
+        /// 列宽
+        /// </summary>
+        public int Width { get; set; }
+
+        /// <summary>
+        /// 列序号，越小则排在越前面
+        /// </summary>
+        public int ColumnIndex { get; set; }
+
         public Type type { get; set; }
 
         /// <summary>
