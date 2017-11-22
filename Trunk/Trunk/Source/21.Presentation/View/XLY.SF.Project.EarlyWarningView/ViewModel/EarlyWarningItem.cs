@@ -11,6 +11,7 @@ namespace XLY.SF.Project.EarlyWarningView
     class EarlyWarningItem : IEnable
     {
         public bool IsEnable { get; set; }
+
         public string Name { get; set; }
 
         /// <summary>
