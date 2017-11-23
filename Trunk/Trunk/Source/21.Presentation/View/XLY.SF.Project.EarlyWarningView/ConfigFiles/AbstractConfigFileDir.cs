@@ -4,7 +4,7 @@ using System.IO;
 using System.Xml;
 
 /* ==============================================================================
-* Description：SensitiveFile  
+* Description：AbstractConfigFileDir  
 * Author     ：litao
 * Create Date：2017/11/22 17:44:01
 * ==============================================================================*/
@@ -23,14 +23,26 @@ namespace XLY.SF.Project.EarlyWarningView
         /// <summary>
         /// 配置文件所在目录
         /// </summary>
-        protected abstract string Dir { get; }
+        protected string Dir { get; set; }
 
         /// <summary>
         ///  是否已经初始化。没有初始化的话GetAllData返回为null
         /// </summary>
-        protected bool IsInitialize;
+        protected bool IsInitialize;        
 
-        public abstract bool Initialize(string dir);
+        public virtual bool Initialize(string dir)
+        {
+            IsInitialize = false;
+
+            if (!Directory.Exists(dir))
+            {
+                return IsInitialize;
+            }
+            Dir = dir;
+
+            IsInitialize = true;
+            return IsInitialize;
+        }
 
         /// <summary>
         /// 获取全部数据。搜索Dir目录下的Xml文件，并且读取文件中RootName节点的数据；返回一个List<SensitiveData>数据

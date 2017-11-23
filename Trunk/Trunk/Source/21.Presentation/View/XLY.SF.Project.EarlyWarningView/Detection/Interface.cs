@@ -9,11 +9,11 @@ using System.Collections.Generic;
 namespace XLY.SF.Project.EarlyWarningView
 {
     /// <summary>
-    /// 检测输入的字符串是否符合规范
+    /// 检测输入的字符串是否符合规范,不符合就返回其违反的条目
     /// </summary>
     interface IDetection
     {
-        bool Detect(string input);
+        SensitiveData Detect(string input);
     }
 
     /// <summary>
@@ -21,6 +21,6 @@ namespace XLY.SF.Project.EarlyWarningView
     /// </summary>
     interface IInitialize
     {
-        bool Initialize(List<string> sensitiveList);
+        bool Initialize(List<SensitiveData> sensitiveList);
     }
 }

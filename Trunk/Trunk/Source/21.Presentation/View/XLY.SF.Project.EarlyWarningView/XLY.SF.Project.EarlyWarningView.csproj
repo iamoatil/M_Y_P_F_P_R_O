@@ -56,11 +56,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command.cs" />
+    <Compile Include="ConfigFiles\AppNameConfigFileDir.cs" />
+    <Compile Include="ConfigFiles\KeyWordConfigFileDir.cs" />
+    <Compile Include="ConfigFiles\NetAddressConfigFileDir.cs" />
     <Compile Include="ConfigFiles\Md5ConfigFileDir.cs" />
     <Compile Include="ConfigFiles\SensitiveData.cs" />
     <Compile Include="ConfigFiles\AbstractConfigFileDir.cs" />
     <Compile Include="ConfigFiles\SensitiveDataToDbFile.cs" />
     <Compile Include="Detection\Interface.cs" />
+    <Compile Include="Detection\AbstractDetection.cs" />
+    <Compile Include="Detection\NetAddressDetection.cs" />
+    <Compile Include="Detection\AppNameDetection.cs" />
+    <Compile Include="Detection\KeyWordDetection.cs" />
     <Compile Include="Detection\Md5Detection.cs" />
     <Compile Include="EarlyWarningResultView.xaml.cs">
       <DependentUpon>EarlyWarningResultView.xaml</DependentUpon>
@@ -68,6 +75,7 @@
     <Compile Include="EarlyWarningSetting.xaml.cs">
       <DependentUpon>EarlyWarningSetting.xaml</DependentUpon>
     </Compile>
+    <Compile Include="EarlyWarning\EarlyWarning.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -91,8 +99,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="EarlyWarning\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

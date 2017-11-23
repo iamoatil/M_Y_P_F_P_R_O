@@ -1,16 +1,15 @@
 ﻿/* ==============================================================================
-* Description：Md5Detection  
+* Description：NetAddressConfigFileDir  
 * Author     ：litao
-* Create Date：2017/11/22 16:40:14
+* Create Date：2017/11/22 16:56:01
 * ==============================================================================*/
+
 
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    /// <summary>
-    /// Md5检测
-    /// </summary>
-    class Md5Detection : AbstractDetection
-    {        
+    class NetAddressConfigFileDir : AbstractConfigFileDir
+    {
+        protected override string RootName { get { return "NetAddressCollection"; } }
     }
 }
