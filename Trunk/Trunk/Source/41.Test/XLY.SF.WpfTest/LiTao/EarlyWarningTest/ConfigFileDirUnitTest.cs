@@ -6,10 +6,10 @@ using XLY.SF.Project.EarlyWarningView;
 namespace EarlyWarningTest
 {
     [TestClass]
-    public class Md5ConfigFileDirTest
+    public class ConfigFileDirTest
     {
         [TestMethod]
-        public void GetAllData()
+        public void Md5GetAllData()
         {
             string path = @"TestFiles\Md5File.xml";
             if (!File.Exists(path))
@@ -74,6 +74,6 @@ namespace EarlyWarningTest
             Md5ConfigFileDir dir = new Md5ConfigFileDir();
             dir.Initialize(@"TestFiles\");
             List<SensitiveData> ls = dir.GetAllData();
-        }
+        }        
     }
 }
