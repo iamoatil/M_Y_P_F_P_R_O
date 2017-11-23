@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <local:ConversionTemplateSelector  x:Key="tmSelector"></local:ConversionTemplateSelector>
+        <!--<local:ConversionTemplateSelector  x:Key="tmSelector"></local:ConversionTemplateSelector>
         <DataTemplate x:Key="left_txt">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -45,7 +45,7 @@
         <local:ConversionStyleSelector x:Key="conSelector"
                                        StyleLeft="{StaticResource left_style}" 
                                        StyleRight="{StaticResource right_style}">
-        </local:ConversionStyleSelector>
+        </local:ConversionStyleSelector>-->
 
         <!--列表分组数据源-->
         <CollectionViewSource x:Key="conversionCollectionViewSource" Filter="CollectionViewSource_Filter">
@@ -56,8 +56,6 @@
     </UserControl.Resources>
     
     <Grid>
-        <!--<ListBox x:Name="lsb1" ItemsSource="{Binding Items.View}" ItemTemplateSelector="{StaticResource tmSelector}" ItemContainerStyleSelector="{StaticResource conSelector}" SelectionChanged="ListBox_SelectionChanged"></ListBox>-->
-
         <ListBox x:Name="lsb1" ItemsSource="{Binding Source={StaticResource ResourceKey=conversionCollectionViewSource}}" Style="{StaticResource conversionListBoxStyle}" SelectionChanged="ListBox_SelectionChanged">
             <ListBox.GroupStyle>
                 <GroupStyle ContainerStyle="{StaticResource conversionGroupHeadStyle}"/>

@@ -59,6 +59,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.Expression.Drawing, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Expression.Effects, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -68,6 +69,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\System.Data.SQLite.Core.1.0.105.2\lib\net45\System.Data.SQLite.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -86,9 +88,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CommWindow\SelectWin.xaml.cs">
-      <DependentUpon>SelectWin.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="MessageBox\MessageBoxType.cs" />
     <Compile Include="NavigationManager\WindowNavigationHelper.cs" />
     <Compile Include="NavigationManager\WindowHelper.cs" />
     <Compile Include="DialogWindowService\ConcreateDialogWindowtService.cs" />
@@ -108,10 +108,6 @@
       <DependentUpon>MessageBoxWin.xaml</DependentUpon>
     </Compile>
     <Compile Include="ConfigService\SysConfigService.cs" />
-    <Page Include="CommWindow\SelectWin.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Shell.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

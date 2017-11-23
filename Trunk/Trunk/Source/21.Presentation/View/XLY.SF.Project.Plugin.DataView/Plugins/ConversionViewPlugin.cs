@@ -27,7 +27,7 @@ namespace XLY.SF.Project.Plugin.DataView
         {
             var p = new DataViewPluginInfo() {
                 Guid = "03987975-D89C-48B5-86D5-ABFE44EA3E71",
-                Name = "对话模式",
+                Name = Languagekeys.ConversionMode,
                 ViewType = new List<DataViewSupportItem>(),
                 OrderIndex = 1,
                 PluginType = PluginType.SpfDataView,

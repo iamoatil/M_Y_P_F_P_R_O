@@ -70,7 +70,7 @@ namespace XLY.SF.Shell.DialogWindowService
             var viewContainer = WindowHelper.Instance.CreateShellWindow(targetView, viewArgs.ShowInTaskBar, Application.Current.MainWindow);
             viewContainer.ShowDialog();
             if (targetView.DataSource.DialogResult)
-                result = targetView.DataSource.GetResult()?.ToString();
+                result = targetView.DataSource.GetResult();
 
             return result;
         }

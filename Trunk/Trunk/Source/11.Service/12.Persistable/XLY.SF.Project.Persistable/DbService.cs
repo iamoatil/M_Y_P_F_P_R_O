@@ -26,11 +26,14 @@ namespace XLY.SF.Project.Persistable
     /// <summary>
     /// 数据库管理器【单例模式】
     /// </summary>
-    [Export(typeof(IDatabaseContext))]
+    [Export(typeof(IRecordContext<OperationLog>))]
+    [Export(typeof(IRecordContext<UserInfo>))]
+    [Export(typeof(IRecordContext<RecentCase>))]
+    [Export(typeof(ILogicalDataContext))]
     [PartCreationPolicy(CreationPolicy.Shared)]
-    public class DbService : DbContext, IDatabaseContext
+    public class DbService : DbContext, ILogicalDataContext
     {
-        #region 构造
+        #region Constructors
 
         public DbService()
             : base("System")
@@ -47,11 +50,17 @@ namespace XLY.SF.Project.Persistable
 
         public DbSet<RecentCase> RecentCases { get; set; }
 
-        IQueryable<OperationLog> IDatabaseContext.OperationLogs => OperationLogs;
+        IQueryable<OperationLog> IRecordContext<OperationLog>.Records => OperationLogs;
 
-        IQueryable<UserInfo> IDatabaseContext.UserInfos => UserInfos;
+        IQueryable<UserInfo> IRecordContext<UserInfo>.Records => UserInfos;
 
-        IQueryable<RecentCase> IDatabaseContext.RecentCases => RecentCases;
+        IQueryable<RecentCase> IRecordContext<RecentCase>.Records => RecentCases;
+
+        #endregion
+
+        #region Methods
+
+        #region IDatabaseContext
 
         public Boolean Add<TModel>(TModel model)
             where TModel : LogicalModelBase
@@ -61,7 +70,7 @@ namespace XLY.SF.Project.Persistable
             return SaveChanges() == 1;
         }
 
-        public void AddRange<TModel>(params TModel[] models) 
+        public void AddRange<TModel>(params TModel[] models)
             where TModel : LogicalModelBase
         {
             if (models.Length == 0) return;
@@ -82,7 +91,7 @@ namespace XLY.SF.Project.Persistable
             return SaveChanges() == 1;
         }
 
-        public void RemoveRange<TModel>(params TModel[] models) 
+        public void RemoveRange<TModel>(params TModel[] models)
             where TModel : LogicalModelBase
         {
             if (models.Length == 0) return;
@@ -110,6 +119,129 @@ namespace XLY.SF.Project.Persistable
             Entry(attached).State = EntityState.Modified;
             return SaveChanges() == 1;
         }
+
+        #endregion
+
+        #region IRecordContext
+
+        public Boolean Add(OperationLog record)
+        {
+            if (record == null) return false;
+            OperationLogs.Add(record);
+            return SaveChanges() == 1;
+        }
+
+        public Boolean Add(UserInfo record)
+        {
+            if (record == null) return false;
+            UserInfos.Add(record);
+            return SaveChanges() == 1;
+        }
+
+        public Boolean Add(RecentCase record)
+        {
+            if (record == null) return false;
+            RecentCases.Add(record);
+            return SaveChanges() == 1;
+        }
+
+        public void AddRange(params OperationLog[] records)
+        {
+            if (records.Length == 0) return;
+            OperationLogs.AddRange(records);
+            SaveChanges();
+        }
+
+        public void AddRange(params UserInfo[] records)
+        {
+            if (records.Length == 0) return;
+            UserInfos.AddRange(records);
+            SaveChanges();
+        }
+
+        public void AddRange(params RecentCase[] records)
+        {
+            if (records.Length == 0) return;
+            RecentCases.AddRange(records);
+            SaveChanges();
+        }
+
+        public Boolean Remove(OperationLog record)
+        {
+            if (record == null) return false;
+            var attached = OperationLogs.Attach(record);
+            if (attached == null) return false;
+            OperationLogs.Remove(attached);
+            return SaveChanges() == 1;
+        }
+
+        public Boolean Remove(UserInfo record)
+        {
+            if (record == null) return false;
+            var attached = UserInfos.Attach(record);
+            if (attached == null) return false;
+            UserInfos.Remove(attached);
+            return SaveChanges() == 1;
+        }
+
+        public Boolean Remove(RecentCase record)
+        {
+            if (record == null) return false;
+            var attached = RecentCases.Attach(record);
+            if (attached == null) return false;
+            RecentCases.Remove(attached);
+            return SaveChanges() == 1;
+        }
+
+        public void RemoveRange(params OperationLog[] records)
+        {
+            if (records.Length == 0) return;
+            OperationLogs.RemoveRange(records);
+            SaveChanges();
+        }
+
+        public void RemoveRange(params UserInfo[] records)
+        {
+            if (records.Length == 0) return;
+            UserInfos.RemoveRange(records);
+            SaveChanges();
+        }
+
+        public void RemoveRange(params RecentCase[] records)
+        {
+            if (records.Length == 0) return;
+            RecentCases.RemoveRange(records);
+            SaveChanges();
+        }
+
+        public Boolean Update(OperationLog record)
+        {
+            if (record == null) return false;
+            var attached = OperationLogs.Attach(record);
+            if (attached == null) return false;
+            Entry(attached).State = EntityState.Modified;
+            return SaveChanges() == 1;
+        }
+
+        public Boolean Update(UserInfo record)
+        {
+            if (record == null) return false;
+            var attached = UserInfos.Attach(record);
+            if (attached == null) return false;
+            Entry(attached).State = EntityState.Modified;
+            return SaveChanges() == 1;
+        }
+
+        public Boolean Update(RecentCase record)
+        {
+            if (record == null) return false;
+            var attached = RecentCases.Attach(record);
+            if (attached == null) return false;
+            Entry(attached).State = EntityState.Modified;
+            return SaveChanges() == 1;
+        }
+
+        #endregion
 
         #endregion
     }

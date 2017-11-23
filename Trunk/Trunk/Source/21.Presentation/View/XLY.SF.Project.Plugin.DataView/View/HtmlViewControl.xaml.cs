@@ -42,6 +42,9 @@ namespace XLY.SF.Project.Plugin.DataView
         public string Url { get; set; }
         public DataViewPluginArgument DataSource { get; set; }
 
+        /// <summary>
+        /// 保存数据源，生成json文件
+        /// </summary>
         private void SaveDataSource()
         {
             if (DataSource == null || DataSource.Items == null)
@@ -75,6 +78,9 @@ namespace XLY.SF.Project.Plugin.DataView
         }
     }
 
+    /// <summary>
+    /// 浏览器操作COM口，用于html和cs的交互
+    /// </summary>
     [System.Runtime.InteropServices.ComVisibleAttribute(true)]//将该类设置为com可访问  
     public class WebOperator
     {

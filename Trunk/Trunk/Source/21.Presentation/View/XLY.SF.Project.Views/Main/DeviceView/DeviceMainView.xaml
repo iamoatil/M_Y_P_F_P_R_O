@@ -74,7 +74,7 @@
             </StackPanel.Effect>
         </StackPanel>
 
-        <ContentControl Grid.Column="1" Content="{Binding CurDeviceView}"/>
+        <ContentControl Grid.Column="1" Content="{Binding SubView}"/>
 
         <i:Interaction.Triggers>
             <ei:DataTrigger Binding="{Binding CurDevModel.IsAndroid}" Value="False">

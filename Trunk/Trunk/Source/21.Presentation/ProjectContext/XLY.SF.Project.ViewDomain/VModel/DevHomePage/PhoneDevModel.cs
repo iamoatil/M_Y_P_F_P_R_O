@@ -19,6 +19,30 @@ namespace XLY.SF.Project.ViewDomain.VModel.DevHomePage
             HasRoot = true;
         }
 
+        #region Icon
+
+        private string _devIcon;
+        /// <summary>
+        /// 图标
+        /// </summary>
+        public new string DevIcon
+        {
+            get
+            {
+                _devIcon = IsAndroid ? "pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_Android.png" :
+                    "pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_IOS.png";
+                return this._devIcon;
+            }
+
+            private set
+            {
+                this._devIcon = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region 是否为Android，否为IOS
 
         private bool _isAndroid;

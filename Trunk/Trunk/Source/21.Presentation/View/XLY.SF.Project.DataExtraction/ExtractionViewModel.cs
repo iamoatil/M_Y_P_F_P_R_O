@@ -127,14 +127,14 @@ namespace XLY.SF.Project.DataExtraction
             set
             {
                 _isSelfHost = value;
-                if (value)
-                {
-                    MessageAggregation.UnRegisterMsg<GeneralArgs<Pump>>(this, "SetDataExtractionParamsMsg", SetPump);
-                }
-                else
-                {
-                    MessageAggregation.RegisterGeneralMsg<Pump>(this, "SetDataExtractionParamsMsg", SetPump);
-                }
+                //if (value)
+                //{
+                //    MessageAggregation.UnRegisterMsg<GeneralArgs<Pump>>(this, "SetDataExtractionParamsMsg", SetPump);
+                //}
+                //else
+                //{
+                //    MessageAggregation.RegisterGeneralMsg<Pump>(this, "SetDataExtractionParamsMsg", SetPump);
+                //}
             }
         }
 
@@ -280,10 +280,15 @@ namespace XLY.SF.Project.DataExtraction
             LaunchService();
         }
 
-        private void SetPump(GeneralArgs<Pump> args)
+        protected override void InitLoad(object parameters)
         {
-            Pump = args.Parameters;
+            Pump = parameters as Pump;
         }
+
+        //private void SetPump(GeneralArgs<Pump> args)
+        //{
+        //    Pump = args.Parameters;
+        //}
 
         private void Start()
         {

@@ -65,7 +65,7 @@ namespace XLY.SF.Shell.NavigationManager
             var curWin = sender as Shell;
             if (curWin != null)
             {
-                WindowHelper.Instance.RemoveOpenedWindowAndCleanUp(curWin.Content.DataSource.ViewModelID, false);
+                WindowHelper.Instance.RemoveOpenedWindowAndCleanUp(curWin.Content.ViewID, false);
             }
         }
 

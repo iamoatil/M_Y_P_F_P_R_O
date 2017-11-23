@@ -50,6 +50,20 @@ namespace XLY.SF.Project.Services
                 {
                     var list = DoGetChildNodes(parentNode, async);
 
+                    list.Sort((l, r) =>
+                    {
+                        if (!l.IsFile && r.IsFile)
+                        {
+                            return -1;
+                        }
+                        else if (l.IsFile && !r.IsFile)
+                        {
+                            return 1;
+                        }
+
+                        return string.Compare(l.Name, r.Name);
+                    });
+
                     parentNode.ChildNodes = list;
                 }
 

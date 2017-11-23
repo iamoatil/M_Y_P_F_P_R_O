@@ -28,7 +28,7 @@ namespace XLY.SF.Project.DataPump.IOS
             String savePath = context.GetContextData<String>("savePath");
             if (context.Source.ItemType == SourceFileItemType.NormalPath)
             {
-                context.Source.Local = FileHelper.ConnectPath(savePath, context.Source.Config);
+                context.Source.Local = FileHelper.ConnectPath(savePath, context.Source.Config.Replace('/', '\\'));
             }
         }
 

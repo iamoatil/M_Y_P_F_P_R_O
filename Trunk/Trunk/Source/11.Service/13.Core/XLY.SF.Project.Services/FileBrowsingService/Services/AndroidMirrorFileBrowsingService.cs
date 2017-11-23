@@ -95,7 +95,7 @@ namespace XLY.SF.Project.Services
                             Name = node.FileName,
                             FileSize = node.Size,
                             NodeType = node.IsFolder ? FileBrowingNodeType.Directory : FileBrowingNodeType.File,
-                            NodeState = node.IsDelete ? FileBrowingNodeState.Delete : FileBrowingNodeState.Normal,
+                            NodeState = node.IsDelete ? EnumDataState.Deleted : EnumDataState.Normal,
                             CreateTime = BaseTypeExtension.ToSafeDateTime(node.Source.CreateTime),
                             LastWriteTime = BaseTypeExtension.ToSafeDateTime(node.Source.ModifyTime),
                             LastAccessTime = BaseTypeExtension.ToSafeDateTime(node.Source.LastAccessTime),

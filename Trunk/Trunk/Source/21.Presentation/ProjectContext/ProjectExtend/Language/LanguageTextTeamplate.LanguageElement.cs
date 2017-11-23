@@ -486,6 +486,81 @@ public class Languagekeys
 		public const string ViewLanguage_View_DevHomePage_IOSRoot = "LanguageResource/ViewLanguage/View_DevHomePage_IOSRoot";
 				
         /// <summary>
+        /// 搜索
+        /// </summary>
+		public const string ViewLanguage_Management_User_Search = "LanguageResource/ViewLanguage/Management/User/Search";
+				
+        /// <summary>
+        /// 编号
+        /// </summary>
+		public const string ViewLanguage_Management_User_Number = "LanguageResource/ViewLanguage/Management/User/Number";
+				
+        /// <summary>
+        /// 用户名
+        /// </summary>
+		public const string ViewLanguage_Management_User_Account = "LanguageResource/ViewLanguage/Management/User/Account";
+				
+        /// <summary>
+        /// 姓名
+        /// </summary>
+		public const string ViewLanguage_Management_User_Name = "LanguageResource/ViewLanguage/Management/User/Name";
+				
+        /// <summary>
+        /// 电话
+        /// </summary>
+		public const string ViewLanguage_Management_User_Phone = "LanguageResource/ViewLanguage/Management/User/Phone";
+				
+        /// <summary>
+        /// 工作单位
+        /// </summary>
+		public const string ViewLanguage_Management_User_Unit = "LanguageResource/ViewLanguage/Management/User/Unit";
+				
+        /// <summary>
+        /// 证件号
+        /// </summary>
+		public const string ViewLanguage_Management_User_Id = "LanguageResource/ViewLanguage/Management/User/Id";
+				
+        /// <summary>
+        /// 添加
+        /// </summary>
+		public const string ViewLanguage_Management_User_Add = "LanguageResource/ViewLanguage/Management/User/Add";
+				
+        /// <summary>
+        /// 删除
+        /// </summary>
+		public const string ViewLanguage_Management_User_Remove = "LanguageResource/ViewLanguage/Management/User/Remove";
+				
+        /// <summary>
+        /// 修改
+        /// </summary>
+		public const string ViewLanguage_Management_User_Update = "LanguageResource/ViewLanguage/Management/User/Update";
+				
+        /// <summary>
+        /// 输入密码
+        /// </summary>
+		public const string ViewLanguage_Management_User_InputPassword = "LanguageResource/ViewLanguage/Management/User/InputPassword";
+				
+        /// <summary>
+        /// 确认密码
+        /// </summary>
+		public const string ViewLanguage_Management_User_ConfirmPassword = "LanguageResource/ViewLanguage/Management/User/ConfirmPassword";
+				
+        /// <summary>
+        /// 关闭
+        /// </summary>
+		public const string ViewLanguage_Management_User_Close = "LanguageResource/ViewLanguage/Management/User/Close";
+				
+        /// <summary>
+        /// 取消
+        /// </summary>
+		public const string ViewLanguage_Management_User_Cancel = "LanguageResource/ViewLanguage/Management/User/Cancel";
+				
+        /// <summary>
+        /// 确认
+        /// </summary>
+		public const string ViewLanguage_Management_User_Confirm = "LanguageResource/ViewLanguage/Management/User/Confirm";
+				
+        /// <summary>
         /// 
         /// </summary>
 		public const string ViewLanguage_View_Operation1 = "LanguageResource/ViewLanguage/View_Operation1";
@@ -511,14 +586,19 @@ public class Languagekeys
 		public const string ViewLanguage_View_StrategyRecommend_AutoExtraction = "LanguageResource/ViewLanguage/View_StrategyRecommend_AutoExtraction";
 				
         /// <summary>
-        /// 错误消息
+        /// 很抱歉
         /// </summary>
 		public const string ViewLanguage_View_MessageBox_Error = "LanguageResource/ViewLanguage/View_MessageBox_Error";
 				
         /// <summary>
-        /// 提示消息
+        /// 成功
         /// </summary>
-		public const string ViewLanguage_View_MessageBox_Notice = "LanguageResource/ViewLanguage/View_MessageBox_Notice";
+		public const string ViewLanguage_View_MessageBox_Success = "LanguageResource/ViewLanguage/View_MessageBox_Success";
+				
+        /// <summary>
+        /// 警告
+        /// </summary>
+		public const string ViewLanguage_View_MessageBox_Warning = "LanguageResource/ViewLanguage/View_MessageBox_Warning";
 				
         /// <summary>
         /// 准备开始备份, 请注意点亮屏幕进入手机主界面, 注意手机弹出的操作请求提示, 并确定(允许)请求的操作！

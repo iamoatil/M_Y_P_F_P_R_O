@@ -1,0 +1,210 @@
+﻿<core:UcViewBase x:Class="XLY.SF.Project.FileBrowingView.FileBrowingViewControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:XLY.SF.Project.FileBrowingView"
+             xmlns:conver="clr-namespace:XLY.SF.Project.FileBrowingView.Converter"
+             xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
+             xmlns:ctrl="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             mc:Ignorable="d" Background="#FF253453"
+             d:DesignHeight="800" d:DesignWidth="1568">
+    <Grid>
+        <Grid.Resources>
+            <conver:FileTypeToImageSourceConverter x:Key="FileTypeToImageSourceConverter"></conver:FileTypeToImageSourceConverter>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
+        </Grid.Resources>
+        <Label Background="Red" Visibility="{Binding IsLoading,Converter={StaticResource BooleanToVisibilityConverter}}" 
+               HorizontalContentAlignment="Center" VerticalContentAlignment="Center">正在加载</Label>
+
+        <Grid Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="310*"/>
+                <ColumnDefinition Width="1258*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="720*" MinHeight="70"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="#0FFFFFFF" Margin="5">
+                <Label Foreground="White" FontSize="18" Margin="20,5,20,10">我是搜索区域</Label>
+            </Grid>
+
+            <!--文件树列表-->
+            <ctrl:TreeViewEx x:Name="treeDataList" Background="#0FFFFFFF" Margin="20" BorderThickness="0"  Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding Roots}">
+                <ctrl:TreeViewEx.ItemContainerStyle>
+                    <Style TargetType="ctrl:TreeViewItemEx" BasedOn="{StaticResource stTreeViewItem}">
+                    </Style>
+                </ctrl:TreeViewEx.ItemContainerStyle>
+                <ctrl:TreeViewEx.ItemTemplate >
+                    <HierarchicalDataTemplate  ItemsSource="{Binding Path=ChildrenTreeNodes}">
+                        <TextBlock Text="{Binding Text}"  />
+                    </HierarchicalDataTemplate>
+                </ctrl:TreeViewEx.ItemTemplate>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectedItemChanged">
+                        <i:InvokeCommandAction Command="{Binding SelecedNodeChanged}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctrl:TreeViewEx}}, Path=SelectedValue}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ctrl:TreeViewEx>
+
+            <ctrl:TabControlWithButton Style="{StaticResource TabControlWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithGrayIconButtonStyle1}" CustomButtonAlignment="Right"
+                                           Grid.Column="1" Grid.Row="1" Margin="20">
+                <TabItem Style="{StaticResource TabItemWithGrayIconButtonStyle1}" >
+                    <TabItem.Header>
+                        <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_view_grid.png" Width="13" Height="13"></Image>
+                    </TabItem.Header>
+                    <!--文件列表-->
+                    <DataGrid BorderThickness="1"
+                      AutoGenerateColumns="False" CanUserResizeColumns="False" IsReadOnly="True"
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ItemsSource="{Binding TableItems}">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn MinWidth="100" Width="Auto">
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                        <Setter Property="Height" Value="40"/>
+                                        <Setter Property="Background" Value="#0AFFFFFF"/>
+                                        <Setter Property="FontSize" Value="14"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="Foreground" Value="#9ba5b9"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                                                    <Grid>
+                                                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Background="{TemplateBinding Background}"  Padding="14 0" >
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <CheckBox IsChecked="{Binding DataContext.IsTableSelectAll,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:FileBrowingViewControl}}" Content="标记" Foreground="{TemplateBinding Foreground}"></CheckBox>
+                                                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                            </StackPanel>
+                                                        </Border>
+                                                        <Thumb x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left" Style="{StaticResource ColumnHeaderGripperStyle}"/>
+                                                        <Thumb x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right" Style="{StaticResource ColumnHeaderGripperStyle}"/>
+                                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 4 0">
+                                                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/grid_sort_asc.png" x:Name="btnSortAsc" Width="11" VerticalAlignment="Center" Visibility="Collapsed"></Image>
+                                                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/grid_sort_desc.png" x:Name="btnSortdesc" Width="11" VerticalAlignment="Center" Visibility="Collapsed"></Image>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="SortDirection" Value="Ascending">
+                                                            <Setter TargetName="btnSortAsc" Property="Visibility" Value="Visible"/>
+                                                        </Trigger>
+                                                        <Trigger Property="SortDirection" Value="Descending">
+                                                            <Setter TargetName="btnSortdesc" Property="Visibility" Value="Visible"/>
+                                                        </Trigger>
+                                                        <Trigger Property="SortDirection" Value="{x:Null}">
+                                                            <Setter TargetName="btnSortAsc" Property="Visibility" Value="Collapsed"/>
+                                                            <Setter TargetName="btnSortdesc" Property="Visibility" Value="Collapsed"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2,0,0,0">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Click">
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.ClickCheckCommand,RelativeSource={RelativeSource AncestorType={x:Type local:FileBrowingViewControl}}}"
+                                                                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}},Path=SelectedValue}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </CheckBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn MinWidth="120" Header="状态" Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding DataState, Converter={StaticResource dataStateToImageSourceConverter}}" 
+                                       Width="16" Height="16" HorizontalAlignment="Left" Margin="5,0,0,0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Width="*" Header="文件名" Binding="{Binding Text}"></DataGridTextColumn>
+                            <DataGridTextColumn MinWidth="120" Width="Auto" Header="类型" Binding="{Binding TypeDesc}"></DataGridTextColumn>
+                            <DataGridTextColumn MinWidth="120" Width="Auto" Header="创建时间" Binding="{Binding CreateTime}"></DataGridTextColumn>
+                            <DataGridTextColumn MinWidth="120" Width="Auto" Header="最后修改时间" Binding="{Binding LastWriteTime}"></DataGridTextColumn>
+                            <DataGridTextColumn MinWidth="120" Width="Auto" Header="最后访问时间" Binding="{Binding LastAccessTime}"></DataGridTextColumn>
+                            <DataGridTextColumn MinWidth="120" Width="Auto" Header="大小" Binding="{Binding FileSize}"></DataGridTextColumn>
+                            <DataGridTemplateColumn MinWidth="120" Header="操作">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ctrl:IconButton HorizontalAlignment="Left" 
+                                                IconHeight="14" IconWidth="14" Width="16" Cursor="Hand"
+                                                Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_filebrowing_open.png">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Click">
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.DownFileNodeCommand,RelativeSource={RelativeSource AncestorType={x:Type local:FileBrowingViewControl}}}"
+                                                                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}},Path=SelectedValue}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </ctrl:IconButton>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Style="{StaticResource TabItemWithGrayIconButtonStyle1}">
+                    <TabItem.Header>
+                        <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_view_icon.png" Width="13" Height="13"></Image>
+                    </TabItem.Header>
+                    <ScrollViewer>
+                        <ItemsControl ItemsSource="{Binding TableItems}" Padding="30" Background="#0FFFFFFF">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel></WrapPanel>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Width="104" Padding="10" CornerRadius="12" Margin="10" x:Name="br_bg" BorderBrush="#379be6" SnapsToDevicePixels="True"
+                                            ToolTip="{Binding Text}">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"></RowDefinition>
+                                                <RowDefinition Height="14"></RowDefinition>
+                                                <RowDefinition Height="Auto"></RowDefinition>
+                                            </Grid.RowDefinitions>
+
+                                            <Image x:Name="im_checked" HorizontalAlignment="Right" VerticalAlignment="Top" Stretch="None" Margin="0,-11,-11,0" Panel.ZIndex="99"
+                                                   Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Mirror_Checked.png"></Image>
+
+                                            <Image Grid.Row="0" Height="53" HorizontalAlignment="Center"
+                                                   Source="{Binding Data.FileType,Converter={StaticResource FileTypeToImageSourceConverter}}" Stretch="None"></Image>
+                                            <TextBlock Grid.Row="2" FontSize="14" Foreground="White" 
+                                                   Text="{Binding Text}" TextWrapping="Wrap"
+                                                   Width="84" HorizontalAlignment="Center" TextAlignment="Center" 
+                                                   Margin="0" Padding="0" ></TextBlock>
+
+                                            <Image Source="{Binding DataState, Converter={StaticResource dataStateToImageSourceConverter}}" 
+                                       Width="16" Height="16" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0"/>
+
+                                        </Grid>
+                                    </Border>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelected}" Value="true">
+                                            <Setter TargetName="br_bg" Property="BorderThickness" Value="1"></Setter>
+                                            <Setter TargetName="br_bg" Property="Background" Value="#08FFFFFF"></Setter>
+                                            <Setter TargetName="im_checked" Property="Visibility" Value="Visible"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsSelected}" Value="false">
+                                            <Setter TargetName="im_checked" Property="Visibility" Value="Collapsed"></Setter>
+                                        </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </TabItem>
+            </ctrl:TabControlWithButton>
+
+        </Grid>
+    </Grid>
+</core:UcViewBase>

@@ -31,7 +31,7 @@ namespace XLY.SF.Project.Plugin.DataReport
                 ReportExtension = ".html",
                 Description = "导出为Html格式的报表",
                 OrderIndex = 0,
-                Platform = "效率源",
+                Platform = "",
                 PluginType = PluginType.SpfReport,
                 Group = ""
             };

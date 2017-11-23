@@ -9,17 +9,16 @@ using XLY.SF.Project.Models.Logical;
 
 namespace XLY.SF.Project.Models.Logical
 {
-
-    public class UserInfoEntityModel :  LogicalModelBase<UserInfo>
+    public class UserInfoModel :  LogicalModelBase<UserInfo>
     {
         #region Constructors
 
-        public UserInfoEntityModel(UserInfo entity)
+        public UserInfoModel(UserInfo entity)
             : base(entity)
         {
         }
 
-        public UserInfoEntityModel()
+        public UserInfoModel()
         {
         }
 
@@ -36,7 +35,7 @@ namespace XLY.SF.Project.Models.Logical
             get => Entity.UserName;
             set
             {
-                Entity.UserName = value;
+                Entity.UserName = (value ?? String.Empty).Trim();
                 OnPropertyChanged();
             }
         }
@@ -46,7 +45,7 @@ namespace XLY.SF.Project.Models.Logical
             get => Entity.WorkUnit;
             set
             {
-                Entity.WorkUnit = value;
+                Entity.WorkUnit = (value ?? String.Empty).Trim();
                 OnPropertyChanged();
             }
         }
@@ -56,7 +55,7 @@ namespace XLY.SF.Project.Models.Logical
             get => Entity.IdNumber;
             set
             {
-                Entity.IdNumber = value;
+                Entity.IdNumber = (value ?? String.Empty).Trim();
                 OnPropertyChanged();
             }
         }
@@ -66,7 +65,7 @@ namespace XLY.SF.Project.Models.Logical
             get => Entity.PhoneNumber;
             set
             {
-                Entity.PhoneNumber = value;
+                Entity.PhoneNumber = (value ?? String.Empty).Trim();
                 OnPropertyChanged();
             }
         }
@@ -78,7 +77,7 @@ namespace XLY.SF.Project.Models.Logical
             get => Entity.LoginUserName;
             set
             {
-                Entity.LoginUserName = value;
+                Entity.LoginUserName = (value ?? String.Empty).Trim();
                 OnPropertyChanged();
             }
         }
@@ -101,6 +100,7 @@ namespace XLY.SF.Project.Models.Logical
         }
 
         #endregion
+
         public virtual DateTime LoginTime
         {
             get => Entity.LoginTime;
@@ -110,6 +110,52 @@ namespace XLY.SF.Project.Models.Logical
                 OnPropertyChanged();
             }
         }
+
+        #region IsChecked
+
+        private Boolean _isChecked;
+        public Boolean IsChecked
+        {
+            get => _isChecked;
+            set
+            {
+                _isChecked = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region Password
+
+        private String _password = String.Empty;
+        public String Password
+        {
+            get => _password;
+            set
+            {
+                _password = (value ?? String.Empty).Trim();
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region ConfirmPassword
+
+        private String _confirmPassword = String.Empty;
+        public String ConfirmPassword
+        {
+            get => _confirmPassword;
+            set
+            {
+                _confirmPassword = (value ?? String.Empty).Trim();
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Methods

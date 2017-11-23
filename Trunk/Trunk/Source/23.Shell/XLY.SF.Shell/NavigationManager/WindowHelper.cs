@@ -88,9 +88,9 @@ namespace XLY.SF.Shell.NavigationManager
         /// <param name="newWindow"></param>
         private void AddWindow(Shell newWindow)
         {
-            if (!_curOpenWindows.ContainsKey(newWindow.Content.DataSource.ViewModelID))
+            if (!_curOpenWindows.ContainsKey(newWindow.Content.ViewID))
             {
-                _curOpenWindows.Add(newWindow.Content.DataSource.ViewModelID, newWindow);
+                _curOpenWindows.Add(newWindow.Content.ViewID, newWindow);
             }
         }
 
@@ -105,7 +105,7 @@ namespace XLY.SF.Shell.NavigationManager
             {
                 if (needClose)
                     _curOpenWindows[viewModelID].Close();
-                _curOpenWindows[viewModelID].Content.DataSource.ViewClosedCallback();
+                _curOpenWindows[viewModelID].Content.DataSource?.ViewClosedCallback();
                 _curOpenWindows.Remove(viewModelID);
             }
         }

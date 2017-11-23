@@ -166,6 +166,10 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         /// </summary>
         public const string ExtractionView = "ExportKey_ExtractionView";
 
+        /// 文件浏览页
+        /// </summary>
+        public const string FileBrowingView = "ExportKey_FileBrowingView";
+
         #endregion
 
         #region 选择控件（路径，文件，打开）
@@ -180,17 +184,39 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         public const string DataDisplayViewModel = "DataDisplayViewModel";
         #endregion
 
-        #region 管理
+        #region 设置
 
         #region 用户
 
-        public const String ManagementUserListView = "ExportKey_Management_UserListView";
+        public const String SettingsUserListView = "ExportKey_Settings_UserListView";
 
-        public const String ManagementUserListViewModel = "ExportKey_Management_UserListViewModel";
+        public const String SettingsUserListViewModel = "ExportKey_Settings_UserListViewModel";
 
-        public const String ManagementUserInfoView = "ExportKey_Management_UserInfoView";
+        public const String SettingsUserInfoView = "ExportKey_Settings_UserInfoView";
 
-        public const String ManagementUserInfoViewModel = "ExportKey_Management_UserInfoViewModel";
+        public const String SettingsUserInfoViewModel = "ExportKey_Settings_UserInfoViewModel";
+
+        #endregion
+
+        #region 系统设置
+
+        public const String SettingsBasicView = "ExportKey_Settings_BasicSettingsView";
+
+        public const String SettingsBasicViewModel = "ExportKey_Settings_BasicSettingsViewModel";
+
+        public const String SettingsCaseTypeView = "ExportKey_Settings_CaseTypeView";
+
+        public const String SettingsCaseTypeViewModel = "ExportKey_Settings_CaseTypeViewModel";
+
+        public const String SettingsUnitView = "ExportKey_Settings_UnitView";
+
+        public const String SettingsUnitViewModel = "ExportKey_Settings_UnitViewModel";
+
+        public const String SettingsInspectionView = "ExportKey_Settings_InspectionView";
+
+        public const String SettingsInspectionViewModel = "ExportKey_Settings_InspectionViewModel";
+
+        public const String SettingsView = "ExportKey_SettingsView";
 
         #endregion
 

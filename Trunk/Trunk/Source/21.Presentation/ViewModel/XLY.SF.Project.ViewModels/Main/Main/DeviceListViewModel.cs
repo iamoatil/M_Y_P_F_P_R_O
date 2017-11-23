@@ -14,6 +14,7 @@ using XLY.SF.Project.Models.Logical;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Project.ViewModels.Main.CaseManagement;
 using System.Linq;
+using XLY.SF.Project.ViewDomain.Model.PresentationNavigationElement;
 
 namespace XLY.SF.Project.ViewModels.Main
 {
@@ -184,6 +185,8 @@ namespace XLY.SF.Project.ViewModels.Main
         private void Close(DeviceExtractionAdorner de)
         {
             Items.Remove(de);
+            PreCacheToken args = new PreCacheToken(de.Id, ExportKeys.DeviceMainView);
+            MessageAggregation.SendGeneralMsg<PreCacheToken>(new GeneralArgs<PreCacheToken>(GeneralKeys.DeleteCacheView) { Parameters = args });
         }
 
         /// <summary>
@@ -207,9 +210,9 @@ namespace XLY.SF.Project.ViewModels.Main
                     return $"案例[{rc.Name}]不存在";
                 }
 
-                Items.Remove(de);
-                toCase.Attach(de.Target);
+                Close(de);
                 SystemContext.Instance.CurrentCase.Detach(de.Target);
+                toCase.Attach(de.Target);
 
                 var log = $"移动设备[{de.Name}]到案例[{toCase.Name}]";
 
@@ -227,11 +230,11 @@ namespace XLY.SF.Project.ViewModels.Main
         /// <returns></returns>
         private String Delete(DeviceExtractionAdorner de)
         {
-            if (MessageBox.ShowDialogNoticeMsg(""))
+            if (MessageBox.ShowDialogWarningMsg(""))
             {
                 var log = $"确认删除设备[{de.Name}]";
 
-                Items.Remove(de);
+                Close(de);
                 de.Delete();
 
                 return log;

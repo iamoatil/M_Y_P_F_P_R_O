@@ -36,7 +36,7 @@ namespace XLY.SF.Project.ViewModels.Main
         /// <summary>
         /// 数据库服务
         /// </summary>
-        private IDatabaseContext _dbService;
+        private ILogicalDataContext _dbService;
 
         /// <summary>
         /// 消息服务
@@ -177,7 +177,7 @@ namespace XLY.SF.Project.ViewModels.Main
         #region Constructors
 
         [ImportingConstructor]
-        public MainViewModel(IDatabaseContext dbService, IMessageBox messageBox)
+        public MainViewModel(ILogicalDataContext dbService, IMessageBox messageBox)
         {
             _dbService = dbService;
             _messageBox = messageBox;
@@ -225,9 +225,11 @@ namespace XLY.SF.Project.ViewModels.Main
 
         #region 菜单操作
 
+        //系统设置
         private string ExecuteSysSettingCommand()
         {
-            return "打开案例管理";
+            base.NavigationForNewWindow(ExportKeys.SettingsView);
+            return "打开系统设置";
         }
 
         //案例管理
@@ -239,7 +241,7 @@ namespace XLY.SF.Project.ViewModels.Main
         //用户管理
         private string ExecuteUserManagementCommand()
         {
-            base.NavigationForNewWindow(ExportKeys.ManagementUserListView);
+            base.NavigationForNewWindow(ExportKeys.SettingsUserListView);
             return "打开用户管理";
         }
 

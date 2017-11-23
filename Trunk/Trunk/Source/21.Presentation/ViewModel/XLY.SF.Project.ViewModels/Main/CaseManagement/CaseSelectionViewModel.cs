@@ -27,8 +27,8 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         #region Properties
 
-        [Import(typeof(IDatabaseContext))]
-        private IDatabaseContext DbService { get; set; }
+        [Import(typeof(IRecordContext<RecentCase>))]
+        private IRecordContext<RecentCase> DbService { get; set; }
 
         public RecentCaseEntityModel SelectedItem { get; set; }
 
@@ -68,7 +68,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         protected override void InitLoad(Object parameters)
         {
-            Cases = DbService.RecentCases.OrderByDescending(x => x.Timestamp).ToModels<RecentCase, RecentCaseEntityModel>().ToArray();
+            Cases = DbService.Records.OrderByDescending(x => x.Timestamp).ToModels<RecentCase, RecentCaseEntityModel>().ToArray();
         }
 
         #endregion

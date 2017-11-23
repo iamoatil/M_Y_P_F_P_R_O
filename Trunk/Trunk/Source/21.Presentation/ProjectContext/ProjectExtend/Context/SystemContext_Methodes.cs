@@ -55,7 +55,7 @@ namespace ProjectExtend.Context
         /// 设置成功登录的用户
         /// </summary>
         /// <param name="user"></param>
-        public void SetLoginSuccessUser(UserInfoEntityModel user)
+        public void SetLoginSuccessUser(UserInfoModel user)
         {
             if (user != null)
             {

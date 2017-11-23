@@ -7,8 +7,10 @@
 *****************************************************************************/
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using XLY.SF.Project.BaseUtility.Helper;
+using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.Services
 {
@@ -17,6 +19,12 @@ namespace XLY.SF.Project.Services
     /// </summary>
     public abstract class FileBrowingNode
     {
+        private readonly static string[] _LsTxt = { ".txt", ".xml" };
+        private readonly static string[] _LsImage = { ".png", ".jpg" };
+        private readonly static string[] _LsVoice = { ".mp3", ".amr" };
+        private readonly static string[] _LsVideo = { ".avi", ".mp4" };
+        private readonly static string[] _LsRAR = { ".rar" };
+
         /// <summary>
         /// 父节点
         /// </summary>
@@ -45,13 +53,62 @@ namespace XLY.SF.Project.Services
         /// </summary>
         public bool IsDelete
         {
-            get { return NodeState == FileBrowingNodeState.Delete; }
+            get { return NodeState == EnumDataState.Deleted || NodeState == EnumDataState.Fragment; }
+        }
+
+        private EnumFileType? _FileType = null;
+
+        /// <summary>
+        /// 文件类型
+        /// 根据后缀名判断
+        /// </summary>
+        public EnumFileType FileType
+        {
+            get
+            {
+                if (_FileType == null)
+                {
+                    if (IsFile)
+                    {
+                        var ext = System.IO.Path.GetExtension(Name).ToLower();
+                        if (_LsTxt.Contains(ext))
+                        {
+                            _FileType = EnumFileType.Txt;
+                        }
+                        else if (_LsImage.Contains(ext))
+                        {
+                            _FileType = EnumFileType.Image;
+                        }
+                        else if (_LsVoice.Contains(ext))
+                        {
+                            _FileType = EnumFileType.Voice;
+                        }
+                        else if (_LsVideo.Contains(ext))
+                        {
+                            _FileType = EnumFileType.Video;
+                        }
+                        else if (_LsRAR.Contains(ext))
+                        {
+                            _FileType = EnumFileType.Rar;
+                        }
+                        else
+                        {
+                            _FileType = EnumFileType.Other;
+                        }
+                    }
+                    else
+                    {
+                        _FileType = EnumFileType.Directory;
+                    }
+                }
+                return _FileType.Value;
+            }
         }
 
         /// <summary>
         /// 节点状态
         /// </summary>
-        internal FileBrowingNodeState NodeState { get; set; } = FileBrowingNodeState.Normal;
+        public EnumDataState NodeState { get; set; } = EnumDataState.Normal;
 
         /// <summary>
         /// 文件大小
@@ -104,21 +161,6 @@ namespace XLY.SF.Project.Services
     }
 
     /// <summary>
-    /// 文件节点状态
-    /// </summary>
-    internal enum FileBrowingNodeState
-    {
-        /// <summary>
-        /// 正常
-        /// </summary>
-        Normal,
-        /// <summary>
-        /// 删除
-        /// </summary>
-        Delete,
-    }
-
-    /// <summary>
     /// 文件节点类型
     /// </summary>
     public enum FileBrowingNodeType
@@ -139,5 +181,40 @@ namespace XLY.SF.Project.Services
         /// 分区，安卓镜像文件节点专用
         /// </summary>
         Partition,
+    }
+
+    /// <summary>
+    /// 文件类型
+    /// </summary>
+    public enum EnumFileType
+    {
+        /// <summary>
+        /// 文件夹
+        /// </summary>
+        Directory,
+        /// <summary>
+        /// 文本文件
+        /// </summary>
+        Txt,
+        /// <summary>
+        /// 图片文件
+        /// </summary>
+        Image,
+        /// <summary>
+        /// 音频文件
+        /// </summary>
+        Voice,
+        /// <summary>
+        /// 视频
+        /// </summary>
+        Video,
+        /// <summary>
+        /// 压缩文件
+        /// </summary>
+        Rar,
+        /// <summary>
+        /// 其他文件
+        /// </summary>
+        Other,
     }
 }

@@ -21,7 +21,7 @@ namespace XLY.SF.Project.Views.Management.User
     /// <summary>
     /// UserInfoView.xaml 的交互逻辑
     /// </summary>
-    [Export(ExportKeys.ManagementUserInfoView, typeof(UcViewBase))]
+    [Export(ExportKeys.SettingsUserInfoView, typeof(UcViewBase))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class UserInfoView : UcViewBase
     {
@@ -30,7 +30,7 @@ namespace XLY.SF.Project.Views.Management.User
             InitializeComponent();
         }
 
-        [Import(ExportKeys.ManagementUserInfoViewModel, typeof(ViewModelBase))]
+        [Import(ExportKeys.SettingsUserInfoViewModel, typeof(ViewModelBase))]
         public override ViewModelBase DataSource
         {
             get

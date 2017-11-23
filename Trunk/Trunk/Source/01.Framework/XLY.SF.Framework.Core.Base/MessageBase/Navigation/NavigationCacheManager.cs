@@ -15,9 +15,9 @@ namespace XLY.SF.Framework.Core.Base.MessageBase.Navigation
         /// <summary>
         /// 当前缓存数据
         /// </summary>
-        private static Dictionary<TToken, NavigationViewElement> _curCacheItems;
+        private Dictionary<TToken, NavigationViewElement> _curCacheItems;
 
-        static NavigationCacheManager()
+        public NavigationCacheManager()
         {
             _curCacheItems = new Dictionary<TToken, NavigationViewElement>();
         }
@@ -27,9 +27,9 @@ namespace XLY.SF.Framework.Core.Base.MessageBase.Navigation
         /// </summary>
         /// <param name="token">标识</param>
         /// <param name="view">视图</param>
-        public static void AddViewCache(TToken token, UcViewBase view)
+        public void AddViewCache(TToken token, UcViewBase view)
         {
-            if (!_curCacheItems.Keys.Contains(token))
+            if (!_curCacheItems.ContainsKey(token))
                 _curCacheItems.Add(token, new NavigationViewElement(view));
         }
 
@@ -37,16 +37,16 @@ namespace XLY.SF.Framework.Core.Base.MessageBase.Navigation
         /// 删除视图缓存
         /// </summary>
         /// <param name="token">标识</param>
-        public static void RemoveViewCache(TToken token)
+        public void RemoveViewCache(TToken token)
         {
-            if (_curCacheItems.Keys.Contains(token))
+            if (_curCacheItems.ContainsKey(token))
                 _curCacheItems.Remove(token);
         }
 
         /// <summary>
         /// 清除所有缓存
         /// </summary>
-        public static void Clear()
+        public void Clear()
         {
             _curCacheItems.Clear();
         }
@@ -56,7 +56,7 @@ namespace XLY.SF.Framework.Core.Base.MessageBase.Navigation
         /// </summary>
         /// <param name="queryCallback">查询条件</param>
         /// <returns></returns>
-        public static List<UcViewBase> QueryView(Func<TToken, bool> queryCallback)
+        public List<UcViewBase> QueryView(Func<TToken, bool> queryCallback)
         {
             var a = _curCacheItems.Keys.Where(queryCallback);
             List<UcViewBase> result = new List<UcViewBase>();
@@ -73,10 +73,10 @@ namespace XLY.SF.Framework.Core.Base.MessageBase.Navigation
         /// <param name="token">标识</param>
         /// <param name="cacheView">缓存的视图</param>
         /// <returns></returns>
-        public static bool TryGetFirstView(TToken token, out UcViewBase cacheView)
+        public bool TryGetFirstView(TToken token, out UcViewBase cacheView)
         {
             bool hasView = false;
-            if (_curCacheItems.Keys.Contains(token))
+            if (_curCacheItems.ContainsKey(token))
             {
                 hasView = true;
                 cacheView = _curCacheItems[token].View;

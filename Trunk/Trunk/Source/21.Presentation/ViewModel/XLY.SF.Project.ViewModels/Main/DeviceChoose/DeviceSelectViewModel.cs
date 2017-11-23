@@ -164,6 +164,7 @@ namespace XLY.SF.Project.ViewModels.Device
         {
             Devices.Clear();
             Devices.AddRange(ProxyFactory.DeviceMonitor.GetCurConnectedDevices());
+            HasDevice = Devices.Count > 0;
             ProxyFactory.DeviceMonitor.OnDeviceConnected += DeviceMonitor_OnDeviceConnected;
 
         }

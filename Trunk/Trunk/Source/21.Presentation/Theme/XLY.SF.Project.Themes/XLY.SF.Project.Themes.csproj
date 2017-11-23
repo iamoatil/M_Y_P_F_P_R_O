@@ -425,6 +425,26 @@
     <Resource Include="Resources\Images\bookmark_no.png" />
     <Resource Include="Resources\Images\bookmark_yes.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\data_view_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\data_filebrowing_open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Msg_Error.png" />
+    <Resource Include="Resources\Images\Icons\Msg_Success.png" />
+    <Resource Include="Resources\Images\Icons\Msg_Warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\data_filebrowing_icon1.png" />
+    <Resource Include="Resources\Images\data_filebrowing_icon2.png" />
+    <Resource Include="Resources\Images\data_filebrowing_icon3.png" />
+    <Resource Include="Resources\Images\data_filebrowing_icon4.png" />
+    <Resource Include="Resources\Images\data_filebrowing_icon5.png" />
+    <Resource Include="Resources\Images\data_filebrowing_icon6.png" />
+    <Resource Include="Resources\Images\data_filebrowing_icon7.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

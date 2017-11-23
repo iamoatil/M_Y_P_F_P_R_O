@@ -72,8 +72,8 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
             set;
         }
 
-        [Import(typeof(IDatabaseContext))]
-        private IDatabaseContext DbService
+        [Import(typeof(ILogicalDataContext))]
+        private ILogicalDataContext DbService
         {
             get;
             set;
@@ -161,7 +161,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         {
             if (SystemContext.Instance.CurrentCase.Update())
             {
-                MessageBox.ShowDialogNoticeMsg("修改成功");
+                MessageBox.ShowDialogWarningMsg("修改成功");
                 return $"更新案例信息{SystemContext.Instance.CurrentCase.Name}成功";
             }
             return $"更新案例信息{SystemContext.Instance.CurrentCase.Name}失败";

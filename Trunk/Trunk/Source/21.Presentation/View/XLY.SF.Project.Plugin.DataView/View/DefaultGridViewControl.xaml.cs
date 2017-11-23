@@ -68,6 +68,9 @@ namespace XLY.SF.Project.Plugin.DataView.View.Controls
             }
         }
 
+        /// <summary>
+        /// 列模板定义中的属性名称，在读取列模板时替换为实际的属性
+        /// </summary>
         private const string PROPERTY_NAME = "$PropertyName$";
 
         /// <summary>
@@ -98,13 +101,13 @@ namespace XLY.SF.Project.Plugin.DataView.View.Controls
                         stateCol.CellTemplate = XamlResouceReader.ToDataTemplate<DataTemplate>("ThemesStyle.DataGridStyle.DataGridDataStateColumnTemplate.xaml", c => c.Replace(PROPERTY_NAME, attr.Owner.Name));
                         dg.Columns.Add(stateCol);
                     }
-                    else if (attr.ColumnType == EnumColumnType.URL)
+                    else if (attr.ColumnType == EnumColumnType.URL) //超链接列
                     {
                         DataGridTemplateColumn col = new DataGridTemplateColumn() { Header = attr.Text };
                         col.CellTemplate = XamlResouceReader.ToDataTemplate<DataTemplate>("ThemesStyle.DataGridStyle.DataGridUrlColumnTemplate.xaml", c => c.Replace(PROPERTY_NAME, attr.Owner.Name));
                         dg.Columns.Add(col);
                     }
-                    else if (attr.ColumnType == EnumColumnType.Image)
+                    else if (attr.ColumnType == EnumColumnType.Image)  //图片列
                     {
                         DataGridTemplateColumn col = new DataGridTemplateColumn() { Header = attr.Text };
                         col.CellTemplate = XamlResouceReader.ToDataTemplate<DataTemplate>("ThemesStyle.DataGridStyle.DataGridImageColumnTemplate.xaml", c => c.Replace(PROPERTY_NAME, attr.Owner.Name));
@@ -115,7 +118,6 @@ namespace XLY.SF.Project.Plugin.DataView.View.Controls
                         DataGridBoundColumn col = new DataGridTextColumn() { Header = attr.Text, Binding = new Binding(attr.Owner.Name), Width = attr.Width, MinWidth = 50 };
                         dg.Columns.Add(col);
                     }
-
                 }
             }
             else if(type is string)

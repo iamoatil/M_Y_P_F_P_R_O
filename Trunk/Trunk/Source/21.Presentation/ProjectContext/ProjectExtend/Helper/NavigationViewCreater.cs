@@ -30,12 +30,11 @@ namespace XLY.SF.Project.Extension.Helper
                 if (targetView != null)
                 {
                     //传递参数
-                    if (!targetView.DataSource.IsLoaded)
+                    if (targetView.DataSource != null && !targetView.DataSource.IsLoaded)
                     {
                         try
                         {
                             targetView.DataSource.LoadViewModel(parameter);
-
                             //加载ViewContainer
                             targetView.DataSource.SetViewContainer(targetView);
                         }
@@ -44,11 +43,6 @@ namespace XLY.SF.Project.Extension.Helper
                             LoggerManagerSingle.Instance.Error(ex, string.Format("加载模块Key【{0}】失败", exportViewkey));
                         }
                     }
-                    //else
-                    //{
-                    //    //加载ViewContainer
-                    //    targetView.DataSource.SetViewContainer(targetView);
-                    //}
                 }
                 else
                     LoggerManagerSingle.Instance.Error(string.Format("导入模块Key【{0}】失败", exportViewkey));

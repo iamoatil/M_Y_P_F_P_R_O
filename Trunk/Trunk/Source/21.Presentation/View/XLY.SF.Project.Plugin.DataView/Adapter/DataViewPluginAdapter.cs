@@ -62,7 +62,7 @@ namespace XLY.SF.Project.Plugin.DataView
             {
                 for (int i = views.Count - 1; i >= 0; i--)
                 {
-                    if(views[i].PluginInfo.Guid == "7B51FA8D-F7F6-4EE3-B3B9-780C29B9B778") //移除默认的表格视图
+                    if(views[i].PluginInfo.Guid == DataViewConfigure.DEFAULT_GRID_VIEW_ID) //移除默认的表格视图
                     {
                         views.RemoveAt(i);
                     }

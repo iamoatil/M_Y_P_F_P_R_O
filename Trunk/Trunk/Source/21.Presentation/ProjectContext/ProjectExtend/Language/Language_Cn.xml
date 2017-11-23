@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <LanguageResource>
-  <ViewLanguage Prompt="界面显示语言">
+  <ViewLanguage Prompt="界面显示语言">    
     <!--登录、加载-->
     <View_Loading>系统加载中，请稍等</View_Loading>
     <View_Login>登录</View_Login>
     <View_Login_ExitSys>退出</View_Login_ExitSys>
-    <View_Login_UserName>帐  号</View_Login_UserName>
+    <View_Login_UserName>账  号</View_Login_UserName>
     <View_Login_Password>密  码</View_Login_Password>
-    <View_Login_Company>效率源信息安全股份有限公司</View_Login_Company>
+    <View_Login_Company>四川效率源信息安全股份有限公司</View_Login_Company>
     <View_Login_Version>版本 1.0</View_Login_Version>
 
     <!--主页-->
@@ -53,9 +53,7 @@
     <View_CaseCreateTime>创建时间</View_CaseCreateTime>
     <View_UpdateRecentError>更新失败</View_UpdateRecentError>
     <View_CaseListViewTitle>案例管理</View_CaseListViewTitle>
-    <View_DeleteCase>删除</View_DeleteCase>
-    <View_SearchCase>搜索</View_SearchCase>
-    <View_CaseKeyword>关键字</View_CaseKeyword>
+    <View_CaseKeyword>请输入关键字</View_CaseKeyword>
     <View_CaseSelectAll>全选</View_CaseSelectAll>
     <View_CaseIndex>序号</View_CaseIndex>
     <View_CaseNumber>案例编号</View_CaseNumber>
@@ -68,7 +66,7 @@
     <View_CaseTypeEdition>增/删</View_CaseTypeEdition>
     <View_CaseNotExist>案例不存在</View_CaseNotExist>
     <View_CaseListTimeTo>至</View_CaseListTimeTo>
-    <View_CaseListDelete>删除</View_CaseListDelete>
+    <View_CaseListDelete>批量删除</View_CaseListDelete>
     <View_CaseListSearch>搜索</View_CaseListSearch>
     <View_CaseOpen>打开</View_CaseOpen>
     <View_CaseListIndex>序号</View_CaseListIndex>
@@ -120,11 +118,9 @@
         <Unit>工作单位</Unit>
         <Id>证件号</Id>
         <Add>添加</Add>
-        <Remove>删除</Remove>
-        <Update>修改</Update>
+        <RemoveBatch>批量删除</RemoveBatch>
         <InputPassword>输入密码</InputPassword>
         <ConfirmPassword>确认密码</ConfirmPassword>
-        <Close>关闭</Close>
         <Cancel>取消</Cancel>
         <Confirm>确认</Confirm>
       </User>
@@ -157,8 +153,9 @@
     
 
     <!--消息提示-->
-    <View_MessageBox_Error>错误消息</View_MessageBox_Error>
-    <View_MessageBox_Notice>提示消息</View_MessageBox_Notice>
+    <View_MessageBox_Error>很抱歉</View_MessageBox_Error>
+    <View_MessageBox_Success>成功</View_MessageBox_Success>
+    <View_MessageBox_Warning>警告</View_MessageBox_Warning>
   
 </ViewLanguage>
 

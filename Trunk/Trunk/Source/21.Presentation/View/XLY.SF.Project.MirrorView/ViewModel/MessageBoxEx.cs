@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Core.Base.MefIoc;
 
@@ -10,15 +11,15 @@ using XLY.SF.Framework.Core.Base.MefIoc;
 
 namespace XLY.SF.Project.MirrorView
 {
-    class MessageBoxEx: IMessageBox
+    class MessageBoxEx : IMessageBox
     {
         IMessageBox _msgBox;
         public MessageBoxEx()
         {
             bool isToolRun = Application.Current is App;
-            if(!isToolRun)
+            if (!isToolRun)
             {
-                _msgBox= IocManagerSingle.Instance.GetPart<IMessageBox>();
+                _msgBox = IocManagerSingle.Instance.GetPart<IMessageBox>();
             }
         }
 
@@ -35,11 +36,11 @@ namespace XLY.SF.Project.MirrorView
             }
         }
 
-        public bool ShowDialogNoticeMsg(string text)
+        public bool ShowDialogWarningMsg(string text)
         {
             if (_msgBox != null)
             {
-                return _msgBox.ShowDialogNoticeMsg(text);
+                return _msgBox.ShowDialogWarningMsg(text);
             }
             else
             {
@@ -59,11 +60,11 @@ namespace XLY.SF.Project.MirrorView
             }
         }
 
-        public bool ShowMutualMsg(string title, string text)
+        public bool ShowSuccessMsg(string title, string text)
         {
             if (_msgBox != null)
             {
-                return _msgBox.ShowMutualMsg(title, text);
+                return _msgBox.ShowDialogSuccessMsg(text);
             }
             else
             {
@@ -72,27 +73,51 @@ namespace XLY.SF.Project.MirrorView
             }
         }
 
-        public void ShowNoticeMsg(string text)
+        public bool ShowDialogSuccessMsg(string text)
         {
             if (_msgBox != null)
             {
-                _msgBox.ShowNoticeMsg(text);
+                return _msgBox.ShowDialogSuccessMsg(text);
             }
             else
             {
-                MessageBox.Show(text, "提示");
+                return MessageBox.Show(text, "提示") == MessageBoxResult.OK;
             }
         }
 
-        public void ShowOtherMsg(string title, string text)
+        //public void ShowWarningMsg(string title, string text)
+        //{
+        //    if (_msgBox != null)
+        //    {
+        //        _msgBox.ShowWarningMsg(text);
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show(text, title);
+        //    }
+        //}
+
+        public void ShowWarningMsg(string warningText)
         {
             if (_msgBox != null)
             {
-                _msgBox.ShowOtherMsg(title, text);
+                _msgBox.ShowWarningMsg(warningText);
             }
             else
             {
-                MessageBox.Show(text, title);
+                MessageBox.Show(warningText, "警告");
+            }
+        }
+
+        public void ShowSuccessMsg(string successText)
+        {
+            if (_msgBox != null)
+            {
+                _msgBox.ShowSuccessMsg(successText);
+            }
+            else
+            {
+                MessageBox.Show(successText, "成功");
             }
         }
     }

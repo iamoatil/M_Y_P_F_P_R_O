@@ -55,7 +55,7 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 加入书签的编号，小于0则未加入书签
         /// </summary>
-        [Display(Visibility = EnumDisplayVisibility.ShowInDatabase)]
+        //[Display(Visibility = EnumDisplayVisibility.ShowInDatabase)]
         public int BookMarkId
         {
             get => _bookMarkId;

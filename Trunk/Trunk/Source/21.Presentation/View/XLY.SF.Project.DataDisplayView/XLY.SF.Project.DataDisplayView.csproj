@@ -99,6 +99,12 @@
     <Compile Include="DataFilterControl.xaml.cs">
       <DependentUpon>DataFilterControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Language\LanguageHelper.cs" />
+    <Compile Include="Language\LanguageTextTeamplate.LanguageElement.cs">
+      <DependentUpon>LanguageTextTeamplate.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="MainDisplayView.xaml.cs">
       <DependentUpon>MainDisplayView.xaml</DependentUpon>
     </Compile>
@@ -195,6 +201,26 @@
       <Name>XLY.SF.Project.Plugin.DataView</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Language\Language_Cn.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Language\Language_En.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Language\LanguageTextTeamplate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LanguageTextTeamplate.LanguageElement.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>::使用AOP修改dll
+if exist "AopInjection.exe"  start "" "AopInjection.exe"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

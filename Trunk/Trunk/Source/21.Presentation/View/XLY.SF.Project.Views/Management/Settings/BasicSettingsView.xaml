@@ -1,0 +1,41 @@
+﻿<core:UcViewBase x:Class="XLY.SF.Project.Views.Management.Settings.BasicSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
+                 xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
+                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                 xmlns:local="clr-namespace:XLY.SF.Project.Views.Management.Settings"
+                 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+             mc:Ignorable="d" >
+    <core:UcViewBase.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--此处以下添加自己的引用-->
+            <local:LanguageConverter x:Key="LanguageConverter" />
+        </ResourceDictionary>
+    </core:UcViewBase.Resources>
+    <StackPanel>
+        <GroupBox Header="语言">
+            <ComboBox SelectedItem="{Binding Language, Converter={StaticResource LanguageConverter}}">
+                <ComboBoxItem>中文</ComboBoxItem>
+                <ComboBoxItem>英文</ComboBoxItem>
+            </ComboBox>
+        </GroupBox>
+        <GroupBox Header="默认路径">
+            <DockPanel>
+                <Button Content="..."
+                        DockPanel.Dock="Right" />
+                <TextBlock Text="{Binding Path,Mode=TwoWay}" />
+            </DockPanel>
+        </GroupBox>
+        <GroupBox Header="数据过滤">
+            <CheckBox Content="提取结果自动去重并过滤无效数据"
+                      IsChecked="{Binding EnableFilter,Mode=TwoWay}"/>
+        </GroupBox>
+    </StackPanel>
+</core:UcViewBase>

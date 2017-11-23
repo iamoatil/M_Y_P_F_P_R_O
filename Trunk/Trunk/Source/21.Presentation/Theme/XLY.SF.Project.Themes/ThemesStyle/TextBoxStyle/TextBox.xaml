@@ -124,7 +124,7 @@
                 <ControlTemplate TargetType="{x:Type PasswordBox}">
                     <Border x:Name="Bd" BorderBrush="#FF414B69"  BorderThickness="1" CornerRadius="4"  Background="#FF414B69"  SnapsToDevicePixels="true">
                         <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                            <TextBlock Text="密 码" FontSize="14" Foreground="#9ba5b9" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="密  码" FontSize="14" Foreground="#9ba5b9" Margin="10,0,0,0" VerticalAlignment="Center"/>
                             <ScrollViewer x:Name="PART_ContentHost" Margin="10,0,0,0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Height="30" VerticalAlignment="Center"  Width="180" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
                             <Image Width="16" Height="16" Margin="10" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/LoginPassWord.png" x:Name="img_Icon">
                             </Image>

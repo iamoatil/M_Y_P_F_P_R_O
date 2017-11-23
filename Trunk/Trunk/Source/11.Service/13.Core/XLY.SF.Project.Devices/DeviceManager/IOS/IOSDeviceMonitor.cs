@@ -54,6 +54,7 @@ namespace XLY.SF.Project.Devices
                 Dictionary<string, string> properties = iosDeviceManager.GetProperties(device);
                 device.Name = properties.ContainsKey("DeviceName") ? properties["DeviceName"] : "";
                 device.Manufacture = LanguageManager.Current[Languagekeys.DeviceLanguage_DeviceType_IOS];
+                device.Brand = "iPhone";
                 device.Model = properties.ContainsKey("ProductType") ? properties["ProductType"] : "";
                 device.OSVersion = properties.ContainsKey("ProductVersion") ? properties["ProductVersion"] : "";
                 device.Status = EnumDeviceStatus.Online;

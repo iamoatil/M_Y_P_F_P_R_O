@@ -94,10 +94,15 @@
     <Compile Include="Main\CaseManagement\DeviceWindowContentViewModel.cs" />
     <Compile Include="Main\DeviceMain\DeviceHomePageViewModel.cs" />
     <Compile Include="Main\DeviceMain\DeviceMainViewModel.cs" />
+    <Compile Include="Main\DeviceMain\Navigation\SubViewCacheManager.cs" />
     <Compile Include="Main\HomePage\HomePageViewModel.cs" />
     <Compile Include="Main\Main\DeviceListViewModel.cs" />
     <Compile Include="Main\Main\MainNavigationManager.cs" />
     <Compile Include="Main\Main\MainViewModel.cs" />
+    <Compile Include="Management\Settings\BasicSettingsViewModel.cs" />
+    <Compile Include="Management\Settings\CaseTypeSettingsViewModel.cs" />
+    <Compile Include="Management\Settings\InspectionSettingsViewModel.cs" />
+    <Compile Include="Management\Settings\UnitSettingsViewModel.cs" />
     <Compile Include="Management\User\UserInfoViewModel.cs" />
     <Compile Include="Management\User\UserListViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

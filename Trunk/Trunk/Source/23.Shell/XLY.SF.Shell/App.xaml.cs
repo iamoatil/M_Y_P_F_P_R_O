@@ -119,7 +119,7 @@ namespace XLY.SF.Shell
             IMessageBox _msgBox = IocManagerSingle.Instance.GetPart<IMessageBox>();
             if (!string.IsNullOrWhiteSpace(args.Parameters))
             {
-                if (_msgBox.ShowMutualMsg(SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_MessageBox_Notice], args.Parameters))
+                if (_msgBox.ShowDialogWarningMsg(args.Parameters))
                     Application.Current.Shutdown();
             }
             else

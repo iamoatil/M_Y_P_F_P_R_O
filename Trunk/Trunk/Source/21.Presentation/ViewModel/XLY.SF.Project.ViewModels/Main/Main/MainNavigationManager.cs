@@ -15,6 +15,7 @@ using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Framework.Core.Base.MessageBase.Navigation;
 using XLY.SF.Project.ViewModels.Main.CaseManagement;
 using XLY.SF.Project.Extension.Helper;
+using XLY.SF.Project.ViewDomain.Model.PresentationNavigationElement;
 
 
 /*************************************************
@@ -72,15 +73,16 @@ namespace XLY.SF.Project.ViewModels.Main
             //注册主界面导航消息
             MsgAggregation.Instance.RegisterNaviagtionMsg(this, SystemKeys.MainUcNavigation, MainNavigationCallback);
             //注册清理缓存视图消息
-            MsgAggregation.Instance.RegisterGeneralMsg<string>(this, GeneralKeys.DeleteCacheView, DeleteCacheViewCallback);
+            MsgAggregation.Instance.RegisterGeneralMsg<PreCacheToken>(this, GeneralKeys.DeleteCacheView, DeleteCacheViewCallback);
         }
 
         #region 导航相关
 
         //清楚缓存【设备主页】
-        private void DeleteCacheViewCallback(GeneralArgs<string> obj)
+        private void DeleteCacheViewCallback(GeneralArgs<PreCacheToken> obj)
         {
-            NavigationCacheManager<string>.RemoveViewCache(obj.Parameters);
+            if (obj.Parameters != null)
+                SystemContext.Instance.CurCacheViews.RemoveViewCache(obj.Parameters);
         }
 
         //主界面导航回调
@@ -105,12 +107,13 @@ namespace XLY.SF.Project.ViewModels.Main
                 if (args.MsgToken == ExportKeys.DeviceMainView)
                 {
                     var devTmp = args.Parameter as DeviceExtractionAdorner;
-                    if (devTmp != null)
+                    if (devTmp != null && devTmp.Device != null)
                     {
-                        if (!NavigationCacheManager<string>.TryGetFirstView(devTmp.Device.ID, out targetView))
+                        PreCacheToken delToken = new PreCacheToken(devTmp.Device.ID, ExportKeys.DeviceMainView);
+                        if (!SystemContext.Instance.CurCacheViews.TryGetFirstView(delToken, out targetView))
                         {
                             targetView = NavigationViewCreater.CreateView(args.MsgToken, args.Parameter);
-                            NavigationCacheManager<string>.AddViewCache(devTmp.Device.ID, targetView);
+                            SystemContext.Instance.CurCacheViews.AddViewCache(delToken, targetView);
                         }
                     }
                 }
@@ -118,7 +121,6 @@ namespace XLY.SF.Project.ViewModels.Main
                 {
                     //记录打开案例编辑界面之前的页面，方便返回使用
                     EditCaseNavigationHelper.RecordBeforeViewOnisExpanded(MainView);
-
                     targetView = NavigationViewCreater.CreateView(args.MsgToken, args.Parameter);
                 }
             }
@@ -138,7 +140,7 @@ namespace XLY.SF.Project.ViewModels.Main
                 IsShowDeviceListRow = false;
                 EditCaseNavigationHelper.ResetCurCaseStatus();
                 //清除界面缓存
-                NavigationCacheManager<string>.Clear();
+                SystemContext.Instance.CurCacheViews.Clear();
             }
             else
             {

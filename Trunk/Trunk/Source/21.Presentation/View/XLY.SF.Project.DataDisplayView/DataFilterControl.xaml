@@ -7,6 +7,15 @@
              xmlns:local="clr-namespace:XLY.SF.Project.DataDisplayView"
              mc:Ignorable="d" 
              d:DesignHeight="60" d:DesignWidth="1000">
+    <UserControl.Resources>
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Template" Value="{DynamicResource cb_DefaultItemCt}"/>
+            <Setter Property="Padding" Value="20 0 0 0"/>
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <StackPanel Orientation="Horizontal">
             <!--时间范围-->
@@ -15,11 +24,10 @@
             <DatePicker Margin="2 15" Width="150" SelectedDate="{Binding EndTime}"></DatePicker>
             
             <!--数据状态-->
-            <ctrl:ComboBoxEx Margin="2 15" Width="100" FontSize="14" ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
+            <ctrl:ComboBoxEx Margin="2 15" Width="100" FontSize="14" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
             
             <!--应用筛选-->
-            <!--<ctrl:ComboBoxEx Margin="2 15" Width="100" FontSize="14" ItemsSource="{Binding DataListSource}"></ctrl:ComboBoxEx>-->
-            <ctrl:PopupControl Margin="2 15" Width="100" FontSize="14" Text="所有应用">
+            <ctrl:PopupControl Margin="2 15" Width="100" FontSize="14" Text="{local:Lang Key=AllApps}">
                 <Popup Width="200" MaxHeight="600" PopupAnimation="Slide" StaysOpen="False" VerticalOffset="6" HorizontalOffset="-10">
                     <Border Background="#485374" >
                         <ctrl:TreeViewEx x:Name="treeDataList" Background="#0FFFFFFF" BorderThickness="0"  ItemsSource="{Binding DataListSource}">
@@ -42,19 +50,19 @@
             </ctrl:PopupControl>
             
             <!--标记筛选-->
-            <ctrl:ComboBoxEx Margin="2 15" Width="100" FontSize="14"  ItemsSource="{Binding BookmarkSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding BookmarkId}"></ctrl:ComboBoxEx>
+            <ctrl:ComboBoxEx Margin="2 15" Width="100" FontSize="14"  TitlePadding="10 0 0 0"  ItemsSource="{Binding BookmarkSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding BookmarkId}"></ctrl:ComboBoxEx>
             
             <!--关键词和正则-->
             <Border Margin="2 15"  BorderThickness="1" CornerRadius="5" Background="#414b69">
                 <StackPanel Orientation="Horizontal">
-                    <ctrl:ComboBoxEx Width="100" FontSize="14" Background="Transparent" ItemsSource="{Binding KeywordTypeSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding KeywordType}"></ctrl:ComboBoxEx>
-                    <TextBox Width="140" BorderThickness="0" Background="Transparent" Text="{Binding Keyword}" Foreground="White" VerticalContentAlignment="Center"></TextBox>
+                    <ctrl:ComboBoxEx Width="75" FontSize="14"  TitlePadding="10 0 0 0"  Background="Transparent" ItemsSource="{Binding KeywordTypeSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding KeywordType}"></ctrl:ComboBoxEx>
+                    <ctrl:TextBoxEx HorizontalContentAlignment="Left" TitlePadding="0"  Watermark="{local:Lang Key=KeyWordWatermark}" Width="140" Padding="5 0" FontSize="14" BorderThickness="0" CaretBrush="#FFFFFF" Background="Transparent" Text="{Binding Keyword}" Foreground="White" VerticalContentAlignment="Center"></ctrl:TextBoxEx>
                 </StackPanel>
             </Border>
             
             <!--开始查询-->
-            <Button Width="100" Margin="10 15 26 15" Command="{Binding StartFilterCommond}">搜索</Button>
-            <Button Style="{StaticResource btn_GrayIcon}" Width="30" Height="24" Margin="0 15 0 15" Command="{Binding ClearCommond}">
+            <Button Width="100" Margin="10 15 26 15" Command="{Binding StartFilterCommond}" Content="{local:Lang Key=Search}"></Button>
+            <Button Style="{StaticResource btn_GrayIcon}" Width="30" Height="24" Margin="0 15 0 15" Command="{Binding ClearCommond}" ToolTip="{local:Lang Key=ClearTip}">
                 <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_filter_clear.png" Width="13" Height="13"/>
             </Button>
         </StackPanel>    

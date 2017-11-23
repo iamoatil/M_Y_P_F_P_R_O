@@ -151,37 +151,64 @@ namespace XLY.SF.Project.Domains
         private Expression CreateExpression(Boolean paging, params FilterArgs[] args)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("XLYKey = '{0}' ", Key);
-            if (args.Length == 0) return Expression.Constant(sb.ToString());
+            sb.AppendFormat("a.XLYKey = '{0}' ", Key);
+            if (args.Length == 0)       //全部查询
+            {
+                if (paging)
+                {
+                    sb.AppendFormat("LIMIT {0} OFFSET {1} ", PageSize, _cursor);
+                }
+                return Expression.Constant(sb.ToString());
+            }
+            bool isAttach = false;
+            bool isUnion = false;
             foreach (var arg in args)
             {
                 switch (arg)
                 {
                     case FilterByStringContainsArgs keywordArg:
-                        sb.AppendFormat("AND XLYJson LIKE '%{0}%' ", keywordArg.PatternText);
+                        sb.AppendFormat("AND a.XLYJson LIKE '%{0}%' ", keywordArg.PatternText.Replace("'","''"));
                         break;
                     case FilterByRegexArgs regexArg:
                         String temp = regexArg.Regex.ToString();
-                        sb.AppendFormat("AND RegexMatch('$XLYJson','${0}') ", temp.Replace("{", "{{").Replace("}", "}}"));
+                        sb.AppendFormat("AND RegexMatch(a.XLYJson,'{0}') ", temp.Replace("'", "''").Replace("{", "{{").Replace("}", "}}"));
                         break;
                     case FilterByDateRangeArgs dateRangeArg:
                         SetDateTimeRangeSql(dateRangeArg.StartTime, dateRangeArg.EndTime, sb);
                         break;
                     case FilterByBookmarkArgs bookMarkArg:
-                        sb.AppendFormat("AND BookMarkId = {0} ", bookMarkArg.BookmarkId);
+                        if(bookMarkArg.BookmarkId < 0)
+                        {
+                            isUnion = true;
+                        }
+                        else
+                        {
+                            sb.AppendFormat("AND b.BookMarkId = {0} ", bookMarkArg.BookmarkId);
+                        }
+                        isAttach = true;
                         break;
                     case FilterByEnumStateArgs stateArg:
-                        sb.AppendFormat("AND DataState = '{0}' ", stateArg.State.ToString());
+                        sb.AppendFormat("AND a.DataState = '{0}' ", stateArg.State.ToString());
                         break;
                     default:
                         break;
                 }
             }
+
+            if (isUnion)
+            {
+                sb.Insert(0, "#");
+            }
+            else if (isAttach)
+            {
+                sb.Insert(0, "$");
+            }
+
             if (paging)
             {
                 sb.AppendFormat("LIMIT {0} OFFSET {1} ", PageSize, _cursor);
             }
-            //sb = sb.Remove(0, 3);
+           
             return Expression.Constant(sb.ToString());
         }
 
@@ -217,21 +244,21 @@ namespace XLY.SF.Project.Domains
                 {
                     foreach (String str in dateColumnsName)
                     {
-                        sb.AppendFormat($"AND REPLACE({str},'/','-') < '{end.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
+                        sb.AppendFormat($"AND REPLACE(a.{str},'/','-') < '{end.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
                     }
                 }
                 else if (start != null && end == null)
                 {
                     foreach (String str in dateColumnsName)
                     {
-                        sb.AppendFormat($"AND REPLACE({str},'/','-') >= '{start.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
+                        sb.AppendFormat($"AND REPLACE(a.{str},'/','-') >= '{start.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
                     }
                 }
                 else
                 {
                     foreach (String str in dateColumnsName)
                     {
-                        sb.AppendFormat($"AND REPLACE({str},'/','-') >= '{start.Value.ToString("yyyy-MM-dd HH:mm:ss")}'AND REPLACE({str},'/','-') < '{end.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
+                        sb.AppendFormat($"AND REPLACE(a.{str},'/','-') >= '{start.Value.ToString("yyyy-MM-dd HH:mm:ss")}'AND REPLACE(a.{str},'/','-') < '{end.Value.ToString("yyyy-MM-dd HH:mm:ss")}' ");
                     }
                 }
             }

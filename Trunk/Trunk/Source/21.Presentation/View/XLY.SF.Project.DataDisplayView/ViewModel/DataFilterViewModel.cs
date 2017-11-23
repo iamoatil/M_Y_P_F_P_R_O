@@ -31,23 +31,23 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
 
             BookmarkSource = new Dictionary<int, string>()
             {
-                {-2, "所有标记" },
-                {0, "已标记" },
-                {-1, "未标记" },
+                {-2, Languagekeys.BookmarkAll },
+                {0, Languagekeys.BookmarkYes },
+                {-1, Languagekeys.BookmarkNone },
             };
             DataStateSource = new Dictionary<EnumDataState, string>()
             {
-                { EnumDataState.None, "所有状态" },
-                { EnumDataState.Normal,"正常数据" },
-                { EnumDataState.Deleted ,"删除数据" }
+                { EnumDataState.None, Languagekeys.DataStateAll },
+                { EnumDataState.Normal,Languagekeys.DataStateNormal },
+                { EnumDataState.Deleted ,Languagekeys.DataStateDelete }
             };
             KeywordTypeSource = new Dictionary<int, string>()
             {
-                {0, "关键词" },
-                {1, "正  则" },
+                {0, Languagekeys.Keyword },
+                {1, Languagekeys.ZhengZe},
             };
 
-            MessageAggregation.RegisterGeneralMsg<ObservableCollection<DataExtactionTreeItem>>(this, MessageKeys.SetDataListKey, SetDataListKey);
+            MessageAggregation.RegisterGeneralMsg<ObservableCollection<DataExtactionItem>>(this, MessageKeys.SetDataListKey, SetDataListKey);
         }
 
         #region 绑定数据源
@@ -104,12 +104,12 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         #endregion
 
         #region 数据列表
-        private ObservableCollection<DataExtactionTreeItem> _DataListSource = null;
+        private ObservableCollection<DataExtactionItem> _DataListSource = null;
 
         /// <summary>
         /// 数据列表
         /// </summary>	
-        public ObservableCollection<DataExtactionTreeItem> DataListSource
+        public ObservableCollection<DataExtactionItem> DataListSource
         {
             get { return _DataListSource; }
             set
@@ -290,7 +290,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         /// </summary>
         /// <param name="treeNodes"></param>
         /// <param name="args"></param>
-        private void Filter(ObservableCollection<DataExtactionTreeItem> treeNodes, params FilterArgs[] args)
+        private void Filter(ObservableCollection<DataExtactionItem> treeNodes, params FilterArgs[] args)
         {
             if (treeNodes == null)
                 return;
@@ -315,7 +315,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         /// 重新设置数据
         /// </summary>
         /// <param name="obj"></param>
-        private void SetDataListKey(GeneralArgs<ObservableCollection<DataExtactionTreeItem>> obj)
+        private void SetDataListKey(GeneralArgs<ObservableCollection<DataExtactionItem>> obj)
         {
             DataListSource = obj.Parameters;
             DoClearCommond();

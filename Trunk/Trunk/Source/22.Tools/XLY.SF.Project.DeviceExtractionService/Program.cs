@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using XLY.SF.Framework.Language;
 using XLY.SF.Project.IsolatedTaskEngine;
 using XLY.SF.Project.IsolatedTaskEngine.Common;
 using XLY.SF.Project.Plugin.Adapter;
@@ -20,6 +21,7 @@ namespace XLY.SF.Project.DeviceExtractionService
             Mutex mutex = new Mutex(true, "DeviceExtractionService", out Boolean createdNew);
             if (createdNew)
             {
+                LanguageManager.SwitchAll(LanguageType.Cn);
                 PluginAdapter.Instance.Initialization(null);
                 EngineSetup setup = new EngineSetup("isolatedTask", null);
                 TaskEngine engine = new TaskEngine(setup);

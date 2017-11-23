@@ -3,6 +3,7 @@ using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Markup;
 
 // 有关程序集的常规信息通过以下
 // 特性集控制。更改这些特性值可修改
@@ -40,6 +41,8 @@ using System.Windows;
     // 未找到某个资源的情况下使用)
 )]
 
+[assembly:XmlnsDefinition("http://www.spfpro.com", "XLY.SF.Project.Themes.CustromControl")]
+[assembly: XmlnsDefinition("http://www.spfpro.com", "XLY.SF.Project.Themes.Converter")]
 
 // 程序集的版本信息由下面四个值组成: 
 //

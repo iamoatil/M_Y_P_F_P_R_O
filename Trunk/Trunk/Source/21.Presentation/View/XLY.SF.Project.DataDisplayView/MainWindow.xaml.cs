@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using XLY.SF.Framework.Core.Base;
 using XLY.SF.Framework.Core.Base.MefIoc;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Plugin.Adapter;
@@ -31,7 +32,10 @@ namespace XLY.SF.Project.DataDisplayView
 
             IocManagerSingle.Instance.LoadParts(GetType().Assembly);
             var view = IocManagerSingle.Instance.GetViewPart(ExportKeys.DataDisplayView);
-            view.DataSource.LoadViewModel();
+
+            string devicePath = StartupArgment.Instance.Get("DevicePath", "");      //从命令行中读取传入的设备路径
+
+            view.DataSource.LoadViewModel(devicePath);
             content.Content = view;
         }
     }

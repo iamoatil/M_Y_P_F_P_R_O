@@ -27,7 +27,7 @@ namespace XLY.SF.Project.Plugin.DataView
         {
             DataViewPluginInfo p = new DataViewPluginInfo() {
                 Guid = "CCE3101E-F90C-4C5E-B5E9-51CC58CFAA76",
-                Name = "联系人视图",
+                Name = Languagekeys.ContactView,
                 ViewType = new List<DataViewSupportItem>(),
                 OrderIndex = 1,
                 PluginType = PluginType.SpfDataView,

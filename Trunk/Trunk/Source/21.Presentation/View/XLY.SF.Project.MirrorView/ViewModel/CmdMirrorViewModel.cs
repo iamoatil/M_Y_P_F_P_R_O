@@ -87,30 +87,30 @@ namespace XLY.SF.Project.MirrorView
             }
             else if (state.Match(CmdStrings.AllFinishState))
             {
-                _msgBox.ShowNoticeMsg("镜像完成");
+                _msgBox.ShowDialogSuccessMsg("镜像完成");
                 SourcePosition.IsMirroring = false;
                 ProgressPosition.FinishedSize = ProgressPosition.TotalSize;
                 ProgressPosition.Stop();
             }
             else if (state.IsType(CmdStrings.Exception))
             {
-                _msgBox.ShowNoticeMsg("镜像失败" + state.GetChildCmd());
+                _msgBox.ShowDialogSuccessMsg("镜像失败" + state.GetChildCmd());
                 SourcePosition.IsMirroring = false;
             }
             else if (state.Match(CmdStrings.StopMirror))
             {
-                _msgBox.ShowNoticeMsg("镜像停止");
+                _msgBox.ShowDialogSuccessMsg("镜像停止");
                 SourcePosition.IsMirroring = false;
             }
             else if(state.Match(CmdStrings.NoSelectedPartition))
             {
-                _msgBox.ShowNoticeMsg("请选择至少一个分区");
+                _msgBox.ShowDialogSuccessMsg("请选择至少一个分区");
                 SourcePosition.IsMirroring = false;
             }
             else if(state.Match(CmdStrings.PauseMirror)
                 || state.Match(CmdStrings.ContinueMirror))
             {
-                _msgBox.ShowNoticeMsg(state.ToString());
+                _msgBox.ShowDialogSuccessMsg(state.ToString());
             }
         }
 

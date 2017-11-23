@@ -16,9 +16,119 @@ namespace X64Service
         private const string IPhoneDeviceDll = @"Lib\vcdllX64\IphoneDevices\iphoneDevice.dll";
         private const string DevicePreDealDll = @"Lib\vcdllX64\IphoneDevices\iphoneDevice_pre.dll";
 
+        private static bool IsStartDeviceMonitoring = false;
+
         static IOSDeviceCoreDll()
         {
             DevicePreDeal("");
+        }
+
+        /// <summary>
+        /// 预先处理，必须第一个调用。
+        /// </summary>
+        /// <returns></returns>
+        public static uint DevicePreDeal(string path)
+        {
+            return _DevicePreDeal(path);
+        }
+
+        /// <summary>
+        /// 开始设备监听，需要传入回调函数以实时通知设备变更情况。
+        /// </summary>
+        /// <param name="startMonitoringCallback"></param>
+        /// <returns></returns>
+        public static uint StartDeviceMonitoring(StartMonitoringCallbackDelegate startMonitoringCallback)
+        {
+            IsStartDeviceMonitoring = true;
+            return _StartDeviceMonitoring(startMonitoringCallback);
+        }
+
+        /// <summary>
+        /// 关闭设备监听。
+        /// </summary>
+        /// <returns></returns>
+        public static uint CloseDeviceMonitoring()
+        {
+            IsStartDeviceMonitoring = false;
+            return _CloseDeviceMonitoring();
+        }
+
+        /// <summary>
+        /// 判断设备是否可用。
+        /// </summary>
+        /// <param name="uniqueDeviceID"></param>
+        /// <returns></returns>
+        public static uint CheckDeviceIsOnline(string uniqueDeviceID)
+        {
+            return _CheckDeviceIsOnline(uniqueDeviceID);
+        }
+
+        /// <summary>
+        /// 获取设备的属性信息，包括名字，是否越狱，序列化等。
+        /// </summary>
+        /// <param name="uniqueDeviceID"></param>
+        /// <param name="devicePropertyList"></param>
+        /// <returns></returns>
+        public static uint GetDeviceProperties(string uniqueDeviceID, ref IntPtr devicePropertyList)
+        {
+            return _GetDeviceProperties(uniqueDeviceID, ref devicePropertyList);
+        }
+
+        /// <summary>
+        /// 获取设备所有安装的应用名称列表，含内置应用。
+        /// </summary>
+        /// <param name="uniqueDeviceID"></param>
+        /// <param name="AppNameList"></param>
+        /// <returns></returns>
+        public static uint GetALLInstalledApp(string uniqueDeviceID, ref IntPtr AppNameList)
+        {
+            DoStartDeviceMonitoring();
+
+            return _GetALLInstalledApp(uniqueDeviceID, ref AppNameList);
+        }
+
+        /// <summary>
+        /// 拷贝出所有（含内置）应用的用户数据。
+        /// 本方法只能拷贝出应用的部分数据。
+        /// </summary>
+        /// <param name="savePath"></param>
+        /// <param name="uniqueDeviceID"></param>
+        /// <param name="copyUserDataCallback"></param>
+        /// <returns></returns>
+        public static uint CopyUserData(string savePath, string uniqueDeviceID, CopyUserDataCallbackDelegate copyUserDataCallback)
+        {
+            DoStartDeviceMonitoring();
+
+            return _CopyUserData(savePath, uniqueDeviceID, copyUserDataCallback);
+        }
+
+        /// <summary>
+        /// 拷贝出所有（含内置）应用的用户数据，如果有密码情况要求用户输入密码
+        /// </summary>
+        /// <param name="savePath"></param>
+        /// <param name="uniqueDeviceID"></param>
+        /// <param name="copyUserDataCallback"></param>
+        /// <returns></returns>
+        public static uint CopyUserDataPWD(string savePath, string uniqueDeviceID, CopyUserDataCallbackDelegate copyUserDataCallback, BackupPasswordInput backupPassword)
+        {
+            DoStartDeviceMonitoring();
+
+            return _CopyUserDataPWD(savePath, uniqueDeviceID, copyUserDataCallback, backupPassword);
+        }
+
+        /// <summary>
+        /// 启动设备监听
+        /// 如果已启动，则跳过
+        /// 部分接口必须要启动设备监听后才可成功调用
+        /// </summary>
+        private static void DoStartDeviceMonitoring()
+        {
+            if (!IsStartDeviceMonitoring)
+            {
+                StartDeviceMonitoring((i, s) => 0);
+                //等待3S，否则底层还未获取到设备信息
+                System.Threading.Thread.Sleep(3000);
+            }
         }
 
         #region IOS设备底层交互接口
@@ -28,7 +138,7 @@ namespace X64Service
         /// </summary>
         /// <returns></returns>
         [DllImport(DevicePreDealDll, EntryPoint = "iphonepreDeal")]
-        private static extern uint DevicePreDeal(string path);
+        private static extern uint _DevicePreDeal(string path);
 
         /// <summary>
         /// 开始设备监听，需要传入回调函数以实时通知设备变更情况。
@@ -36,14 +146,14 @@ namespace X64Service
         /// <param name="startMonitoringCallback"></param>
         /// <returns></returns>
         [DllImport(IPhoneDeviceDll, EntryPoint = "openIphoneDevice")]
-        public static extern uint StartDeviceMonitoring(StartMonitoringCallbackDelegate startMonitoringCallback);
+        private static extern uint _StartDeviceMonitoring(StartMonitoringCallbackDelegate startMonitoringCallback);
 
         /// <summary>
         /// 关闭设备监听。
         /// </summary>
         /// <returns></returns>
         [DllImport(IPhoneDeviceDll, EntryPoint = "closeIphoneDevice")]
-        public static extern uint CloseDeviceMonitoring();
+        private static extern uint _CloseDeviceMonitoring();
 
         /// <summary>
         /// 判断设备是否可用。
@@ -51,7 +161,7 @@ namespace X64Service
         /// <param name="uniqueDeviceID"></param>
         /// <returns></returns>
         [DllImport(IPhoneDeviceDll, EntryPoint = "checkIphoneOnline")]
-        public static extern uint CheckDeviceIsOnline(string uniqueDeviceID);
+        private static extern uint _CheckDeviceIsOnline(string uniqueDeviceID);
 
         /// <summary>
         /// 获取设备的属性信息，包括名字，是否越狱，序列化等。
@@ -60,7 +170,7 @@ namespace X64Service
         /// <param name="devicePropertyList"></param>
         /// <returns></returns>
         [DllImport(IPhoneDeviceDll, EntryPoint = "getIphoneDeviceInfos")]
-        public static extern uint GetDeviceProperties(string uniqueDeviceID, ref IntPtr devicePropertyList);
+        private static extern uint _GetDeviceProperties(string uniqueDeviceID, ref IntPtr devicePropertyList);
 
         /// <summary>
         /// 获取设备所有安装的应用名称列表，含内置应用。
@@ -69,7 +179,7 @@ namespace X64Service
         /// <param name="AppNameList"></param>
         /// <returns></returns>
         [DllImport(IPhoneDeviceDll, EntryPoint = "getIPhoneALLDomainNames")]
-        public static extern uint GetALLInstalledApp(string uniqueDeviceID, ref IntPtr AppNameList);
+        private static extern uint _GetALLInstalledApp(string uniqueDeviceID, ref IntPtr AppNameList);
 
         /// <summary>
         /// 从Iphone设备中拷贝一个文件到Windwos系统中。
@@ -113,7 +223,7 @@ namespace X64Service
         /// <param name="copyUserDataCallback"></param>
         /// <returns></returns>
         [DllImport(IPhoneDeviceDll, EntryPoint = "ImgUserDATA")]
-        public static extern uint CopyUserData(string savePath, string uniqueDeviceID, CopyUserDataCallbackDelegate copyUserDataCallback);
+        private static extern uint _CopyUserData(string savePath, string uniqueDeviceID, CopyUserDataCallbackDelegate copyUserDataCallback);
 
         /// <summary>
         /// 拷贝出所有（含内置）应用的用户数据，如果有密码情况要求用户输入密码
@@ -123,7 +233,7 @@ namespace X64Service
         /// <param name="copyUserDataCallback"></param>
         /// <returns></returns>
         [DllImport(IPhoneDeviceDll, EntryPoint = "ImgUserDATAPWDinput")]
-        public static extern uint CopyUserDataPWD(string savePath, string uniqueDeviceID, CopyUserDataCallbackDelegate copyUserDataCallback, BackupPasswordInput backupPassword);
+        private static extern uint _CopyUserDataPWD(string savePath, string uniqueDeviceID, CopyUserDataCallbackDelegate copyUserDataCallback, BackupPasswordInput backupPassword);
 
         /// <summary>
         /// 镜像文件

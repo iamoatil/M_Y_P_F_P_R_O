@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageResource>
+  <GridView>表格视图</GridView>
+  <ContactView>联系人视图</ContactView>
+  <MessageView>消息视图</MessageView>
+  <ConversionMode>对话模式</ConversionMode>
+  <DefaultLayout>默认布局</DefaultLayout>
+  <PhoneLayout>手机布局</PhoneLayout>
+  <Bookmark>标记</Bookmark>
+  <PhonePageList>页面列表</PhonePageList>
+  <PhoneHome>主页</PhoneHome>
+  <PhoneBack>后退</PhoneBack>
+  <WeChat>微信</WeChat>
+  <DengLu>登录</DengLu>
+</LanguageResource>
+
+

@@ -67,76 +67,7 @@
 
 
 
-    <!--样式-->
-    <!--设备首页编辑按钮-->
-    <Style x:Key="cb_DevHomePageEdit" TargetType="ToggleButton">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="BorderBrush" Value="#c8cdd7"/>
-        <Setter Property="Foreground" Value="#c8cdd7"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Border.CornerRadius" Value="5"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ToggleButton">
-                    <Border x:Name="br" Background="{Binding Background,RelativeSource={RelativeSource Mode=TemplatedParent}}" CornerRadius="5"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}">
-                    <ContentPresenter x:Name="cp"
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" Value="#c8cdd7" TargetName="br"/>
-                            <Setter Property="Effect" TargetName="cp">
-                                <Setter.Value>
-                                    <ee:EmbossedEffect Color="#414b69"/>
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="true">
-                            <Setter Property="Background" Value="#aab4be" TargetName="br"/>
-                            <Setter Property="Effect" TargetName="cp">
-                                <Setter.Value>
-                                    <ee:EmbossedEffect Color="#414b69"/>
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Style.Triggers>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Background" Value="#379be6"/>
-                <Setter Property="BorderBrush" Value="#379be6"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Border x:Name="br" Background="{Binding Background,RelativeSource={RelativeSource Mode=TemplatedParent}}" CornerRadius="5"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}">
-                            <ContentPresenter x:Name="cp"
-                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
-                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#3ca5f5" TargetName="br"/>
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter Property="Background" Value="#2382cd" TargetName="br"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
-
+    <!--#region 样式-->
 
     <!--书签标记复选框样式-->
     <Style x:Key="bookmarkCheckboxStyle" TargetType="CheckBox">
@@ -158,7 +89,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-
+    <!--#endregion-->
 
 
 </ResourceDictionary>

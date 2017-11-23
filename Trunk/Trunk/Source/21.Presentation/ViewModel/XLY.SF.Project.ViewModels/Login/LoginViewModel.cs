@@ -77,8 +77,8 @@ namespace XLY.SF.Project.ViewModels.Login
             PluginAdapter.Instance.Initialization(null);
 
             //加载一次数据库
-            _dbService.UserInfos.FirstOrDefault();
-            AllUser =new ObservableCollection<UserInfo>(_dbService.UserInfos.OrderByDescending(p=>p.LoginTime).Take(5)); //获取本地前5条用户记录
+            _dbService.Records.FirstOrDefault();
+            AllUser =new ObservableCollection<UserInfo>(_dbService.Records.OrderByDescending(p=>p.LoginTime).Take(5)); //获取本地前5条用户记录
 
             return opertionResult;
         }
@@ -130,16 +130,16 @@ namespace XLY.SF.Project.ViewModels.Login
 
         #region Model
 
-        private UserInfoEntityModel _curLoginUser;
+        private UserInfoModel _curLoginUser;
         /// <summary>
         /// 当前登录用户
         /// </summary>
-        public UserInfoEntityModel CurLoginUser
+        public UserInfoModel CurLoginUser
         {
             get {
                 if (_curLoginUser == null)
                 {
-                    _curLoginUser = new UserInfoEntityModel();
+                    _curLoginUser = new UserInfoModel();
                 }
                 return _curLoginUser;
             }
@@ -158,8 +158,8 @@ namespace XLY.SF.Project.ViewModels.Login
         /// <summary>
         /// 数据库服务
         /// </summary>
-        [Import(typeof(IDatabaseContext))]
-        private IDatabaseContext _dbService { get; set; }
+        [Import(typeof(IRecordContext<UserInfo>))]
+        private IRecordContext<UserInfo> _dbService { get; set; }
 
         /// <summary>
         /// 消息服务
@@ -210,8 +210,8 @@ namespace XLY.SF.Project.ViewModels.Login
 
             MD5CryptoServiceProvider md5Psd = new MD5CryptoServiceProvider();
             String newPsd = BitConverter.ToString(md5Psd.ComputeHash(Encoding.ASCII.GetBytes(CurLoginUser.LoginPassword)));
-            var loginUser = _dbService.UserInfos.FirstOrDefault((t) => t.LoginUserName == CurLoginUser.LoginUserName && t.LoginPassword== newPsd).ToModel<UserInfo, UserInfoEntityModel>();
-            if (loginUser == default(UserInfoEntityModel))
+            var loginUser = _dbService.Records.FirstOrDefault((t) => t.LoginUserName == CurLoginUser.LoginUserName && t.LoginPassword== newPsd).ToModel<UserInfo, UserInfoModel>();
+            if (loginUser == default(UserInfoModel))
             {
                 //登录失败
                 MessageBox.ShowDialogErrorMsg("登录失败，密码或帐号错误！");

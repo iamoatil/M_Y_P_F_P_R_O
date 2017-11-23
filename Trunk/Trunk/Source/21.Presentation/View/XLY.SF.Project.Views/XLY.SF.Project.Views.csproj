@@ -84,6 +84,7 @@
     <Compile Include="Behavior\TreeViewExpandedBehavior.cs" />
     <Compile Include="Converters\ContraryBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\IsEnableToVisibilityConverter.cs" />
+    <Compile Include="Converters\MultiConverter\DevHomePageEditItemConverter.cs" />
     <Compile Include="Main\DeviceView\DeviceMainView.xaml.cs">
       <DependentUpon>DeviceMainView.xaml</DependentUpon>
     </Compile>
@@ -122,6 +123,22 @@
     </Compile>
     <Compile Include="Main\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Management\Settings\BasicSettingsView.xaml.cs">
+      <DependentUpon>BasicSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Management\Settings\CaseTypeSettingsView.xaml.cs">
+      <DependentUpon>CaseTypeSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Management\Settings\InspectionSettingsView.xaml.cs">
+      <DependentUpon>InspectionSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Management\Settings\LanguageConverter.cs" />
+    <Compile Include="Management\Settings\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Management\Settings\UnitSettingsView.xaml.cs">
+      <DependentUpon>UnitSettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Management\User\UserInfoView.xaml.cs">
       <DependentUpon>UserInfoView.xaml</DependentUpon>
@@ -212,6 +229,26 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Management\Settings\BasicSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Management\Settings\CaseTypeSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Management\Settings\InspectionSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Management\Settings\SettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Management\Settings\UnitSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Management\User\UserInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -252,7 +289,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Management\Settings\" />
     <Folder Include="PathSelection\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

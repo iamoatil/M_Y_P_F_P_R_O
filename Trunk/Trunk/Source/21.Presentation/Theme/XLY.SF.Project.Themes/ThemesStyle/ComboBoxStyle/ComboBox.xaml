@@ -8,11 +8,11 @@
     <convert:LeftOffsetConvert x:Key="subtraction"/>
     <!--加法转换器-->
     <convert:AdditionConverter x:Key="add"/>
-    
-    
-    
 
-    <!--自定义控件样式-->
+
+
+
+    <!--#region 自定义控件样式-->
     <!--打开案例按钮-->
     <Style TargetType="{x:Type local:MenuButton}">
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
@@ -133,29 +133,35 @@
         </Setter>
     </Style>
     
-    
-    
-    
-    
-    
-    
+    <!--#endregion-->
 
-    <!--样式-->
-    
-    
-    
-    
 
-    <!--控件模版-->
+
+
+
+
+
+
+    <!--#region 样式-->
+    
+    
+    
+    
+    <!--#endregion-->
+
+
+
+    <!--#region 控件模版-->
+    
     <!--【默认】下拉框样式-->
     <ControlTemplate x:Key="cb_DefaultCt" TargetType="{x:Type local:ComboBoxEx}">
         <Grid>
-            <Border CornerRadius="5" x:Name="bg" Background="{TemplateBinding Background}" MinHeight="32">
+            <Border CornerRadius="5" x:Name="bg" Background="{TemplateBinding Background}" MinHeight="28">
                 <Grid x:Name="MainGrid" SnapsToDevicePixels="true" Margin="{TemplateBinding Padding}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="2*" MinWidth="30"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock x:Name="tb_Title" VerticalAlignment="Center" 
                                        Foreground="{Binding TitleForeground,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:ComboBoxEx}}" 
@@ -211,7 +217,7 @@
     <!--【默认】下拉框，可输入状态模版-->
     <ControlTemplate x:Key="ComboBoxEditableCt" TargetType="{x:Type local:ComboBoxEx}">
         <Grid>
-            <Border Background="{TemplateBinding Background}" CornerRadius="5" MinHeight="32" x:Name="bg">
+            <Border Background="{TemplateBinding Background}" CornerRadius="5" MinHeight="30" x:Name="bg">
                 <Grid x:Name="Placement" SnapsToDevicePixels="true" Margin="{TemplateBinding Padding}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
@@ -239,7 +245,7 @@
                             </Border>
                         </Grid>
                     </Popup>
-                    <TextBox Grid.Column="1" x:Name="PART_EditableTextBox" Background="{Binding Background,RelativeSource={RelativeSource Mode=TemplatedParent}}" Foreground="White" Template="{DynamicResource tb_EmptyCt}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" VerticalContentAlignment="Center"/>
+                    <TextBox Grid.Column="1" x:Name="PART_EditableTextBox" Background="{Binding Background,ElementName=bg}" Foreground="White" Template="{DynamicResource tb_EmptyCt}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" VerticalContentAlignment="Center"/>
                     <ToggleButton Grid.Column="2" Margin="5" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Template="{DynamicResource tb_CbDefaultCt}"/>
                 </Grid>
             </Border>
@@ -272,6 +278,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+    <!--设备信息填写处使用-->
     <ControlTemplate x:Key="ComboBoxEditableCtEnabled" TargetType="{x:Type local:ComboBoxEx}">
         <Grid>
             <Border Background="{TemplateBinding Background}" CornerRadius="5" MinHeight="32" x:Name="bg">
@@ -302,16 +309,13 @@
                             </Border>
                         </Grid>
                     </Popup>
-                    <TextBox Grid.Column="1" x:Name="PART_EditableTextBox" Background="{Binding Background,RelativeSource={RelativeSource Mode=TemplatedParent}}" Foreground="White" Template="{DynamicResource tb_EmptyCt}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" VerticalContentAlignment="Center"/>
+                    <TextBlock x:Name="tb_Content" Grid.Column="1" Foreground="{TemplateBinding Foreground}" Text="{TemplateBinding SelectionBoxItem}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" IsHitTestVisible="false" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
                     <ToggleButton Grid.Column="2" Margin="5" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Template="{DynamicResource tb_CbDefaultCt}"/>
                 </Grid>
             </Border>
             <Border x:Name="br" CornerRadius="4" BorderBrush="#4b5a78" BorderThickness="2" Visibility="Collapsed"/>
         </Grid>
         <ControlTemplate.Triggers>
-            <Trigger Property="IsFocused" Value="true" SourceName="PART_EditableTextBox">
-                <Setter Property="Background" Value="#37415f" TargetName="bg"/>
-            </Trigger>
             <Trigger Property="IsMouseOver" Value="true">
                 <Setter Property="Visibility" Value="Visible" TargetName="br"/>
             </Trigger>
@@ -319,7 +323,7 @@
                 <Setter Property="Height" TargetName="DropDownBorder" Value="95"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="false">
-                <Setter Property="Foreground" Value="#9ba5b9" TargetName="PART_EditableTextBox"/>
+                <Setter Property="Foreground" Value="#9ba5b9" TargetName="tb_Content"/>
                 <Setter Property="Background" Value="#33414b69" TargetName="bg"/>
             </Trigger>
             <MultiTrigger>
@@ -381,5 +385,7 @@
             </MultiTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+    
+    <!--#endregion-->
 
 </ResourceDictionary>

@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace XLY.SF.Framework.Core.Base
 {
     /// <summary>
-    /// IStartupArgment
+    /// 命令行启动参数解析
     /// </summary>
     public class StartupArgment
     {
@@ -25,11 +25,11 @@ namespace XLY.SF.Framework.Core.Base
             Properties = new Dictionary<string, string>();
 
             var cmd = Environment.GetCommandLineArgs();
-            if(cmd == null || cmd.Length < 1)
+            if(cmd == null || cmd.Length < 2)
             {
                 return;
             }
-            DecodeCommond(cmd[0]);
+            DecodeCommond(cmd[1]);
         }
 
         private static StartupArgment _instance = null;
@@ -45,28 +45,49 @@ namespace XLY.SF.Framework.Core.Base
             }
         }
 
+        /// <summary>
+        /// 获取属性值
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public string Get(string key, string defaultValue = "")
+        {
+            return Properties.ContainsKey(key) ? Properties[key] : defaultValue; 
+        }
+
+        /// <summary>
+        /// 属性字典
+        /// </summary>
         public Dictionary<string, string> Properties { get; set; }
 
-        public JObject Source { get; set; }
+        /// <summary>
+        /// 原始的Json对象
+        /// </summary>
+        public JObject SourceObject { get; set; }
+        /// <summary>
+        /// 原始的Json字符串
+        /// </summary>
+        public string SourceJson { get; set; }
 
         private void DecodeCommond(string cmd)
         {
             //base64解码
-            string decode = "";
+            SourceJson = "";
             byte[] bytes = Convert.FromBase64String(cmd);
             try
             {
-                decode = Encoding.UTF8.GetString(bytes);
+                SourceJson = Encoding.UTF8.GetString(bytes);
             }
             catch
             {
                 return;
             }
 
-            JsonReader reader = new JsonTextReader(new System.IO.StringReader(decode));
+            JsonReader reader = new JsonTextReader(new System.IO.StringReader(SourceJson));
 
-            Source = JObject.Load(reader);
-            foreach (var j in Source.Properties())    //读取所有的json属性
+            SourceObject = JObject.Load(reader);
+            foreach (var j in SourceObject.Properties())    //读取所有的json属性
             {
                 Properties[j.Name] = j.Value.ToObject<string>();
             }

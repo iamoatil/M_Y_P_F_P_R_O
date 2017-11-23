@@ -50,9 +50,9 @@
 
                 <!--底部导航-->
                 <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button x:Name="btnPageList" Style="{StaticResource btnNavStyle}" ToolTip="页面列表"></Button>
-                    <Button x:Name="btnHome" Style="{StaticResource btnNavStyle}" ToolTip="主页"></Button>
-                    <Button x:Name="btnBack" Style="{StaticResource btnNavStyle}" ToolTip="后退"></Button>
+                    <Button x:Name="btnPageList" Style="{StaticResource btnNavStyle}" ToolTip="{local:Lang Key=PhonePageList}"></Button>
+                    <Button x:Name="btnHome" Style="{StaticResource btnNavStyle}" ToolTip="{local:Lang Key=PhoneHome}"></Button>
+                    <Button x:Name="btnBack" Style="{StaticResource btnNavStyle}" ToolTip="{local:Lang Key=PhoneBack}"></Button>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

@@ -10,7 +10,7 @@ namespace XLY.SF.Project.DataFilter.Asist
     /// <summary>
     /// 表达式转SQL语句辅助类。
     /// </summary>
-    internal static class SQLExpressionConverter
+    public static class SQLExpressionConverter
     {
         public static String GetSelectionSql(Expression expression,String tableName)
         {
@@ -20,9 +20,9 @@ namespace XLY.SF.Project.DataFilter.Asist
             String str = constantExpression.Value as String;
             if (String.IsNullOrWhiteSpace(str))
             {
-                return $"SELECT * FROM {tableName}";
+                return $"SELECT * FROM {tableName} a";
             }
-            return $"SELECT * FROM {tableName} WHERE {str}";
+            return $"SELECT * FROM {tableName} a WHERE {str}";
         }
 
         public static String GetCountSql(Expression expression, String tableName)
@@ -33,9 +33,9 @@ namespace XLY.SF.Project.DataFilter.Asist
             String str = (String)constantExpression.Value;
             if (String.IsNullOrWhiteSpace(str))
             {
-                return $"SELECT COUNT(*) FROM {tableName}";
+                return $"SELECT COUNT(*) FROM {tableName} a";
             }
-            return $"SELECT COUNT(*) FROM {tableName} WHERE {str}";
+            return $"SELECT COUNT(*) FROM {tableName} a WHERE {str}";
         }
 
         #region Private
