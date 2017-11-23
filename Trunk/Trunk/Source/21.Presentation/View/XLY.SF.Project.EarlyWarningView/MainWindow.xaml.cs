@@ -32,14 +32,9 @@ namespace XLY.SF.Project.EarlyWarningView
                     setting.ShowDialog();
                 });
 
-            DetectCommand = new RelayCommand(
-                () => { });
-
             InitializeComponent();
         }
 
         public ICommand SettingCommand { get; private set; }
-
-        public ICommand DetectCommand { get; private set; }
     }
 }

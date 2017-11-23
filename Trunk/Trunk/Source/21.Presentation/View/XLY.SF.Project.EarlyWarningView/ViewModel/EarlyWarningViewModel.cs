@@ -52,7 +52,16 @@ namespace XLY.SF.Project.EarlyWarningView
 
             IsEnable = true;
             Name = "默认开启智能检视";
+
+            _earlyWarning = new EarlyWarning();
+            _earlyWarning.Initialize();
+            DetectCommand = new RelayCommand(()=> { _earlyWarning.Detect(); });
         }
+
+        /// <summary>
+        /// 智能预警
+        /// </summary>
+        readonly EarlyWarning _earlyWarning;
 
         public bool IsEnable { get; set; }
 
@@ -86,6 +95,10 @@ namespace XLY.SF.Project.EarlyWarningView
         }
         private EarlyWarningCollection _currentSelected;
 
+        /// <summary>
+        /// 检测命令
+        /// </summary>
+        public ICommand DetectCommand { get; private set; }
        
         public event PropertyChangedEventHandler PropertyChanged;
         /// <summary>
@@ -98,5 +111,11 @@ namespace XLY.SF.Project.EarlyWarningView
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
+    }
+
+    class EarlyWarningVm
+    {
+        private static EarlyWarningViewModel _vm = new EarlyWarningViewModel();
+        public EarlyWarningViewModel Instance { get { return _vm; } }
     }
 }

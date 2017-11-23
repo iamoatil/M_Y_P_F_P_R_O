@@ -15,8 +15,7 @@
         </Grid.RowDefinitions>
         <Menu HorizontalAlignment="Left" VerticalAlignment="Center" >
             <MenuItem  Header="设置" Command="{Binding SettingCommand}"/>
-        </Menu>
-        <Button Grid.Row="1" Content="开始检视" Command="{Binding DetectCommand}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="25"/>
-        <earlywarningview:EarlyWarningResultView Grid.Row="2"/>
+        </Menu>       
+        <earlywarningview:EarlyWarningMainPage Grid.Row="2"/>
     </Grid>
 </Window>

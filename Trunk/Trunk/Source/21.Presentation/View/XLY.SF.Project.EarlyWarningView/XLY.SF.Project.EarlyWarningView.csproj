@@ -69,8 +69,8 @@
     <Compile Include="Detection\AppNameDetection.cs" />
     <Compile Include="Detection\KeyWordDetection.cs" />
     <Compile Include="Detection\Md5Detection.cs" />
-    <Compile Include="EarlyWarningResultView.xaml.cs">
-      <DependentUpon>EarlyWarningResultView.xaml</DependentUpon>
+    <Compile Include="EarlyWarningMainPage.xaml.cs">
+      <DependentUpon>EarlyWarningMainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="EarlyWarningSetting.xaml.cs">
       <DependentUpon>EarlyWarningSetting.xaml</DependentUpon>
@@ -86,7 +86,7 @@
     <Compile Include="ViewModel\IEnable.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="EarlyWarningResultView.xaml">
+    <Page Include="EarlyWarningMainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -99,6 +99,31 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.BaseUtility\XLY.SF.Framework.BaseUtility.csproj">
+      <Project>{e58b3baa-0f89-4e6d-b34e-4607dfa8f805}</Project>
+      <Name>XLY.SF.Framework.BaseUtility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.Core.Base\XLY.SF.Framework.Core.Base.csproj">
+      <Project>{28682fe4-ec72-42a3-bb2c-27d19f55e14f}</Project>
+      <Name>XLY.SF.Framework.Core.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.Language\XLY.SF.Framework.Language.csproj">
+      <Project>{95c796fd-57f1-4d2e-927f-4e34ea75e319}</Project>
+      <Name>XLY.SF.Framework.Language</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.Log4NetService\XLY.SF.Framework.Log4NetService.csproj">
+      <Project>{6e3193b7-7316-415a-b529-0f743d5f267b}</Project>
+      <Name>XLY.SF.Framework.Log4NetService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\11.Service\11.Domains\XLY.SF.Project.Domains\XLY.SF.Project.Domains.csproj">
+      <Project>{68F2D8A3-05A8-4AAA-A9E2-00071188595B}</Project>
+      <Name>XLY.SF.Project.Domains</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XLY.SF.Project.DataExtraction\XLY.SF.Project.DataExtraction.csproj">
+      <Project>{57b9de4a-f6f2-4f41-9829-2e852a963ef4}</Project>
+      <Name>XLY.SF.Project.DataExtraction</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
