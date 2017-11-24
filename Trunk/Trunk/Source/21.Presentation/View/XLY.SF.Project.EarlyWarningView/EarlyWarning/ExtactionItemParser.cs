@@ -22,7 +22,7 @@ namespace XLY.SF.Project.EarlyWarningView
         public event Func<bool, string> DetectAction;
         
         public ExtactionCategoryCollectionManager CategoryManager { get { return _categoryManager; } }
-        ExtactionCategoryCollectionManager _categoryManager = new ExtactionCategoryCollectionManager();
+        ExtactionCategoryCollectionManager _categoryManager = new ExtactionCategoryCollectionManager() { Name="智能检视"};
 
         public void Detect()
         { 
@@ -164,9 +164,9 @@ namespace XLY.SF.Project.EarlyWarningView
                         ds.Filter<dynamic>();
                         ls.Add(new DataExtactionItem()
                         {
-                            Text = ds.PluginInfo?.Name,
+                            Text = ds.PluginInfo.Name,
                             Index = ds.PluginInfo == null ? 0 : ds.PluginInfo.OrderIndex,
-                            Group = ds.PluginInfo?.Group,
+                            Group = ds.PluginInfo.Group,
                             Data = ds,
                             TreeNodes = new ObservableCollection<DataExtactionItem>()
                         });
