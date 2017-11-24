@@ -19,7 +19,7 @@ namespace XLY.SF.Project.EarlyWarningView
 {
     class ExtactionItemParser
     {
-        public event Func<bool, string> DetectAction;
+        public event Func<string,bool> DetectAction;
         
         public ExtactionCategoryCollectionManager CategoryManager { get { return _categoryManager; } }
         ExtactionCategoryCollectionManager _categoryManager = new ExtactionCategoryCollectionManager() { Name="智能检视"};
@@ -35,6 +35,16 @@ namespace XLY.SF.Project.EarlyWarningView
             GenerateTextFile(resultList);
         }        
         
+        private bool OnDetect(string content)
+        {
+            if(DetectAction != null)
+            {
+               return DetectAction(content);
+            }
+
+            return false;
+        }
+
         private void GenerateTextFile(ObservableCollection<DataExtactionItem> resultList)
         {
             foreach (var dirItem in resultList)
@@ -95,8 +105,13 @@ namespace XLY.SF.Project.EarlyWarningView
                                         string content = ob.ToString();
                                         if (!string.IsNullOrEmpty(content))
                                         {
-                                            ExtactionItem extactionItem = (ExtactionItem)subCategory.GetChild(subItem.Text);
-                                            extactionItem.SetActualData(dataItem);
+                                            bool ret = OnDetect(content);
+                                            if(ret)
+                                            {
+                                                ExtactionItem extactionItem = (ExtactionItem)subCategory.GetChild(subItem.Text);
+                                                extactionItem.SetActualData(dataItem);
+                                            }                                            
+
                                             streamWriter.WriteLine(content);
                                         }
                                     }

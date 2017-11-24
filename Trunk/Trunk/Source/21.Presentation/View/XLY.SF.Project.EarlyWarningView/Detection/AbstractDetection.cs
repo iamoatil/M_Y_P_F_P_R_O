@@ -9,9 +9,9 @@ using System.Collections.Generic;
 namespace XLY.SF.Project.EarlyWarningView
 {
     /// <summary>
-    /// Md5检测
+    /// 检测
     /// </summary>
-    abstract class AbstractDetection : IDetection,IInitialize
+    abstract class AbstractDetection : IDetection,IInitialize,IName
     {
         /// <summary>
         /// 是否已经初始化
@@ -19,9 +19,11 @@ namespace XLY.SF.Project.EarlyWarningView
         private bool _isInitialize;
         
         /// <summary>
-        /// 从配置文件中读取的敏感Md5列表
+        /// 从配置文件中读取的敏感数据列表
         /// </summary>
-        List<SensitiveData> _sensitiveMd5List;
+        List<SensitiveData> _sensitiveDataList;
+
+        public string Name { get; set; }
 
         /// <summary>
         /// 检测输入的字符串是否符合规范,不符合就返回其违反的条目
@@ -35,7 +37,7 @@ namespace XLY.SF.Project.EarlyWarningView
                 return null;
             }
 
-            foreach (var item in _sensitiveMd5List)
+            foreach (var item in _sensitiveDataList)
             {
                 if(item.Value == input)
                 {
@@ -63,8 +65,8 @@ namespace XLY.SF.Project.EarlyWarningView
         public bool Initialize(List<SensitiveData> sensitiveList)
         {
             _isInitialize = false;
-
-            _sensitiveMd5List = sensitiveList;
+           
+            _sensitiveDataList = sensitiveList;
             _isInitialize = true;
             return _isInitialize;
         }
