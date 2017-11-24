@@ -6,7 +6,6 @@
 
 using System.Collections.Generic;
 using System.IO;
-using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
@@ -72,8 +71,7 @@ namespace XLY.SF.Project.EarlyWarningView
         /// </summary>
         public void Detect()
         {
-            string dir = @"C:\Users\litao\Documents\QQEIM Files\2851233699\FileRecv\123_20171123[021724]\R7_20171123[021726]\";
-            DeviceExternsion.LoadDeviceData(dir);
-        }
+           
+        }        
     }
 }

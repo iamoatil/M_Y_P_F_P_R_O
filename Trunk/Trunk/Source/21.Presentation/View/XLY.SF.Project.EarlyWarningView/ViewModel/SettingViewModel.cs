@@ -1,5 +1,5 @@
 ﻿/* ==============================================================================
-* Description：EarlyWarningViewModel  
+* Description：SettingViewModel  
 * Author     ：litao
 * Create Date：2017/11/22 10:32:57
 * ==============================================================================*/
@@ -12,37 +12,37 @@ using System.Windows.Input;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    class EarlyWarningViewModel : IEnable, INotifyPropertyChanged
+    class SettingViewModel : IEnable, INotifyPropertyChanged
     {
-        public EarlyWarningViewModel()
+        public SettingViewModel()
         {
             Items = new List<IEnable>();
-            var item = new EarlyWarningCollection()
+            var item = new SettingCollection()
             {
                 Name = "涉及国安",
                 IsEnable = true
             };
             CurrentSelected = item;
             Items.Add(item);
-            item = new EarlyWarningCollection()
+            item = new SettingCollection()
             {
                 Name = "涉及治安",
                 IsEnable = true
             };
             Items.Add(item);
-            item = new EarlyWarningCollection()
+            item = new SettingCollection()
             {
                 Name = "涉及经济",
                 IsEnable = true
             };
             Items.Add(item);
-            item = new EarlyWarningCollection()
+            item = new SettingCollection()
             {
                 Name = "涉及民生",
                 IsEnable = false
             };
             Items.Add(item);
-            item = new EarlyWarningCollection()
+            item = new SettingCollection()
             {
                 Name = "自定义",
                 IsEnable = false
@@ -80,7 +80,7 @@ namespace XLY.SF.Project.EarlyWarningView
         /// <summary>
         /// 当前选择的项目
         /// </summary>
-        public EarlyWarningCollection CurrentSelected
+        public SettingCollection CurrentSelected
         {
             get
             {
@@ -93,7 +93,7 @@ namespace XLY.SF.Project.EarlyWarningView
                 OnPropertyChanged();
             }
         }
-        private EarlyWarningCollection _currentSelected;
+        private SettingCollection _currentSelected;
 
         /// <summary>
         /// 检测命令
@@ -113,9 +113,9 @@ namespace XLY.SF.Project.EarlyWarningView
 
     }
 
-    class EarlyWarningVm
+    class SettingVm
     {
-        private static EarlyWarningViewModel _vm = new EarlyWarningViewModel();
-        public EarlyWarningViewModel Instance { get { return _vm; } }
+        private static SettingViewModel _vm = new SettingViewModel();
+        public SettingViewModel Instance { get { return _vm; } }
     }
 }

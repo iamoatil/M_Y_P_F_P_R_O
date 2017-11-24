@@ -1,5 +1,5 @@
 ﻿/* ==============================================================================
-* Description：EarlyWarningCollection  
+* Description：SettingCollection  
 * Author     ：litao
 * Create Date：2017/11/22 11:01:20
 * ==============================================================================*/
@@ -8,30 +8,30 @@ using System.Collections.Generic;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    class EarlyWarningCollection : IEnable
+    class SettingCollection : IEnable
     {
-        public EarlyWarningCollection()
+        public SettingCollection()
         {
             Items = new List<IEnable>();
-            var item = new EarlyWarningItem()
+            var item = new SettingItem()
             {
                 Name = "MD5(默认)",
                 IsEnable = false
             };
             Items.Add(item);
-             item = new EarlyWarningItem()
+             item = new SettingItem()
             {
                 Name = "关键字(默认)",
                 IsEnable = true
             };
             Items.Add(item);
-            item = new EarlyWarningItem()
+            item = new SettingItem()
             {
                 Name = "URL(默认)",
                 IsEnable = true
             };
             Items.Add(item);
-            item = new EarlyWarningItem()
+            item = new SettingItem()
             {
                 Name = "电话(默认)",
                 IsEnable = true

@@ -1,5 +1,5 @@
 ﻿/* ==============================================================================
-* Description：EarlyWarningItem  
+* Description：SettingItem  
 * Author     ：litao
 * Create Date：2017/11/22 11:01:34
 * ==============================================================================*/
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    class EarlyWarningItem : IEnable
+    class SettingItem : IEnable
     {
         public bool IsEnable { get; set; }
 

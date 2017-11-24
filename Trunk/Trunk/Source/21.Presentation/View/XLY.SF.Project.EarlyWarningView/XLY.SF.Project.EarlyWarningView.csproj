@@ -14,7 +14,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -76,13 +76,20 @@
       <DependentUpon>EarlyWarningSetting.xaml</DependentUpon>
     </Compile>
     <Compile Include="EarlyWarning\EarlyWarning.cs" />
+    <Compile Include="EarlyWarning\ExtactionData.cs" />
+    <Compile Include="EarlyWarning\ExtactionItemParser.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\EarlyWarningCollection.cs" />
-    <Compile Include="ViewModel\EarlyWarningItem.cs" />
-    <Compile Include="ViewModel\EarlyWarningViewModel.cs" />
+    <Compile Include="ViewModel\AbstractCategory.cs" />
+    <Compile Include="ViewModel\ExtactionItem.cs" />
+    <Compile Include="ViewModel\ExtactionCategory.cs" />
+    <Compile Include="ViewModel\ExtactionViewModel.cs" />
+    <Compile Include="ViewModel\ICategory.cs" />
+    <Compile Include="ViewModel\SettingCollection.cs" />
+    <Compile Include="ViewModel\SettingItem.cs" />
+    <Compile Include="ViewModel\SettingViewModel.cs" />
     <Compile Include="ViewModel\IEnable.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +126,10 @@
     <ProjectReference Include="..\..\..\11.Service\11.Domains\XLY.SF.Project.Domains\XLY.SF.Project.Domains.csproj">
       <Project>{68F2D8A3-05A8-4AAA-A9E2-00071188595B}</Project>
       <Name>XLY.SF.Project.Domains</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\11.Service\13.Core\XLY.SF.Project.DataFilter\XLY.SF.Project.DataFilter.csproj">
+      <Project>{22661B55-AD41-4232-8EE7-485CAE0F4F3D}</Project>
+      <Name>XLY.SF.Project.DataFilter</Name>
     </ProjectReference>
     <ProjectReference Include="..\XLY.SF.Project.DataExtraction\XLY.SF.Project.DataExtraction.csproj">
       <Project>{57b9de4a-f6f2-4f41-9829-2e852a963ef4}</Project>
