@@ -71,7 +71,8 @@ namespace XLY.SF.Project.EarlyWarningView
         /// </summary>
         public void Detect()
         {
-           
+            ExtactionItemParser parser = new ExtactionItemParser();
+            parser.Detect();
         }        
     }
 }

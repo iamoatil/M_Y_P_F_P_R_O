@@ -63,7 +63,7 @@ namespace XLY.SF.Project.EarlyWarningView
                         if (dataSource.Total < 1)
                         {
                             continue;
-                        }
+                        }                       
 
                         ExtactionSubCategory subCategory = (ExtactionSubCategory)category.GetChild(typeItem.Text);
 
@@ -72,26 +72,32 @@ namespace XLY.SF.Project.EarlyWarningView
                             StreamWriter streamWriter = new StreamWriter(fs);
                             if (dataSource.Items != null)
                             {
+                                PropertyInfo[] allPropertyInfos = ((Type)dataSource.Type).GetProperties();
+                                List<PropertyInfo> propertyInfos = new List<PropertyInfo>();
+                                foreach (var propertyInfo in allPropertyInfos)
+                                {
+                                    if (propertyInfo.PropertyType == typeof(string))
+                                    {
+                                        propertyInfos.Add(propertyInfo);
+                                    }
+                                }
+
                                 IEnumerable view = dataSource.Items.View;
                                 foreach (AbstractDataItem dataItem in view)
                                 {
-                                    PropertyInfo[] propertyInfos = ((Type)dataSource.Type).GetProperties();
                                     foreach (var propertyInfo in propertyInfos)
                                     {
-                                        if (propertyInfo.PropertyType == typeof(string))
+                                        object ob = propertyInfo.GetValue(dataItem);
+                                        if (ob == null)
                                         {
-                                            object ob = propertyInfo.GetValue(dataItem);
-                                            if (ob == null)
-                                            {
-                                                continue;
-                                            }
-                                            string content = ob.ToString();
-                                            if (!string.IsNullOrEmpty(content))
-                                            {
-                                                ExtactionItem extactionItem=(ExtactionItem)subCategory.GetChild(subItem.Text);
-                                                extactionItem.SetActualData(dataItem);
-                                                streamWriter.WriteLine(content);
-                                            }
+                                            continue;
+                                        }
+                                        string content = ob.ToString();
+                                        if (!string.IsNullOrEmpty(content))
+                                        {
+                                            ExtactionItem extactionItem = (ExtactionItem)subCategory.GetChild(subItem.Text);
+                                            extactionItem.SetActualData(dataItem);
+                                            streamWriter.WriteLine(content);
                                         }
                                     }
                                 }
