@@ -10,7 +10,8 @@ namespace XLY.SF.Project.EarlyWarningView
         public EarlyWarningSetting()
         {
             InitializeComponent();
-            this.DataContext =new SettingViewModel();
+            SettingViewModel vm = new SettingViewModel();
+            this.DataContext = vm;
         }       
     }
 }

@@ -9,7 +9,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              xmlns:local="clr-namespace:XLY.SF.Project.EarlyWarningView"
-              d:DataContext="{d:DesignInstance local:SettingViewModel,IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance local:SettingViewModel,IsDesignTimeCreatable=True}"
+             x:Name="root"
             >
     <UserControl.Resources>
         <Style x:Key="RadioButtonWithBorder" TargetType="{x:Type RadioButton}">
@@ -38,7 +39,7 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-    <Grid x:Name="grid">
+    <Grid DataContext="{Binding SettingManager}">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
@@ -64,39 +65,39 @@
             <RadioButton Grid.Row="1"   DataContext="{Binding Items[0]}" IsChecked="True" Style="{StaticResource RadioButtonWithBorder}"  >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Checked">
-                        <ei:ChangePropertyAction PropertyName="CurrentSelected" TargetObject="{Binding ElementName=grid,Path=DataContext}" Value="{Binding }"/>
+                        <ei:ChangePropertyAction PropertyName="CurrentSelected" TargetObject="{Binding ElementName=root,Path=DataContext}" Value="{Binding }"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </RadioButton>
             <RadioButton Grid.Row="2"  DataContext="{Binding Items[1]}" Style="{StaticResource RadioButtonWithBorder}" >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Checked">
-                        <ei:ChangePropertyAction PropertyName="CurrentSelected" TargetObject="{Binding ElementName=grid,Path=DataContext}" Value="{Binding }"/>
+                        <ei:ChangePropertyAction PropertyName="CurrentSelected" TargetObject="{Binding ElementName=root,Path=DataContext}" Value="{Binding }"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </RadioButton>
             <RadioButton Grid.Row="3"  DataContext="{Binding Items[2]}" Style="{StaticResource RadioButtonWithBorder}" >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Checked">
-                        <ei:ChangePropertyAction PropertyName="CurrentSelected" TargetObject="{Binding ElementName=grid,Path=DataContext}" Value="{Binding}"/>
+                        <ei:ChangePropertyAction PropertyName="CurrentSelected" TargetObject="{Binding ElementName=root,Path=DataContext}" Value="{Binding}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </RadioButton>
             <RadioButton Grid.Row="4"  DataContext="{Binding Items[3]}" Style="{StaticResource RadioButtonWithBorder}" >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Checked">
-                        <ei:ChangePropertyAction PropertyName="CurrentSelected" TargetObject="{Binding ElementName=grid,Path=DataContext}" Value="{Binding }"/>
+                        <ei:ChangePropertyAction PropertyName="CurrentSelected" TargetObject="{Binding ElementName=root,Path=DataContext}" Value="{Binding }"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </RadioButton>
-            <RadioButton Grid.Row="5"  DataContext="{Binding Items[4]}" Style="{StaticResource RadioButtonWithBorder}" Width="90" >
+            <RadioButton Grid.Row="5"  DataContext="{Binding Items[4]}" Style="{StaticResource RadioButtonWithBorder}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Checked">
-                        <ei:ChangePropertyAction PropertyName="CurrentSelected" TargetObject="{Binding ElementName=grid,Path=DataContext}" Value="{Binding}"/>
+                        <ei:ChangePropertyAction PropertyName="CurrentSelected" TargetObject="{Binding ElementName=root,Path=DataContext}" Value="{Binding}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </RadioButton>
-            <ListBox Grid.Column="1" Grid.Row="1" Grid.RowSpan="5" ItemsSource="{Binding CurrentSelected.Items}">
+            <ListBox Grid.Column="1" Grid.Row="1" Grid.RowSpan="5" DataContext="{Binding ElementName=root,Path=DataContext}" ItemsSource="{Binding CurrentSelected.Items}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <CheckBox Content="{Binding Name}" IsChecked="{Binding IsEnable}"/>
