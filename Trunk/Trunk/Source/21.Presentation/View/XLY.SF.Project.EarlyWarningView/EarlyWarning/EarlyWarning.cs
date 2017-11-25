@@ -36,7 +36,7 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             _isInitialized = false;
 
-            _baseDir = Path.GetFullPath(@"EarlyWarning\");
+            _baseDir = Path.GetFullPath(@"EarlyWarningConfig\");
             //Md5敏感初始化
             Md5ConfigFileDir md5ConfigFileDir = new Md5ConfigFileDir();
             md5ConfigFileDir.Initialize(string.Format(@"{0}{1}Config\", _baseDir, _fileMd5Name));
@@ -78,8 +78,19 @@ namespace XLY.SF.Project.EarlyWarningView
 
         private bool Parser_DetectAction(string content)
         {
-
-            return true;
+            foreach (var item in _detectionDic)
+            {
+                SensitiveData data= item.Value.Detect(content);
+                if(data == null)
+                {
+                    continue;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

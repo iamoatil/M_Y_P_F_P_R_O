@@ -36,7 +36,7 @@ namespace XLY.SF.Project.EarlyWarningView
 
             if (!Directory.Exists(dir))
             {
-                return IsInitialize;
+                Directory.CreateDirectory(dir);
             }
             Dir = dir;
 

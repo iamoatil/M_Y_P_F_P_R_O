@@ -69,6 +69,18 @@
     <Compile Include="Detection\AppNameDetection.cs" />
     <Compile Include="Detection\KeyWordDetection.cs" />
     <Compile Include="Detection\Md5Detection.cs" />
+    <Content Include="EarlyWarningConfig\AppConfig\AppNames.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EarlyWarningConfig\KeyWordConfig\KeyWord.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EarlyWarningConfig\NetAddressConfig\NetAddress.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EarlyWarningConfig\FileMd5Config\FileMd5.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Compile Include="EarlyWarningMainPage.xaml.cs">
       <DependentUpon>EarlyWarningMainPage.xaml</DependentUpon>
     </Compile>

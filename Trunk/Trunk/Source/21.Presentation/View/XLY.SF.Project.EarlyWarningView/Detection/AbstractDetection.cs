@@ -11,13 +11,13 @@ namespace XLY.SF.Project.EarlyWarningView
     /// <summary>
     /// 检测
     /// </summary>
-    abstract class AbstractDetection : IDetection,IInitialize,IName
+    abstract class AbstractDetection : IDetection, IInitialize, IName
     {
         /// <summary>
         /// 是否已经初始化
         /// </summary>
         private bool _isInitialize;
-        
+
         /// <summary>
         /// 从配置文件中读取的敏感数据列表
         /// </summary>
@@ -32,14 +32,14 @@ namespace XLY.SF.Project.EarlyWarningView
         /// <returns></returns>
         public SensitiveData Detect(string input)
         {
-            if(!_isInitialize)
+            if (!_isInitialize)
             {
                 return null;
             }
 
             foreach (var item in _sensitiveDataList)
             {
-                if(item.Value == input)
+                if (item.Value == input)
                 {
                     return item;
                 }
@@ -65,7 +65,12 @@ namespace XLY.SF.Project.EarlyWarningView
         public bool Initialize(List<SensitiveData> sensitiveList)
         {
             _isInitialize = false;
-           
+            if (sensitiveList == null
+                || sensitiveList.Count < 1)
+            {
+                return _isInitialize;
+            }
+            
             _sensitiveDataList = sensitiveList;
             _isInitialize = true;
             return _isInitialize;

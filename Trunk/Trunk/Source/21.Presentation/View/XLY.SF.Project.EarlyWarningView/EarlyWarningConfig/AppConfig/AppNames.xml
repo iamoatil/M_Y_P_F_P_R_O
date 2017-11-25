@@ -1,0 +1,7 @@
+﻿<AppCollection>
+  <Category Name = "涉黄">
+    <App Type="xxx" Value="App1"/>
+    <App Type="xxx" Value="App2"/>
+    <App Type="xxx" Value="App3"/>
+  </Category>
+</AppCollection>

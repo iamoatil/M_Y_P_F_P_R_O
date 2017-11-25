@@ -1,0 +1,7 @@
+﻿<UrlCollection>
+  <Category Name = "涉黄">
+    <Url Type="xxx" Value="Url1"/>
+    <Url Type="xxx" Value="Url2"/>
+    <Url Type="xxx" Value="Url3"/>
+  </Category>
+</UrlCollection>
