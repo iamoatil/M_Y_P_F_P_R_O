@@ -23,4 +23,24 @@ namespace XLY.SF.Project.EarlyWarningView
     {
         bool Initialize(List<SensitiveData> sensitiveList);
     }
+
+    interface IName
+    {
+        /// <summary>
+        /// 类型的名字
+        /// </summary>
+        string Name { get; set; }
+    }
+
+    interface IEnable
+    {
+        bool IsEnable { get; set; }
+    }
+
+    /// <summary>
+    /// IEnable接口与界面上的Checkbox对应
+    /// </summary>
+    interface ISetting : IEnable,IName
+    {
+    }
 }

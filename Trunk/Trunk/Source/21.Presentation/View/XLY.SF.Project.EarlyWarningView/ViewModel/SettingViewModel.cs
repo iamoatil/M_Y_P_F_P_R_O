@@ -8,15 +8,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    class SettingViewModel : IEnable, INotifyPropertyChanged
+    class SettingViewModel : ISetting, INotifyPropertyChanged
     {
         public SettingViewModel()
         {
-            Items = new List<IEnable>();
+            Items = new List<ISetting>();
             var item = new SettingCollection()
             {
                 Name = "涉及国安",
@@ -52,16 +51,12 @@ namespace XLY.SF.Project.EarlyWarningView
 
             IsEnable = true;
             Name = "默认开启智能检视";
-
-            _earlyWarning = new EarlyWarning();
-            _earlyWarning.Initialize();
-            DetectCommand = new RelayCommand(()=> { _earlyWarning.Detect(); });
         }
 
         /// <summary>
         /// 智能预警
         /// </summary>
-        readonly EarlyWarning _earlyWarning;
+        EarlyWarning _earlyWarning { get { return EarlyWarning.Instance; } }
 
         public bool IsEnable { get; set; }
 
@@ -75,7 +70,7 @@ namespace XLY.SF.Project.EarlyWarningView
         /// <summary>
         /// 孩子数据
         /// </summary>
-        public List<IEnable> Items { get; private set; }
+        public List<ISetting> Items { get; private set; }
 
         /// <summary>
         /// 当前选择的项目
@@ -95,11 +90,6 @@ namespace XLY.SF.Project.EarlyWarningView
         }
         private SettingCollection _currentSelected;
 
-        /// <summary>
-        /// 检测命令
-        /// </summary>
-        public ICommand DetectCommand { get; private set; }
-       
         public event PropertyChangedEventHandler PropertyChanged;
         /// <summary>
         /// 属性更新（不用给propertyName赋值）
@@ -110,12 +100,5 @@ namespace XLY.SF.Project.EarlyWarningView
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
-
-    }
-
-    class SettingVm
-    {
-        private static SettingViewModel _vm = new SettingViewModel();
-        public SettingViewModel Instance { get { return _vm; } }
     }
 }

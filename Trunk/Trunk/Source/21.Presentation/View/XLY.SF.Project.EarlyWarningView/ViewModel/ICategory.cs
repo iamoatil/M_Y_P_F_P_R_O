@@ -6,14 +6,6 @@
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    interface IName
-    {
-        /// <summary>
-        /// 类型的名字
-        /// </summary>
-        string Name { get; set; }
-    }
-    
     interface ICategory: IName
     {
         /// <summary>

@@ -8,11 +8,11 @@ using System.Collections.Generic;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    class SettingCollection : IEnable
+    class SettingCollection : ISetting
     {
         public SettingCollection()
         {
-            Items = new List<IEnable>();
+            Items = new List<ISetting>();
             var item = new SettingItem()
             {
                 Name = "MD5(默认)",
@@ -50,6 +50,6 @@ namespace XLY.SF.Project.EarlyWarningView
         /// <summary>
         /// 孩子数据
         /// </summary>
-        public List<IEnable> Items { get; private set; }
+        public List<ISetting> Items { get; private set; }
     }
 }

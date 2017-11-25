@@ -97,12 +97,11 @@
     <Compile Include="ViewModel\AbstractCategory.cs" />
     <Compile Include="ViewModel\ExtactionItem.cs" />
     <Compile Include="ViewModel\ExtactionCategory.cs" />
-    <Compile Include="ViewModel\ExtactionViewModel.cs" />
+    <Compile Include="ViewModel\ResultViewModel.cs" />
     <Compile Include="ViewModel\ICategory.cs" />
     <Compile Include="ViewModel\SettingCollection.cs" />
     <Compile Include="ViewModel\SettingItem.cs" />
     <Compile Include="ViewModel\SettingViewModel.cs" />
-    <Compile Include="ViewModel\IEnable.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="EarlyWarningMainPage.xaml">
@@ -142,6 +141,10 @@
     <ProjectReference Include="..\..\..\11.Service\13.Core\XLY.SF.Project.DataFilter\XLY.SF.Project.DataFilter.csproj">
       <Project>{22661B55-AD41-4232-8EE7-485CAE0F4F3D}</Project>
       <Name>XLY.SF.Project.DataFilter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Theme\XLY.SF.Project.Themes\XLY.SF.Project.Themes.csproj">
+      <Project>{c4c4fc67-5d56-4426-acc5-b53cd24c6b69}</Project>
+      <Name>XLY.SF.Project.Themes</Name>
     </ProjectReference>
     <ProjectReference Include="..\XLY.SF.Project.DataExtraction\XLY.SF.Project.DataExtraction.csproj">
       <Project>{57b9de4a-f6f2-4f41-9829-2e852a963ef4}</Project>

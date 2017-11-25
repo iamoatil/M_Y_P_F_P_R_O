@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    class SettingItem : IEnable
+    class SettingItem : ISetting
     {
         public bool IsEnable { get; set; }
 
@@ -22,6 +22,6 @@ namespace XLY.SF.Project.EarlyWarningView
         /// <summary>
         /// 
         /// </summary>
-        List<IEnable> Items { get; set; }
+        List<ISetting> Items { get; set; }
     }
 }

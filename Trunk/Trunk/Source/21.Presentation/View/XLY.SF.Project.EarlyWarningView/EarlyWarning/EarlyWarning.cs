@@ -11,6 +11,16 @@ namespace XLY.SF.Project.EarlyWarningView
 {
     class EarlyWarning
     {
+        #region 单例
+        private EarlyWarning()
+        {
+
+        }
+        private static EarlyWarning _instance = new EarlyWarning();
+        public static EarlyWarning Instance { get { return _instance; } }
+        
+        #endregion
+
         private readonly static string _fileMd5Name = "FileMd5";
         private readonly static string _netAddressName = "NetAddress";
         private readonly static string _keyWordName = "KeyWord";
