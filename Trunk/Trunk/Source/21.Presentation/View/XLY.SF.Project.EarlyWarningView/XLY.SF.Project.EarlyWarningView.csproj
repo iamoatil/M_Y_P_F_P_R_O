@@ -62,10 +62,7 @@
     <Compile Include="ConfigFiles\SensitiveDataToDbFile.cs" />
     <Compile Include="Detection\Interface.cs" />
     <Compile Include="Detection\AbstractDetection.cs" />
-    <Compile Include="Detection\NetAddressDetection.cs" />
-    <Compile Include="Detection\AppNameDetection.cs" />
-    <Compile Include="Detection\KeyWordDetection.cs" />
-    <Compile Include="Detection\Md5Detection.cs" />
+    <Compile Include="Detection\Detection.cs" />
     <Content Include="EarlyWarningConfig\AppConfig\AppNames.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
