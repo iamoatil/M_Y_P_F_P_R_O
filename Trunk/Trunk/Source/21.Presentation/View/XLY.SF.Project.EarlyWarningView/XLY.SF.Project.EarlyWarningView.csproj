@@ -56,10 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command.cs" />
-    <Compile Include="ConfigFiles\AppNameConfigFileDir.cs" />
-    <Compile Include="ConfigFiles\KeyWordConfigFileDir.cs" />
-    <Compile Include="ConfigFiles\NetAddressConfigFileDir.cs" />
-    <Compile Include="ConfigFiles\Md5ConfigFileDir.cs" />
+    <Compile Include="ConfigFiles\ConfigFileDir.cs" />
     <Compile Include="ConfigFiles\SensitiveData.cs" />
     <Compile Include="ConfigFiles\AbstractConfigFileDir.cs" />
     <Compile Include="ConfigFiles\SensitiveDataToDbFile.cs" />
