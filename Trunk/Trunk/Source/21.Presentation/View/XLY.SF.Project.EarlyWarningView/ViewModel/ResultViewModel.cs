@@ -19,7 +19,7 @@ namespace XLY.SF.Project.EarlyWarningView
         /// <summary>
         /// 智能预警
         /// </summary>
-        EarlyWarning _earlyWarning { get { return EarlyWarning.Instance; } }
+        DetectionManager _earlyWarning { get { return DetectionManager.Instance; } }
 
         /// <summary>
         /// 检测命令

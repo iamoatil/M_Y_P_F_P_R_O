@@ -6,15 +6,21 @@
 
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
     class SettingViewModel:INotifyPropertyChanged
     {
+        public SettingViewModel()
+        {
+            SetCommand = new RelayCommand(()=> { DetectionManager.Instance.SetParameter(SettingManager); });
+        }
+
         /// <summary>
         /// SettingManager
         /// </summary>
-        public SettingManager SettingManager { get { return EarlyWarning.Instance.SettingManager; } }
+        public SettingManager SettingManager { get { return DetectionManager.Instance.SettingManager; } }
 
         /// <summary>
         /// 当前选择的项目
@@ -34,7 +40,12 @@ namespace XLY.SF.Project.EarlyWarningView
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        
+
+        /// <summary>
+        /// 设置生效命令
+        /// </summary>
+        public ICommand SetCommand { get; private set; }
+
         /// <summary>
         /// 属性更新（不用给propertyName赋值）
         /// </summary>

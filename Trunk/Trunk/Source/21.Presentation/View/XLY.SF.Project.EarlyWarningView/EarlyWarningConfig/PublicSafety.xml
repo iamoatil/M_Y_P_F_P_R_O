@@ -1,0 +1,19 @@
+﻿<Root Name="PublicSafety" Description="涉及治安" >
+  <AppCollection >
+    <Content Value="123456"/>
+    <Content Value="12"/>
+  </AppCollection>
+ <FileMd5Collection >
+    <Content Value="123456"/>
+    <Content Value="12"/>
+ </FileMd5Collection>
+ <KeyWordCollection >
+    <Content Value="123456"/>
+    <Content Value="12"/>
+  </KeyWordCollection>
+ <UrlCollection >
+    <Content Value="123456"/>
+    <Content Value="12"/>
+  </UrlCollection>
+</Root>
+  

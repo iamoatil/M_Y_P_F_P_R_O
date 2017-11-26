@@ -16,7 +16,7 @@
         <Style x:Key="RadioButtonWithBorder" TargetType="{x:Type RadioButton}">
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Content" Value="{Binding Name}"/>
+            <Setter Property="Content" Value="{Binding Description}"/>
             <Setter Property="Tag" Value="{Binding IsEnable}"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -39,6 +39,9 @@
             </Setter>
         </Style>
     </UserControl.Resources>
+    <Grid>
+        
+    
     <Grid DataContext="{Binding SettingManager}">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -105,5 +108,7 @@
                 </ListBox.ItemTemplate>
             </ListBox>
         </Grid>
+        </Grid>
+        <Button Content="设置" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Row="3" Width="75" Height="25" Command="{Binding SetCommand}"/>
     </Grid>
 </UserControl>

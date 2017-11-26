@@ -15,7 +15,8 @@ namespace XLY.SF.Project.EarlyWarningView
             Items = new List<ISetting>();
             var item = new SettingCollection()
             {
-                Name = "涉及国安",
+                Name= "CountrySafety",
+                Description = "涉及国安",
                 IsEnable = true
             };
             CurrentSelected = item;
@@ -23,25 +24,29 @@ namespace XLY.SF.Project.EarlyWarningView
             Items.Add(item);
             item = new SettingCollection()
             {
-                Name = "涉及治安",
+                Name = "PublicSafety",
+                Description = "涉及治安",
                 IsEnable = true
             };
             Items.Add(item);
             item = new SettingCollection()
             {
-                Name = "涉及经济",
+                Name = "EconomySafety",
+                Description = "涉及经济",
                 IsEnable = true
             };
             Items.Add(item);
             item = new SettingCollection()
             {
-                Name = "涉及民生",
+                Name = "Livehood",
+                Description = "涉及民生",
                 IsEnable = false
             };
             Items.Add(item);
             item = new SettingCollection()
             {
-                Name = "自定义 ",
+                Name = "Custom",
+                Description = "自定义 ",
                 IsEnable = false
             };
             Items.Add(item);

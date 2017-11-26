@@ -56,23 +56,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command.cs" />
-    <Compile Include="ConfigFiles\ConfigFileDir.cs" />
-    <Compile Include="ConfigFiles\SensitiveData.cs" />
-    <Compile Include="ConfigFiles\AbstractConfigFileDir.cs" />
-    <Compile Include="ConfigFiles\SensitiveDataToDbFile.cs" />
+    <Compile Include="ConfigFiles\AbstractConfigNode.cs" />
+    <Compile Include="ConfigFiles\ConfigFile.cs" />
+    <Compile Include="ConfigFiles\ConfigNode.cs" />
+    <Compile Include="EarlyWarning\EarlyWarning.cs" />
+    <Compile Include="SensitiveData.cs" />
     <Compile Include="Detection\Interface.cs" />
     <Compile Include="Detection\AbstractDetection.cs" />
     <Compile Include="Detection\Detection.cs" />
-    <Content Include="EarlyWarningConfig\AppConfig\AppNames.xml">
+    <Content Include="EarlyWarningConfig\Livehood.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="EarlyWarningConfig\KeyWordConfig\KeyWord.xml">
+    <Content Include="EarlyWarningConfig\PublicSafety.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="EarlyWarningConfig\NetAddressConfig\NetAddress.xml">
+    <Content Include="EarlyWarningConfig\EconomySafety.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="EarlyWarningConfig\FileMd5Config\FileMd5.xml">
+    <Content Include="EarlyWarningConfig\Custom.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EarlyWarningConfig\CountrySafety.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Compile Include="EarlyWarningMainPage.xaml.cs">
@@ -81,7 +85,7 @@
     <Compile Include="EarlyWarningSetting.xaml.cs">
       <DependentUpon>EarlyWarningSetting.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EarlyWarning\EarlyWarning.cs" />
+    <Compile Include="Detection\DetectionManager.cs" />
     <Compile Include="EarlyWarning\ExtactionData.cs" />
     <Compile Include="EarlyWarning\ExtactionItemParser.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -146,5 +150,6 @@
       <Name>XLY.SF.Project.DataExtraction</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

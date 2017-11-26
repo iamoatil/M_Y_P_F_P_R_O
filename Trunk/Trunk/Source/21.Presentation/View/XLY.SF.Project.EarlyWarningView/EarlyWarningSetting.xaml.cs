@@ -12,6 +12,6 @@ namespace XLY.SF.Project.EarlyWarningView
             InitializeComponent();
             SettingViewModel vm = new SettingViewModel();
             this.DataContext = vm;
-        }       
+        }
     }
 }

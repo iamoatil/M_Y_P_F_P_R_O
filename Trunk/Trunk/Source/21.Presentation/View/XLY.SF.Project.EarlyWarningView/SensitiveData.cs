@@ -11,12 +11,10 @@ namespace XLY.SF.Project.EarlyWarningView
     /// </summary>
     class SensitiveData
     {
-        public SensitiveData(string type,string value)
+        public SensitiveData(string value)
         {
-            Type = type;
             Value = value;
         }
-        public string Type { get; private set; }
 
         public string Value { get; private set; }
     }
