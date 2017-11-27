@@ -34,7 +34,7 @@ namespace XLY.SF.Project.EarlyWarningView
         /// </summary>
         public bool IsChecked { get; set; }
 
-        internal IName GetChild(string name)
+        internal virtual IName GetChild(string name)
         {
             if (!Contain(name))
             {

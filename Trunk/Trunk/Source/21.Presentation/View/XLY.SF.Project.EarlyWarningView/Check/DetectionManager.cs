@@ -125,7 +125,7 @@ namespace XLY.SF.Project.EarlyWarningView
                                             bool ret = OnDetect(content,validateDataNodes);
                                             if (ret)
                                             {
-                                                ExtactionItem extactionItem = (ExtactionItem)subCategory.GetChild(subItem.Text);
+                                                ExtactionItem extactionItem = subCategory.AddItem(subItem.Text);
                                                 extactionItem.SetActualData(dataItem);
                                             }
 

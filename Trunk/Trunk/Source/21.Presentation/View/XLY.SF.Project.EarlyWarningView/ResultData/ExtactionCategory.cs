@@ -13,6 +13,10 @@
 
 
 
+using System.Collections.Generic;
+using System.Linq;
+using XLY.SF.Project.Domains;
+
 namespace XLY.SF.Project.EarlyWarningView
 {
     /* ==============================================================================
@@ -55,9 +59,31 @@ namespace XLY.SF.Project.EarlyWarningView
     /// </summary>
     class ExtactionSubCategory : AbstractCategory
     {
+        public ExtactionItem AddItem(string name)
+        {
+            ExtactionItem item=new ExtactionItem() { Name = name };
+            Items.Add(item);
+            return item;
+        }
+
         protected override void Add(string name)
         {
-            Children.Add(name, new ExtactionItem() { Name = name });
-        }        
+            throw new System.NotImplementedException();
+        }
+
+        public List<ExtactionItem> Items { get { return _items; } }
+        List<ExtactionItem> _items = new List<ExtactionItem>();
+    }
+
+    class ExtactionItem : IName
+    {
+        public string Name { get; set; }
+
+        public AbstractDataItem DataItem { get; private set; }
+
+        internal void SetActualData(AbstractDataItem dataItem)
+        {
+            DataItem = dataItem;
+        }
     }
 }

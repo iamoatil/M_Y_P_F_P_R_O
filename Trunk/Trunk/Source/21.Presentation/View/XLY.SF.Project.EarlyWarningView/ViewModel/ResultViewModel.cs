@@ -17,9 +17,16 @@ namespace XLY.SF.Project.EarlyWarningView
     {
         public ResultViewModel()
         {
-            foreach(var item in CategoryManager.Children)
+            for (int i = 0; i < 10; i++)
             {
-               
+                TestData data=new TestData();
+                Items.Add(data);
+                for (int j = 0; j < 2;j++)
+                {
+                    TestData d = new TestData();
+                    data.Children.Add(d);
+
+                }
             }
         }
 
@@ -33,6 +40,8 @@ namespace XLY.SF.Project.EarlyWarningView
         /// </summary>
         public ExtactionCategoryCollectionManager CategoryManager { get { return _detectionManager.CategoryManager; } }
 
+        public List<TestData> Items { get { return _items; } }
+        private List<TestData> _items = new List<TestData>();
         /// <summary>
         /// 预警的结果
         /// </summary>
@@ -52,5 +61,15 @@ namespace XLY.SF.Project.EarlyWarningView
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
+    }
+
+    public class TestData
+    {
+        public string Name { get { return "Test"; } }
+
+        public int ChildrenCount { get { return 234; } }
+
+        public List<TestData> Children { get { return _items; } }
+        private List<TestData> _items = new List<TestData>();
     }
 }

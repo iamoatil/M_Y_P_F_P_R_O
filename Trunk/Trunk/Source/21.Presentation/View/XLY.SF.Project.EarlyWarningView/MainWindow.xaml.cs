@@ -15,8 +15,15 @@ namespace XLY.SF.Project.EarlyWarningView
         [STAThread]
         static void Main()
         {
-            MainWindow win = new MainWindow();
-            win.ShowDialog();
+            //MainWindow win = new MainWindow();
+            //win.ShowDialog();
+
+            Window setting = new Window()
+            {
+                ShowInTaskbar = true,
+                Content=new UserControl1()
+            };
+            setting.ShowDialog();
         }
 
         public MainWindow()
