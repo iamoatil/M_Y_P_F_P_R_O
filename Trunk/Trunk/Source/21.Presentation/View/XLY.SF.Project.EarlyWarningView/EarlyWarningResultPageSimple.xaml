@@ -25,9 +25,9 @@
         <TextBlock Text="12344423sdfsaaaaaaaaaaaaaaaa"/>
         <Grid Grid.Row="1">
             <!--数据列表-->
-            <TreeView  ItemsSource="{Binding Path=Items}">
+            <TreeView  ItemsSource="{Binding Path=Children.Values}">
                 <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate DataType="{x:Type local:TestData}" ItemsSource="{Binding Path=Children}">
+                    <HierarchicalDataTemplate DataType="{x:Type local:ICategory}" ItemsSource="{Binding Path=Children.Values}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock VerticalAlignment="Center" Text="{Binding Name}"  FontSize="14"/>
                             <StackPanel.ToolTip>

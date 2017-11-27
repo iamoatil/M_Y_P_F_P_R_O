@@ -48,7 +48,7 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             _earlyWarning.Detect();
             ResultGrid.Children.Clear();
-            ResultGrid.Children.Add(new EarlyWarningResultPageSimple());
+            ResultGrid.Children.Add(new EarlyWarningResultPage());
         }
 
         /// <summary>

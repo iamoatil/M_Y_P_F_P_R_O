@@ -10,7 +10,7 @@ namespace XLY.SF.Project.EarlyWarningView
         public EarlyWarningResultPage()
         {
             InitializeComponent();
-            ResultViewModel vm= new ResultViewModel();
+            ResultViewModel vm = new ResultViewModel();
             this.DataContext = vm.CategoryManager;
         }
     }
