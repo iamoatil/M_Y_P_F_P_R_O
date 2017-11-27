@@ -26,11 +26,10 @@ namespace XLY.SF.Project.EarlyWarningView
         
         #endregion
 
-        private Dictionary<string, IDetection> _detectionDic = new Dictionary<string, IDetection>();
-
         private RootNodeManager _rootNodeManager = new RootNodeManager();
 
-        private RootNodeManager _validateRootNodeManager ;
+
+        private readonly List<DataNode> _validateDataNodes=new List<DataNode>();
 
         /// <summary>
         /// 预警配置文件的所在顶层目录
@@ -65,7 +64,7 @@ namespace XLY.SF.Project.EarlyWarningView
                 return _isInitialized;
             }
             configFile.GetAllData(_rootNodeManager);
-
+            SetParameter(SettingManager);
             _isInitialized = true;
             return _isInitialized;
         }
@@ -78,7 +77,6 @@ namespace XLY.SF.Project.EarlyWarningView
         public void SetParameter(SettingManager settingManager)
         {
             //SettingManager对应-- -》RootNodeManager
-            _validateRootNodeManager = new RootNodeManager();
             if (!SettingManager.IsEnable)
             {
                 return;
@@ -93,26 +91,24 @@ namespace XLY.SF.Project.EarlyWarningView
                 {
                     continue;
                 }
-                if (_rootNodeManager.Children.Keys.Contains(rootName))
+                if (!_rootNodeManager.Children.Keys.Contains(rootName))
                 {
-                    _validateRootNodeManager.Children.Add(rootName, new RootNode(rootName));
-
-                    RootNode rootNode = (RootNode)_rootNodeManager.Children[rootName];
-                    RootNode validateRootNode = (RootNode)_validateRootNodeManager.Children[rootName];
-                    foreach (SettingItem item in rootSetting.Items)
+                    continue;
+                }
+                RootNode rootNode = (RootNode)_rootNodeManager.Children[rootName];
+                foreach (SettingItem item in rootSetting.Items)
+                {
+                    //  SettingItem对应 ---》CategoryNode
+                    bool categoryEnable = item.IsEnable;
+                    string categoryName = item.Name;
+                    if (!categoryEnable)
                     {
-                        //  SettingItem对应 ---》CategoryNode
-                        bool categoryEnable = item.IsEnable;
-                        string categoryName = item.Name;
-                        if (!categoryEnable)
-                        {
-                            continue;
-                        }
-                        if (rootNode.Children.Keys.Contains(categoryName))
-                        {
-                            CategoryNode categoryNode=(CategoryNode)rootNode.Children[categoryName];
-                            validateRootNode.Children.Add(categoryNode.NodeName, categoryNode);
-                        }
+                        continue;
+                    }
+                    if (rootNode.Children.Keys.Contains(categoryName))
+                    {
+                        CategoryNode categoryNode = (CategoryNode)rootNode.Children[categoryName];
+                        _validateDataNodes.AddRange(categoryNode.DataList);
                     }
                 }
             }
@@ -130,14 +126,9 @@ namespace XLY.SF.Project.EarlyWarningView
 
         private bool Parser_DetectAction(string content)
         {
-            foreach (var item in _detectionDic)
+            foreach (var item in _validateDataNodes)
             {
-                SensitiveData data= item.Value.Detect(content);
-                if(data == null)
-                {
-                    continue;
-                }
-                else
+                if(item.Data.Value == content)
                 {
                     return true;
                 }
