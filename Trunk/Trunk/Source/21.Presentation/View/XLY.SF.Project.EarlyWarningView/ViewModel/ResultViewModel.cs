@@ -17,7 +17,6 @@ namespace XLY.SF.Project.EarlyWarningView
     {
         public ResultViewModel()
         {
-            _earlyWarning.Initialize();
             ExtactionCategoryCollectionManager categoryManager = _earlyWarning.ExtactionItemParser.CategoryManager;
         }
 
@@ -25,16 +24,12 @@ namespace XLY.SF.Project.EarlyWarningView
         /// 智能预警
         /// </summary>
         DetectionManager _earlyWarning { get { return DetectionManager.Instance; } }
-
-        
         
         /// <summary>
         /// 预警的结果
         /// </summary>
         public ObservableCollection<DataExtactionItem> DataList { get { return _dataList; } }
         ObservableCollection<DataExtactionItem> _dataList = new ObservableCollection<DataExtactionItem>();
-
-       
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
