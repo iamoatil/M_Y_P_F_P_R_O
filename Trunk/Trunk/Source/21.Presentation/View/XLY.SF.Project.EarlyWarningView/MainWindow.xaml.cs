@@ -15,15 +15,15 @@ namespace XLY.SF.Project.EarlyWarningView
         [STAThread]
         static void Main()
         {
-            //MainWindow win = new MainWindow();
-            //win.ShowDialog();
+            MainWindow win = new MainWindow();
+            win.ShowDialog();
 
-            Window setting = new Window()
-            {
-                ShowInTaskbar = true,
-                Content=new UserControl1()
-            };
-            setting.ShowDialog();
+            //Window setting = new Window()
+            //{
+            //    ShowInTaskbar = true,
+            //    Content=new UserControl1()
+            //};
+            //setting.ShowDialog();
         }
 
         public MainWindow()
@@ -48,7 +48,7 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             _earlyWarning.Detect();
             ResultGrid.Children.Clear();
-            ResultGrid.Children.Add(new EarlyWarningResultPage());
+            ResultGrid.Children.Add(new EarlyWarningResultPageSimple());
         }
 
         /// <summary>

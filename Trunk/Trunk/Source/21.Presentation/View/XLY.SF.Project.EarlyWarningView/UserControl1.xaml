@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Background="Gray">
-        <TreeView x:Name="tvProperty" >
+        <TreeView x:Name="tvProperty" ItemsSource="{Binding listItem}">
             <!--加载treeview数据-->
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type local:propertyNodeItem}" ItemsSource="{Binding Path=Children.Values}">

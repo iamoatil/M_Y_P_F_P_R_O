@@ -23,16 +23,16 @@ namespace XLY.SF.Project.EarlyWarningView
         public UserControl1()
         {
             InitializeComponent();
-            ShowTreeView();
+            this.DataContext = new Vm();
         }
+        
+    }
 
-
-        /// <summary>
-        /// 加载tree数据
-        /// </summary>
-        private void ShowTreeView()
+    public class Vm
+    {
+        public Vm()
         {
-            List<propertyNodeItem> listItem = new List<propertyNodeItem>();
+            listItem = new List<propertyNodeItem>();
             propertyNodeItem mainNode = new propertyNodeItem()
             {
                 DisplayName = "功能菜单",
@@ -50,10 +50,11 @@ namespace XLY.SF.Project.EarlyWarningView
                 Name = "当前选项--密码修改"
             };
             systemNode.Children.Add(pwdTag.Name, pwdTag);
-            mainNode.Children.Add(systemNode.Name,systemNode);
+            mainNode.Children.Add(systemNode.Name, systemNode);
             listItem.Add(mainNode);
-            this.tvProperty.ItemsSource = listItem;
         }
+
+        public List<propertyNodeItem> listItem { get; set; }
     }
 
     public class propertyNodeItem
