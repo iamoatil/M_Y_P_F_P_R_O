@@ -16,16 +16,14 @@
         <Style x:Key="RadioButtonWithBorder" TargetType="{x:Type RadioButton}">
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Content" Value="{Binding Description}"/>
-            <Setter Property="Tag" Value="{Binding IsEnable}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type RadioButton}">
                         <Grid Background="Transparent">
                             <Border x:Name="border" BorderThickness="1" BorderBrush="Black" Padding="10" >
                                 <StackPanel Orientation="Horizontal">
-                                    <CheckBox IsChecked="{TemplateBinding Tag}"/>
-                                    <TextBlock Text="{TemplateBinding Content}"/>
+                                    <CheckBox IsChecked="{Binding IsEnable}"/>
+                                    <TextBlock Text="{Binding Description}"/>
                                 </StackPanel>
                             </Border>
                         </Grid>

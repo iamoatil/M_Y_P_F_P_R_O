@@ -42,5 +42,6 @@ namespace XLY.SF.Project.EarlyWarningView
     /// </summary>
     interface ISetting : IEnable,IName
     {
+        string Description { get; set; }
     }
 }

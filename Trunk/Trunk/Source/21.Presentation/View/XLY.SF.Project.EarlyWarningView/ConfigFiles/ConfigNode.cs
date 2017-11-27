@@ -6,33 +6,49 @@
 * Create Date：2017/11/25 13:35:51
 * ==============================================================================*/
 
+using System.Collections.Generic;
+
 namespace XLY.SF.Project.EarlyWarningView
 {
-    class NodeDefinition
+    interface INodeName
     {
-        public static string RootName = "Root";
+        string NodeName { get; set; }
+    }
+
+    abstract class AbstractConfigNode : INodeName
+    {
+        /// <summary>
+        /// 节点的孩子
+        /// </summary>
+        public readonly Dictionary<string, INodeName> Children = new Dictionary<string, INodeName>();
+
+        public string NodeName { get; set; }
+    }
+
+    class RootNodeManager: AbstractConfigNode
+    {
 
     }
 
     class RootNode : AbstractConfigNode
     {
-        public RootNode()
+        public RootNode(string nodeName)
         {
-            NodeName= NodeDefinition.RootName;
-        }
-
-        public RootNode(RootNode node)
-        {
-            NodeName = node.NodeName;
+            NodeName = nodeName;
         }
     }
 
-    class CategoryNode : AbstractConfigNode
+    class CategoryNode : INodeName
     {
+        public string NodeName { get; set; }
+
+        public readonly List<DataNode> DataList = new List<DataNode>();
     }
 
-    class DataNode : AbstractConfigNode
+    class DataNode : INodeName
     {
+        public string NodeName { get; set; }
+
         public SensitiveData Data { get; set; }
     }
 

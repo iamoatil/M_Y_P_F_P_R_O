@@ -15,7 +15,7 @@ namespace XLY.SF.Project.EarlyWarningView
             Items = new List<ISetting>();
             var item = new SettingCollection()
             {
-                Name= "CountrySafety",
+                Name= ConstDefinition.CountrySafety,
                 Description = "涉及国安",
                 IsEnable = true
             };
@@ -24,28 +24,28 @@ namespace XLY.SF.Project.EarlyWarningView
             Items.Add(item);
             item = new SettingCollection()
             {
-                Name = "PublicSafety",
+                Name = ConstDefinition.PublicSafety,
                 Description = "涉及治安",
                 IsEnable = true
             };
             Items.Add(item);
             item = new SettingCollection()
             {
-                Name = "EconomySafety",
+                Name = ConstDefinition.EconomySafety,
                 Description = "涉及经济",
                 IsEnable = true
             };
             Items.Add(item);
             item = new SettingCollection()
             {
-                Name = "Livehood",
+                Name = ConstDefinition.Livehood,
                 Description = "涉及民生",
                 IsEnable = false
             };
             Items.Add(item);
             item = new SettingCollection()
             {
-                Name = "Custom",
+                Name = ConstDefinition.Custom,
                 Description = "自定义 ",
                 IsEnable = false
             };
@@ -59,6 +59,8 @@ namespace XLY.SF.Project.EarlyWarningView
         public bool IsEnable { get; set; }
 
         public string Name { get; set; }
+
+        public string Description { get; set; }
 
         /// <summary>
         /// 孩子数据

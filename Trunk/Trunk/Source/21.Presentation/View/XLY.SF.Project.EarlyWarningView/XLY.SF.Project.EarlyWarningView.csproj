@@ -56,9 +56,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Command.cs" />
-    <Compile Include="ConfigFiles\AbstractConfigNode.cs" />
     <Compile Include="ConfigFiles\ConfigFile.cs" />
     <Compile Include="ConfigFiles\ConfigNode.cs" />
+    <Compile Include="ConstDefinition.cs" />
     <Compile Include="EarlyWarning\EarlyWarning.cs" />
     <Compile Include="SensitiveData.cs" />
     <Compile Include="Detection\Interface.cs" />

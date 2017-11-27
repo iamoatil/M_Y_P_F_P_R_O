@@ -15,7 +15,11 @@ namespace XLY.SF.Project.EarlyWarningView
         #region 单例
         private DetectionManager()
         {
-
+            _rootNodeManager.Children.Add(ConstDefinition.CountrySafety,new RootNode(ConstDefinition.CountrySafety));
+            _rootNodeManager.Children.Add(ConstDefinition.PublicSafety, new RootNode(ConstDefinition.PublicSafety));
+            _rootNodeManager.Children.Add(ConstDefinition.EconomySafety, new RootNode(ConstDefinition.EconomySafety));
+            _rootNodeManager.Children.Add(ConstDefinition.Livehood, new RootNode(ConstDefinition.Livehood) );
+            _rootNodeManager.Children.Add(ConstDefinition.Custom, new RootNode(ConstDefinition.Custom) );
         }
         private static DetectionManager _instance = new DetectionManager();
         public static DetectionManager Instance { get { return _instance; } }
@@ -23,8 +27,11 @@ namespace XLY.SF.Project.EarlyWarningView
         #endregion
 
         private Dictionary<string, IDetection> _detectionDic = new Dictionary<string, IDetection>();
-        private List<RootNode> _allData = new List<RootNode>();
-        private List<RootNode> _validateData = new List<RootNode>();
+
+        private RootNodeManager _rootNodeManager = new RootNodeManager();
+
+        private RootNodeManager _validateRootNodeManager ;
+
         /// <summary>
         /// 预警配置文件的所在顶层目录
         /// </summary>
@@ -57,56 +64,56 @@ namespace XLY.SF.Project.EarlyWarningView
             {
                 return _isInitialized;
             }
-            configFile.GetAllData(_allData);
+            configFile.GetAllData(_rootNodeManager);
 
             _isInitialized = true;
             return _isInitialized;
         }
 
+        /// <summary>
+        /// SettingManager对应 ---》RootNodeManager
+        ///  SettingCollection对应 ---》RootNode
+        ///  SettingItem对应 ---》CategoryNode
+        /// </summary>
         public void SetParameter(SettingManager settingManager)
         {
-            _validateData.Clear();
+            //SettingManager对应-- -》RootNodeManager
+            _validateRootNodeManager = new RootNodeManager();
             if (!SettingManager.IsEnable)
-            {               
+            {
                 return;
             }
-            List<string> rootNames= _allData.Select(it=>it.NodeName).ToList();
+            
             foreach (SettingCollection rootSetting in settingManager.Items)
             {
+                //  SettingCollection对应 ---》RootNode
                 bool rootEnable = rootSetting.IsEnable;
                 string rootName = rootSetting.Name;
-                if(rootEnable
-                   && rootNames.Contains(rootName))
+                if (!rootEnable)
                 {
-                    var rootNodes = _allData.Where(it => it.NodeName == rootName);                    
-                    if(rootNodes.Count() < 1)
-                    {
-                        continue;
-                    }
-                    RootNode rootNode = rootNodes.ElementAt(0);
-                    RootNode newRootNode = new RootNode(rootNode);
-                    _validateData.Add(newRootNode);
+                    continue;
+                }
+                if (_rootNodeManager.Children.Keys.Contains(rootName))
+                {
+                    _validateRootNodeManager.Children.Add(rootName, new RootNode(rootName));
 
-                    List<string> nodeNames = rootNode.Children.Select(it => it.NodeName).ToList();
+                    RootNode rootNode = (RootNode)_rootNodeManager.Children[rootName];
+                    RootNode validateRootNode = (RootNode)_validateRootNodeManager.Children[rootName];
                     foreach (SettingItem item in rootSetting.Items)
                     {
-                        bool nodeEnable = item.IsEnable;
-                        string nodeName = item.Name;
-                        if (nodeEnable
-                           && nodeNames.Contains(rootName))
+                        //  SettingItem对应 ---》CategoryNode
+                        bool categoryEnable = item.IsEnable;
+                        string categoryName = item.Name;
+                        if (!categoryEnable)
                         {
-                            var nodes = rootNode.Children.Where(it => it.NodeName == rootName);
-                            if (nodes.Count() < 1)
-                            {
-                                continue;
-                            }
-
-                            //CategoryNode node = nodes.ElementAt(0);
-                            //CategoryNode newNode = new RootNode(rootNode);
-                            _validateData.Add(newRootNode);
+                            continue;
                         }
-                    
-                   
+                        if (rootNode.Children.Keys.Contains(categoryName))
+                        {
+                            CategoryNode categoryNode=(CategoryNode)rootNode.Children[categoryName];
+                            validateRootNode.Children.Add(categoryNode.NodeName, categoryNode);
+                        }
+                    }
                 }
             }
         }

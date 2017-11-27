@@ -15,25 +15,29 @@ namespace XLY.SF.Project.EarlyWarningView
             Items = new List<ISetting>();
             var item = new SettingItem()
             {
-                Name = "MD5(默认)",
+                Name= ConstDefinition.FileMd5Collection,
+                Description = "MD5(默认)",
                 IsEnable = false
             };
             Items.Add(item);
              item = new SettingItem()
             {
-                Name = "关键字(默认)",
+                 Name = ConstDefinition.KeyWordCollection,
+                 Description = "关键字(默认)",
                 IsEnable = true
             };
             Items.Add(item);
             item = new SettingItem()
             {
-                Name = "URL(默认)",
+                Name = ConstDefinition.UrlCollection,
+                Description = "URL(默认)",
                 IsEnable = true
             };
             Items.Add(item);
             item = new SettingItem()
             {
-                Name = "电话(默认)",
+                Name = ConstDefinition.CallCollection,
+                Description = "电话(默认)",
                 IsEnable = true
             };
             Items.Add(item);

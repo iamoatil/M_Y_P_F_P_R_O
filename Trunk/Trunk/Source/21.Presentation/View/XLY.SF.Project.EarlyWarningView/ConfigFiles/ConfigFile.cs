@@ -36,7 +36,7 @@ namespace XLY.SF.Project.EarlyWarningView
         /// 获取全部数据。搜索Dir目录下的Xml文件，并且读取文件中RootName节点的数据；返回一个List<SensitiveData>数据
         /// </summary>
         /// <returns></returns>
-        public void GetAllData(List<RootNode> list)
+        public void GetAllData(RootNodeManager rootNodeManager)
         {
             if (!IsInitialize)
             {
@@ -56,38 +56,39 @@ namespace XLY.SF.Project.EarlyWarningView
                     Console.WriteLine(ex.Message);
                     continue;
                 }
-                if (xmdDoc.DocumentElement.Name != NodeDefinition.RootName
+                if (xmdDoc.DocumentElement.Name != ConstDefinition.RootName
                     || !xmdDoc.DocumentElement.HasAttribute("Name"))
                 {
                     continue;
                 }
 
-                //新建RootNode节点
+                //新建、获取RootNode节点curRootNode
                 string rootNodeName = xmdDoc.DocumentElement.GetAttribute("Name");
-                RootNode curRootNode = new RootNode() { NodeName = rootNodeName };
-                list.Add(curRootNode);
+                if(!rootNodeManager.Children.Keys.Contains(rootNodeName))
+                {
+                    rootNodeManager.Children.Add(rootNodeName, new RootNode(rootNodeName));
+                }
+                RootNode curRootNode = (RootNode)rootNodeManager.Children[rootNodeName];
 
-                XmlNodeList categoryNodes = xmdDoc.DocumentElement.ChildNodes;
-                Dictionary<string, CategoryNode> categoryNames = new Dictionary<string, CategoryNode>();
+                XmlNodeList categoryNodes = xmdDoc.DocumentElement.ChildNodes;               
                 foreach (XmlElement categoryNode in categoryNodes)
                 {
+                    //新建、获取CategoryNode节点curNode
                     string categoryName = categoryNode.Name;
-
-                    if (!categoryNames.Keys.Contains(categoryName))
-                    {
-                        //新建CategoryNode节点
+                    if (!curRootNode.Children.Keys.Contains(categoryName))
+                    {                       
                         CategoryNode node = new CategoryNode() { NodeName = categoryName };
-                        curRootNode.Children.Add(node);
-                        categoryNames.Add(categoryName, node);
+                        curRootNode.Children.Add(categoryName, node);
                     }
-                    CategoryNode curNode = categoryNames[categoryName];
+                    CategoryNode curCategoryNode = (CategoryNode)curRootNode.Children[categoryName];
+
                     foreach (XmlElement item in categoryNode.ChildNodes)
                     {
-                        //新建数据
+                        //新建、获取DataNode节点
                         if (item.HasAttribute("Value"))
                         {
                             string value = item.Attributes["Value"].Value;
-                            curNode.Children.Add(new DataNode() { Data = new SensitiveData(value) });
+                            curCategoryNode.DataList.Add(new DataNode() { Data = new SensitiveData(value) });
                         }
                     }
                 }

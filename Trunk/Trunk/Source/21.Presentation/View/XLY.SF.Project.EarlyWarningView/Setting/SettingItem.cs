@@ -14,6 +14,8 @@ namespace XLY.SF.Project.EarlyWarningView
 
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
         /// <summary>
         /// 功能需要的数据所在的路径或目录
         /// </summary>
