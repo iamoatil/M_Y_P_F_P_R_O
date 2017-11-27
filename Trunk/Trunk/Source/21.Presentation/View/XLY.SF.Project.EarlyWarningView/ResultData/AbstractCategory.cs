@@ -7,7 +7,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.EarlyWarningView
 {

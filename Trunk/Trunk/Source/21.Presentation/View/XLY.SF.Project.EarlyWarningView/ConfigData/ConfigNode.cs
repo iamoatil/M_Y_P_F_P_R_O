@@ -51,24 +51,4 @@ namespace XLY.SF.Project.EarlyWarningView
 
         public SensitiveData Data { get; set; }
     }
-
-    //class AppNameConfigNode : AbstractConfigNode
-    //{
-    //    protected override string RootName { get { return NodeDefinition.AppNameCollection; } }
-    //}
-
-    //class KeyWordConfigNode : AbstractConfigNode
-    //{
-    //    protected override string RootName { get { return NodeDefinition.KeyWordCollection; } }
-    //}
-
-    //class Md5ConfigNode : AbstractConfigNode
-    //{
-    //    protected override string RootName { get { return NodeDefinition.FileMd5Collection; } }
-    //}
-
-    //class NetAddressConfigNode : AbstractConfigNode
-    //{
-    //    protected override string RootName { get { return NodeDefinition.NetAddressCollection; } }
-    //}
 }

@@ -17,14 +17,22 @@ namespace XLY.SF.Project.EarlyWarningView
     {
         public ResultViewModel()
         {
-            ExtactionCategoryCollectionManager categoryManager = _earlyWarning.ExtactionItemParser.CategoryManager;
+            foreach(var item in CategoryManager.Children)
+            {
+               
+            }
         }
 
         /// <summary>
         /// 智能预警
         /// </summary>
-        DetectionManager _earlyWarning { get { return DetectionManager.Instance; } }
-        
+        DetectionManager _detectionManager { get { return DetectionManager.Instance; } }
+
+        /// <summary>
+        /// 预警的结果CategoryManager
+        /// </summary>
+        public ExtactionCategoryCollectionManager CategoryManager { get { return _detectionManager.CategoryManager; } }
+
         /// <summary>
         /// 预警的结果
         /// </summary>

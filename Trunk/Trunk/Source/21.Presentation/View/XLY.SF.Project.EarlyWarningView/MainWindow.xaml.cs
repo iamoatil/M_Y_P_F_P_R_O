@@ -21,7 +21,6 @@ namespace XLY.SF.Project.EarlyWarningView
 
         public MainWindow()
         {
-            _earlyWarning.Initialize();
             SettingCommand = new RelayCommand(
                 () =>
                 {

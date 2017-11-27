@@ -12,8 +12,6 @@
 * ==============================================================================*/
 
 
-using System.Collections.Generic;
-using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
