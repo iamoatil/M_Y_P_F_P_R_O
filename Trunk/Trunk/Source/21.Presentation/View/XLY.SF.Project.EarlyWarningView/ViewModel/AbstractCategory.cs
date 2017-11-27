@@ -5,6 +5,9 @@
 * ==============================================================================*/
 
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
@@ -12,14 +15,15 @@ namespace XLY.SF.Project.EarlyWarningView
     /// 表示类型的抽象类
     /// 在ExtactionCategory.cs中定义了4个由它派生的类，这4个类依次呈梯度关系
     /// </summary>
-    abstract class AbstractCategory : ICategory
+    abstract class AbstractCategory : ICategory,INotifyPropertyChanged
     {
-        protected Dictionary<string, IName> Children = new Dictionary<string, IName>();
+        public Dictionary<string, IName> Children { get { return _children; } }
+        protected Dictionary<string, IName> _children = new Dictionary<string, IName>();
 
         /// <summary>
         /// 此Category的名字。可显示到界面 
         /// </summary>
-        public string Name { get ; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// 孩子的个数。可显示到界面 
@@ -33,19 +37,33 @@ namespace XLY.SF.Project.EarlyWarningView
 
         internal IName GetChild(string name)
         {
-            if(!Contain(name))
+            if (!Contain(name))
             {
-               Add(name);
+                Add(name);
             }
             return Children[name];
         }
 
         internal bool Contain(string name)
         {
-            bool ret=Children.ContainsKey(name);
+            bool ret = Children.ContainsKey(name);
             return ret;
         }
 
         protected abstract void Add(string name);
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// 属性更新（不用给propertyName赋值）
+        /// </summary>
+        /// <param name="propertyName"></param>
+        public void OnPropertyChanged([CallerMemberName]string propertyName = null)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 }

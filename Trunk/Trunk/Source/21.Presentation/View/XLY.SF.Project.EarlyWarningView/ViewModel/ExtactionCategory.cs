@@ -12,6 +12,9 @@
 * ==============================================================================*/
 
 
+using System.Collections.Generic;
+using XLY.SF.Project.Domains;
+
 namespace XLY.SF.Project.EarlyWarningView
 {
     /* ==============================================================================
@@ -57,6 +60,6 @@ namespace XLY.SF.Project.EarlyWarningView
         protected override void Add(string name)
         {
             Children.Add(name, new ExtactionItem() { Name = name });
-        }
+        }        
     }
 }

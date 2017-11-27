@@ -47,6 +47,9 @@ namespace XLY.SF.Project.EarlyWarningView
         public SettingManager SettingManager { get { return _settingManager; } }
         private readonly SettingManager _settingManager=new SettingManager();
 
+        public ExtactionItemParser ExtactionItemParser { get { return _parser; } }
+        ExtactionItemParser _parser = new ExtactionItemParser();
+
         /// <summary>
         /// 对象要初始化后才能使用
         /// </summary>
@@ -119,9 +122,8 @@ namespace XLY.SF.Project.EarlyWarningView
         /// </summary>
         public void Detect()
         {
-            ExtactionItemParser parser = new ExtactionItemParser();
-            parser.DetectAction += Parser_DetectAction;
-            parser.Detect();
+            _parser.DetectAction += Parser_DetectAction;
+            _parser.Detect();
         }
 
         private bool Parser_DetectAction(string content)

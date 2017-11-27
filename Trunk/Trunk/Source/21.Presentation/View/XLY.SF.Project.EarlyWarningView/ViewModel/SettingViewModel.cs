@@ -37,14 +37,15 @@ namespace XLY.SF.Project.EarlyWarningView
                 SettingManager.CurrentSelected = value;
                 OnPropertyChanged();
             }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        }       
 
         /// <summary>
         /// 设置生效命令
         /// </summary>
         public ICommand SetCommand { get; private set; }
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
         /// 属性更新（不用给propertyName赋值）
@@ -55,5 +56,6 @@ namespace XLY.SF.Project.EarlyWarningView
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
+        #endregion
     }
 }

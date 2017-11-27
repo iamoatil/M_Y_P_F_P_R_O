@@ -5,14 +5,13 @@ namespace XLY.SF.Project.EarlyWarningView
     /// <summary>
     /// EarlyWarningMainPage.xaml 的交互逻辑
     /// </summary>
-    public partial class EarlyWarningMainPage : UserControl
+    public partial class EarlyWarningResultPage : UserControl
     {
-        public EarlyWarningMainPage()
+        public EarlyWarningResultPage()
         {
             InitializeComponent();
             ResultViewModel vm= new ResultViewModel();
             this.DataContext = vm;
-
         }
     }
 }

@@ -59,11 +59,9 @@
     <Compile Include="ConfigFiles\ConfigFile.cs" />
     <Compile Include="ConfigFiles\ConfigNode.cs" />
     <Compile Include="ConstDefinition.cs" />
+    <Compile Include="Detection\Interface.cs" />
     <Compile Include="EarlyWarning\EarlyWarning.cs" />
     <Compile Include="SensitiveData.cs" />
-    <Compile Include="Detection\Interface.cs" />
-    <Compile Include="Detection\AbstractDetection.cs" />
-    <Compile Include="Detection\Detection.cs" />
     <Content Include="EarlyWarningConfig\Livehood.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -79,8 +77,8 @@
     <Content Include="EarlyWarningConfig\CountrySafety.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Compile Include="EarlyWarningMainPage.xaml.cs">
-      <DependentUpon>EarlyWarningMainPage.xaml</DependentUpon>
+    <Compile Include="EarlyWarningResultPage.xaml.cs">
+      <DependentUpon>EarlyWarningResultPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="EarlyWarningSetting.xaml.cs">
       <DependentUpon>EarlyWarningSetting.xaml</DependentUpon>
@@ -103,7 +101,7 @@
     <Compile Include="ViewModel\SettingViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="EarlyWarningMainPage.xaml">
+    <Page Include="EarlyWarningResultPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

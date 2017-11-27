@@ -11,11 +11,13 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <Menu HorizontalAlignment="Left" VerticalAlignment="Center" >
             <MenuItem  Header="设置" Command="{Binding SettingCommand}"/>
-        </Menu>       
-        <earlywarningview:EarlyWarningMainPage Grid.Row="2"/>
+        </Menu>
+        <Button Grid.Row="2" Content="开始检视" Command="{Binding DetectCommand}" HorizontalAlignment="Center" VerticalAlignment="Center" Height="25"/>
+        <Grid x:Name="ResultGrid" Grid.Row="3"/>
     </Grid>
 </Window>

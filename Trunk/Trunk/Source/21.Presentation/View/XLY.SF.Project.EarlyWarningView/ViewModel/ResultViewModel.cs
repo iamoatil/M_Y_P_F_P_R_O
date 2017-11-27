@@ -4,16 +4,21 @@
 * Create Date：2017/11/24 15:29:04
 * ==============================================================================*/
 
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    class ResultViewModel
+    class ResultViewModel:INotifyPropertyChanged
     {
         public ResultViewModel()
         {
             _earlyWarning.Initialize();
-            DetectCommand = new RelayCommand(() => { _earlyWarning.Detect(); });
+            ExtactionCategoryCollectionManager categoryManager = _earlyWarning.ExtactionItemParser.CategoryManager;
         }
 
         /// <summary>
@@ -21,10 +26,28 @@ namespace XLY.SF.Project.EarlyWarningView
         /// </summary>
         DetectionManager _earlyWarning { get { return DetectionManager.Instance; } }
 
+        
+        
         /// <summary>
-        /// 检测命令
+        /// 预警的结果
         /// </summary>
-        public ICommand DetectCommand { get; private set; }
+        public ObservableCollection<DataExtactionItem> DataList { get { return _dataList; } }
+        ObservableCollection<DataExtactionItem> _dataList = new ObservableCollection<DataExtactionItem>();
 
+       
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// 属性更新（不用给propertyName赋值）
+        /// </summary>
+        /// <param name="propertyName"></param>
+        public void OnPropertyChanged([CallerMemberName]string propertyName = null)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 }

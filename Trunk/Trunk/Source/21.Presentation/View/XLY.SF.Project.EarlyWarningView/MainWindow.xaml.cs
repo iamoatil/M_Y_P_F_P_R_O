@@ -31,10 +31,27 @@ namespace XLY.SF.Project.EarlyWarningView
                     };
                     setting.ShowDialog();
                 });
-
+             DetectCommand = new RelayCommand(Detect);
             InitializeComponent();
         }
 
         public ICommand SettingCommand { get; private set; }
+
+        private void Detect()
+        {
+            _earlyWarning.Detect();
+            ResultGrid.Children.Clear();
+            ResultGrid.Children.Add(new EarlyWarningResultPage());
+        }
+
+        /// <summary>
+        /// 智能预警
+        /// </summary>
+        DetectionManager _earlyWarning { get { return DetectionManager.Instance; } }
+
+        /// <summary>
+        /// 检测命令
+        /// </summary>
+        public ICommand DetectCommand { get; private set; }
     }
 }

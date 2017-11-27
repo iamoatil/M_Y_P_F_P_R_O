@@ -4,7 +4,6 @@
 * Create Date：2017/11/24 15:36:27
 * ==============================================================================*/
 
-using System;
 using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.EarlyWarningView

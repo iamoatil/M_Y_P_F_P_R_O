@@ -25,7 +25,7 @@ namespace XLY.SF.Project.EarlyWarningView
         ExtactionCategoryCollectionManager _categoryManager = new ExtactionCategoryCollectionManager() { Name="智能检视"};
 
         public void Detect()
-        { 
+        {            
             string dir = @"C:\Users\litao\Desktop\迭代66\123_20171123[021724]\R7_20171123[021726]";
             if(!Directory.Exists(dir))
             {
@@ -79,7 +79,7 @@ namespace XLY.SF.Project.EarlyWarningView
 
                         using (FileStream fs = new FileStream(subItemPath, FileMode.Create))
                         {
-                            StreamWriter streamWriter = new StreamWriter(fs);
+                            //StreamWriter streamWriter = new StreamWriter(fs);
                             if (dataSource.Items != null)
                             {
                                 PropertyInfo[] allPropertyInfos = ((Type)dataSource.Type).GetProperties();
@@ -112,23 +112,12 @@ namespace XLY.SF.Project.EarlyWarningView
                                                 extactionItem.SetActualData(dataItem);
                                             }                                            
 
-                                            streamWriter.WriteLine(content);
+                                            //streamWriter.WriteLine(content);
                                         }
                                     }
                                 }
-                                streamWriter.Close();
+                                //streamWriter.Close();
                             }
-                            //else
-                            //{
-                            //    TreeDataSource treeDataSource = dataSource as TreeDataSource;
-                            //    if (treeDataSource != null)
-                            //    {
-                            //        foreach (TreeNode item in treeDataSource.TreeNodes)
-                            //        {
-
-                            //        }
-                            //    }
-                            //}
                         }
                     }
                 }
