@@ -72,7 +72,7 @@ namespace XLY.SF.Project.EarlyWarningView
         }
 
         public List<ExtactionItem> Items { get { return _items; } }
-        List<ExtactionItem> _items = new List<ExtactionItem>();
+        readonly List<ExtactionItem> _items = new List<ExtactionItem>();
     }
 
     class ExtactionItem : IName

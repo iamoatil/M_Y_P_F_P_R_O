@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -56,7 +55,8 @@ namespace XLY.SF.Project.EarlyWarningView
                     Console.WriteLine(ex.Message);
                     continue;
                 }
-                if (xmdDoc.DocumentElement.Name != ConstDefinition.RootName
+                if (xmdDoc.DocumentElement == null
+                    ||xmdDoc.DocumentElement.Name != ConstDefinition.RootName
                     || !xmdDoc.DocumentElement.HasAttribute("Name"))
                 {
                     continue;

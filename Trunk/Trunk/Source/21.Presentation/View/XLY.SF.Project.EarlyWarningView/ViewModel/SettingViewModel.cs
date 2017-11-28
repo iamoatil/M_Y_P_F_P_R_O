@@ -14,7 +14,7 @@ namespace XLY.SF.Project.EarlyWarningView
     {
         public SettingViewModel()
         {
-            SetCommand = new RelayCommand(()=> { DetectionManager.Instance.BaseDataManager.UpdateValidateData(); });
+            SetCommand = new RelayCommand(()=> DetectionManager.Instance.BaseDataManager.UpdateValidateData());
         }
 
         /// <summary>

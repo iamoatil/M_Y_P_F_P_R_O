@@ -4,32 +4,15 @@
 * Create Date：2017/11/24 15:29:04
 * ==============================================================================*/
 
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
 using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
     class ResultViewModel:INotifyPropertyChanged
     {
-        public ResultViewModel()
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                TestData data=new TestData();
-                Items.Add(data);
-                for (int j = 0; j < 2;j++)
-                {
-                    TestData d = new TestData();
-                    data.Children.Add(d);
-
-                }
-            }
-        }
-
         /// <summary>
         /// 智能预警
         /// </summary>
@@ -40,13 +23,12 @@ namespace XLY.SF.Project.EarlyWarningView
         /// </summary>
         public ExtactionCategoryCollectionManager CategoryManager { get { return _detectionManager.CategoryManager; } }
 
-        public List<TestData> Items { get { return _items; } }
-        private List<TestData> _items = new List<TestData>();
         /// <summary>
         /// 预警的结果
         /// </summary>
         public ObservableCollection<DataExtactionItem> DataList { get { return _dataList; } }
-        ObservableCollection<DataExtactionItem> _dataList = new ObservableCollection<DataExtactionItem>();
+
+        readonly ObservableCollection<DataExtactionItem> _dataList = new ObservableCollection<DataExtactionItem>();
 
         #region INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
@@ -61,15 +43,5 @@ namespace XLY.SF.Project.EarlyWarningView
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
         #endregion
-    }
-
-    public class TestData
-    {
-        public string Name { get { return "Test"; } }
-
-        public int ChildrenCount { get { return 234; } }
-
-        public List<TestData> Children { get { return _items; } }
-        private List<TestData> _items = new List<TestData>();
     }
 }

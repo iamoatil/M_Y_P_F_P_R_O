@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 
@@ -17,13 +15,6 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             MainWindow win = new MainWindow();
             win.ShowDialog();
-
-            //Window setting = new Window()
-            //{
-            //    ShowInTaskbar = true,
-            //    Content=new UserControl1()
-            //};
-            //setting.ShowDialog();
         }
 
         public MainWindow()

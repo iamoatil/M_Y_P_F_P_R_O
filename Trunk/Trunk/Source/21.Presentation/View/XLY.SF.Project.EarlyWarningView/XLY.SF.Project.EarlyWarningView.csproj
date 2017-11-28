@@ -60,9 +60,6 @@
     <Compile Include="ConfigData\ConfigFile.cs" />
     <Compile Include="ConfigData\ConfigNode.cs" />
     <Compile Include="ConstDefinition.cs" />
-    <Compile Include="EarlyWarningResultPageSimple.xaml.cs">
-      <DependentUpon>EarlyWarningResultPageSimple.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Interface.cs" />
     <Compile Include="SensitiveData.cs" />
     <Content Include="EarlyWarningConfig\Livehood.xml">
@@ -95,9 +92,6 @@
     <Compile Include="Setting\SettingManager.cs" />
     <Compile Include="ResultData\AbstractCategory.cs" />
     <Compile Include="ResultData\ExtactionCategory.cs" />
-    <Compile Include="UserControl1.xaml.cs">
-      <DependentUpon>UserControl1.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ViewModel\ResultViewModel.cs" />
     <Compile Include="ResultData\ICategory.cs" />
     <Compile Include="Setting\SettingCollection.cs" />
@@ -105,10 +99,6 @@
     <Compile Include="ViewModel\SettingViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="EarlyWarningResultPageSimple.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="EarlyWarningResultPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -118,10 +108,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControl1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -17,7 +17,7 @@ namespace XLY.SF.Project.EarlyWarningView
     abstract class AbstractCategory : ICategory,INotifyPropertyChanged
     {
         public Dictionary<string, IName> Children { get { return _children; } }
-        protected Dictionary<string, IName> _children = new Dictionary<string, IName>();
+        private readonly Dictionary<string, IName> _children = new Dictionary<string, IName>();
 
         /// <summary>
         /// 此Category的名字。可显示到界面 

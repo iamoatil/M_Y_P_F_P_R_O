@@ -17,7 +17,7 @@ namespace XLY.SF.Project.EarlyWarningView
     /// </summary>
     class ConfigDataManager
     {
-        private RootNodeManager _rootNodeManager = new RootNodeManager();       
+        private readonly RootNodeManager _rootNodeManager = new RootNodeManager();       
 
         /// <summary>
         /// 预警配置文件的所在顶层目录
