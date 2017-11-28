@@ -27,7 +27,7 @@ namespace XLY.SF.Project.EarlyWarningView
         /// <summary>
         /// 孩子的个数。可显示到界面 
         /// </summary>
-        public int ChildrenCount { get { return Children.Count; } }
+        public virtual int ChildrenCount { get { return Children.Count; } }
 
         /// <summary>
         /// 界面是否选择的是这个类型

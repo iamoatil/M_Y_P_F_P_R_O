@@ -71,6 +71,11 @@ namespace XLY.SF.Project.EarlyWarningView
             throw new System.NotImplementedException();
         }
 
+        public override int ChildrenCount
+        {
+            get { return Items.Count; }
+        }
+
         public List<ExtactionItem> Items { get { return _items; } }
         readonly List<ExtactionItem> _items = new List<ExtactionItem>();
     }

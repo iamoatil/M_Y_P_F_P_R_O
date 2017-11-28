@@ -29,9 +29,7 @@
                     <HierarchicalDataTemplate  DataType="{x:Type local:ICategory}" ItemsSource="{Binding Path=Children.Values}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock VerticalAlignment="Center" Text="{Binding Name}"  FontSize="14"/>
-                            <StackPanel.ToolTip>
-                                <TextBlock VerticalAlignment="Center" Text="{Binding ChildrenCount}" TextWrapping="Wrap" FontSize="14"/>
-                            </StackPanel.ToolTip>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding ChildrenCount ,StringFormat=({0})}" />
                         </StackPanel>
                     </HierarchicalDataTemplate>
                 </ctrl:TreeViewEx.ItemTemplate>
