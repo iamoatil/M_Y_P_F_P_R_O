@@ -69,20 +69,6 @@ namespace XLY.SF.Project.EarlyWarningView
                 Items = subCategory.Items;
             }
         }
-
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        /// <summary>
-        /// 属性更新（不用给propertyName赋值）
-        /// </summary>
-        /// <param name="propertyName"></param>
-        public void OnPropertyChanged([CallerMemberName]string propertyName = null)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 
     class ExtactionCategoryCollection : AbstractCategory

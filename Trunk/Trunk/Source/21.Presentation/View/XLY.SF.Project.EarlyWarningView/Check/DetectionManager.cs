@@ -8,9 +8,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Common;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.EarlyWarningView
@@ -23,6 +26,7 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             BaseDataManager.Initialize();
             BaseDataManager.UpdateValidateData();
+
         }
 
         private static DetectionManager _instance = new DetectionManager();
@@ -32,7 +36,7 @@ namespace XLY.SF.Project.EarlyWarningView
             get { return _instance; }
         }
 
-        #endregion
+        #endregion     
 
         /// <summary>
         /// 检测的结果放于CategoryManager中
@@ -53,70 +57,70 @@ namespace XLY.SF.Project.EarlyWarningView
         /// <summary>
         /// 检测
         /// </summary>
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Detect()
         {
             DeviceDataParser parser = new DeviceDataParser();
-            ObservableCollection<DataExtactionItem> deviceData = parser.LoadDeviceData();
+            parser.LoadDeviceData();
+            List<DeviceDataSource> dataSources =parser.DataSources;
+
             BaseDataManager.UpdateValidateData();
-            DetectResultList(deviceData, BaseDataManager.ValidateDataNodes);
+            foreach (var item in dataSources)
+            {
+                Match(item, BaseDataManager.ValidateDataNodes);
+            }
+        }
+
+        private void Match(DeviceDataSource ds, List<DataNode> dataNodes)
+        {
+            //读取数据库中JsonColumnName列，并且匹配
+            IDataSource dataSource = ds.DataSource;
+            string dir=Path.GetDirectoryName(Path.GetDirectoryName(ds.DsFilePath));
+            string extactionName = dir.Substring(dir.LastIndexOf("\\")+1);
+            ExtactionCategoryCollection categoryCollection = (ExtactionCategoryCollection)_categoryManager.GetChild(extactionName);
+            ExtactionCategory category =  (ExtactionCategory)categoryCollection.GetChild(dataSource.PluginInfo.Group);
+            ExtactionSubCategory subCategory=(ExtactionSubCategory)category.GetChild(dataSource.PluginInfo.Name);
+
+            SqliteDbFile sqliteDbFile = dataSource.Items.DbInstance;
+            string connectString = sqliteDbFile.DbConnectionStr;
+            string cmd = string.Format("select {0} from {1}", SqliteDbFile.JsonColumnName, dataSource.Items.DbTableName);
+            using (SQLiteConnection con = new SQLiteConnection(connectString))
+            {
+                con.Open();
+                using (var com = new SQLiteCommand(con))
+                {
+                    com.CommandText = cmd;
+                    SQLiteDataReader reader = com.ExecuteReader();
+                    try
+                    {
+                        foreach (DbDataRecord dataRecord in reader)
+                        {
+                            if(dataRecord.FieldCount > 0)
+                            {
+                                string jsonContent = (string)dataRecord[SqliteDbFile.JsonColumnName];
+                                foreach (DataNode item in dataNodes)
+                                {
+                                    bool ret = jsonContent.Contains(item.Data.Value);
+                                    if (ret)
+                                    {
+                                        ExtactionItem extactionItem = subCategory.AddItem(jsonContent);
+                                        //extactionItem.SetActualData(dataItem);
+                                    }
+                                }
+                            }                            
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.InnerException);
+                    }
+                }
+            }
         }
 
         private bool OnDetect(string content, IEnumerable<DataNode> validateDataNodes)
         {
             return validateDataNodes.Any(item => item.Data.Value == content);
-        }
-
-        private void DetectResultList(IEnumerable<DataExtactionItem> resultList,List<DataNode> validateDataNodes)
-        {
-            foreach (var dirItem in resultList)
-            {
-                var categoryCollection =(ExtactionCategoryCollection) CategoryManager.GetChild(dirItem.Text);
-
-                foreach (var typeItem in dirItem.TreeNodes)
-                {
-                    var category = (ExtactionCategory) categoryCollection.GetChild(typeItem.Text);
-
-                    foreach (var subItem in typeItem.TreeNodes)
-                    {
-                        var dataSource = (AbstractDataSource) subItem.Data;
-                        if (dataSource.Total < 1)
-                        {
-                            continue;
-                        }
-
-                        var subCategory = (ExtactionSubCategory) category.GetChild(subItem.Text);
-
-                        if (dataSource.Items != null)
-                        {
-                            PropertyInfo[] allPropertyInfos = ((Type) dataSource.Type).GetProperties();
-                            List<PropertyInfo> propertyInfos = allPropertyInfos.Where(propertyInfo => propertyInfo.PropertyType == typeof (string)).ToList();
-
-                            IEnumerable view = dataSource.Items.View;
-                            foreach (AbstractDataItem dataItem in view)
-                            {
-                                foreach (var propertyInfo in propertyInfos)
-                                {
-                                    object ob = propertyInfo.GetValue(dataItem);
-                                    if (ob == null)
-                                    {
-                                        continue;
-                                    }
-                                    string content = ob.ToString();
-                                    if (!string.IsNullOrEmpty(content))
-                                    {
-                                        bool ret = OnDetect(content, validateDataNodes);
-                                        if (ret)
-                                        {
-                                            ExtactionItem extactionItem = subCategory.AddItem(subItem.Text);
-                                            extactionItem.SetActualData(dataItem);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         private void DetectResultList2(ObservableCollection<DataExtactionItem> resultList,
