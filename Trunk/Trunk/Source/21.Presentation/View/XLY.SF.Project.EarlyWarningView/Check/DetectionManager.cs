@@ -75,6 +75,10 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             //读取数据库中JsonColumnName列，并且匹配
             IDataSource dataSource = ds.DataSource;
+            if(dataSource.Items == null)
+            {
+                return;
+            }
             string dir=Path.GetDirectoryName(Path.GetDirectoryName(ds.DsFilePath));
             string extactionName = dir.Substring(dir.LastIndexOf("\\")+1);
             ExtactionCategoryCollection categoryCollection = (ExtactionCategoryCollection)_categoryManager.GetChild(extactionName);
