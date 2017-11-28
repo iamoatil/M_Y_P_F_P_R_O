@@ -116,16 +116,13 @@ namespace XLY.SF.Project.EarlyWarningView
     class ExtactionItem : IName
     {
         private AbstractDataItem _dataItem;
-
-        public string DeviceName { get; private set; }
+        
         public string Name { get; set; }        
-
-        public string MD5 { get; private set; }
+        
         
         internal void SetActualData(AbstractDataItem dataItem)
         {
             _dataItem = dataItem;
-            MD5 = _dataItem.MD5;
         }        
     }
 }

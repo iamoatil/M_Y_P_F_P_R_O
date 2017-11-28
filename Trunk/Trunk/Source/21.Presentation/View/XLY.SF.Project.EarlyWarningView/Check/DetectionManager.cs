@@ -67,7 +67,7 @@ namespace XLY.SF.Project.EarlyWarningView
             BaseDataManager.UpdateValidateData();
             foreach (var item in dataSources)
             {
-                Match(item, BaseDataManager.ValidateDataNodes);
+                Match2(item, BaseDataManager.ValidateDataNodes);
             }
         }
 
@@ -87,14 +87,16 @@ namespace XLY.SF.Project.EarlyWarningView
 
             SqliteDbFile sqliteDbFile = dataSource.Items.DbInstance;
             string connectString = sqliteDbFile.DbConnectionStr;
-            string cmd = string.Format("select {0} from {1}", SqliteDbFile.JsonColumnName, dataSource.Items.DbTableName);
-            using (SQLiteConnection con = new SQLiteConnection(connectString))
+            string cmdText = string.Format("select {0} from {1}", SqliteDbFile.JsonColumnName, dataSource.Items.DbTableName);
+            IEnumerable view = dataSource.Items.View;
+
+            using (SQLiteConnection connect = new SQLiteConnection(connectString))
             {
-                con.Open();
-                using (var com = new SQLiteCommand(con))
+                connect.Open();
+                using (var command = new SQLiteCommand(connect))
                 {
-                    com.CommandText = cmd;
-                    SQLiteDataReader reader = com.ExecuteReader();
+                    command.CommandText = cmdText;
+                    SQLiteDataReader reader = command.ExecuteReader();
                     try
                     {
                         foreach (DbDataRecord dataRecord in reader)
@@ -108,7 +110,8 @@ namespace XLY.SF.Project.EarlyWarningView
                                     if (ret)
                                     {
                                         ExtactionItem extactionItem = subCategory.AddItem(jsonContent);
-                                        //extactionItem.SetActualData(dataItem);
+                                        
+                                       // extactionItem.SetActualData(dataSource);
                                     }
                                 }
                             }                            
@@ -122,11 +125,67 @@ namespace XLY.SF.Project.EarlyWarningView
             }
         }
 
+        private void Match2(DeviceDataSource ds, List<DataNode> dataNodes)
+        {
+            //读取数据库中JsonColumnName列，并且匹配
+            IDataSource dataSource = ds.DataSource;
+            if (dataSource.Items == null)
+            {
+                return;
+            }
+            string dir = Path.GetDirectoryName(Path.GetDirectoryName(ds.DsFilePath));
+            string extactionName = dir.Substring(dir.LastIndexOf("\\") + 1);
+            ExtactionCategoryCollection categoryCollection = (ExtactionCategoryCollection)_categoryManager.GetChild(extactionName);
+            ExtactionCategory category = (ExtactionCategory)categoryCollection.GetChild(dataSource.PluginInfo.Group);
+            ExtactionSubCategory subCategory = (ExtactionSubCategory)category.GetChild(dataSource.PluginInfo.Name);
+
+            AbstractDataSource abstractDataSource = (AbstractDataSource)dataSource;
+            if (dataSource.Total < 1)
+            {
+                return;
+            }
+
+            PropertyInfo[] allPropertyInfos = ((Type)abstractDataSource.Type).GetProperties();
+            List<PropertyInfo> propertyInfos = new List<PropertyInfo>();
+            foreach (var propertyInfo in allPropertyInfos)
+            {
+                //if (propertyInfo.Attributes == typeof(string))
+                //{
+                //    propertyInfos.Add(propertyInfo);
+                //}
+            }
+
+            IEnumerable view = dataSource.Items.View;
+            foreach (AbstractDataItem dataItem in view)
+            {
+                foreach (var propertyInfo in propertyInfos)
+                {
+                    object ob = propertyInfo.GetValue(dataItem);
+                    if (ob == null)
+                    {
+                        continue;
+                    }
+                    string content = ob.ToString();
+                    if (!string.IsNullOrEmpty(content))
+                    {
+
+                        //bool ret = OnDetect(content, validateDataNodes);
+                        //if (ret)
+                        //{
+                        //    ExtactionItem extactionItem = subCategory.AddItem(subItem.Text);
+                        //    extactionItem.SetActualData(dataItem);
+                        //}
+                    }
+                }
+            }
+        }
+    
+
         private bool OnDetect(string content, IEnumerable<DataNode> validateDataNodes)
         {
             return validateDataNodes.Any(item => item.Data.Value == content);
         }
-
+        
         private void DetectResultList2(ObservableCollection<DataExtactionItem> resultList,
             List<DataNode> validateDataNodes)
         {
