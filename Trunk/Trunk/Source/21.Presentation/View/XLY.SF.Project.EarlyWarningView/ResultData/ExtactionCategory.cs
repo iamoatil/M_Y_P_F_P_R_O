@@ -13,8 +13,13 @@
 
 
 
+using GalaSoft.MvvmLight.Command;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
 using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.EarlyWarningView
@@ -30,12 +35,54 @@ namespace XLY.SF.Project.EarlyWarningView
 
 * ==============================================================================*/
 
-    class ExtactionCategoryCollectionManager : AbstractCategory
+    class ExtactionCategoryCollectionManager : AbstractCategory,INotifyPropertyChanged
     {
         protected override void Add(string name)
         {
             Children.Add(name, new ExtactionCategoryCollection() { Name = name });
+            SelectedItemShowCommand = new RelayCommand<object>(SelectedItemShow);
         }
+
+        /// <summary>
+        /// 选项显示命令
+        /// </summary>
+        public ICommand SelectedItemShowCommand { get; private set; }
+
+        private List<ExtactionItem> _items;
+
+        public List<ExtactionItem> Items
+        {
+            get { return _items; }
+            set
+            {
+                _items = value;
+                OnPropertyChanged();
+            }
+        }
+            
+
+        private void SelectedItemShow(object o)
+        {
+            ExtactionSubCategory subCategory=o as ExtactionSubCategory;
+            if (subCategory != null)
+            {
+                Items = subCategory.Items;
+            }
+        }
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// 属性更新（不用给propertyName赋值）
+        /// </summary>
+        /// <param name="propertyName"></param>
+        public void OnPropertyChanged([CallerMemberName]string propertyName = null)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 
     class ExtactionCategoryCollection : AbstractCategory
@@ -82,13 +129,17 @@ namespace XLY.SF.Project.EarlyWarningView
 
     class ExtactionItem : IName
     {
-        public string Name { get; set; }
+        private AbstractDataItem _dataItem;
 
-        public AbstractDataItem DataItem { get; private set; }
+        public string DeviceName { get; private set; }
+        public string Name { get; set; }        
 
+        public string MD5 { get; private set; }
+        
         internal void SetActualData(AbstractDataItem dataItem)
         {
-            DataItem = dataItem;
-        }
+            _dataItem = dataItem;
+            MD5 = _dataItem.MD5;
+        }        
     }
 }

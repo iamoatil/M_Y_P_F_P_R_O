@@ -6,20 +6,25 @@
              xmlns:ctrl="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:local="clr-namespace:XLY.SF.Project.EarlyWarningView"
-             mc:Ignorable="d"             
+             mc:Ignorable="d"          
+             x:Name="Page"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/ThemesStyle/TreeViewStyle/TreeViewStyle.xaml"/>
-            </ResourceDictionary.MergedDictionaries> 
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid >
 
-        <Grid >
+        <Grid DataContext="{Binding CategoryManager}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
             <!--数据列表-->
-            <ctrl:TreeViewEx x:Name="treeDataList" Background="#0FFFFFFF" Margin="20" BorderThickness="0"  Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding Path=Children.Values}">
+            <ctrl:TreeViewEx Background="#0FFFFFFF" BorderThickness="0"  ItemsSource="{Binding Path=Children.Values}" MinWidth="120">
                 <ctrl:TreeViewEx.ItemContainerStyle>
                     <Style TargetType="ctrl:TreeViewItemEx" BasedOn="{StaticResource stTreeViewItem}">
                         <Setter Property="IsItemStyle" Value="{Binding IsItemStyle}"></Setter>
@@ -35,11 +40,12 @@
                 </ctrl:TreeViewEx.ItemTemplate>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectedItemChanged">
-                        <i:InvokeCommandAction Command="{Binding SelecedAppChanged}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctrl:TreeViewEx}}, Path=SelectedValue}"/>
+                        <i:InvokeCommandAction Command="{Binding SelectedItemShowCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctrl:TreeViewEx}}, Path=SelectedValue}"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ctrl:TreeViewEx>
-            <GridSplitter Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Stretch" Width="2" Background="Transparent"/>
+            <DataGrid  ItemsSource="{Binding Items}" Grid.Column="1">               
+            </DataGrid>
         </Grid>
     </Grid>
 </UserControl>

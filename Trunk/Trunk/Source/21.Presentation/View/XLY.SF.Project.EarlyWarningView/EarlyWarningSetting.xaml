@@ -63,7 +63,7 @@
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="检视项：（对MD5的检视可能造成系统变慢）" Grid.ColumnSpan="2"  VerticalAlignment="Center"/>
-            <RadioButton Grid.Row="1"   DataContext="{Binding Items[0]}" IsChecked="True" Style="{StaticResource RadioButtonWithBorder}"  >
+            <RadioButton Grid.Row="1"  DataContext="{Binding Items[0]}" IsChecked="True" Style="{StaticResource RadioButtonWithBorder}"  >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Checked">
                         <ei:ChangePropertyAction PropertyName="CurrentSelected" TargetObject="{Binding ElementName=root,Path=DataContext}" Value="{Binding }"/>

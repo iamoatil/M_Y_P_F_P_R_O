@@ -37,6 +37,10 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.3.0.19026, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\31.Build\Debug\XlyToolkits\Mirror\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -56,7 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigData\ConfigDataManager.cs" />
-    <Compile Include="Command.cs" />
     <Compile Include="ConfigData\ConfigFile.cs" />
     <Compile Include="ConfigData\ConfigNode.cs" />
     <Compile Include="ConstDefinition.cs" />

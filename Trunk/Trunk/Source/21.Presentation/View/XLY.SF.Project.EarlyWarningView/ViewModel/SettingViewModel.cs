@@ -4,6 +4,7 @@
 * Create Date：2017/11/22 10:32:57
 * ==============================================================================*/
 
+using GalaSoft.MvvmLight.Command;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
