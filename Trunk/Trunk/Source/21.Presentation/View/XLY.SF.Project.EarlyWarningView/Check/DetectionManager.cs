@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using XLY.SF.Project.Domains;
@@ -76,7 +77,7 @@ namespace XLY.SF.Project.EarlyWarningView
             List<DeviceDataSource> dataSources =parser.DataSources;
 
             ConfigDataManager.UpdateValidateData();
-            ConfigDbManager.GenerateDbFile();
+            ConfigDbManager.GenerateDbFile(ConfigDataManager.ValidateDataNodes.Select(it =>it.SensitiveData));
             foreach (var item in dataSources)
             {
                 Match(item, ConfigDataManager.ValidateDataNodes);

@@ -53,7 +53,7 @@ namespace XLY.SF.Project.EarlyWarningView
         /// 生成数据库文件
         /// </summary>
         /// <param name="DbDatas"></param>
-        public void GenerateDbFile(List<DbData> DbDatas)
+        public void GenerateDbFile(List<SensitiveData> DbDatas)
         {
             //创建数据库
             if (!File.Exists(_dbPath))
@@ -75,30 +75,12 @@ namespace XLY.SF.Project.EarlyWarningView
             command.ExecuteNonQuery();
             //添加数据
             sb = new StringBuilder();
-            foreach (DbData item in DbDatas)
+            foreach (SensitiveData item in DbDatas)
             {
                 sb.AppendFormat("insert into {0} values('{1}','{2}','{3}','{4}');", TableName, item.RootNodeName,item.CategoryName,item.Value);
             }
             command = new SQLiteCommand(sb.ToString(), dbConnection);
             command.ExecuteNonQuery();
         }
-    }
-
-
-    /// <summary>
-    /// 数据库类型的数据
-    /// </summary>
-    class DbData
-    {
-        public string RootNodeName { get; private set; }
-        public string CategoryName { get; private set; }
-        public string Value { get; private set; }
-
-        public DbData(string rootNodeName, string categoryName, string value)
-        {
-            this.RootNodeName = rootNodeName;
-            this.CategoryName = categoryName;
-            this.Value = value;
-        }
-    }
+    }    
 }
