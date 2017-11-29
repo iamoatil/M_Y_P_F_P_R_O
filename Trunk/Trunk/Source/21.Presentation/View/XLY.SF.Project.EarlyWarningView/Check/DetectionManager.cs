@@ -88,7 +88,7 @@ namespace XLY.SF.Project.EarlyWarningView
 
             string dir = Path.GetDirectoryName(Path.GetDirectoryName(ds.DsFilePath));
             string extactionName = dir.Substring(dir.LastIndexOf("\\") + 1);
-            
+
             ExtactionCategoryCollection categoryCollection = (ExtactionCategoryCollection)_categoryManager.GetChild(extactionName);
             ExtactionCategory category = (ExtactionCategory)categoryCollection.GetChild(dataSource.PluginInfo.Group);
             ExtactionSubCategory subCategory = (ExtactionSubCategory)category.GetChild(dataSource.PluginInfo.Name);
@@ -101,9 +101,9 @@ namespace XLY.SF.Project.EarlyWarningView
             {
                 string cmd = string.Format("{1} like '%{2}%'", dataSource.Items.DbTableName, SqliteDbFile.JsonColumnName, dataNode.Data.Value);
                 IEnumerable<dynamic> result = dataSource.Items.FilterByCmd<dynamic>(cmd);
-                foreach (AbstractDataItem a in result)
+                foreach (AbstractDataItem item in result)
                 {
-                    subCategory.AddItem(a);
+                    subCategory.AddItem(item);
                 }
             }           
         }
