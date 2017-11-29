@@ -39,14 +39,14 @@ namespace XLY.SF.Project.EarlyWarningView
 
         private void Create(string path)
         {
-            if (!File.Exists(_path))
+            if (!File.Exists(path))
             {
-                var dir = Path.GetDirectoryName(_path);
+                var dir = Path.GetDirectoryName(path);
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
                 }
-                SQLiteConnection.CreateFile(_path);               
+                SQLiteConnection.CreateFile(path);               
             }           
         }
 

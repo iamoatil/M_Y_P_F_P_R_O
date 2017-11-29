@@ -57,6 +57,9 @@ namespace XLY.SF.Project.EarlyWarningView
         public SqlFile SqlFile { get { return _sqlFile; } }
         SqlFile _sqlFile = new SqlFile();
 
+        public ConfigDbManager ConfigDbManager { get { return _configDbManager; } }
+        ConfigDbManager _configDbManager = new ConfigDbManager();
+
         /// <summary>
         /// 基础数据管理
         /// </summary>
@@ -73,6 +76,7 @@ namespace XLY.SF.Project.EarlyWarningView
             List<DeviceDataSource> dataSources =parser.DataSources;
 
             ConfigDataManager.UpdateValidateData();
+            ConfigDbManager.GenerateDbFile();
             foreach (var item in dataSources)
             {
                 Match(item, ConfigDataManager.ValidateDataNodes);
