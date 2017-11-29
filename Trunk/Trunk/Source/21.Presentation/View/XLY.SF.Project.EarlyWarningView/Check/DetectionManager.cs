@@ -38,6 +38,8 @@ namespace XLY.SF.Project.EarlyWarningView
 
         #endregion     
 
+
+        private static string EarlyWarning = "EarlyWarning";
         /// <summary>
         /// 检测的结果放于CategoryManager中
         /// </summary>
@@ -87,7 +89,8 @@ namespace XLY.SF.Project.EarlyWarningView
 
             SqliteDbFile sqliteDbFile = dataSource.Items.DbInstance;
             string connectString = sqliteDbFile.DbConnectionStr;
-            string cmdText = string.Format("select {0} from {1}", SqliteDbFile.JsonColumnName, dataSource.Items.DbTableName);
+            string tableName = dataSource.Items.DbTableName;
+            string cmdText = string.Format("select * from {0}", tableName);
             IEnumerable view = dataSource.Items.View;
 
             using (SQLiteConnection connect = new SQLiteConnection(connectString))
@@ -109,7 +112,9 @@ namespace XLY.SF.Project.EarlyWarningView
                                     bool ret = jsonContent.Contains(item.Data.Value);
                                     if (ret)
                                     {
-                                        ExtactionItem extactionItem = subCategory.AddItem(jsonContent);
+                                        SqliteDbFile dbFile= SqliteDbFile.GetSqliteDbFile(EarlyWarning);
+                                        dbFile.CreateTable<>(tableName);
+                                        //ExtactionItem extactionItem = subCategory.AddItem(jsonContent);
                                         
                                        // extactionItem.SetActualData(dataSource);
                                     }
