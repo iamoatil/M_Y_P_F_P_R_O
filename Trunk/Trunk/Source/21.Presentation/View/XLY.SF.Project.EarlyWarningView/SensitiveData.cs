@@ -11,11 +11,20 @@ namespace XLY.SF.Project.EarlyWarningView
     /// </summary>
     class SensitiveData
     {
-        public SensitiveData(string value)
+        public SensitiveData(string value,string rootCategory)
         {
             Value = value;
+            RootCategory = rootCategory;
         }
 
+        /// <summary>
+        /// 根类型
+        /// </summary>
+        public string RootCategory { get; private set; }
+
+        /// <summary>
+        /// 敏感数据
+        /// </summary>
         public string Value { get; private set; }
     }
 }

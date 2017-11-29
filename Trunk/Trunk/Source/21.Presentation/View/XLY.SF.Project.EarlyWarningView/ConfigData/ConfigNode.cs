@@ -47,8 +47,8 @@ namespace XLY.SF.Project.EarlyWarningView
 
     class DataNode : INodeName
     {
-        public string NodeName { get; set; }
+        public string NodeName { get; set; }        
 
-        public SensitiveData Data { get; set; }
+        public SensitiveData SensitiveData { get; set; }
     }
 }

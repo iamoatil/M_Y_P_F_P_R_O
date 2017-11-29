@@ -22,8 +22,8 @@ namespace XLY.SF.Project.EarlyWarningView
 
         private DetectionManager()
         {
-            BaseDataManager.Initialize();
-            BaseDataManager.UpdateValidateData();
+            ConfigDataManager.Initialize();
+            ConfigDataManager.UpdateValidateData();
 
         }
 
@@ -54,14 +54,13 @@ namespace XLY.SF.Project.EarlyWarningView
 
         DataExtactionItemCollection _dataExtactionItemCollection = new DataExtactionItemCollection();
 
+        public SqlFile SqlFile { get { return _sqlFile; } }
+        SqlFile _sqlFile = new SqlFile();
+
         /// <summary>
         /// 基础数据管理
         /// </summary>
-        public readonly ConfigDataManager BaseDataManager = new ConfigDataManager();
-
-
-        public SqlFile SqlFile { get { return _sqlFile; } }
-        SqlFile _sqlFile = new SqlFile();
+        public readonly ConfigDataManager ConfigDataManager = new ConfigDataManager();
 
         /// <summary>
         /// 检测
@@ -73,10 +72,10 @@ namespace XLY.SF.Project.EarlyWarningView
             parser.LoadDeviceData();
             List<DeviceDataSource> dataSources =parser.DataSources;
 
-            BaseDataManager.UpdateValidateData();
+            ConfigDataManager.UpdateValidateData();
             foreach (var item in dataSources)
             {
-                Match(item, BaseDataManager.ValidateDataNodes);
+                Match(item, ConfigDataManager.ValidateDataNodes);
             }
 
             //DataExtactionItemCollection.SelectDefaultNode();
@@ -110,9 +109,13 @@ namespace XLY.SF.Project.EarlyWarningView
 
             foreach (DataNode dataNode in dataNodes)
             {
-                string cmd = string.Format("{1} like '%{2}%'", dataSource.Items.DbTableName, SqliteDbFile.JsonColumnName, dataNode.Data.Value);
+                string cmd = string.Format("{1} like '%{2}%'", dataSource.Items.DbTableName, SqliteDbFile.JsonColumnName, dataNode.SensitiveData.Value);
                 IEnumerable<dynamic> result = dataSource.Items.FilterByCmd<dynamic>(cmd);
-                SqlFile.WriteResult(result, (AbstractDataSource)dataSource);
+                foreach (AbstractDataItem item in result)
+                {
+                    item.SensitiveId = ConstDefinition.Categorys.IndexOf(dataNode.SensitiveData.RootCategory)+1;
+                }
+                //SqlFile.WriteResult(result, (AbstractDataSource)dataSource);
             }           
         }
 
@@ -152,7 +155,7 @@ namespace XLY.SF.Project.EarlyWarningView
                                 string jsonContent = (string)dataRecord[SqliteDbFile.JsonColumnName];
                                 foreach (DataNode item in dataNodes)
                                 {
-                                    bool ret = jsonContent.Contains(item.Data.Value);
+                                    bool ret = jsonContent.Contains(item.SensitiveData.Value);
                                     if (ret)
                                     {
                                         //ExtactionItem extactionItem = subCategory.AddItem(jsonContent);

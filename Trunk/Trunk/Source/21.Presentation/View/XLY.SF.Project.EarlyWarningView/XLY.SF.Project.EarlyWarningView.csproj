@@ -84,6 +84,7 @@
     <Compile Include="ConstDefinition.cs" />
     <Compile Include="Interface.cs" />
     <Compile Include="ResultData\DataExtactionItemCollection.cs" />
+    <Compile Include="ResultData\SensitiveSetting.cs" />
     <Compile Include="ResultData\SqlFile.cs" />
     <Compile Include="SensitiveData.cs" />
     <Content Include="EarlyWarningConfig\CountrySafety.xml">

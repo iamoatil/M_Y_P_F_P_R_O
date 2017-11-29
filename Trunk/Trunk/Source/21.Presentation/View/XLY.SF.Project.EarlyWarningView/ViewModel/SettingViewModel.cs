@@ -15,13 +15,13 @@ namespace XLY.SF.Project.EarlyWarningView
     {
         public SettingViewModel()
         {
-            SetCommand = new RelayCommand(()=> DetectionManager.Instance.BaseDataManager.UpdateValidateData());
+            SetCommand = new RelayCommand(()=> DetectionManager.Instance.ConfigDataManager.UpdateValidateData());
         }
 
         /// <summary>
         /// SettingManager
         /// </summary>
-        public SettingManager SettingManager { get { return DetectionManager.Instance.BaseDataManager.SettingManager; } }
+        public SettingManager SettingManager { get { return DetectionManager.Instance.ConfigDataManager.SettingManager; } }
 
         /// <summary>
         /// 当前选择的项目

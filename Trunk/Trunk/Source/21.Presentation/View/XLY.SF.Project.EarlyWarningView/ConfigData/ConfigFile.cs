@@ -88,7 +88,7 @@ namespace XLY.SF.Project.EarlyWarningView
                         if (item.HasAttribute("Value"))
                         {
                             string value = item.Attributes["Value"].Value;
-                            curCategoryNode.DataList.Add(new DataNode() { Data = new SensitiveData(value) });
+                            curCategoryNode.DataList.Add(new DataNode() { SensitiveData = new SensitiveData(value, rootNodeName) });
                         }
                     }
                 }
