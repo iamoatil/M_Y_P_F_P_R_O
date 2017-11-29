@@ -1,7 +1,7 @@
 ﻿<Root Name="CountrySafety" Description="涉及国安" >
   <AppCollection>
-    <Content Value="123456"/>
-    <Content Value="12"/>
+    <Content Value="涉及国123456"/>
+    <Content Value="涉及国12"/>
   </AppCollection>
  <FileMd5Collection>
     <Content Value="涉及国123456"/>

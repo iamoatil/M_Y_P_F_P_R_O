@@ -90,26 +90,50 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             string tableName = dataSource.Items.DbTableName;
             SQLFilterDataProvider.DbEnumerableDataReader<object> lst = (SQLFilterDataProvider.DbEnumerableDataReader<object>)result;
-            var lsString = lst.Columns.Select(it => it.Key).Where(it =>it != SqliteDbFile.KeyColumnName);
-            CreateTable(lsString, tableName);
+            List<string> cols = lst.Columns.Select(it => it.Key).Where(it =>it != SqliteDbFile.KeyColumnName).ToList();
+            CreateTable(cols, tableName);
 
             Type type = (Type)dataSource.Type;
+            PropertyInfo[] proInfos=type.GetProperties();
+            Dictionary<string, PropertyInfo> proDic = new Dictionary<string, PropertyInfo>();
+            foreach (var item in proInfos)
+            {
+                if (cols.Contains(item.Name))
+                {
+                    proDic.Add(item.Name, item);
+                }
+                else if (item.CustomAttributes.Count() > 0)
+                {
+                    var customAtrrs = item.CustomAttributes.Where(it => it.AttributeType.Name == "DisplayAttribute");
+                    if (customAtrrs.Count() > 0
+                        && customAtrrs.ElementAt(0).NamedArguments.Count() > 0)
+                    {
+                        string display = customAtrrs.ElementAt(0).NamedArguments[0].TypedValue.ToString();
+                        if(cols.Contains(display))
+                        {
+                            proDic.Add(display, item);
+                        }                        
+                        continue;
+                    }
+                }
+            }
+
             foreach (AbstractDataItem item in result)
             {
                 StringBuilder sb = new StringBuilder();
                 sb.AppendFormat("insert into {0} values('{1}'", tableName, item.MD5);
-                
-                foreach (var col in lsString)
+
+                foreach (var col in cols)
                 {
-                    PropertyInfo proInfo=type.GetProperty(col);
-                    if (proInfo == null)
+                    if (!proDic.Keys.Contains(col))
                     {
                         sb.AppendFormat(",'{0}'", "");
                         continue;
                     }
-
+                    var proInfo = proDic[col];
                     sb.AppendFormat(",'{0}'", proInfo.GetValue(item));
                 }
+
                 sb.AppendFormat(");");
 
                 SQLiteCommand command = new SQLiteCommand(sb.ToString(), _dbConnection);
