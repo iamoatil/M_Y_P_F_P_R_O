@@ -25,7 +25,7 @@
 
 
 3，XLY.SF.Project.Domains class SMS : AbstractDataItem 和{XLY.SF.Project.Domains.DataItems<XLY.SF.Project.Domains.SMS>}是不一样的。
-   public class CallDataSource : AbstractDataSource ==》DataSource是DataItems<T>的Owner。 DataItems<T>是T的Owner
+   public class CallDataSource : AbstractDataSource ==》DataSource是DataItems<T>的Owner。 DataItems<T>是T的Owner,且DataItems<T>直接与数据库相关联
 
 
 

@@ -84,19 +84,8 @@
     <Compile Include="ConstDefinition.cs" />
     <Compile Include="Interface.cs" />
     <Compile Include="ResultData\DataExtactionItemCollection.cs" />
+    <Compile Include="ResultData\SqlFile.cs" />
     <Compile Include="SensitiveData.cs" />
-    <Content Include="EarlyWarningConfig\Livehood.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EarlyWarningConfig\PublicSafety.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EarlyWarningConfig\EconomySafety.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="EarlyWarningConfig\Custom.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="EarlyWarningConfig\CountrySafety.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
