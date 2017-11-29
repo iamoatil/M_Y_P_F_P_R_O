@@ -21,6 +21,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.DataView;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
@@ -48,9 +49,9 @@ namespace XLY.SF.Project.EarlyWarningView
         /// </summary>
         public ICommand SelectedItemShowCommand { get; private set; }
 
-        private List<ExtactionItem> _items;
+        private List<AbstractDataItem> _items;
 
-        public List<ExtactionItem> Items
+        public List<AbstractDataItem> Items
         {
             get { return _items; }
             set
@@ -66,7 +67,38 @@ namespace XLY.SF.Project.EarlyWarningView
             ExtactionSubCategory subCategory=o as ExtactionSubCategory;
             if (subCategory != null)
             {
-                Items = subCategory.Items;
+                //Items = subCategory.Items;
+                //item.ToControl(new DataViewPluginArgument() { CurrentData = null, DataSource = Items.Data as IDataSource })
+            }
+        }
+
+        private ObservableCollection<object> _layoutViewItems;
+
+        /// <summary>
+        /// 布局视图集合
+        /// </summary>	
+        public ObservableCollection<object> LayoutViewItems
+        {
+            get { return _layoutViewItems; }
+            set
+            {
+                _layoutViewItems = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private object _selectedLayoutViewItem;
+
+        /// <summary>
+        /// 当前选择的布局视图
+        /// </summary>	
+        public object SelectedLayoutViewItem
+        {
+            get { return _selectedLayoutViewItem; }
+            set
+            {
+                _selectedLayoutViewItem = value;
+                OnPropertyChanged();
             }
         }
     }
@@ -92,11 +124,12 @@ namespace XLY.SF.Project.EarlyWarningView
     /// </summary>
     class ExtactionSubCategory : AbstractCategory
     {
-        public ExtactionItem AddItem(string name)
+        public void AddItem(AbstractDataItem item)
         {
-            ExtactionItem item=new ExtactionItem() { Name = name };
-            Items.Add(item);
-            return item;
+            if(!Items.Contains(item))
+            {
+                Items.Add(item);
+            }            
         }
 
         protected override void Add(string name)
@@ -109,8 +142,8 @@ namespace XLY.SF.Project.EarlyWarningView
             get { return Items.Count; }
         }
 
-        public List<ExtactionItem> Items { get { return _items; } }
-        readonly List<ExtactionItem> _items = new List<ExtactionItem>();
+        public List<AbstractDataItem> Items { get { return _items; } }
+        readonly List<AbstractDataItem> _items = new List<AbstractDataItem>();
     }
 
     class ExtactionItem : IName

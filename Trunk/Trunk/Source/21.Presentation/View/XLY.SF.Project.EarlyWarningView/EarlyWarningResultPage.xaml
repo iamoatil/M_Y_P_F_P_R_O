@@ -6,6 +6,7 @@
              xmlns:ctrl="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:local="clr-namespace:XLY.SF.Project.EarlyWarningView"
+             xmlns:theme="clr-namespace:XLY.SF.Project.Themes;assembly=XLY.SF.Project.Themes"
              mc:Ignorable="d"          
              x:Name="Page"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -13,7 +14,9 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/ThemesStyle/TreeViewStyle/TreeViewStyle.xaml"/>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/ThemesStyle/TabControlStyle/TabControlWithButton.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <theme:BooleanToCollapseConverter x:Key="boolToCollapseConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid >
@@ -44,8 +47,8 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </ctrl:TreeViewEx>
-            <DataGrid  ItemsSource="{Binding Items}" Grid.Column="1">               
-            </DataGrid>
+            <!--自定义数据展示-->
+            <ctrl:TabControlWithButton x:Name="contentView" BorderThickness="1" BorderBrush="#3c4662" Margin="0 20 20 0" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}" Style="{StaticResource TabControlWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithButtonStyle1}" CustomButtonAlignment="Right" IsHideHeaderWhenEmpty="True" Visibility="{Binding HasData, Converter={StaticResource boolToCollapseConverter}}"></ctrl:TabControlWithButton>
         </Grid>
     </Grid>
 </UserControl>

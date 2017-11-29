@@ -77,11 +77,13 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Check\Helper.cs" />
     <Compile Include="ConfigData\ConfigDataManager.cs" />
     <Compile Include="ConfigData\ConfigFile.cs" />
     <Compile Include="ConfigData\ConfigNode.cs" />
     <Compile Include="ConstDefinition.cs" />
     <Compile Include="Interface.cs" />
+    <Compile Include="ResultData\DataExtactionItemCollection.cs" />
     <Compile Include="SensitiveData.cs" />
     <Content Include="EarlyWarningConfig\Livehood.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -162,9 +164,17 @@
       <Project>{c4c4fc67-5d56-4426-acc5-b53cd24c6b69}</Project>
       <Name>XLY.SF.Project.Themes</Name>
     </ProjectReference>
+    <ProjectReference Include="..\XLY.SF.Project.DataDisplayView\XLY.SF.Project.DataDisplayView.csproj">
+      <Project>{26B3C073-8944-4917-A7AF-94A10A5B5A7C}</Project>
+      <Name>XLY.SF.Project.DataDisplayView</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XLY.SF.Project.DataExtraction\XLY.SF.Project.DataExtraction.csproj">
       <Project>{57b9de4a-f6f2-4f41-9829-2e852a963ef4}</Project>
       <Name>XLY.SF.Project.DataExtraction</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XLY.SF.Project.Plugin.DataView\XLY.SF.Project.Plugin.DataView.csproj">
+      <Project>{F082BD5C-9B42-4749-AF88-CC5804BF50A1}</Project>
+      <Name>XLY.SF.Project.Plugin.DataView</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
