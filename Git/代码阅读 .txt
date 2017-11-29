@@ -6,7 +6,9 @@
 内容：
     a：    SQLFilterDataProvider：    基于SQL语句的数据提供器。构造函数中传入连接字符串和表名。  
      定义了类中类DbEnumerableDataReader<T>，它构造中提供一个DbDataReader的reader，主要是对reader的数据进行读取 
-     
+
+
+
      
  2，SqliteDbFile
  位置：server\Domains\Project.Domains\Contract\DataItems\SqliteDbFile.CS
@@ -19,7 +21,27 @@
         4，除此外还有Update：其中涉及列名为书签列就调用书签更新UpdateBookmark，否则为普通更新Update
                     GetDataItemsBookmark获取数据列表书签状态。
                     BeginTransaction，Commit等
-         
+
+
+
+3，XLY.SF.Project.Domains class SMS : AbstractDataItem 和{XLY.SF.Project.Domains.DataItems<XLY.SF.Project.Domains.SMS>}是不一样的。
+   public class CallDataSource : AbstractDataSource ==》DataSource是DataItems<T>的Owner。 DataItems<T>是T的Owner
+
+
+
+4，当前胡景已经提供了数据筛选的功能
+  位置：Core\Project.DataFilter.Views\Filterable.cs
+  方法：FilterAllTextByKeywords：其可以获取数据库中XLYJso列中包含的关键字的所有行。
+
+位置：Core\Project.DataFilter.Views\FilterView.cs
+类：abstract class FilterView<T> 其集成结构为AggregationFilterView<TResult> : FilterView<TResult>  where TResult : AbstractDataItem
+功能：其中定义了过滤后的视图IEnumerable<T> View { get; private set; }，并且在 protected virtual void Filter()中赋值为View = Source.Provider.Query<T>(Expression);在具体实现中Source.Provider者为MultiSQLiteFilterDataProvider类型，其执行Query<T>返回的是DbEnumerableDataReader<T>类型的列表。
+
+而在DataItems中View就是返回其_filterView.View的view。所以就是
+  
+5，
+11.Service\11.Domains\XLY.SF.Project.Domains\Contract\DataItems
+MultiSQLiteFilterDataProvider : SQLiteFilterDataProvider支持多数据库文件联合查询的数据库Provider       
                     
         
         
