@@ -31,10 +31,5 @@ namespace XLY.SF.Project.EarlyWarningView
             this.CategoryName = categoryName;
             this.Value = value;
         }
-
-        
-       
-
-       
     }
 }

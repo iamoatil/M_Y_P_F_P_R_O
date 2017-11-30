@@ -118,7 +118,7 @@ namespace XLY.SF.Project.EarlyWarningView
                 IEnumerable<dynamic> result = dataSource.Items.FilterByCmd<dynamic>(cmd);
                 foreach (AbstractDataItem item in result)
                 {
-                    item.SensitiveId = ConstDefinition.Categorys.IndexOf(dataNode.SensitiveData.RootCategory)+1;
+                    item.SensitiveId = ConstDefinition.Categorys.IndexOf(dataNode.SensitiveData.RootNodeName)+1;
                 }
                 //SqlFile.WriteResult(result, (AbstractDataSource)dataSource);
             }           
