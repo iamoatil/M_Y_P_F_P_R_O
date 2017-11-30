@@ -1,0 +1,48 @@
+目的：了解提取数据怎么转换成SQLite
+
+1，SQLiteFilterDataProvider：
+位置：Core\Project.DataFilter\Provider文件夹：SQLiteFilterDataProvider
+结构：SQLiteFilterDataProvider：abtract SQLFilterDataProvider：IFilterDataProvider
+内容：
+    a：    SQLFilterDataProvider：    基于SQL语句的数据提供器。构造函数中传入连接字符串和表名。  
+     定义了类中类DbEnumerableDataReader<T>，它构造中提供一个DbDataReader的reader，主要是对reader的数据进行读取 
+
+
+
+     
+ 2，SqliteDbFile
+ 位置：server\Domains\Project.Domains\Contract\DataItems\SqliteDbFile.CS
+ 内容：用一个静态的字典缓存所有的SqliteDbFile，
+        方法：
+        1，静态GetSqliteDbFile（dbFile）中获取、新建一个SqliteDbfile对象
+        2，CreateTable<T>(string defTableName）where T : AbstractDataItem：把一个AbstractDataItem的子类中标记为DisplayAttribute
+        的属性作为数据库Table的列（外加一个XLYJson列）  建一个表defTableName。
+        3，Add<T>(T obj, string key) where T : AbstractDataItem：把一个AbstractDataItem的对象添加到数据库中。
+        4，除此外还有Update：其中涉及列名为书签列就调用书签更新UpdateBookmark，否则为普通更新Update
+                    GetDataItemsBookmark获取数据列表书签状态。
+                    BeginTransaction，Commit等
+
+
+
+3，XLY.SF.Project.Domains class SMS : AbstractDataItem 和{XLY.SF.Project.Domains.DataItems<XLY.SF.Project.Domains.SMS>}是不一样的。
+   public class CallDataSource : AbstractDataSource ==》DataSource是DataItems<T>的Owner。 DataItems<T>是T的Owner,且DataItems<T>直接与数据库相关联
+
+
+
+4，当前胡景已经提供了数据筛选的功能
+  位置：Core\Project.DataFilter.Views\Filterable.cs
+  方法：FilterAllTextByKeywords：其可以获取数据库中XLYJso列中包含的关键字的所有行。
+
+位置：Core\Project.DataFilter.Views\FilterView.cs
+类：abstract class FilterView<T> 其集成结构为AggregationFilterView<TResult> : FilterView<TResult>  where TResult : AbstractDataItem
+功能：其中定义了过滤后的视图IEnumerable<T> View { get; private set; }，并且在 protected virtual void Filter()中赋值为View = Source.Provider.Query<T>(Expression);在具体实现中Source.Provider者为MultiSQLiteFilterDataProvider类型，其执行Query<T>返回的是DbEnumerableDataReader<T>类型的列表。
+
+而在DataItems中View就是返回其_filterView.View的view。所以就是
+  
+5，
+11.Service\11.Domains\XLY.SF.Project.Domains\Contract\DataItems
+MultiSQLiteFilterDataProvider : SQLiteFilterDataProvider支持多数据库文件联合查询的数据库Provider       
+                    
+        
+        
+ 

@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="XLY.SF.Project.EarlyWarningView.EarlyWarningResultPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ctrl="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:local="clr-namespace:XLY.SF.Project.EarlyWarningView"
+             xmlns:theme="clr-namespace:XLY.SF.Project.Themes;assembly=XLY.SF.Project.Themes"
+             mc:Ignorable="d"          
+             x:Name="Page"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/ThemesStyle/TreeViewStyle/TreeViewStyle.xaml"/>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/ThemesStyle/TabControlStyle/TabControlWithButton.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <theme:BooleanToCollapseConverter x:Key="boolToCollapseConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid >
+
+        <Grid DataContext="{Binding CategoryManager}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <!--数据列表-->
+            <ctrl:TreeViewEx Background="#0FFFFFFF" BorderThickness="0"  ItemsSource="{Binding Path=Children.Values}" MinWidth="120">
+                <ctrl:TreeViewEx.ItemContainerStyle>
+                    <Style TargetType="ctrl:TreeViewItemEx" BasedOn="{StaticResource stTreeViewItem}">
+                        <Setter Property="IsItemStyle" Value="{Binding IsItemStyle}"></Setter>
+                    </Style>
+                </ctrl:TreeViewEx.ItemContainerStyle>
+                <ctrl:TreeViewEx.ItemTemplate >
+                    <HierarchicalDataTemplate  DataType="{x:Type local:ICategory}" ItemsSource="{Binding Path=Children.Values}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Name}"  FontSize="14"/>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding ChildrenCount ,StringFormat=({0})}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </ctrl:TreeViewEx.ItemTemplate>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectedItemChanged">
+                        <i:InvokeCommandAction Command="{Binding SelectedItemShowCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctrl:TreeViewEx}}, Path=SelectedValue}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ctrl:TreeViewEx>
+            <!--自定义数据展示-->
+            <ctrl:TabControlWithButton x:Name="contentView" BorderThickness="1" BorderBrush="#3c4662" Margin="0 20 20 0" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}" Style="{StaticResource TabControlWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithButtonStyle1}" CustomButtonAlignment="Right" IsHideHeaderWhenEmpty="True" Visibility="{Binding HasData, Converter={StaticResource boolToCollapseConverter}}"></ctrl:TabControlWithButton>
+        </Grid>
+    </Grid>
+</UserControl>

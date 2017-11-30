@@ -86,6 +86,7 @@
   <ItemGroup>
     <Compile Include="DatabaseInitializer.cs" />
     <Compile Include="DbService.cs" />
+    <Compile Include="ISettings.cs" />
     <Compile Include="Primitive\SqliteRecoveryHelper.cs" />
     <Compile Include="Primitive\SqliteReturn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

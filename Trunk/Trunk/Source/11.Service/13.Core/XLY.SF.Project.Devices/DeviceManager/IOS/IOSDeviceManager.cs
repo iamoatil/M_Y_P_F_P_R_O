@@ -106,6 +106,8 @@ namespace XLY.SF.Project.Devices
             //1.初始化相关参数
             InitCopyUserData(device, 100, asyn);
 
+            Directory.SetCurrentDirectory(Path.Combine(Environment.CurrentDirectory, @"Lib\vcdllX64\IphoneDevices"));
+
             //2.文件拷贝
             var res = IOSDeviceCoreDll.CopyUserData(targetPath, device.ID, _CopyUserDataCallback);
 
@@ -139,6 +141,8 @@ namespace XLY.SF.Project.Devices
         {
             //1.初始化相关参数
             InitCopyUserData(device, 100, asyn);
+
+            Directory.SetCurrentDirectory(Path.Combine(Environment.CurrentDirectory, @"Lib\vcdllX64\IphoneDevices"));
 
             //2.文件拷贝
             var res = IOSDeviceCoreDll.CopyUserDataPWD(targetPath, device.ID, CopyUserDataCallback, (b) =>
@@ -342,6 +346,8 @@ namespace XLY.SF.Project.Devices
         /// <returns></returns>
         public List<AppEntity> FindInstalledApp(Device device)
         {
+            Directory.SetCurrentDirectory(Path.Combine(Environment.CurrentDirectory, @"Lib\vcdllX64\IphoneDevices"));
+
             var appPointer = IntPtr.Zero;
             uint execResultCode = IOSDeviceCoreDll.GetALLInstalledApp(device.ID, ref appPointer);
             var appEntities = new List<AppEntity>();

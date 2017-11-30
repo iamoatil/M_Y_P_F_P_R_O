@@ -1,0 +1,19 @@
+﻿<Root  Name="Custom" Description="自定义" >
+  <AppCollection >
+    <Content Value="自定义123456"/>
+    <Content Value="自定义12"/>
+  </AppCollection>
+ <FileMd5Collection >
+    <Content Value="自定义123456"/>
+    <Content Value="12"/>
+ </FileMd5Collection>
+ <KeyWordCollection >
+    <Content Value="自定义123456"/>
+    <Content Value="自定义12"/>
+  </KeyWordCollection>
+ <UrlCollection >
+    <Content Value="自定义123456"/>
+    <Content Value="自定义12"/>
+  </UrlCollection>
+</Root>
+  

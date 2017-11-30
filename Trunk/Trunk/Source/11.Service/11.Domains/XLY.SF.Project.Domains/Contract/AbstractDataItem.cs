@@ -70,6 +70,7 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 敏感数据序号，比如包含了“涉黄、涉毒”等信息
         /// </summary>
+        [Display(Visibility = EnumDisplayVisibility.ShowInDatabase)]
         public int SensitiveId { get => _sensitiveId; set { _sensitiveId = value; OnPropertyChanged(); } }
 
         /// <summary>

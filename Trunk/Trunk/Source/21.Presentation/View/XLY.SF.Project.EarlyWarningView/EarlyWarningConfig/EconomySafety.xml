@@ -1,0 +1,19 @@
+﻿<Root  Name="EconomySafety" Description="涉及经济" >
+  <AppCollection >
+    <Content Value="涉及经济123456"/>
+    <Content Value="涉及经济12"/>
+  </AppCollection>
+ <FileMd5Collection >
+    <Content Value="涉及经济123456"/>
+    <Content Value="涉及经济12"/>
+ </FileMd5Collection>
+ <KeyWordCollection >
+    <Content Value="涉及经济123456"/>
+    <Content Value="涉及经济12"/>
+  </KeyWordCollection>
+ <UrlCollection >
+    <Content Value="涉及经济123456"/>
+    <Content Value="涉及经济12"/>
+  </UrlCollection>
+</Root>
+  
