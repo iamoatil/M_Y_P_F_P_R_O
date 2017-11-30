@@ -47,9 +47,9 @@ namespace XLY.SF.Project.Plugin.DataReport
         {
             return TryConverter(value, v =>
             {
-                //if (v.ToSafeString() == LanguageHelper.Get("LANGKEY_ShanChu_02221")) return 1;
+                if (v.ToSafeString() == "删除") return 1;
                 if (v.ToSafeString() == "Deleted") return 1;
-                //if (v.ToSafeString() == LanguageHelper.Get("LANGKEY_ZhengChang_02222")) return 0;
+                if (v.ToSafeString() == "正常") return 0;
                 if (v.ToSafeString() == "Normal") return 0;
                 return 0;
             });
@@ -119,15 +119,15 @@ namespace XLY.SF.Project.Plugin.DataReport
         /// <returns></returns>
         public object XlySMSAction(object value, object[] args)
         {
-            //if (value.ToSafeString() == LanguageHelper.Get("LANGKEY_JieShou_02223"))
-            //{
-            //    return "01";
-            //}
-            //else if (value.ToSafeString() == LanguageHelper.Get("LANGKEY_FaSong_02224"))
-            //{
-            //    return "02";
-            //}
-            //else
+            if (value.ToSafeString() == "接收")
+            {
+                return "01";
+            }
+            else if (value.ToSafeString() == "发送")
+            {
+                return "02";
+            }
+            else
             {
                 return "99";
             }
@@ -140,15 +140,15 @@ namespace XLY.SF.Project.Plugin.DataReport
         /// <returns></returns>
         public object XlyViewStatus(object value, object[] args)
         {
-            //if (value.ToSafeString() == LanguageHelper.Get("LANGKEY_YiDu_02225"))
-            //{
-            //    return "1";
-            //}
-            //else if (value.ToSafeString() == LanguageHelper.Get("LANGKEY_WeiDu_02226"))
-            //{
-            //    return "0";
-            //}
-            //else
+            if (value.ToSafeString() == "已读")
+            {
+                return "1";
+            }
+            else if (value.ToSafeString() == "未读")
+            {
+                return "0";
+            }
+            else
             {
                 return "9";
             }
@@ -161,8 +161,7 @@ namespace XLY.SF.Project.Plugin.DataReport
         /// <returns></returns>
         public object XlyCallStatus(object value, object[] args)
         {
-            //return value.ToSafeString().Contains(LanguageHelper.Get("LANGKEY_WeiJie_02227")) ? "0" : "1";
-            return "0";
+            return value.ToSafeString().Contains("未接") ? "0" : "1";
         }
 
         /// <summary>
@@ -172,15 +171,15 @@ namespace XLY.SF.Project.Plugin.DataReport
         /// <returns></returns>
         public object XlyCallAction(object value, object[] args)
         {
-            //if (value.ToSafeString().Contains(LanguageHelper.Get("LANGKEY_HuChu_02228")))
-            //{
-            //    return "02";
-            //}
-            //else if (value.ToSafeString().Contains(LanguageHelper.Get("LANGKEY_WeiZhi_02229")))
-            //{
-            //    return "99";
-            //}
-            //else
+            if (value.ToSafeString().Contains("呼出"))
+            {
+                return "02";
+            }
+            else if (value.ToSafeString().Contains("未知"))
+            {
+                return "99";
+            }
+            else
             {
                 return "01";
             }
@@ -195,15 +194,15 @@ namespace XLY.SF.Project.Plugin.DataReport
         {
             return this.TryConverter(value, v =>
             {
-                //if (value.ToSafeString() == LanguageHelper.Get("LANGKEY_WeiDu_02230"))
-                //{
-                //    return "0";
-                //}
-                //else if (value.ToSafeString() == LanguageHelper.Get("LANGKEY_YiDu_02231"))
-                //{
-                //    return "1";
-                //}
-                //else
+                if (value.ToSafeString() == "未读")
+                {
+                    return "0";
+                }
+                else if (value.ToSafeString() == "已读")
+                {
+                    return "1";
+                }
+                else
                 {
                     return "9";
                 }
@@ -241,18 +240,18 @@ namespace XLY.SF.Project.Plugin.DataReport
             {
                 string content = value.ToSafeString();
                 string reg = "";
-                //if (content.Contains(LanguageHelper.Get("LANGKEY_Shi_02232")))
-                //{
-                //    reg += @LanguageHelper.Get("LANGKEY_ShiShi_02233");
-                //}
-                //if (content.Contains(LanguageHelper.Get("LANGKEY_Fen_02234")))
-                //{
-                //    reg += @LanguageHelper.Get("LANGKEY_FenFen_02235");
-                //}
-                //if (content.Contains(LanguageHelper.Get("LANGKEY_Miao_02236")))
-                //{
-                //    reg += @LanguageHelper.Get("LANGKEY_MiaoMiao_02237");
-                //}
+                if (content.Contains("时"))
+                {
+                    reg += "(?<时>.*?时)";
+                }
+                if (content.Contains("分"))
+                {
+                    reg += "(?<分>.*?分)";
+                }
+                if (content.Contains("秒"))
+                {
+                    reg += "(?<秒>.*?秒)";
+                }
                 int h = 0, m = 0, s = 0;
                 if (reg.IsValid())
                 {
@@ -270,9 +269,9 @@ namespace XLY.SF.Project.Plugin.DataReport
                     var m1 = rg1.Match(content);
                     if (m1.Success)
                     {
-                        //h = !m1.Groups[LanguageHelper.Get("LANGKEY_Shi_02238")].Success ? 0 : m1.Groups[LanguageHelper.Get("LANGKEY_Shi_02238")].Value.Replace(LanguageHelper.Get("LANGKEY_Shi_02238"), "").ToSafeInt();
-                        //m = !m1.Groups[LanguageHelper.Get("LANGKEY_Fen_02241")].Success ? 0 : m1.Groups[LanguageHelper.Get("LANGKEY_Fen_02241")].Value.Replace(LanguageHelper.Get("LANGKEY_Fen_02241"), "").ToSafeInt();
-                        //s = !m1.Groups[LanguageHelper.Get("LANGKEY_Miao_02244")].Success ? 0 : m1.Groups[LanguageHelper.Get("LANGKEY_Miao_02244")].Value.Replace(LanguageHelper.Get("LANGKEY_Miao_02244"), "").ToSafeInt();
+                        h = !m1.Groups["时"].Success ? 0 : m1.Groups["时"].Value.Replace("时", "").ToSafeInt();
+                        m = !m1.Groups["分"].Success ? 0 : m1.Groups["分"].Value.Replace("分", "").ToSafeInt();
+                        s = !m1.Groups["秒"].Success ? 0 : m1.Groups["秒"].Value.Replace("秒", "").ToSafeInt();
                     }
                 }
                 else   //如果没有包含时分秒等文字，默认表示为秒

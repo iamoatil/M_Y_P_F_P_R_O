@@ -1,6 +1,0 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-    <!--引用基础样式-->
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
-    </ResourceDictionary.MergedDictionaries>
-</ResourceDictionary>

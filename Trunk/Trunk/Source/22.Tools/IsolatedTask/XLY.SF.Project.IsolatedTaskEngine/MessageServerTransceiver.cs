@@ -7,12 +7,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
     /// <summary>
     ///  服务端消息收发器。
     /// </summary>
-#if DEBUG
-    public
-#else
-        internal
-#endif
-     class MessageServerTransceiver : MessageTransceiver
+    internal class MessageServerTransceiver : MessageTransceiver
     {
         #region Constructors
 

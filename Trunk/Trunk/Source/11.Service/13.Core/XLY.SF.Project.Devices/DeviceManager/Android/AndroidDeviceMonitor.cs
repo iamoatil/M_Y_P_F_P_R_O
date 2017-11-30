@@ -57,8 +57,7 @@ namespace XLY.SF.Project.Devices
 
         public override bool Start()
         {
-            DoSelfPretection();
-
+            //DoSelfPretection();
             if (null != MonitorTimer)
             {
                 MonitorTimer.Stop();
@@ -263,7 +262,9 @@ namespace XLY.SF.Project.Devices
             //获取设备的SD卡路径
             device.SDCardPath = AndroidDeviceHelper.GetSDCardPath(device);
 
-        }
+            //获取设备的内存容量信息
+            AndroidDeviceHelper.GetDiskCapacityInfo(device);
 
+        }
     }
 }

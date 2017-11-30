@@ -18,7 +18,9 @@ namespace XLY.SF.Project.DataPump.Misc
         /// <summary>
         /// 初始化类型 XLY.SF.Project.DataPump.Misc.CellbriteMirrorDataPump 实例。
         /// </summary>
-        public CellbriteMirrorDataPump()
+        /// <param name="metadata">与此数据泵关联的元数据信息。</param>
+        public CellbriteMirrorDataPump(Pump metadata)
+            :base(metadata)
         {
         }
 
@@ -31,14 +33,13 @@ namespace XLY.SF.Project.DataPump.Misc
         /// <summary>
         /// 创建实现了 IFileSystemDevice 接口的类型实例。
         /// </summary>
-        /// <param name="context">执行上下文。</param>
         /// <returns>实现了 IFileSystemDevice 接口的类型实例。</returns>
-        protected override IFileSystemDevice CreateFileSystemDevice(DataPumpControllableExecutionContext context)
+        protected override IFileSystemDevice CreateFileSystemDevice()
         {
-            IFileSystemDevice device = new CellbriteDevice(context.PumpDescriptor.Source.ToString())
+            IFileSystemDevice device = new CellbriteDevice(Metadata.Source.ToString())
             {
-                Source = context.PumpDescriptor.Source,
-                ScanModel = (Byte)context.PumpDescriptor.ScanModel
+                Source = Metadata.Source,
+                ScanModel = (Byte)Metadata.ScanModel
             };
             return device;
         }

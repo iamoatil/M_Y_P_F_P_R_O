@@ -9,15 +9,21 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
 		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
              xmlns:control="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
-             mc:Ignorable="d" >
+             xmlns:convert="clr-namespace:XLY.SF.Project.Views.Converters.MultiConverter"
+             mc:Ignorable="d">
     <core:UcViewBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <!--转换器-->
+            <!--#region 转换器-->
+
             <BooleanToVisibilityConverter x:Key="bToV"/>
+            <convert:DevHomePageEditItemConverter x:Key="devItemConverter"/>
+
+
+            <!--#endregion-->
 
 
             <!--此处以下添加自己的引用-->
@@ -51,7 +57,7 @@
                     <RowDefinition/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Image Height="208" Width="120"/>
+                <Image Height="208" Width="120" Source="{Binding CurDevModel.DevIcon}"/>
                 <Button Grid.Row="1" Margin="0 10 0 10" 
                         Content="{Binding XPath=ViewLanguage/View_DevHomePage_TakePhoto, Source={x:Static ex:SystemContext.LanguageProvider}}" 
                         Style="{StaticResource btn_TransparentBg}" Height="30" Width="90"
@@ -155,7 +161,7 @@
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="{Binding XPath=ViewLanguage/View_DevHomePage_Device, Source={x:Static ex:SystemContext.LanguageProvider}}" HorizontalAlignment="Left" FontSize="14" Foreground="#9ba5b9" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding CurDevModel.DeviceTotalSize,StringFormat={}{0}G}" HorizontalAlignment="Right" Foreground="#9ba5b9" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding CurDevModel.DeviceTotalSize,StringFormat={}{0:.00}G}" HorizontalAlignment="Right" Foreground="#9ba5b9" FontWeight="Bold"/>
                     <ProgressBar Height="20" Margin="0 12 0 22" Grid.Row="1" Value="{Binding CurDevModel.UsedTotalSizeOfDevice}" Maximum="{Binding CurDevModel.DeviceTotalSize}">
                         <ProgressBar.Template>
                             <ControlTemplate TargetType="{x:Type ProgressBar}">
@@ -181,14 +187,14 @@
                                                 <TextBlock Margin="5 0 5 0" Foreground="#9ba5b9" VerticalAlignment="Center">
                                                     <Run Text="{Binding XPath=ViewLanguage/View_DevHomePage_Used, Source={x:Static ex:SystemContext.LanguageProvider}}"/>
                                                     <Run Text="："/>
-                                                    <Run Text="{Binding CurDevModel.UsedTotalSizeOfDevice,StringFormat={}{0}G}"/>
+                                                    <Run Text="{Binding CurDevModel.UsedTotalSizeOfDevice,StringFormat={}{0:.00}G}"/>
                                                 </TextBlock>
                                             </Border>
                                             <Border Background="{Binding Background,ElementName=PART_Track}" Grid.Column="2" Margin="1">
                                                 <TextBlock Margin="5 0 5 0" Foreground="White" VerticalAlignment="Center">
                                                 <Run Text="{Binding XPath=ViewLanguage/View_DevHomePage_Unused, Source={x:Static ex:SystemContext.LanguageProvider}}"/>
                                                 <Run Text="："/>
-                                                <Run Text="{Binding CurDevModel.UnusedTotalSizeOfDevice,StringFormat={}{0}G}"/>
+                                                <Run Text="{Binding CurDevModel.UnusedTotalSizeOfDevice,StringFormat={}{0:.00}G}"/>
                                                 </TextBlock>
                                             </Border>
                                         </Grid>
@@ -204,7 +210,7 @@
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="{Binding XPath=ViewLanguage/View_DevHomePage_SDCard, Source={x:Static ex:SystemContext.LanguageProvider}}" HorizontalAlignment="Left" FontSize="14" Foreground="#9ba5b9" FontWeight="Bold"/>
-                    <TextBlock Text="{Binding CurDevModel.SDCardTotalSize,StringFormat={}{0}G}" HorizontalAlignment="Right" Foreground="#9ba5b9" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding CurDevModel.SDCardTotalSize,StringFormat={}{0:.00}G}" HorizontalAlignment="Right" Foreground="#9ba5b9" FontWeight="Bold"/>
                     <ProgressBar Height="20" Value="{Binding CurDevModel.UsedTotalSizeOfSD}" Maximum="{Binding CurDevModel.SDCardTotalSize}" Margin="0 12 0 0" Grid.Row="1">
                         <ProgressBar.Template>
                             <ControlTemplate TargetType="{x:Type ProgressBar}">
@@ -230,14 +236,14 @@
                                                 <TextBlock Margin="5 0 5 0" Foreground="#9ba5b9" VerticalAlignment="Center">
                                                 <Run Text="{Binding XPath=ViewLanguage/View_DevHomePage_Used, Source={x:Static ex:SystemContext.LanguageProvider}}"/>
                                                 <Run Text="："/>
-                                                <Run Text="{Binding CurDevModel.UsedTotalSizeOfSD,StringFormat={}{0}G}"/>
+                                                <Run Text="{Binding CurDevModel.UsedTotalSizeOfSD,StringFormat={}{0:.00}G}"/>
                                                 </TextBlock>
                                             </Border>
                                             <Border Background="{Binding Background,ElementName=PART_Track}" Margin="1" Grid.Column="2" >
                                                 <TextBlock Margin="5 0 5 0" Foreground="White" VerticalAlignment="Center">
                                                 <Run Text="{Binding XPath=ViewLanguage/View_DevHomePage_Unused, Source={x:Static ex:SystemContext.LanguageProvider}}"/>
                                                 <Run Text="："/>
-                                                <Run Text="{Binding CurDevModel.UnusedTotalSizeOfSD,StringFormat={}{0}G}"/>
+                                                <Run Text="{Binding CurDevModel.UnusedTotalSizeOfSD,StringFormat={}{0:.00}G}"/>
                                                 </TextBlock>
                                             </Border>
                                         </Grid>
@@ -250,7 +256,7 @@
             </StackPanel>
 
             <!--信息填写-->
-            <StackPanel Grid.Row="2" IsEnabled="{Binding IsChecked,ElementName=tb_Edit}">
+            <StackPanel Grid.Row="2" IsEnabled="{Binding CurEditStatus}">
                 <StackPanel.Resources>
                     <Style TargetType="{x:Type control:TextBoxEx}">
                         <Setter Property="TitleForeground" Value="#9ba5b9"/>
@@ -276,45 +282,67 @@
                         <Setter Property="Template" Value="{StaticResource ComboBoxEditableCtEnabled}"/>
                     </Style>
                 </StackPanel.Resources>
-                <control:TextBoxEx Height="42" Text="{Binding CurDevModel.No}" Width="472" Title="{Binding XPath=ViewLanguage/View_DevHomePage_No, Source={x:Static ex:SystemContext.LanguageProvider}}"/>
+                <control:TextBoxEx x:Name="edit_No" Height="42" Width="472" Title="{Binding XPath=ViewLanguage/View_DevHomePage_No, Source={x:Static ex:SystemContext.LanguageProvider}}"/>
                 <Grid Margin="0 10 0 10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="10"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <control:TextBoxEx Text="{Binding CurDevModel.Holder}" Title="{Binding XPath=ViewLanguage/View_DevHomePage_Holder, Source={x:Static ex:SystemContext.LanguageProvider}}" Height="42"/>
-                    <control:ComboBoxEx SelectedValue="{Binding CurDevModel.CredentialsType}" Title="{Binding XPath=ViewLanguage/View_DevHomePage_CredentialsType, Source={x:Static ex:SystemContext.LanguageProvider}}" Grid.Column="2"/>
+                    <control:TextBoxEx x:Name="edit_Holder" Title="{Binding XPath=ViewLanguage/View_DevHomePage_Holder, Source={x:Static ex:SystemContext.LanguageProvider}}" Height="42"/>
+                    <control:ComboBoxEx x:Name="edit_CredentialsType" SelectedIndex="0" Title="{Binding XPath=ViewLanguage/View_DevHomePage_CredentialsType, Source={x:Static ex:SystemContext.LanguageProvider}}" Grid.Column="2">
+                        <ComboBoxItem Content="身份证"/>
+                        <ComboBoxItem Content="军官证"/>
+                        <ComboBoxItem Content="护照"/>
+                        <ComboBoxItem Content="学生证"/>
+                        <ComboBoxItem Content="暂住证"/>
+                    </control:ComboBoxEx>
                 </Grid>
-                <control:TextBoxEx Height="42" Width="472" Text="{Binding CurDevModel.HolderCredentialsNo}" Title="{Binding XPath=ViewLanguage/View_DevHomePage_HolderCredentialsNo, Source={x:Static ex:SystemContext.LanguageProvider}}"/>
+                <control:TextBoxEx x:Name="edit_HolderCredentialsNo" Height="42" Width="472" Title="{Binding XPath=ViewLanguage/View_DevHomePage_HolderCredentialsNo, Source={x:Static ex:SystemContext.LanguageProvider}}"/>
                 <Grid Margin="0 10 0 10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="10"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <control:TextBoxEx Text="{Binding CurDevModel.CensorshipPerson}" Title="{Binding XPath=ViewLanguage/View_DevHomePage_CensorshipPerson, Source={x:Static ex:SystemContext.LanguageProvider}}" Height="42"/>
-                    <control:ComboBoxEx SelectedValue="{Binding CurDevModel.UnitName}" Title="{Binding XPath=ViewLanguage/View_DevHomePage_UnitName, Source={x:Static ex:SystemContext.LanguageProvider}}" Grid.Column="2"/>
+                    <control:TextBoxEx x:Name="edit_CensorshipPerson" Title="{Binding XPath=ViewLanguage/View_DevHomePage_CensorshipPerson, Source={x:Static ex:SystemContext.LanguageProvider}}" Height="42"/>
+                    <control:TextBoxEx x:Name="edit_UnitName" Title="{Binding XPath=ViewLanguage/View_DevHomePage_UnitName, Source={x:Static ex:SystemContext.LanguageProvider}}" Grid.Column="2"/>
                 </Grid>
-                <control:TextBoxEx Height="42" Width="472" Text="{Binding CurDevModel.CensorshipPersonCredentialsNo}" Title="{Binding XPath=ViewLanguage/View_DevHomePage_CensorshipPersonCredentialsNo, Source={x:Static ex:SystemContext.LanguageProvider}}"/>
+                <control:TextBoxEx x:Name="edit_CensorshipPersonCredentialsNo" Height="42" Width="472" Title="{Binding XPath=ViewLanguage/View_DevHomePage_CensorshipPersonCredentialsNo, Source={x:Static ex:SystemContext.LanguageProvider}}"/>
                 <Grid Margin="0 10 0 10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="10"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <control:TextBoxEx Text="{Binding CurDevModel.Operator}" Title="{Binding XPath=ViewLanguage/View_DevHomePage_Operator, Source={x:Static ex:SystemContext.LanguageProvider}}" Height="42"/>
-                    <control:TextBoxEx Text="{Binding CurDevModel.CredentialsNo}" Title="{Binding XPath=ViewLanguage/View_DevHomePage_CredentialsNo, Source={x:Static ex:SystemContext.LanguageProvider}}" Grid.Column="2"/>
+                    <control:TextBoxEx x:Name="edit_Operator" Text="{Binding CurLoginUserName,Mode=OneWay}" Title="{Binding XPath=ViewLanguage/View_DevHomePage_Operator, Source={x:Static ex:SystemContext.LanguageProvider}}" Height="42"/>
+                    <control:TextBoxEx x:Name="edit_CredentialsNo" Text="{Binding CurLoginUserID,Mode=OneWay}" Title="{Binding XPath=ViewLanguage/View_DevHomePage_CredentialsNo, Source={x:Static ex:SystemContext.LanguageProvider}}" Grid.Column="2"/>
                 </Grid>
-                <control:TextBoxEx Text="{Binding CurDevModel.Desciption}" Height="42" Width="472" Title="{Binding XPath=ViewLanguage/View_DevHomePage_Desciption, Source={x:Static ex:SystemContext.LanguageProvider}}"/>
+                <control:TextBoxEx x:Name="edit_Desciption" Height="42" Width="472" Title="{Binding XPath=ViewLanguage/View_DevHomePage_Desciption, Source={x:Static ex:SystemContext.LanguageProvider}}"/>
             </StackPanel>
 
             <StackPanel Grid.Row="3" Margin="0 20 0 0" Orientation="Horizontal" HorizontalAlignment="Right">
-                <TextBlock Visibility="{Binding IsChecked,ElementName=tb_Edit,Converter={StaticResource bToV}}" Text="{Binding XPath=ViewLanguage/View_DevHomePage_ClickESCCancel, Source={x:Static ex:SystemContext.LanguageProvider}}" VerticalAlignment="Center"/>
-                <ToggleButton x:Name="tb_Edit" Margin="10 0 0 0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                              IsChecked="{Binding CurEditStatus}"
+                <TextBlock Visibility="{Binding CurEditStatus,Converter={StaticResource bToV}}" Text="{Binding XPath=ViewLanguage/View_DevHomePage_ClickESCCancel, Source={x:Static ex:SystemContext.LanguageProvider}}" VerticalAlignment="Center"/>
+                <Button x:Name="tb_Edit" Margin="10 0 0 0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                               Content="{Binding XPath=ViewLanguage/View_DevHomePage_Edit, Source={x:Static ex:SystemContext.LanguageProvider}}" 
-                              Style="{StaticResource cb_DevHomePageEdit}" Width="90" Height="30"/>
+                              Style="{StaticResource cb_DevHomePageEdit}" Width="90" Height="30"
+                              Command="{Binding SaveEditCommand.ViewExecuteCmd}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource devItemConverter}">
+                            <Binding Path="Text" ElementName="edit_No"/>
+                            <Binding Path="Text" ElementName="edit_Holder"/>
+                            <Binding Path="SelectedValue" ElementName="edit_CredentialsType"/>
+                            <Binding Path="Text" ElementName="edit_HolderCredentialsNo"/>
+                            <Binding Path="Text" ElementName="edit_CensorshipPerson"/>
+                            <Binding Path="Text" ElementName="edit_UnitName"/>
+                            <Binding Path="Text" ElementName="edit_CensorshipPersonCredentialsNo"/>
+                            <Binding Path="Text" ElementName="edit_Operator"/>
+                            <Binding Path="Text" ElementName="edit_CredentialsNo"/>
+                            <Binding Path="Text" ElementName="edit_Desciption"/>
+                            <Binding Path="CurEditStatus"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
             </StackPanel>
         </Grid>
 
@@ -380,9 +408,9 @@
 
             <Image Grid.Row="1" MaxWidth="485" MaxHeight="212" HorizontalAlignment="Left" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DevHomePageText.png"/>
         </Grid>
-        
+
         <!--设备首页导航内容【只用于推荐方案】-->
-        <ContentControl Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding DevHomePageSubView}"/>
+        <ContentControl Grid.Column="0" Grid.ColumnSpan="3" Content="{Binding SubView}"/>
 
         <!--触发器-->
         <i:Interaction.Triggers>
@@ -415,11 +443,23 @@
                 <ei:ChangePropertyAction PropertyName="Visibility" Value="Visible" TargetObject="{Binding ElementName=sp_Card}"/>
             </ei:DataTrigger>
             <!--编辑名称触发器-->
-            <ei:DataTrigger Binding="{Binding IsChecked,ElementName=tb_Edit}" Value="True">
+            <ei:DataTrigger Binding="{Binding CurEditStatus}" Value="True">
+                <ei:ChangePropertyAction PropertyName="Style" Value="{StaticResource cb_DevHomePageSave}" TargetObject="{Binding ElementName=tb_Edit}"/>
                 <ei:ChangePropertyAction PropertyName="Content" Value="{Binding XPath=ViewLanguage/View_Common_Save, Source={x:Static ex:SystemContext.LanguageProvider}}" TargetObject="{Binding ElementName=tb_Edit}"/>
             </ei:DataTrigger>
-            <ei:DataTrigger Binding="{Binding IsChecked,ElementName=tb_Edit}" Value="false">
+            <ei:DataTrigger Binding="{Binding CurEditStatus}" Value="false">
+                <ei:ChangePropertyAction PropertyName="Style" Value="{StaticResource cb_DevHomePageEdit}" TargetObject="{Binding ElementName=tb_Edit}"/>
                 <ei:ChangePropertyAction PropertyName="Content" Value="{Binding XPath=ViewLanguage/View_DevHomePage_Edit, Source={x:Static ex:SystemContext.LanguageProvider}}" TargetObject="{Binding ElementName=tb_Edit}"/>
+                <ei:ChangePropertyAction PropertyName="Text" Value="" TargetObject="{Binding ElementName=edit_No}"/>
+                <ei:ChangePropertyAction PropertyName="Text" Value="" TargetObject="{Binding ElementName=edit_Holder}"/>
+                <ei:ChangePropertyAction PropertyName="SelectedIndex" Value="0" TargetObject="{Binding ElementName=edit_CredentialsType}"/>
+                <ei:ChangePropertyAction PropertyName="Text" Value="" TargetObject="{Binding ElementName=edit_HolderCredentialsNo}"/>
+                <ei:ChangePropertyAction PropertyName="Text" Value="" TargetObject="{Binding ElementName=edit_CensorshipPerson}"/>
+                <ei:ChangePropertyAction PropertyName="Text" Value="" TargetObject="{Binding ElementName=edit_UnitName}"/>
+                <ei:ChangePropertyAction PropertyName="Text" Value="" TargetObject="{Binding ElementName=edit_CensorshipPersonCredentialsNo}"/>
+                <ei:ChangePropertyAction PropertyName="Text" Value="{Binding CurLoginUserName}" TargetObject="{Binding ElementName=edit_Operator}"/>
+                <ei:ChangePropertyAction PropertyName="Text" Value="{Binding CurLoginUserID}" TargetObject="{Binding ElementName=edit_CredentialsNo}"/>
+                <ei:ChangePropertyAction PropertyName="Text" Value="" TargetObject="{Binding ElementName=edit_Desciption}"/>
             </ei:DataTrigger>
 
         </i:Interaction.Triggers>

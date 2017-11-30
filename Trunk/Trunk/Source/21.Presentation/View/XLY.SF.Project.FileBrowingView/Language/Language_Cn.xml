@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageResource>
+  <FileBrowing>
+    <Msg_SelectDownloadFileNode>请选择要导出的文件或文件夹！</Msg_SelectDownloadFileNode>
+    <View_SerachBtnName>搜索</View_SerachBtnName>
+    <View_CancelSearchBtnName>取消搜索</View_CancelSearchBtnName>
+    <View_ResetSerachArgs>重置搜索条件</View_ResetSerachArgs>
+    <View_SearchIngTip>正在搜索</View_SearchIngTip>
+    <View_LoadingTip>正在加载</View_LoadingTip>
+    <View_ExportTip>导出选中文件、文件夹</View_ExportTip>
+    <View_ExportBtnName>导出文件</View_ExportBtnName>
+    <View_Grid_MarkCol>标记</View_Grid_MarkCol>
+    <View_Grid_State>状态</View_Grid_State>
+    <View_Grid_NameCol>文件名</View_Grid_NameCol>
+    <View_Grid_TypeCol>类型</View_Grid_TypeCol>
+    <View_Grid_CreateTimeCol>创建时间</View_Grid_CreateTimeCol>
+    <View_Grid_LastWriteTimeCol>最后修改时间</View_Grid_LastWriteTimeCol>
+    <View_Grid_LastAccessTimeCol>最后访问时间</View_Grid_LastAccessTimeCol>
+    <View_Grid_FileSizeCol>大小</View_Grid_FileSizeCol>
+    <View_Grid_OperateCol>操作</View_Grid_OperateCol>
+    <View_ExportView_Tital>正在导出</View_ExportView_Tital>
+    <View_ExportView_End>已完成</View_ExportView_End>
+    <View_ExportView_Failure>失败</View_ExportView_Failure>
+    <View_ExportView_Success>成功</View_ExportView_Success>
+    <View_ExportView_BtnCancel>取消</View_ExportView_BtnCancel>
+    <View_ExportView_BtnClose>关闭</View_ExportView_BtnClose>
+    <View_ExportView_BtnOpenPath>打开路径</View_ExportView_BtnOpenPath>
+    <View_ExportViewModel_Exporting>开始导出...</View_ExportViewModel_Exporting>
+
+
+    <View_Search_DataStateAll>所有状态</View_Search_DataStateAll>
+    <View_Search_DataStateNormal>正常数据</View_Search_DataStateNormal>
+    <View_Search_DataStateDelete>删除数据</View_Search_DataStateDelete>
+    <View_Search_Keyword>关键词</View_Search_Keyword>
+    <View_Search_KeywordTip>请输入关键词</View_Search_KeywordTip>
+    <View_Search_ZhengZe>正则</View_Search_ZhengZe>
+    <View_Search_ZhengZeTip>请输入正则表达式</View_Search_ZhengZeTip>
+
+  </FileBrowing>
+</LanguageResource>
+
+

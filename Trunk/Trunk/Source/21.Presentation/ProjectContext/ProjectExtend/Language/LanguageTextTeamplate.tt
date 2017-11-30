@@ -83,6 +83,7 @@ public class Languagekeys
                     //属性
                     emt.IsCustromClass = false;
                     emt.PropertyName = string.Format("{0}_{1}", xmlNodePath, xmlItem.LocalName).TrimStart((firstNodeName + "/").ToArray());
+                    emt.PropertyName = emt.PropertyName.Replace('/','_');
                     emt.PropertyValue = xmlItem.HasAttributes ? GetAttributeValue(xmlItem) : xmlItem.FirstChild != null && xmlItem.FirstChild.NodeType == XmlNodeType.Text ? xmlItem.InnerText : "";
                     emt.XmlInnerPath = string.Format("{0}/{1}", xmlNodePath, xmlItem.LocalName);
                     result.Add(emt);

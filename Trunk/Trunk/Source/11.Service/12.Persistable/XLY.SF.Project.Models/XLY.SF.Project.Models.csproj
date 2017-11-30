@@ -45,9 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\Basic.cs" />
+    <Compile Include="Entities\CaseType.cs" />
     <Compile Include="Entities\IEntity.cs" />
+    <Compile Include="Entities\Inspection.cs" />
     <Compile Include="Entities\OperationLog.cs" />
-    <Compile Include="IDatabaseContext.cs" />
+    <Compile Include="Entities\WorkUnit.cs" />
+    <Compile Include="ILogicalDataContext.cs" />
+    <Compile Include="IRecordContext.cs" />
+    <Compile Include="IRecordContextExtension.cs" />
+    <Compile Include="ISettings.cs" />
     <Compile Include="Logical\LogicalModelBase.cs" />
     <Compile Include="Logical\OperationLogEntityModel.cs" />
     <Compile Include="Logical\UserInfoReadOnlyModel.cs" />

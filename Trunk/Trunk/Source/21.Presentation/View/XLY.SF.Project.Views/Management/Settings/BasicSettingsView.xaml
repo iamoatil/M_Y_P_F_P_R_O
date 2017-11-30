@@ -1,0 +1,48 @@
+﻿<core:UcViewBase x:Class="XLY.SF.Project.Views.Management.Settings.BasicSettingsView"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
+                 xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
+                 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                 xmlns:local="clr-namespace:XLY.SF.Project.Views.Management.Settings"
+                 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                 xmlns:pro="http://www.spfpro.com"
+                 mc:Ignorable="d">
+    <core:UcViewBase.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--此处以下添加自己的引用-->
+            <local:LanguageConverter x:Key="LanguageConverter" />
+        </ResourceDictionary>
+    </core:UcViewBase.Resources>
+    <StackPanel>
+        <GroupBox Header="{Binding XPath=ViewLanguage/Management/Settings/Language,Source={x:Static ex:SystemContext.LanguageProvider}}">
+            <pro:ComboBoxEx SelectedValue="{Binding Language, Converter={StaticResource LanguageConverter}}"
+                            Title="{Binding XPath=ViewLanguage/Management/Settings/Language,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                            Width="200"
+                            Height="30"
+                            HorizontalAlignment="Left"
+                            ItemsSource="{Binding Languages}" />
+
+        </GroupBox>
+        <GroupBox Header="{Binding XPath=ViewLanguage/Management/Settings/DefaultPath,Source={x:Static ex:SystemContext.LanguageProvider}}">
+            <pro:TextBoxEx Title="{Binding XPath=ViewLanguage/Management/Settings/DefaultPath,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                           Width="412"
+                           Height="30"
+                           HorizontalAlignment="Left"
+                           IsReadOnly="True"
+                           Text="{Binding Path,Mode=TwoWay}" />
+        </GroupBox>
+        <GroupBox Header="{Binding XPath=ViewLanguage/Management/Settings/DataFilter,Source={x:Static ex:SystemContext.LanguageProvider}}">
+            <CheckBox Content="{Binding XPath=ViewLanguage/Management/Settings/DataFilterDescription,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                      HorizontalAlignment="Left"
+                      Foreground="White"
+                      IsChecked="{Binding EnableFilter,Mode=TwoWay}" />
+        </GroupBox>
+    </StackPanel>
+</core:UcViewBase>

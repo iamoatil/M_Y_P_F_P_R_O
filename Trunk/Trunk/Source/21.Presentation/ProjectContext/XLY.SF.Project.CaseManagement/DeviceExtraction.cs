@@ -137,7 +137,7 @@ namespace XLY.SF.Project.CaseManagement
         /// <summary>
         /// 拥有此设备的案例。
         /// </summary>
-        internal Case Owner { get; }
+        public Case Owner { get; }
 
         /// <summary>
         /// 标识。用于标识该实例与某个案例关联。同一案例及其设备提取、提取项都具有相同的标识。

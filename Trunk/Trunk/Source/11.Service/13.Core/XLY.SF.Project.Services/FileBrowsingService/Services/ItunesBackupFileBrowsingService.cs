@@ -11,11 +11,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using X64Service;
 using XLY.SF.Framework.BaseUtility;
-using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Domains.Contract;
@@ -42,7 +40,7 @@ namespace XLY.SF.Project.Services
         /// </summary>
         private string DataSourcePath { get; set; }
 
-        protected override FileBrowingNode DoGetRootNode(IAsyncTaskProgress async)
+        protected override FileBrowingNode DoGetRootNode()
         {
             var di = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).Root.Name;
 
@@ -75,7 +73,7 @@ namespace XLY.SF.Project.Services
             return 0;
         }
 
-        protected override List<FileBrowingNode> DoGetChildNodes(FileBrowingNode parentNode, IAsyncTaskProgress async)
+        protected override List<FileBrowingNode> DoGetChildNodes(FileBrowingNode parentNode)
         {
             List<FileBrowingNode> list = new List<FileBrowingNode>();
 
@@ -115,72 +113,13 @@ namespace XLY.SF.Project.Services
             return list;
         }
 
-        protected override void DoDownload(FileBrowingNode node, string savePath, bool persistRelativePath, IAsyncTaskProgress async)
-        {
-            FileHelper.CreateDirectory(savePath);
-
-            DownLoadNode(node as ItunesBackupFileBrowingNode, savePath, persistRelativePath, async);
-        }
-
-        private void DownLoadNode(ItunesBackupFileBrowingNode node, string savePath, bool persistRelativePath, IAsyncTaskProgress async)
-        {
-            if (null == node || node.SourcePath.IsInvalid())
-            {
-                return;
-            }
-
-            if (node.NodeType == FileBrowingNodeType.File)
-            {
-                DownLoadFile(node, savePath, persistRelativePath, async);
-            }
-            else
-            {
-                var cSavePath = Path.Combine(savePath, node.Name).Replace('/', '\\');
-                if (persistRelativePath)
-                {
-                    cSavePath = savePath.Replace('/', '\\');
-                }
-
-                FileHelper.CreateDirectory(cSavePath);
-
-                foreach (var cnode in DoGetChildNodes(node, async))
-                {
-                    DownLoadNode(cnode as ItunesBackupFileBrowingNode, cSavePath, persistRelativePath, async);
-                }
-            }
-        }
-
-        private void DownLoadFile(ItunesBackupFileBrowingNode fileNode, string savePath, bool persistRelativePath, IAsyncTaskProgress async)
-        {
-            try
-            {
-                var tSavePath = string.Empty;
-                if (persistRelativePath)
-                {
-                    tSavePath = Path.Combine(savePath, fileNode.SourcePath.Replace('/', '\\').TrimStart("\\").TrimStart(DataSourcePath).TrimStart("\\"));
-                }
-                else
-                {
-                    tSavePath = Path.Combine(savePath, fileNode.Name).Replace('/', '\\');
-                }
-
-                FileHelper.CreateDirectory(FileHelper.GetFilePath(tSavePath));
-
-                File.Copy(fileNode.SourcePath, tSavePath);
-            }
-            catch
-            {
-
-            }
-        }
-
         /// <summary>
         /// 开始搜索
         /// </summary>
         /// <param name="node">搜索根节点，必须是文件夹类型 即IsFile为false</param>
         /// <param name="args">搜索条件</param>
         /// <param name="async">异步通知</param>
-        protected override void BeginSearch(FileBrowingNode node, IEnumerable<FilterArgs> args, IAsyncTaskProgress async)
+        protected override void BeginSearch(FileBrowingNode node, IEnumerable<FilterArgs> args, CancellationTokenSource cancellationTokenSource, FileBrowingIAsyncTaskProgress async)
         {
             var stateArg = args.FirstOrDefault(a => a is FilterByEnumStateArgs);
             if (null != stateArg && (stateArg as FilterByEnumStateArgs).State != EnumDataState.Normal)
@@ -196,7 +135,33 @@ namespace XLY.SF.Project.Services
                 return;
             }
 
-            base.BeginSearch(node, args, async);
+            base.BeginSearch(node, args, cancellationTokenSource, async);
+        }
+
+        protected override void DownLoadFile(FileBrowingNode fileNode, string savePath, bool persistRelativePath, CancellationTokenSource cancellationTokenSource, FileBrowingIAsyncTaskProgress async)
+        {
+            var ifileNode = fileNode as ItunesBackupFileBrowingNode;
+
+            try
+            {
+                var tSavePath = string.Empty;
+                if (persistRelativePath)
+                {
+                    tSavePath = Path.Combine(savePath, ifileNode.SourcePath.Replace('/', '\\').TrimStart("\\").TrimStart(DataSourcePath).TrimStart("\\"));
+                }
+                else
+                {
+                    tSavePath = Path.Combine(savePath, ifileNode.Name).Replace('/', '\\');
+                }
+
+                FileHelper.CreateDirectory(FileHelper.GetFilePath(tSavePath));
+
+                File.Copy(ifileNode.SourcePath, tSavePath);
+            }
+            catch
+            {
+
+            }
         }
 
         /// <summary>

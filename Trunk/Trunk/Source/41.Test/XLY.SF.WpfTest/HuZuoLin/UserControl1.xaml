@@ -12,10 +12,17 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            
+            
+            
+            
+            
+            
+            
         </ResourceDictionary>
-
+        
     </UserControl.Resources>
     <Grid>
-        <control:TextBoxEx Width="300" Height="30" Title="测试文字" Watermark="我是水印" Text=""/>
+        <control:LoadingControl Width="300" Height="30"/>
     </Grid>
 </UserControl>

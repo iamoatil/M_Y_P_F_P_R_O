@@ -90,24 +90,6 @@ namespace XLY.SF.Project.Domains
 
         #endregion
 
-        //#region Name -- 名称
-
-        //private string _Name;
-        ///// <summary>
-        ///// 名称
-        ///// </summary>
-        //public virtual string Name
-        //{
-        //    get { return _Name; }
-        //    set
-        //    {
-        //        _Name = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
-
-        //#endregion
-
         #region Manufacture -- 厂商
 
         private string _Manufacture;
@@ -328,6 +310,42 @@ namespace XLY.SF.Project.Domains
             get { return _ScreenImage; }
             set { _ScreenImage = value; }
         }
+        #endregion
+
+        #region 手机内存容量
+
+        /// <summary>
+        /// 设备总容量 字节
+        /// </summary>
+        public UInt64 TotalDiskCapacity
+        {
+            get;set;
+        }
+
+        /// <summary>
+        /// 设备剩余容量 字节
+        /// </summary>
+        public UInt64 TotalDiskAvailable
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// SD卡总容量 字节
+        /// </summary>
+        public UInt64 TotalDataCapacity
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// SD卡剩余容量 字节
+        /// </summary>
+        public UInt64 TotalDataAvailable
+        {
+            get; set;
+        }
+
         #endregion
 
         /// <summary>

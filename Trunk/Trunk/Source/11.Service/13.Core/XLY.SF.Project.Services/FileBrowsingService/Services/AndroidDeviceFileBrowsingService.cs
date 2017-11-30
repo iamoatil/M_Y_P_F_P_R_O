@@ -9,9 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using XLY.SF.Framework.Core.Base.CoreInterface;
+using System.Threading;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.Devices;
 using XLY.SF.Project.Domains;
@@ -40,7 +38,7 @@ namespace XLY.SF.Project.Services
 
             RootNode = new AndroidDeviceFileBrowingNode()
             {
-                Name = "根目录",
+                Name = device.Name,
                 NodeType = FileBrowingNodeType.Root
             };
         }
@@ -49,7 +47,7 @@ namespace XLY.SF.Project.Services
         /// 获取根节点
         /// </summary>
         /// <returns></returns>
-        protected override FileBrowingNode DoGetRootNode(IAsyncTaskProgress async)
+        protected override FileBrowingNode DoGetRootNode()
         {
             return RootNode;
         }
@@ -59,7 +57,7 @@ namespace XLY.SF.Project.Services
         /// </summary>
         /// <param name="parentNode"></param>
         /// <returns></returns>
-        protected override List<FileBrowingNode> DoGetChildNodes(FileBrowingNode parentNode, IAsyncTaskProgress async)
+        protected override List<FileBrowingNode> DoGetChildNodes(FileBrowingNode parentNode)
         {
             return DoGetChildNodes(parentNode as AndroidDeviceFileBrowingNode);
         }
@@ -124,31 +122,12 @@ namespace XLY.SF.Project.Services
         }
 
         /// <summary>
-        /// 下载
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="savePath"></param>
-        /// <param name="persistRelativePath"></param>
-        /// <param name="async"></param>
-        protected override void DoDownload(FileBrowingNode node, string savePath, bool persistRelativePath, IAsyncTaskProgress async)
-        {
-            if (node.NodeType == FileBrowingNodeType.File)
-            {
-                AndroidHelper.Instance.CopyFile(AndroidPhone, (node as AndroidDeviceFileBrowingNode).SourcePath, savePath, async, persistRelativePath);
-            }
-            else
-            {
-                AndroidHelper.Instance.CopyFile(AndroidPhone, string.Format("{0}#F", (node as AndroidDeviceFileBrowingNode).SourcePath), savePath, async, persistRelativePath);
-            }
-        }
-
-        /// <summary>
         /// 开始搜索
         /// </summary>
         /// <param name="node">搜索根节点，必须是文件夹类型 即IsFile为false</param>
         /// <param name="args">搜索条件</param>
         /// <param name="async">异步通知</param>
-        protected override void BeginSearch(FileBrowingNode node, IEnumerable<FilterArgs> args, IAsyncTaskProgress async)
+        protected override void BeginSearch(FileBrowingNode node, IEnumerable<FilterArgs> args, CancellationTokenSource cancellationTokenSource, FileBrowingIAsyncTaskProgress async)
         {
             var stateArg = args.FirstOrDefault(a => a is FilterByEnumStateArgs);
             if (null != stateArg && (stateArg as FilterByEnumStateArgs).State != EnumDataState.Normal)
@@ -157,7 +136,12 @@ namespace XLY.SF.Project.Services
                 return;
             }
 
-            base.BeginSearch(node, args, async);
+            base.BeginSearch(node, args, cancellationTokenSource, async);
+        }
+
+        protected override void DownLoadFile(FileBrowingNode fileNode, string savePath, bool persistRelativePath, CancellationTokenSource cancellationTokenSource, FileBrowingIAsyncTaskProgress async)
+        {
+            AndroidHelper.Instance.CopyFile(AndroidPhone, (fileNode as AndroidDeviceFileBrowingNode).SourcePath, savePath, null, persistRelativePath);
         }
 
         /// <summary>
@@ -176,5 +160,4 @@ namespace XLY.SF.Project.Services
             }
         }
     }
-
 }

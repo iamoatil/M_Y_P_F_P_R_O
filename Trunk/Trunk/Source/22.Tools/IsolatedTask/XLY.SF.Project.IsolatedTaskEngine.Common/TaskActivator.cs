@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 
 namespace XLY.SF.Project.IsolatedTaskEngine.Common
 {
@@ -34,6 +35,16 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// 对象占用的资源是否已经被释放。
         /// </summary>
         public Boolean IsDisposed { get; private set; }
+
+        /// <summary>
+        /// 日志记录器。
+        /// </summary>
+        internal protected ILog Logger { get; set; }
+
+        /// <summary>
+        /// 激活器唯一标识。
+        /// </summary>
+        public Guid ActivatorToken { get; } = Guid.NewGuid();
 
         #endregion
 

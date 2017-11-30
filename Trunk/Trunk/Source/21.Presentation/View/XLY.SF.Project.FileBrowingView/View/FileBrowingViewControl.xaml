@@ -1,0 +1,351 @@
+﻿<core:UcViewBase x:Class="XLY.SF.Project.FileBrowingView.FileBrowingViewControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:XLY.SF.Project.FileBrowingView"
+             xmlns:lang="clr-namespace:XLY.SF.Project.FileBrowingView.Language"
+             xmlns:behavior="clr-namespace:XLY.SF.Project.Themes.Behavior;assembly=XLY.SF.Project.Themes"
+             xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
+             xmlns:ctrl="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1568">
+    <core:UcViewBase.Resources>
+        <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
+    </core:UcViewBase.Resources>
+    <Grid>
+        <Grid.Resources>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></BooleanToVisibilityConverter>
+            <Style TargetType="Button" x:Key="searchBtnStyle">
+                <Setter Property="Content" Value="{Binding XPath=FileBrowing/View_SerachBtnName,Source={x:Static lang:LanguageHelper.LanguageProvider}}"></Setter>
+                <Setter Property="Template" Value="{StaticResource btn_EmptyCT}"/>
+                <Setter Property="Border.CornerRadius" Value="5"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Background" Value="#379be6"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="#3ca5f5"/>
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background" Value="#2382cd"/>
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="false">
+                        <Setter Property="Background" Value="#4d556d"></Setter>
+                        <Setter Property="Foreground" Value="#9ba5b9"></Setter>
+                    </Trigger>
+                    <DataTrigger Binding="{Binding IsSearching}" Value="true">
+                        <Setter Property="Content" Value="{Binding XPath=FileBrowing/View_CancelSearchBtnName,Source={x:Static lang:LanguageHelper.LanguageProvider}}"></Setter>
+                        <Setter Property="Template" Value="{StaticResource RedButtonCt}"></Setter>
+                        <Setter Property="Border.CornerRadius" Value="5"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="ComboBoxItem">
+                <Setter Property="Template" Value="{DynamicResource cb_DefaultItemCt}"/>
+                <Setter Property="Height" Value="42"/>
+                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                <Setter Property="Foreground" Value="White"/>
+            </Style>
+        </Grid.Resources>
+        <Label Background="Red" Visibility="{Binding IsLoading,Converter={StaticResource BooleanToVisibilityConverter}}" 
+               HorizontalContentAlignment="Center" VerticalContentAlignment="Center" 
+               Content="{Binding XPath=FileBrowing/View_LoadingTip,Source={x:Static lang:LanguageHelper.LanguageProvider}}"></Label>
+
+        <Grid Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="310*"/>
+                <ColumnDefinition Width="1258*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="720*" MinHeight="70"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Height="60">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Offset="0" Color="#2b385a"/>
+                        <GradientStop Offset="1" Color="#2a3759"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.Effect>
+                    <DropShadowEffect Color="#181d3a" ShadowDepth="10" Direction="270" BlurRadius="20" Opacity="0.08"/>
+                </Border.Effect>
+                <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
+                    <Grid>
+                        <Button Template="{StaticResource btn_EmptyCT}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Click="Button_Click"
+                        Panel.ZIndex="2" Visibility="{Binding IsSearching,Converter={StaticResource BooleanToVisibilityConverter}}"></Button>
+                        
+                        <!--搜索条件-->
+                        <StackPanel Orientation="Horizontal" >
+                            <!--时间范围-->
+                            <DatePicker Margin="10 15 2 15" Width="150" SelectedDate="{Binding StartTime}"></DatePicker>
+                            <TextBlock Margin="2 15" Text="-" FontSize="20" Foreground="#9BA6B7" FontWeight="ExtraBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <DatePicker Margin="2 15" Width="150" SelectedDate="{Binding EndTime}"></DatePicker>
+
+                            <!--数据状态-->
+                            <ctrl:ComboBoxEx Margin="2 15" MinWidth="100" Width="Auto" FontSize="14" TitlePadding="10 0 0 0" HorizontalContentAlignment="Center" ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
+
+                            <!--关键词和正则-->
+                            <Border Margin="2 15"  BorderThickness="1" CornerRadius="5" Background="#414b69">
+                                <StackPanel Orientation="Horizontal">
+                                    <ctrl:ComboBoxEx MinWidth="85" Width="Auto" FontSize="14"  TitlePadding="10 0 0 0" HorizontalContentAlignment="Center"  Background="Transparent" ItemsSource="{Binding KeywordTypeSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding KeywordType}"></ctrl:ComboBoxEx>
+                                    <ctrl:TextBoxEx HorizontalContentAlignment="Left" TitlePadding="0"  Watermark="{Binding KeywordTypeTip}" Width="150" Padding="5 0" FontSize="14" BorderThickness="0" CaretBrush="#FFFFFF" Background="Transparent" Text="{Binding Keyword}" Foreground="White" VerticalContentAlignment="Center"></ctrl:TextBoxEx>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <Button Command="{Binding SearchFileNodeCommand}" Style="{StaticResource searchBtnStyle}" 
+                        Margin="10,0,0,0" FontSize="14" Foreground="White" Height="24" Width="80">
+                    </Button>
+
+                    <Button Width="30" Height="24" Margin="15 0" Command="{Binding ClearSearchCommand}" ToolTip="{Binding XPath=FileBrowing/View_ResetSerachArgs,Source={x:Static lang:LanguageHelper.LanguageProvider}}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource btn_GrayIcon}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSearching}" Value="true">
+                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                        <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_filter_clear.png" Width="13" Height="13"/>
+                    </Button>
+
+                </StackPanel>
+            </Border>
+
+            <Grid Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" >
+                <Button Template="{StaticResource btn_EmptyCT}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Transparent" Click="Button_Click"
+                        Margin="20,20,10,20" Panel.ZIndex="2" Visibility="{Binding IsSearching,Converter={StaticResource BooleanToVisibilityConverter}}"></Button>
+                <!--文件树列表-->
+                <ctrl:TreeViewEx x:Name="treeDataList" Background="#04FFFFFF" Margin="20,20,10,20" BorderThickness="0" ItemsSource="{Binding Roots}">
+                    <ctrl:TreeViewEx.ItemContainerStyle>
+                        <Style TargetType="ctrl:TreeViewItemEx" BasedOn="{StaticResource FileBrowingstTreeViewItem}">
+                        </Style>
+                    </ctrl:TreeViewEx.ItemContainerStyle>
+                    <ctrl:TreeViewEx.ItemTemplate >
+                        <HierarchicalDataTemplate  ItemsSource="{Binding Path=ChildrenTreeNodes}">
+                            <TextBlock Text="{Binding Text}"  />
+                        </HierarchicalDataTemplate>
+                    </ctrl:TreeViewEx.ItemTemplate>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectedItemChanged">
+                            <i:InvokeCommandAction Command="{Binding OpenFileNodeCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctrl:TreeViewEx}}, Path=SelectedValue}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ctrl:TreeViewEx>
+            </Grid>
+
+            <ctrl:TabControlWithButton Style="{StaticResource TabControlWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithGrayIconButtonStyle1}" CustomButtonAlignment="Right"
+                                           Grid.Column="1" Grid.Row="1" Margin="10,10,20,20">
+                <TabItem Style="{StaticResource TabItemWithGrayIconButtonStyle1}" >
+                    <TabItem.Header>
+                        <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_view_grid.png" Width="13" Height="13"></Image>
+                    </TabItem.Header>
+                    <!--文件列表-->
+                    <DataGrid BorderThickness="1" Background="#04FFFFFF"
+                      AutoGenerateColumns="False" CanUserResizeColumns="False" IsReadOnly="True" 
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ItemsSource="{Binding TableItems}">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn MinWidth="80" Width="Auto">
+                                <DataGridTemplateColumn.HeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                        <Setter Property="Height" Value="40"/>
+                                        <Setter Property="Background" Value="#0AFFFFFF"/>
+                                        <Setter Property="FontSize" Value="14"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="Foreground" Value="#9ba5b9"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                                                    <Grid>
+                                                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0" Background="{TemplateBinding Background}"  Padding="14 0" >
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <CheckBox IsChecked="{Binding DataContext.IsTableSelectAll,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:FileBrowingViewControl}}" Content="{Binding XPath=FileBrowing/View_Grid_MarkCol,Source={x:Static lang:LanguageHelper.LanguageProvider}}" Foreground="{TemplateBinding Foreground}"></CheckBox>
+                                                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                            </StackPanel>
+                                                        </Border>
+                                                        <Thumb x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left" Style="{StaticResource ColumnHeaderGripperStyle}"/>
+                                                        <Thumb x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right" Style="{StaticResource ColumnHeaderGripperStyle}"/>
+                                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 4 0">
+                                                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/grid_sort_asc.png" x:Name="btnSortAsc" Width="11" VerticalAlignment="Center" Visibility="Collapsed"></Image>
+                                                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/grid_sort_desc.png" x:Name="btnSortdesc" Width="11" VerticalAlignment="Center" Visibility="Collapsed"></Image>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="SortDirection" Value="Ascending">
+                                                            <Setter TargetName="btnSortAsc" Property="Visibility" Value="Visible"/>
+                                                        </Trigger>
+                                                        <Trigger Property="SortDirection" Value="Descending">
+                                                            <Setter TargetName="btnSortdesc" Property="Visibility" Value="Visible"/>
+                                                        </Trigger>
+                                                        <Trigger Property="SortDirection" Value="{x:Null}">
+                                                            <Setter TargetName="btnSortAsc" Property="Visibility" Value="Collapsed"/>
+                                                            <Setter TargetName="btnSortdesc" Property="Visibility" Value="Collapsed"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </DataGridTemplateColumn.HeaderStyle>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="2,0,0,0">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Click">
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.ClickCheckCommand,RelativeSource={RelativeSource AncestorType={x:Type local:FileBrowingViewControl}}}"
+                                                                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}},Path=SelectedValue}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </CheckBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn MinWidth="80" Header="{Binding XPath=FileBrowing/View_Grid_State,Source={x:Static lang:LanguageHelper.LanguageProvider}}" Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Image Source="{Binding DataState, Converter={StaticResource dataStateToImageSourceConverter}}" 
+                                       Width="16" Height="16" HorizontalAlignment="Left" Margin="5,0,0,0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Width="*" Header="{Binding XPath=FileBrowing/View_Grid_NameCol,Source={x:Static lang:LanguageHelper.LanguageProvider}}" Binding="{Binding Text}"></DataGridTextColumn>
+                            <DataGridTextColumn MinWidth="120" Width="Auto" Header="{Binding XPath=FileBrowing/View_Grid_TypeCol,Source={x:Static lang:LanguageHelper.LanguageProvider}}" Binding="{Binding TypeDesc}"></DataGridTextColumn>
+                            <DataGridTextColumn MinWidth="160" Width="Auto" Header="{Binding XPath=FileBrowing/View_Grid_CreateTimeCol,Source={x:Static lang:LanguageHelper.LanguageProvider}}" Binding="{Binding CreateTime}"></DataGridTextColumn>
+                            <DataGridTextColumn MinWidth="160" Width="Auto" Header="{Binding XPath=FileBrowing/View_Grid_LastWriteTimeCol,Source={x:Static lang:LanguageHelper.LanguageProvider}}" Binding="{Binding LastWriteTime}"></DataGridTextColumn>
+                            <DataGridTextColumn MinWidth="160" Width="Auto" Header="{Binding XPath=FileBrowing/View_Grid_LastAccessTimeCol,Source={x:Static lang:LanguageHelper.LanguageProvider}}" Binding="{Binding LastAccessTime}"></DataGridTextColumn>
+                            <DataGridTextColumn MinWidth="120" Width="Auto" Header="{Binding XPath=FileBrowing/View_Grid_FileSizeCol,Source={x:Static lang:LanguageHelper.LanguageProvider}}" Binding="{Binding FileSize}"></DataGridTextColumn>
+                            <DataGridTemplateColumn MinWidth="120" Header="{Binding XPath=FileBrowing/View_Grid_OperateCol,Source={x:Static lang:LanguageHelper.LanguageProvider}}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ctrl:IconButton HorizontalAlignment="Left" 
+                                                IconHeight="14" IconWidth="14" Width="16" Cursor="Hand"
+                                                Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_filebrowing_open.png">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Click">
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.DownFileNodeCommand,RelativeSource={RelativeSource AncestorType={x:Type local:FileBrowingViewControl}}}"
+                                                                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}},Path=SelectedValue}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </ctrl:IconButton>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                        <i:Interaction.Behaviors>
+                            <behavior:DataGridBehavior DataGridRowDoubleClickCommand="{Binding OpenFileNodeCommand}"/>
+                        </i:Interaction.Behaviors>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Style="{StaticResource TabItemWithGrayIconButtonStyle1}">
+                    <TabItem.Header>
+                        <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_view_icon.png" Width="13" Height="13"></Image>
+                    </TabItem.Header>
+                    <Border BorderThickness="1" BorderBrush="#3c4664">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" >
+                            <ItemsControl ItemsSource="{Binding TableItems}" Padding="30" Background="#04FFFFFF">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel></WrapPanel>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Width="104" Padding="10" CornerRadius="12" Margin="10" x:Name="br_bg" BorderThickness="1"
+                                            ToolTip="{Binding Text}">
+                                            <Button Template="{StaticResource btn_EmptyCT}" BorderThickness="0" Background="Transparent" VerticalAlignment="Top">
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"></RowDefinition>
+                                                        <RowDefinition Height="14"></RowDefinition>
+                                                        <RowDefinition Height="Auto"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+
+                                                    <Image x:Name="im_checked" HorizontalAlignment="Right" VerticalAlignment="Top" Stretch="None" Margin="0,-11,-11,0" Panel.ZIndex="99"
+                                                   Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Mirror_Checked.png"></Image>
+
+                                                    <Image x:Name="im_fileicon" Grid.Row="0" Height="53" HorizontalAlignment="Center" Stretch="None"></Image>
+                                                    <TextBlock Grid.Row="2" FontSize="14" Foreground="White" 
+                                                   Text="{Binding Text}" TextWrapping="Wrap"
+                                                   Width="84" HorizontalAlignment="Center" TextAlignment="Center" 
+                                                   Margin="0" Padding="2 0" ></TextBlock>
+
+                                                    <Image Source="{Binding DataState, Converter={StaticResource dataStateToImageSourceConverter}}" 
+                                       Width="16" Height="16" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0"/>
+
+                                                </Grid>
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <i:InvokeCommandAction Command="{Binding DataContext.SelecedNodeCommand,RelativeSource={RelativeSource AncestorType={x:Type local:FileBrowingViewControl}}}"  CommandParameter="{Binding}"/>
+                                                    </i:EventTrigger>
+                                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                                        <i:InvokeCommandAction Command="{Binding DataContext.OpenFileNodeCommand,RelativeSource={RelativeSource AncestorType={x:Type local:FileBrowingViewControl}}}"  CommandParameter="{Binding}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </Button>
+                                        </Border>
+                                        <DataTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="true">
+                                                <Setter TargetName="br_bg" Property="BorderBrush" Value="#657192"></Setter>
+                                                <Setter TargetName="br_bg" Property="Background" Value="#08FFFFFF"></Setter>
+                                            </Trigger>
+                                            <DataTrigger Binding="{Binding IsSelected}" Value="true">
+                                                <Setter TargetName="br_bg" Property="BorderBrush" Value="#379be6"></Setter>
+                                                <Setter TargetName="br_bg" Property="Background" Value="#08FFFFFF"></Setter>
+                                                <Setter TargetName="im_checked" Property="Visibility" Value="Visible"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsSelected}" Value="false">
+                                                <Setter TargetName="im_checked" Property="Visibility" Value="Collapsed"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Data.FileType}" Value="Directory">
+                                                <Setter TargetName="im_fileicon" Property="Source" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_filebrowing_icon1.png"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Data.FileType}" Value="Txt">
+                                                <Setter TargetName="im_fileicon" Property="Source" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_filebrowing_icon2.png"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Data.FileType}" Value="Image">
+                                                <Setter TargetName="im_fileicon" Property="Source" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_filebrowing_icon3.png"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Data.FileType}" Value="Voice">
+                                                <Setter TargetName="im_fileicon" Property="Source" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_filebrowing_icon5.png"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Data.FileType}" Value="Video">
+                                                <Setter TargetName="im_fileicon" Property="Source" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_filebrowing_icon6.png"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Data.FileType}" Value="Rar">
+                                                <Setter TargetName="im_fileicon" Property="Source" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_filebrowing_icon4.png"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Data.FileType}" Value="Other">
+                                                <Setter TargetName="im_fileicon" Property="Source" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_filebrowing_icon7.png"></Setter>
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+                </TabItem>
+            </ctrl:TabControlWithButton>
+
+            <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" Margin="0,20,0,20" 
+                        HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="{Binding IsSearching,Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Button Style="{StaticResource loadingControlStyle}" Width="24" Height="24" />
+                <TextBlock FontSize="14" Foreground="#9ba5b9" Text="{Binding XPath=FileBrowing/View_SearchIngTip,Source={x:Static lang:LanguageHelper.LanguageProvider}}" VerticalAlignment="Center" Margin="5,0,0,0"></TextBlock>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="2" Margin="20" HorizontalAlignment="Right" VerticalAlignment="Top">
+                <TextBlock VerticalAlignment="Center" FontSize="12" Foreground="#6e7891" Text="{Binding XPath=FileBrowing/View_ExportTip,Source={x:Static lang:LanguageHelper.LanguageProvider}}"></TextBlock>
+                <Button Style="{StaticResource btn_LoginClose}" Content="{Binding XPath=FileBrowing/View_ExportBtnName,Source={x:Static lang:LanguageHelper.LanguageProvider}}" Command="{Binding DownSelectedFileNodeCommand}"
+                        Margin="10,0,0,0" FontSize="14" Foreground="White" Height="24" Width="80"></Button>
+            </StackPanel>
+            
+        </Grid>
+    </Grid>
+</core:UcViewBase>

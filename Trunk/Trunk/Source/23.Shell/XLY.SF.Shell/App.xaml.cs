@@ -54,7 +54,7 @@ namespace XLY.SF.Shell
             //创建主窗体
             Current.MainWindow = new Shell()
             {
-                CanResize = true
+                CanResize = false
             };
             Current.MainWindow.WindowState = WindowState.Maximized;
 
@@ -64,9 +64,6 @@ namespace XLY.SF.Shell
 
         private void Load()
         {
-            //启动DLL服务
-            //StartDllService();
-
             //初始化异常服务（既：监听未捕获异常）
             _exceptionHelper.Init();
             //注册窗口导航消息
@@ -80,16 +77,6 @@ namespace XLY.SF.Shell
             //c.InitModule();
             ProjectExtend.Context.SystemContext.Instance.LoadAsyncOperation();
         }
-
-        ////启动DLL服务
-        //private void StartDllService()
-        //{
-        //    Process dllService = new Process();
-        //    dllService.StartInfo = new ProcessStartInfo();
-        //    dllService.StartInfo.CreateNoWindow = false;
-        //    dllService.StartInfo.FileName = @"CoreDLLService.exe";
-        //    dllService.Start();
-        //}
 
         #region 读取当前语言设置
 
@@ -119,7 +106,7 @@ namespace XLY.SF.Shell
             IMessageBox _msgBox = IocManagerSingle.Instance.GetPart<IMessageBox>();
             if (!string.IsNullOrWhiteSpace(args.Parameters))
             {
-                if (_msgBox.ShowMutualMsg(SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_MessageBox_Notice], args.Parameters))
+                if (_msgBox.ShowDialogWarningMsg(args.Parameters))
                     Application.Current.Shutdown();
             }
             else

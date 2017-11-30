@@ -7,6 +7,10 @@
                  xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                  xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                 xmlns:pro="http://www.spfpro.com"
+                 Title="{Binding XPath=ViewLanguage/Management/User/InfoTitle,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                 Width="420"
+                 Height="480"
                  mc:Ignorable="d">
     <core:UcViewBase.Resources>
         <ResourceDictionary>
@@ -18,61 +22,56 @@
 
         </ResourceDictionary>
     </core:UcViewBase.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="200" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="10" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <TextBlock Text="{Binding XPath=ViewLanguage/Management/User/Name,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                   HorizontalAlignment="Right"
-                   Grid.Row="0"
-                   Grid.Column="0" />
-        <TextBlock Text="{Binding XPath=ViewLanguage/Management/User/Unit,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                   HorizontalAlignment="Right"
-                   Grid.Row="2"
-                   Grid.Column="0" />
-        <TextBlock Text="{Binding XPath=ViewLanguage/Management/User/Id,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                   HorizontalAlignment="Right"
-                   Grid.Row="4"
-                   Grid.Column="0" />
-        <TextBlock Text="{Binding XPath=ViewLanguage/Management/User/Phone,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                   HorizontalAlignment="Right"
-                   Grid.Row="6"
-                   Grid.Column="0" />
-        <TextBlock Text="{Binding XPath=ViewLanguage/Management/User/Account,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                   HorizontalAlignment="Right"
-                   Grid.Row="8"
-                   Grid.Column="0" />
-        <TextBlock Text="{Binding XPath=ViewLanguage/Management/User/InputPassword,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                   HorizontalAlignment="Right"
-                   Grid.Row="10"
-                   Grid.Column="0" />
-        <TextBlock Text="{Binding XPath=ViewLanguage/Management/User/ConfirmPassword,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                   HorizontalAlignment="Right"
-                   Grid.Row="12"
-                   Grid.Column="0" />
-        <StackPanel Orientation="Horizontal"
-                    Grid.Row="14"
-                    Grid.Column="1">
-            <Button Content="{Binding XPath=ViewLanguage/Management/User/Cancel,Source={x:Static ex:SystemContext.LanguageProvider}}" />
-            <Button Content="{Binding XPath=ViewLanguage/Management/User/Confirm,Source={x:Static ex:SystemContext.LanguageProvider}}" />
+    <StackPanel Margin="20,30,20,30">
+        <StackPanel DataContext="{Binding Item}">
+            <pro:TextBoxEx Title="{Binding XPath=ViewLanguage/Management/User/Name,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                           Text="{Binding UserName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                           Width="380"
+                           Height="40"
+                           Margin="0,0,0,10" />
+            <pro:TextBoxEx  Title="{Binding XPath=ViewLanguage/Management/User/Unit,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                            Text="{Binding WorkUnit,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                            Width="380"
+                            Height="40"
+                            Margin="0,0,0,10" />
+            <pro:TextBoxEx  Title="{Binding XPath=ViewLanguage/Management/User/Id,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                            Text="{Binding IdNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                            Width="380"
+                            Height="40"
+                            Margin="0,0,0,10" />
+            <pro:TextBoxEx  Title="{Binding XPath=ViewLanguage/Management/User/Phone,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                            Text="{Binding PhoneNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                            Width="380"
+                            Height="40"
+                            Margin="0,0,0,10" />
+            <pro:TextBoxEx  Title="{Binding XPath=ViewLanguage/Management/User/Account,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                            Text="{Binding LoginUserName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                            Width="380"
+                            Height="40"
+                            Margin="0,0,0,10" />
+            <pro:TextBoxEx  Title="{Binding XPath=ViewLanguage/Management/User/InputPassword,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                            Text="{Binding Password,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                            Width="380"
+                            Height="40"
+                            Margin="0,0,0,10" />
+            <pro:TextBoxEx  Title="{Binding XPath=ViewLanguage/Management/User/ConfirmPassword,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                            Text="{Binding ConfirmPassword,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                            Width="380"
+                            Height="40"
+                            Margin="0,0,0,10" />
         </StackPanel>
-    </Grid>
+        <StackPanel Orientation="Horizontal"
+                    Margin="0,30,0,0"
+                    HorizontalAlignment="Center">
+            <Button Content="{Binding XPath=ViewLanguage/Management/User/Confirm,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                    Command="{Binding ConfirmCommand}"
+                    Width="100"
+                    Height="30" />
+            <Button Content="{Binding XPath=ViewLanguage/Management/User/Cancel,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                    Command="{Binding CancelCommand}"
+                    Width="100"
+                    Height="30"
+                    Margin="20,0,0,0" />
+        </StackPanel>
+    </StackPanel>
 </core:UcViewBase>

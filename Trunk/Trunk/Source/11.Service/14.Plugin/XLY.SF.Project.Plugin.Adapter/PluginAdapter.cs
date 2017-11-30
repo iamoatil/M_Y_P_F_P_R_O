@@ -32,11 +32,11 @@ namespace XLY.SF.Project.Plugin.Adapter
         /// <summary>
         /// 初始化
         /// </summary>
-        public void Initialization(IAsyncTaskProgress asyn)
+        public void Initialization(IAsyncTaskProgress asyn, params string[] pluginPaths)
         {
             if (!_Isloaded)
             {
-                PluginContainerAdapter.Instance.Initialization(asyn);
+                PluginContainerAdapter.Instance.Initialization(asyn, pluginPaths);
 
                 _Isloaded = true;
                 Plugins = new Dictionary<AbstractPluginInfo, IPlugin>();
@@ -44,7 +44,7 @@ namespace XLY.SF.Project.Plugin.Adapter
 
                 foreach (var loader in pluginLoaders)
                 {
-                    var pls = loader.Load(asyn);
+                    var pls = loader.Load(asyn, pluginPaths);
 
                     foreach (var pl in pls)
                     {
@@ -283,9 +283,18 @@ namespace XLY.SF.Project.Plugin.Adapter
             if (null != pl)
             {
                 pl.StartTime = DateTime.Now;
-                var ds = pl.Execute(null, asyn) as IDataSource;
-                ds?.BuildParent();
-                if(ds != null)
+                IDataSource ds = null;
+
+                try
+                {
+                    ds = pl.Execute(null, asyn) as IDataSource;
+                }
+                finally
+                {
+                    ds?.BuildParent();
+                }
+
+                if (ds != null)
                 {
                     ds.PluginInfo = plugin;
                 }

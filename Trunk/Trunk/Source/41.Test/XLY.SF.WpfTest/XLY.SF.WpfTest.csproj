@@ -40,6 +40,7 @@
     <Reference Include="Microsoft.Expression.Drawing, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Expression.Effects, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -113,6 +114,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\01.Framework\XLY.SF.Framework.Core.Base\XLY.SF.Framework.Core.Base.csproj">
+      <Project>{28682FE4-EC72-42A3-BB2C-27D19F55E14F}</Project>
+      <Name>XLY.SF.Framework.Core.Base</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\21.Presentation\Theme\XLY.SF.Project.Themes\XLY.SF.Project.Themes.csproj">
       <Project>{c4c4fc67-5d56-4426-acc5-b53cd24c6b69}</Project>
       <Name>XLY.SF.Project.Themes</Name>

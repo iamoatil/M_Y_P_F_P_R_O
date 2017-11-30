@@ -1,0 +1,162 @@
+﻿<core:UcViewBase x:Class="XLY.SF.Project.FileBrowingView.FileNodeExportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:thems="clr-namespace:XLY.SF.Project.Themes;assembly=XLY.SF.Project.Themes"
+             xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
+             xmlns:ctrls="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
+             xmlns:lang="clr-namespace:XLY.SF.Project.FileBrowingView.Language"
+             mc:Ignorable="d" Background="Transparent" >
+    <core:UcViewBase.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <thems:BooleanToCollapseConverter x:Key="BooleanToCollapseConverter"></thems:BooleanToCollapseConverter>
+        </ResourceDictionary>
+    </core:UcViewBase.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ContentControl Grid.Row="0" Margin="0,40,0,20" HorizontalAlignment="Center">
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding XPath=FileBrowing/View_ExportView_Tital,Source={x:Static lang:LanguageHelper.LanguageProvider}}" FontSize="18" FontWeight="Bold" Foreground="White"></TextBlock>
+                                    <ctrls:LoadingControl Margin="0,20,0,0"></ctrls:LoadingControl>
+                                </StackPanel>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <!--导出完成-->
+                        <DataTrigger Binding="{Binding IsExporting}" Value="false">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <StackPanel>
+                                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/Msg_Success.png" Stretch="None"></Image>
+                                            <TextBlock Text="{Binding XPath=FileBrowing/View_ExportView_End,Source={x:Static lang:LanguageHelper.LanguageProvider}}" FontSize="18" FontWeight="Bold" Foreground="White" 
+                                               Margin="0,20,0,0" HorizontalAlignment="Center"></TextBlock>
+                                        </StackPanel>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+
+        <Grid Grid.Row="1" Width="290" Margin="60,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="1"></RowDefinition>
+                <RowDefinition Height="28"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" BorderThickness="0" CornerRadius="6,6,0,0" Background="#04FFFFFF">
+                <ScrollViewer Margin="4,10,4,4" Template="{StaticResource ScrollViewerNoBtnCt}" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding LogItems}" Margin="6,0" FontSize="12">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock x:Name="tl_log" Grid.Column="0" Foreground="White"  Text="{Binding LogStr}" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                                    <TextBlock x:Name="tl_success" Grid.Column="1" Foreground="White"  HorizontalAlignment="Right" VerticalAlignment="Center"></TextBlock>
+                                </Grid>
+                                <DataTemplate.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding InfoType}" Value="ExportInfo"></Condition>
+                                            <Condition Binding="{Binding IsSuccess}" Value="true"></Condition>
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter TargetName="tl_success" Property="Text" Value="{Binding XPath=FileBrowing/View_ExportView_Success,Source={x:Static lang:LanguageHelper.LanguageProvider}}"></Setter>
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding InfoType}" Value="ExportInfo"></Condition>
+                                            <Condition Binding="{Binding IsSuccess}" Value="false"></Condition>
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter TargetName="tl_success" Property="Text" Value="{Binding XPath=FileBrowing/View_ExportView_Failure,Source={x:Static lang:LanguageHelper.LanguageProvider}}"></Setter>
+                                            <Setter TargetName="tl_log" Property="Foreground" Value="#ff4b64"></Setter>
+                                            <Setter TargetName="tl_success" Property="Foreground" Value="#ff4b64"></Setter>
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Height" Value="154"></Setter>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsExporting}" Value="false">
+                                <Setter Property="Height" Value="102"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+            </Border>
+            
+            <Border Grid.Row="2" BorderThickness="0" CornerRadius="0,0,6,6" Background="#04FFFFFF">
+                <Grid>
+                    <TextBlock HorizontalAlignment="Left" FontSize="14" Margin="10,0" VerticalAlignment="Center">
+                    <Run Text="{Binding XPath=FileBrowing/View_ExportView_Success,Source={x:Static lang:LanguageHelper.LanguageProvider}}"></Run>
+                    <Run Text=":"></Run>
+                    <Run Text="{Binding CountSuccess}"></Run>
+                    </TextBlock>
+                    <TextBlock HorizontalAlignment="Right" FontSize="14" Margin="10,0" VerticalAlignment="Center">
+                    <Run Text="{Binding XPath=FileBrowing/View_ExportView_Failure,Source={x:Static lang:LanguageHelper.LanguageProvider}}"></Run>
+                    <Run Text=":"></Run>
+                    <Run Text="{Binding CountFailure}"></Run>
+                    </TextBlock>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <ContentControl Grid.Row="2" Margin="0,30,0,30" HorizontalAlignment="Center">
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <Button Content="{Binding XPath=FileBrowing/View_ExportView_BtnCancel,Source={x:Static lang:LanguageHelper.LanguageProvider}}" Width="90" Height="30" Command="{Binding CancelOrCloseCommand}" Template="{StaticResource RedButtonCt}"></Button>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <!--导出完成-->
+                        <DataTrigger Binding="{Binding IsExporting}" Value="false">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="{Binding XPath=FileBrowing/View_ExportView_BtnClose,Source={x:Static lang:LanguageHelper.LanguageProvider}}" Width="90" Height="30" Command="{Binding CancelOrCloseCommand}"></Button>
+                                            <Button Content="{Binding XPath=FileBrowing/View_ExportView_BtnOpenPath,Source={x:Static lang:LanguageHelper.LanguageProvider}}" Width="90" Height="30" Margin="20,0,0,0" Command="{Binding OpenPathCommand}"></Button>
+                                        </StackPanel>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+
+    </Grid>
+</core:UcViewBase>

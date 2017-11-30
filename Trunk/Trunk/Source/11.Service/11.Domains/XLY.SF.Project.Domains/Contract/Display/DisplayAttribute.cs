@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using XLY.SF.Framework.Language;
 using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.Domains
@@ -27,20 +28,26 @@ namespace XLY.SF.Project.Domains
     [AttributeUsage(AttributeTargets.Property)]
     public class DisplayAttribute : Attribute
     {
-        public DisplayAttribute(String text)
-        {
-            Text = text;
-        }
-
-        public DisplayAttribute()
-        {
-
-        }
-
+        private string _Key = null;
         /// <summary>
-        /// 文本的语言资源Key
+        /// 文本的语言资源Key，如果不设置，则默认为"类名_属性名"
         /// </summary>
-        public string Key { get; set; }
+        public string Key
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_Key))
+                {
+                    _Key = $"{ Owner.DeclaringType.Name}_{Owner.Name}";
+                }
+                return _Key;
+            }
+            set
+            {
+                _Key = value;
+            }
+        }
+
 
         /// <summary>
         /// 对齐方式，默认左对齐
@@ -53,9 +60,12 @@ namespace XLY.SF.Project.Domains
         public EnumColumnType ColumnType { get; set; }
 
         /// <summary>
-        /// 列标题
+        /// 列标题，支持多语言显示
         /// </summary>
-        public String Text { get; set; }
+        public String Text
+        {
+            get { return LanguageManager.Current[$"LanguageResource/DataEntityLanguage/{Key}"] ?? Owner.Name; }
+        }
 
         /// <summary>
         /// 列宽

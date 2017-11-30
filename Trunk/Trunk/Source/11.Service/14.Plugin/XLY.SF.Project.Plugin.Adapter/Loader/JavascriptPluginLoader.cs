@@ -22,7 +22,7 @@ namespace XLY.SF.Project.Plugin.Adapter.Loader
         public const string JS_EXT = ".js";
         public const string RELEASE_JS_EXT = ".pluginjs";
 
-        protected override void LoadPlugin(IAsyncTaskProgress asyn)
+        protected override void LoadPlugin(IAsyncTaskProgress asyn, params string[] pluginPaths)
         {
             List<IPlugin> pluginList = new List<IPlugin>();
 

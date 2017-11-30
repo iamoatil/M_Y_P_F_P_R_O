@@ -42,14 +42,6 @@ namespace XLY.SF.Project.Domains
                         {
                             DisplayAttribute da = das.First() as DisplayAttribute;
                             da.Owner = pi;
-                            if (string.IsNullOrEmpty(da.Key))
-                            {
-                                da.Key = pi.Name;
-                            }
-                            if (string.IsNullOrEmpty(da.Text))
-                            {
-                                da.Text = pi.Name;
-                            }
                             list.Add(da);
                         }
                     }

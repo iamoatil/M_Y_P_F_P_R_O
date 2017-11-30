@@ -4,12 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
-                 xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
-                 xmlns:cc="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
-                 xmlns:behavior="clr-namespace:XLY.SF.Project.Views.Behavior"
+             xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
+             xmlns:cc="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
+             xmlns:behavior="clr-namespace:XLY.SF.Project.Views.Behavior"
 		     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
 		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
-             mc:Ignorable="d" IsMaxView="False" Width="360" Height="480" d:DesignHeight="480" d:DesignWidth="360">
+             xmlns:control="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
+             mc:Ignorable="d" IsMaxView="False" d:DesignHeight="480" d:DesignWidth="360">
     <core:UcViewBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -86,17 +87,17 @@
                 </DoubleAnimationUsingKeyFrames>
             </Storyboard>
         </ResourceDictionary>
-        
+
     </core:UcViewBase.Resources>
-    <Grid>
-        <Border BorderBrush="Black" BorderThickness="0" CornerRadius="25" >
+    <Grid Width="360" Height="480" >
+        <Border BorderBrush="Black" BorderThickness="0" CornerRadius="10" >
             <Border.Background>
                 <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
                     <GradientStop Offset="0" Color="#FF2D3C5F"/>
                     <GradientStop Offset="1" Color="#191e37" />
                 </LinearGradientBrush>
             </Border.Background>
-                
+
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="70"></RowDefinition>
@@ -109,7 +110,10 @@
                 <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/LoginIcon.png" Grid.Row="1" Width="88" Height="70"></Image>
                 <TextBlock Margin="0,18,0,0"  Grid.Row="2" Text="S P F 智 能 手 机"  FontSize="14" Foreground="White" HorizontalAlignment="Center"/>
                 <TextBlock Margin="0,8,0,0"  Grid.Row="3" Text="数据恢复取证系统"  FontSize="15" Foreground="White" HorizontalAlignment="Center" FontWeight="Bold"/>
-                <StackPanel Orientation="Horizontal" Grid.Row="4"  Margin="44,0,44,0" HorizontalAlignment="Center" Visibility="{Binding IsLoadingVisibility}">
+
+                <control:LoadingControl Grid.Row="4" Visibility="{Binding IsLoadingVisibility}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                <!--<StackPanel Orientation="Horizontal" Grid.Row="4"  Margin="44,0,44,0" HorizontalAlignment="Center" Visibility="Collapsed">
                     <StackPanel.Triggers>
                         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
                             <BeginStoryboard Storyboard="{StaticResource StoryLeftToRight}" />
@@ -157,7 +161,8 @@
                     Margin="2,0,0,0"
                     HorizontalAlignment="Left"
                     Fill="#363E55" />
-                </StackPanel>
+                </StackPanel>-->
+                
                 <Grid Grid.Row="4"  Margin="44,34,44,0" Visibility="{Binding IsLoadVisibility}">
                     <Grid.RowDefinitions >
                         <RowDefinition Height="50"></RowDefinition>

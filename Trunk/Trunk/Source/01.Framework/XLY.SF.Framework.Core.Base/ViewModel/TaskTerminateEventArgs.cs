@@ -30,8 +30,9 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// </summary>
         /// <param name="taskId">任务标识。</param>
         /// <param name="isCompleted">是否完成。如果为false，表示在未完成的情况下停止任务。</param>
-        public TaskTerminateEventArgs(String taskId, Boolean isCompleted)
-            : base(taskId)
+        /// <param name="message">消息。</param>
+        public TaskTerminateEventArgs(String taskId, Boolean isCompleted, String message)
+            : base(taskId, message)
         {
             if (isCompleted)
             {

@@ -27,6 +27,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
             _transceiver = new MessageServerTransceiver(owner.Setup.TransceiverName, owner.Setup.MaxParallelTask);
             _transceiver.Disconnect += (a, b) => TerminateTask();
             TaskActivator activator = (TaskActivator)Activator.CreateInstance(owner.Setup.EntryType);
+            activator.Logger = TaskEngine.Logger;
             activator.RequestSendMessageCallback = (m) => _transceiver.Send(m);
             activator.RequestTerminateTask = () => TerminateTask();
             _activator = activator;
@@ -75,6 +76,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
                     {
                         _isRuning = true;
                         Task.Factory.StartNew(Handle, TaskCreationOptions.LongRunning | TaskCreationOptions.AttachedToParent);
+                        TaskEngine.Logger.Info("Task handler launched");
                     }
                     else
                     {
@@ -118,6 +120,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
             while (_isRuning)
             {
                 message = _transceiver.Receive();
+                TaskEngine.Logger.Debug($"Received message:[Code]{message?.Code},[Token]{message?.Token}");
                 if (message == null) continue;
                 try
                 {
@@ -129,7 +132,6 @@ namespace XLY.SF.Project.IsolatedTaskEngine
                     break;
                 }
             }
-            Owner.ReleaseTask(this);
         }
 
         /// <summary>
@@ -139,9 +141,11 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         {
             if (IsDisposed) return;
             _isRuning = false;
+            IsDisposed = true;
             _activator.Dispose();
             _transceiver.Close();
-            IsDisposed = true;
+            TaskEngine.Logger.Info("Task handler terminated");
+            Owner.ReleaseTask(this);
         }
 
         /// <summary>
@@ -150,6 +154,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         /// <param name="ex">异常信息。</param>
         private void OnActivatorError(Exception ex)
         {
+            TaskEngine.Logger.Error("Activator Error", ex);
             Message message = Message.CreateSystemMessage((Int32)SystemMessageCode.ActivatorErrorEvent, new ActivatorErrorEventArgs(ex));
             _transceiver.Send(message);
         }

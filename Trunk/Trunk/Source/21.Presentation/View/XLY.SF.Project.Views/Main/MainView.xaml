@@ -209,7 +209,7 @@
                                 </StackPanel>
                             </Grid>
                             <!--菜单-->
-                            <ComboBox Grid.Column="5" Margin="0 0 10 0" Template="{DynamicResource cb_MainCt}" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <ComboBox x:Name="cb_Menu" SelectionChanged="cb_Menu_SelectionChanged" Grid.Column="5" Margin="0 0 10 0" Template="{DynamicResource cb_MainCt}" BorderThickness="0" VerticalAlignment="Center" HorizontalAlignment="Center">
                                 <ComboBox.Resources>
                                     <Style TargetType="ComboBoxItem">
                                         <Setter Property="Height" Value="42"/>
@@ -402,6 +402,7 @@
                 </Rectangle>
             </Grid>
         </Grid>
+
         <!--界面触发器-->
         <i:Interaction.Triggers>
             <ei:DataTrigger Binding="{Binding Visibility,ElementName=gd_CaseName}" Value="Visible">

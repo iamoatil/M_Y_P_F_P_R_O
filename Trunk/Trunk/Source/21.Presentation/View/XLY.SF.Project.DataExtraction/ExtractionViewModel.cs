@@ -127,14 +127,14 @@ namespace XLY.SF.Project.DataExtraction
             set
             {
                 _isSelfHost = value;
-                if (value)
-                {
-                    MessageAggregation.UnRegisterMsg<GeneralArgs<Pump>>(this, "SetDataExtractionParamsMsg", SetPump);
-                }
-                else
-                {
-                    MessageAggregation.RegisterGeneralMsg<Pump>(this, "SetDataExtractionParamsMsg", SetPump);
-                }
+                //if (value)
+                //{
+                //    MessageAggregation.UnRegisterMsg<GeneralArgs<Pump>>(this, "SetDataExtractionParamsMsg", SetPump);
+                //}
+                //else
+                //{
+                //    MessageAggregation.RegisterGeneralMsg<Pump>(this, "SetDataExtractionParamsMsg", SetPump);
+                //}
             }
         }
 
@@ -280,10 +280,15 @@ namespace XLY.SF.Project.DataExtraction
             LaunchService();
         }
 
-        private void SetPump(GeneralArgs<Pump> args)
+        protected override void InitLoad(object parameters)
         {
-            Pump = args.Parameters;
+            Pump = parameters as Pump;
         }
+
+        //private void SetPump(GeneralArgs<Pump> args)
+        //{
+        //    Pump = args.Parameters;
+        //}
 
         private void Start()
         {
@@ -393,6 +398,8 @@ namespace XLY.SF.Project.DataExtraction
             if (args.IsCompleted)
             {
                 item.State = TaskState.Completed;
+                Int32.TryParse(args.Message, out Int32 count);
+                item.Count = count;
             }
             else if (args.IsFailed)
             {
@@ -413,7 +420,7 @@ namespace XLY.SF.Project.DataExtraction
         {
             _timer.Stop();
             CanSelect = true;
-            MessageAggregation.SendGeneralMsg<Boolean>(new GeneralArgs<Boolean>("ExtractTaskCompleteMsg")
+            MessageAggregation.SendGeneralMsgToUI<Boolean>(new GeneralArgs<Boolean>("GeneralKeys_TaskCompleteMsg")
             {
                 Parameters = !e.IsFailed
             });

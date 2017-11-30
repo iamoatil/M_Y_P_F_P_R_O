@@ -79,12 +79,12 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 扫描模式(镜像文件、SDCard)
         /// </summary>
-        public ScanFileModel ScanModel { get; set; }
+        public ScanFileModel ScanModel { get; set; } = ScanFileModel.Quick;
 
         /// <summary>
         /// 提取方案。
         /// </summary>
-        public PumpSolution Solution { get; set; }
+        public PumpSolution Solution { get; set; } = PumpSolution.TempRoot | PumpSolution.AppInjection;
 
         #endregion
     }

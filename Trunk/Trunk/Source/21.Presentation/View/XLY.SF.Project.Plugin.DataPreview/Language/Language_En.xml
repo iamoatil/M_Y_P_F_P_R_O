@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageResource>
+  <AudioView>Audio</AudioView>
+  <BasicView>Basic</BasicView>
+  <HtmlView>Html</HtmlView>
+  <ImageView>Image</ImageView>
+  <TextView>Text</TextView>
+  <VedioView>Vedio</VedioView>
+  <OfficeView>Office</OfficeView>
+  <Start>Start</Start>
+  <Pause>Pause</Pause>
+  <Continue>Continue</Continue>
+  <Stop>Stop</Stop>
+  <FileName>FileName</FileName>
+  <FullPath>FullPath</FullPath>
+  <FileSize>FileSize</FileSize>
+  <CreateTime>CreateTime</CreateTime>
+  <ModifyTime>LastModifyTime</ModifyTime>
+  <AccessTime>AccessTime</AccessTime>
+  <Attributes>Attributes</Attributes>
+  <ZhiDu>Readonly</ZhiDu>
+  <Bytes>Bytes</Bytes>
+</LanguageResource>
+
+

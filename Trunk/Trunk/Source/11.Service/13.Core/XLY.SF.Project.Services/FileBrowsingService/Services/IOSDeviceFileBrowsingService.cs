@@ -10,13 +10,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using X64Service;
 using XLY.SF.Framework.BaseUtility;
-using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
-using XLY.SF.Project.Devices.AdbSocketManagement;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Domains.Contract;
 
@@ -43,18 +40,18 @@ namespace XLY.SF.Project.Services
 
             RootNode = new IOSDeviceFileBrowingNode()
             {
-                Name = "根目录",
+                Name = device.Name,
                 NodeType = FileBrowingNodeType.Directory,
                 SourcePath = "/"
             };
         }
 
-        protected override FileBrowingNode DoGetRootNode(IAsyncTaskProgress async)
+        protected override FileBrowingNode DoGetRootNode()
         {
             return RootNode;
         }
 
-        protected override List<FileBrowingNode> DoGetChildNodes(FileBrowingNode parentNode, IAsyncTaskProgress async)
+        protected override List<FileBrowingNode> DoGetChildNodes(FileBrowingNode parentNode)
         {
             return DoGetChildNodes(parentNode as IOSDeviceFileBrowingNode);
         }
@@ -134,53 +131,40 @@ namespace XLY.SF.Project.Services
             return list;
         }
 
-        protected override void DoDownload(FileBrowingNode node, string savePath, bool persistRelativePath, IAsyncTaskProgress async)
+        /// <summary>
+        /// 开始搜索
+        /// </summary>
+        /// <param name="node">搜索根节点，必须是文件夹类型 即IsFile为false</param>
+        /// <param name="args">搜索条件</param>
+        /// <param name="async">异步通知</param>
+        protected override void BeginSearch(FileBrowingNode node, IEnumerable<FilterArgs> args, CancellationTokenSource cancellationTokenSource, FileBrowingIAsyncTaskProgress async)
         {
-            FileHelper.CreateDirectory(savePath);
-
-            DownLoadNode(node as IOSDeviceFileBrowingNode, savePath, persistRelativePath, async);
-        }
-
-        private void DownLoadNode(IOSDeviceFileBrowingNode node, string savePath, bool persistRelativePath, IAsyncTaskProgress async)
-        {
-            if (null == node || node.SourcePath.IsInvalid())
-            {
+            var stateArg = args.FirstOrDefault(a => a is FilterByEnumStateArgs);
+            if (null != stateArg && (stateArg as FilterByEnumStateArgs).State != EnumDataState.Normal)
+            {//如果要搜索删除状态的文件，直接返回。因为IOS手机文件浏览不会有删除状态的文件。
+                //TODO:通知搜索结束
                 return;
             }
 
-            if (node.NodeType == FileBrowingNodeType.File)
-            {
-                DownLoadFile(node, savePath, persistRelativePath, async);
-            }
-            else
-            {
-                var cSavePath = Path.Combine(savePath, node.Name).Replace('/', '\\');
-                if (persistRelativePath)
-                {
-                    cSavePath = savePath.Replace('/', '\\');
-                }
-
-                FileHelper.CreateDirectory(cSavePath);
-
-                foreach (var cnode in GetIOSFileSystem(node.SourcePath, node))
-                {
-                    DownLoadNode(cnode as IOSDeviceFileBrowingNode, cSavePath, persistRelativePath, async);
-                }
-            }
+            base.BeginSearch(node, args, cancellationTokenSource, async);
         }
 
-        private void DownLoadFile(IOSDeviceFileBrowingNode fileNode, string savePath, bool persistRelativePath, IAsyncTaskProgress async)
+        protected override void DownLoadFile(FileBrowingNode fileNode, string savePath, bool persistRelativePath, CancellationTokenSource cancellationTokenSource, FileBrowingIAsyncTaskProgress async)
         {
+            FileHelper.CreateDirectory(savePath);
+
+            var ifileNode = fileNode as IOSDeviceFileBrowingNode;
+
             try
             {
                 var tSavePath = string.Empty;
                 if (persistRelativePath)
                 {
-                    tSavePath = Path.Combine(savePath, fileNode.SourcePath).Replace('/', '\\');
+                    tSavePath = Path.Combine(savePath, ifileNode.SourcePath).Replace('/', '\\');
                 }
                 else
                 {
-                    tSavePath = Path.Combine(savePath, fileNode.Name).Replace('/', '\\');
+                    tSavePath = Path.Combine(savePath, ifileNode.Name).Replace('/', '\\');
                 }
 
                 FileHelper.CreateDirectory(FileHelper.GetFilePath(tSavePath));
@@ -189,7 +173,7 @@ namespace XLY.SF.Project.Services
                 uint result = IOSDeviceCoreDll.SetIphoneFileService(IPhone.ID, IPhone.IsRoot);
 
                 // 2，下载
-                result = IOSDeviceCoreDll.CopyOneIosFile(IPhone.ID, fileNode.SourcePath, tSavePath);
+                result = IOSDeviceCoreDll.CopyOneIosFile(IPhone.ID, ifileNode.SourcePath, tSavePath);
             }
             catch
             {
@@ -200,25 +184,6 @@ namespace XLY.SF.Project.Services
                 IOSDeviceCoreDll.CloseIphoneFileService(IPhone.ID);
             }
         }
-
-        /// <summary>
-        /// 开始搜索
-        /// </summary>
-        /// <param name="node">搜索根节点，必须是文件夹类型 即IsFile为false</param>
-        /// <param name="args">搜索条件</param>
-        /// <param name="async">异步通知</param>
-        protected override void BeginSearch(FileBrowingNode node, IEnumerable<FilterArgs> args, IAsyncTaskProgress async)
-        {
-            var stateArg = args.FirstOrDefault(a => a is FilterByEnumStateArgs);
-            if (null != stateArg && (stateArg as FilterByEnumStateArgs).State != EnumDataState.Normal)
-            {//如果要搜索删除状态的文件，直接返回。因为IOS手机文件浏览不会有删除状态的文件。
-                //TODO:通知搜索结束
-                return;
-            }
-
-            base.BeginSearch(node, args, async);
-        }
-
 
         /// <summary>
         /// iPhone文件节点

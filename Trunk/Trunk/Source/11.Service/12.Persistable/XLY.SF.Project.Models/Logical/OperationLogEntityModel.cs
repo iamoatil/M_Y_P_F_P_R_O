@@ -57,7 +57,7 @@ namespace XLY.SF.Project.Models.Logical
         }
 
         [Required]
-        public UserInfoEntityModel OperationUser
+        public UserInfoModel OperationUser
         {
             get;
             set;

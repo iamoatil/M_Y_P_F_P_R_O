@@ -27,8 +27,8 @@ namespace XLY.SF.Project.Plugin.DataView
         public DefaultGridViewPlugin()
         {
             var p = new DataViewPluginInfo() {
-                Guid = "7B51FA8D-F7F6-4EE3-B3B9-780C29B9B778",
-                Name = "表格视图",
+                Guid = DataViewConfigure.DEFAULT_GRID_VIEW_ID,
+                Name = Languagekeys.GridView,
                 ViewType = new List<DataViewSupportItem>(),
                 OrderIndex = 0,
                 PluginType = PluginType.SpfDataView,

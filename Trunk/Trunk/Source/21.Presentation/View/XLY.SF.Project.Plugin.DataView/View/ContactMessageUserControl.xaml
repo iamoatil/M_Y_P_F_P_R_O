@@ -9,67 +9,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded">
     <UserControl.Resources>
-        <local:TreeNodeSelectMultiConverter x:Key="treeNodeConverter"/>
-        <!--<theme:EnumDataStateToImageSourceConverter x:Key="dataStateToImageSourceConverter"/>-->
-
-        <!--<Style x:Key="accoutListItemStyle" TargetType="ListBoxItem">
-            <Setter Property="Margin" Value="4 4 4 0"/>
-            <Setter Property="Foreground" Value="#9bA5b9"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="Normal"/>
-            <Setter Property="Background" Value="#05FFFFFF"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListBoxItem">
-                        <Border BorderThickness="0" BorderBrush="LightGray" Background="{TemplateBinding Background}" Padding="20">
-                            <Grid x:Name="bk1">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Orientation="Horizontal"  Grid.Column="0" Grid.Row="0">
-                                    <TextBlock Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" Text="账号: "/>
-                                    <TextBlock Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" Text="{Binding WeChatId}"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal"  Grid.Column="1" Grid.Row="0">
-                                    <TextBlock Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" Text="备注名: "/>
-                                    <TextBlock Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" Text="{Binding Remark}"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal"  Grid.Column="0" Grid.Row="1">
-                                    <TextBlock Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" Text="昵称: "/>
-                                    <TextBlock Foreground="{TemplateBinding Foreground}" FontSize="{TemplateBinding FontSize}" Text="{Binding Nick}"/>
-                                </StackPanel>
-                                <Image Source="{Binding DataState, Converter={StaticResource dataStateToImageSourceConverter}}" Width="16" Height="16" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2"/>
-                            </Grid>
-                        </Border>
-                        
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsSelected" Value="true">
-                                <Setter Property="Background" Value="#19FFFFFF"/>
-                                <Setter Property="Foreground" Value="White"/>
-                            </Trigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsSelected" Value="false"/>
-                                    <Condition Property="IsMouseOver" Value="true"/>
-                                </MultiTrigger.Conditions>
-                                <Setter Property="Background" Value="#0FFFFFFF"/>
-                                <Setter Property="Foreground" Value="White"/>
-                            </MultiTrigger>
-                            --><!--<Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" Value="#0FFFFFFF"/>
-                                <Setter Property="Foreground" Value="Red"/>
-                            </Trigger>--><!--
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>-->
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>

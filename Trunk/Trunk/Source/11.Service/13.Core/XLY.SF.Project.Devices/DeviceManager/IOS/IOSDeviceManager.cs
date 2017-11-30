@@ -107,7 +107,7 @@ namespace XLY.SF.Project.Devices
             InitCopyUserData(device, 100, asyn);
 
             //2.文件拷贝
-            var res = IOSDeviceCoreDll.CopyUserData(device.ID, targetPath, _CopyUserDataCallback);
+            var res = IOSDeviceCoreDll.CopyUserData(targetPath, device.ID, _CopyUserDataCallback);
 
             if (0 != res)
             {
@@ -143,11 +143,17 @@ namespace XLY.SF.Project.Devices
             //2.文件拷贝
             var res = IOSDeviceCoreDll.CopyUserDataPWD(targetPath, device.ID, CopyUserDataCallback, (b) =>
             {
-                var password = InputPassword();
+                if (null != InputPassword)
+                {
+                    var password = InputPassword();
 
-                var pS = Marshal.StringToHGlobalAnsi(password);
+                    if (password.IsValid())
+                    {
+                        var pS = Marshal.StringToHGlobalAnsi(password);
 
-                Marshal.WriteIntPtr(b, pS);
+                        Marshal.WriteIntPtr(b, pS);
+                    }
+                }
 
                 return 0;
             });

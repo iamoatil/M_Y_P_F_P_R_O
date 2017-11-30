@@ -50,7 +50,7 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
                     }
                     if (line.Contains("versionName"))
                     {
-                        app.Version = line.Split('=')[1].ToSafeVersion();
+                        app.VersionDesc = line.Split('=')[1].ToSafeString();
                         continue;
                     }
                     if (line.Contains("dataDir"))

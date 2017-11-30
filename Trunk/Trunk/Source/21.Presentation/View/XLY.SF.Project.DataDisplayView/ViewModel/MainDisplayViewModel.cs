@@ -14,6 +14,8 @@ using XLY.SF.Project.Plugin.Adapter;
 using XLY.SF.Project.Plugin.DataView;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Framework.Core.Base.MessageBase;
+using XLY.SF.Framework.Core.Base.CoreInterface;
+using XLY.SF.Framework.Core.Base.MefIoc;
 
 /* ==============================================================================
 * Assembly   ：	XLY.SF.Project.Plugin.DataView.ViewModel.MainDisplayViewModel
@@ -28,37 +30,52 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
     /// MainDisplayViewModel
     /// </summary>
     [Export(ExportKeys.DataDisplayViewModel, typeof(ViewModelBase))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class MainDisplayViewModel : ViewModelBase
     {
         public MainDisplayViewModel()
         {
             SelecedAppChanged = new RelayCommand<object>(DoSelecedAppChanged);
-            ExpandPreviewAreaCommond = new RelayCommand<object>(DoExpandPreviewAreaCommond);
+            DeleteDataCommond = new RelayCommand<object>(DoDeleteDataCommond);
 
             MessageAggregation.RegisterGeneralMsg<bool>(this, MessageKeys.StartFilterKey, StartFilter);
+            _MessageBox = IocManagerSingle.Instance.GetPart<IMessageBox>();
         }
 
-       
+        private IMessageBox _MessageBox
+        {
+            get;
+            set;
+        }
+
         #region 事件
         protected override void InitLoad(object parameters)
         {
-            string devicePath = parameters?.ToString();
+            _currentDevicePath = parameters?.ToString();
             LoadPlugin();
-            LoadData(devicePath);
-
+            LoadData(_currentDevicePath);
         }
 
+        /// <summary>
+        /// 接收到数据更新的请求
+        /// </summary>
+        /// <param name="parameters"></param>
+        public override void ReceiveParameters(object parameters)
+        {
+            base.ReceiveParameters(parameters);
+            LoadData(_currentDevicePath);
+        }
         #endregion
 
         #region 属性
 
         #region 数据列表
-        private ObservableCollection<DataExtactionTreeItem> _dataList;
+        private ObservableCollection<DataExtactionItem> _dataList;
 
         /// <summary>
         /// 数据列表
         /// </summary>	
-        public ObservableCollection<DataExtactionTreeItem> DataList
+        public ObservableCollection<DataExtactionItem> DataList
         {
             get { return _dataList; }
             set
@@ -188,6 +205,26 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         }
         #endregion
 
+        #region 当前正在执行的操作
+        private string _CurrentOperation = "";
+
+        /// <summary>
+        /// 当前正在执行的操作
+        /// </summary>	
+        public string CurrentOperation
+        {
+            get { return _CurrentOperation; }
+            set
+            {
+                _CurrentOperation = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
+
+        private string _currentDevicePath = null;
+
         #endregion
 
         #region Commond
@@ -202,36 +239,64 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         {
             if (app == null)
                 return;
-            if(app is DataExtactionTreeItem treeItem && treeItem.Data != null)
+            if (app is DataExtactionItem treeItem && treeItem.Data != null)
             {
                 LayoutViewItems = new ObservableCollection<object>();
                 foreach (var item in DataViewPluginAdapter.Instance.GetView(treeItem.Text, DataViewConfigure.XLY_LAYOUT_KEY))
                 {
-                    LayoutViewItems.Add(item.ToControl(new DataViewPluginArgument() {  CurrentData = null, DataSource = treeItem.Data as IDataSource}));
+                    LayoutViewItems.Add(item.ToControl(new DataViewPluginArgument() { CurrentData = null, DataSource = treeItem.Data as IDataSource, OnSelectedItemChanged = OnDataViewSelectedItemChanged }));
                 }
                 SelectedLayoutViewItem = LayoutViewItems.FirstOrDefault();
             }
             HasData = SelectedLayoutViewItem != null;
         }
-        #endregion
-
-        #region 展开或折叠预览区域
-
-        public RelayCommand<object> ExpandPreviewAreaCommond { get; set; }
 
         /// <summary>
-        /// 展开或折叠预览区域
+        /// 选了某项数据，此时更新数据预览
         /// </summary>
-        private void DoExpandPreviewAreaCommond(object isExpanded)
+        /// <param name="data"></param>
+        private void OnDataViewSelectedItemChanged(object data)
         {
-            IsExpandPreviewArea = bool.Parse(isExpanded?.ToString());
-            if (IsExpandPreviewArea)
+            MessageAggregation.SendGeneralMsg<object>(new GeneralArgs<object>(MessageKeys.PreviewKey) { Parameters = data });
+        }
+
+        #endregion
+
+        #region 删除某个提取项数据
+
+        public RelayCommand<object> DeleteDataCommond { get; set; }
+
+        /// <summary>
+        /// 删除某个提取项数据
+        /// </summary>
+        private void DoDeleteDataCommond(object item)
+        {
+            if(item == null)
             {
-                PreviewAreaHeight = 200;
+                return;
             }
-            else
+            if(ShowMessageBox(string.Format(Languagekeys.DeleteNotice, item)))
             {
-                PreviewAreaHeight = 40;
+                Task.Factory.StartNew(() =>
+                {
+                    AsyncOperator.Execute(() => { CurrentOperation = Languagekeys.DeletingData; IsFiltering = true; } );
+                    string path = Path.Combine(_currentDevicePath, item.ToString());
+                    BaseUtility.Helper.FileHelper.RemoveDirectoryReadOnly(path);
+                    Directory.Delete(path, true);
+                    AsyncOperator.Execute(() =>
+                    {
+                        IsFiltering = false;
+                        var d = DataList.FirstOrDefault(e => e.Text == item.ToString());
+                        DataList.Remove(d);
+                        HasDataList = DataList != null && DataList.Count > 0;
+                        if (!SelectDefaultNode(DataList))
+                        {
+                            LayoutViewItems = new ObservableCollection<object>();
+                            SelectedLayoutViewItem = null;
+                            HasData = SelectedLayoutViewItem != null;
+                        }
+                    });
+                });
             }
         }
         #endregion
@@ -239,18 +304,39 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         #endregion
 
         #region 方法
+        private bool ShowMessageBox(string message)
+        {
+            if(_MessageBox != null)
+            {
+                return _MessageBox.ShowDialogWarningMsg(message);
+            }
+            else
+            {
+                return System.Windows.MessageBox.Show(message, Languagekeys.DeleteNoticeTitle, System.Windows.MessageBoxButton.YesNo) == System.Windows.MessageBoxResult.Yes;
+            }
+        }
         private void LoadPlugin()
         {
-            if(DataViewPluginAdapter.Instance.Plugins == null || DataViewPluginAdapter.Instance.Plugins.Count() == 0)
+            if (DataViewPluginAdapter.Instance.Plugins == null || DataViewPluginAdapter.Instance.Plugins.Count() == 0)
             {
                 DataViewPluginAdapter.Instance.Plugins = PluginAdapter.Instance.GetPluginsByType<DataViewPluginInfo>(PluginType.SpfDataView).ToList().ConvertAll(p => (AbstractDataViewPlugin)p.Value);
             }
         }
         private void LoadData(string devicePath)
         {
-            Task.Factory.StartNew(() => {
+            Task.Factory.StartNew(() =>
+            {
                 IsFiltering = true;
                 //string DB_PATH = @"C:\Users\fhjun\Desktop\test.db";
+                //string DBBMK_PATH = @"C:\Users\fhjun\Desktop\test_bmk.db";
+                //if (File.Exists(DB_PATH))
+                //{
+                //    File.Delete(DB_PATH);
+                //}
+                //if (File.Exists(DBBMK_PATH))
+                //{
+                //    File.Delete(DBBMK_PATH);
+                //}
                 //var treeSource = new TreeDataSource();
                 //treeSource.TreeNodes = new List<TreeNode>();
                 //treeSource.PluginInfo = new DataParsePluginInfo() { Guid = "微信", Name = "微信" };
@@ -288,7 +374,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                 //        accouts2.TreeNodes.Add(friend);
 
                 //        friend.Items.Add(new MessageCore() { SenderName = friend.Text, SenderImage = "images/zds.png", Receiver = t.Text, Content = "http://www.sohu.com", SendState = EnumSendState.Send, Type = EnumColumnType.URL });
-                //        for (int k = 0; k < 100; k++)
+                //        for (int k = 0; k < 130; k++)
                 //        {
                 //            MessageCore msg = new MessageCore() { SenderName = friend.Text, SenderImage = "images/zds.png", Receiver = t.Text, Content = "消息内容" + k, MessageType = k % 4 == 0 ? "图片" : "文本", SendState = EnumSendState.Send, Date = DateTime.Now.AddHours(k * 3) };
                 //            friend.Items.Add(msg);
@@ -323,73 +409,45 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                 //sms.Filter<AbstractDataItem>();
                 //treeSource.Filter<AbstractDataItem>();
 
-                //DataList = new ObservableCollection<DataExtactionTreeItem>() {
-                //    new DataExtactionTreeItem(){Text = "自动提取", IsItemStyle=true, TreeNodes = new ObservableCollection<DataExtactionTreeItem>(){
-                //        new DataExtactionTreeItem(){Text = "基础信息", IsItemStyle=false,TreeNodes = new ObservableCollection<DataExtactionTreeItem>(){
-                //           new DataExtactionTreeItem(){Text = "短信",Data = sms, IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionTreeItem>() }
-                //    } }, new DataExtactionTreeItem(){Text = "社交聊天", IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionTreeItem>(){
-                //           new DataExtactionTreeItem(){Text = "微信", IsItemStyle=false, Data = treeSource, TreeNodes = new ObservableCollection<DataExtactionTreeItem>() }
+                //var dataList = new ObservableCollection<DataExtactionItem>() {
+                //    new DataExtactionItem(){Text = "自动提取", Total = 511, IsItemStyle=true, TreeNodes = new ObservableCollection<DataExtactionItem>(){
+                //        new DataExtactionItem(){Text = "基础信息", IsItemStyle=false,TreeNodes = new ObservableCollection<DataExtactionItem>(){
+                //           new DataExtactionItem(){Text = "短信",Data = sms, IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionItem>() }
+                //    } }, new DataExtactionItem(){Text = "社交聊天", IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionItem>(){
+                //           new DataExtactionItem(){Text = "微信", IsItemStyle=false, Data = treeSource, TreeNodes = new ObservableCollection<DataExtactionItem>() }
+                //    }}}},
+                //    new DataExtactionItem(){Text = "镜像提取", Total = 11, IsItemStyle=true, TreeNodes = new ObservableCollection<DataExtactionItem>(){
+                //        new DataExtactionItem(){Text = "基础信息", IsItemStyle=false,TreeNodes = new ObservableCollection<DataExtactionItem>(){
+                //           new DataExtactionItem(){Text = "短信",Data = sms, IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionItem>() }
+                //    } }, new DataExtactionItem(){Text = "社交聊天", IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionItem>(){
+                //           new DataExtactionItem(){Text = "微信", IsItemStyle=false, Data = treeSource, TreeNodes = new ObservableCollection<DataExtactionItem>() }
+                //    }}}},
+                //     new DataExtactionItem(){Text = "APP降级提取",Total = 0, IsItemStyle=true, TreeNodes = new ObservableCollection<DataExtactionItem>(){
+                //        new DataExtactionItem(){Text = "基础信息", IsItemStyle=false,TreeNodes = new ObservableCollection<DataExtactionItem>(){
+                //           new DataExtactionItem(){Text = "短信",Data = sms, IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionItem>() }
+                //    } }, new DataExtactionItem(){Text = "社交聊天", IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionItem>(){
+                //           new DataExtactionItem(){Text = "微信", IsItemStyle=false, Data = treeSource, TreeNodes = new ObservableCollection<DataExtactionItem>() }
                 //    }}}}
                 //};
 
                 //devicePath = @"C:\Users\fhjun\Desktop\默认案例_20171115[081055]\默认案例_20171115[081055]\R7007_20171115[081055]";
-                var  dataList = new ObservableCollection<DataExtactionTreeItem>();
-                if (!Directory.Exists(devicePath))
+                _currentDevicePath = devicePath;
+                var dataList = DeviceExternsion.LoadDeviceData(devicePath);
+                foreach (var item in dataList)
                 {
-                    return;
+                    item.BuildParent();
                 }
-                foreach (var dir in Directory.GetDirectories(devicePath))
+                AsyncOperator.Execute(() =>
                 {
-                    if (!Directory.Exists(Path.Combine(dir, "Result")))     //如果包含了Result文件夹，则认为是测试数据
-                    {
-                        continue;
-                    }
-                    DirectoryInfo d = new DirectoryInfo(dir);
-                    DataExtactionTreeItem extact = new DataExtactionTreeItem() { Text = d.Name, IsItemStyle = true, TreeNodes = new ObservableCollection<DataExtactionTreeItem>() };
-                    dataList.Add(extact);
-
-                    List<DataExtactionTreeItem> ls = new List<DataExtactionTreeItem>();
-                    foreach (var bin in Directory.GetFiles(Path.Combine(dir, "Result"), "*.ds"))        //ds为IDataSource二进制序列化包
-                    {
-                        try
-                        {
-                            IDataSource ds = Serializer.DeSerializeFromBinary<IDataSource>(bin);
-                            ds.SetCurrentPath(dir);     //修改数据中的当前任务路径，因为原始数据中存储的是绝对路径
-                            if (ds != null)
-                            {
-                                ds.Filter<dynamic>();
-                                ls.Add(new DataExtactionTreeItem()
-                                {
-                                    Text = ds.PluginInfo?.Name,
-                                    Index = ds.PluginInfo == null ? 0 : ds.PluginInfo.OrderIndex,
-                                    Group = ds.PluginInfo?.Group,
-                                    Data = ds,
-                                    IsItemStyle = false,
-                                    TreeNodes = new ObservableCollection<DataExtactionTreeItem>()
-                                });
-                            }
-                        }
-                        catch
-                        {
-
-                        }
-                    }
-                    foreach (var group in ls.GroupBy(g => g.Group))
-                    {
-                        DataExtactionTreeItem g = new DataExtactionTreeItem() { Text = group.Key, IsItemStyle = false, TreeNodes = new ObservableCollection<DataExtactionTreeItem>() };
-                        g.TreeNodes.AddRange(group.ToList().OrderBy(p => p.Index));       //添加该分组的所有插件，并按照序号排序
-                        extact.TreeNodes.Add(g);
-                    }
-                }
-               
-                AsyncOperator.Execute(() => 
-                {
-                    //重置数据
-                    MessageAggregation.SendGeneralMsg(new GeneralArgs<ObservableCollection<DataExtactionTreeItem>>(MessageKeys.SetDataListKey) { Parameters = DataList });
-
                     DataList = dataList;
+
+                    //重置数据
+                    MessageAggregation.SendGeneralMsg(new GeneralArgs<ObservableCollection<DataExtactionItem>>(MessageKeys.SetDataListKey) { Parameters = DataList });
+
                     IsFiltering = false;
                     HasDataList = DataList != null && DataList.Count > 0;
+
+                    SelectDefaultNode(DataList);
                 });
             });
         }
@@ -402,27 +460,45 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         {
             AsyncOperator.Execute(() =>
             {
+                CurrentOperation = Languagekeys.Searching;
                 IsFiltering = obj.Parameters;
+
+                if(!IsFiltering)
+                {
+                    SelectDefaultNode(DataList);
+                }
             });
         }
 
+        /// <summary>
+        /// 选择默认的节点，当刷新数据后设置
+        /// </summary>
+        private bool SelectDefaultNode(ObservableCollection<DataExtactionItem> nodes)
+        {
+            if(nodes == null)
+            {
+                return false;
+            }
+            foreach (var item in nodes)
+            {
+                if(item != null && item.Data != null)
+                {
+                    item.IsSelected = true;
+                    DoSelecedAppChanged(item);
+                    return true;
+                }
+                if(item.TreeNodes != null)
+                {
+                    if(SelectDefaultNode(item.TreeNodes))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         #endregion
     }
 
-    /// <summary>
-    /// 用于界面树的绑定
-    /// </summary>
-    public class DataExtactionTreeItem
-    {
-        public string Text { get; set; }
-        public string Group { get; set; }
-        public int Index { get; set; }
-        public object Data { get; set; }
-        public bool IsHideChildren { get; set; }
-        public bool IsItemStyle { get; set; }
-        public bool IsChecked { get; set; } = true;
-        public ObservableCollection<DataExtactionTreeItem> TreeNodes { get; set; }
-    }
-
-    
+   
 }

@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -12,39 +12,31 @@ using XLY.SF.Project.ViewDomain.MefKeys;
 
 namespace XLY.SF.Project.ViewModels.Management.User
 {
-    [Export(ExportKeys.ManagementUserInfoViewModel, typeof(ViewModelBase))]
+    [Export(ExportKeys.SettingsUserInfoViewModel, typeof(ViewModelBase))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class UserInfoViewModel : ViewModelBase
     {
-        #region Fields
-
-        private readonly ProxyRelayCommandBase _cancelProxyCommand;
-
-        private readonly ProxyRelayCommandBase _confirmProxyCommand;
-
-        #endregion
-
         #region Constructors
 
         public UserInfoViewModel()
         {
-            _cancelProxyCommand = new ProxyRelayCommand(Cancel);
-            _confirmProxyCommand = new ProxyRelayCommand<UserInfoEntityModel>(Confirm);
-            Item = new UserInfoEntityModel();
+            CancelCommand = new RelayCommand(Cancel);
+            ConfirmCommand = new RelayCommand(Confirm, CanConfirm);
+            Item = new UserInfoModel();
         }
 
         #endregion
 
         #region Properties
 
-        public ICommand CancelCommand => _cancelProxyCommand.ViewExecuteCmd;
+        public ICommand CancelCommand { get; }
 
-        public ICommand ConfirmCommand => _confirmProxyCommand.ViewExecuteCmd;
+        public ICommand ConfirmCommand { get; }
 
-        #region UserInfoEntityModel
+        #region UserInfoModel
 
-        private UserInfoEntityModel _item;
-        public UserInfoEntityModel Item
+        private UserInfoModel _item;
+        public UserInfoModel Item
         {
             get => _item;
             set
@@ -60,16 +52,45 @@ namespace XLY.SF.Project.ViewModels.Management.User
 
         #region Methods
 
-        #region Private
+        #region Public
 
-        private String Cancel()
+        protected override void InitLoad(Object parameters)
         {
-            throw new NotImplementedException();
+            Item = parameters as UserInfoModel;
         }
 
-        private String Confirm(UserInfoEntityModel item)
+        public override Object GetResult()
         {
-            throw new NotImplementedException();
+            return Item;
+        }
+
+        #endregion
+
+        #region Private
+
+        private Boolean CanConfirm()
+        {
+            if (Item.UserName == String.Empty
+                || Item.WorkUnit == String.Empty
+                || Item.IdNumber == String.Empty
+                || Item.PhoneNumber == String.Empty
+                || Item.LoginUserName == String.Empty)
+            {
+                return false;
+            }
+            if (Item.Password == String.Empty) return false;
+            return Item.Password == Item.ConfirmPassword;
+        }
+
+        private void Cancel()
+        {
+            CloseView();
+        }
+
+        private void Confirm()
+        {
+            DialogResult = true;
+            CloseView();
         }
 
         #endregion

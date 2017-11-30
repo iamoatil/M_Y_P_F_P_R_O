@@ -19,6 +19,30 @@ namespace XLY.SF.Project.ViewDomain.VModel.DevHomePage
             HasRoot = true;
         }
 
+        #region Icon
+
+        private string _devIcon;
+        /// <summary>
+        /// 图标
+        /// </summary>
+        public new string DevIcon
+        {
+            get
+            {
+                _devIcon = IsAndroid ? "pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_Android.png" :
+                    "pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_IOS.png";
+                return this._devIcon;
+            }
+
+            private set
+            {
+                this._devIcon = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region 是否为Android，否为IOS
 
         private bool _isAndroid;
@@ -190,7 +214,7 @@ namespace XLY.SF.Project.ViewDomain.VModel.DevHomePage
             }
         }
 
-        private double _usedTotalSizeOfSD;
+        private double usedTotalSizeOfSD;
         /// <summary>
         /// 已用SD卡总和
         /// </summary>
@@ -198,13 +222,11 @@ namespace XLY.SF.Project.ViewDomain.VModel.DevHomePage
         {
             get
             {
-                return this._usedTotalSizeOfSD;
+                return SDCardTotalSize - UnusedTotalSizeOfSD;
             }
-
-            set
+            private set
             {
-                this._usedTotalSizeOfSD = value;
-                base.OnPropertyChanged();
+                usedTotalSizeOfSD = value;
             }
         }
 

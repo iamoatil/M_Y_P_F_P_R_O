@@ -277,7 +277,7 @@ namespace XLY.SF.Project.CaseManagement
         /// <returns>设备提取列表。</returns>
         private IEnumerable<DeviceExtraction> GetAllDeviceExtractions()
         {
-            return Configuration.ReferenceItems.Where(x => x.IsValid).Select(x => DeviceExtraction.Open(x, this));
+            return Configuration.ReferenceItems.Where(x => x.IsValid).Select(x => DeviceExtraction.Open(x, this)).Where(x => x != null);
         }
 
         private static void RegisterCaseWatcher(Case @case,String initPath,Action initCallback)

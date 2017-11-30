@@ -631,7 +631,7 @@ namespace XLY.SF.Project.Services
         /// <param name="savePath">保存文件路径</param>
         /// <param name="isCover">是否覆盖已存在的文件</param>
         /// <returns></returns>
-        public void ExportFileX(FNodeX file, string savePath, bool persistRelativePath = true, bool isMedia = false, bool isCover = false)
+        public void ExportFileX(FNodeX file, string savePath, bool persistRelativePath = true, bool isMedia = false, bool isCover = false, bool isThrowEx = false)
         {
             try
             {
@@ -647,6 +647,11 @@ namespace XLY.SF.Project.Services
             catch (Exception ex)
             {
                 LoggerManagerSingle.Instance.Error(string.Format("export file error[{0}]", file.FullPath), ex);
+
+                if (isThrowEx)
+                {
+                    throw;
+                }
             }
         }
 

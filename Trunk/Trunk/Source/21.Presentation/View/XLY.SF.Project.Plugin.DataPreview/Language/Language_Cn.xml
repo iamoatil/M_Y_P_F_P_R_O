@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageResource>
+  <AudioView>音频播放</AudioView>
+  <BasicView>基本信息</BasicView>
+  <HtmlView>网页查看</HtmlView>
+  <ImageView>图片查看</ImageView>
+  <TextView>文本查看</TextView>
+  <VedioView>视频播放</VedioView>
+  <OfficeView>Office文件</OfficeView>
+  <Start>开始</Start>
+  <Pause>暂停</Pause>
+  <Continue>继续</Continue>
+  <Stop>停止</Stop>
+  <FileName>文件名</FileName>
+  <FullPath>全路径</FullPath>
+  <FileSize>大小</FileSize>
+  <CreateTime>创建时间</CreateTime>
+  <ModifyTime>修改时间</ModifyTime>
+  <AccessTime>访问时间</AccessTime>
+  <Attributes>属性</Attributes>
+  <ZhiDu>只读</ZhiDu>
+  <Bytes>字节</Bytes>
+</LanguageResource>
+
+

@@ -149,7 +149,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <DockPanel>
-        <Button Content="数据源"
+        <Button Content="{Binding XPath=DeviceLanguage/Deivce_DataSource,Source={x:Static ex:SystemContext.LanguageProvider}}"
                 Margin="30,0,0,0"
                 Height="34"
                 Width="104"

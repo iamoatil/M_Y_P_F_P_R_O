@@ -27,11 +27,11 @@ namespace XLY.SF.Project.Plugin.DataReport
             PluginInfo = new DataReportPluginInfo()
             {
                 Guid = "DC22CD47-D05D-49D1-8B4E-98039FCB2BB0",
-                Name = "Html报表",
+                Name = "Html",
                 ReportExtension = ".html",
-                Description = "导出为Html格式的报表",
+                Description = "",
                 OrderIndex = 0,
-                Platform = "效率源",
+                Platform = "",
                 PluginType = PluginType.SpfReport,
                 Group = ""
             };

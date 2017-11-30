@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <LanguageResource>
-  <ViewLanguage Prompt="界面显示语言">
+  <ViewLanguage Prompt="界面显示语言">    
     <!--登录、加载-->
     <View_Loading>系统加载中，请稍等</View_Loading>
     <View_Login>登录</View_Login>
     <View_Login_ExitSys>退出</View_Login_ExitSys>
-    <View_Login_UserName>帐  号</View_Login_UserName>
+    <View_Login_UserName>账  号</View_Login_UserName>
     <View_Login_Password>密  码</View_Login_Password>
-    <View_Login_Company>效率源信息安全股份有限公司</View_Login_Company>
+    <View_Login_Company>四川效率源信息安全股份有限公司</View_Login_Company>
     <View_Login_Version>版本 1.0</View_Login_Version>
 
     <!--主页-->
@@ -32,11 +32,6 @@
     <View_MainWin_MenuAbout>关于我们</View_MainWin_MenuAbout>
     <View_MainWin_MenuLogout>注销</View_MainWin_MenuLogout>
 
-    <!--选择文件、文件夹、保存-->
-    <View_SelectControl_OpenTitle>打开文件</View_SelectControl_OpenTitle>
-    <View_SelectControl_SaveTitle>保存文件</View_SelectControl_SaveTitle>
-    <View_SelectControl_SelectFolderTitle>选择文件夹</View_SelectControl_SelectFolderTitle>
-
     <!--首页-->
     <View_HomePageOpen>打开</View_HomePageOpen>
     <View_HomePageOpenAllCase>所有案例</View_HomePageOpenAllCase>
@@ -53,9 +48,7 @@
     <View_CaseCreateTime>创建时间</View_CaseCreateTime>
     <View_UpdateRecentError>更新失败</View_UpdateRecentError>
     <View_CaseListViewTitle>案例管理</View_CaseListViewTitle>
-    <View_DeleteCase>删除</View_DeleteCase>
-    <View_SearchCase>搜索</View_SearchCase>
-    <View_CaseKeyword>关键字</View_CaseKeyword>
+    <View_CaseKeyword>请输入关键字</View_CaseKeyword>
     <View_CaseSelectAll>全选</View_CaseSelectAll>
     <View_CaseIndex>序号</View_CaseIndex>
     <View_CaseNumber>案例编号</View_CaseNumber>
@@ -68,7 +61,7 @@
     <View_CaseTypeEdition>增/删</View_CaseTypeEdition>
     <View_CaseNotExist>案例不存在</View_CaseNotExist>
     <View_CaseListTimeTo>至</View_CaseListTimeTo>
-    <View_CaseListDelete>删除</View_CaseListDelete>
+    <View_CaseListDelete>批量删除</View_CaseListDelete>
     <View_CaseListSearch>搜索</View_CaseListSearch>
     <View_CaseOpen>打开</View_CaseOpen>
     <View_CaseListIndex>序号</View_CaseListIndex>
@@ -109,9 +102,24 @@
     <View_DevHomePage_Port>端   口</View_DevHomePage_Port>
     <View_DevHomePage_IOSRoot>越狱</View_DevHomePage_IOSRoot>
 
+    <!--选择文件、文件夹、保存-->
+    <View_SelectControl_Format>格式</View_SelectControl_Format>
+    <View_SelectControl_SelectFile>选择文件</View_SelectControl_SelectFile>
+    <View_SelectControl_OpenTitle>打开文件</View_SelectControl_OpenTitle>
+    <View_SelectControl_SaveTitle>保存文件</View_SelectControl_SaveTitle>
+    <View_SelectControl_FolderName>文件夹名</View_SelectControl_FolderName>
+    <View_SelectControl_SelectFolderTitle>选择文件夹</View_SelectControl_SelectFolderTitle>
+    
+    <!--数据导出-->
+    <Export>
+      <ExportData>数据导出</ExportData>
+    </Export>
+
     <!--管理-->
     <Management>
       <User>
+        <ListTitle>用户管理</ListTitle>
+        <InfoTitle>用户信息</InfoTitle>
         <Search>搜索</Search>
         <Number>编号</Number>
         <Account>用户名</Account>
@@ -120,14 +128,31 @@
         <Unit>工作单位</Unit>
         <Id>证件号</Id>
         <Add>添加</Add>
-        <Remove>删除</Remove>
-        <Update>修改</Update>
+        <RemoveBatch>批量删除</RemoveBatch>
         <InputPassword>输入密码</InputPassword>
         <ConfirmPassword>确认密码</ConfirmPassword>
-        <Close>关闭</Close>
         <Cancel>取消</Cancel>
         <Confirm>确认</Confirm>
       </User>
+      <Settings>
+        <Title>设置</Title>
+        <Basic>基本设置</Basic>
+        <CaseType>案例类型</CaseType>
+        <Unit>单位设置</Unit>
+        <UnitInputBox>单位</UnitInputBox>
+        <NumberInputBox>编号</NumberInputBox>
+        <Inspection>智能检视</Inspection>
+        <InspectionDescription>检视项（对MD5的检视可能导致系统变慢）：</InspectionDescription>
+        <InspectionTooltip>默认开启智能检视</InspectionTooltip>
+        <Language>语言</Language>
+        <DefaultPath>默认路径</DefaultPath>
+        <DataFilter>数据过滤</DataFilter>
+        <DataFilterDescription>提取结果自动去重并过滤无效数据</DataFilterDescription>
+        <Add>添加</Add>
+        <Remove>删除</Remove>
+        <Chinese>中文</Chinese>
+        <English>英文</English>
+      </Settings>
     </Management>
 
 
@@ -157,8 +182,9 @@
     
 
     <!--消息提示-->
-    <View_MessageBox_Error>错误消息</View_MessageBox_Error>
-    <View_MessageBox_Notice>提示消息</View_MessageBox_Notice>
+    <View_MessageBox_Error>很抱歉</View_MessageBox_Error>
+    <View_MessageBox_Success>成功</View_MessageBox_Success>
+    <View_MessageBox_Warning>警告</View_MessageBox_Warning>
   
 </ViewLanguage>
 
@@ -194,6 +220,10 @@
     <Device_Move>移动</Device_Move>
     <Device_Delete>删除</Device_Delete>
     <Device_Close>关闭</Device_Close>
+    <Device_Move_Description>请选择要移动到的案例（移动过程可能需要较长时间）</Device_Move_Description>
+    <Device_Confirm>确定</Device_Confirm>
+    <Device_Cancel>取消</Device_Cancel>
+    <Deivce_DataSource>数据源</Deivce_DataSource>
   </DeviceLanguage>
 
   <ErrorMessageLanguage Prompt="错误提示信息语言资源">

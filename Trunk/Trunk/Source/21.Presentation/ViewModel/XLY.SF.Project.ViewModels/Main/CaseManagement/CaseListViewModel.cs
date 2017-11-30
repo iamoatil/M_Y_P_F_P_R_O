@@ -19,19 +19,18 @@ using XLY.SF.Project.ViewDomain.MefKeys;
 namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 {
     [Export(ExportKeys.CaseListViewModel, typeof(ViewModelBase))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class CaseListViewModel : ViewModelBase
     {
         #region Fields
 
         private readonly ProxyRelayCommandBase _openCommandProxy;
 
-        private readonly ProxyRelayCommandBase _deleteCommandProxy;
+        private readonly ProxyRelayCommandBase _removeCommandProxy;
 
         private readonly ProxyRelayCommandBase _searchCommandProxy;
 
-        private readonly ProxyRelayCommandBase _selectAllCommandProxy;
-
-        private readonly ProxyRelayCommandBase _deleteBatchCommandProxy;
+        private readonly ProxyRelayCommandBase _removeBatchCommandProxy;
 
         #endregion
 
@@ -41,10 +40,11 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         {
             FilterArgs = new CaseFilterArgs();
             _openCommandProxy = new ProxyRelayCommand<RecentCaseEntityModel>(Open);
-            _deleteCommandProxy = new ProxyRelayCommand<CaseItem>(Delete);
+            _removeCommandProxy = new ProxyRelayCommand<CaseItem>(Remove);
             _searchCommandProxy = new ProxyRelayCommand(Search);
-            _selectAllCommandProxy = new ProxyRelayCommand<Boolean>(SelectAll);
-            _deleteBatchCommandProxy = new ProxyRelayCommand(DeletBatch, CanDeleteBatch);
+            SelectAllCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<Boolean>(SelectAll, (b) => Items != null && Items.Count != 0);
+            SelectCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<Boolean>(Select);
+            _removeBatchCommandProxy = new ProxyRelayCommand(RemoveBatch);
         }
 
         #endregion
@@ -70,13 +70,31 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         public ICommand OpenCommand => _openCommandProxy.ViewExecuteCmd;
 
-        public ICommand DeleteBatchCommand => _deleteBatchCommandProxy.ViewExecuteCmd;
+        public ICommand RemoveBatchCommand => _removeBatchCommandProxy.ViewExecuteCmd;
 
-        public ICommand DeleteCommand => _deleteCommandProxy.ViewExecuteCmd;
+        public ICommand RemoveCommand => _removeCommandProxy.ViewExecuteCmd;
 
         public ICommand SearchCommand => _searchCommandProxy.ViewExecuteCmd;
 
-        public ICommand SelectAllCommand => _selectAllCommandProxy.ViewExecuteCmd;
+        public ICommand SelectAllCommand { get; }
+
+        public ICommand SelectCommand { get; }
+
+        #region IsSelectAll
+
+        private Boolean? _isSelectAll = false;
+
+        public Boolean? IsSelectAll
+        {
+            get => _isSelectAll;
+            private set
+            {
+                _isSelectAll = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
 
         [Import(typeof(IMessageBox))]
         private IMessageBox MessageBox
@@ -85,8 +103,8 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
             set;
         }
 
-        [Import(typeof(IDatabaseContext))]
-        private IDatabaseContext DbService { get; set; }
+        [Import(typeof(IRecordContext<RecentCase>))]
+        private IRecordContext<RecentCase> DbService { get; set; }
 
         //#region PageNo
 
@@ -131,7 +149,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
             //PagingRequest paging = new PagingRequest(1, 100);
             //var result = DbService.QueryOfPaging<RecentCaseEntity, RecentCaseEntityModel>(paging, (e) => true);
             //PageCount = result.PageCount;
-            var result = DbService.RecentCases.ToModels<RecentCase, RecentCaseEntityModel>().ToArray();
+            var result = DbService.Records.ToModels<RecentCase, RecentCaseEntityModel>().ToArray();
             Int32 index = 1;
             var items = result.OrderByDescending(x=>x.Timestamp).Select(x => new CaseItem(x, index++)).ToArray();
             Items = new ObservableCollection<CaseItem>(items);
@@ -141,20 +159,25 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         #region Private
 
-        private String DeletBatch()
+        private String RemoveBatch()
         {
-            if (_items == null) return "案例列表为空";
+            if (_items == null) return "没有可删除的案例";
             var selected = _items.Where(x => x.IsChecked).ToArray();
-            Case @case = null;
-            foreach (CaseItem item in selected)
+            if (selected.Length == 0) return "没有可删除的案例";
+            if (MessageBox.ShowDialogWarningMsg("是否确定删除？"))
             {
-                Items.Remove(item);
-                @case = Case.Open(item.CaseInfo.CaseProjectFile);
-                if (@case == null) continue;
-                @case.Delete();
+                Case @case = null;
+                foreach (CaseItem item in selected)
+                {
+                    Items.Remove(item);
+                    @case = Case.Open(item.CaseInfo.CaseProjectFile);
+                    if (@case == null) continue;
+                    @case.Delete();
+                }
+                DbService.RemoveRange(selected.Select(x => x.CaseInfo.Entity).ToArray());
+                return "删除选择的案例";
             }
-            DbService.RemoveRange(selected.Select(x => x.CaseInfo).ToArray());
-            return "删除选择的案例";
+            return "取消删除案例";
         }
 
         private String Open(RecentCaseEntityModel caseInfo)
@@ -174,24 +197,22 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
             }
             else
             {
-                MessageBox.ShowNoticeMsg(SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_CaseNotExist]);
+                MessageBox.ShowDialogSuccessMsg(SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_CaseNotExist]);
                 return $"打开案例[{currentCase.Name}]失败";
             }
         }
 
-        private String Delete(CaseItem item)
+        private String Remove(CaseItem item)
         {
-            Case @case = Case.Open(item.CaseInfo.CaseProjectFile);
-            @case?.Delete();
-            Items.Remove(item);
-            DbService.Remove(item.CaseInfo);
-            return "删除案例";
-        }
-
-        private Boolean CanDeleteBatch()
-        {
-            if (_items == null) return false;
-            return _items.Any(x => x.IsChecked);
+            if (MessageBox.ShowDialogWarningMsg("是否确定删除？"))
+            {
+                Case @case = Case.Open(item.CaseInfo.CaseProjectFile);
+                @case?.Delete();
+                Items.Remove(item);
+                DbService.Remove(item.CaseInfo.Entity);
+                return "删除案例";
+            }
+            return "取消删除案例";
         }
 
         private String Search()
@@ -199,7 +220,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
             String keyword = FilterArgs.Keyword;
             DateTime? begin = FilterArgs.Begin;
             DateTime? end = FilterArgs.End;
-            IQueryable<RecentCase> result = DbService.RecentCases;
+            IQueryable<RecentCase> result = DbService.Records;
             if (!String.IsNullOrWhiteSpace(keyword))
             {
                 if (begin != null && end != null)
@@ -241,14 +262,29 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
             return "查询案例";
         }
 
-        private String SelectAll(Boolean isChecked)
+        private void SelectAll(Boolean isSelectAll)
         {
-            if (_items == null) return "案例列表为空";
-            foreach (CaseItem item in _items)
+            IsSelectAll = isSelectAll;
+            foreach (var item in Items)
             {
-                item.IsChecked = isChecked;
+                item.IsChecked = isSelectAll;
             }
-            return "选择所有案例";
+        }
+
+        private void Select(Boolean isChecked)
+        {
+            if (Items.All(x => x.IsChecked))
+            {
+                IsSelectAll = true;
+            }
+            else if (Items.All(x => !x.IsChecked))
+            {
+                IsSelectAll = false;
+            }
+            else
+            {
+                IsSelectAll = null;
+            }
         }
 
         #endregion

@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Data;
 using XLY.SF.Framework.Core.Base;
+using XLY.SF.Framework.Core.Base.MessageBase.Navigation;
 using XLY.SF.Framework.Language;
 using XLY.SF.Project.CaseManagement;
 using XLY.SF.Project.Models.Logical;
 using XLY.SF.Project.ViewDomain.Model;
+using XLY.SF.Project.ViewDomain.Model.PresentationNavigationElement;
 
 namespace ProjectExtend.Context
 {
@@ -192,7 +194,7 @@ namespace ProjectExtend.Context
         /// <summary>
         /// 当前登录用户【此值无法被修改，只能通过设置改变】
         /// </summary>
-        public UserInfoEntityModel CurUserInfo { get; private set; }
+        public UserInfoModel CurUserInfo { get; private set; }
 
         #endregion
 
@@ -258,6 +260,27 @@ namespace ProjectExtend.Context
 
         #endregion
 
+        #region 界面缓存
+
+        /// <summary>
+        /// 当前界面缓存
+        /// </summary>
+        public NavigationCacheManager<PreCacheToken> CurCacheViews { get; }
+
+        #endregion
+
+        #region 常量
+
+        public const String EnableInspectionKey = "enableInspection";
+
+        public const String LanguageKey = "language";
+
+        public const String EnableFilterKey = "enableFilter";
+
+        public const String DefaultPathKey = "defaultPath";
+
+        #endregion
+
         #region private
 
         #region 用户信息
@@ -270,7 +293,7 @@ namespace ProjectExtend.Context
         /// <summary>
         /// 本地副本
         /// </summary>
-        private UserInfoEntityModel _curUserInfoClone { get; set; }
+        private UserInfoModel _curUserInfoClone { get; set; }
 
         #endregion
 

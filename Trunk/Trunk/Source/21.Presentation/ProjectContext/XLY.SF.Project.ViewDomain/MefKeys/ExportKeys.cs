@@ -166,12 +166,35 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         /// </summary>
         public const string ExtractionView = "ExportKey_ExtractionView";
 
+        /// <summary>
+        /// 提取展示页
+        /// </summary>
+        public const string ExtractionViewModel = "ExportKey_ExtractionViewModel";
+
+        /// 文件浏览页
+        /// </summary>
+        public const string FileBrowingView = "ExportKey_ModuleFileBowingView";
+
         #endregion
 
         #region 选择控件（路径，文件，打开）
+        /// <summary>
+        /// 文件选择
+        /// </summary>
+        public const string SelectFileView = "ExportKey_SelectFileView";
+        /// <summary>
+        /// 文件选择
+        /// </summary>
+        public const string SelectFileViewViewModel = "ExportKey_SelectFileViewViewModel";
 
-        public const string SelectControlView = "ExportKey_SelectControlView";
-        public const string SelectControlViewModel = "ExportKey_SelectControlViewModel";
+        /// <summary>
+        /// 文件夹选择
+        /// </summary>
+        public const string SelectFolderView = "ExportKey_SelectFolderView";
+        /// <summary>
+        /// 文件夹选择
+        /// </summary>
+        public const string SelectFolderViewModel = "ExportKey_SelectFolderViewModel";
 
         #endregion
 
@@ -180,17 +203,49 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         public const string DataDisplayViewModel = "DataDisplayViewModel";
         #endregion
 
-        #region 管理
+        #endregion 数据导出
+        public const String ExportDataView = "ExportDataView";
+        public const String ExportDataViewViewModel = "ExportDataViewViewModel";
+        #region 数据导出
+
+        #region 数据预览
+        public const string DataPreView = "DataPreView";
+        public const string DataPreViewModel = "DataPreViewModel";
+        #endregion
+
+        #region 设置
 
         #region 用户
 
-        public const String ManagementUserListView = "ExportKey_Management_UserListView";
+        public const String SettingsUserListView = "ExportKey_Settings_UserListView";
 
-        public const String ManagementUserListViewModel = "ExportKey_Management_UserListViewModel";
+        public const String SettingsUserListViewModel = "ExportKey_Settings_UserListViewModel";
 
-        public const String ManagementUserInfoView = "ExportKey_Management_UserInfoView";
+        public const String SettingsUserInfoView = "ExportKey_Settings_UserInfoView";
 
-        public const String ManagementUserInfoViewModel = "ExportKey_Management_UserInfoViewModel";
+        public const String SettingsUserInfoViewModel = "ExportKey_Settings_UserInfoViewModel";
+
+        #endregion
+
+        #region 系统设置
+
+        public const String SettingsBasicView = "ExportKey_Settings_BasicSettingsView";
+
+        public const String SettingsBasicViewModel = "ExportKey_Settings_BasicSettingsViewModel";
+
+        public const String SettingsCaseTypeView = "ExportKey_Settings_CaseTypeView";
+
+        public const String SettingsCaseTypeViewModel = "ExportKey_Settings_CaseTypeViewModel";
+
+        public const String SettingsUnitView = "ExportKey_Settings_UnitView";
+
+        public const String SettingsUnitViewModel = "ExportKey_Settings_UnitViewModel";
+
+        public const String SettingsInspectionView = "ExportKey_Settings_InspectionView";
+
+        public const String SettingsInspectionViewModel = "ExportKey_Settings_InspectionViewModel";
+
+        public const String SettingsView = "ExportKey_SettingsView";
 
         #endregion
 

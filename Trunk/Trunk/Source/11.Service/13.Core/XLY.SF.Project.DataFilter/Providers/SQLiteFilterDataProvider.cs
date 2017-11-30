@@ -46,7 +46,7 @@ namespace XLY.SF.Project.DataFilter.Providers
         {
             public override Object Invoke(Object[] args)
             {
-                return Regex.IsMatch(Convert.ToString(args[0]), Convert.ToString(args[1]));
+                return Regex.IsMatch(Convert.ToString(args[0]), Convert.ToString(args[1]), RegexOptions.Multiline);
             }
         }
 

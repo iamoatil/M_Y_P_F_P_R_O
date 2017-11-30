@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -74,7 +75,7 @@ namespace XLY.SF.Shell
             }
         }
 
-        #endregion
+       #endregion
 
         #region 窗口关闭
 
@@ -266,7 +267,8 @@ namespace XLY.SF.Shell
         //最大化
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            this.WindowState = WindowState.Maximized;
+            var a = sender as ToggleButton;
+            this.WindowState = a.IsChecked.HasValue&&a.IsChecked.Value ? WindowState.Maximized : WindowState.Normal;
         }
 
         //最小化

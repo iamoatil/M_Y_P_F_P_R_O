@@ -23,6 +23,19 @@ namespace XLY.SF.Project.DataPump.Misc
 
         #endregion
 
+        #region Constructors
+
+        /// <summary>
+        /// 初始化类型 XLY.SF.Project.DataPump.Misc.MtpDataPump 实例。
+        /// </summary>
+        /// <param name="metadata">与此数据泵关联的元数据信息。</param>
+        public MtpDataPump(Pump metadata)
+            : base(metadata)
+        {
+        }
+
+        #endregion
+
         #region Methods
 
         #region Protected
@@ -38,7 +51,7 @@ namespace XLY.SF.Project.DataPump.Misc
             {
                 throw new InvalidOperationException("Only support FileExtension");
             }
-            MTPDevice mtpDevice = GetMTPDevice(context);
+            MTPDevice mtpDevice = GetMTPDevice();
             if (mtpDevice == null) return;
             //2.解析文件类型和文件后缀名列表
             var filetype = Regex.Match(source.Config, @"^\$(\S+),").Groups[1].Value;
@@ -51,7 +64,7 @@ namespace XLY.SF.Project.DataPump.Misc
             foreach (var fileNode in fileNodes)
             {
                 sourcePath = fileNode.GetFullPath();
-                destPath = Path.Combine(context.TargetDirectory, filetype, sourcePath);
+                destPath = Path.Combine(Metadata.SourceStorePath, filetype, sourcePath);
                 FileHelper.CreateDirectory(destPath);
                 if (MtpDeviceManager.Instance.CopyFileFromDevice(mtpDevice, fileNode, destPath))
                 {
@@ -73,9 +86,9 @@ namespace XLY.SF.Project.DataPump.Misc
 
         #region Private
 
-        private MTPDevice GetMTPDevice(DataPumpControllableExecutionContext context)
+        private MTPDevice GetMTPDevice()
         {
-            Device device = context.PumpDescriptor.Source as Device;
+            Device device = Metadata.Source as Device;
             if (device == null) return null;
             MTPDevice mtpDevice = MtpDeviceManager.Instance.GetMTPDevice(device);
             if (mtpDevice != null)

@@ -5,28 +5,21 @@
 
     <BooleanToVisibilityConverter x:Key="bToV"/>
 
-    <!--空Btn样式-->
+    <!--#region 空Btn样式-->
     <ControlTemplate x:Key="btn_EmptyCT" TargetType="Button">
         <Border Background="{TemplateBinding Background}"
-                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderBrush="{TemplateBinding BorderBrush}" Padding="{TemplateBinding Padding}"
                 BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding Border.CornerRadius}">
             <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
         </Border>
     </ControlTemplate>
-    
-    <!--自定义控件-->
+    <!--#endregion-->
 
+    <!--#region 自定义控件-->
+    <!--#endregion-->
 
-
-
-
-
-
-
-
-
-    <!--控件模版-->
+    <!--#region 控件模版-->
     <!--首页按钮-->
     <ControlTemplate x:Key="btn_HomePageCT" TargetType="{x:Type Button}">
         <Grid x:Name="gd">
@@ -113,18 +106,28 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
+    <!--#region 红色按钮-->
+    <ControlTemplate x:Key="RedButtonCt" TargetType="Button">
+        <Border x:Name="br" Background="#ff4b64"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+            <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#ff5b72" TargetName="br"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="#d63e53" TargetName="br"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!--#endregion-->
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <!--样式-->
+    <!--#endregion-->
+
+    <!--#region 样式-->
     <!--主界面最小化-->
     <Style x:Key="btn_Minsize" TargetType="Button">
         <Setter Property="BorderThickness" Value="0"/>
@@ -311,4 +314,82 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!--透明图标按钮-->
+    <Style x:Key="btn_TranIcon" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template" Value="{StaticResource btn_EmptyCT}">
+        </Setter>
+    </Style>
+
+    <!--#region 设备首页编辑按钮-->
+    <Style x:Key="cb_DevHomePageEdit" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="2"/>
+        <Setter Property="BorderBrush" Value="#c8cdd7"/>
+        <Setter Property="Foreground" Value="#c8cdd7"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Border.CornerRadius" Value="5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="br" Background="{Binding Background,RelativeSource={RelativeSource Mode=TemplatedParent}}" CornerRadius="5"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter x:Name="cp"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter Property="Background" Value="#c8cdd7" TargetName="br"/>
+                            <Setter Property="Effect" TargetName="cp">
+                                <Setter.Value>
+                                    <ee:EmbossedEffect Color="#414b69"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter Property="Background" Value="#aab4be" TargetName="br"/>
+                            <Setter Property="Effect" TargetName="cp">
+                                <Setter.Value>
+                                    <ee:EmbossedEffect Color="#414b69"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="cb_DevHomePageSave" TargetType="Button">
+        <Setter Property="Background" Value="#379be6"/>
+        <Setter Property="BorderBrush" Value="#379be6"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="br" Background="{Binding Background,RelativeSource={RelativeSource Mode=TemplatedParent}}" CornerRadius="5"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter x:Name="cp"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#3ca5f5" TargetName="br"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="#2382cd" TargetName="br"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+    <!--#endregion-->
+
 </ResourceDictionary>

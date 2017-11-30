@@ -109,7 +109,7 @@ namespace XLY.SF.Project.Plugin.DataView.ViewModel
             LayoutViewItems = new ObservableCollection<object>();
             foreach (var item in DataViewPluginAdapter.Instance.GetView(pluginId, type))
             {
-                LayoutViewItems.Add(item.ToControl(new DataViewPluginArgument() { CurrentData = currentData, DataSource = _arg.DataSource }));
+                LayoutViewItems.Add(item.ToControl(new DataViewPluginArgument() { CurrentData = currentData, DataSource = _arg.DataSource , OnSelectedItemChanged = _arg.OnSelectedItemChanged}));
             }
             SelectedLayoutViewItem = LayoutViewItems.FirstOrDefault(); //设置默认选中第一项
         }

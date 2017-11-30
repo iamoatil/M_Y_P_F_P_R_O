@@ -5,9 +5,13 @@
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
                  xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
+                 xmlns:pro="http://www.spfpro.com"
                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                  xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-                 mc:Ignorable="d">
+                 Title="{Binding XPath=ViewLanguage/Management/User/ListTitle,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                 mc:Ignorable="d"
+                 Width="960"
+                 Height="560">
     <core:UcViewBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,53 +22,101 @@
 
         </ResourceDictionary>
     </core:UcViewBase.Resources>
-    <Grid>
+    <Grid  x:Name="Root"
+           Margin="20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="20" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="50" />
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0"
-                    Orientation="Horizontal"
-                    FlowDirection="RightToLeft">
+        <DockPanel Grid.Row="0"
+                   LastChildFill="False">
+            <pro:TextBoxEx x:Name="condition"
+                           Width="222" 
+                           Watermark="请输入关键字"
+                           DockPanel.Dock="Left"/>
             <Button Content="{Binding XPath=ViewLanguage/Management/User/Search,Source={x:Static ex:SystemContext.LanguageProvider}}"
                     Command="{Binding SearchCommand}"
-                    CommandParameter="{Binding Text,ElementName=condition}" />
-            <TextBox x:Name="condition"
-                     Width="200" />
-        </StackPanel>
+                    CommandParameter="{Binding Text,ElementName=condition}"
+                    DockPanel.Dock="Left"
+                    Margin="10,0,0,0"
+                    Width="100"/>
+            <Button Content="{Binding XPath=ViewLanguage/Management/User/RemoveBatch,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                    Command="{Binding RemoveBatchCommand}"
+                    DockPanel.Dock="Right"
+                    Width="100"
+                    Margin="10,0,0,0" />
+            <Button Content="{Binding XPath=ViewLanguage/Management/User/Add,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                    Command="{Binding AddCommand}"
+                    DockPanel.Dock="Right"
+                    Width="80" />
+        </DockPanel>
         <DataGrid x:Name="dataGrids"
-                  Grid.Row="1"
-                  SelectedItem="{Binding SelectedItem,Mode=OneWayToSource}"
+                  Grid.Row="2"
+                  AutoGenerateColumns="False"
                   ItemsSource="{Binding Users}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="{Binding XPath=ViewLanguage/Management/User/Number,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                                    Binding="{Binding Number,Mode=OneTime}" />
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding DataContext.IsSelectAll,ElementName=Root}"
+                                      Command="{Binding DataContext.SelectAllCommand,ElementName=Root}"
+                                      CommandParameter="{Binding IsChecked,RelativeSource={RelativeSource Self}}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsChecked,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                      Command="{Binding DataContext.SelectCommand,ElementName=Root}"
+                                      CommandParameter="{Binding IsChecked,RelativeSource={RelativeSource Self}}"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="{Binding XPath=ViewLanguage/Management/User/Account,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                                    Binding="{Binding LoginUserName,Mode=OneWay}" />
+                                    Binding="{Binding LoginUserName,Mode=OneWay}"
+                                    Width="*" />
                 <DataGridTextColumn Header="{Binding XPath=ViewLanguage/Management/User/Name,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                                    Binding="{Binding UserName,Mode=OneWay}" />
+                                    Binding="{Binding UserName,Mode=OneWay}"
+                                    Width="*" />
                 <DataGridTextColumn Header="{Binding XPath=ViewLanguage/Management/User/Phone,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                                    Binding="{Binding PhoneNumber,Mode=OneWay}" />
+                                    Binding="{Binding PhoneNumber,Mode=OneWay}"
+                                    Width="*" />
                 <DataGridTextColumn Header="{Binding XPath=ViewLanguage/Management/User/Unit,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                                    Binding="{Binding WorkUnit,Mode=OneWay}" />
+                                    Binding="{Binding WorkUnit,Mode=OneWay}"
+                                    Width="*" />
                 <DataGridTextColumn Header="{Binding XPath=ViewLanguage/Management/User/Id,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                                    Binding="{Binding IdNumber,Mode=OneWay}" />
+                                    Binding="{Binding IdNumber,Mode=OneWay}"
+                                    Width="*" />
+                <DataGridTemplateColumn Header="{Binding XPath=ViewLanguage/View_CaseOperation,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                        Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <pro:IconButton Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/DevHomePageEditIcon.png"
+                                                IconWidth="14"
+                                                IconHeight="14"
+                                                Width="18"
+                                                Height="18"
+                                                Margin="20,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Command="{Binding DataContext.UpdateCommand,ElementName=Root}"
+                                                CommandParameter="{Binding}" />
+                                <pro:IconButton Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/TreeViewDeleteIcon.png"
+                                                IconWidth="14"
+                                                IconHeight="14"
+                                                Width="18"
+                                                Height="18"
+                                                Margin="20,0,0,0"
+                                                VerticalAlignment="Center"
+                                                Command="{Binding DataContext.RemoveCommand,ElementName=Root}"
+                                                CommandParameter="{Binding}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <DockPanel Grid.Row="2"
-                   LastChildFill="False">
-            <Button Content="{Binding XPath=ViewLanguage/Management/User/Close,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                    DockPanel.Dock="Right" />
-            <Button Content="{Binding XPath=ViewLanguage/Management/User/Add,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                    DockPanel.Dock="Left"
-                    Command="{Binding AddCommand}" />
-            <Button Content="{Binding XPath=ViewLanguage/Management/User/Remove,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                    DockPanel.Dock="Left"
-                    Command="{Binding RemoveCommand}" />
-            <Button Content="{Binding XPath=ViewLanguage/Management/User/Update,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                    DockPanel.Dock="Left"
-                    Command="{Binding UpdateCommand}" />
-        </DockPanel>
     </Grid>
 </core:UcViewBase>

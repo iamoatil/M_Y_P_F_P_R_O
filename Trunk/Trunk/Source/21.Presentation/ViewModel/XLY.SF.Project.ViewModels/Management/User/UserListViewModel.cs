@@ -9,10 +9,12 @@ using XLY.SF.Project.Models;
 using XLY.SF.Project.Models.Entities;
 using XLY.SF.Project.Models.Logical;
 using XLY.SF.Project.ViewDomain.MefKeys;
+using System.Linq;
+using XLY.SF.Framework.Core.Base.CoreInterface;
 
 namespace XLY.SF.Project.ViewModels.Management.User
 {
-    [Export(ExportKeys.ManagementUserListViewModel, typeof(ViewModelBase))]
+    [Export(ExportKeys.SettingsUserListViewModel, typeof(ViewModelBase))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class UserListViewModel : ViewModelBase
     {
@@ -26,16 +28,21 @@ namespace XLY.SF.Project.ViewModels.Management.User
 
         private readonly ProxyRelayCommandBase _searchProxyCommand;
 
+        private readonly ProxyRelayCommandBase _removeBatchCommand;
+
         #endregion
 
         #region Constructors
 
         public UserListViewModel()
         {
-            _addProxyCommand = new ProxyRelayCommand<UserInfoEntityModel>(Add);
-            _removeProxyCommand = new ProxyRelayCommand(Remove, () => CanModify());
-            _updateProxyCommand = new ProxyRelayCommand(Update, () => CanModify());
+            _addProxyCommand = new ProxyRelayCommand(Add);
+            _removeProxyCommand = new ProxyRelayCommand<UserInfoModel>(Remove);
+            _updateProxyCommand = new ProxyRelayCommand<UserInfoModel>(Update);
             _searchProxyCommand = new ProxyRelayCommand<String>(Search);
+            SelectAllCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<Boolean>(SelectAll, (b) => Users != null && Users.Count != 0);
+            SelectCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<Boolean>(Select);
+            _removeBatchCommand = new ProxyRelayCommand(RemoveBatch);
         }
 
         #endregion
@@ -50,11 +57,33 @@ namespace XLY.SF.Project.ViewModels.Management.User
 
         public ICommand SearchCommand => _searchProxyCommand.ViewExecuteCmd;
 
+        public ICommand RemoveBatchCommand => _removeBatchCommand.ViewExecuteCmd;
+
+        public ICommand SelectAllCommand { get; }
+
+        public ICommand SelectCommand { get; }
+
+        #region IsSelectAll
+
+        private Boolean? _isSelectAll = false;
+
+        public Boolean? IsSelectAll
+        {
+            get => _isSelectAll;
+            private set
+            {
+                _isSelectAll = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region Users
 
-        private ObservableCollection<UserInfoEntityModel> _users;
+        private ObservableCollection<UserInfoModel> _users;
 
-        public ObservableCollection<UserInfoEntityModel> Users
+        public ObservableCollection<UserInfoModel> Users
         {
             get => _users;
             private set
@@ -66,10 +95,18 @@ namespace XLY.SF.Project.ViewModels.Management.User
 
         #endregion
 
-        [Import(typeof(IDatabaseContext))]
-        private IDatabaseContext DbService { get; set; }
+        [Import(typeof(IRecordContext<UserInfo>))]
+        private IRecordContext<UserInfo> DbService { get; set; }
 
-        public UserInfoEntityModel SelectedItem { get; set; }
+        [Import(typeof(IPopupWindowService))]
+        private IPopupWindowService PopupService { get; set; }
+
+        [Import(typeof(IMessageBox))]
+        private IMessageBox MessageBox
+        {
+            get;
+            set;
+        }
 
         #endregion
 
@@ -86,14 +123,55 @@ namespace XLY.SF.Project.ViewModels.Management.User
 
         #region Private
 
-        private Boolean CanModify()
+        private String RemoveBatch()
         {
-            return SelectedItem != null;
+            if (Users == null) return "没有可删除的用户";
+            UserInfoModel[] items = Users.Where(x => x.IsChecked).ToArray();
+            if(items.Length ==0) return "没有可删除的用户";
+            if (MessageBox.ShowDialogWarningMsg("是否确定删除？"))
+            {
+                DbService.RemoveRange(items.Select(x => x.Entity).ToArray());
+                foreach (var item in items)
+                {
+                    Users.Remove(item);
+                }
+                return "批量删除用户";
+            }
+            return "取消删除用户";
         }
 
-        private String Add(UserInfoEntityModel item)
+        private void SelectAll(Boolean isSelectAll)
         {
-            if (DbService.Add(item))
+            IsSelectAll = isSelectAll;
+            foreach (var item in Users)
+            {
+                item.IsChecked = isSelectAll;
+            }
+        }
+
+        private void Select(Boolean isChecked)
+        {
+            if (Users.All(x => x.IsChecked))
+            {
+                IsSelectAll = true;
+            }
+            else if (Users.All(x => !x.IsChecked))
+            {
+                IsSelectAll = false;
+            }
+            else 
+            {
+                IsSelectAll = null;
+            }
+        }
+
+        private String Add()
+        {
+            Object result = PopupService.ShowDialogWindow(ExportKeys.SettingsUserInfoView, new UserInfoModel());
+            if (result == null) return "取消添加用户";
+            UserInfoModel item = (UserInfoModel)result;
+            item.LoginPassword = item.Password;
+            if (DbService.Add(item.Entity))
             {
                 Users.Add(item);
                 return "添加用户成功";
@@ -101,19 +179,25 @@ namespace XLY.SF.Project.ViewModels.Management.User
             return "添加用户失败";
         }
 
-        private String Remove()
+        private String Remove(UserInfoModel item)
         {
-            if (DbService.Remove(SelectedItem))
+            if (MessageBox.ShowDialogWarningMsg("是否确定删除？"))
             {
-                Users.Remove(SelectedItem);
-                return "删除用户成功";
+                if (DbService.Remove(item.Entity))
+                {
+                    Users.Remove(item);
+                    return "删除用户成功";
+                }
+                return "删除用户失败";
             }
-            return "删除用户失败";
+            return "取消删除用户";
         }
 
-        private String Update()
+        private String Update(UserInfoModel item)
         {
-            if (DbService.Update(SelectedItem))
+            Object result = PopupService.ShowDialogWindow(ExportKeys.SettingsUserInfoView, item);
+            if (result == null) return "取消更新用户";
+            if (DbService.Update(item.Entity))
             {
                 return "更新用户失败";
             }
@@ -122,14 +206,21 @@ namespace XLY.SF.Project.ViewModels.Management.User
 
         private String Search(String condition)
         {
+            UserInfoModel[] items;
             if (String.IsNullOrWhiteSpace(condition))
             {
-                var items = DbService.UserInfos.ToModels<UserInfo, UserInfoEntityModel>();
-                Users = new ObservableCollection<UserInfoEntityModel>(items);
+                items = DbService.Records.ToModels<UserInfo, UserInfoModel>().ToArray();
             }
             else
             {
+                var result = DbService.Records.Where(x => x.UserName.Contains(condition)
+                || x.LoginUserName.Contains(condition)
+                || x.PhoneNumber.Contains(condition)
+                || x.WorkUnit.Contains(condition)
+                || x.IdNumber.Contains(condition));
+                items = result.ToModels<UserInfo, UserInfoModel>().ToArray();
             }
+            Users = new ObservableCollection<UserInfoModel>(items);
             return $"搜索关键字[{condition}]";
         }
 

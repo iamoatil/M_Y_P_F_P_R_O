@@ -54,7 +54,14 @@ namespace XLY.SF.Project.Plugin.IOS
 
                 var mqqPath = new DirectoryInfo(databasesPath).Parent.FullName;
 
-                //TODO IOS企业QQ数据解析
+                var parser = new IOSEimQQDataParseCoreV1_0(pi.SaveDbPath, "IOS 企业QQ", mqqPath);
+
+                var qqNode = parser.BuildTree();
+
+                if (null != qqNode)
+                {
+                    ds.TreeNodes.Add(qqNode);
+                }
             }
             catch (System.Exception ex)
             {

@@ -82,6 +82,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Export\ExportDataViewModel.cs" />
     <Compile Include="Main\CaseManagement\DeviceExtractionAdorner.cs" />
     <Compile Include="Main\DeviceChoose\DeviceSelectViewModel.cs" />
     <Compile Include="Device\LocalFileSelectControlViewModel.cs" />
@@ -92,16 +93,24 @@
     <Compile Include="Main\CaseManagement\CaseListViewModel.cs" />
     <Compile Include="Main\CaseManagement\CaseSelectionViewModel.cs" />
     <Compile Include="Main\CaseManagement\DeviceWindowContentViewModel.cs" />
+    <Compile Include="Main\DeviceMain\DeviceExtractionViewModel.cs" />
     <Compile Include="Main\DeviceMain\DeviceHomePageViewModel.cs" />
     <Compile Include="Main\DeviceMain\DeviceMainViewModel.cs" />
+    <Compile Include="Main\DeviceMain\Navigation\SubViewCacheManager.cs" />
     <Compile Include="Main\HomePage\HomePageViewModel.cs" />
     <Compile Include="Main\Main\DeviceListViewModel.cs" />
     <Compile Include="Main\Main\MainNavigationManager.cs" />
     <Compile Include="Main\Main\MainViewModel.cs" />
+    <Compile Include="Management\Settings\BasicSettingsViewModel.cs" />
+    <Compile Include="Management\Settings\CaseTypeSettingsViewModel.cs" />
+    <Compile Include="Management\Settings\InspectionSettingsViewModel.cs" />
+    <Compile Include="Management\Settings\UnitSettingsViewModel.cs" />
     <Compile Include="Management\User\UserInfoViewModel.cs" />
     <Compile Include="Management\User\UserListViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SelectControl\SelectControlViewModel.cs" />
+    <Compile Include="SelectControl\SelectFileViewModel.cs" />
+    <Compile Include="SelectControl\SelectFolderViewModel.cs" />
+    <Compile Include="SelectControl\SelectService\SelectManager.cs" />
     <Compile Include="Tools\EditCaseNavigationHelper.cs" />
     <Compile Include="Tools\SpfNavigationCacheHelper.cs" />
   </ItemGroup>

@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using XLY.SF.Framework.Core.Base.MefIoc;
+using XLY.SF.Framework.Core.Base.MessageAggregation;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.ViewDomain.MefKeys;
@@ -31,7 +33,19 @@ namespace XLY.SF.Project.DataDisplayView
             InitializeComponent();
 
             AsyncOperator.LoadAsyncOperation(this);
+
+            var preview = IocManagerSingle.Instance.GetViewPart(ExportKeys.DataPreView);
+            if(preview != null)
+            {
+                preview.DataSource.LoadViewModel();
+                _preVM = preview.DataSource;
+                preView.Content = preview;
+
+                MsgAggregation.Instance.RegisterGeneralMsg<object>(this, MessageKeys.PreviewKey, RefreshPreview);
+            }
         }
+
+        private ViewModelBase _preVM = null;
 
         [Import(ExportKeys.DataDisplayViewModel, typeof(ViewModelBase))]
         public override ViewModelBase DataSource
@@ -47,15 +61,10 @@ namespace XLY.SF.Project.DataDisplayView
             }
         }
 
-        private void btnExpanded_Click(object sender, RoutedEventArgs e)
+        private void RefreshPreview(object data)
         {
-            tabPreview.Height = this.ActualHeight * 0.5;
+            if(data is Framework.Core.Base.MessageBase.GeneralArgs<object> g)
+                _preVM?.ReceiveParameters(g.Parameters);
         }
-
-        private void btnCollpse_Click(object sender, RoutedEventArgs e)
-        {
-            tabPreview.Height = 40d;
-        }
-        
     }
 }

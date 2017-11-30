@@ -25,11 +25,11 @@ namespace XLY.SF.Project.Plugin.Adapter
         /// </summary>
         /// <param name="asyn"></param>
         /// <returns></returns>
-        public IEnumerable<IPlugin> Load(IAsyncTaskProgress asyn)
+        public IEnumerable<IPlugin> Load(IAsyncTaskProgress asyn, params string[] pluginPaths)
         {
             if(!IsLoaded)
             {
-                this.LoadPlugin(asyn);
+                this.LoadPlugin(asyn, pluginPaths);
                 this.IsLoaded = true;
             }
 
@@ -51,7 +51,7 @@ namespace XLY.SF.Project.Plugin.Adapter
         /// </summary>
         /// <param name="asyn"></param>
         /// <returns></returns>
-        protected abstract void LoadPlugin(IAsyncTaskProgress asyn);
+        protected abstract void LoadPlugin(IAsyncTaskProgress asyn, params string[] pluginPaths);
 
     }
 }

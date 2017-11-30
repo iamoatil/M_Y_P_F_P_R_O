@@ -74,6 +74,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\23.Shell\XLY.SF.Shell\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -111,6 +112,7 @@
     <Compile Include="MessageBase\SysCommonMsgArgs.cs" />
     <Compile Include="ModuleBase\IModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StartupArgument\AssemblyHelper.cs" />
     <Compile Include="StartupArgument\StartupArgment.cs" />
     <Compile Include="SystemKeys\SysKeyEnum.cs" />
     <Compile Include="ValidationBase\ValidateBase.cs" />

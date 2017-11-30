@@ -26,7 +26,7 @@ public class Languagekeys
 		public const string ViewLanguage_View_Login_ExitSys = "LanguageResource/ViewLanguage/View_Login_ExitSys";
 				
         /// <summary>
-        /// 帐  号
+        /// 账  号
         /// </summary>
 		public const string ViewLanguage_View_Login_UserName = "LanguageResource/ViewLanguage/View_Login_UserName";
 				
@@ -36,7 +36,7 @@ public class Languagekeys
 		public const string ViewLanguage_View_Login_Password = "LanguageResource/ViewLanguage/View_Login_Password";
 				
         /// <summary>
-        /// 效率源信息安全股份有限公司
+        /// 四川效率源信息安全股份有限公司
         /// </summary>
 		public const string ViewLanguage_View_Login_Company = "LanguageResource/ViewLanguage/View_Login_Company";
 				
@@ -221,17 +221,7 @@ public class Languagekeys
 		public const string ViewLanguage_View_CaseListViewTitle = "LanguageResource/ViewLanguage/View_CaseListViewTitle";
 				
         /// <summary>
-        /// 删除
-        /// </summary>
-		public const string ViewLanguage_View_DeleteCase = "LanguageResource/ViewLanguage/View_DeleteCase";
-				
-        /// <summary>
-        /// 搜索
-        /// </summary>
-		public const string ViewLanguage_View_SearchCase = "LanguageResource/ViewLanguage/View_SearchCase";
-				
-        /// <summary>
-        /// 关键字
+        /// 请输入关键字
         /// </summary>
 		public const string ViewLanguage_View_CaseKeyword = "LanguageResource/ViewLanguage/View_CaseKeyword";
 				
@@ -296,7 +286,7 @@ public class Languagekeys
 		public const string ViewLanguage_View_CaseListTimeTo = "LanguageResource/ViewLanguage/View_CaseListTimeTo";
 				
         /// <summary>
-        /// 删除
+        /// 批量删除
         /// </summary>
 		public const string ViewLanguage_View_CaseListDelete = "LanguageResource/ViewLanguage/View_CaseListDelete";
 				
@@ -486,6 +476,136 @@ public class Languagekeys
 		public const string ViewLanguage_View_DevHomePage_IOSRoot = "LanguageResource/ViewLanguage/View_DevHomePage_IOSRoot";
 				
         /// <summary>
+        /// 用户管理
+        /// </summary>
+		public const string ViewLanguage_Management_User_ListTitle = "LanguageResource/ViewLanguage/Management/User/ListTitle";
+				
+        /// <summary>
+        /// 用户信息
+        /// </summary>
+		public const string ViewLanguage_Management_User_InfoTitle = "LanguageResource/ViewLanguage/Management/User/InfoTitle";
+				
+        /// <summary>
+        /// 搜索
+        /// </summary>
+		public const string ViewLanguage_Management_User_Search = "LanguageResource/ViewLanguage/Management/User/Search";
+				
+        /// <summary>
+        /// 编号
+        /// </summary>
+		public const string ViewLanguage_Management_User_Number = "LanguageResource/ViewLanguage/Management/User/Number";
+				
+        /// <summary>
+        /// 用户名
+        /// </summary>
+		public const string ViewLanguage_Management_User_Account = "LanguageResource/ViewLanguage/Management/User/Account";
+				
+        /// <summary>
+        /// 姓名
+        /// </summary>
+		public const string ViewLanguage_Management_User_Name = "LanguageResource/ViewLanguage/Management/User/Name";
+				
+        /// <summary>
+        /// 电话
+        /// </summary>
+		public const string ViewLanguage_Management_User_Phone = "LanguageResource/ViewLanguage/Management/User/Phone";
+				
+        /// <summary>
+        /// 工作单位
+        /// </summary>
+		public const string ViewLanguage_Management_User_Unit = "LanguageResource/ViewLanguage/Management/User/Unit";
+				
+        /// <summary>
+        /// 证件号
+        /// </summary>
+		public const string ViewLanguage_Management_User_Id = "LanguageResource/ViewLanguage/Management/User/Id";
+				
+        /// <summary>
+        /// 添加
+        /// </summary>
+		public const string ViewLanguage_Management_User_Add = "LanguageResource/ViewLanguage/Management/User/Add";
+				
+        /// <summary>
+        /// 批量删除
+        /// </summary>
+		public const string ViewLanguage_Management_User_RemoveBatch = "LanguageResource/ViewLanguage/Management/User/RemoveBatch";
+				
+        /// <summary>
+        /// 输入密码
+        /// </summary>
+		public const string ViewLanguage_Management_User_InputPassword = "LanguageResource/ViewLanguage/Management/User/InputPassword";
+				
+        /// <summary>
+        /// 确认密码
+        /// </summary>
+		public const string ViewLanguage_Management_User_ConfirmPassword = "LanguageResource/ViewLanguage/Management/User/ConfirmPassword";
+				
+        /// <summary>
+        /// 取消
+        /// </summary>
+		public const string ViewLanguage_Management_User_Cancel = "LanguageResource/ViewLanguage/Management/User/Cancel";
+				
+        /// <summary>
+        /// 确认
+        /// </summary>
+		public const string ViewLanguage_Management_User_Confirm = "LanguageResource/ViewLanguage/Management/User/Confirm";
+				
+        /// <summary>
+        /// 设置
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_Title = "LanguageResource/ViewLanguage/Management/Settings/Title";
+				
+        /// <summary>
+        /// 基本设置
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_Basic = "LanguageResource/ViewLanguage/Management/Settings/Basic";
+				
+        /// <summary>
+        /// 案例类型
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_CaseType = "LanguageResource/ViewLanguage/Management/Settings/CaseType";
+				
+        /// <summary>
+        /// 单位设置
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_Unit = "LanguageResource/ViewLanguage/Management/Settings/Unit";
+				
+        /// <summary>
+        /// 智能检视
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_Inspection = "LanguageResource/ViewLanguage/Management/Settings/Inspection";
+				
+        /// <summary>
+        /// 检视项（对MD5的检视可能导致系统变慢）：
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_InspectionDescription = "LanguageResource/ViewLanguage/Management/Settings/InspectionDescription";
+				
+        /// <summary>
+        /// 语言
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_Language = "LanguageResource/ViewLanguage/Management/Settings/Language";
+				
+        /// <summary>
+        /// 默认路径
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_DefaultPath = "LanguageResource/ViewLanguage/Management/Settings/DefaultPath";
+				
+        /// <summary>
+        /// 数据过滤
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_DataFilter = "LanguageResource/ViewLanguage/Management/Settings/DataFilter";
+				
+        /// <summary>
+        /// 中文
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_Chinese = "LanguageResource/ViewLanguage/Management/Settings/Chinese";
+				
+        /// <summary>
+        /// 英文
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_English = "LanguageResource/ViewLanguage/Management/Settings/English";
+				
+        /// <summary>
         /// 
         /// </summary>
 		public const string ViewLanguage_View_Operation1 = "LanguageResource/ViewLanguage/View_Operation1";
@@ -511,14 +631,19 @@ public class Languagekeys
 		public const string ViewLanguage_View_StrategyRecommend_AutoExtraction = "LanguageResource/ViewLanguage/View_StrategyRecommend_AutoExtraction";
 				
         /// <summary>
-        /// 错误消息
+        /// 很抱歉
         /// </summary>
 		public const string ViewLanguage_View_MessageBox_Error = "LanguageResource/ViewLanguage/View_MessageBox_Error";
 				
         /// <summary>
-        /// 提示消息
+        /// 成功
         /// </summary>
-		public const string ViewLanguage_View_MessageBox_Notice = "LanguageResource/ViewLanguage/View_MessageBox_Notice";
+		public const string ViewLanguage_View_MessageBox_Success = "LanguageResource/ViewLanguage/View_MessageBox_Success";
+				
+        /// <summary>
+        /// 警告
+        /// </summary>
+		public const string ViewLanguage_View_MessageBox_Warning = "LanguageResource/ViewLanguage/View_MessageBox_Warning";
 				
         /// <summary>
         /// 准备开始备份, 请注意点亮屏幕进入手机主界面, 注意手机弹出的操作请求提示, 并确定(允许)请求的操作！

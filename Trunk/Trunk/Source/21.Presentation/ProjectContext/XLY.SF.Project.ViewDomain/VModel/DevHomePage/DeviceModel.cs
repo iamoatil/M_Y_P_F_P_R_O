@@ -34,6 +34,45 @@ namespace XLY.SF.Project.ViewDomain.VModel.DevHomePage
 
         #endregion
 
+        #region Icon
+
+        private string _devIcon;
+        /// <summary>
+        /// 图标
+        /// </summary>
+        public string DevIcon
+        {
+            get
+            {
+                switch (IDevSource.DeviceType)
+                {
+                    case EnumDeviceType.Chip:
+                        _devIcon = "pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_Sim.png";
+                        break;
+                    case EnumDeviceType.Disk:
+                        break;
+                    case EnumDeviceType.SDCard:
+                        _devIcon = "pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_SDCard.png";
+                        break;
+                    case EnumDeviceType.SIM:
+                        _devIcon = "pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_Sim.png";
+                        break;
+                    default:
+                        _devIcon = "pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_unknown.png";
+                        break;
+                }
+                return this._devIcon;
+            }
+
+            private set
+            {
+                this._devIcon = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #region 是否有ROOT状态
 
         private bool _hasRoot;
@@ -124,13 +163,12 @@ namespace XLY.SF.Project.ViewDomain.VModel.DevHomePage
         {
             get
             {
-                return this._usedTotalSizeOfDevice;
+                return DeviceTotalSize - UnusedTotalSizeOfDevice;
             }
 
             set
             {
-                this._usedTotalSizeOfDevice = value;
-                base.OnPropertyChanged();
+                _usedTotalSizeOfDevice = value;
             }
         }
 
@@ -186,6 +224,24 @@ namespace XLY.SF.Project.ViewDomain.VModel.DevHomePage
         #endregion
 
         #region 录入信息
+
+        private DevHomePageEditItemModel _devHomePageEditItems;
+        /// <summary>
+        /// 设备首页编辑项信息
+        /// </summary>
+        public DevHomePageEditItemModel DevHomePageEditItemInfo
+        {
+            get
+            {
+                return this._devHomePageEditItems;
+            }
+
+            set
+            {
+                this._devHomePageEditItems = value;
+                base.OnPropertyChanged();
+            }
+        }
 
         #region 检材编号
 

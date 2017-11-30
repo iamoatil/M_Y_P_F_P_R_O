@@ -12,7 +12,9 @@ using XLY.SF.Framework.Core.Base.MessageAggregation;
 using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Extension.Helper;
+using XLY.SF.Project.ViewDomain.Enums;
 using XLY.SF.Project.ViewDomain.MefKeys;
+using XLY.SF.Project.ViewDomain.Model.SelectControlElement;
 using XLY.SF.Shell.NavigationManager;
 
 namespace XLY.SF.Shell.DialogWindowService
@@ -34,20 +36,35 @@ namespace XLY.SF.Shell.DialogWindowService
         #region 打开文件，选择路径，保存文件服务
 
         /// <summary>
-        /// 打开文件
+        /// 选择文件
         /// </summary>
         /// <param name="filter">筛选</param>
         /// <returns></returns>
         public string OpenFileDialog(string filter)
         {
             string result = string.Empty;
-            var view = IocManagerSingle.Instance.GetViewPart(ExportKeys.SelectControlView);
+            var view = IocManagerSingle.Instance.GetViewPart(ExportKeys.SelectFileView);
             view.DataSource.LoadViewModel(filter);
             var viewContainer = WindowHelper.Instance.CreateShellWindow(view, false, Application.Current.MainWindow);
             viewContainer.ShowDialog();
             if (view.DataSource.DialogResult)
                 result = view.DataSource.GetResult()?.ToString();
+            return result;
+        }
 
+        /// <summary>
+        /// 选择文件夹
+        /// </summary>
+        public string SelectFolderDialog()
+        {
+            string result = string.Empty;
+            //var view = CreateSelectControlView(SelectControlType.SelectFolder);
+            var view = IocManagerSingle.Instance.GetViewPart(ExportKeys.SelectFolderView);
+            view.DataSource.LoadViewModel(null);
+            var viewContainer = WindowHelper.Instance.CreateShellWindow(view, false, Application.Current.MainWindow);
+            viewContainer.ShowDialog();
+            if (view.DataSource.DialogResult)
+                result = view.DataSource.GetResult()?.ToString();
             return result;
         }
 
@@ -70,7 +87,7 @@ namespace XLY.SF.Shell.DialogWindowService
             var viewContainer = WindowHelper.Instance.CreateShellWindow(targetView, viewArgs.ShowInTaskBar, Application.Current.MainWindow);
             viewContainer.ShowDialog();
             if (targetView.DataSource.DialogResult)
-                result = targetView.DataSource.GetResult()?.ToString();
+                result = targetView.DataSource.GetResult();
 
             return result;
         }
@@ -78,7 +95,7 @@ namespace XLY.SF.Shell.DialogWindowService
         #endregion
 
         #region Tools
-
+        
         /// <summary>
         /// 创建导航消息，但并不用导航事件发送
         /// </summary>

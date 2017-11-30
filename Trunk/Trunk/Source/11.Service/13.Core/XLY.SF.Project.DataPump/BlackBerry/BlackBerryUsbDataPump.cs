@@ -14,6 +14,25 @@ namespace XLY.SF.Project.DataPump.BlackBerry
     /// </summary>
     public class BlackBerryUsbDataPump : ControllableDataPumpBase
     {
+        #region Fields
+
+        private String _destDirectory;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// 初始化类型 XLY.SF.Project.DataPump.BlackBerry.BlackBerryUsbDataPump 实例。
+        /// </summary>
+        /// <param name="metadata">与此数据泵关联的元数据信息。</param>
+        public BlackBerryUsbDataPump(Pump metadata)
+            : base(metadata)
+        {
+        }
+
+        #endregion
+
         #region Methods
 
         #region Protected
@@ -31,21 +50,31 @@ namespace XLY.SF.Project.DataPump.BlackBerry
         }
 
         /// <summary>
-        /// 初始化当前的执行流程。
+        /// 初始化数据泵。
         /// </summary>
-        /// <param name="context">执行上下文。</param>
         /// <returns>成功返回true；否则返回false。</returns>
-        protected override Boolean InitExecution(DataPumpControllableExecutionContext context)
+        protected override Boolean InitializeCore()
         {
-            if (!(context.PumpDescriptor.Source is Device)) return false;
-            if (context.Source == null) return false;
-            String destDirectory = FileHelper.ConnectPath(context.TargetDirectory, $"BlackBerry_{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}");
+            if (!(Metadata.Source is Device)) return false;
+            String destDirectory = FileHelper.ConnectPath(Metadata.SourceStorePath, $"BlackBerry_{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}");
             if (Directory.Exists(destDirectory))
             {
                 Directory.Delete(destDirectory, true);
             }
             Directory.CreateDirectory(destDirectory);
-            context.Source.Local = destDirectory;
+            _destDirectory = destDirectory;
+            return true;
+        }
+
+        /// <summary>
+        /// 初始化当前的执行流程。
+        /// </summary>
+        /// <param name="context">执行上下文。</param>
+        /// <returns>成功返回true；否则返回false。</returns>
+        protected override Boolean InitExecutionContext(DataPumpControllableExecutionContext context)
+        {
+            if (context.Source == null) return false;
+            context.Source.Local = _destDirectory;
             return true;
         }
 

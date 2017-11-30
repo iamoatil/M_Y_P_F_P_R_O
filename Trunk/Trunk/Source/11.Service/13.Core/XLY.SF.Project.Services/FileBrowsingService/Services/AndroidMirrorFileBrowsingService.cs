@@ -6,16 +6,9 @@
  *
 *****************************************************************************/
 
-using System;
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using XLY.SF.Framework.BaseUtility;
-using XLY.SF.Framework.Core.Base.CoreInterface;
-using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.Services
@@ -46,11 +39,11 @@ namespace XLY.SF.Project.Services
             };
         }
 
-        protected override FileBrowingNode DoGetRootNode(IAsyncTaskProgress async)
+        protected override FileBrowingNode DoGetRootNode()
         {
             if (null == FileServiceX)
             {
-                FileServiceX = new MirrorDeviceService(CreateFileSystemDevice(), async);
+                FileServiceX = new MirrorDeviceService(CreateFileSystemDevice(), null);
                 FileServiceX.OpenDevice();
                 FileServiceX.LoadDevicePartitions();
             }
@@ -62,7 +55,7 @@ namespace XLY.SF.Project.Services
             };
         }
 
-        protected override List<FileBrowingNode> DoGetChildNodes(FileBrowingNode parentNode, IAsyncTaskProgress async)
+        protected override List<FileBrowingNode> DoGetChildNodes(FileBrowingNode parentNode)
         {
             if (parentNode.NodeType == FileBrowingNodeType.Root)
             {//根节点，获取分区列表
@@ -95,7 +88,7 @@ namespace XLY.SF.Project.Services
                             Name = node.FileName,
                             FileSize = node.Size,
                             NodeType = node.IsFolder ? FileBrowingNodeType.Directory : FileBrowingNodeType.File,
-                            NodeState = node.IsDelete ? FileBrowingNodeState.Delete : FileBrowingNodeState.Normal,
+                            NodeState = node.IsDelete ? EnumDataState.Deleted : EnumDataState.Normal,
                             CreateTime = BaseTypeExtension.ToSafeDateTime(node.Source.CreateTime),
                             LastWriteTime = BaseTypeExtension.ToSafeDateTime(node.Source.ModifyTime),
                             LastAccessTime = BaseTypeExtension.ToSafeDateTime(node.Source.LastAccessTime),
@@ -140,30 +133,11 @@ namespace XLY.SF.Project.Services
             }
         }
 
-        protected override void DoDownload(FileBrowingNode node, string savePath, bool persistRelativePath, IAsyncTaskProgress async)
+        protected override void DownLoadFile(FileBrowingNode fileNode, string savePath, bool persistRelativePath, CancellationTokenSource cancellationTokenSource, FileBrowingIAsyncTaskProgress async)
         {
-            var mPnode = node as AndroidMirrorFileBrowingNode;
+            var mPnode = fileNode as AndroidMirrorFileBrowingNode;
 
-            FileServiceX.ExportFileX(mPnode.FNode, savePath, persistRelativePath);
-
-            if (mPnode.NodeType != FileBrowingNodeType.File)
-            {
-                if (null == mPnode.ChildNodes)
-                {
-                    DoGetChildNodes(mPnode, async);
-                }
-
-                var cSavePath = savePath;
-                if (!persistRelativePath)
-                {
-                    cSavePath = Path.Combine(savePath, mPnode.Name);
-                }
-
-                foreach (var cnode in mPnode.ChildNodes)
-                {
-                    DoDownload(cnode, cSavePath, persistRelativePath, async);
-                }
-            }
+            FileServiceX.ExportFileX(mPnode.FNode, savePath, persistRelativePath, isThrowEx: true);
         }
 
         /// <summary>

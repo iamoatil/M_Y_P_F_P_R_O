@@ -26,34 +26,40 @@ namespace XLY.SF.Project.Plugin.Adapter
     /// </summary>
     internal class NetPluginLoader : AbstractPluginLoader
     {
-        protected override void LoadPlugin(IAsyncTaskProgress asyn)
+        protected override void LoadPlugin(IAsyncTaskProgress asyn, params string[] pluginPaths)
         {
             try
             {
                 Plugins = new List<IPlugin>();
-
-                var files = System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "XLY.SF.Project.Plugin.*.dll", System.IO.SearchOption.AllDirectories);
                 List<string> existList = new List<string>();
-                foreach (var dllFile in files)
+
+                List<string> dirs = new List<string>();
+                dirs.Add(AppDomain.CurrentDomain.BaseDirectory);
+                dirs.AddRange(pluginPaths);
+                foreach (var dir in dirs)
                 {
-                    if (existList.Contains(System.IO.Path.GetFileName(dllFile)))
+                    var files = System.IO.Directory.GetFiles(dir, "XLY.SF.Project.Plugin.*.dll", System.IO.SearchOption.AllDirectories);
+                    foreach (var dllFile in files)
                     {
-                        continue;
-                    }
-                    existList.Add(System.IO.Path.GetFileName(dllFile));
-                    var ass = Assembly.LoadFile(dllFile);
-                    foreach (var cla in ass.GetTypes().Where(t => t.GetCustomAttribute<PluginAttribute>() != null && !t.IsAbstract && !t.IsInterface))
-                    {
-                        var plu = ass.CreateInstance(cla.FullName) as IPlugin;
-                        if (null != plu && null != plu.PluginInfo)
+                        if (existList.Contains(System.IO.Path.GetFileName(dllFile)))
                         {
-                            if (Plugins.Any(p => p.PluginInfo.Guid == plu.PluginInfo.Guid))
+                            continue;
+                        }
+                        existList.Add(System.IO.Path.GetFileName(dllFile));
+                        var ass = Assembly.LoadFile(dllFile);
+                        foreach (var cla in ass.GetTypes().Where(t => t.GetCustomAttribute<PluginAttribute>() != null && !t.IsAbstract && !t.IsInterface))
+                        {
+                            var plu = ass.CreateInstance(cla.FullName) as IPlugin;
+                            if (null != plu && null != plu.PluginInfo)
                             {
-                                LoggerManagerSingle.Instance.Error($"C#插件加载出错！重复的Guid：{plu.PluginInfo.Guid}");
-                            }
-                            else
-                            {
-                                Plugins.Add(plu);
+                                if (Plugins.Any(p => p.PluginInfo.Guid == plu.PluginInfo.Guid))
+                                {
+                                    LoggerManagerSingle.Instance.Error($"C#插件加载出错！重复的Guid：{plu.PluginInfo.Guid}");
+                                }
+                                else
+                                {
+                                    Plugins.Add(plu);
+                                }
                             }
                         }
                     }

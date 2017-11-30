@@ -59,9 +59,9 @@ namespace XLY.SF.Project.DataExtract
         #region 基础属性和构造器
 
         /// <summary>
-        /// 提取信息。
+        /// 数据泵。
         /// </summary>
-        public Pump Pump { get; private set; }
+        public DataPumpBase DataPump { get; private set; }
 
         /// <summary>
         /// 多任务进度报告器。
@@ -79,6 +79,11 @@ namespace XLY.SF.Project.DataExtract
                 return count != 0;
             }
         }
+
+        /// <summary>
+        /// 提取到的结果数量。
+        /// </summary>
+        public Int32 DataItemsCount { get; set; }
 
         #endregion
 
@@ -146,7 +151,8 @@ namespace XLY.SF.Project.DataExtract
             if (extractItems == null || extractItems.Length == 0) return false;
             _pluginAdapter = PluginAdapter.Instance;
             if (_pluginAdapter == null) return false;
-            Pump = pump;
+            DataItemsCount = 0;
+            DataPump = pump.GetDataPump();
             _extractItems = extractItems;
             _cancelTokenSource = new CancellationTokenSource();
             _cancelToken = _cancelTokenSource.Token;
@@ -170,7 +176,7 @@ namespace XLY.SF.Project.DataExtract
              * 
              * */
 
-            var items = _pluginAdapter.MatchPluginByPump(Pump, _extractItems);
+            var items = _pluginAdapter.MatchPluginByPump(DataPump.Metadata, _extractItems);
 
             ExtractData(items);
         }
@@ -227,7 +233,7 @@ namespace XLY.SF.Project.DataExtract
                     {
                         return;
                     }
-                    Pump.Execute(s, null, extractItem);
+                    DataPump.Execute(s, null, extractItem);
                 }
             }
             Reporter?.ChangeProgress(extractItem.GUID, 0.33);
@@ -237,17 +243,16 @@ namespace XLY.SF.Project.DataExtract
         {
             if (_cancelToken.IsCancellationRequested) return;
             //1.匹配插件
-            var plug = _pluginAdapter.MatchPluginByApp(plugs, Pump, Pump.SourceStorePath, GetAppVersion(extractItem));
+            var plug = _pluginAdapter.MatchPluginByApp(plugs, DataPump.Metadata, DataPump.Metadata.SourceStorePath, GetAppVersion(extractItem));
             //2.执行插件
-            plug.SaveDbPath = Pump.DbFilePath;
-            plug.Phone = Pump.Source as Device;
+            plug.SaveDbPath = DataPump.Metadata.DbFilePath;
+            plug.Phone = DataPump.Metadata.Source as Device;
 
+            Reporter?.ChangeProgress(extractItem.GUID, 0.45);
             _pluginAdapter.ExecutePlugin(plug, null, (ds) =>
             {
                 FinishExtractItem(extractItem, ds);
             });
-            if (_cancelToken.IsCancellationRequested) return;
-            Reporter?.ChangeProgress(extractItem.GUID, 0.85);
         }
 
         private void FinishExtractItem(ExtractItem extractItem, IDataSource ds)
@@ -255,8 +260,9 @@ namespace XLY.SF.Project.DataExtract
             if (ds != null)
             {
                 //1.处理IDataSource
-                String fileName = Path.Combine(Pump.ResultPath, $"{extractItem.GUID}_{extractItem.Name}.ds");
+                String fileName = Path.Combine(DataPump.Metadata.ResultPath, $"{extractItem.GUID}_{extractItem.Name}.ds");
                 Serializer.SerializeToBinary(ds, fileName);
+                DataItemsCount = ds.Total;
             }
         }
 
@@ -292,7 +298,7 @@ namespace XLY.SF.Project.DataExtract
             else
             {
                 Reporter?.ChangeProgress(taskId, 1);
-                Reporter?.Finish(taskId);
+                Reporter?.Finish(taskId, DataItemsCount.ToString());
             }
         }
 

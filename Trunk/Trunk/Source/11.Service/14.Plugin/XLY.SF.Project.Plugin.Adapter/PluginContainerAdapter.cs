@@ -27,26 +27,33 @@ namespace XLY.SF.Project.Plugin.Adapter
         public Dictionary<PluginType, Type> Plugins { get; set; }
 
         private bool _Isloaded = false;
-        public void Initialization(IAsyncTaskProgress asyn)
+        public void Initialization(IAsyncTaskProgress asyn, params string[] pluginPaths)
         {
             if (!_Isloaded)
             {
                 _Isloaded = true;
                 Plugins = new Dictionary<PluginType, Type>();
-
-                var files = System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "XLY.SF.Project.Plugin.*.dll", System.IO.SearchOption.AllDirectories);
                 List<string> existList = new List<string>();
-                foreach (var dllFile in files)
+
+                List<string> dirs = new List<string>();
+                dirs.Add(AppDomain.CurrentDomain.BaseDirectory);
+                dirs.AddRange(pluginPaths);
+
+                foreach (var dir in dirs)
                 {
-                    if (existList.Contains(System.IO.Path.GetFileName(dllFile)))
+                    var files = System.IO.Directory.GetFiles(dir, "XLY.SF.Project.Plugin.*.dll", System.IO.SearchOption.AllDirectories);
+                    foreach (var dllFile in files)
                     {
-                        continue;
-                    }
-                    existList.Add(System.IO.Path.GetFileName(dllFile));
-                    var ass = Assembly.LoadFile(dllFile);
-                    foreach (var cla in ass.GetTypes().Where(t => t.GetCustomAttribute<PluginContainerAttribute>() != null && !t.IsAbstract && !t.IsInterface))
-                    {
-                        Plugins[cla.GetCustomAttribute<PluginContainerAttribute>().PluginType] = cla;
+                        if (existList.Contains(System.IO.Path.GetFileName(dllFile)))
+                        {
+                            continue;
+                        }
+                        existList.Add(System.IO.Path.GetFileName(dllFile));
+                        var ass = Assembly.LoadFile(dllFile);
+                        foreach (var cla in ass.GetTypes().Where(t => t.GetCustomAttribute<PluginContainerAttribute>() != null && !t.IsAbstract && !t.IsInterface))
+                        {
+                            Plugins[cla.GetCustomAttribute<PluginContainerAttribute>().PluginType] = cla;
+                        }
                     }
                 }
             }

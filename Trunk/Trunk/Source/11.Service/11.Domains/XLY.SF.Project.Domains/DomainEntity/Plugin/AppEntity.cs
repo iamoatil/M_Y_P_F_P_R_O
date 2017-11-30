@@ -34,11 +34,15 @@ namespace XLY.SF.Project.Domains
         public string AppId { get; set; }
 
         /// <summary>
-        /// 版本信息
+        /// APP版本信息
         /// </summary>
-        public Version Version { get; set; }
+        public Version Version
+        {
+            get { return VersionDesc.ToSafeVersion(); }
+        }
 
         private string _VersionDesc;
+
         /// <summary>
         /// 版本描述
         /// </summary>
@@ -48,8 +52,7 @@ namespace XLY.SF.Project.Domains
             get { return _VersionDesc; }
             set
             {
-                _VersionDesc = value;
-                Version = value.ToSafeVersion();
+                _VersionDesc = value.ToSafeVersion().ToSafeString();
             }
         }
 

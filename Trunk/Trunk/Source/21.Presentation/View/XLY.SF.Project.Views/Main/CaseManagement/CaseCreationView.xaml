@@ -121,6 +121,11 @@
                               Text="{Binding CaseInfo.Number,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 <cc:ComboBoxEx Grid.Row="4" Width="560" Grid.Column="0"
                                VerticalContentAlignment="Center"
+                               ItemsSource="{Binding CaseTypes}"
+                               SelectedIndex="0" 
+                               DisplayMemberPath="Name"
+                               SelectedValuePath="Name"
+                               SelectedValue="{Binding CaseInfo.Type,Mode=OneWayToSource}"
                                Title="{Binding XPath=ViewLanguage/View_CaseType,Source={x:Static ex:SystemContext.LanguageProvider}}"
                           SelectedItem="{Binding CaseInfo.Type,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 <cc:TextBoxEx Grid.Row="6" Width="560" Grid.Column="0"
@@ -135,11 +140,12 @@
                                Title="{Binding XPath=ViewLanguage/View_StorePath,Source={x:Static ex:SystemContext.LanguageProvider}}"
                                Text="{Binding CaseInfo.Path,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/CaseCreation_Path.png" IconWidth="18" IconHeight="18"
+                               Command="{Binding SelectDirectoryCommand}"
                                ToolTip="{Binding CaseInfo.Path,Mode=OneWay}"/>
-                <Button Grid.Row="4" Command="{Binding UpdateCaseTypeCommand}"
+                <!--<Button Grid.Row="4" Command="{Binding UpdateCaseTypeCommand}"
                         Grid.Column="3" Width="14" Height="14" Background="Transparent" HorizontalAlignment="Left" Margin="20,0,0,0">
                     <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/CaseCreation_Set.png"></Image>
-                </Button>
+                </Button>-->
             </Grid>
             <StackPanel Margin="0,28,0,0">
                 <Button Content="{Binding XPath=ViewLanguage/View_CaseCreationConfirm,Source={x:Static ex:SystemContext.LanguageProvider}}"

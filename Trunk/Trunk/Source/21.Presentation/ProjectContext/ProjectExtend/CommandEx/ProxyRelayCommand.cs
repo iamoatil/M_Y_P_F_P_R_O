@@ -1,5 +1,4 @@
-﻿using GalaSoft.MvvmLight.Command;
-using ProjectExtend.Context;
+﻿using ProjectExtend.Context;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +10,7 @@ using XLY.SF.Framework.Core.Base.MessageAggregation;
 using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Project.ViewDomain.Model;
 
-namespace GalaSoft.MvvmLight.Command
+namespace GalaSoft.MvvmLight.CommandWpf
 {
     #region 基类
 

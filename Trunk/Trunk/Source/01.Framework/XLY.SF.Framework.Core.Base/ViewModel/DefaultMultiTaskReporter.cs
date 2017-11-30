@@ -141,20 +141,22 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// 报告完成。
         /// </summary>
         /// <param name="id">任务id。</param>
-        public override void Finish(String id)
+        /// <param name="message">消息。</param>
+        public override void Finish(String id,String message = null)
         {
             if (!_reporters.ContainsKey(id)) return;
-            _reporters[id].Finish();
+            _reporters[id].Finish(message);
         }
 
         /// <summary>
         /// 报告停止。
         /// </summary>
         /// <param name="id">任务id。</param>
-        public override void Stop(String id)
+        /// <param name="message">消息。</param>
+        public override void Stop(String id, String message = null)
         {
             if (!_reporters.ContainsKey(id)) return;
-            _reporters[id].Stop();
+            _reporters[id].Stop(message);
         }
 
         /// <summary>

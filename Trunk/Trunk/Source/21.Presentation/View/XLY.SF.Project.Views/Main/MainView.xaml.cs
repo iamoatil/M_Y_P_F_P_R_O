@@ -183,5 +183,10 @@ namespace XLY.SF.Project.Views.Main
         }
 
         #endregion
+
+        private void cb_Menu_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            cb_Menu.SelectedIndex = -1;
+        }
     }
 }

@@ -19,8 +19,11 @@ namespace XLY.SF.Project.DataPump
         /// <summary>
         /// 初始化类型 XLY.SF.Project.DataPump.ControllableDataPumpBase 实例。
         /// </summary>
-        protected ControllableDataPumpBase()
+        /// <param name="metadata">与此数据泵关联的元数据信息。</param>
+        protected ControllableDataPumpBase(Pump metadata)
+            : base(metadata)
         {
+
         }
 
         #endregion
@@ -35,9 +38,9 @@ namespace XLY.SF.Project.DataPump
         /// <param name="metadata">元数据。</param>
         /// <param name="source">数据源。</param>
         /// <returns>执行上下文。</returns>
-        public override DataPumpExecutionContext CreateContext(Pump metadata, SourceFileItem source)
+        public override DataPumpExecutionContext CreateContext(SourceFileItem source)
         {
-            return new DataPumpControllableExecutionContext(metadata, source) { Owner = this };
+            return new DataPumpControllableExecutionContext(Metadata, source) { Owner = this };
         }
 
         /// <summary>
@@ -53,13 +56,13 @@ namespace XLY.SF.Project.DataPump
         }
 
         /// <summary>
-        /// 初始化当前的执行流程。
+        /// 初始化执行上下文。
         /// </summary>
         /// <param name="context">执行上下文。</param>
         /// <returns>成功返回true；否则返回false。</returns>
-        protected sealed override Boolean InitExecution(DataPumpExecutionContext context)
+        protected sealed override Boolean InitExecutionContext(DataPumpExecutionContext context)
         {
-            return InitExecution((DataPumpControllableExecutionContext)context);
+            return InitExecutionContext((DataPumpControllableExecutionContext)context);
         }
 
         /// <summary>
@@ -88,11 +91,11 @@ namespace XLY.SF.Project.DataPump
         protected abstract void ExecuteCore(DataPumpControllableExecutionContext context);
 
         /// <summary>
-        /// 初始化当前的执行流程。
+        /// 初始化执行上下文。
         /// </summary>
         /// <param name="context">执行上下文。</param>
         /// <returns>成功返回true；否则返回false。</returns>
-        protected virtual Boolean InitExecution(DataPumpControllableExecutionContext context)
+        protected virtual Boolean InitExecutionContext(DataPumpControllableExecutionContext context)
         {
             return true;
         }

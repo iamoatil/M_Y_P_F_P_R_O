@@ -13,7 +13,7 @@ namespace XLY.SF.Project.ViewDomain.Model.SelectControlElement
 {
     public class FolderElement : NotifyPropertyBase
     {
-        public FolderElement()
+        private FolderElement()
         {
             SubFolders = new ObservableCollection<FolderElement>();
             Files = new ObservableCollection<FolderElement>();
@@ -23,7 +23,7 @@ namespace XLY.SF.Project.ViewDomain.Model.SelectControlElement
         /// 创建文件夹元素
         /// </summary>
         /// <param name="parentFolder">当前文件夹</param>
-        public FolderElement(DirectoryInfo curDir, FolderElement parent) : this()
+        public FolderElement(DirectoryInfo curDir) : this()
         {
             if (curDir == null)
                 throw new NullReferenceException("文件夹不能为Null");
@@ -31,7 +31,7 @@ namespace XLY.SF.Project.ViewDomain.Model.SelectControlElement
                 throw new NullReferenceException("文件夹不存在");
 
             IsFolder = true;
-            Parent = parent;
+            //Parent = parent;
             Name = curDir.Name;
             FullPath = curDir.FullName;
         }
@@ -40,14 +40,14 @@ namespace XLY.SF.Project.ViewDomain.Model.SelectControlElement
         /// 创建文件元素
         /// </summary>
         /// <param name="parentFolder">当前文件</param>
-        public FolderElement(FileInfo file, FolderElement parent) : this()
+        public FolderElement(FileInfo file) : this()
         {
             if (file == null)
                 throw new NullReferenceException("文件不能为Null");
             else if (!file.Exists)
                 throw new NullReferenceException("文件不存在");
 
-            Parent = parent;
+            //Parent = parent;
             Name = file.Name;
             FullPath = file.FullName;
         }
@@ -98,10 +98,24 @@ namespace XLY.SF.Project.ViewDomain.Model.SelectControlElement
 
         #region 父节点
 
+        private FolderElement _parent;
         /// <summary>
         /// 父节点
         /// </summary>
-        public FolderElement Parent { get; private set; }
+        public FolderElement Parent
+        {
+            get
+            {
+                var tmpParent = Directory.GetParent(FullPath);
+                if (tmpParent != null)
+                    _parent = new FolderElement(tmpParent);
+                return _parent;
+            }
+            private set
+            {
+                _parent = value;
+            }
+        }
 
         #endregion
 
@@ -148,11 +162,12 @@ namespace XLY.SF.Project.ViewDomain.Model.SelectControlElement
         /// <summary>
         /// 加载子文件夹和文件
         /// </summary>
-        public void LoadSubFolderAndFiles(string filter)
+        public void LoadSubFolderAndFiles(string filter, bool hasFile)
         {
             DirectoryInfo tmpDir = new DirectoryInfo(FullPath);
             LoadSubFolders(tmpDir);
-            LoadFiles(tmpDir, filter);
+            if (hasFile)
+                LoadFiles(tmpDir, filter);
         }
 
         private void LoadSubFolders(DirectoryInfo dir)
@@ -167,7 +182,11 @@ namespace XLY.SF.Project.ViewDomain.Model.SelectControlElement
                     for (int i = 0; i < subDirs.Length; i++)
                     {
                         if ((subDirs[i].Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)
-                            SubFolders.Add(new FolderElement(new DirectoryInfo(subDirs[i].FullName), this));
+                        {
+                            FolderElement tmpFolder = new FolderElement(new DirectoryInfo(subDirs[i].FullName));
+                            tmpFolder.Parent = this;
+                            SubFolders.Add(tmpFolder);
+                        }
                     }
                 }
             }
@@ -186,7 +205,9 @@ namespace XLY.SF.Project.ViewDomain.Model.SelectControlElement
                     {
                         if ((subDirs[i].Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)
                         {
-                            Files.Add(new FolderElement(new FileInfo(subDirs[i].FullName), this));
+                            FolderElement fileTmp = new FolderElement(new FileInfo(subDirs[i].FullName));
+                            fileTmp.Parent = this;
+                            Files.Add(fileTmp);
                         }
                     }
                 }

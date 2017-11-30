@@ -13,20 +13,20 @@ namespace XLY.SF.Project.Models.Entities
 
         [Required]
         [MaxLength(10)]
-        public String UserName { get; set; }
+        public String UserName { get; set; } = String.Empty;
 
-        public String WorkUnit { get; set; }
+        public String WorkUnit { get; set; } = String.Empty;
 
-        public String IdNumber { get; set; }
+        public String IdNumber { get; set; } = String.Empty;
 
-        public String PhoneNumber { get; set; }
+        public String PhoneNumber { get; set; } = String.Empty;
 
         [Required]
         [MaxLength(10)]
-        public String LoginUserName { get; set; }
+        public String LoginUserName { get; set; } = String.Empty;
 
         [Required]
-        public String LoginPassword { get; set; }
+        public String LoginPassword { get; set; } = String.Empty;
 
         public DateTime LoginTime { get; set; }
     }

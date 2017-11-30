@@ -106,8 +106,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.WpfTest", "..\..\41.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.DataDisplayView", "..\..\21.Presentation\View\XLY.SF.Project.DataDisplayView\XLY.SF.Project.DataDisplayView.csproj", "{26B3C073-8944-4917-A7AF-94A10A5B5A7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.PreviewFilesView", "..\..\21.Presentation\View\XLY.SF.Project.PreviewFiles\XLY.SF.Project.PreviewFilesView.csproj", "{65336A55-E659-4EC8-8BB6-0D99CEFBA159}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IsolatedTask", "IsolatedTask", "{773D7753-7773-4ED7-8E09-59AA561A36CC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.IsolatedTaskEngine.Common", "..\..\22.Tools\IsolatedTask\XLY.SF.Project.IsolatedTaskEngine.Common\XLY.SF.Project.IsolatedTaskEngine.Common.csproj", "{C31639C3-6E19-4681-8647-46BDD60BFEAB}"
@@ -125,6 +123,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.MirrorView", "..\..\21.Presentation\View\XLY.SF.Project.MirrorView\XLY.SF.Project.MirrorView.csproj", "{475A3B8A-1E15-4BB3-8BFD-B5932A80C5A7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.Plugin.DataReport", "..\..\11.Service\14.Plugin\XLY.SF.Project.Plugin.DataReport\XLY.SF.Project.Plugin.DataReport.csproj", "{CDB4F4F4-7131-4A29-828D-CC9F5A43536D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.FileBrowingView", "..\..\21.Presentation\View\XLY.SF.Project.FileBrowingView\XLY.SF.Project.FileBrowingView.csproj", "{25E2AA7A-10B9-481A-B249-4820924D225D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.DataPreview", "..\..\21.Presentation\View\XLY.SF.Project.DataPreview\XLY.SF.Project.DataPreview.csproj", "{07436026-639D-45C1-8D3F-A8CD0EE626FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.Plugin.DataPreview", "..\..\21.Presentation\View\XLY.SF.Project.Plugin.DataPreview\XLY.SF.Project.Plugin.DataPreview.csproj", "{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -543,18 +547,6 @@ Global
 		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Release|x64.Build.0 = Release|Any CPU
 		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Release|x86.ActiveCfg = Release|Any CPU
 		{26B3C073-8944-4917-A7AF-94A10A5B5A7C}.Release|x86.Build.0 = Release|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|x64.Build.0 = Debug|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Debug|x86.Build.0 = Debug|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|Any CPU.Build.0 = Release|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|x64.ActiveCfg = Release|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|x64.Build.0 = Release|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|x86.ActiveCfg = Release|Any CPU
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159}.Release|x86.Build.0 = Release|Any CPU
 		{C31639C3-6E19-4681-8647-46BDD60BFEAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C31639C3-6E19-4681-8647-46BDD60BFEAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C31639C3-6E19-4681-8647-46BDD60BFEAB}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -651,6 +643,42 @@ Global
 		{CDB4F4F4-7131-4A29-828D-CC9F5A43536D}.Release|x64.Build.0 = Release|Any CPU
 		{CDB4F4F4-7131-4A29-828D-CC9F5A43536D}.Release|x86.ActiveCfg = Release|Any CPU
 		{CDB4F4F4-7131-4A29-828D-CC9F5A43536D}.Release|x86.Build.0 = Release|Any CPU
+		{25E2AA7A-10B9-481A-B249-4820924D225D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25E2AA7A-10B9-481A-B249-4820924D225D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25E2AA7A-10B9-481A-B249-4820924D225D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{25E2AA7A-10B9-481A-B249-4820924D225D}.Debug|x64.Build.0 = Debug|Any CPU
+		{25E2AA7A-10B9-481A-B249-4820924D225D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{25E2AA7A-10B9-481A-B249-4820924D225D}.Debug|x86.Build.0 = Debug|Any CPU
+		{25E2AA7A-10B9-481A-B249-4820924D225D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25E2AA7A-10B9-481A-B249-4820924D225D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25E2AA7A-10B9-481A-B249-4820924D225D}.Release|x64.ActiveCfg = Release|Any CPU
+		{25E2AA7A-10B9-481A-B249-4820924D225D}.Release|x64.Build.0 = Release|Any CPU
+		{25E2AA7A-10B9-481A-B249-4820924D225D}.Release|x86.ActiveCfg = Release|Any CPU
+		{25E2AA7A-10B9-481A-B249-4820924D225D}.Release|x86.Build.0 = Release|Any CPU
+		{07436026-639D-45C1-8D3F-A8CD0EE626FB}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{07436026-639D-45C1-8D3F-A8CD0EE626FB}.Debug|Any CPU.Build.0 = Debug|x64
+		{07436026-639D-45C1-8D3F-A8CD0EE626FB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{07436026-639D-45C1-8D3F-A8CD0EE626FB}.Debug|x64.Build.0 = Debug|Any CPU
+		{07436026-639D-45C1-8D3F-A8CD0EE626FB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{07436026-639D-45C1-8D3F-A8CD0EE626FB}.Debug|x86.Build.0 = Debug|Any CPU
+		{07436026-639D-45C1-8D3F-A8CD0EE626FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07436026-639D-45C1-8D3F-A8CD0EE626FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07436026-639D-45C1-8D3F-A8CD0EE626FB}.Release|x64.ActiveCfg = Release|Any CPU
+		{07436026-639D-45C1-8D3F-A8CD0EE626FB}.Release|x64.Build.0 = Release|Any CPU
+		{07436026-639D-45C1-8D3F-A8CD0EE626FB}.Release|x86.ActiveCfg = Release|Any CPU
+		{07436026-639D-45C1-8D3F-A8CD0EE626FB}.Release|x86.Build.0 = Release|Any CPU
+		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}.Debug|x64.Build.0 = Debug|Any CPU
+		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}.Debug|x86.Build.0 = Debug|Any CPU
+		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}.Release|x64.ActiveCfg = Release|Any CPU
+		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}.Release|x64.Build.0 = Release|Any CPU
+		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}.Release|x86.ActiveCfg = Release|Any CPU
+		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -699,7 +727,6 @@ Global
 		{45BAAD0B-FB78-4E6E-BD80-AB513212FEF1} = {A912AB32-171F-4A1D-8167-B9A844188F02}
 		{FA4759AB-A043-44B2-B634-5EFE402D372D} = {A912AB32-171F-4A1D-8167-B9A844188F02}
 		{26B3C073-8944-4917-A7AF-94A10A5B5A7C} = {3782972E-78FA-4989-845D-120B6382E7DE}
-		{65336A55-E659-4EC8-8BB6-0D99CEFBA159} = {3782972E-78FA-4989-845D-120B6382E7DE}
 		{773D7753-7773-4ED7-8E09-59AA561A36CC} = {FDDD33CF-DC4D-4676-9D6F-96D32E0F70BE}
 		{C31639C3-6E19-4681-8647-46BDD60BFEAB} = {773D7753-7773-4ED7-8E09-59AA561A36CC}
 		{4A9F07F5-4232-43C2-8806-2998BA4E984E} = {773D7753-7773-4ED7-8E09-59AA561A36CC}
@@ -709,12 +736,15 @@ Global
 		{F082BD5C-9B42-4749-AF88-CC5804BF50A1} = {3782972E-78FA-4989-845D-120B6382E7DE}
 		{475A3B8A-1E15-4BB3-8BFD-B5932A80C5A7} = {3782972E-78FA-4989-845D-120B6382E7DE}
 		{CDB4F4F4-7131-4A29-828D-CC9F5A43536D} = {64F16A97-5640-487E-9079-A2F438DB5B0A}
+		{25E2AA7A-10B9-481A-B249-4820924D225D} = {3782972E-78FA-4989-845D-120B6382E7DE}
+		{07436026-639D-45C1-8D3F-A8CD0EE626FB} = {3782972E-78FA-4989-845D-120B6382E7DE}
+		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4} = {3782972E-78FA-4989-845D-120B6382E7DE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3A587B29-35A1-47EC-AA7B-9EC40EA8AE9A}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 44
+		SccNumberOfProjects = 46
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.0.16:8080/tfs/xlyteamprojects
 		SccLocalPath0 = .
@@ -881,13 +911,21 @@ Global
 		SccProjectTopLevelParentUniqueName41 = XLY.SF.Shell.sln
 		SccProjectName41 = ../../21.Presentation/View/XLY.SF.Project.MirrorView
 		SccLocalPath41 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.MirrorView
-		SccProjectUniqueName42 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.PreviewFiles\\XLY.SF.Project.PreviewFilesView.csproj
+		SccProjectUniqueName42 = ..\\..\\11.Service\\14.Plugin\\XLY.SF.Project.Plugin.DataReport\\XLY.SF.Project.Plugin.DataReport.csproj
 		SccProjectTopLevelParentUniqueName42 = XLY.SF.Shell.sln
-		SccProjectName42 = ../../21.Presentation/View/XLY.SF.Project.PreviewFiles
-		SccLocalPath42 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.PreviewFiles
-		SccProjectUniqueName43 = ..\\..\\11.Service\\14.Plugin\\XLY.SF.Project.Plugin.DataReport\\XLY.SF.Project.Plugin.DataReport.csproj
+		SccProjectName42 = ../../11.Service/14.Plugin/XLY.SF.Project.Plugin.DataReport
+		SccLocalPath42 = ..\\..\\11.Service\\14.Plugin\\XLY.SF.Project.Plugin.DataReport
+		SccProjectUniqueName43 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.FileBrowingView\\XLY.SF.Project.FileBrowingView.csproj
 		SccProjectTopLevelParentUniqueName43 = XLY.SF.Shell.sln
-		SccProjectName43 = ../../11.Service/14.Plugin/XLY.SF.Project.Plugin.DataReport
-		SccLocalPath43 = ..\\..\\11.Service\\14.Plugin\\XLY.SF.Project.Plugin.DataReport
+		SccProjectName43 = ../../21.Presentation/View/XLY.SF.Project.FileBrowingView
+		SccLocalPath43 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.FileBrowingView
+		SccProjectUniqueName44 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.DataPreview\\XLY.SF.Project.DataPreview.csproj
+		SccProjectTopLevelParentUniqueName44 = XLY.SF.Shell.sln
+		SccProjectName44 = ../../21.Presentation/View/XLY.SF.Project.DataPreview
+		SccLocalPath44 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.DataPreview
+		SccProjectUniqueName45 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.Plugin.DataPreview\\XLY.SF.Project.Plugin.DataPreview.csproj
+		SccProjectTopLevelParentUniqueName45 = XLY.SF.Shell.sln
+		SccProjectName45 = ../../21.Presentation/View/XLY.SF.Project.Plugin.DataPreview
+		SccLocalPath45 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.Plugin.DataPreview
 	EndGlobalSection
 EndGlobal

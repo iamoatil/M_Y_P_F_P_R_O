@@ -2,15 +2,10 @@
 using DllClient.Callback;
 using DllClient.ServiceReference1;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using XLY.SF.Framework.BaseUtility;
-using XLY.SF.Framework.Core.Base.CoreInterface;
-using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
@@ -22,6 +17,20 @@ namespace XLY.SF.Project.DataPump.Android
     /// </summary>
     public class AndroidVivoBackupDataPump : ControllableDataPumpBase
     {
+        #region Constructors
+
+        /// <summary>
+        /// 初始化类型 XLY.SF.Project.DataPump.Android.IOSUsbDataPump 实例。
+        /// </summary>
+        /// <param name="metadata">与此数据泵关联的元数据信息。</param>
+        public AndroidVivoBackupDataPump(Pump metadata)
+            : base(metadata)
+        {
+
+        }
+
+        #endregion
+
         #region Methods
 
         #region Public
@@ -50,7 +59,7 @@ namespace XLY.SF.Project.DataPump.Android
         /// </summary>
         /// <param name="context">执行上下文。</param>
         /// <returns>成功返回true；否则返回false。</returns>
-        protected override Boolean InitExecution(DataPumpControllableExecutionContext context)
+        protected override Boolean InitExecutionContext(DataPumpControllableExecutionContext context)
         {
             return Init(context);
         }

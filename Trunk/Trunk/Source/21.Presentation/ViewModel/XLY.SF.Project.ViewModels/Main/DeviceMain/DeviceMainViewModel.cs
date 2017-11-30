@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -13,6 +13,7 @@ using XLY.SF.Project.Domains;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Project.ViewDomain.VModel.DevHomePage;
 using XLY.SF.Project.ViewModels.Main.CaseManagement;
+using XLY.SF.Project.ViewModels.Main.DeviceMain.Navigation;
 
 namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 {
@@ -43,31 +44,41 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
         #endregion
 
-        #region 当前显示的界面
+        #region 设备主页导航
 
-        private UcViewBase _curDeviceView;
-
+        private object _subView;
         /// <summary>
-        /// 当前设备显示的界面
+        /// 子界面内容
         /// </summary>
-        public UcViewBase CurDeviceView
+        public object SubView
         {
             get
             {
-                return _curDeviceView;
+                return this._subView;
             }
+
             set
             {
-                _curDeviceView = value;
+                this._subView = value;
                 base.OnPropertyChanged();
             }
         }
+
+        /// <summary>
+        /// 设备主页导航器
+        /// </summary>
+        public SubViewCacheManager DevNavigationManager { get; private set; }
 
         #endregion
 
         #endregion
 
         #region Commands
+
+        /// <summary>
+        /// 文件浏览
+        /// </summary>
+        public ProxyRelayCommand FileViewCommand { get; private set; }
 
         /// <summary>
         /// 数据提取结果
@@ -84,6 +95,7 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         {
             base.MessageAggregation.RegisterGeneralMsg<bool>(this, GeneralKeys.ExtractTaskCompleteMsg, TaskCompleteCallback);
             ExtractionResultCommand = new ProxyRelayCommand(ExeucteExtractionResultCommand);
+            FileViewCommand = new ProxyRelayCommand(ExecuteFileViewCommand);
             DeviceHomePageCommand = new ProxyRelayCommand(ExecuteDeviceHomePageCommand);
         }
 
@@ -95,31 +107,33 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
                 if (_curDevice == null)
                     throw new NullReferenceException(string.Format("当前设备为NULL"));
                 CreateDeviceByType(_curDevice);
+                //根据设备ID创建导航器
+                DevNavigationManager = new SubViewCacheManager(_curDevice.Device.ID);
 
 
                 //首次加载使用设备首页
-                CurDeviceView = IocManagerSingle.Instance.GetViewPart(ExportKeys.DeviceHomePageView);
-                CurDeviceView.DataSource.LoadViewModel(CurDevModel);
+                SubView = DevNavigationManager.GetOrCreateView(ExportKeys.DeviceHomePageView, CurDevModel);
             }
         }
 
         #region ExecuteCommands
 
+        private string ExecuteFileViewCommand()
+        {
+            SubView = DevNavigationManager.GetOrCreateView(ExportKeys.FileBrowingView, CurDevModel.IDevSource);
+            return string.Empty;
+        }
+
         private string ExecuteDeviceHomePageCommand()
         {
-            var a = IocManagerSingle.Instance.GetViewPart(ExportKeys.DeviceHomePageView);
-            a.DataSource.LoadViewModel(CurDevModel);
-
-            CurDeviceView = a;
+            SubView = DevNavigationManager.GetOrCreateView(ExportKeys.DeviceHomePageView, CurDevModel);
             return string.Empty;
         }
 
         private string ExeucteExtractionResultCommand()
         {
-            var a = IocManagerSingle.Instance.GetViewPart(ExportKeys.DataDisplayView);
-            var b = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
-            a.DataSource.LoadViewModel(b.Target.Path);
-            CurDeviceView = a;
+            var tmp = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
+            SubView = DevNavigationManager.GetOrCreateView(ExportKeys.DataDisplayView, tmp.Target.Path);
             return string.Empty;
         }
 
@@ -167,23 +181,16 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
                 SerialNumber = tmpDev.SerialNumber,
                 System = string.Format("{0}{1}", tmpDev.OSType, tmpDev.OSVersion),
                 IsAndroid = tmpDev.OSType == EnumOSType.Android,
-
-
-
-                DeviceTotalSize = 50,
-                UsedTotalSizeOfDevice = 12,
-                UnusedTotalSizeOfDevice = 50 - 12,
-                SDCardTotalSize = 100,
-                UsedTotalSizeOfSD = 20,
-                UnusedTotalSizeOfSD = 100 - 20,
-
-
-
-
+                
+                DeviceTotalSize = tmpDev.TotalDiskCapacity * 1.0 / 1024 / 1024 / 1024,
+                UnusedTotalSizeOfDevice = tmpDev.TotalDiskAvailable * 1.0 / 1024 / 1024 / 1024,
+                SDCardTotalSize = tmpDev.TotalDataCapacity * 1.0 / 1024 / 1024 / 1024,
+                UnusedTotalSizeOfSD = tmpDev.TotalDataAvailable * 1.0 / 1024 / 1024 / 1024,
 
                 DeviceExtractionAdorner = idev,
                 IDevSource = idev.Device
             };
+
             return targetDev;
         }
 
@@ -224,14 +231,11 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         //自动提取完成
         private void TaskCompleteCallback(GeneralArgs<bool> args)
         {
-            if (args.Parameters)
-            {
-                //跳转
-                var a = IocManagerSingle.Instance.GetViewPart(ExportKeys.DataDisplayView);
-                var b = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
-                a.DataSource.LoadViewModel(b.Target.Path);
-                CurDeviceView = a;
-            }
+            //跳转
+            var tmp = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
+            var a = DevNavigationManager.GetOrCreateView(ExportKeys.DataDisplayView, tmp.Target.Path);
+            a.DataSource.ReceiveParameters(args.Parameters);
+            SubView = a;          
         }
 
         #endregion

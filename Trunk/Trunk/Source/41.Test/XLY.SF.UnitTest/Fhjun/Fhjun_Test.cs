@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using X64Service;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.MefIoc;
@@ -708,16 +709,76 @@ namespace XLY.SF.UnitTest
 
             //System.IO.File.WriteAllText(DB_PATH + ".js", Serializer.JsonSerilize(DataSource));
 
-            var source2 = Serializer.JsonDeserilize<TreeDataSource>(System.IO.File.ReadAllText(DB_PATH + ".js"));
-            source2.BuildParent();
-            var dsss = source2.TreeNodes[0].TreeNodes[0].Items;
-            var t = source2.TreeNodes[0].TreeNodes[0].Total;
-            //dsss.Filter();
-            foreach (AbstractDataItem i in dsss.View)
+            //var source2 = Serializer.JsonDeserilize<TreeDataSource>(System.IO.File.ReadAllText(DB_PATH + ".js"));
+            //source2.BuildParent();
+            //var dsss = source2.TreeNodes[0].TreeNodes[0].Items;
+            //var t = source2.TreeNodes[0].TreeNodes[0].Total;
+            ////dsss.Filter();
+            //foreach (AbstractDataItem i in dsss.View)
+            //{
+            //    i.BookMarkId = 5;
+            //    Console.WriteLine($"1111111111111"); 
+            //}
+
+            SimpleDataSource ds = new SimpleDataSource();
+            ds.Type = typeof(SMS);
+            ds.Items = new DataItems<SMS>(DB_PATH);
+            for (int i = 0; i < 200; i++)
             {
-                i.BookMarkId = 5;
-                Console.WriteLine($"1111111111111"); 
+                ds.Items.Add(new SMS() { Content = "内容" + i });
             }
+            ds.BuildParent();
+
+            ds.Filter<dynamic>();
+            List<string> ls = new List<string>();
+            foreach (SMS item in ds.Items.View)
+            {
+                ls.Add(item.Content);
+            }
+            List<string> ls2 = new List<string>();
+            foreach (SMS item in (ds.Items as DataItems<SMS>).ViewAll)
+            {
+                ls2.Add(item.Content);
+            }
+            Assert.AreEqual(ls2.Count, 200);
+            Assert.AreEqual(ls.Count, 200);
+        }
+        #endregion
+
+        #region DataEntity定义的数据转换为多语言xml
+
+        /// <summary>
+        /// DataEntity定义的数据转换为多语言xml
+        /// </summary>	
+        [TestMethod]
+        public void TestDataEntity2LanguageXml()
+        {
+            //var a = DeviceExternsion.LoadDeviceData(@"C:\Users\fhjun\Desktop\默认案例_20171115[081055]\默认案例_20171115[081055]\R7007_20171115[081055]");
+
+            Log("-----------开始测试DataEntity定义的数据转换为多语言xml----------------");
+            Stream sm = typeof(IDataSource).Assembly.GetManifestResourceStream("XLY.SF.Project.Domains.Language.Language_Cn.xml");
+            XDocument doc = XDocument.Load(sm);
+            XElement DataEntityLanguage = doc.Element("LanguageResource").Element("DataEntityLanguage");
+            if (DataEntityLanguage == null)
+            {
+                DataEntityLanguage = new XElement("DataEntityLanguage", new XAttribute("Prompt", "数据定义语言资源"));
+                doc.Element("LanguageResource").Add(DataEntityLanguage);
+            }
+            foreach (var type in typeof(IDataSource).Assembly.GetTypes())
+            {
+                foreach (var property in type.GetProperties())
+                {
+                    var attr = property.GetCustomAttribute<DisplayAttribute>();
+                    if (attr != null)
+                    {
+                        string langkey = !string.IsNullOrWhiteSpace(attr.Key) ? attr.Key : $"{type.Name}_{property.Name}";  //没有设置语言Key，则默认为“类名_属性名”
+
+                        if (DataEntityLanguage.Element(langkey) == null)
+                                DataEntityLanguage.Add(new XElement(langkey, $"{attr.Key ?? property.Name}"));
+                    }
+                }
+            }
+            doc.Save(DeskPath(@"Language_Cn.xml"));
         }
         #endregion
 

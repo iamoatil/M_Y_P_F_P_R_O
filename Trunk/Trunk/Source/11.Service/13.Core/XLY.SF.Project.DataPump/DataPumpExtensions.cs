@@ -19,17 +19,39 @@ namespace XLY.SF.Project.DataPump
         #region Public
 
         /// <summary>
-        /// 执行数据泵。
+        /// 根据提取方式和系统类型获取指定的数据泵，并完成数据泵的初始化。
         /// </summary>
         /// <param name="pump">元数据。</param>
+        /// <returns>数据泵。</returns>
+        public static DataPumpBase GetDataPump(this Pump pump)
+        {
+            DataPumpBase dp = null;
+            switch (pump.Type)
+            {
+                case EnumPump.USB:
+                    dp = GetUsbDataDataPump(pump);
+                    break;
+                case EnumPump.Mirror:
+                    dp = GetMirrorDataPump(pump);
+                    break;
+                default:
+                    break;
+            }
+            dp?.Initialize();
+            return dp;
+        }
+
+        /// <summary>
+        /// 执行数据泵。
+        /// </summary>
+        /// <param name="dataPump">元数据。</param>
         /// <param name="source">数据源。</param>
         /// <param name="reporter">异步通知器。</param>
         /// <param name="items">提取项列表。</param>
         /// <returns>数据泵任务执行上下文。</returns>
-        public static DataPumpExecutionContext Execute(this Pump pump, SourceFileItem source, MultiTaskReporterBase reporter, params ExtractItem[] items)
+        public static DataPumpExecutionContext Execute(this DataPumpBase dataPump, SourceFileItem source, MultiTaskReporterBase reporter, params ExtractItem[] items)
         {
-            DataPumpBase dataPump = pump.GetDataPump();
-            DataPumpExecutionContext context = dataPump.CreateContext(pump, source);
+            DataPumpExecutionContext context = dataPump.CreateContext(source);
             context.ExtractItems = items;
             DataPumpControllableExecutionContext contextEx = context as DataPumpControllableExecutionContext;
             if (contextEx != null) contextEx.Reporter = reporter;
@@ -99,24 +121,6 @@ namespace XLY.SF.Project.DataPump
         #region Internal
 
         /// <summary>
-        /// 根据提取方式和系统类型获取指定的数据泵。
-        /// </summary>
-        /// <param name="key">元数据。</param>
-        /// <returns>数据泵。</returns>
-        internal static DataPumpBase GetDataPump(this Pump key)
-        {
-            switch (key.Type)
-            {
-                case EnumPump.USB:
-                    return GetUsbDataDataPump(key, EnumPump.USB.GetHashCode() ^ key.OSType.GetHashCode());
-                case EnumPump.Mirror:
-                    return GetMirrorDataPump(key, EnumPump.Mirror.GetHashCode() ^ key.OSType.GetHashCode());
-                default:
-                    throw new NotSupportedException(key.Type.ToString());
-            }
-        }
-
-        /// <summary>
         /// 创建执行上下文。
         /// </summary>
         /// <param name="dataPump">数据泵。</param>
@@ -128,7 +132,7 @@ namespace XLY.SF.Project.DataPump
         /// <returns>执行上下文。</returns>
         internal static DataPumpExecutionContext CreateContext(this DataPumpBase dataPump, Pump metaData, String rootSavePath, SourceFileItem source, IEnumerable<ExtractItem> extractItems, DefaultMultiTaskReporter asyn = null)
         {
-            DataPumpExecutionContext context = dataPump.CreateContext(metaData, source);
+            DataPumpExecutionContext context = dataPump.CreateContext(source);
             context.ExtractItems = extractItems;
             DataPumpControllableExecutionContext contextEx = context as DataPumpControllableExecutionContext;
             if (contextEx != null) contextEx.Reporter = asyn;
@@ -139,50 +143,41 @@ namespace XLY.SF.Project.DataPump
 
         #region Private
 
-        private static DataPumpBase GetUsbDataDataPump(Pump key, Int32 hash)
+        private static DataPumpBase GetUsbDataDataPump(Pump pump)
         {
-            var device = (Device)key.Source;
-            DataPumpBase dataPump = null;
-            switch (key.OSType)
+            switch (pump.OSType)
             {
-                case EnumOSType.Android:
+                case EnumOSType.Android when pump.Source is Device device:
                     if (device.IsRoot || device.Status == EnumDeviceStatus.Recovery)
                     {
-                        dataPump = new AndroidUsbDataPump();
+                        return new AndroidUsbDataPump(pump);
                     }
                     else if (device.Brand.ToSafeString().ToLower() == "vivo" || device.Manufacture.ToSafeString().ToLower() == "vivo")
                     {
-                        dataPump = new AndroidVivoBackupDataPump();
+                        return new AndroidVivoBackupDataPump(pump);
                     }
                     else
                     {
-                        dataPump = new AndroidUsbUnrootDataPump();
+                        return new AndroidUsbUnrootDataPump(pump);
                     }
-                    break;
-                case EnumOSType.IOS:
-                    dataPump = new IOSUsbDataPump();
-                    break;
+                case EnumOSType.IOS when pump.Source is Device:
+                    return new IOSUsbDataPump(pump);
                 default:
-                    throw new NotSupportedException(key.OSType.ToString());
+                    return null;
             }
-            return dataPump;
         }
 
-        private static DataPumpBase GetMirrorDataPump(Pump key, Int32 hash)
+        private static DataPumpBase GetMirrorDataPump(Pump pump)
         {
-            DataPumpBase dataPump = null;
-            switch (key.OSType)
+            switch (pump.OSType)
             {
                 case EnumOSType.Android:
-                    dataPump = new AndroidMirrorDataPump();
-                    break;
+                    return new AndroidMirrorDataPump(pump);
                 case EnumOSType.IOS:
-                    dataPump = new IOSMirrorDataPump();
-                    break;
+                    return new IOSMirrorDataPump(pump);
                 default:
-                    throw new NotSupportedException(key.OSType.ToString());
+                    return null;
             }
-            return dataPump;
         }
 
         #endregion

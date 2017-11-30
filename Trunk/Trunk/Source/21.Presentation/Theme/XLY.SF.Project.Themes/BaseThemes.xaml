@@ -18,15 +18,20 @@
         <ResourceDictionary Source="ThemesStyle/Listbox/ListboxItemStyle.xaml"/>
         <ResourceDictionary Source="ThemesStyle/Listbox/ConversionListBoxStyle.xaml"/>
         <ResourceDictionary Source="ThemesStyle/DataGridStyle/DataGridStyle.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/TreeViewStyle/TreeViewStyle2.xaml"/>
         <ResourceDictionary Source="ThemesStyle/TreeViewStyle/TreeViewStyle.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/ExpanderControlStyle/ExpanderControlStyle.xaml"/>
         <ResourceDictionary Source="ThemesStyle/HyperlinkStyle/HyperlinkStyle.xaml"/>
         <ResourceDictionary Source="ThemesStyle/ProgressBarStyle/ProgressBar.xaml"/>
         <ResourceDictionary Source="ThemesStyle/PopupControlStyle/PopupControlStyle.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/Sliderbar/SliderbarStyle.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/HexViewerStyle/HexViewerStyle.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/LoadingStyle/Loading.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <!--系统默认样式加载-->
-    <!--自定义控件-->
-    <!--输入框-->
+    <!--#region 自定义控件-->
+    <!--#region 输入框-->
     <Style TargetType="{x:Type control:TextBoxEx}">
         <Setter Property="TitleForeground" Value="#9ba5b9"/>
         <Setter Property="Foreground" Value="White"/>
@@ -34,10 +39,29 @@
         <Setter Property="Background" Value="#414b69"/>
         <Setter Property="IconWidth" Value="20"/>
         <Setter Property="IconHeight" Value="20"/>
+        <Setter Property="BorderBrush" Value="#414b69"/>
         <Setter Property="TitlePadding" Value="10 0 10 0"/>
         <Setter Property="Template" Value="{StaticResource tb_DefaultCt}"/>
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource tb_ErrorCt}"/>
+        <Style.Triggers>
+            <Trigger Property="IsFocused" Value="true">
+                <Setter Property="Background" Value="#37415f"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="#4b5a78"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Foreground" Value="#9ba5b9"/>
+                <Setter Property="Background" Value="#4d556d"/>
+            </Trigger>
+            <Trigger Property="Validation.HasError" Value="True">
+                <Setter Property="Background" Value="#19ff4b64"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
-    <!--下拉框-->
+    <!--#endregion-->
+
+    <!--#region 下拉框-->
     <Style TargetType="{x:Type control:ComboBoxEx}">
         <Setter Property="Background" Value="#414b69"/>
         <Setter Property="TitleForeground" Value="#9ba5b9"/>
@@ -56,22 +80,37 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <!--带图标按钮-->
+    <!--#endregion-->
+
+    <!--#region 带图标按钮-->
     <Style TargetType="{x:Type control:IconButton}">
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="#0fffffff"/>
         <Setter Property="Template" Value="{DynamicResource btn_IconChangeColorCt}"/>
     </Style>
-    <!--设备首页推荐方案按钮【带图标按钮】-->
+    <!--#endregion-->
+
+    <!--#region 设备首页推荐方案按钮【带图标按钮】-->
     <Style TargetType="{x:Type control:IconRadioButton}">
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="#0fffffff"/>
         <Setter Property="Template" Value="{DynamicResource rb_IconHasArrowCt}"/>
     </Style>
+    <!--#endregion-->
+
+    <!--#region 加载控件-->
+
+    <Style TargetType="control:LoadingControl">
+        <Setter Property="Template" Value="{StaticResource defaultLoadingCt}"/>
+    </Style>
     
-    <!--系统控件-->
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+    <!--#region 系统控件-->
     <Style TargetType="TextBlock">
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
@@ -111,7 +150,29 @@
         <Setter Property="Template" Value="{DynamicResource cb_Default}"/>
     </Style>
 
-    <!--字体-->
+    <!--#region ListBox-->
+    <Style TargetType="ListBox">
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="#3c4664"/>
+        <Setter Property="Background" Value="#05FFFFFF"/>
+        <Setter Property="Padding" Value="4"/>
+    </Style>
+
+    <Style TargetType="ListBoxItem">
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Template" Value="{DynamicResource DefaultListBoxItem_Ct}"/>
+    </Style>
+
+    <Style TargetType="ProgressBar">
+        <Setter Property="Template" Value="{StaticResource defaultProgressBar}"/>
+    </Style>
+    <!--#endregion-->
+
+    <!--#endregion-->
+
+    <!--#region 字体-->
     <FontFamily x:Key="OswaldFont">
         pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald
     </FontFamily>
@@ -121,5 +182,6 @@
     <FontFamily x:Key="OswaldLightFont">
         pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#OswaldLight
     </FontFamily>
+    <!--#endregion-->
 
 </ResourceDictionary>

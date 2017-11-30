@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using ProjectExtend.Context;
 using System;
 using System.ComponentModel.Composition;
@@ -8,9 +8,12 @@ using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Framework.Language;
 using XLY.SF.Project.CaseManagement;
 using XLY.SF.Project.Models;
+using XLY.SF.Project.Models.Entities;
 using XLY.SF.Project.Models.Logical;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Project.ViewModels.Tools;
+using System.Linq;
+using XLY.SF.Framework.Core.Base.MessageBase;
 
 namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 {
@@ -25,15 +28,20 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         private readonly ProxyRelayCommandBase _skipCommandProxy;
 
+        private readonly IRecordContext<CaseType> _caseTypeService;
+
         #endregion
 
         #region Constructors
 
-        public CaseCreationViewModel()
+        [ImportingConstructor]
+        public CaseCreationViewModel(IRecordContext<CaseType> caseTypeService)
         {
             _confirmCommandProxy = new ProxyRelayCommand(Confirm, CanConfirm);
             _updateCaseTypeCommandProxy = new ProxyRelayCommand(UpdateCasetType);
             _skipCommandProxy = new ProxyRelayCommand(Skip);
+            SelectDirectoryCommand = new RelayCommand(SelectDirectory);
+            _caseTypeService = caseTypeService;
         }
 
         #endregion
@@ -65,6 +73,19 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         public ICommand UpdateCaseTypeCommand => _updateCaseTypeCommandProxy.ViewExecuteCmd;
 
+        public ICommand SelectDirectoryCommand { get; }
+
+        private CaseType[] _caseTypes;
+        public CaseType[] CaseTypes
+        {
+            get => _caseTypes;
+            private set
+            {
+                _caseTypes = value;
+                OnPropertyChanged();
+            }
+        }
+
         [Import(typeof(IMessageBox))]
         private IMessageBox MessageBox
         {
@@ -72,12 +93,15 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
             set;
         }
 
-        [Import(typeof(IDatabaseContext))]
-        private IDatabaseContext DbService
+        [Import(typeof(ILogicalDataContext))]
+        private ILogicalDataContext DbService
         {
             get;
             set;
         }
+
+        [Import(typeof(IPopupWindowService))]
+        private IPopupWindowService PopupService { get; set; }
 
         #endregion
 
@@ -89,6 +113,14 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         {
             SystemContext.Instance.CaseChanged += Instance_CaseChanged;
             CaseInfo = NewCaseInfo();
+            LoadCaseTypes(null);
+            MessageAggregation.RegisterGeneralMsg(this, GeneralKeys.SettingsChangedMsg, LoadCaseTypes);
+        }
+
+        protected override void Closed()
+        {
+            base.Closed();
+            MessageAggregation.UnRegisterMsg<GeneralArgs>(this, GeneralKeys.SettingsChangedMsg, LoadCaseTypes);
         }
 
         #endregion
@@ -105,6 +137,18 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
             {
                 CaseInfo = e.NewValue.CaseInfo;
             }
+        }
+
+        private void SelectDirectory()
+        {
+            String directory = PopupService.SelectFolderDialog();
+            CaseInfo.Path = directory;
+            OnPropertyChanged("CaseInfo.Path");
+        }
+
+        private void LoadCaseTypes(GeneralArgs args)
+        {
+            CaseTypes = _caseTypeService.Records.ToArray();
         }
 
         private String Confirm()
@@ -161,7 +205,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         {
             if (SystemContext.Instance.CurrentCase.Update())
             {
-                MessageBox.ShowDialogNoticeMsg("修改成功");
+                MessageBox.ShowDialogWarningMsg("修改成功");
                 return $"更新案例信息{SystemContext.Instance.CurrentCase.Name}成功";
             }
             return $"更新案例信息{SystemContext.Instance.CurrentCase.Name}失败";
@@ -183,7 +227,6 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
                 Number = DateTime.Now.ToString("yyyyMMddhhmmss"),
                 Author = SystemContext.Instance.CurUserInfo.UserName,
                 Path = SystemContext.Instance.CaseSaveFullPath,
-                Type = "临时的",
             };
         }
 

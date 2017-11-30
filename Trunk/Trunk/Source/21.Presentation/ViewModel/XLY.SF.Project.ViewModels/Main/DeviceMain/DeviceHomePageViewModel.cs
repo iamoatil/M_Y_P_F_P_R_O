@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using ProjectExtend.Context;
 using System;
 using System.Collections.Generic;
@@ -18,6 +18,7 @@ using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Project.ViewDomain.Model;
 using XLY.SF.Project.ViewDomain.VModel.DevHomePage;
 using XLY.SF.Project.ViewModels.Main.CaseManagement;
+using XLY.SF.Project.ViewModels.Main.DeviceMain.Navigation;
 
 namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 {
@@ -58,6 +59,35 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
         #endregion
 
+        #region 设备首页导航
+
+        private object _subView;
+        /// <summary>
+        /// 子界面内容
+        /// </summary>
+        public object SubView
+        {
+            get
+            {
+                return this._subView;
+            }
+
+            set
+            {
+                this._subView = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// 设备首页界面
+        /// </summary>
+        public SubViewCacheManager DevHomePageSubViewHelper { get; private set; }
+
+        #endregion
+
+        #region 界面控制
+
         #region 当前编辑状态【信息录入】
 
         private bool _curEditStatus;
@@ -80,25 +110,25 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
         #endregion
 
-        #region 设备首页导航内容
+        #region 采集人【当前登录人】
 
-        private object _devHomePageSubView;
         /// <summary>
-        /// 设备首页导航内容
+        /// 采集人姓名
         /// </summary>
-        public object DevHomePageSubView
+        public string CurLoginUserName
         {
-            get
-            {
-                return this._devHomePageSubView;
-            }
-
-            set
-            {
-                this._devHomePageSubView = value;
-                base.OnPropertyChanged();
-            }
+            get;
         }
+
+        /// <summary>
+        /// 采集人证件号
+        /// </summary>
+        public string CurLoginUserID
+        {
+            get;
+        }
+
+        #endregion
 
         #endregion
 
@@ -109,12 +139,17 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         /// <summary>
         /// 取消编辑
         /// </summary>
-        public ICommand CancelEditCommand { get; set; }
+        public ICommand CancelEditCommand { get; private set; }
+
+        /// <summary>
+        /// 保存编辑信息
+        /// </summary>
+        public ProxyRelayCommand<DevHomePageEditItemModel> SaveEditCommand { get; private set; }
 
         /// <summary>
         /// 自动提取
         /// </summary>
-        public ICommand AutoExtractCommand { get; set; }
+        public ICommand AutoExtractCommand { get; private set; }
 
         /// <summary>
         /// 手机拍照
@@ -135,11 +170,12 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
             PhoneTakePhotoCommand = new ProxyRelayCommand(ExecutePhoneTakePhotoCommand);
             StrategyRecommendCommand = new ProxyRelayCommand<StrategyElement>(ExecuteStrategyRecommendCommand);
+            SaveEditCommand = new ProxyRelayCommand<DevHomePageEditItemModel>(ExecuteSaveEditCommand);
             CancelEditCommand = new RelayCommand(ExecuteCancelEditCommand);
             AutoExtractCommand = new RelayCommand(ExecuteAutoExtractCommand);
 
-
-
+            CurLoginUserName = SystemContext.Instance.CurUserInfo.UserName;
+            CurLoginUserID = SystemContext.Instance.CurUserInfo.IdNumber;
 
 
 
@@ -168,40 +204,61 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
             CurDevModel = parameters as DeviceModel;
             if (CurDevModel == null)
                 throw new NullReferenceException($"CurDevModel为null");
+
+            //根据设备ID创建对应设备的子界面导航器
+            DevHomePageSubViewHelper = new SubViewCacheManager(CurDevModel.IDevSource.ID);
         }
 
         #endregion
 
         #region ExecuteCommands
 
+        //保存编辑信息
+        private string ExecuteSaveEditCommand(DevHomePageEditItemModel arg)
+        {
+            if (arg != null)
+            {
+                //保存信息
+                CurDevModel.IDevSource.CollectionInfo = CurDevModel.IDevSource.CollectionInfo ?? new ExportCollectionInfo();
+                CurDevModel.IDevSource.CollectionInfo.DataNo = arg.No;
+                CurDevModel.IDevSource.CollectionInfo.HolderName = arg.Holder;
+                CurDevModel.IDevSource.CollectionInfo.HolderCertificateType = arg.CredentialsType;
+                CurDevModel.IDevSource.CollectionInfo.HolderCertificateCode = arg.HolderCredentialsNo;
+                CurDevModel.IDevSource.CollectionInfo.SenderName = arg.CensorshipPerson;
+                CurDevModel.IDevSource.CollectionInfo.SenderCompany = arg.UnitName;
+                CurDevModel.IDevSource.CollectionInfo.SenderCertificateCode = arg.CensorshipPersonCredentialsNo;
+                CurDevModel.IDevSource.CollectionInfo.CollectorName = arg.Operator;
+                CurDevModel.IDevSource.CollectionInfo.CollectorCertificateCode = arg.CredentialsNo;
+                CurDevModel.IDevSource.CollectionInfo.Description = arg.Desciption;
+
+                return "保存提取信息成功";
+            }
+
+            CurEditStatus = !CurEditStatus;
+            return string.Empty;
+        }
+
         //执行推荐方案
         private string ExecuteStrategyRecommendCommand(StrategyElement arg)
         {
             //物理镜像【测试代码】
-            var a = IocManagerSingle.Instance.GetViewPart(ExportKeys.MirrorView);
-            a.DataSource.LoadViewModel(CurDevModel.IDevSource);
-            DevHomePageSubView = a;
-
+            SubView = DevHomePageSubViewHelper.GetOrCreateView(ExportKeys.MirrorView, CurDevModel.IDevSource);
 
             return $"执行推荐方案{arg.SolutionStrategyName}";
         }
 
         private void ExecuteAutoExtractCommand()
         {
-            DevHomePageSubView = IocManagerSingle.Instance.GetViewPart(ExportKeys.ExtractionView);
-
-
-
-            GeneralArgs<Pump> args = new GeneralArgs<Pump>(GeneralKeys.SetDataExtractionParamsMsg);
             var adorner = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
             XLY.SF.Project.CaseManagement.ExtractItem ei =
                 adorner.Target.CreateExtract(SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_StrategyRecommend_AutoExtraction],
                                             SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_StrategyRecommend_AutoExtraction]);
-            args.Parameters = new Pump(ei.Path, "data.db");
-            args.Parameters.Type = EnumPump.USB;
-            args.Parameters.OSType = (CurDevModel.IDevSource as Domains.Device).OSType;
-            args.Parameters.Source = CurDevModel.IDevSource;
-            base.MessageAggregation.SendGeneralMsg<Pump>(args);
+
+            Pump @params = new Pump(ei.Path, "data.db");
+            @params.Type = EnumPump.USB;
+            @params.OSType = (CurDevModel.IDevSource as Domains.Device).OSType;
+            @params.Source = CurDevModel.IDevSource;
+            SubView = DevHomePageSubViewHelper.GetOrCreateView(ExportKeys.ExtractionView, @params);
         }
 
         private string ExecutePhoneTakePhotoCommand()

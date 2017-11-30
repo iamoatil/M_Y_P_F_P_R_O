@@ -13,6 +13,19 @@ namespace XLY.SF.Project.DataPump.Android
     /// </summary>
     public class AndroidUsbDataPump : ControllableDataPumpBase
     {
+        #region Constructors
+
+        /// <summary>
+        /// 初始化类型 XLY.SF.Project.DataPump.Android.AndroidUsbDataPump 实例。
+        /// </summary>
+        /// <param name="metadata">与此数据泵关联的元数据信息。</param>
+        public AndroidUsbDataPump(Pump metadata)
+            : base(metadata)
+        {
+        }
+
+        #endregion
+
         #region Methods
 
         #region Public

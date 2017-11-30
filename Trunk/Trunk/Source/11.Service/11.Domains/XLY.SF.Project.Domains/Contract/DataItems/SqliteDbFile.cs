@@ -91,11 +91,20 @@ namespace XLY.SF.Project.Domains
         /// 用户保存C#实体类对象的Json序列化字符串
         /// </summary>
         public const string JsonColumnName = "XLYJson";
+        /// <summary>
+        /// 书签数据库别名
+        /// </summary>
+        public const string BookmarkAliasName = "bmk";
 
         /// <summary>
         /// 数据库文件路径
         /// </summary>
         public string DbFilePath { get; set; }
+
+        /// <summary>
+        /// 书签数据库文件路径
+        /// </summary>
+        public string DbBmkFilePath => DbFilePath.Insert(DbFilePath.LastIndexOf('.'), "_bmk");
 
         /// <summary>
         /// 数据库连接字符串
@@ -104,7 +113,7 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 书签数据库连接字符串
         /// </summary>
-        public string DbBookmarkConnectionStr { get { return string.Format("Data Source='{0}'", DbFilePath.Insert(DbFilePath.LastIndexOf('.'), "_bmk")); } }
+        public string DbBookmarkConnectionStr { get { return string.Format("Data Source='{0}'", DbBmkFilePath); } }
 
         /// <summary>
         /// 数据库事务

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using X64Service;
 using XLY.SF.Framework.Language;
 using XLY.SF.Framework.Log4NetService;
@@ -54,6 +55,7 @@ namespace XLY.SF.Project.Devices
                 Dictionary<string, string> properties = iosDeviceManager.GetProperties(device);
                 device.Name = properties.ContainsKey("DeviceName") ? properties["DeviceName"] : "";
                 device.Manufacture = LanguageManager.Current[Languagekeys.DeviceLanguage_DeviceType_IOS];
+                device.Brand = "iPhone";
                 device.Model = properties.ContainsKey("ProductType") ? properties["ProductType"] : "";
                 device.OSVersion = properties.ContainsKey("ProductVersion") ? properties["ProductVersion"] : "";
                 device.Status = EnumDeviceStatus.Online;
@@ -61,6 +63,26 @@ namespace XLY.SF.Project.Devices
                 device.IMEI = properties.ContainsKey("IMEI") ? properties["IMEI"] : "";
                 device.SerialNumber = properties.ContainsKey("SerialNumber") ? properties["SerialNumber"] : device.ID;
                 device.Properties = properties;
+
+                /*
+                 *  TotalDiskCapacity  总容量
+                 *  TotalDataCapacity 数据区容量
+                 *  TotalDataAvailable 数据区可用容量
+                 *  TotalSystemCapacity 系统容量
+                 *  MobileApplicationUsage 应用数据使用量
+                 *  
+                 * */
+                var TotalDiskCapacity = properties.ContainsKey("TotalDiskCapacity") ? properties["TotalDiskCapacity"] : "0";
+                //var TotalDataCapacity = properties.ContainsKey("TotalDataCapacity") ? properties["TotalDataCapacity"] : "0";
+                var TotalDataAvailable = properties.ContainsKey("TotalDataAvailable") ? properties["TotalDataAvailable"] : "0";
+                //var TotalSystemCapacity = properties.ContainsKey("TotalSystemCapacity") ? properties["TotalSystemCapacity"] : "0";
+                //var MobileApplicationUsage = properties.ContainsKey("MobileApplicationUsage") ? properties["MobileApplicationUsage"] : "0";
+
+                device.TotalDiskCapacity = UInt64.Parse(TotalDiskCapacity);
+                device.TotalDiskAvailable = UInt64.Parse(TotalDataAvailable);
+                device.TotalDataCapacity = 0;
+                device.TotalDataAvailable = 0;
+
 
                 //发出新设备连入通知
                 OnConnected(device);

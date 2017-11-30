@@ -5,12 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:local="clr-namespace:XLY.SF.Project.Plugin.DataView"
+             xmlns:theme="clr-namespace:XLY.SF.Project.Themes;assembly=XLY.SF.Project.Themes"
              xmlns:ctrl="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
-        <!--<Style TargetType="{x:Type TreeView}">
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
+            <!--<Style TargetType="{x:Type TreeView}">
             <Setter Property="ItemTemplate">
                 <Setter.Value>
                     <HierarchicalDataTemplate ItemsSource="{Binding TreeNodes}">
@@ -20,7 +25,7 @@
             </Setter>
         </Style>-->
 
-        <!--<Style TargetType="{x:Type TreeViewItem}">
+            <!--<Style TargetType="{x:Type TreeViewItem}">
             <Setter Property="MinHeight" Value="25" />
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -93,6 +98,7 @@
                 </Setter.Value>
             </Setter>
         </Style>-->
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -113,7 +119,7 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </TreeView>-->
-        <ctrl:TreeViewEx x:Name="treeDataList" Background="#05FFFFFF" BorderThickness="0" Grid.Column="0" ItemsSource="{Binding TreeNodes}" MinWidth="200" Width="236" Visibility="{Binding IsTreeDataSource, Converter={StaticResource booleanToVisibilityConverter}}">
+        <!--<ctrl:TreeViewEx x:Name="treeDataList" Background="#05FFFFFF" BorderThickness="0" Grid.Column="0" ItemsSource="{Binding TreeNodes}" MinWidth="200" Width="236" Visibility="{Binding IsTreeDataSource, Converter={StaticResource booleanToVisibilityConverter}}">
             <ctrl:TreeViewEx.ItemContainerStyle>
                 <Style TargetType="ctrl:TreeViewItemEx" BasedOn="{StaticResource stTreeViewItem}">
                     <Setter Property="IsItemStyle" Value="{Binding IsItemStyle}"></Setter>
@@ -129,7 +135,20 @@
                     <i:InvokeCommandAction Command="{Binding SelecedNodeChanged}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctrl:TreeViewEx}}, Path=SelectedValue}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-        </ctrl:TreeViewEx>
+        </ctrl:TreeViewEx>-->
+        <TreeView BorderThickness="0" theme:AttachHelper.IsShowSelectedGripper="True"  theme:AttachHelper.IsShowCheckBox="False" theme:AttachHelper.IsHideUnCheckedNode="True" theme:AttachHelper.IsHideChildren="False" 
+                  Background="#05FFFFFF" Grid.Column="0" MinWidth="200" ItemsSource="{Binding TreeNodes}" Visibility="{Binding IsTreeDataSource, Converter={StaticResource booleanToVisibilityConverter}}">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding TreeNodes}">
+                    <TextBlock Text="{Binding Text}"/>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectedItemChanged">
+                    <i:InvokeCommandAction Command="{Binding SelecedNodeChanged}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeView}}, Path=SelectedValue}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TreeView>
         <GridSplitter VerticalAlignment="Stretch" Grid.Column="0" Width="2" Visibility="{Binding IsTreeDataSource, Converter={StaticResource booleanToVisibilityConverter}}" Background="Transparent"/>
 
         <!--数据显示区域，如果有多个视图方式则加载-->

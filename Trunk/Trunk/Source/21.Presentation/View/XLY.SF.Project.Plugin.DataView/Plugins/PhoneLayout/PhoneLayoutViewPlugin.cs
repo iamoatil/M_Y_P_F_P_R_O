@@ -28,13 +28,13 @@ namespace XLY.SF.Project.Plugin.DataView
         {
             var p = new DataViewPluginInfo() {
                 Guid = "8EEB83BF-FF24-45F5-BFBC-EBB306A16F33",
-                Name = "手机布局",
+                Name = Languagekeys.PhoneLayout,
                 ViewType = new List<DataViewSupportItem>(),
                 OrderIndex = 0,
                 PluginType = PluginType.SpfDataView,
                 State = PluginState.Disabled
             };
-            p.ViewType.Add(new DataViewSupportItem() { PluginId = "微信", TypeName = DataViewConfigure.XLY_LAYOUT_KEY });
+            p.ViewType.Add(new DataViewSupportItem() { PluginId = Languagekeys.WeChat, TypeName = DataViewConfigure.XLY_LAYOUT_KEY });
             PluginInfo = p;
         }
 

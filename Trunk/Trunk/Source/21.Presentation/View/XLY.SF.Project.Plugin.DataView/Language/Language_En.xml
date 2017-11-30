@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageResource>
+  <GridView>GridView</GridView>
+  <ContactView>ContactView</ContactView>
+  <MessageView>MessageView</MessageView>
+  <ConversionMode>ConversionMode</ConversionMode>
+  <DefaultLayout>DefaultLayout</DefaultLayout>
+  <PhoneLayout>PhoneLayout</PhoneLayout>
+  <Bookmark>Bookmark</Bookmark>
+  <PhonePageList>Pages</PhonePageList>
+  <PhoneHome>Home</PhoneHome>
+  <PhoneBack>Back</PhoneBack>
+  <WeChat>WeChat</WeChat>
+  <DengLu>Login</DengLu>
+</LanguageResource>
+
+

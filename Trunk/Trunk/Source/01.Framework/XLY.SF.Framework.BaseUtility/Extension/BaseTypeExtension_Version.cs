@@ -43,6 +43,16 @@ namespace XLY.SF.Framework.BaseUtility
             }
             if (Version.TryParse(value, out ver))
             {
+                if (!(ver.Major > 0 && ver.Minor > 0 && ver.Build > 0 && ver.Revision > 0))
+                {//修正版本号
+                    var major = ver.Major <= 0 ? 0 : ver.Major;
+                    var minor = ver.Minor <= 0 ? 0 : ver.Minor;
+                    var build = ver.Build <= 0 ? 0 : ver.Build;
+                    var revison = ver.Revision <= 0 ? 0 : ver.Revision;
+
+                    ver = new Version(major, minor, build, revison);
+                }
+
                 return ver;
             }
 

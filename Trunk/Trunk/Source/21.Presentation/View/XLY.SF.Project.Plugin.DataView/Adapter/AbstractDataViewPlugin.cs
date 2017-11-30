@@ -48,8 +48,18 @@ namespace XLY.SF.Project.Plugin.DataView
             SelectedDataChanged?.Invoke(data);
         }
 
+        /// <summary>
+        /// 获取显示的插件控件
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         public abstract FrameworkElement GetControl(DataViewPluginArgument arg);
 
+        /// <summary>
+        /// 将控件转换为TabItem，便于显示到界面上
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         public FrameworkElement ToControl(DataViewPluginArgument arg)
         {
             SelectedDataChanged += arg.OnSelectedItemChanged;
@@ -90,7 +100,6 @@ namespace XLY.SF.Project.Plugin.DataView
     /// </summary>
     public class DataViewPluginArgument
     {
-        public SPFTask Task { get; set; }
         /// <summary>
         /// 当前的数据集合
         /// </summary>
@@ -124,8 +133,33 @@ namespace XLY.SF.Project.Plugin.DataView
         public const string XLY_LAYOUT_KEY = "__LayOut";
 
         /// <summary>
+        /// 默认的表格视图的ID
+        /// </summary>
+        public const string DEFAULT_GRID_VIEW_ID = "7B51FA8D-F7F6-4EE3-B3B9-780C29B9B778";
+
+        /// <summary>
         /// 当存在多视图时，是否隐藏默认的表格视图，默认为隐藏
         /// </summary>
         public bool IsDefaultGridViewVisibleWhenMultiviews { get; set; } = false;
+    }
+
+    /// <summary>
+    /// 数据展示时传递的参数
+    /// </summary>
+    public class DataPreviewPluginArgument
+    {
+        /// <summary>
+        /// 当前的数据，如果是文件，则为文件名；如果是数据对象，则为对象实例
+        /// </summary>
+        public object CurrentData { get; set; }
+
+        /// <summary>
+        /// 如果是数据对象，则表示当前插件的ID
+        /// </summary>
+        public string PluginId { get; set; }
+        /// <summary>
+        /// 如果是数据对象，表示当前数据的类型
+        /// </summary>
+        public object Type { get; set; }
     }
 }

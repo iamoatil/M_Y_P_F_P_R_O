@@ -13,53 +13,59 @@ namespace XLY.SF.Project.DataPump.IOS
     /// <summary>
     /// IOS USB数据泵。
     /// </summary>
-    public class IOSUsbDataPump : ControllableDataPumpBase
+    public class IOSUsbDataPump : InitAtExecutionDataPump
     {
+        #region Fields
+
+        private String _savePath;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// 初始化类型 XLY.SF.Project.DataPump.IOS.IOSUsbDataPump 实例。
+        /// </summary>
+        /// <param name="metadata">与此数据泵关联的元数据信息。</param>
+        public IOSUsbDataPump(Pump metadata)
+            : base(metadata)
+        {
+
+        }
+
+        #endregion
+
         #region Methods
 
         #region Protected
 
-        /// <summary>
-        /// 使用特定的执行上下文执行服务。
-        /// </summary>
-        /// <param name="context">执行上下文。</param>
-        protected override void ExecuteCore(DataPumpControllableExecutionContext context)
+        protected override Boolean InitAtFirstTime()
         {
-            String savePath = context.GetContextData<String>("savePath");
-            if (context.Source.ItemType == SourceFileItemType.NormalPath)
+            Pump metadata = Metadata;
+            Device device = metadata.Source as Device;
+            if (device == null) return false;
+            IOSDeviceManager dm = device.DeviceManager as IOSDeviceManager;
+            if (dm == null) return false;
+            String savePath = dm.CopyUserData(device, metadata.SourceStorePath, null);
+            _savePath = savePath;
+            if (FileHelper.IsValidDictory(savePath))
             {
-                context.Source.Local = FileHelper.ConnectPath(savePath, context.Source.Config);
+                RenameUnofficialApp(savePath);
             }
+            return true;
         }
 
-        /// <summary>
-        /// 初始化当前的执行流程。
-        /// </summary>
-        /// <param name="context">执行上下文。</param>
-        /// <returns>成功返回true；否则返回false。</returns>
-        protected override bool InitExecution(DataPumpControllableExecutionContext context)
+        protected override void OverrideExecute(DataPumpControllableExecutionContext context)
         {
-            return Init(context);
+            if (context.Source.ItemType == SourceFileItemType.NormalPath)
+            {
+                context.Source.Local = FileHelper.ConnectPath(_savePath, context.Source.Config.Replace('/', '\\'));
+            }
         }
 
         #endregion
 
         #region Private
-
-        private Boolean Init(DataPumpControllableExecutionContext context)
-        {
-            Device device = context.PumpDescriptor.Source as Device;
-            if (device == null) return false;
-            IOSDeviceManager dm = device.DeviceManager as IOSDeviceManager;
-            if (dm == null) return false;
-            String savePath = dm.CopyUserData(device, context.TargetDirectory, null);
-            if (FileHelper.IsValidDictory(savePath))
-            {
-                RenameUnofficialApp(savePath);
-            }
-            context.SetContextData("savePath", savePath);
-            return true;
-        }
 
         /// <summary>
         /// 修改第三方应用的文件夹名字

@@ -19,19 +19,17 @@ namespace XLY.SF.Framework.Core.Base.CoreInterface
     public interface IMessageBox
     {
         /// <summary>
-        /// 显示其他消息
+        /// 显示警告消息
         /// </summary>
-        /// <param name="title">消息标题</param>
-        /// <param name="text">内容</param>
-        void ShowOtherMsg(string title, string text);
+        /// <param name="warningText">内容</param>
+        void ShowWarningMsg(string warningText);
 
         /// <summary>
-        /// 显示交互消息（需要用户确认）
+        /// 显示成功消息
         /// </summary>
-        /// <param name="title">消息标题</param>
-        /// <param name="text">内容</param>
+        /// <param name="successText">内容</param>
         /// <returns></returns>
-        bool ShowMutualMsg(string title, string text);
+        void ShowSuccessMsg(string successText);
 
         /// <summary>
         /// 显示错误消息
@@ -45,15 +43,15 @@ namespace XLY.SF.Framework.Core.Base.CoreInterface
         bool ShowDialogErrorMsg(string errorText);
 
         /// <summary>
-        /// 显示通知信息
+        /// 显示成功消息【模式对话框】
         /// </summary>
-        /// <param name="text">消息内容</param>
-        void ShowNoticeMsg(string text);
+        /// <param name="successText">消息内容</param>
+        bool ShowDialogSuccessMsg(string successText);
 
         /// <summary>
-        /// 显示通知信息（模式对话框）
+        /// 显示警告消息（模式对话框）
         /// </summary>
-        /// <param name="text">消息内容</param>
-        bool ShowDialogNoticeMsg(string text);
+        /// <param name="warningText">消息内容</param>
+        bool ShowDialogWarningMsg(string warningText);
     }
 }

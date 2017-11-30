@@ -802,6 +802,25 @@ namespace XLY.SF.Project.BaseUtility.Helper
         }
         #endregion
 
+        #region 查找文件夹下的文件
+        /// <summary>
+        /// 查找文件夹下的文件
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static IEnumerable<FileInfo> SearchFile(DirectoryInfo dir, string filter)
+        {
+            List<FileInfo> lst = new List<FileInfo>();
+            lst.AddRange(dir.GetFiles(filter));
+            foreach (var item in dir.GetDirectories())
+            {
+                lst.AddRange(SearchFile(item, filter));
+            }
+            return lst;
+        }
+        #endregion
+
         #region GetFilePath
         /// <summary>
         /// 获取指定文件或文件夹路径的所在文件路径，默认分隔符separate='\\'
@@ -943,6 +962,48 @@ namespace XLY.SF.Project.BaseUtility.Helper
                 index++;
             }
             return name;
+        }
+        #endregion
+
+        #region 移除整个文件夹及其子文件的只读属性
+        /// <summary>
+        /// 移除整个文件夹及其子文件的只读属性
+        /// </summary>
+        /// <param name="dirPath"></param>
+        public static void RemoveDirectoryReadOnly(string dirPath)
+        {
+            string[] dirPathes = Directory.GetDirectories(dirPath, "*.*", SearchOption.AllDirectories);
+            string[] filePathes = Directory.GetFiles(dirPath, "*.*", SearchOption.AllDirectories);
+            foreach (var dp in dirPathes)
+            {
+                DirectoryInfo dir = new DirectoryInfo(dirPath);
+                dir.Attributes = FileAttributes.Normal & FileAttributes.Directory;
+            }
+            foreach (var fp in filePathes)
+            {
+                File.SetAttributes(fp, System.IO.FileAttributes.Normal);
+            }
+        }
+        #endregion
+
+        #region 解析路径配置，转换为路径名称列表
+        /// <summary>
+        /// 解析路径配置，转换为路径名称列表
+        /// </summary>
+        /// <param name="paths"></param>
+        /// <returns></returns>
+        public static List<string> ConverterPathConfig(string paths)
+        {
+            List<string> lst = new List<string>();
+            if (string.IsNullOrWhiteSpace(paths))
+                return lst;
+            foreach (var p in paths.Split(new string[] { ";" },  StringSplitOptions.RemoveEmptyEntries))
+            {
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, p);
+                if(File.Exists(path) || Directory.Exists(path))
+                    lst.Add(path);
+            }
+            return lst;
         }
         #endregion
     }

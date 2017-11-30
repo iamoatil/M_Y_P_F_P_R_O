@@ -3,18 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:XLY.SF.Project.Plugin.DataView.View.Controls"
+             xmlns:local="clr-namespace:XLY.SF.Project.Plugin.DataView"
              xmlns:theme="clr-namespace:XLY.SF.Project.Themes;assembly=XLY.SF.Project.Themes"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
         <theme:BookmarkToBooleanConverter x:Key="bmkConverter"/>
 
         <!--书签列模板-->
         <DataGridTemplateColumn x:Key="bookmarkColumnTemplate">
             <DataGridTemplateColumn.HeaderTemplate>
                 <DataTemplate>
-                    <CheckBox x:Name="CheckAll" Click="CheckAll_Click" Style="{DynamicResource bookmarkCheckboxStyle}">标记</CheckBox>
+                    <CheckBox x:Name="CheckAll" Click="CheckAll_Click" Style="{DynamicResource bookmarkCheckboxStyle}" Content="{local:Lang Key=Bookmark}" Foreground="#9ba5b9"></CheckBox>
                 </DataTemplate>
             </DataGridTemplateColumn.HeaderTemplate>
             <DataGridTemplateColumn.CellTemplate>
@@ -23,15 +27,8 @@
                 </DataTemplate>
             </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-
-        <!--图片列模板-->
-        <!--<DataGridTemplateColumn x:Key="imageColumnTemplate">
-            <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                    <Image Width="17" Height="17" HorizontalAlignment="Center" VerticalAlignment="Center"></Image>
-                </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-        </DataGridTemplateColumn>-->
+        </ResourceDictionary>
     </UserControl.Resources>
-    <DataGrid x:Name="dg" CanUserAddRows="False" IsReadOnly="True" ItemsSource="{Binding Items.View}" SelectionChanged="DataGrid_SelectionChanged"></DataGrid>
+    
+    <DataGrid x:Name="dg" CanUserAddRows="False" IsReadOnly="True" AutoGenerateColumns="False" ItemsSource="{Binding Items.View}" SelectionChanged="DataGrid_SelectionChanged"></DataGrid>
 </UserControl>

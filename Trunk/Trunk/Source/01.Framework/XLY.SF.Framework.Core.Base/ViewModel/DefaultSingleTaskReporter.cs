@@ -66,23 +66,25 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <summary>
         /// 报告完成。
         /// </summary>
-        public override void Finish()
+        /// <param name="message">消息。</param>
+        public override void Finish(String message = null)
         {
             if (State != TaskState.Running) return;
             State = TaskState.Completed;
             Progress = 100;
-            OnTerminate(new TaskTerminateEventArgs(Id, true));
+            OnTerminate(new TaskTerminateEventArgs(Id, true, message));
         }
 
         /// <summary>
         /// 报告停止。
         /// </summary>
-        public override void Stop()
+        /// <param name="message">消息。</param>
+        public override void Stop(String message = null)
         {
             if (((Int32)State & 0xFF00) == 0x0100)
             {
                 State = TaskState.Stopping;
-                OnTerminate(new TaskTerminateEventArgs(Id, false));
+                OnTerminate(new TaskTerminateEventArgs(Id, false, message));
             }
         }
 

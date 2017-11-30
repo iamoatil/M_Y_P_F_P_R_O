@@ -61,6 +61,7 @@
     <Reference Include="Microsoft.Expression.Effects, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -74,6 +75,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttachProperty\AttachHelper.cs" />
+    <Compile Include="Behavior\DataGridBehavior.cs" />
     <Compile Include="Converter\AdditionConverter.cs" />
     <Compile Include="Converter\BookmarkToBooleanConverter.cs" />
     <Compile Include="Converter\DateTimeToDateStringConverter.cs" />
@@ -81,6 +84,7 @@
     <Compile Include="Converter\PercentWidthConverter.cs" />
     <Compile Include="Converter\ReverseConverter.cs" />
     <Compile Include="Converter\StringToImageConverter.cs" />
+    <Compile Include="Converter\TreeViewItemIndentConverter.cs" />
     <Compile Include="CustromControl\ComboBox\ComboBoxEx.cs" />
     <Compile Include="Converter\ImageContentToBoolConverter.cs" />
     <Compile Include="Converter\SubtractionConverter.cs" />
@@ -90,13 +94,19 @@
     <Compile Include="CustromControl\CheckBox\IconCheckBox.cs" />
     <Compile Include="CustromControl\CheckBox\MenuRadioButton.cs" />
     <Compile Include="CustromControl\Button\IconButton.cs" />
+    <Compile Include="CustromControl\ExpanderControl\ExpanderControl.cs" />
+    <Compile Include="CustromControl\HexViewer\HexViewer.cs" />
     <Compile Include="CustromControl\Hyperlink\HyperlinkControl.cs" />
+    <Compile Include="CustromControl\Loading\LoadingControl.cs" />
     <Compile Include="CustromControl\PopupControl\PopupControl.cs" />
     <Compile Include="CustromControl\ProgressBar\ProgressBarWithCorner.cs" />
     <Compile Include="CustromControl\ToggleButton\IconRadioButton.cs" />
     <Compile Include="CustromControl\TabControl\TabControlWithButton.cs" />
     <Compile Include="CustromControl\TreeView\TreeViewEx.cs" />
+    <Compile Include="CustromControl\TreeView\TreeViewExport.cs" />
     <Compile Include="CustromControl\TreeView\TreeViewItemEx.cs" />
+    <Compile Include="CustromControl\TreeView\TreeViewItemExport.cs" />
+    <Compile Include="CustromControl\Window\WindowEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -110,7 +120,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="CustromControl\Window\WindowEx.cs" />
     <Compile Include="CustromControl\TextBox\TextBoxEx.cs" />
     <Compile Include="Converter\BooleanToCollapseConverter.cs" />
     <Compile Include="Converter\XamlResouceReader.cs" />
@@ -172,6 +181,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="ThemesStyle\ExpanderControlStyle\ExpanderControlStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ThemesStyle\HexViewerStyle\HexViewerStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ThemesStyle\HyperlinkStyle\HyperlinkStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -184,6 +201,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ThemesStyle\LoadingStyle\Loading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ThemesStyle\PopupControlStyle\PopupControlStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -193,6 +214,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ThemesStyle\ScrollViewerStyle\ScrollViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ThemesStyle\Sliderbar\SliderbarStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -217,6 +242,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ThemesStyle\TreeViewStyle\TreeViewStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ThemesStyle\TreeViewStyle\TreeViewStyle2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -425,6 +454,51 @@
     <Resource Include="Resources\Images\bookmark_no.png" />
     <Resource Include="Resources\Images\bookmark_yes.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\data_view_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\data_filebrowing_open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\Msg_Error.png" />
+    <Resource Include="Resources\Images\Icons\Msg_Success.png" />
+    <Resource Include="Resources\Images\Icons\Msg_Warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\data_filebrowing_icon1.png" />
+    <Resource Include="Resources\Images\data_filebrowing_icon2.png" />
+    <Resource Include="Resources\Images\data_filebrowing_icon3.png" />
+    <Resource Include="Resources\Images\data_filebrowing_icon4.png" />
+    <Resource Include="Resources\Images\data_filebrowing_icon5.png" />
+    <Resource Include="Resources\Images\data_filebrowing_icon6.png" />
+    <Resource Include="Resources\Images\data_filebrowing_icon7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\TextBoxOpenIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\desktopIcon.png" />
+    <Resource Include="Resources\Images\Icons\diskIcon.png" />
+    <Resource Include="Resources\Images\Icons\mydocumentIcon.png" />
+    <Resource Include="Resources\Images\Icons\recentlyopenIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\player_mp3.png" />
+    <Resource Include="Resources\Images\Icons\player_pause.png" />
+    <Resource Include="Resources\Images\Icons\player_play.png" />
+    <Resource Include="Resources\Images\Icons\player_slider_thumb.png" />
+    <Resource Include="Resources\Images\Icons\player_stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\TreeViewExportExpandIcon.png" />
+    <Resource Include="Resources\Images\Icons\TreeViewExportPutIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\ExportBcp.png" />
+    <Resource Include="Resources\Images\Icons\ExportStatement.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XLY.SF.Project.BaseUtility.Helper;
+using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.DataPump.BlackBerry
 {
@@ -14,6 +15,25 @@ namespace XLY.SF.Project.DataPump.BlackBerry
     /// </summary>
     public class BlackBerryMirrorDataPump : ControllableDataPumpBase
     {
+        #region Fields
+
+        private String _destDirectory;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// 初始化类型 XLY.SF.Project.DataPump.BlackBerry.BlackBerryMirrorDataPump 实例。
+        /// </summary>
+        /// <param name="metadata">与此数据泵关联的元数据信息。</param>
+        public BlackBerryMirrorDataPump(Pump metadata)
+            : base(metadata)
+        {
+        }
+
+        #endregion
+
         #region Methods
 
         #region Protected
@@ -30,21 +50,31 @@ namespace XLY.SF.Project.DataPump.BlackBerry
         }
 
         /// <summary>
-        /// 初始化当前的执行流程。
+        /// 初始化数据泵。
         /// </summary>
-        /// <param name="context">执行上下文。</param>
         /// <returns>成功返回true；否则返回false。</returns>
-        protected override Boolean InitExecution(DataPumpControllableExecutionContext context)
+        protected override Boolean InitializeCore()
         {
-            String dataSourcePath = context.PumpDescriptor.Source as String;
+            String dataSourcePath = Metadata.Source as String;
             if (String.IsNullOrWhiteSpace(dataSourcePath)) return false;
-            String destDirectory = FileHelper.ConnectPath(context.TargetDirectory, $"BlackBerry_{dataSourcePath.GetHashCode()}");
+            String destDirectory = FileHelper.ConnectPath(Metadata.SourceStorePath, $"BlackBerry_{dataSourcePath.GetHashCode()}");
             if (Directory.Exists(destDirectory))
             {
                 Directory.Delete(destDirectory, true);
             }
             Directory.CreateDirectory(destDirectory);
-            context.Source.Local = destDirectory;
+            _destDirectory = destDirectory;
+            return true;
+        }
+
+        /// <summary>
+        /// 初始化当前的执行流程。
+        /// </summary>
+        /// <param name="context">执行上下文。</param>
+        /// <returns>成功返回true；否则返回false。</returns>
+        protected override Boolean InitExecutionContext(DataPumpControllableExecutionContext context)
+        {
+            context.Source.Local = _destDirectory;
             return true;
         }
 

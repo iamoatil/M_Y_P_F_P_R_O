@@ -6,61 +6,62 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XLY.SF.Project.BaseUtility.Helper;
+using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.DataPump.IOS
 {
     /// <summary>
     /// IOS镜像数据泵。
     /// </summary>
-    public class IOSMirrorDataPump : ControllableDataPumpBase
+    public class IOSMirrorDataPump : InitAtExecutionDataPump
     {
-        #region Methods
+        #region Fields
 
-        #region Protected
+        private String _destPath;
 
-        /// <summary>
-        /// 使用特定的执行上下文执行服务。
-        /// </summary>
-        /// <param name="context">执行上下文。</param>
-        protected override void ExecuteCore(DataPumpControllableExecutionContext context)
-        {
-            if (context.Source.ItemType == Domains.SourceFileItemType.NormalPath)
-            {
-                context.Source.Local = FileHelper.ConnectPath(context.GetContextData<String>("desctPath"), context.Source.Config);
-            }
-        }
+        #endregion
+
+        #region Constructors
 
         /// <summary>
-        /// 初始化当前的执行流程。
+        /// 初始化类型 XLY.SF.Project.DataPump.IOS.IOSMirrorDataPump 实例。
         /// </summary>
-        /// <param name="context">执行上下文。</param>
-        /// <returns>成功返回true；否则返回false。</returns>
-        protected override bool InitExecution(DataPumpControllableExecutionContext context)
+        /// <param name="metadata">与此数据泵关联的元数据信息。</param>
+        public IOSMirrorDataPump(Pump metadata)
+            : base(metadata)
         {
-            return Init(context);
+
         }
 
         #endregion
 
-        #region Private
+        #region Methods
 
-        private Boolean Init(DataPumpControllableExecutionContext context)
+        #region Protected
+
+        protected override Boolean InitializeCore()
         {
             //1.获取镜像文件路径
-            String mirrorFile = context.PumpDescriptor.Source as String;
+            String mirrorFile = Metadata.Source as String;
             if (String.IsNullOrWhiteSpace(mirrorFile)) return false;
 
             //2.解压
-            String destPath = Path.Combine(context.TargetDirectory, $"IosData_{context.GetHashCode()}");
+            String destPath = Path.Combine(Metadata.SourceStorePath, $"IosData_{Guid.NewGuid()}");
             if (Directory.Exists(destPath))
             {
                 Directory.Delete(destPath, true);
             }
-            ZipFile.ExtractToDirectory(mirrorFile, destPath);
+            _destPath = destPath;
+            return true;
+        }
 
-            context.SetContextData("destPath", destPath);
+        protected override Boolean InitAtFirstTime()
+        {
+            String mirrorFile = (String)Metadata.Source;
+            ZipFile.ExtractToDirectory(mirrorFile, _destPath);
+
             //3.处理app文件夹
-            var directories = Directory.GetDirectories(destPath);
+            var directories = Directory.GetDirectories(_destPath);
             foreach (string path in directories)
             {
                 if (path.Contains("AppDomain-"))
@@ -69,6 +70,14 @@ namespace XLY.SF.Project.DataPump.IOS
                 }
             }
             return true;
+        }
+
+        protected override void OverrideExecute(DataPumpControllableExecutionContext context)
+        {
+            if (context.Source.ItemType == Domains.SourceFileItemType.NormalPath)
+            {
+                context.Source.Local = FileHelper.ConnectPath(_destPath, context.Source.Config);
+            }
         }
 
         #endregion

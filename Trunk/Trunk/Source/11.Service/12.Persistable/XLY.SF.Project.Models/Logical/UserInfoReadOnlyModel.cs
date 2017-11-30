@@ -4,7 +4,7 @@ using XLY.SF.Project.Models.Entities;
 
 namespace XLY.SF.Project.Models.Logical
 {
-    public class UserInfoReadOnlyModel : UserInfoEntityModel
+    public class UserInfoReadOnlyModel : UserInfoModel
     {
         #region Constructors
 

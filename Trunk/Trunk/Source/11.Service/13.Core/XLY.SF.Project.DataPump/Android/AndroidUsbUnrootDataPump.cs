@@ -19,6 +19,10 @@ namespace XLY.SF.Project.DataPump.Android
 
         public static readonly String[] Commands;
 
+        private static readonly String ApkPath;
+
+        private String _savePath;
+
         #endregion
 
         #region Constructors
@@ -33,13 +37,23 @@ namespace XLY.SF.Project.DataPump.Android
                 "basic_info","app_info","sms_info",
                 "contact_info","calllog_info"
             };
+            ApkPath = FileHelper.GetPhysicalPath(@"Toolkits\app\SPFSocket.apk");
+        }
+
+        /// <summary>
+        /// 初始化类型 XLY.SF.Project.DataPump.Android.AndroidUsbUnrootDataPump 实例。
+        /// </summary>
+        /// <param name="metadata">与此数据泵关联的元数据信息。</param>
+        public AndroidUsbUnrootDataPump(Pump metadata)
+            : base(metadata)
+        {
         }
 
         #endregion
 
         #region Methods
 
-        #region Public
+        #region protected
 
         /// <summary>
         /// 使用特定的执行上下文执行服务。
@@ -47,46 +61,39 @@ namespace XLY.SF.Project.DataPump.Android
         /// <param name="context">执行上下文。</param>
         protected override void ExecuteCore(DataPumpControllableExecutionContext context)
         {
-            String destPath = context.GetContextData<String>("destPath");
-            Device device = context.GetContextData<Device>("device");
-            AndroidHelper.Instance.BackupAndResolve(device, FileHelper.ConnectPath(destPath, $"{device.SerialNumber}.rar"));
+            Device device = (Device)Metadata.Source;
+            AndroidHelper.Instance.BackupAndResolve(device, FileHelper.ConnectPath(_savePath, $"{device.SerialNumber}.rar"));
 
             String content = String.Empty;
             foreach (String command in Commands)
             {
                 content = AndroidHelper.Instance.ExecuteSPFAppCommand(device, command);
-                File.WriteAllText(FileHelper.ConnectPath(destPath, $"{command}.txt"), content);
+                File.WriteAllText(FileHelper.ConnectPath(_savePath, $"{command}.txt"), content);
             }
         }
 
         /// <summary>
         /// 初始化当前的执行流程。
         /// </summary>
-        /// <param name="context">执行上下文。</param>
         /// <returns>成功返回true；否则返回false。</returns>
-        protected override Boolean InitExecution(DataPumpControllableExecutionContext context)
+        protected override Boolean InitializeCore()
         {
-            if (context.PumpDescriptor.Source is Device device)
+            if (Metadata.Source is Device device)
             {
-                String path = FileHelper.GetPhysicalPath(@"Toolkits\app\SPFSocket.apk");
-                if (AndroidHelper.Instance.InstallPackage(path, device))
+                if (AndroidHelper.Instance.InstallPackage(ApkPath, device))
                 {
-                    path = FileHelper.ConnectPath(context.TargetDirectory, $"AndroidData_{context.GetHashCode()}");
+                    String path = FileHelper.ConnectPath(Metadata.SourceStorePath, $"AndroidData_{Guid.NewGuid()}");
                     if (Directory.Exists(path))
                     {
                         Directory.Delete(path, true);
                     }
                     FileHelper.CreateDirectory(path);
-                    context.SetContextData("destPath", path);
-                    context.SetContextData("device", device);
+                    _savePath = path;
+                    return true;
                 }
             }
             return false;
         }
-
-        #endregion
-
-        #region Private
 
         #endregion
 

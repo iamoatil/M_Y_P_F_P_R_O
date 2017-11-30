@@ -16,14 +16,14 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 临时ROOT。
         /// </summary>
-        TempRoot = 0x0100,
+        TempRoot = 0x0101,
         /// <summary>
         /// APP植入。
         /// </summary>
-        AppInjection= 0x0101,
+        AppInjection= 0x0102,
         /// <summary>
         /// 备份提取。
         /// </summary>
-        BackExtraction = 0x0102
+        BackExtraction = 0x0104
     }
 }

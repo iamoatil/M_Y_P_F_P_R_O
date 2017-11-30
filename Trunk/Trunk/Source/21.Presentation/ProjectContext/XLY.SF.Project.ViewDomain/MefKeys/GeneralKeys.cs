@@ -40,6 +40,11 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         /// </summary>
         public const string DeleteCacheView = "GeneralKeys_DeleteCacheView";
 
+        /// <summary>
+        /// 设置变更消息。
+        /// </summary>
+        public const string SettingsChangedMsg = "SettingsChangedMsg";
+
         #endregion
     }
 }

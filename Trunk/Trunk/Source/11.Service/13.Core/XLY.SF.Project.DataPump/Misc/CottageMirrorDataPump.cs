@@ -18,7 +18,9 @@ namespace XLY.SF.Project.DataPump.Misc
         /// <summary>
         /// 初始化类型 XLY.SF.Project.DataPump.Misc.CottageMirrorDataPump 实例。
         /// </summary>
-        public CottageMirrorDataPump()
+        /// <param name="metadata">与此数据泵关联的元数据信息。</param>
+        public CottageMirrorDataPump(Pump metadata)
+            :base(metadata)
         {
         }
 
@@ -31,18 +33,17 @@ namespace XLY.SF.Project.DataPump.Misc
         /// <summary>
         /// 创建实现了 IFileSystemDevice 接口的类型实例。
         /// </summary>
-        /// <param name="context">执行上下文。</param>
         /// <returns>实现了 IFileSystemDevice 接口的类型实例。</returns>
-        protected override IFileSystemDevice CreateFileSystemDevice(DataPumpControllableExecutionContext context)
+        protected override IFileSystemDevice CreateFileSystemDevice()
         {
-            Device device = context.PumpDescriptor.Source as Device;
+            Device device = Metadata.Source as Device;
             if (device == null) return null;
             IFileSystemDevice fsDevice = new CottageDevice
             {
                 FlshType = device.FlshType,
                 DevType = device.DevType,
-                Source = context.PumpDescriptor.Source,
-                ScanModel = (Byte)context.PumpDescriptor.ScanModel
+                Source = Metadata.Source,
+                ScanModel = (Byte)Metadata.ScanModel
             };
             return fsDevice;
         }

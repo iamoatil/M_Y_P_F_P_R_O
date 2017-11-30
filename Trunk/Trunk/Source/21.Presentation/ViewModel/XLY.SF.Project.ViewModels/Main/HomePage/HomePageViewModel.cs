@@ -1,4 +1,4 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using ProjectExtend.Context;
 using System;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace XLY.SF.Project.ViewModels.Main
         #region Constructors
 
         [ImportingConstructor]
-        public HomePageViewModel(IDatabaseContext dbService, IPopupWindowService service)
+        public HomePageViewModel(IRecordContext<RecentCase> dbService, IPopupWindowService service)
         {
             MainFunDepict = Path.Combine(Environment.CurrentDirectory, "CacheData\\FunctionDepict\\首页-样图_03.png");
             Sub1FunDepict = Path.Combine(Environment.CurrentDirectory, "CacheData\\FunctionDepict\\首页-样图_05.png");
@@ -80,7 +80,7 @@ namespace XLY.SF.Project.ViewModels.Main
         /// <summary>
         /// 数据库服务
         /// </summary>
-        private IDatabaseContext _dbService;
+        private IRecordContext<RecentCase> _dbService;
 
         #endregion
 
@@ -105,7 +105,7 @@ namespace XLY.SF.Project.ViewModels.Main
         //加载最新创建案例
         private void LoadRecentCreationCaseItems()
         {
-            var @case = _dbService.RecentCases.OrderByDescending((t) => t.Timestamp).Take(10).ToModels<RecentCase, RecentCaseEntityModel>();
+            var @case = _dbService.Records.OrderByDescending((t) => t.Timestamp).Take(10).ToModels<RecentCase, RecentCaseEntityModel>();
             foreach (var item in @case)
             {
                 RecentCaseItems.Add(item);

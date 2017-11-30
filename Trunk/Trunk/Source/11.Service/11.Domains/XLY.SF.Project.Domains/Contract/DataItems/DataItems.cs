@@ -65,7 +65,7 @@ namespace XLY.SF.Project.Domains
             {
                 if (_providerInstance == null)
                 {
-                    _providerInstance = new SQLiteFilterDataProvider(DbFilePath, DbTableName);
+                    _providerInstance = new MultiSQLiteFilterDataProvider(DbFilePath, DbTableName) {  AttachedDatabase = DbBmkFilePath, AttachedDatabaseAliasName = SqliteDbFile.BookmarkAliasName };
                 }
                 return _providerInstance;
             }
@@ -102,8 +102,6 @@ namespace XLY.SF.Project.Domains
             _empty = new T[0];
         }
 
-     
-
         #endregion
 
         #region Properties
@@ -121,6 +119,7 @@ namespace XLY.SF.Project.Domains
         }
 
         public string DbFilePath { get; set; }
+        public string DbBmkFilePath => DbFilePath.Insert(DbFilePath.LastIndexOf('.'), "_bmk");
 
         public IFilterDataProvider Provider => _provider;
 
@@ -175,10 +174,28 @@ namespace XLY.SF.Project.Domains
             _filterView.Reset();
             _filterView.Args = args;
             _filterView.Initialize();
+            _filterView.NextPage();
             OnPropertyChanged("View");
             OnPropertyChanged("Count");
         }
 
+        public IEnumerable<T> ViewAll
+        {
+            get
+            {
+                if (_filterView.View == null)
+                    yield break;
+                _filterView.ResetCursor();
+                while(_filterView.NextPage())
+                {
+                    foreach (var item in View)
+                    {
+                        yield return item;
+                    }
+                }
+                yield break;
+            }
+        }
 
         #endregion
 

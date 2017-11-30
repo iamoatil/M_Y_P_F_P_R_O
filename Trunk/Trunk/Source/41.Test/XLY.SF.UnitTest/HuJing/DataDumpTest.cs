@@ -35,13 +35,15 @@ namespace XLY.SF.UnitTest
         [TestMethod]
         public void TestExecuteMethod(Pump pump, SourceFileItem source, MultiTaskReporterBase reporter, params ExtractItem[] items)
         {
-            DataPumpExecutionContext context = pump.Execute(source, reporter, items);
+            DataPumpBase dp = pump.GetDataPump();
+            DataPumpExecutionContext context = dp.Execute(source, reporter, items);
         }
 
         [TestMethod]
         public void TestCancelMethod(Pump pump, SourceFileItem source, MultiTaskReporterBase reporter, params ExtractItem[] items)
         {
-            DataPumpExecutionContext context = pump.Execute(source, reporter, items);
+            DataPumpBase dp = pump.GetDataPump();
+            DataPumpExecutionContext context = dp.Execute(source, reporter, items);
             context.Cancel();
         }
 

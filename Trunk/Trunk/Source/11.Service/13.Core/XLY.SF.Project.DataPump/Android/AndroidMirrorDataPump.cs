@@ -17,7 +17,7 @@ namespace XLY.SF.Project.DataPump.Android
     {
         #region Fields
 
-        private const String FileSystemDeviceKey = "fileSystemDevice";
+        private IFileSystemDevice _fsd;
 
         #endregion
 
@@ -26,7 +26,9 @@ namespace XLY.SF.Project.DataPump.Android
         /// <summary>
         /// 初始化类型 XLY.SF.Project.DataPump.Android.AndroidMirrorDataPump 实例。
         /// </summary>
-        public AndroidMirrorDataPump()
+        /// <param name="metadata">与此数据泵关联的元数据信息。</param>
+        public AndroidMirrorDataPump(Pump metadata)
+            : base(metadata)
         {
             FileService = new FileService();
         }
@@ -66,29 +68,27 @@ namespace XLY.SF.Project.DataPump.Android
         }
 
         /// <summary>
-        /// 初始化当前的执行流程。当执行该方法时，会获取镜像的文件系统信息。
+        /// 初始化数据泵。
         /// </summary>
-        /// <param name="context">执行上下文。</param>
         /// <returns>成功返回true；否则返回false。</returns>
-        protected sealed override Boolean InitExecution(DataPumpControllableExecutionContext context)
+        protected override Boolean InitializeCore()
         {
-            IFileSystemDevice device = CreateFileSystemDevice(context);
+            IFileSystemDevice device = CreateFileSystemDevice();
             if (device == null) return false;
-            context.SetContextData(FileSystemDeviceKey, device);
+            _fsd = device;
             return FileService.GetFileSystem(device, null) != null;
         }
 
         /// <summary>
         /// 创建实现了 IFileSystemDevice 接口的类型实例。
         /// </summary>
-        /// <param name="context">执行上下文。</param>
         /// <returns>实现了 IFileSystemDevice 接口的类型实例。</returns>
-        protected virtual IFileSystemDevice CreateFileSystemDevice(DataPumpControllableExecutionContext context)
+        protected virtual IFileSystemDevice CreateFileSystemDevice()
         {
             IFileSystemDevice device = new MirrorDevice
             {
-                Source = context.PumpDescriptor,
-                ScanModel = (Byte)context.PumpDescriptor.ScanModel
+                Source = Metadata,
+                ScanModel = (Byte)Metadata.ScanModel
             };
             return device;
         }

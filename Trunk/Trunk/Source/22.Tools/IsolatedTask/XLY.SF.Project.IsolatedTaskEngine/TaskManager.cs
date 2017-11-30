@@ -53,6 +53,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
             if (IsRuning) return;
             IsRuning = true;
             Task.Factory.StartNew(Dipatch, TaskCreationOptions.LongRunning);
+            TaskEngine.Logger.Info("Task manager started");
         }
 
         public void RequestStop()
@@ -64,6 +65,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
             {
                 _tasks.ForEach(x => x.Close());
             }
+            TaskEngine.Logger.Info("Task manager is stopping...");
         }
 
         #endregion
@@ -90,8 +92,13 @@ namespace XLY.SF.Project.IsolatedTaskEngine
                         _tasks.Add(newHandler);
                     }
                 }
+                else
+                {
+                    newHandler.Close();
+                }
             }
             IsRuning = false;
+            TaskEngine.Logger.Info("Task manager stopped.");
         }
 
         internal void ReleaseTask(TaskHandler sender)
@@ -102,6 +109,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
                 _tasks.Remove(sender);
             }
             _semaphore.Release();
+            TaskEngine.Logger.Info("Task manager recycle one handler.");
         }
 
         #endregion

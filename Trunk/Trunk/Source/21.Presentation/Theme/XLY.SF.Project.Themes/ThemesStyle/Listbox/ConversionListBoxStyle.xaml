@@ -196,5 +196,6 @@
         <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True"/>
         <Setter Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="True"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource conversionListBoxItemStyle}"/>
-    </Style>
+    </Style>    
+    
 </ResourceDictionary>

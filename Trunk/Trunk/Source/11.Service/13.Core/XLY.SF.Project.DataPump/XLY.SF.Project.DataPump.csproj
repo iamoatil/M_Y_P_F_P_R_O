@@ -82,6 +82,7 @@
     <Compile Include="DataPumpExecutionContext.cs" />
     <Compile Include="DataPumpControler.cs" />
     <Compile Include="DataPumpExtensions.cs" />
+    <Compile Include="InitAtExecutionDataPump.cs" />
     <Compile Include="IProcessStrategy.cs" />
     <Compile Include="IOS\IOSMirrorDataPump.cs" />
     <Compile Include="IOS\IOSUsbDataPump.cs" />

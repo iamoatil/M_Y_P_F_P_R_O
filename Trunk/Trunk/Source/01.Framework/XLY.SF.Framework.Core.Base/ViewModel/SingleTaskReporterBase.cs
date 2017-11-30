@@ -112,12 +112,14 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <summary>
         /// 报告完成。
         /// </summary>
-        public abstract void Finish();
+        /// <param name="message">消息。</param>
+        public abstract void Finish(String message = null);
 
         /// <summary>
         /// 报告停止。
         /// </summary>
-        public abstract void Stop();
+        /// <param name="message">消息。</param>
+        public abstract void Stop(String message = null);
 
         /// <summary>
         /// 报告失败。

@@ -17,6 +17,12 @@ namespace XLY.SF.Framework.Core.Base.CoreInterface
         /// <returns></returns>
         string OpenFileDialog(string filter = "案例项目文件|*.cp");
 
+        /// <summary>
+        /// 选择路径
+        /// </summary>
+        /// <returns></returns>
+        string SelectFolderDialog();
+
         #endregion
 
         #region 弹窗服务

@@ -28,7 +28,7 @@ namespace XLY.SF.Project.Plugin.DataView
         {
             var p = new DataViewPluginInfo() {
                 Guid = "432A5C38-4580-49BA-84CB-64C2BD98974A",
-                Name = "默认布局",
+                Name = Languagekeys.DefaultLayout,
                 ViewType = new List<DataViewSupportItem>(),
                 OrderIndex = 0,
                 PluginType = PluginType.SpfDataView

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -70,6 +71,11 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         #region Methods
 
         #region Public
+
+        /// <summary>
+        /// 日志记录器。
+        /// </summary>
+        public static ILog Logger { get; } = LogManager.GetLogger("SysLog");
 
         /// <summary>
         /// 开启。

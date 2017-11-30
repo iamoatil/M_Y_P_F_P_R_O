@@ -50,13 +50,10 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         #endregion
 
         #region 构造函数
-
-        /// <summary>
-        /// 创建ViewModel
-        /// </summary>
-        protected ViewModelBase()
+        
+        internal void SetViewID(Guid viewID)
         {
-            ViewModelID = Guid.NewGuid();
+            ViewModelID = viewID;
         }
 
         #endregion
@@ -117,7 +114,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// <summary>
         /// 接收参数
         /// </summary>
-        protected virtual void ReceiveParameters(object parameters)
+        public virtual void ReceiveParameters(object parameters)
         {
 
         }

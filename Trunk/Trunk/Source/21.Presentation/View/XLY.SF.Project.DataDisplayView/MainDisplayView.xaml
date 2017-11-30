@@ -11,98 +11,141 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <core:UcViewBase.Resources>
-        <theme:BooleanToCollapseConverter x:Key="boolToCollapseConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <theme:BooleanToCollapseConverter x:Key="boolToCollapseConverter"/>
+        </ResourceDictionary>
     </core:UcViewBase.Resources>
     <Grid>
         <Grid  Background="Transparent" Visibility="{Binding HasDataList, Converter={StaticResource boolToCollapseConverter}}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="310*"/>
-            <ColumnDefinition Width="1258*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="720*" MinHeight="70"/>
-            <RowDefinition Height="82*" MinHeight="70"/>
-        </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="310*"/>
+                <ColumnDefinition Width="1258*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="720*" MinHeight="70"/>
+                <RowDefinition Height="82*" MinHeight="50"/>
+            </Grid.RowDefinitions>
 
-        <!--数据过滤-->
-        <Border Grid.ColumnSpan="2" Height="60">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Offset="0" Color="#2b385a"/>
-                    <GradientStop Offset="1" Color="#2a3759"/>
-                </LinearGradientBrush>
-            </Border.Background>
-            <Border.Effect>
-                <DropShadowEffect Color="#181d3a" ShadowDepth="10" Direction="270" BlurRadius="20" Opacity="0.08"/>
-            </Border.Effect>
-            <local:DataFilterControl />
-        </Border>
+            <!--数据过滤-->
+            <Border Grid.ColumnSpan="2" Height="60">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Offset="0" Color="#2b385a"/>
+                        <GradientStop Offset="1" Color="#2a3759"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.Effect>
+                    <DropShadowEffect Color="#181d3a" ShadowDepth="10" Direction="270" BlurRadius="20" Opacity="0.08"/>
+                </Border.Effect>
+                <local:DataFilterControl />
+            </Border>
 
-        <!--数据列表-->
-        <ctrl:TreeViewEx x:Name="treeDataList" Background="#0FFFFFFF" Margin="20" BorderThickness="0"  Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding DataList}">
-            <ctrl:TreeViewEx.ItemContainerStyle>
-                <Style TargetType="ctrl:TreeViewItemEx" BasedOn="{StaticResource stTreeViewItem}">
-                    <Setter Property="IsItemStyle" Value="{Binding IsItemStyle}"></Setter>
-                </Style>
-            </ctrl:TreeViewEx.ItemContainerStyle>
-            <ctrl:TreeViewEx.ItemTemplate >
-                <HierarchicalDataTemplate  ItemsSource="{Binding Path=TreeNodes}">
-                    <TextBlock Text="{Binding Text}"  />
-                </HierarchicalDataTemplate>
-            </ctrl:TreeViewEx.ItemTemplate>
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectedItemChanged">
-                    <i:InvokeCommandAction Command="{Binding SelecedAppChanged}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctrl:TreeViewEx}}, Path=SelectedValue}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </ctrl:TreeViewEx>
-        <GridSplitter Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Stretch" Width="2" Background="Transparent"/>
+            <!--数据列表-->
+            <!--<ctrl:TreeViewEx x:Name="treeDataList" Background="#0FFFFFFF" Margin="20" BorderThickness="0"  Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding DataList}">
+                <ctrl:TreeViewEx.ItemContainerStyle>
+                    <Style TargetType="ctrl:TreeViewItemEx" BasedOn="{StaticResource stTreeViewItem}">
+                        <Setter Property="IsItemStyle" Value="{Binding IsItemStyle}"></Setter>
+                    </Style>
+                </ctrl:TreeViewEx.ItemContainerStyle>
+                <ctrl:TreeViewEx.ItemTemplate >
+                    <HierarchicalDataTemplate  ItemsSource="{Binding Path=TreeNodes}">
+                        <TextBlock Text="{Binding Text}"  />
+                    </HierarchicalDataTemplate>
+                </ctrl:TreeViewEx.ItemTemplate>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectedItemChanged">
+                        <i:InvokeCommandAction Command="{Binding SelecedAppChanged}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctrl:TreeViewEx}}, Path=SelectedValue}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ctrl:TreeViewEx>-->
+            <ctrl:ExpanderControl Background="#0FFFFFFF" Margin="20" BorderThickness="0"  Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" ItemsSource="{Binding DataList}">
+                <ctrl:ExpanderControl.HeaderTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Text}" Foreground="#9ba5b9"/>
+                            <TextBlock Text="(" Grid.Column="1" Foreground="#9ba5b9" FontFamily="{StaticResource OswaldBoldFont}"/>
+                            <TextBlock Text="{Binding Total}" Grid.Column="2" Foreground="#9ba5b9" FontFamily="{StaticResource OswaldBoldFont}"/>
+                            <TextBlock Text=")" Grid.Column="3" Foreground="#9ba5b9" FontFamily="{StaticResource OswaldBoldFont}"/>
+                            <Button Style="{StaticResource btn_TranIcon}" Margin="20 0" Grid.Column="4" Command="{Binding DataContext.DeleteDataCommond,RelativeSource={RelativeSource AncestorType={x:Type ctrl:ExpanderControl}}}" CommandParameter="{Binding Text}">
+                                <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/TreeViewDeleteIcon.png" Width="14" Height="14" Stretch="UniformToFill" />
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+                </ctrl:ExpanderControl.HeaderTemplate>
+                <ctrl:ExpanderControl.ContentTemplate>
+                    <DataTemplate>
+                        <TreeView BorderThickness="0" theme:AttachHelper.IsShowSelectedGripper="True"  theme:AttachHelper.IsShowCheckBox="False" theme:AttachHelper.IsHideUnCheckedNode="True" theme:AttachHelper.IsHideChildren="False" Background="Transparent" ItemsSource="{Binding TreeNodes}">
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding TreeNodes}">
+                                    <TextBlock Text="{Binding Text}"/>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectedItemChanged">
+                                    <i:InvokeCommandAction Command="{Binding DataContext.SelecedAppChanged,RelativeSource={RelativeSource AncestorType={x:Type ctrl:ExpanderControl}}}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeView}}, Path=SelectedValue}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TreeView>
+                    </DataTemplate>
+                </ctrl:ExpanderControl.ContentTemplate>
+            </ctrl:ExpanderControl>
+                                  
+            <GridSplitter Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Stretch" Width="2" Background="Transparent"/>
 
-        <!--自定义数据展示-->
-        <ctrl:TabControlWithButton x:Name="contentView" BorderThickness="1" BorderBrush="#3c4662" Margin="0 20 20 0" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}" Style="{StaticResource TabControlWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithButtonStyle1}" CustomButtonAlignment="Right" IsHideHeaderWhenEmpty="True" Visibility="{Binding HasData, Converter={StaticResource boolToCollapseConverter}}"></ctrl:TabControlWithButton>
-        <GridSplitter Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Height="2" VerticalAlignment="Bottom" Background="Transparent" Visibility="{Binding HasData, Converter={StaticResource boolToCollapseConverter}}"/>
-        
-        <!--自定义数据预览-->
-        <Border  BorderThickness="1" BorderBrush="#3c4662" Margin="0 2 20 20" Grid.Column="1" Grid.Row="2" Visibility="{Binding HasData, Converter={StaticResource boolToCollapseConverter}}">
-            <ctrl:TabControlWithButton x:Name="tabPreview" Style="{StaticResource TabControlFlatWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithButtonStyle1}" CustomButtonAlignment="Right" Padding="2">
-                <ctrl:TabControlWithButton.CustomButtonGroup>
-                    <Button x:Name="btnExpanded" Style="{StaticResource btn_GrayIcon}" Width="30" Height="24" Click="btnExpanded_Click">
-                        <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/grid_sort_asc.png" Width="13" Height="13"/>
-                    </Button>
-                </ctrl:TabControlWithButton.CustomButtonGroup>
+            <!--自定义数据展示-->
+            <ctrl:TabControlWithButton x:Name="contentView" BorderThickness="1" BorderBrush="#3c4662" Margin="0 20 20 0" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}" Style="{StaticResource TabControlWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithButtonStyle1}" CustomButtonAlignment="Right" IsHideHeaderWhenEmpty="True" Visibility="{Binding HasData, Converter={StaticResource boolToCollapseConverter}}"></ctrl:TabControlWithButton>
+            <GridSplitter Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" Height="2" VerticalAlignment="Bottom" Background="Transparent" Visibility="{Binding HasData, Converter={StaticResource boolToCollapseConverter}}"/>
 
-                <TabItem Header="基本属性"></TabItem>
-                <TabItem Header="16进制"></TabItem>
-            </ctrl:TabControlWithButton>
-        </Border>
-        
-        <!--数据为空时显示-->
-        <Border Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Visibility="{Binding HasData, Converter={StaticResource boolToCollapseConverter}, ConverterParameter=True}">
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock FontSize="30" Text="未提取到任何数据" Foreground="#9ba5b9" HorizontalAlignment="Center"></TextBlock>
-                <TextBlock FontSize="18" Text="请尝试其他方案" Foreground="#9ba5b9" HorizontalAlignment="Center"></TextBlock>
-            </StackPanel>
-        </Border>
-      
-        <!--正在筛选数据-->
-        <Grid Grid.ColumnSpan="2" Grid.RowSpan="3" Background="#0AFFFFFF" Visibility="{Binding IsFiltering, Converter={StaticResource boolToCollapseConverter}, ConverterParameter=False}">
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                <Button Style="{StaticResource loadingControlStyle}" Width="38" Height="58" HorizontalAlignment="Center"/>
-                <TextBlock FontSize="18" Text="正在查询数据..." Foreground="#9ba5b9" HorizontalAlignment="Center"></TextBlock>
-            </StackPanel>
+            <!--自定义数据预览-->
+            <Border  BorderThickness="1" BorderBrush="#3c4662" Margin="0 2 20 20" Grid.Column="1" Grid.Row="2" Visibility="{Binding HasData, Converter={StaticResource boolToCollapseConverter}}">
+                <!--<ctrl:TabControlWithButton x:Name="tabPreview" Style="{StaticResource TabControlFlatWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithButtonStyle1}" CustomButtonAlignment="Right" Padding="2">
+                    <ctrl:TabControlWithButton.CustomButtonGroup>
+                        <Button x:Name="btnExpanded" Style="{StaticResource btn_GrayIcon}" Width="30" Height="24" Click="btnExpanded_Click">
+                            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/grid_sort_asc.png" Width="13" Height="13"/>
+                        </Button>
+                    </ctrl:TabControlWithButton.CustomButtonGroup>
+
+                    <TabItem Header="基本属性"></TabItem>
+                    <TabItem Header="16进制"></TabItem>
+                </ctrl:TabControlWithButton>-->
+                <ContentControl x:Name="preView"/>
+            </Border>
+
+            <!--数据为空时显示-->
+            <Border Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Visibility="{Binding HasData, Converter={StaticResource boolToCollapseConverter}, ConverterParameter=True}">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock FontSize="30" Text="{local:Lang Key=TipNoData}" Foreground="#9ba5b9" HorizontalAlignment="Center"></TextBlock>
+                    <TextBlock FontSize="18" Text="{local:Lang Key=TipNoData2}" Foreground="#9ba5b9" HorizontalAlignment="Center"></TextBlock>
+                </StackPanel>
+            </Border>
+
+            <!--正在筛选数据-->
+            <Grid Grid.ColumnSpan="2" Grid.RowSpan="3" Background="#0AFFFFFF" Visibility="{Binding IsFiltering, Converter={StaticResource boolToCollapseConverter}, ConverterParameter=False}">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                    <Button Style="{StaticResource loadingControlStyle}" Width="38" Height="58" HorizontalAlignment="Center"/>
+                    <TextBlock FontSize="18" Text="{Binding CurrentOperation}" Foreground="#9ba5b9" HorizontalAlignment="Center"></TextBlock>
+                </StackPanel>
+            </Grid>
+
         </Grid>
-      
-    </Grid>
         <Grid>
             <!--数据列表为空时显示-->
             <Border Visibility="{Binding HasDataList, Converter={StaticResource boolToCollapseConverter}, ConverterParameter=True}">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock FontSize="30" Text="当前没有数据" Foreground="#9ba5b9" HorizontalAlignment="Center"></TextBlock>
-                    <TextBlock FontSize="18" Text="请尝试其他方案" Foreground="#9ba5b9" HorizontalAlignment="Center"></TextBlock>
+                    <TextBlock FontSize="30" Text="{local:Lang Key=TipNoData}" Foreground="#9ba5b9" HorizontalAlignment="Center"></TextBlock>
                 </StackPanel>
             </Border>
-
         </Grid>
     </Grid>
 

@@ -11,6 +11,15 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
     /// </summary>
     internal interface ITaskActivator : IDisposable
     {
+        #region Properites
+
+        /// <summary>
+        /// 激活器唯一标识。
+        /// </summary>
+        Guid ActivatorToken { get; }
+
+        #endregion
+
         #region Methods
 
         /// <summary>

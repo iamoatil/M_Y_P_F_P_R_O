@@ -5,6 +5,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Windows.Input;
 using XLY.SF.Framework.Core.Base.ViewModel;
+using XLY.SF.Project.CaseManagement;
 using XLY.SF.Project.Models;
 using XLY.SF.Project.Models.Entities;
 using XLY.SF.Project.Models.Logical;
@@ -27,8 +28,8 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         #region Properties
 
-        [Import(typeof(IDatabaseContext))]
-        private IDatabaseContext DbService { get; set; }
+        [Import(typeof(IRecordContext<RecentCase>))]
+        private IRecordContext<RecentCase> DbService { get; set; }
 
         public RecentCaseEntityModel SelectedItem { get; set; }
 
@@ -68,7 +69,8 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         protected override void InitLoad(Object parameters)
         {
-            Cases = DbService.RecentCases.OrderByDescending(x => x.Timestamp).ToModels<RecentCase, RecentCaseEntityModel>().ToArray();
+            Case owner = (Case)parameters;
+            Cases = DbService.Records.Where(x => x.CaseID != owner.CaseInfo.Id).OrderByDescending(x => x.Timestamp).ToModels<RecentCase, RecentCaseEntityModel>().ToArray();
         }
 
         #endregion
@@ -77,12 +79,12 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         private void Confirm()
         {
+            DialogResult = true;
             CloseView();
         }
 
         private void Cancel()
         {
-            SelectedItem = null;
             CloseView();
         }
 

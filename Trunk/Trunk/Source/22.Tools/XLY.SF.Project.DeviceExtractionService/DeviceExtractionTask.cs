@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net.Repository.Hierarchy;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -43,6 +44,7 @@ namespace XLY.SF.Project.DeviceExtractionService
 
         public override Boolean Launch()
         {
+            Logger.Info($"Activator {ActivatorToken} launched");
             return true;
         }
 
@@ -70,6 +72,7 @@ namespace XLY.SF.Project.DeviceExtractionService
         {
             base.Dispose(isDisposing);
             _controler.Stop();
+            Logger.Info($"Activator {ActivatorToken} is stopping...");
         }
 
         #endregion
@@ -79,8 +82,14 @@ namespace XLY.SF.Project.DeviceExtractionService
         private void _reporter_Terminated(object sender, TaskTerminateEventArgs e)
         {
             SendMessage(ExtractionCode.Terminate, e);
+            if (e.IsFailed)
+            {
+                Logger.Error($"Activator {ActivatorToken}--Task {e.TaskId}: {e.Exception}");
+            }
+            Logger.Info($"Activator {ActivatorToken}--Task {e.TaskId} terminated: [IsCompleted]{e.IsCompleted},[IsFailed]{e.IsFailed}");
             if (_controler.IsBusy) return;
             OnTerminateActivator(new TaskOverEventArgs());
+            Logger.Info($"Activator {ActivatorToken} terminated");
         }
 
         private void _reporter_ProgressChanged(object sender, TaskProgressEventArgs e)
@@ -94,6 +103,7 @@ namespace XLY.SF.Project.DeviceExtractionService
             Pump pump = @params.Pump;
             if (pump != null && @params.Items.Length != 0)
             {
+                Logger.Info($"Pump:[EnumOSType]{pump.OSType},[SavePath]{pump.SavePath},[Type]{pump.Type},[ScanModel]{pump.ScanModel},[Solution]{String.Format("0x{0:X}", (Int32)pump.Solution)}");
                 _controler.Start(@params.Pump, @params.Items);
                 OnSend(message.CreateResponse(true));
             }
@@ -106,6 +116,7 @@ namespace XLY.SF.Project.DeviceExtractionService
         private void SendMessage(ExtractionCode code,Object obj)
         {
             Message message = new Message((Int32)code);
+            Logger.DebugFormat("Send message:[Code]{0},[Token]{1}", message.Code, message.Token);
             if (obj != null)
             {
                 message.SetContent(obj);

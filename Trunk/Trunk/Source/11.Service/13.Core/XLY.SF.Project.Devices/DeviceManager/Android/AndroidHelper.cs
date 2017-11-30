@@ -759,7 +759,7 @@ namespace XLY.SF.Project.Devices
 
                     if (phoneType == "CDMA")
                     {
-                        device.IMEI = deviceId.Substring(0, 14);
+                        device.IMEI = deviceId.Substring(0, 15);
                     }
                     else
                     {
@@ -770,7 +770,7 @@ namespace XLY.SF.Project.Devices
             catch (Exception exception)
             {
 #if DEBUG
-                LoggerManagerSingle.Instance.Error(exception, "");
+                LoggerManagerSingle.Instance.Error(exception, "GetIMEINumber Error");
 #endif
             }
 
@@ -782,7 +782,7 @@ namespace XLY.SF.Project.Devices
             if (!string.IsNullOrWhiteSpace(meidKey))
             {
                 var v = device.Properties[meidKey];
-                var len = v.Length > 14 ? 14 : 0;
+                var len = v.Length >= 15 ? 15 : 0;
                 device.IMEI = v.Substring(0, len);
                 return;
             }
@@ -790,9 +790,9 @@ namespace XLY.SF.Project.Devices
             foreach (var imeiKey in device.Properties.Keys.Where(key => key.Contains(imei, StringComparison.OrdinalIgnoreCase)))
             {
                 var v = device.Properties[imeiKey];
-                if (v.Length > 14)
+                if (v.Length >= 15)
                 {
-                    device.IMEI = v.Substring(0, 14);
+                    device.IMEI = v.Substring(0, 15);
                     return;
                 }
             }
@@ -818,6 +818,81 @@ namespace XLY.SF.Project.Devices
                     return;
                 }
             }
+        }
+
+        #endregion
+
+        #region GetDiskCapacityInfo
+
+        /// <summary>
+        /// 获取安卓手机内存容量信息
+        /// </summary>
+        /// <param name="device"></param>
+        public void GetDiskCapacityInfo(Device device)
+        {
+            try
+            {
+                var receiver = new DefaultReceiver();
+                ExecuteRemoteAutoCommand("df", device, receiver);
+                var res = receiver.Data.Replace("\r\n", ";").Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+
+                device.TotalDiskCapacity = 0;
+                device.TotalDiskAvailable = 0;
+                device.TotalDataCapacity = 0;
+                device.TotalDataAvailable = 0;
+
+                foreach (var line in res.Skip(1))//第一行是列头，直接跳过
+                {
+                    var dataArr = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (dataArr.Length != 5)
+                    {
+                        continue;
+                    }
+
+                    var name = dataArr[0];
+                    var size = GetUInt64FromString(dataArr[1]);
+                    var free = GetUInt64FromString(dataArr[3]);
+
+                    if (name.ToLower().EndsWith("sdcard") || name.ToLower().EndsWith("sdcard1"))
+                    {//SD卡
+                        device.TotalDataCapacity += size;
+                        device.TotalDataAvailable += free;
+                    }
+                    else
+                    {//手机
+                        device.TotalDiskCapacity += size;
+                        device.TotalDiskAvailable += free;
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+#if DEBUG
+                LoggerManagerSingle.Instance.Error(exception, "GetDiskCapacityInfo Error");
+#endif
+            }
+        }
+
+        private UInt64 GetUInt64FromString(string val)
+        {
+            UInt64 beishu = 0;
+            if (val.EndsWith("K"))
+            {
+                beishu = 1024;
+                val = val.Substring(0, val.Length - 1);
+            }
+            else if (val.EndsWith("M"))
+            {
+                beishu = 1024 * 1024;
+                val = val.Substring(0, val.Length - 1);
+            }
+            else if (val.EndsWith("G"))
+            {
+                beishu = 1024 * 1024 * 1024;
+                val = val.Substring(0, val.Length - 1);
+            }
+
+            return (UInt64)Math.Round(double.Parse(val) * beishu);
         }
 
         #endregion

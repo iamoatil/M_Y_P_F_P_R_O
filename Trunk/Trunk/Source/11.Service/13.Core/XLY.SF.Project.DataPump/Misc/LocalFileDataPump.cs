@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using XLY.SF.Framework.BaseUtility;
+using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.DataPump.Misc
 {
@@ -16,6 +13,22 @@ namespace XLY.SF.Project.DataPump.Misc
         #region Fields
 
         private IProcessControllableStrategy _strategy;
+
+        private String _destPath;
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// 初始化类型 XLY.SF.Project.DataPump.Misc.LocalFileDataPump 实例。
+        /// </summary>
+        /// <param name="metadata">与此数据泵关联的元数据信息。</param>
+        public LocalFileDataPump(Pump metadata)
+            : base(metadata)
+        {
+
+        }
 
         #endregion
 
@@ -29,21 +42,34 @@ namespace XLY.SF.Project.DataPump.Misc
             _strategy.Process(context);
         }
 
-        protected override Boolean InitExecution(DataPumpControllableExecutionContext context)
+        /// <summary>
+        /// 初始化执行上下文。
+        /// </summary>
+        /// <param name="context">执行上下文。</param>
+        /// <returns>成功返回true；否则返回false。</returns>
+        protected override Boolean InitExecutionContext(DataPumpControllableExecutionContext context)
         {
-            String destPath = context.TargetDirectory;
-            if (String.IsNullOrWhiteSpace(destPath)) return false;
-
             String sourcePath = context.Source.ToSafeString();
             if (sourcePath == String.Empty || !Directory.Exists(sourcePath)) return false;
+            context.SetContextData("sourcePath", sourcePath);
+            return true;
+        }
+
+        /// <summary>
+        /// 初始化数据泵。
+        /// </summary>
+        /// <returns>成功返回true；否则返回false。</returns>
+        protected override Boolean InitializeCore()
+        {
+            String destPath = Metadata.SourceStorePath;
+            if (String.IsNullOrWhiteSpace(destPath)) return false;
 
             if (!Directory.Exists(destPath))
             {
                 Directory.CreateDirectory(destPath);
             }
 
-            context.SetContextData("destPath", destPath);
-            context.SetContextData("sourcePath", sourcePath);
+            _destPath = destPath;
             return true;
         }
 

@@ -16,6 +16,7 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// 手机采集的基本信息(导出时）
     /// </summary>
+    [Serializable]
     public class ExportCollectionInfo
     {
         /// <summary>
@@ -87,5 +88,14 @@ namespace XLY.SF.Project.Domains
         /// 此采集设备的制造商的厂商组织机构代码，673536061
         /// </summary>
         public string ManufacturerCode => "673536061";
+
+        #region 新增
+
+        /// <summary>
+        /// 检材编号
+        /// </summary>
+        public string DataNo { get; set; }
+
+        #endregion
     }
 }

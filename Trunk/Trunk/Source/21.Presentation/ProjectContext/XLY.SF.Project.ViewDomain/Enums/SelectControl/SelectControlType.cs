@@ -19,9 +19,5 @@ namespace XLY.SF.Project.ViewDomain.Enums
         /// 选择路径
         /// </summary>
         SelectFolder,
-        /// <summary>
-        /// 保存文件
-        /// </summary>
-        SaveFile
     }
 }

@@ -37,6 +37,11 @@ namespace XLY.SF.Project.Plugin.DataView
             }
         }
 
+        /// <summary>
+        /// 选择了某个联系人，在右侧显示对话
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void lsb1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             DataViewPluginArgument arg = lsb1.DataContext as DataViewPluginArgument;
@@ -48,15 +53,11 @@ namespace XLY.SF.Project.Plugin.DataView
             {
                 return ;
             }
-            var selNode = nodes.TreeNodes.FirstOrDefault(t => t.Text == accout.Nick);
+            var selNode = nodes.TreeNodes.FirstOrDefault(t => t.Text == accout.Nick);   //获取选择的好友
             var views = DataViewPluginAdapter.Instance.GetView(arg.DataSource.PluginInfo.Guid, selNode.Type, new DataViewConfigure() { IsDefaultGridViewVisibleWhenMultiviews = true });
             tbdetail.Items.Clear();
-            foreach (var v in views)
+            foreach (var v in views)    //生成消息列表显示视图列表
             {
-                if(v.PluginInfo.Name == "消息视图")
-                {
-                    continue;
-                }
                 v.SelectedDataChanged += OnSelectedDataChanged;
                 tbdetail.Items.Add(v.ToControl(new DataViewPluginArgument() { CurrentData = selNode, DataSource = arg.DataSource }));
             }
@@ -65,24 +66,4 @@ namespace XLY.SF.Project.Plugin.DataView
             OnSelectedDataChanged?.Invoke(lsb1.SelectedValue);
         }
     }
-
-    public class TreeNodeSelectMultiConverter : IMultiValueConverter
-    {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        {
-            WeChatFriendShow accout = values[0] as WeChatFriendShow;
-            TreeNode nodes = values[1] as TreeNode;
-            if(accout == null || nodes == null)
-            {
-                return null;
-            }
-            return nodes.TreeNodes.FirstOrDefault(t => t.Text == accout.Nick);
-        }
-
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
 }

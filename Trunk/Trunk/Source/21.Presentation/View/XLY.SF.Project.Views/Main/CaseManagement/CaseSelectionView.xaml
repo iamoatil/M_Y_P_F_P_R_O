@@ -7,7 +7,10 @@
                  xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                  xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-                 mc:Ignorable="d" Title="移动到...">
+                 mc:Ignorable="d" 
+                 Width="420"
+                 Height="440"
+                 Title="{Binding XPath=DeviceLanguage/Device_Move,Source={x:Static ex:SystemContext.LanguageProvider}}">
     <core:UcViewBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,29 +21,34 @@
 
         </ResourceDictionary>
     </core:UcViewBase.Resources>
-    <Border>
-        <Grid Margin="10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="5" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="5" />
-                <RowDefinition Height="40" />
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Foreground="Black"
-                       Text="请选择要移动到的案例（移动过程可能需要较长时间）" />
-            <ListBox Grid.Row="2" MinHeight="300" MinWidth="450"
-                     ItemsSource="{Binding Cases}"
-                     SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
-                     DisplayMemberPath="Name" />
-            <StackPanel Grid.Row="4"
-                        HorizontalAlignment="Center"
-                        Orientation="Horizontal">
-                <Button Content="确定" 
-                        Command="{Binding ConfirmCommand}" />
-                <Button Content="取消"
-                        Command="{Binding CancelCommand}" />
-            </StackPanel>
-        </Grid>
-    </Border>
+    <Grid Margin="20,0,20,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="1"
+                   Text="{Binding XPath=DeviceLanguage/Device_Move_Description,Source={x:Static ex:SystemContext.LanguageProvider}}" />
+        <ListBox Grid.Row="3"
+                 ItemsSource="{Binding Cases}"
+                 SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
+                 DisplayMemberPath="Name" />
+        <StackPanel Grid.Row="5"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+            <Button Width="100"
+                    Height="30"
+                    Content="{Binding XPath=DeviceLanguage/Device_Confirm,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                    Command="{Binding ConfirmCommand}" />
+            <Button Width="100"
+                    Height="30"
+                    Margin="20,0,0,0"
+                    Content="{Binding XPath=DeviceLanguage/Device_Cancel,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                    Command="{Binding CancelCommand}" />
+        </StackPanel>
+    </Grid>
 </core:UcViewBase>

@@ -78,7 +78,7 @@ namespace XLY.SF.Project.DataFilter.Providers
                 DefaultValueCache = new Dictionary<Type, String>();
             }
 
-            internal DbEnumerableDataReader(DbDataReader reader)
+            public DbEnumerableDataReader(DbDataReader reader)
             {
                 _reader = reader ?? throw new ArgumentNullException("reader");
                 _temp = new Dictionary<String, String>();

@@ -123,8 +123,28 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
+    
+    <!--#region 选中后右上角带勾-->
+    <ControlTemplate x:Key="ToggleBtnWithFile_Ct" TargetType="{x:Type ToggleButton}">
+        <Border x:Name="br" CornerRadius="13.5" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="Transparent">
+            <Grid>
+                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                <Image x:Name="img_Checked" Visibility="Collapsed" Source="Mirror_Checked.png" Width="38" Height="38" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="#657192" TargetName="br"/>
+                <Setter Property="Background" Value="#14FFFFFF" TargetName="br"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Visibility" Value="Visible" TargetName="img_Checked"/>
+                <Setter Property="BorderBrush" Value="#379be6" TargetName="br"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    
+    <!--#endregion-->
 
 
 
@@ -234,4 +254,62 @@
         </Style.Triggers>
     </Style>
 
+
+    <!--树节点展开状态按钮-->
+    <Style x:Key="tb_treeItemExpand" TargetType="ToggleButton">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Width" Value="10"/>
+        <Setter Property="Height" Value="10"/>
+        <Setter Property="Background" Value="Red"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template" Value="{DynamicResource tlbtn_NullCt}"/>
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="False">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/TreeViewExpandIcon.png"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/TreeViewPutIcon.png"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--导出树节点展开状态按钮-->
+    <Style x:Key="dc_treeItemExpand" TargetType="ToggleButton">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Width" Value="10"/>
+        <Setter Property="Height" Value="10"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template" Value="{DynamicResource tlbtn_NullCt}"/>
+        <Style.Triggers>
+            <Trigger Property="IsChecked" Value="False">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/TreeViewExportExpandIcon.png"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="{x:Null}">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/TreeViewExportExpandIcon.png"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/TreeViewExportPutIcon.png"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

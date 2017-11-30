@@ -1,0 +1,63 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ctrl="clr-namespace:XLY.SF.Project.Themes.CustromControl"
+                    xmlns:local="clr-namespace:XLY.SF.Project.Themes"
+                    xmlns:ee="http://schemas.microsoft.com/expression/2010/effects">
+
+    <!--Expand标题头展示-->
+    <Style x:Key="expanderHeaderStyle" TargetType="CheckBox">
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="#9ba5b9"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Height" Value="70"/>
+        <Setter Property="Margin" Value="0 0 0 -1"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template" >
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Border BorderBrush="#1F273F" BorderThickness="0 1 0 1" Background="{TemplateBinding Background}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter x:Name="cp" VerticalAlignment="Center" Margin="20 0 0 0" />
+                            <!--<Image x:Name="img" Source="Image/jg_103.png" Margin="20 0" Width="14" Height="14" Stretch="UniformToFill" Grid.Column="1"/>-->
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Effect" TargetName="cp">
+                                <Setter.Value>
+                                    <ee:EmbossedEffect Color="White"></ee:EmbossedEffect>
+                                </Setter.Value>
+                            </Setter>
+                            <!--<Setter Property="Effect" TargetName="img">
+                                <Setter.Value>
+                                    <ee:EmbossedEffect Color="White"></ee:EmbossedEffect>
+                                </Setter.Value>
+                            </Setter>-->
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--Expand控件-->
+    <Style TargetType="{x:Type ctrl:ExpanderControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ctrl:ExpanderControl}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid x:Name="PART_Layout"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+</ResourceDictionary>

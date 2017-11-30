@@ -1,0 +1,56 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:XLY.SF.Project.Themes.CustromControl">
+
+    <Style x:Key="hexContent" TargetType="TextBox">
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="IsEnabled" Value="False"/>
+        <Setter Property="FontFamily" Value="Courier New"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Padding" Value="5 2"/>
+        <Setter Property="BorderThickness" Value="0 0 1 0"/>
+    </Style>
+    
+    <Style x:Key="hexTitle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontFamily" Value="Courier New"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    
+    <!--16进制查看器样式-->
+    <Style TargetType="{x:Type local:HexViewer}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:HexViewer}">
+                    <Grid x:Name="PART_Container">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="OFFSET" HorizontalAlignment="Center"  Style="{StaticResource hexTitle}"/>
+                        <TextBlock Text=" 0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F " Grid.Column="1" Margin="5 0 0 0"  HorizontalAlignment="Left" Style="{StaticResource hexTitle}" />
+
+                        <TextBox Grid.Row="1" x:Name="PART_Line" Grid.Column="0" Style="{StaticResource hexContent}"></TextBox>
+                        <TextBox Grid.Row="1" x:Name="PART_Byte" Grid.Column="1" Style="{StaticResource hexContent}"></TextBox>
+                        <TextBox Grid.Row="1" x:Name="PART_Text" Grid.Column="2" Style="{StaticResource hexContent}" BorderThickness="0"></TextBox>
+
+                        <ScrollBar x:Name="PART_Scroll" Grid.Row="1" Grid.Column="3" Orientation="Vertical" Visibility="Visible" HorizontalAlignment="Right" SmallChange="16" LargeChange="16"/>
+
+                        <ComboBox x:Name="PART_Encoding" Grid.Row="2" Grid.Column="2" Margin="0 10"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

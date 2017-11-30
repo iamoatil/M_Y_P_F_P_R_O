@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.DataPump.Misc
 {
@@ -11,6 +12,20 @@ namespace XLY.SF.Project.DataPump.Misc
     /// </summary>
     public class SimCardDataPump : DataPumpBase
     {
+        #region Constructors
+
+        /// <summary>
+        /// 初始化类型 XLY.SF.Project.DataPump.SimCardDataPump 实例。
+        /// </summary>
+        /// <param name="metadata">与此数据泵关联的元数据信息。</param>
+        public SimCardDataPump(Pump metadata)
+            : base(metadata)
+        {
+
+        }
+
+        #endregion
+
         #region Methods
 
         #region Protected
