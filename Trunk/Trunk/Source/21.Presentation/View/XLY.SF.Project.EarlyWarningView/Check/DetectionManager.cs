@@ -58,13 +58,13 @@ namespace XLY.SF.Project.EarlyWarningView
         public SqlFile SqlFile { get { return _sqlFile; } }
         SqlFile _sqlFile = new SqlFile();
 
-        public ConfigDbManager ConfigDbManager { get { return _configDbManager; } }
-        ConfigDbManager _configDbManager = new ConfigDbManager();
+        public ConfigDataToDB ConfigDbManager { get { return _configDbManager; } }
+        ConfigDataToDB _configDbManager = new ConfigDataToDB();
 
         /// <summary>
         /// 基础数据管理
         /// </summary>
-        public readonly ConfigDataManager ConfigDataManager = new ConfigDataManager();
+        public readonly ConfigDataFilter ConfigDataManager = new ConfigDataFilter();
 
         /// <summary>
         /// 检测
@@ -72,12 +72,13 @@ namespace XLY.SF.Project.EarlyWarningView
         [MethodImpl(MethodImplOptions.Synchronized)]
         public void Detect()
         {
+            //SqlFile.Initialize();
             DeviceDataParser parser = new DeviceDataParser();
             parser.LoadDeviceData();
-            List<DeviceDataSource> dataSources =parser.DataSources;
+            List<DeviceDataSource> dataSources = parser.DataSources;
 
             ConfigDataManager.UpdateValidateData();
-            ConfigDbManager.GenerateDbFile(ConfigDataManager.ValidateDataNodes.Select(it =>it.SensitiveData));
+            ConfigDbManager.GenerateDbFile(ConfigDataManager.ValidateDataNodes.Select(it => it.SensitiveData));
             foreach (var item in dataSources)
             {
                 Match(item, ConfigDataManager.ValidateDataNodes);
@@ -100,7 +101,7 @@ namespace XLY.SF.Project.EarlyWarningView
             {
                 return;
             }
-
+           
             string dir = Path.GetDirectoryName(Path.GetDirectoryName(ds.DsFilePath));
             string extactionName = dir.Substring(dir.LastIndexOf("\\") + 1);
 

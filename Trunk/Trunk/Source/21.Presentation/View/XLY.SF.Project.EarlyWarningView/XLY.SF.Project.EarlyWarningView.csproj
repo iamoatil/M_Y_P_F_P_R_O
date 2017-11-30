@@ -78,8 +78,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Check\Helper.cs" />
-    <Compile Include="ConfigData\ConfigDataManager.cs" />
-    <Compile Include="ConfigData\ConfigDbManager.cs" />
+    <Compile Include="ConfigData\ConfigDataFilter.cs" />
+    <Compile Include="ConfigData\ConfigDataToDB.cs" />
     <Compile Include="ConfigData\ConfigFile.cs" />
     <Compile Include="ConfigData\ConfigNode.cs" />
     <Compile Include="ConstDefinition.cs" />

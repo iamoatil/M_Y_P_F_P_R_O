@@ -11,11 +11,11 @@ using System.Linq;
 namespace XLY.SF.Project.EarlyWarningView
 {
     /// <summary>
-    /// 配置文件管理
+    /// 配置文件过滤
     /// 原型图上有5种RootNode，此处把这5种直接预定义与此类中，放在RootNodeManager中，并且只读取这5中类型的数据到相应的节点下configFile.GetAllData(_rootNodeManager)。
     /// 根据配置文件更新有效数据的逻辑为把RootNodeManager中的数据放到名为ValidateDataNodes的列表中
     /// </summary>
-    class ConfigDataManager
+    class ConfigDataFilter
     {
         private readonly RootNodeManager _rootNodeManager = new RootNodeManager();       
 

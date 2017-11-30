@@ -18,8 +18,12 @@ namespace XLY.SF.Project.EarlyWarningView
 {
     class SqlFile
     {
+        /// <summary>
+        /// 是否已经初始化。对象要初始化后才能使用
+        /// </summary>
+        private bool _isInitialized;
 
-        private string _path  ;
+        private string _path;
         private string _bookMarkPath;
 
         SQLiteConnection _dbConnection;
@@ -27,15 +31,8 @@ namespace XLY.SF.Project.EarlyWarningView
         public SqlFile()
         {
             _path = Path.GetFullPath("EarlyWarning");
-            _bookMarkPath = Path.GetFullPath("EarlyWarningBookMark");
-
-           Create(_path);
-           Create(_bookMarkPath);
-            _dbConnection = new SQLiteConnection(string.Format("Data Source={0}", _path));
-            _dbConnection.Open();
-            _dbBookMarkConnection = new SQLiteConnection(string.Format("Data Source={0}", _bookMarkPath));
-            _dbBookMarkConnection.Open();
-        }        
+            _bookMarkPath = Path.GetFullPath("EarlyWarningBookMark");           
+        }
 
         private void Create(string path)
         {
@@ -46,11 +43,11 @@ namespace XLY.SF.Project.EarlyWarningView
                 {
                     Directory.CreateDirectory(dir);
                 }
-                SQLiteConnection.CreateFile(path);               
-            }           
+                SQLiteConnection.CreateFile(path);
+            }
         }
 
-        public void CreateTable(IEnumerable<string> colunms,string tableName)
+        public void CreateTable(IEnumerable<string> colunms, string tableName)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendFormat("CREATE TABLE IF NOT EXISTS {0}(", tableName);
@@ -59,13 +56,33 @@ namespace XLY.SF.Project.EarlyWarningView
             foreach (var col in colunms)
             {
                 sb.AppendFormat(",'{0}' TEXT", col);
-            }            
+            }
 
             sb.Append(");");
 
             SQLiteCommand command = new SQLiteCommand(sb.ToString(), _dbConnection);
             command.ExecuteNonQuery();
         }
+
+        /// <summary>
+        /// 对象要初始化后才能使用
+        /// </summary>
+        /// <returns></returns>
+        public bool Initialize()
+        {
+            _isInitialized = false;
+
+            Create(_path);
+            Create(_bookMarkPath);
+            _dbConnection = new SQLiteConnection(string.Format("Data Source={0}", _path));
+            _dbConnection.Open();
+            _dbBookMarkConnection = new SQLiteConnection(string.Format("Data Source={0}", _bookMarkPath));
+            _dbBookMarkConnection.Open();
+
+            _isInitialized = true;
+            return _isInitialized;
+        }
+
         /// <summary>
         /// 把被标记的数据写到路径为_bookMarkPath的数据库中
         /// </summary>
@@ -88,13 +105,17 @@ namespace XLY.SF.Project.EarlyWarningView
         /// </summary>
         internal void WriteResult(IEnumerable<dynamic> result, AbstractDataSource dataSource)
         {
+            if(!_isInitialized)
+            {
+                return;
+            }
             string tableName = dataSource.Items.DbTableName;
             SQLFilterDataProvider.DbEnumerableDataReader<object> lst = (SQLFilterDataProvider.DbEnumerableDataReader<object>)result;
-            List<string> cols = lst.Columns.Select(it => it.Key).Where(it =>it != SqliteDbFile.KeyColumnName).ToList();
+            List<string> cols = lst.Columns.Select(it => it.Key).Where(it => it != SqliteDbFile.KeyColumnName).ToList();
             CreateTable(cols, tableName);
 
             Type type = (Type)dataSource.Type;
-            PropertyInfo[] proInfos=type.GetProperties();
+            PropertyInfo[] proInfos = type.GetProperties();
             Dictionary<string, PropertyInfo> proDic = new Dictionary<string, PropertyInfo>();
             foreach (var item in proInfos)
             {
@@ -109,10 +130,10 @@ namespace XLY.SF.Project.EarlyWarningView
                         && customAtrrs.ElementAt(0).NamedArguments.Count() > 0)
                     {
                         string display = customAtrrs.ElementAt(0).NamedArguments[0].TypedValue.ToString();
-                        if(cols.Contains(display))
+                        if (cols.Contains(display))
                         {
                             proDic.Add(display, item);
-                        }                        
+                        }
                         continue;
                     }
                 }

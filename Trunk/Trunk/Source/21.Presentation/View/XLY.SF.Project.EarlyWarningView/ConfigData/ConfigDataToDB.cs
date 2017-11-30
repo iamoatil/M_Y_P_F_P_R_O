@@ -16,7 +16,7 @@ namespace XLY.SF.Project.EarlyWarningView
     /// <summary>
     /// 把配置文件转换成sqlite数据文件作为数据源
     /// </summary>
-    class ConfigDbManager
+    class ConfigDataToDB
     {
         /// <summary>
         /// 配置文件所在目录
