@@ -16,24 +16,32 @@ using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    class SqlFile
+    class EarlyWarningSqlDb:IDisposable
     {
         /// <summary>
         /// 是否已经初始化。对象要初始化后才能使用
         /// </summary>
         private bool _isInitialized;
 
+        /// <summary>
+        /// 数据库文件的路径
+        /// </summary>
         private string _path;
-        private string _bookMarkPath;
 
+        /// <summary>
+        /// 数据库的连接
+        /// </summary>
         SQLiteConnection _dbConnection;
-        SQLiteConnection _dbBookMarkConnection;
-        public SqlFile()
+
+        public EarlyWarningSqlDb()
         {
-            _path = Path.GetFullPath("EarlyWarning");
-            _bookMarkPath = Path.GetFullPath("EarlyWarningBookMark");           
+            _path = Path.GetFullPath("EarlyWarning");         
         }
 
+        /// <summary>
+        /// 创建数据库文件
+        /// </summary>
+        /// <param name="path"></param>
         private void Create(string path)
         {
             if (!File.Exists(path))
@@ -47,7 +55,12 @@ namespace XLY.SF.Project.EarlyWarningView
             }
         }
 
-        public void CreateTable(IEnumerable<string> colunms, string tableName)
+        /// <summary>
+        /// 创建指定了列的Table
+        /// </summary>
+        /// <param name="colunms"></param>
+        /// <param name="tableName"></param>
+        private void CreateTable(IEnumerable<string> colunms, string tableName)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendFormat("CREATE TABLE IF NOT EXISTS {0}(", tableName);
@@ -68,53 +81,33 @@ namespace XLY.SF.Project.EarlyWarningView
         /// 对象要初始化后才能使用
         /// </summary>
         /// <returns></returns>
-        public bool Initialize()
+        internal bool Initialize()
         {
             _isInitialized = false;
 
             Create(_path);
-            Create(_bookMarkPath);
+            //todo 必须要释放SQLiteConnection
             _dbConnection = new SQLiteConnection(string.Format("Data Source={0}", _path));
             _dbConnection.Open();
-            _dbBookMarkConnection = new SQLiteConnection(string.Format("Data Source={0}", _bookMarkPath));
-            _dbBookMarkConnection.Open();
 
             _isInitialized = true;
             return _isInitialized;
-        }
-
-        /// <summary>
-        /// 把被标记的数据写到路径为_bookMarkPath的数据库中
-        /// </summary>
-        public void MarkItem()
-        {
-
-        }
-
-        /// <summary>
-        /// 重置
-        /// </summary>
-        public void Reset()
-        {
-            File.Delete(_path);
-            File.Delete(_bookMarkPath);
-        }
+        }        
 
         /// <summary>
         /// 把含有敏感字符的数据保存到路径为 _path的数据库中
         /// </summary>
-        internal void WriteResult(IEnumerable<dynamic> result, AbstractDataSource dataSource)
+        internal void WriteResult(IEnumerable<dynamic> result, string tableName,Type type)
         {
             if(!_isInitialized)
             {
                 return;
             }
-            string tableName = dataSource.Items.DbTableName;
+            
             SQLFilterDataProvider.DbEnumerableDataReader<object> lst = (SQLFilterDataProvider.DbEnumerableDataReader<object>)result;
             List<string> cols = lst.Columns.Select(it => it.Key).Where(it => it != SqliteDbFile.KeyColumnName).ToList();
             CreateTable(cols, tableName);
-
-            Type type = (Type)dataSource.Type;
+            
             PropertyInfo[] proInfos = type.GetProperties();
             Dictionary<string, PropertyInfo> proDic = new Dictionary<string, PropertyInfo>();
             foreach (var item in proInfos)
@@ -161,5 +154,37 @@ namespace XLY.SF.Project.EarlyWarningView
                 command.ExecuteNonQuery();
             }
         }
+
+        #region IDisposable
+        //是否回收完毕
+        bool _disposed;
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        ~EarlyWarningSqlDb()
+        {
+            Dispose(false);
+        }
+
+        //这里的参数表示示是否需要释放那些实现IDisposable接口的托管对象
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return; //如果已经被回收，就中断执行
+            }
+            if (disposing)
+            {
+                _dbConnection.Dispose();
+                _isInitialized = false;
+                File.Delete(_path);
+                //TODO:释放那些实现IDisposable接口的托管对象
+            }
+            //TODO:释放非托管资源，设置对象为null
+            _disposed = true;
+        }
+        #endregion
     }
 }

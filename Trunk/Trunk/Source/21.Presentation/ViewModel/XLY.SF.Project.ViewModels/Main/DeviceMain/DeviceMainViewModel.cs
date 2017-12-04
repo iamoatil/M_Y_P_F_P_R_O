@@ -345,7 +345,8 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
                     break;
 
                 case DevMainSubViewType.AutoWarning:
-                    exportKey = ExportKeys.DataDisplayView;
+                    //todo 迁入tfs时需要删除
+                    exportKey = ExportKeys.AutoWarningView;
                     break;
             }
             CurSubViewType = subType;

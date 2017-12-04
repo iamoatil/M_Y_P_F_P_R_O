@@ -17,4 +17,7 @@ dll：System.Data.SQLite.dll，运行目录下放,其提供了SQLiteConnection，SQLiteComman
  Codeproject上的一个封装：http://www.codeproject.com/Articles/746191/SQLite-Helper-Csharp
  
  
- ds.Items.DbTableName = "Table_02549624AC61484AA0EAF447591AF4C5"
+	    SQLiteCommand command = connection.CreateCommand();
+            command.CommandText = SQLExpressionConverter.GetSelectionSql(expression, TableName);
+            DbDataReader reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+            return new DbEnumerableDataReader<T>(reader);

@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using XLY.SF.Project.DataDisplayView.ViewModel;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Models;
 using XLY.SF.Project.Plugin.Adapter;
@@ -50,6 +48,11 @@ namespace XLY.SF.Project.EarlyWarningView
         public ConfigDataToDB ConfigDbManager { get { return _configDbManager; } }
         ConfigDataToDB _configDbManager = new ConfigDataToDB();
 
+        /// <summary>
+        /// 智能预警的结果
+        /// </summary>
+        EarlyWarningResult earlyWarningResult = new EarlyWarningResult();
+
         public void Initialize(IRecordContext<Models.Entities.Inspection> setting)
         {
             if(IsInitialized)
@@ -64,6 +67,9 @@ namespace XLY.SF.Project.EarlyWarningView
             ConfigDataFilter.Setting = setting;
 
             ConfigDbManager.Initialize();
+
+            earlyWarningResult.Serializer.Initialize();
+            earlyWarningResult.SqlDb.Initialize();
 
             IsInitialized = true;
         }
@@ -101,12 +107,12 @@ namespace XLY.SF.Project.EarlyWarningView
             AbstractEarlyWarningPlugin plugin = Plugins.Where(p => ((EarlyWarningPluginInfo)p.PluginInfo).Match(dataSource)).FirstOrDefault(); 
             if(plugin != null)
             {
-                EarlyWarningPluginArgument arg = new EarlyWarningPluginArgument(ds, dataNodes);
+                EarlyWarningPluginArgument arg = new EarlyWarningPluginArgument(ds, dataNodes,earlyWarningResult);
                 plugin.Execute(arg,null);
             }
             if(KeyWordPlugin != null)
             {
-                EarlyWarningPluginArgument arg = new EarlyWarningPluginArgument(ds, dataNodes);
+                EarlyWarningPluginArgument arg = new EarlyWarningPluginArgument(ds, dataNodes, earlyWarningResult);
                 KeyWordPlugin.Execute(arg,null);
             }
             return;            

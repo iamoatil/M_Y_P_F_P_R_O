@@ -24,7 +24,7 @@ namespace XLY.SF.Project.EarlyWarningView
 
         public abstract object Execute(object arg, IAsyncTaskProgress progress);
 
-        public abstract void Execute(object arg0);
+        public abstract void Execute(object arg);
     }
 
     /// <summary>
@@ -32,16 +32,19 @@ namespace XLY.SF.Project.EarlyWarningView
     /// </summary>
     internal class EarlyWarningPluginArgument
     {
-        public EarlyWarningPluginArgument(DeviceDataSource deviceDataSource, List<DataNode> dataNodes)
+        public EarlyWarningPluginArgument(DeviceDataSource deviceDataSource, List<DataNode> dataNodes, EarlyWarningResult earlyWarningResult)
         {
             DeviceDataSource = deviceDataSource;
             DataNodes = dataNodes;
+            EarlyWarningResult = earlyWarningResult;
         }
 
         public EarlyWarningPluginArgument(DeviceDataSource deviceDataSource)
         {
             DeviceDataSource = deviceDataSource;
         }
+
+        public EarlyWarningResult EarlyWarningResult { get; private set; }
 
         /// <summary>
         /// 数据源

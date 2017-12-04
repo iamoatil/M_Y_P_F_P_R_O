@@ -45,15 +45,19 @@ namespace XLY.SF.Project.EarlyWarningView
                 foreach (AbstractDataItem item in result)
                 {
                     item.SensitiveId = dataNode.SensitiveData.SensitiveId;
-                    Console.WriteLine("item.SensitiveId:"+ item.SensitiveId + "   TableName:" + dataSource.Items.DbTableName);
+                    
                 }
             }
             return null;
         }
 
-        public override void Execute(object arg0)
+        public override void Execute(object arg)
         {
-            throw new NotImplementedException();
+            EarlyWarningPluginArgument ewArg = (EarlyWarningPluginArgument)arg;
+            DeviceDataSource ds = ewArg.DeviceDataSource;
+            IDataSource dataSource = ds.DataSource;
+
+
         }
     }
 }
