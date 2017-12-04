@@ -258,6 +258,10 @@
       <Project>{22661B55-AD41-4232-8EE7-485CAE0F4F3D}</Project>
       <Name>XLY.SF.Project.DataFilter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\14.Plugin\XLY.SF.Project.Plugin.Language\XLY.SF.Project.Plugin.Language.csproj">
+      <Project>{86A35DE5-5B18-457F-A972-E3D8240606B5}</Project>
+      <Name>XLY.SF.Project.Plugin.Language</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

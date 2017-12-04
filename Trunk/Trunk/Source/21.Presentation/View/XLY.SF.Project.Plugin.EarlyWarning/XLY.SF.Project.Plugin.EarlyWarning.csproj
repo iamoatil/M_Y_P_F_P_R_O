@@ -7,7 +7,7 @@
     <ProjectGuid>{5E39B1BF-D987-4B78-AE11-CB1C070B027B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>XLY.SF.Project.EarlyWarningView</RootNamespace>
-    <AssemblyName>XLY.SF.Project.EarlyWarningView</AssemblyName>
+    <AssemblyName>XLY.SF.Project.Plugin.EarlyWarning</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -228,4 +228,8 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\23.Shell\XLY.SF.Shell\packages\System.Data.SQLite.Core.1.0.106.0\build\net45\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\23.Shell\XLY.SF.Shell\packages\System.Data.SQLite.Core.1.0.106.0\build\net45\System.Data.SQLite.Core.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>::使用AOP修改dll
+::if exist "AopInjection.exe"  start "" "AopInjection.exe"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

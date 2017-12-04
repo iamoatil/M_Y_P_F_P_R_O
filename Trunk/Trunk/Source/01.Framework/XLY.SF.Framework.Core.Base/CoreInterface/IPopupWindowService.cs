@@ -32,7 +32,7 @@ namespace XLY.SF.Framework.Core.Base.CoreInterface
         /// </summary>
         /// <param name="exportKey">ViewKey</param>
         /// <param name="parameters">参数</param>
-        object ShowDialogWindow(string exportKey, object parameters, bool showInTaskBar = false);
+        object ShowDialogWindow(string exportKey, object parameters = null, bool showInTaskBar = false);
 
         #endregion
     }

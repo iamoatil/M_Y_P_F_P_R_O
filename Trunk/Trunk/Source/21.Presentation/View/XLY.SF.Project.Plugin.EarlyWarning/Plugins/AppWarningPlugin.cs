@@ -1,8 +1,9 @@
 ﻿/* ==============================================================================
-* Description：PhoneWarning  
+* Description：AppWarning  
 * Author     ：litao
-* Create Date：2017/12/2 10:15:48
+* Create Date：2017/12/2 10:15:58
 * ==============================================================================*/
+
 
 using System;
 using System.Collections.Generic;
@@ -11,20 +12,19 @@ using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    class PhoneWarningPlugin : AbstractEarlyWarningPlugin
+    public class AppWarningPlugin : AbstractEarlyWarningPlugin
     {
-        public PhoneWarningPlugin()
+        public AppWarningPlugin()
         {
-            var p = new EarlyWarningPluginInfo()
+            var p = new AppEarlyWarningPluginInfo()
             {
-                Guid = "{B3A98E69-1F47-454B-B99F-2A090EF05F58}",
-                Name = "PhoneWarningPlugin",
+                Guid = "{E3422DF4-B69A-4642-8420-B69ABCB413A4}",
+                Name = "AppWarningPlugin",
                 OrderIndex = 1,
-                PluginType = PluginType.SpfEarlyWarning,
-                DataSourceTypes = new List<Type> { typeof(CallDataSource),typeof(ContactDataSource) }
+                PluginType = PluginType.SpfEarlyWarning,               
             };
             PluginInfo = p;
-        }
+        }        
 
         public override object Execute(object arg, IAsyncTaskProgress progress)
         {
@@ -35,14 +35,25 @@ namespace XLY.SF.Project.EarlyWarningView
 
             foreach (DataNode dataNode in dataNodes)
             {
+                //todo 此处dataNode.SensitiveData.CategoryName != "App"为硬代码
+                if (dataNode.SensitiveData.CategoryName != "App")
+                {
+                    continue;
+                }
                 string cmd = string.Format("{1} like '%{2}%'", dataSource.Items.DbTableName, SqliteDbFile.JsonColumnName, dataNode.SensitiveData.Value);
                 IEnumerable<dynamic> result = dataSource.Items.FilterByCmd<dynamic>(cmd);
                 foreach (AbstractDataItem item in result)
                 {
                     item.SensitiveId = dataNode.SensitiveData.SensitiveId;
+                    Console.WriteLine("item.SensitiveId:"+ item.SensitiveId + "   TableName:" + dataSource.Items.DbTableName);
                 }
             }
             return null;
+        }
+
+        public override void Execute(object arg0)
+        {
+            throw new NotImplementedException();
         }
     }
 }

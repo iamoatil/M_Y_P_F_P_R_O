@@ -11,24 +11,29 @@ using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    class Md5WarningPlugin : AbstractEarlyWarningPlugin
+    public class Md5WarningPlugin : AbstractEarlyWarningPlugin
     {
         public Md5WarningPlugin()
         {
-            var p = new EarlyWarningPluginInfo()
+            var p = new Md5EarlyWarningPluginInfo()
             {
                 Guid = "{D531E61F-544C-44EB-A499-8BBA86069F45}",
                 Name = "Md5WarningPlugin",
                 OrderIndex = 1,
                 PluginType = PluginType.SpfEarlyWarning,
-                DataSourceTypes = new List<Type> { typeof(int) }
             };
             PluginInfo = p;
         }
 
         public override object Execute(object arg, IAsyncTaskProgress progress)
         {
+
             return null;
+        }
+
+        public override void Execute(object arg0)
+        {
+            throw new NotImplementedException();
         }
     }
 }

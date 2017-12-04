@@ -16,12 +16,12 @@
         
         <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
         <ctrl:BooleanToCollapseConverter x:Key="booleanToCollapseConverter"/>
-        <Style x:Key="tooltipStyle" TargetType="{x:Type Label}">
+        <Style x:Key="tooltipStyle" TargetType="{x:Type Button}">
             <Setter Property="Foreground" Value="#9ba5b9"/>
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="Template">
                 <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Label}">
+                        <ControlTemplate TargetType="{x:Type Button}">
                         <StackPanel Orientation="Horizontal">
                             <Image x:Name="img" Width="16" Height="16" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_tips_normal.png" Margin="0 0 8 0"/>
                             <TextBlock VerticalAlignment="Center">设备连接不正确?</TextBlock>
@@ -72,6 +72,12 @@
             </Button>
         </StackPanel>
 
-        <Label Grid.Row="4" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 40 40" Style="{StaticResource tooltipStyle}" Cursor="Hand"></Label>
-        </Grid>
+        <Button Grid.Row="4"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Margin="0 0 40 40"
+                Style="{StaticResource tooltipStyle}"
+                Command="{Binding OpenGuideCommand}"
+                Cursor="Hand" />
+    </Grid>
 </core:UcViewBase>

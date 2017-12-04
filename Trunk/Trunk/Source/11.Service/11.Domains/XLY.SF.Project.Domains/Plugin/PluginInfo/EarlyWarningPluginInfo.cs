@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Domains
 {
@@ -14,9 +15,85 @@ namespace XLY.SF.Project.Domains
     /// </summary>
     public class EarlyWarningPluginInfo : AbstractZipPluginInfo
     {
-        /// <summary>
-        /// 此插件会处理的DataSource的类型集合
-        /// </summary>
-        public List<Type> DataSourceTypes { get; set; }
+
+        public virtual bool Match(IDataSource dataSource)
+        {
+            return false;
+        }
+    }
+
+    public class UrlEarlyWarningPluginInfo : EarlyWarningPluginInfo
+    {
+        private string _groupName;
+        public UrlEarlyWarningPluginInfo()
+        {
+            _groupName = LanguageHelper.GetString(Languagekeys.PluginGroupName_WebMark);
+        }
+
+        public override bool Match(IDataSource dataSource)
+        {
+            TreeDataSource ds = dataSource as TreeDataSource;
+            if (ds != null
+                && ds.PluginInfo.Group == _groupName)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public class Md5EarlyWarningPluginInfo : EarlyWarningPluginInfo
+    {
+
+    }
+
+    public class AppEarlyWarningPluginInfo : EarlyWarningPluginInfo
+    {
+        private string _name;
+        public AppEarlyWarningPluginInfo()
+        {
+            _name = LanguageHelper.GetString(Languagekeys.PluginName_InstalledApp);
+        }
+
+        public override bool Match(IDataSource dataSource)
+        {
+            SimpleDataSource ds = dataSource as SimpleDataSource;
+            if (ds != null
+                && ds.PluginInfo.Name == _name)
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public class PhoneEarlyWarningPluginInfo : EarlyWarningPluginInfo
+    {
+        private List<string> _names;
+        public PhoneEarlyWarningPluginInfo()
+        {
+            _names = new List<string>()
+            {
+                LanguageHelper.GetString(Languagekeys.PluginName_Call),
+               LanguageHelper.GetString( Languagekeys.PluginName_Sms),
+                LanguageHelper.GetString(Languagekeys.PluginName_Mms),
+                LanguageHelper.GetString(Languagekeys.PluginName_Contacts),
+            };
+        }
+
+        public override bool Match(IDataSource dataSource)
+        {
+            AbstractDataSource ds = dataSource as AbstractDataSource;
+            if (ds != null
+                && _names.Contains(ds.PluginInfo.Name))
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public class KeyWordEarlyWarningPluginInfo : EarlyWarningPluginInfo
+    {
     }
 }

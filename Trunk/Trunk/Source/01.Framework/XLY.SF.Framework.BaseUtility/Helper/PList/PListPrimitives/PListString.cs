@@ -37,6 +37,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 
@@ -128,6 +129,11 @@ namespace XLY.SF.Framework.BaseUtility.Plist
         /// </returns>
         protected override String ToXmlString()
         {
+            if (Value.Any(c => Char.IsControl(c)))
+            {
+                Value = new string(Value.Where(c => !Char.IsControl(c)).ToArray());
+            }
+
             if (Value.Length == 1)
             {
                 var c = Value[0];

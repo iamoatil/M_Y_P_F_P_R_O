@@ -30,7 +30,7 @@ namespace XLY.SF.Project.Views.Management.Giude
             InitializeComponent();
         }
 
-        [Import(ExportKeys.SettingsGuideHomeViewModel, typeof(ViewModelBase))]
+        //[Import(ExportKeys.SettingsGuideHomeViewModel, typeof(ViewModelBase))]
         public override ViewModelBase DataSource { get => base.DataSource; set => base.DataSource = value; }
     }
 }

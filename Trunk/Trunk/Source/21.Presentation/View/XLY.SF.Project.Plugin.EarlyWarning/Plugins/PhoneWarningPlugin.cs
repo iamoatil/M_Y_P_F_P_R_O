@@ -1,7 +1,7 @@
 ﻿/* ==============================================================================
-* Description：UrlWarning  
+* Description：PhoneWarning  
 * Author     ：litao
-* Create Date：2017/12/2 10:15:26
+* Create Date：2017/12/2 10:15:48
 * ==============================================================================*/
 
 using System;
@@ -11,16 +11,16 @@ using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    class UrlWarningPlugin : AbstractEarlyWarningPlugin
+    public class PhoneWarningPlugin : AbstractEarlyWarningPlugin
     {
-        public UrlWarningPlugin()
+        public PhoneWarningPlugin()
         {
-            var p = new EarlyWarningPluginInfo()
+            var p = new PhoneEarlyWarningPluginInfo()
             {
-                Guid = "{F8EB7422-6C4E-43A1-9C3B-D5FF04371268}",
-                Name = "UrlWarningPlugin",
+                Guid = "{B3A98E69-1F47-454B-B99F-2A090EF05F58}",
+                Name = "PhoneWarningPlugin",
                 OrderIndex = 1,
-                PluginType = PluginType.SpfEarlyWarning
+                PluginType = PluginType.SpfEarlyWarning,
             };
             PluginInfo = p;
         }
@@ -34,6 +34,12 @@ namespace XLY.SF.Project.EarlyWarningView
 
             foreach (DataNode dataNode in dataNodes)
             {
+                //todo 此处dataNode.SensitiveData.CategoryName != "关键字"为硬代码
+                if (dataNode.SensitiveData.CategoryName != "电话")
+                {
+                    continue;
+                }
+
                 string cmd = string.Format("{1} like '%{2}%'", dataSource.Items.DbTableName, SqliteDbFile.JsonColumnName, dataNode.SensitiveData.Value);
                 IEnumerable<dynamic> result = dataSource.Items.FilterByCmd<dynamic>(cmd);
                 foreach (AbstractDataItem item in result)
@@ -42,6 +48,11 @@ namespace XLY.SF.Project.EarlyWarningView
                 }
             }
             return null;
+        }
+
+        public override void Execute(object arg0)
+        {
+            throw new NotImplementedException();
         }
     }
 }

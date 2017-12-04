@@ -64,8 +64,9 @@ namespace XLY.SF.Project.EarlyWarningView
 
         private void UcViewBase_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            //DetectionManager.Instance.ConfigDataFilter.Setting = Setting;
-            //DetectionManager.Instance.Detect(@"D:\XLY\SpfData\有自动提取数据的_20171130[052023]\H60-L01_20171130[052024]\");
+            EarlyWarningPluginAdapter adapter = new EarlyWarningPluginAdapter();
+            adapter.Initialize(Setting);
+            adapter.Detect(@"D:\XLY\SpfData\手里全部提取_20171204[111147]\H60-L01_20171204[111149]");
         }
     }
 }
