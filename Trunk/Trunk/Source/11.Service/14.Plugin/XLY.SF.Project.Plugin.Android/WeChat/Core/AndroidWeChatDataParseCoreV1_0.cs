@@ -16,9 +16,11 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using X64Service;
 using XLY.SF.Framework.BaseUtility;
+using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Persistable.Primitive;
+using XLY.SF.Project.Plugin.Language;
 using XLY.SF.Project.Services;
 
 namespace XLY.SF.Project.Plugin.Android
@@ -187,10 +189,17 @@ namespace XLY.SF.Project.Plugin.Android
 
                 foreach (var account in GetAllWeChatAccountFileInfos())
                 {
-                    ClearCache();
+                    try
+                    {
+                        ClearCache();
 
-                    MD5AccountPath = account.Directory.Name;
-                    BuildWeChatTree(rootNode, account);
+                        MD5AccountPath = account.Directory.Name;
+                        BuildWeChatTree(rootNode, account);
+                    }
+                    catch (Exception ex)
+                    {
+                        LoggerManagerSingle.Instance.Error(ex, $"解析微信帐号数据出错：{account.Directory.Name}");
+                    }
                 }
 
                 return rootNode;
@@ -302,7 +311,7 @@ namespace XLY.SF.Project.Plugin.Android
             var friendNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "通讯录",
+                Text = LanguageHelper.GetString(Languagekeys.PluginWechat_AddressBook),
                 Type = typeof(WeChatFriendShow),
                 Items = new DataItems<WeChatFriendShow>(DbFilePath),
                 Id = WeChatAccount.WeChatId
@@ -311,7 +320,7 @@ namespace XLY.SF.Project.Plugin.Android
             var gongzhonghaoNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "公众号",
+                Text = LanguageHelper.GetString(Languagekeys.PluginWechat_Public),
                 Type = typeof(WeChatFriendShow),
                 Items = new DataItems<WeChatFriendShow>(DbFilePath),
                 Id = WeChatAccount.WeChatId
@@ -375,14 +384,14 @@ namespace XLY.SF.Project.Plugin.Android
             var msgNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "好友消息",
+                Text = LanguageHelper.GetString(Languagekeys.PluginWechat_FriendMsg),
                 Id = WeChatAccount.WeChatId
             };
 
             var ghMsgNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "公众号消息",
+                Text = LanguageHelper.GetString(Languagekeys.PluginWechat_PublicMsg),
                 Id = WeChatAccount.WeChatId
             };
 
@@ -423,7 +432,7 @@ namespace XLY.SF.Project.Plugin.Android
                         Items = new DataItems<MessageCore>(DbFilePath),
                     };
 
-                    if(wxid.StartsWith("gh_"))
+                    if (wxid.StartsWith("gh_"))
                     {
                         ghMsgNode.TreeNodes.Add(dmsgNode);
                     }
@@ -453,7 +462,7 @@ namespace XLY.SF.Project.Plugin.Android
                                      message.Content = string.Format("微信红包-{0}", Regex.Replace(message.Content, @"<[^<>]*>", "").Trim());
                                  }
                                  message.SendState = EnumSendState.Receive;
-                                 message.SenderName = "系统消息";
+                                 message.SenderName = LanguageHelper.GetString(Languagekeys.PluginWechat_SystemMsg);
                                  message.Receiver = accountName;
                              }
                              else if (message.SendState == EnumSendState.Send)
@@ -490,7 +499,7 @@ namespace XLY.SF.Project.Plugin.Android
                 Type = typeof(MessageCore),
                 Items = new DataItems<MessageCore>(DbFilePath),
             };
-            rootNode.TreeNodes.Add(msgNode);
+            var hasRows = false;
 
             var accountName = WeChatAccountShowName;
             var friendname = friend.ShowName;
@@ -500,6 +509,10 @@ namespace XLY.SF.Project.Plugin.Android
              {
                  MessageCore message = null;
                  dynamic mess;
+                 if (r.HasRows)
+                 {
+                     hasRows = true;
+                 }
                  while (r.Read())
                  {
                      mess = r.ToDynamic();
@@ -518,7 +531,7 @@ namespace XLY.SF.Project.Plugin.Android
                              message.Content = string.Format("微信红包-{0}", Regex.Replace(message.Content, @"<[^<>]*>", "").Trim());
                          }
                          message.SendState = EnumSendState.Receive;
-                         message.SenderName = "系统消息";
+                         message.SenderName = LanguageHelper.GetString(Languagekeys.PluginWechat_SystemMsg);
                          message.Receiver = accountName;
                      }
                      else
@@ -551,6 +564,10 @@ namespace XLY.SF.Project.Plugin.Android
                 WxbakMsgdataContext.UsingSafeConnection(string.Format("SELECT * FROM WxbakMsgdata WHERE wxid = '{0}'", friend.WeChatId), (r) =>
                  {
                      MessageCore message;
+                     if (r.HasRows)
+                     {
+                         hasRows = true;
+                     }
                      while (r.Read())
                      {
                          message = new MessageCore();
@@ -566,10 +583,11 @@ namespace XLY.SF.Project.Plugin.Android
                          {
                              if (message.Content.StartsWith("<img src=\"SystemMessages_HongbaoIcon.png\"/>"))
                              {//领取红包
-                                 message.Content = string.Format("微信红包-{0}", Regex.Replace(message.Content, @"<[^<>]*>", "").Trim());
+                                 message.Content = string.Format("{0}-{1}",
+                                     LanguageHelper.GetString(Languagekeys.PluginWechat_WeChatRedPack), Regex.Replace(message.Content, @"<[^<>]*>", "").Trim());
                              }
                              message.SendState = EnumSendState.Receive;
-                             message.SenderName = "系统消息";
+                             message.SenderName = LanguageHelper.GetString(Languagekeys.PluginWechat_SystemMsg);
                              message.Receiver = accountName;
                          }
                          else if (message.SendState == EnumSendState.Send)
@@ -598,6 +616,10 @@ namespace XLY.SF.Project.Plugin.Android
                 var deletes = DeleteMsgs.FirstOrDefault(g => g.Key == friend.WeChatId).Value;
                 var talkerid = string.Empty;
 
+                if (deletes.IsValid())
+                {
+                    hasRows = true;
+                }
                 foreach (var mess in deletes)
                 {
                     var message = new MessageCore
@@ -630,6 +652,11 @@ namespace XLY.SF.Project.Plugin.Android
                     msgNode.Items.Add(message);
                 }
             }
+
+            if (hasRows)
+            {
+                rootNode.TreeNodes.Add(msgNode);
+            }
         }
 
         /// <summary>
@@ -641,7 +668,7 @@ namespace XLY.SF.Project.Plugin.Android
             var groupNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "群聊",
+                Text = LanguageHelper.GetString(Languagekeys.PluginWechat_ChatRoom),
                 Type = typeof(WeChatGroupShow),
                 Items = new DataItems<WeChatGroupShow>(DbFilePath),
                 Id = WeChatAccount.WeChatId
@@ -716,7 +743,7 @@ namespace XLY.SF.Project.Plugin.Android
             var groupMsgNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "群聊消息",
+                Text = LanguageHelper.GetString(Languagekeys.PluginWechat_ChatRoomMsg),
                 Id = WeChatAccount.WeChatId
             };
 
@@ -768,10 +795,11 @@ namespace XLY.SF.Project.Plugin.Android
                             {
                                 if (message.Content.StartsWith("<img src=\"SystemMessages_HongbaoIcon.png\"/>"))
                                 {//领取红包
-                                    message.Content = string.Format("微信红包-{0}", Regex.Replace(message.Content, @"<[^<>]*>", "").Trim());
+                                    message.Content = string.Format("{0}-{1}",
+                                        LanguageHelper.GetString(Languagekeys.PluginWechat_WeChatRedPack), Regex.Replace(message.Content, @"<[^<>]*>", "").Trim());
                                 }
                                 message.SendState = EnumSendState.Receive;
-                                message.SenderName = "系统消息";
+                                message.SenderName = LanguageHelper.GetString(Languagekeys.PluginWechat_SystemMsg);
                                 message.Receiver = accountName;
                             }
                             else if (message.SendState == EnumSendState.Send)
@@ -810,7 +838,7 @@ namespace XLY.SF.Project.Plugin.Android
                 Type = typeof(MessageCore),
                 Items = new DataItems<MessageCore>(DbFilePath),
             };
-            rootNode.TreeNodes.Add(msgNode);
+            bool hasRows = false;
 
             var accountName = WeChatAccountShowName;
             var groupname = group.ShowName;
@@ -820,6 +848,10 @@ namespace XLY.SF.Project.Plugin.Android
             {
                 MessageCore message = null;
                 dynamic mess;
+                if (r.HasRows)
+                {
+                    hasRows = true;
+                }
                 while (r.Read())
                 {
                     mess = r.ToDynamic();
@@ -835,10 +867,11 @@ namespace XLY.SF.Project.Plugin.Android
                     {
                         if (message.Content.StartsWith("<img src=\"SystemMessages_HongbaoIcon.png\"/>"))
                         {//领取红包
-                            message.Content = string.Format("微信红包-{0}", Regex.Replace(message.Content, @"<[^<>]*>", "").Trim());
+                            message.Content = string.Format("{0}-{1}",
+                                LanguageHelper.GetString(Languagekeys.PluginWechat_WeChatRedPack), Regex.Replace(message.Content, @"<[^<>]*>", "").Trim());
                         }
                         message.SendState = EnumSendState.Receive;
-                        message.SenderName = "系统消息";
+                        message.SenderName = LanguageHelper.GetString(Languagekeys.PluginWechat_SystemMsg);
                         message.Receiver = accountName;
                     }
                     else
@@ -900,6 +933,10 @@ namespace XLY.SF.Project.Plugin.Android
                 WxbakMsgdataContext.UsingSafeConnection(string.Format("SELECT * FROM WxbakMsgdata WHERE wxid = '{0}'", group.WeChatId), (r) =>
                 {
                     MessageCore message;
+                    if (r.HasRows)
+                    {
+                        hasRows = true;
+                    }
                     while (r.Read())
                     {
                         message = new MessageCore();
@@ -915,10 +952,11 @@ namespace XLY.SF.Project.Plugin.Android
                         {
                             if (message.Content.StartsWith("<img src=\"SystemMessages_HongbaoIcon.png\"/>"))
                             {//领取红包
-                                message.Content = string.Format("微信红包-{0}", Regex.Replace(message.Content, @"<[^<>]*>", "").Trim());
+                                message.Content = string.Format("{0}-{1}",
+                                    LanguageHelper.GetString(Languagekeys.PluginWechat_WeChatRedPack), Regex.Replace(message.Content, @"<[^<>]*>", "").Trim());
                             }
                             message.SendState = EnumSendState.Receive;
-                            message.SenderName = "系统消息";
+                            message.SenderName = LanguageHelper.GetString(Languagekeys.PluginWechat_SystemMsg);
                             message.Receiver = accountName;
                         }
                         else if (message.SendState == EnumSendState.Send)
@@ -976,6 +1014,10 @@ namespace XLY.SF.Project.Plugin.Android
                 var deletes = DeleteMsgs.FirstOrDefault(g => g.Key == group.WeChatId).Value;
                 var talkerid = string.Empty;
 
+                if (deletes.IsValid())
+                {
+                    hasRows = true;
+                }
                 foreach (var mess in deletes)
                 {
                     var message = new MessageCore
@@ -1017,6 +1059,11 @@ namespace XLY.SF.Project.Plugin.Android
                     msgNode.Items.Add(message);
                 }
             }
+
+            if (hasRows)
+            {
+                rootNode.TreeNodes.Add(msgNode);
+            }
         }
 
         /// <summary>
@@ -1028,7 +1075,7 @@ namespace XLY.SF.Project.Plugin.Android
             TreeNode massendNode = new TreeNode()
             {
                 DataState = EnumDataState.Normal,
-                Text = "群发消息",
+                Text = LanguageHelper.GetString(Languagekeys.PluginWechat_MassendMsg),
                 Items = new DataItems<MessageCore>(DbFilePath),
                 Type = typeof(MessageCore)
             };
@@ -1074,7 +1121,7 @@ namespace XLY.SF.Project.Plugin.Android
                      {
                          case "3":
                              message.Type = EnumColumnType.Image;
-                             message.MessageType = "图片";
+                             message.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_Image);
 
                              if (FileHelper.IsValidDictory(MediaFileRootPath))
                              {
@@ -1087,7 +1134,7 @@ namespace XLY.SF.Project.Plugin.Android
                              break;
                          default:
                              message.Type = EnumColumnType.String;
-                             message.MessageType = "文本";
+                             message.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_String);
                              break;
                      }
 
@@ -1110,7 +1157,7 @@ namespace XLY.SF.Project.Plugin.Android
             var ftsIndexMessageContentNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "其他删除消息",
+                Text = LanguageHelper.GetString(Languagekeys.PluginWechat_OtherDelMsg),
                 Items = new DataItems<DelWeChatMessageCore>(DbFilePath),
                 Type = typeof(DelWeChatMessageCore)
             };
@@ -1118,14 +1165,14 @@ namespace XLY.SF.Project.Plugin.Android
             var wordMsg = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "文字消息",
+                Text = LanguageHelper.GetString(Languagekeys.PluginWechat_WordDelMsg),
                 Items = new DataItems<DelWeChatMessageCore>(DbFilePath),
                 Type = typeof(DelWeChatMessageCore)
             };
             var numMsg = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "数字消息",
+                Text = LanguageHelper.GetString(Languagekeys.PluginWechat_NumDelMsg),
                 Items = new DataItems<DelWeChatMessageCore>(DbFilePath),
                 Type = typeof(DelWeChatMessageCore)
             };
@@ -1208,7 +1255,7 @@ namespace XLY.SF.Project.Plugin.Android
             var tree = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "朋友圈",
+                Text = LanguageHelper.GetString(Languagekeys.PluginWechat_Sns),
                 Items = new DataItems<WeChatSns>(DbFilePath),
                 Type = typeof(WeChatSns)
             };
@@ -1216,31 +1263,36 @@ namespace XLY.SF.Project.Plugin.Android
             rootNode.TreeNodes.Add(tree);
 
             //朋友圈数据库  
-            var favpath = Path.Combine(FileHelper.GetFilePath(MainDbContext.DbFilePath), "SnsMicroMsg.db");
-            var favContext = new SqliteContext(favpath);
+            var snspath = Path.Combine(FileHelper.GetFilePath(MainDbContext.DbFilePath), "SnsMicroMsg.db");
+            var snsContext = new SqliteContext(snspath);
 
-            favContext.UsingSafeConnection("SELECT snsId,userName,createTime,content,attrBuf FROM SnsInfo ORDER BY createTime DESC", r =>
-             {
-                 dynamic item;
-                 string weChatId, snsId;
+            if (!snsContext.ExistTable("SnsInfo"))
+            {
+                return;
+            }
 
-                 while (r.Read())
-                 {
-                     item = r.ToDynamic();
+            snsContext.UsingSafeConnection("SELECT snsId,userName,createTime,content,attrBuf FROM SnsInfo ORDER BY createTime DESC", r =>
+                    {
+                        dynamic item;
+                        string weChatId, snsId;
 
-                     weChatId = DynamicConvert.ToSafeString(item.userName);
-                     snsId = DynamicConvert.ToSafeString(item.snsId);
+                        while (r.Read())
+                        {
+                            item = r.ToDynamic();
 
-                     var curSender = LsAllFriends.FirstOrDefault(f => f.WeChatId == weChatId);
-                     if (null == curSender)
-                     {
-                         curSender = new WeChatFriendShow() { WeChatId = weChatId };
-                     }
+                            weChatId = DynamicConvert.ToSafeString(item.userName);
+                            snsId = DynamicConvert.ToSafeString(item.snsId);
 
-                     GetSmsInfo(item, curSender, tree);
-                     GetSnsComments(item, tree);
-                 }
-             });
+                            var curSender = LsAllFriends.FirstOrDefault(f => f.WeChatId == weChatId);
+                            if (null == curSender)
+                            {
+                                curSender = new WeChatFriendShow() { WeChatId = weChatId };
+                            }
+
+                            GetSmsInfo(item, curSender, tree);
+                            GetSnsComments(item, tree);
+                        }
+                    });
         }
 
         /// <summary>
@@ -1252,7 +1304,7 @@ namespace XLY.SF.Project.Plugin.Android
             var favNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "我的收藏",
+                Text = LanguageHelper.GetString(Languagekeys.PluginWechat_Favorite),
                 Items = new DataItems<WeChatFavorite>(DbFilePath),
                 Type = typeof(WeChatFavorite)
             };
@@ -1265,6 +1317,11 @@ namespace XLY.SF.Project.Plugin.Android
             var dFavpath = WeChatDataParseHelper.DecryptAndroidWeChatSqlite(favpath);
             var favdbpath = SqliteRecoveryHelper.DataRecovery(dFavpath, "", _favrtable);
             var favContext = new SqliteContext(favdbpath);
+
+            if (!favContext.ExistTable("FavSearchInfo"))
+            {
+                return;
+            }
 
             var filePath = Path.Combine(MediaFileRootPath, MD5AccountPath, "favorite");
             if (FileHelper.IsValidDictory(filePath))
@@ -1310,7 +1367,7 @@ namespace XLY.SF.Project.Plugin.Android
             var appNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "微信小程序",
+                Text = LanguageHelper.GetString(Languagekeys.PluginWechat_AppBrand),
                 Items = new DataItems<WeChatAppBrand>(DbFilePath),
                 Type = typeof(WeChatAppBrand)
             };
@@ -1321,6 +1378,16 @@ namespace XLY.SF.Project.Plugin.Android
             var favpath = Path.Combine(FileHelper.GetFilePath(MainDbContext.DbFilePath), "AppBrandComm.db");
             var dFavpath = WeChatDataParseHelper.DecryptAndroidWeChatSqlite(favpath);
             var appBrandContext = new SqliteContext(dFavpath);
+
+            if (!appBrandContext.ExistTable("AppBrandWxaPkgManifestRecord"))
+            {
+                return;
+            }
+
+            if (!appBrandContext.ExistTable("AppBrandWxaAppInfo"))
+            {
+                return;
+            }
 
             appBrandContext.UsingSafeConnection("SELECT r.appId,i.brandId,i.appName,i.signature,r.pkgPath,r.downloadURL,i.appIcon FROM AppBrandWxaPkgManifestRecord r,AppBrandWxaAppInfo i WHERE r.appId = i.appId", r =>
              {
@@ -1380,12 +1447,17 @@ namespace XLY.SF.Project.Plugin.Android
             var tree = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "微信支付",
+                Text = LanguageHelper.GetString(Languagekeys.PluginWechat_MyWalle),
                 Items = new DataItems<WeChatBackCard>(DbFilePath),
                 Type = typeof(WeChatBackCard)
             };
 
             rootNode.TreeNodes.Add(tree);
+
+            if (!MainDbContext.ExistTable("WalletBankcard"))
+            {
+                return;
+            }
 
             var cardItems = MainDbContext.FindByName("WalletBankcard");
             foreach (var card in cardItems)
@@ -1408,12 +1480,17 @@ namespace XLY.SF.Project.Plugin.Android
             var tree = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "常用设备",
+                Text = LanguageHelper.GetString(Languagekeys.PluginWechat_SafeDevice),
                 Items = new DataItems<WeChatBackCard>(DbFilePath),
                 Type = typeof(WeChatBackCard)
             };
 
             rootNode.TreeNodes.Add(tree);
+
+            if (!MainDbContext.ExistTable("SafeDeviceInfo"))
+            {
+                return;
+            }
 
             var allDevice = MainDbContext.FindByName("SafeDeviceInfo");
             foreach (var dev in allDevice)
@@ -1429,7 +1506,7 @@ namespace XLY.SF.Project.Plugin.Android
 
                     rootNode.Items.Add(device);
                 }
-                catch 
+                catch
                 {
                 }
             }
@@ -1929,64 +2006,64 @@ namespace XLY.SF.Project.Plugin.Android
             {
                 case "1":
                     msg.Type = EnumColumnType.String;
-                    msg.MessageType = "文本";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_String);
                     break;
                 case "3":
                     msg.Type = EnumColumnType.Image;
-                    msg.MessageType = "图片";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_Image);
                     break;
                 case "34":
                     msg.Type = EnumColumnType.Audio;
-                    msg.MessageType = "语音";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_Audio);
                     break;
                 case "48":
                     msg.Type = EnumColumnType.Location;
-                    msg.MessageType = "位置信息";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_Location);
                     break;
                 case "62":
                 case "43":
                     msg.Type = EnumColumnType.Video;
-                    msg.MessageType = "视频";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_Video);
                     break;
                 case "42":
                     msg.Type = EnumColumnType.Card;
-                    msg.MessageType = "名片";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_Card);
                     break;
                 case "50":
                     msg.Type = EnumColumnType.VideoChat;
-                    msg.MessageType = "视频聊天";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_VideoChat);
                     break;
                 case "10000":
                     msg.Type = EnumColumnType.System;
-                    msg.MessageType = "系统消息";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_SystemMsg);
                     break;
                 case "49":
                     msg.Type = EnumColumnType.HTML;
-                    msg.MessageType = "文本";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_String);
                     break;
                 case "47":
                     msg.Type = EnumColumnType.Emoji;
-                    msg.MessageType = "动画表情";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_Emoji);
                     break;
                 case "285212721":
                     msg.Type = EnumColumnType.GongZhongHao;
-                    msg.MessageType = "公众号消息";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_PublicMsg);
                     break;
                 case "318767153":
                     msg.Type = EnumColumnType.WeChatZhifu;
-                    msg.MessageType = "微信支付";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_MyWalle);
                     break;
                 case "436207665":
                     msg.Type = EnumColumnType.WeChatRedPack;
-                    msg.MessageType = "微信红包";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_WeChatRedPack);
                     break;
                 case "419430449":
                     msg.Type = EnumColumnType.WeChatTransfer;
-                    msg.MessageType = "微信转账";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_WeChatTransfer);
                     break;
                 default:
                     msg.Type = EnumColumnType.String;
-                    msg.MessageType = "文本";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_String);
                     break;
             }
         }
@@ -2163,7 +2240,7 @@ namespace XLY.SF.Project.Plugin.Android
                 xmlLoc.Close();
                 msXmlLoc.Close();
 
-                return string.Format("位置信息--标题:{0},地址:{1},坐标:{2},{3}", strPoiname, strLabel, strX, strY);
+                return string.Format(LanguageHelper.GetString(Languagekeys.PluginWechat_LocationInfo), strPoiname, strLabel, strX, strY);
             }
             catch { }
 
@@ -2212,9 +2289,9 @@ namespace XLY.SF.Project.Plugin.Android
                 else
                 {
                     if (strUrl.Trim().Length == 0)
-                        strMessage = string.Format("分享链接--标题:{0}, 描述:{1}", strTitle, strDesc);
+                        strMessage = string.Format(LanguageHelper.GetString(Languagekeys.PluginWechat_HtmlInfoA), strTitle, strDesc);
                     else
-                        strMessage = string.Format("分享链接--标题:{0}, 描述:{1}, 链接:{2}", strTitle, strDesc, strUrl);
+                        strMessage = string.Format(LanguageHelper.GetString(Languagekeys.PluginWechat_HtmlInfoB), strTitle, strDesc, strUrl);
                 }
             }
             catch { }
@@ -2272,7 +2349,7 @@ namespace XLY.SF.Project.Plugin.Android
                 }
                 else if (strMessage.Contains("<paysubtype>3</paysubtype>"))
                 {//接收转账
-                    strMessage = string.Format("{0}-{1}", strTitle, "我已经确认转账！");
+                    strMessage = string.Format("{0}-{1}", strTitle, LanguageHelper.GetString(Languagekeys.PluginWechat_TransferOK));
                 }
             }
 
@@ -2400,9 +2477,10 @@ namespace XLY.SF.Project.Plugin.Android
                     var sex = dataNode.Attributes["sex"].Value;
 
                     StringBuilder sb = new StringBuilder();
-                    sb.AppendLine(string.Format("微信账号:{0}  别名:{1}", username, alias));
-                    sb.AppendLine(string.Format("昵称:{0} 性别:{1} 城市:{2}-{3}", nickname, sex == "2" ? "女" : "男", province, city));
-                    sb.AppendLine(string.Format("个性签名:{0}", sign));
+                    sb.AppendLine(string.Format(LanguageHelper.GetString(Languagekeys.PluginWechat_XmlInfoA), username, alias));
+                    sb.AppendLine(string.Format(LanguageHelper.GetString(Languagekeys.PluginWechat_XmlInfoB), nickname, sex == "2" ?
+                        LanguageHelper.GetString(Languagekeys.PluginWechat_WoMan) : LanguageHelper.GetString(Languagekeys.PluginWechat_Man), province, city));
+                    sb.AppendLine(string.Format(LanguageHelper.GetString(Languagekeys.PluginWechat_XmlInfoC), sign));
 
                     return sb.ToString();
                 }
@@ -2445,64 +2523,64 @@ namespace XLY.SF.Project.Plugin.Android
             {
                 case 1:
                     msg.Type = EnumColumnType.String;
-                    msg.MessageType = "文本";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_String);
                     break;
                 case 3:
                     msg.Type = EnumColumnType.Image;
-                    msg.MessageType = "图片";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_Image);
                     break;
                 case 34:
                     msg.Type = EnumColumnType.Audio;
-                    msg.MessageType = "语音";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_Audio);
                     break;
                 case 48:
                     msg.Type = EnumColumnType.Location;
-                    msg.MessageType = "定位信息";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_Location);
                     break;
                 case 62:
                 case 43:
                     msg.Type = EnumColumnType.Video;
-                    msg.MessageType = "视频";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_Video);
                     break;
                 case 42:
                     msg.Type = EnumColumnType.Card;
-                    msg.MessageType = "名片";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_Card);
                     break;
                 case 50:
                     msg.Type = EnumColumnType.VideoChat;
-                    msg.MessageType = "视频聊天";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_VideoChat);
                     break;
                 case 10000:
                     msg.Type = EnumColumnType.System;
-                    msg.MessageType = "系统消息";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_SystemMsg);
                     break;
                 case 49:
                     msg.Type = EnumColumnType.HTML;
-                    msg.MessageType = "文本";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_String);
                     break;
                 case 47:
                     msg.Type = EnumColumnType.Emoji;
-                    msg.MessageType = "动画表情";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_Emoji);
                     break;
                 case 285212721:
                     msg.Type = EnumColumnType.GongZhongHao;
-                    msg.MessageType = "公众号消息";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_PublicMsg);
                     break;
                 case 318767153:
                     msg.Type = EnumColumnType.WeChatZhifu;
-                    msg.MessageType = "微信支付";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_MyWalle);
                     break;
                 case 436207665:
                     msg.Type = EnumColumnType.WeChatRedPack;
-                    msg.MessageType = "微信红包";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_WeChatRedPack);
                     break;
                 case 419430449:
                     msg.Type = EnumColumnType.WeChatTransfer;
-                    msg.MessageType = "微信转账";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_WeChatTransfer);
                     break;
                 default:
                     msg.Type = EnumColumnType.String;
-                    msg.MessageType = "文本";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_String);
                     break;
             }
 
@@ -2521,7 +2599,7 @@ namespace XLY.SF.Project.Plugin.Android
                 msg.SendState = EnumSendState.Receive;
                 msg.SenderName = DynamicConvert.ToSafeString(msgData.wxid);
                 msg.Type = EnumColumnType.System;
-                msg.MessageType = "系统消息";
+                msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginWechat_SystemMsg);
             }
 
             #endregion
@@ -2590,7 +2668,7 @@ namespace XLY.SF.Project.Plugin.Android
 
                 return wcf;
             }
-            catch 
+            catch
             {
                 return null;
             }
@@ -2661,7 +2739,7 @@ namespace XLY.SF.Project.Plugin.Android
 
                 //wcf.SourceInfo = sourceinfo;
             }
-            catch 
+            catch
             {
             }
         }
@@ -2671,7 +2749,7 @@ namespace XLY.SF.Project.Plugin.Android
         /// </summary>
         private void GetFavoriteItemText(dynamic data, ref WeChatFavorite wcf)
         {
-            wcf.DataType = "文字信息";
+            wcf.DataType = LanguageHelper.GetString(Languagekeys.PluginWechat_WordDelMsg);
 
             var text = DynamicConvert.ToSafeString(data.xml);
             try
@@ -2692,7 +2770,7 @@ namespace XLY.SF.Project.Plugin.Android
         /// </summary>
         private void GetFavoriteItemImage(dynamic data, ref WeChatFavorite wcf)
         {
-            wcf.DataType = "图片";
+            wcf.DataType = LanguageHelper.GetString(Languagekeys.PluginWechat_Image);
 
             string text = DynamicConvert.ToSafeString(data.xml);
             try
@@ -2720,7 +2798,7 @@ namespace XLY.SF.Project.Plugin.Android
                     wcf.Text = fileName;
                 }
             }
-            catch 
+            catch
             {
             }
         }
@@ -2730,7 +2808,7 @@ namespace XLY.SF.Project.Plugin.Android
         /// </summary>
         private void GetFavoriteItemAudio(dynamic data, ref WeChatFavorite wcf)
         {
-            wcf.DataType = "语音";
+            wcf.DataType = LanguageHelper.GetString(Languagekeys.PluginWechat_Audio);
 
             string text = DynamicConvert.ToSafeString(data.xml);
             try
@@ -2758,7 +2836,7 @@ namespace XLY.SF.Project.Plugin.Android
                     wcf.Text = fileName;
                 }
             }
-            catch 
+            catch
             {
             }
         }
@@ -2768,7 +2846,7 @@ namespace XLY.SF.Project.Plugin.Android
         /// </summary>
         private void GetFavoriteItemFile(dynamic data, ref WeChatFavorite wcf)
         {
-            wcf.DataType = "文件";
+            wcf.DataType = LanguageHelper.GetString(Languagekeys.PluginWechat_File);
 
             string text = DynamicConvert.ToSafeString(data.xml);
             try
@@ -2796,7 +2874,7 @@ namespace XLY.SF.Project.Plugin.Android
                     wcf.Text = fileName;
                 }
             }
-            catch 
+            catch
             {
             }
         }
@@ -2806,7 +2884,7 @@ namespace XLY.SF.Project.Plugin.Android
         /// </summary>
         private void GetFavoriteItemLink(dynamic data, ref WeChatFavorite wcf)
         {
-            wcf.DataType = "网页链接";
+            wcf.DataType = LanguageHelper.GetString(Languagekeys.PluginWechat_Link);
 
             string text = DynamicConvert.ToSafeString(data.xml);
             try
@@ -2825,7 +2903,7 @@ namespace XLY.SF.Project.Plugin.Android
 
                 wcf.Text = string.Format("{0}\r\n{1}", title, link).TrimStart("\r\n");
             }
-            catch 
+            catch
             {
             }
         }
@@ -2835,7 +2913,7 @@ namespace XLY.SF.Project.Plugin.Android
         /// </summary>
         private void GetFavoriteItemVideo(dynamic data, ref WeChatFavorite wcf)
         {
-            wcf.DataType = "视频";
+            wcf.DataType = LanguageHelper.GetString(Languagekeys.PluginWechat_Video);
 
             string text = DynamicConvert.ToSafeString(data.xml);
             try
@@ -2863,7 +2941,7 @@ namespace XLY.SF.Project.Plugin.Android
                     wcf.Text = fileName;
                 }
             }
-            catch 
+            catch
             {
             }
         }
@@ -2873,7 +2951,7 @@ namespace XLY.SF.Project.Plugin.Android
         /// </summary>
         private void GetFavoriteItemLocation(dynamic data, ref WeChatFavorite wcf)
         {
-            wcf.DataType = "位置信息";
+            wcf.DataType = LanguageHelper.GetString(Languagekeys.PluginWechat_Location);
 
             string text = DynamicConvert.ToSafeString(data.xml);
             try
@@ -2890,7 +2968,7 @@ namespace XLY.SF.Project.Plugin.Android
                 string lat = null == latNode ? "" : latNode.InnerText;
                 string lng = null == lngNode ? "" : lngNode.InnerText;
 
-                wcf.Text = string.Format("{0}-{1}\r\n经度:{2} 纬度:{3}", poiname, label, lat, lng);
+                wcf.Text = string.Format("{0}-{1}\r\n{2}:{3} {4}:{5}", poiname, label, LanguageHelper.GetString(Languagekeys.PluginWechat_Lat), lat, LanguageHelper.GetString(Languagekeys.PluginWechat_Lng), lng);
             }
             catch
             {
@@ -2902,7 +2980,7 @@ namespace XLY.SF.Project.Plugin.Android
         /// </summary>
         private void GetFavoriteItemMoreMsg(dynamic data, ref WeChatFavorite wcf)
         {
-            wcf.DataType = "聊天记录";
+            wcf.DataType = LanguageHelper.GetString(Languagekeys.PluginWechat_Msg);
 
             string text = DynamicConvert.ToSafeString(data.xml);
             try
@@ -2929,7 +3007,7 @@ namespace XLY.SF.Project.Plugin.Android
 
                 wcf.Text = sb.ToString();
             }
-            catch 
+            catch
             {
             }
         }
@@ -2939,7 +3017,7 @@ namespace XLY.SF.Project.Plugin.Android
         /// </summary>
         private void GetFavoriteItemUser(dynamic data, ref WeChatFavorite wcf)
         {
-            wcf.DataType = "自定义";
+            wcf.DataType = LanguageHelper.GetString(Languagekeys.PluginWechat_Custom);
 
             string text = DynamicConvert.ToSafeString(data.xml);
             try
@@ -2950,7 +3028,7 @@ namespace XLY.SF.Project.Plugin.Android
                 var dataitemNodes = doc.SelectNodes("//datalist/dataitem");
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine(string.Format("共{0}条", dataitemNodes.Count));
+                sb.AppendLine(string.Format(LanguageHelper.GetString(Languagekeys.PluginWechat_TotalInfo), dataitemNodes.Count));
                 foreach (XmlNode node in dataitemNodes)
                 {
                     var res = GetFavoriteDataItemString(node);
@@ -2985,15 +3063,15 @@ namespace XLY.SF.Project.Plugin.Android
                 {
                     case "1"://文本
                         #region 文本
-                        sb.Append("消息类型:文本 ");
+                        sb.AppendFormat("{0}:{1}", LanguageHelper.GetString(Languagekeys.PluginWechat_MsgType), LanguageHelper.GetString(Languagekeys.PluginWechat_String));
 
                         var datadesc = dataitemNode.SelectSingleNode("datadesc");
-                        sb.AppendFormat("内容:{0} ", datadesc.InnerText);
+                        sb.AppendFormat(LanguageHelper.GetString(Languagekeys.PluginWechat_Content) + ":{0} ", datadesc.InnerText);
                         #endregion
                         break;
                     case "2"://图片
                         #region 图片
-                        sb.Append("消息类型:图片 ");
+                        sb.AppendFormat("{0}:{1}", LanguageHelper.GetString(Languagekeys.PluginWechat_MsgType), LanguageHelper.GetString(Languagekeys.PluginWechat_Image));
 
                         fileName = dataitemNode.Attributes["dataid"].Value;
                         if (null != datafmtNode)
@@ -3004,17 +3082,17 @@ namespace XLY.SF.Project.Plugin.Android
                         {
                             var res = ListFavoriteFiles.FirstOrDefault(f => f.Name == fileName);
 
-                            sb.Append("文件路径:" + (res != null ? res.FullName.TrimStart(MediaFileRootPath) : fileName) + " ");
+                            sb.Append(LanguageHelper.GetString(Languagekeys.PluginWechat_FilePath) + ":" + (res != null ? res.FullName.TrimStart(MediaFileRootPath) : fileName) + " ");
                         }
                         else
                         {
-                            sb.Append("文件路径:" + fileName + " ");
+                            sb.Append(LanguageHelper.GetString(Languagekeys.PluginWechat_FilePath) + ":" + fileName + " ");
                         }
                         #endregion
                         break;
                     case "3"://语音
                         #region 语音
-                        sb.Append("消息类型:语音 ");
+                        sb.AppendFormat("{0}:{1}", LanguageHelper.GetString(Languagekeys.PluginWechat_MsgType), LanguageHelper.GetString(Languagekeys.PluginWechat_Audio));
 
                         fileName = dataitemNode.Attributes["dataid"].Value;
                         if (null != datafmtNode)
@@ -3025,17 +3103,17 @@ namespace XLY.SF.Project.Plugin.Android
                         {
                             var res = ListFavoriteFiles.FirstOrDefault(f => f.Name == fileName);
 
-                            sb.Append("文件路径:" + (res != null ? res.FullName.TrimStart(MediaFileRootPath) : fileName) + " ");
+                            sb.Append(LanguageHelper.GetString(Languagekeys.PluginWechat_FilePath) + ":" + (res != null ? res.FullName.TrimStart(MediaFileRootPath) : fileName) + " ");
                         }
                         else
                         {
-                            sb.Append("文件路径:" + fileName + " ");
+                            sb.Append(LanguageHelper.GetString(Languagekeys.PluginWechat_FilePath) + ":" + fileName + " ");
                         }
                         #endregion
                         break;
                     case "4"://视频
                         #region 视频
-                        sb.Append("消息类型:视频 ");
+                        sb.AppendFormat("{0}:{1}", LanguageHelper.GetString(Languagekeys.PluginWechat_MsgType), LanguageHelper.GetString(Languagekeys.PluginWechat_Video));
 
                         fileName = dataitemNode.Attributes["dataid"].Value;
                         if (null != datafmtNode)
@@ -3046,29 +3124,31 @@ namespace XLY.SF.Project.Plugin.Android
                         {
                             var res = ListFavoriteFiles.FirstOrDefault(f => f.Name == fileName);
 
-                            sb.Append("文件路径:" + (res != null ? res.FullName.TrimStart(MediaFileRootPath) : fileName) + " ");
+                            sb.Append(LanguageHelper.GetString(Languagekeys.PluginWechat_FilePath) + ":" + (res != null ? res.FullName.TrimStart(MediaFileRootPath) : fileName) + " ");
                         }
                         else
                         {
-                            sb.Append("文件路径:" + fileName + " ");
+                            sb.Append(LanguageHelper.GetString(Languagekeys.PluginWechat_FilePath) + ":" + fileName + " ");
                         }
                         #endregion
                         break;
                     case "6"://定位
                         #region 定位信息
-                        sb.Append("消息类型:定位信息 ");
+                        sb.AppendFormat("{0}:{1}", LanguageHelper.GetString(Languagekeys.PluginWechat_MsgType), LanguageHelper.GetString(Languagekeys.PluginWechat_Location));
 
                         var poinameNode = dataitemNode.SelectSingleNode("locitem/poiname");
                         var labelNode = dataitemNode.SelectSingleNode("locitem/label");
                         var latNode = dataitemNode.SelectSingleNode("locitem/lat");
                         var lngNode = dataitemNode.SelectSingleNode("locitem/lng");
 
-                        sb.AppendFormat("{0}-{1} 经度:{2} 纬度:{3} ", poinameNode.InnerText, labelNode.InnerText, latNode.InnerText, lngNode.InnerText);
+                        sb.AppendFormat("{0}-{1} {2}:{3} {4}:{5} ", poinameNode.InnerText, labelNode.InnerText,
+                            LanguageHelper.GetString(Languagekeys.PluginWechat_Lat), latNode.InnerText,
+                            LanguageHelper.GetString(Languagekeys.PluginWechat_Lng), lngNode.InnerText);
                         #endregion
                         break;
                     case "8"://文件
                         #region 文件
-                        sb.Append("消息类型:文件 ");
+                        sb.AppendFormat("{0}:{1}", LanguageHelper.GetString(Languagekeys.PluginWechat_MsgType), LanguageHelper.GetString(Languagekeys.PluginWechat_File));
 
                         fileName = dataitemNode.Attributes["dataid"].Value;
                         if (null != datafmtNode)
@@ -3079,17 +3159,17 @@ namespace XLY.SF.Project.Plugin.Android
                         {
                             var res = ListFavoriteFiles.FirstOrDefault(f => f.Name == fileName);
 
-                            sb.Append("文件路径:" + (res != null ? res.FullName.TrimStart(MediaFileRootPath) : fileName) + " ");
+                            sb.Append(LanguageHelper.GetString(Languagekeys.PluginWechat_FilePath) + ":" + (res != null ? res.FullName.TrimStart(MediaFileRootPath) : fileName) + " ");
                         }
                         else
                         {
-                            sb.Append("文件路径:" + fileName + " ");
+                            sb.Append(LanguageHelper.GetString(Languagekeys.PluginWechat_FilePath) + ":" + fileName + " ");
                         }
                         #endregion
                         break;
                     case "15"://视频 OR 文件
                         #region 视频
-                        sb.Append("消息类型:视频 ");
+                        sb.AppendFormat("{0}:{1}", LanguageHelper.GetString(Languagekeys.PluginWechat_MsgType), LanguageHelper.GetString(Languagekeys.PluginWechat_Video));
 
                         fileName = dataitemNode.Attributes["dataid"].Value;
                         if (null != datafmtNode)
@@ -3100,16 +3180,16 @@ namespace XLY.SF.Project.Plugin.Android
                         {
                             var res = ListFavoriteFiles.FirstOrDefault(f => f.Name == fileName);
 
-                            sb.Append("文件路径:" + (res != null ? res.FullName.TrimStart(MediaFileRootPath) : fileName) + " ");
+                            sb.Append(LanguageHelper.GetString(Languagekeys.PluginWechat_FilePath) + ":" + (res != null ? res.FullName.TrimStart(MediaFileRootPath) : fileName) + " ");
                         }
                         else
                         {
-                            sb.Append("文件路径:" + fileName + " ");
+                            sb.Append(LanguageHelper.GetString(Languagekeys.PluginWechat_FilePath) + ":" + fileName + " ");
                         }
                         #endregion
                         break;
                     default:
-                        sb.AppendFormat("消息类型:{0} ", datatype);
+                        sb.AppendFormat("{0}:{1}", LanguageHelper.GetString(Languagekeys.PluginWechat_MsgType), datatype);
                         break;
                 }
 
@@ -3125,16 +3205,16 @@ namespace XLY.SF.Project.Plugin.Android
                     var usr = LsAllFriends.FirstOrDefault(f => f.WeChatId == fromusr);
                     if (null != usr)
                     {
-                        sb.AppendFormat("来源:{0} ", usr.ShowName);
+                        sb.AppendFormat(LanguageHelper.GetString(Languagekeys.PluginWechat_Source) + ":{0} ", usr.ShowName);
                     }
                     else
                     {
-                        sb.AppendFormat("来源:{0} ", fromusr);
+                        sb.AppendFormat(LanguageHelper.GetString(Languagekeys.PluginWechat_Source) + ":{0} ", fromusr);
                     }
                 }
                 else if (null != datasrcnameNode)
                 {
-                    sb.AppendFormat("来源:{0} ", datasrcnameNode.InnerText);
+                    sb.AppendFormat(LanguageHelper.GetString(Languagekeys.PluginWechat_Source) + ":{0} ", datasrcnameNode.InnerText);
                 }
 
                 if (null != realchatnameNode)
@@ -3143,11 +3223,11 @@ namespace XLY.SF.Project.Plugin.Android
                     var usr = LsAllFriends.FirstOrDefault(f => f.WeChatId == realchatname);
                     if (null != usr)
                     {
-                        sb.AppendFormat("发送者:{0} ", usr.ShowName);
+                        sb.AppendFormat(LanguageHelper.GetString(Languagekeys.PluginWechat_Sender) + ":{0} ", usr.ShowName);
                     }
                     else
                     {
-                        sb.AppendFormat("发送者:{0} ", realchatname);
+                        sb.AppendFormat(LanguageHelper.GetString(Languagekeys.PluginWechat_Sender) + ":{0} ", realchatname);
                     }
                 }
 
@@ -3157,17 +3237,17 @@ namespace XLY.SF.Project.Plugin.Android
                     var usr = LsAllFriends.FirstOrDefault(f => f.WeChatId == tousr);
                     if (null != usr)
                     {
-                        sb.AppendFormat("接收者:{0} ", usr.ShowName);
+                        sb.AppendFormat(LanguageHelper.GetString(Languagekeys.PluginWechat_Receiver) + ":{0} ", usr.ShowName);
                     }
                     else
                     {
-                        sb.AppendFormat("接收者:{0} ", tousr);
+                        sb.AppendFormat(LanguageHelper.GetString(Languagekeys.PluginWechat_Receiver) + ":{0} ", tousr);
                     }
                 }
 
                 if (null != datasrctimeNode)
                 {//发送时间
-                    sb.AppendFormat("发送时间:{0} ", datasrctimeNode.InnerText);
+                    sb.AppendFormat(LanguageHelper.GetString(Languagekeys.PluginWechat_SendTime) + ":{0} ", datasrctimeNode.InnerText);
                 }
 
                 return sb.ToString().TrimEnd();
@@ -3189,7 +3269,7 @@ namespace XLY.SF.Project.Plugin.Android
             snsInfo.NickName = curSender.Nick;
             snsInfo.UserName = curSender.WeChatId;
             snsInfo.CreateTime = DynamicConvert.ToSafeDateTime(item.createTime);
-            snsInfo.TypeDesc = "发表朋友圈";
+            snsInfo.TypeDesc = LanguageHelper.GetString(Languagekeys.PluginWechat_SendSns);
 
             GetSnsContent(snsInfo, item.content as byte[]);
 
@@ -3276,12 +3356,12 @@ namespace XLY.SF.Project.Plugin.Android
                     byte[] dataByte = comment.wce.udata.Ptr2Bytes();
                     if (comment.wce.flag == WXIN_COMMENT_TYPE_FLAG.WXIN_COMMENT_TYPE_FLAG_LIKE)
                     {
-                        snsInfo.TypeDesc = "点赞";
-                        snsInfo.Content = "点赞";
+                        snsInfo.TypeDesc = LanguageHelper.GetString(Languagekeys.PluginWechat_Like);
+                        snsInfo.Content = LanguageHelper.GetString(Languagekeys.PluginWechat_Like);
                     }
                     else
                     {
-                        snsInfo.TypeDesc = "评论";
+                        snsInfo.TypeDesc = LanguageHelper.GetString(Languagekeys.PluginWechat_Comment);
                         snsInfo.Content = Encoding.UTF8.GetString(dataByte);
                     }
                     tree.Items.Add(snsInfo);
@@ -3298,12 +3378,12 @@ namespace XLY.SF.Project.Plugin.Android
                         dataByte = comment.wce.udata.Ptr2Bytes();
                         if (comment.wce.flag == WXIN_COMMENT_TYPE_FLAG.WXIN_COMMENT_TYPE_FLAG_LIKE)
                         {
-                            snsInfo.TypeDesc = "点赞";
-                            snsInfo.Content = "点赞";
+                            snsInfo.TypeDesc = LanguageHelper.GetString(Languagekeys.PluginWechat_Like);
+                            snsInfo.Content = LanguageHelper.GetString(Languagekeys.PluginWechat_Like);
                         }
                         else
                         {
-                            snsInfo.TypeDesc = "评论";
+                            snsInfo.TypeDesc = LanguageHelper.GetString(Languagekeys.PluginWechat_Comment);
                             snsInfo.Content = Encoding.UTF8.GetString(dataByte);
                         }
                         tree.Items.Add(snsInfo);

@@ -82,19 +82,19 @@
                                         </ComboBox.Resources>
                                         <ComboBoxItem x:Name="device_PopUp">
                                             <TextBlock  Margin="24,0,0,0"
-                                                        Text="{Binding XPath=DeviceLanguage/Device_PopUp,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
+                                                        Text="{Binding XPath=SourceSelection/PopUp,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                         </ComboBoxItem>
                                         <ComboBoxItem x:Name="device_Move">
                                             <TextBlock  Margin="24,0,0,0"
-                                                        Text="{Binding XPath=DeviceLanguage/Device_Move,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
+                                                        Text="{Binding XPath=SourceSelection/Move,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                         </ComboBoxItem>
                                         <ComboBoxItem x:Name="device_Delete">
                                             <TextBlock Margin="24,0,0,0"
-                                                       Text="{Binding XPath=DeviceLanguage/Device_Delete,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
+                                                       Text="{Binding XPath=SourceSelection/Delete,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                         </ComboBoxItem>
                                         <ComboBoxItem x:Name="device_Close">
                                             <TextBlock Margin="24,0,0,0"
-                                                       Text="{Binding XPath=DeviceLanguage/Device_Close,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
+                                                       Text="{Binding XPath=SourceSelection/Close,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                         </ComboBoxItem>
                                         <!--界面触发器-->
                                         <i:Interaction.Triggers>
@@ -149,7 +149,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <DockPanel>
-        <Button Content="{Binding XPath=DeviceLanguage/Deivce_DataSource,Source={x:Static ex:SystemContext.LanguageProvider}}"
+        <Button Content="{Binding XPath=SourceSelection/Title,Source={x:Static ex:SystemContext.LanguageProvider}}"
                 Margin="30,0,0,0"
                 Height="34"
                 Width="104"

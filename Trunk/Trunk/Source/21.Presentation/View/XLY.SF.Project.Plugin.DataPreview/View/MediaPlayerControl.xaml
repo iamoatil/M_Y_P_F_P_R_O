@@ -13,7 +13,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
+    <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
@@ -24,13 +24,15 @@
             <TextBlock x:Name="Title" Foreground="#9ba5b9" FontSize="14" Margin="10 0" VerticalAlignment="Center"/>
         </Border>
         <Grid Grid.Row="1" x:Name="MediaElementContainer" Background="Black"/>
-        <Image x:Name="imgAudio" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/player_mp3.png" Grid.Row="1" Stretch="None"/>
-        <Slider Grid.Row="2" x:Name="TimeSlider" PreviewMouseDown="TimeSlider_PreviewMouseDown" Maximum="100" />
+        <Grid x:Name="imgAudio" Background="Black" Grid.Row="1" >
+            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/player_mp3.png" Stretch="None" Panel.ZIndex="999"/>
+        </Grid>
+        <Slider Grid.Row="2" x:Name="TimeSlider" PreviewMouseUp="TimeSlider_PreviewMouseUp" Maximum="100" />
         <StackPanel Orientation="Horizontal" Grid.Row="3" Height="30" Background="#CC000000">
             <Button x:Name="btnStart" Style="{StaticResource btn_GrayIcon}" Command="{Binding ClearCommond}" Margin="14 0 0 0" Width="16" Height="16" Padding="0" ToolTip="{local:Lang Key=Start}" Click="Start_Click" >
                 <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/player_play.png" Width="16" Height="16"/>
             </Button>
-            <Button x:Name="btnPause" Style="{StaticResource btn_GrayIcon}" Command="{Binding ClearCommond}" Margin="14 0 0 0" Width="16" Height="16" Padding="0" ToolTip="{local:Lang Key=Pause}" Click="Pause_Click" >
+            <Button x:Name="btnPause" Style="{StaticResource btn_GrayIcon}" Command="{Binding ClearCommond}" Margin="14 0 0 0" Width="16" Height="16" Padding="0" ToolTip="{local:Lang Key=Pause}" Click="Pause_Click"  Visibility="Collapsed">
                 <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/player_pause.png" Width="16" Height="16"/>
             </Button>
             <Button x:Name="btnStop" Style="{StaticResource btn_GrayIcon}" Command="{Binding ClearCommond}" Margin="22 0 0 0" Width="16" Height="16" Padding="0" ToolTip="{local:Lang Key=Stop}" Click="Stop_Click" >
@@ -40,15 +42,5 @@
             <TextBlock Foreground="#9ba5b9" VerticalAlignment="Center" Text="/" FontSize="12"/>
             <TextBlock x:Name="TotalTime" Text="00:00:00" HorizontalAlignment="Right" Foreground="#9ba5b9"  VerticalAlignment="Center" FontSize="12"/>
         </StackPanel>
-        <!--<Grid Grid.Row="3">
-            <TextBlock x:Name="StartTime" Text="00:00:00" Foreground="White"/>
-            <TextBlock x:Name="TotalTime" Text="00:00:00" HorizontalAlignment="Right" Foreground="White"/>
-        </Grid>
-        <Grid Grid.Row="4">
-            <Button Content="{local:Lang Key=Start}" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="75" Click="Start_Click"  />
-            <Button x:Name="Continue" Content="{local:Lang Key=Continue}" HorizontalAlignment="Center"  VerticalAlignment="Bottom" Width="76" Click="Continue_Click" />
-            <Button x:Name="Pause" Content="{local:Lang Key=Pause}" HorizontalAlignment="Center"  VerticalAlignment="Bottom" Width="76" Click="Pause_Click" />
-            <Button Content="{local:Lang Key=Stop}" HorizontalAlignment="Right"  VerticalAlignment="Bottom" Width="75" Click="Stop_Click"  />
-        </Grid>-->
     </Grid>
 </UserControl>

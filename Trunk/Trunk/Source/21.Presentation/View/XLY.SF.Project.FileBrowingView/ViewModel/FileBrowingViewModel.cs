@@ -18,8 +18,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
+using XLY.SF.Framework.Core.Base.MessageAggregation;
+using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Framework.Language;
+using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Domains.Contract;
 using XLY.SF.Project.FileBrowingView.Language;
@@ -62,12 +65,24 @@ namespace XLY.SF.Project.FileBrowingView
             DownSelectedFileNodeCommand = new RelayCommand(OnDownSelectedFileNode);
             SearchFileNodeCommand = new RelayCommand(OnSearchFileNode);
             ClearSearchCommand = new RelayCommand(OnClearSearch);
+            FilePreviewCommand = new RelayCommand<FileBrowingTreeNode>(FilePreview);
 
             DataStateSource = new Dictionary<EnumDataState, string>()
             {
                 { EnumDataState.None, LanguageHelper.LanguageManager[Languagekeys.FileBrowing_View_Search_DataStateAll] },
                 { EnumDataState.Normal,LanguageHelper.LanguageManager[Languagekeys.FileBrowing_View_Search_DataStateNormal] },
                 { EnumDataState.Deleted ,LanguageHelper.LanguageManager[Languagekeys.FileBrowing_View_Search_DataStateDelete] }
+            };
+            FileTypeSource = new Dictionary<EnumFileType, string>()
+            {
+                {EnumFileType.All,LanguageHelper.LanguageManager[Languagekeys.FileBrowing_View_FileType_All] },
+                {EnumFileType.Txt,LanguageHelper.LanguageManager[Languagekeys.FileBrowing_View_FileType_Txt] },
+                {EnumFileType.Image,LanguageHelper.LanguageManager[Languagekeys.FileBrowing_View_FileType_Image] },
+                {EnumFileType.Voice,LanguageHelper.LanguageManager[Languagekeys.FileBrowing_View_FileType_Voice] },
+                {EnumFileType.Video,LanguageHelper.LanguageManager[Languagekeys.FileBrowing_View_FileType_Video] },
+                {EnumFileType.Rar,LanguageHelper.LanguageManager[Languagekeys.FileBrowing_View_FileType_Rar] },
+                {EnumFileType.DB,LanguageHelper.LanguageManager[Languagekeys.FileBrowing_View_FileType_DB] },
+                {EnumFileType.Other,LanguageHelper.LanguageManager[Languagekeys.FileBrowing_View_FileType_Other] }
             };
             KeywordTypeSource = new Dictionary<int, string>()
             {
@@ -107,6 +122,8 @@ namespace XLY.SF.Project.FileBrowingView
         public RelayCommand<FileBrowingTreeNode> DownFileNodeCommand { get; set; }
 
         public RelayCommand<FileBrowingTreeNode> ClickCheckCommand { get; set; }
+
+        public RelayCommand<FileBrowingTreeNode> FilePreviewCommand { get; set; }
 
         public RelayCommand DownSelectedFileNodeCommand { get; set; }
 
@@ -263,6 +280,8 @@ namespace XLY.SF.Project.FileBrowingView
             node.IsSelected = !node.IsSelected;
             _IsTableSelectAll = TableItems.All(i => i.IsSelected);
             OnPropertyChanged(nameof(IsTableSelectAll));
+
+            FilePreview(node);
         }
 
         /// <summary>
@@ -294,6 +313,130 @@ namespace XLY.SF.Project.FileBrowingView
             {
                 TableItems = new ObservableCollection<FileBrowingTreeNode>(node.AllChildrenNodes);
                 IsTableSelectAll = TableItems.All(s => s.IsSelected);
+            }
+        }
+
+        #endregion
+
+        #region 文件预览
+
+        private EnumFilePreviewState _FilePreviewState = EnumFilePreviewState.None;
+
+        /// <summary>
+        /// 文件预览状态
+        /// </summary>
+        public EnumFilePreviewState FilePreviewState
+        {
+            get => _FilePreviewState;
+            set
+            {
+                if (value == _FilePreviewState)
+                {
+                    return;
+                }
+
+                _FilePreviewState = value;
+                OnPropertyChanged();
+
+                HasFilePreview = value == EnumFilePreviewState.Show;
+            }
+        }
+
+        private string _FilePreviewErrorMsg;
+
+        /// <summary>
+        /// 文件预览错误提示消息
+        /// </summary>
+        public string FilePreviewErrorMsg
+        {
+            get => _FilePreviewErrorMsg;
+            set
+            {
+                _FilePreviewErrorMsg = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _HasFilePreview = false;
+
+        /// <summary>
+        /// 是否显示文件预览
+        /// </summary>
+        public bool HasFilePreview
+        {
+            get => _HasFilePreview;
+            set
+            {
+                if (value == _HasFilePreview)
+                {
+                    return;
+                }
+
+                _HasFilePreview = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// 当前预览的节点
+        /// </summary>
+        private FileBrowingTreeNode CurFilePreviewNode = null;
+
+        /// <summary>
+        /// 文件预览
+        /// </summary>
+        /// <param name="node"></param>
+        private void FilePreview(FileBrowingTreeNode node)
+        {
+            if (CurFilePreviewNode == node)
+            {
+                return;
+            }
+
+            CurFilePreviewNode = node;
+
+            if (null == node || !node.Data.IsFile)
+            {//文件夹无法预览
+                FilePreviewState = EnumFilePreviewState.None;
+                return;
+            }
+
+            if (node.FileSize == "0")
+            {//文件大小为0，无法预览
+                FilePreviewState = EnumFilePreviewState.Error;
+                FilePreviewErrorMsg = LanguageHelper.LanguageManager[Languagekeys.FileBrowing_View_PreView_FileZero];
+                return;
+            }
+
+            if (node.Data.IsLocalFile)
+            {//本地文件，直接预览
+                FilePreviewState = EnumFilePreviewState.Show;
+                MsgAggregation.Instance.SendGeneralMsg(new GeneralArgs<object>(MessageKeys.PreviewKey) { Parameters = node.Data.LocalFilePath });
+            }
+            else
+            {//先下载，再预览
+                Task.Run(async () =>
+                {
+                    FilePreviewState = EnumFilePreviewState.Downloading;
+                    CancellationTokenSource cts = new CancellationTokenSource();
+                    FileBrowingIAsyncTaskProgress fts = new FileBrowingIAsyncTaskProgress();
+                    fts.ExportFileNodeHandle += (dn, issuccess, localpath) =>
+                      {
+                          if (issuccess && FileHelper.IsValid(localpath))
+                          {
+                              FilePreviewState = EnumFilePreviewState.Show;
+
+                              AsyncOperation.Post((t) => MsgAggregation.Instance.SendGeneralMsg(new GeneralArgs<object>(MessageKeys.PreviewKey) { Parameters = localpath }), null);
+                          }
+                          else
+                          {
+                              FilePreviewState = EnumFilePreviewState.Error;
+                              FilePreviewErrorMsg = LanguageHelper.LanguageManager[Languagekeys.FileBrowing_View_PreView_DownloadError];
+                          }
+                      };
+
+                    await Service.Download(node.Data, System.IO.Path.GetTempPath(), false, cts, fts);
+                });
             }
         }
 
@@ -386,6 +529,21 @@ namespace XLY.SF.Project.FileBrowingView
             }
         }
 
+        private Dictionary<EnumFileType, string> _FileTypeSource = null;
+
+        /// <summary>
+        /// 文件类型列表
+        /// </summary>	
+        public Dictionary<EnumFileType, string> FileTypeSource
+        {
+            get { return _FileTypeSource; }
+            set
+            {
+                _FileTypeSource = value;
+                OnPropertyChanged();
+            }
+        }
+
         private Dictionary<int, string> _KeywordTypeSource = null;
 
         /// <summary>
@@ -442,6 +600,21 @@ namespace XLY.SF.Project.FileBrowingView
             set
             {
                 _DataState = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private EnumFileType _FileType = EnumFileType.All;
+
+        /// <summary>
+        /// 文件类型
+        /// </summary>	
+        public EnumFileType FileType
+        {
+            get { return _FileType; }
+            set
+            {
+                _FileType = value;
                 OnPropertyChanged();
             }
         }
@@ -511,6 +684,7 @@ namespace XLY.SF.Project.FileBrowingView
             StartTime = null;
             EndTime = null;
             DataState = EnumDataState.None;
+            FileType = EnumFileType.All;
             KeywordType = 0;
             Keyword = null;
         }
@@ -534,6 +708,10 @@ namespace XLY.SF.Project.FileBrowingView
                 if (StartTime != null || EndTime != null)
                 {
                     list.Add(new FilterByDateRangeArgs() { StartTime = StartTime, EndTime = EndTime });
+                }
+                if (FileType != EnumFileType.All)
+                {
+                    list.Add(new FilterByEnumFileTypeArgs(FileType));
                 }
                 if (!string.IsNullOrWhiteSpace(Keyword))
                 {
@@ -661,7 +839,7 @@ namespace XLY.SF.Project.FileBrowingView
         /// <summary>
         /// 文件大小
         /// </summary>
-        public string FileSize => Data.IsFile ? Data.FileSize.ToString() : "";
+        public string FileSize => Data.IsFile ? FileHelper.GetFileSize((long)Data.FileSize) : "";
 
         public FileBrowingTreeNode(FileBrowingNode node)
         {
@@ -674,4 +852,34 @@ namespace XLY.SF.Project.FileBrowingView
         }
     }
 
+    /// <summary>
+    /// 文件预览状态
+    /// </summary>
+    public enum EnumFilePreviewState
+    {
+        /// <summary>
+        /// 无
+        /// </summary>
+        None,
+        /// <summary>
+        /// 预览错误
+        /// </summary>
+        Error,
+        /// <summary>
+        /// 下载文件中
+        /// </summary>
+        Downloading,
+        /// <summary>
+        /// 文件预览显示
+        /// </summary>
+        Show
+    }
+
+    /// <summary>
+    /// 内部消息
+    /// </summary>
+    public class MessageKeys
+    {
+        public const string PreviewKey = "FileBrowingViewPreviewKey";
+    }
 }

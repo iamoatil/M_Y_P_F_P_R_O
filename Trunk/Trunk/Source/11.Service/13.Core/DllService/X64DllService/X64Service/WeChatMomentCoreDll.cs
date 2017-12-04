@@ -17,7 +17,7 @@ namespace X64Service
     public static class WeChatMomentCoreDll
     {
         //todo 需要确定dll的位置
-        private const string WeiXinMomentDllname = "bin\\WeChat_Moment_Extract_for_Android.dll";
+        private const string WeiXinMomentDllname = "Lib\\vcdllX64\\Mirror\\WeChat_Moment_Extract_for_Android.dll";
 
         /// <summary>
         /// 解析微信朋友圈内容 

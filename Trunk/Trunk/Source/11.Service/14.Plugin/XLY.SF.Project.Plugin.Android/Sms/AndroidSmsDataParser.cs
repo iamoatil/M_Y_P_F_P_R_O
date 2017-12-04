@@ -2,6 +2,7 @@
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.Android
 {
@@ -13,8 +14,8 @@ namespace XLY.SF.Project.Plugin.Android
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{DAB60C73-4A35-488F-A0FA-3620F6924B0F}";
-            pluginInfo.Name = "短信";
-            pluginInfo.Group = "基本信息";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_Sms);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_BasicInfo);
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
@@ -23,7 +24,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             pluginInfo.AppName = "com.android.providers.telephony";
             pluginInfo.Icon = "\\icons\\sms.png";
-            pluginInfo.Description = "提取安卓设备短信信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_AndroidSms);
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/data/data/com.android.providers.telephony/databases/#F");
             pluginInfo.SourcePath.AddItem("/data/data/com.android.providers.contacts/databases/#F");

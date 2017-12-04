@@ -53,6 +53,25 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         {
             _currentDevicePath = parameters?.ToString();
             LoadPlugin();
+
+            //判断是否是智能预警
+            if(!string.IsNullOrWhiteSpace(_currentDevicePath))
+            {
+                if(_currentDevicePath.StartsWith("{"))
+                {
+                    try
+                    {
+                        var inspectConfig = Serializer.JsonDeserializeIO<ViewModel.InspectionConfig>(_currentDevicePath);
+                        _currentDevicePath = inspectConfig.DevicePath;
+                        MessageAggregation.SendGeneralMsg(new GeneralArgs<List<Inspection>>(MessageKeys.InspectionKey) { Parameters = inspectConfig.Config });
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+            }
+
             LoadData(_currentDevicePath);
         }
 
@@ -222,7 +241,6 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         }
         #endregion
 
-
         private string _currentDevicePath = null;
 
         #endregion
@@ -271,15 +289,15 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         /// </summary>
         private void DoDeleteDataCommond(object item)
         {
-            if(item == null)
+            if (item == null)
             {
                 return;
             }
-            if(ShowMessageBox(string.Format(Languagekeys.DeleteNotice, item)))
+            if (ShowMessageBox(string.Format(Languagekeys.DeleteNotice, item)))
             {
                 Task.Factory.StartNew(() =>
                 {
-                    AsyncOperator.Execute(() => { CurrentOperation = Languagekeys.DeletingData; IsFiltering = true; } );
+                    AsyncOperator.Execute(() => { CurrentOperation = Languagekeys.DeletingData; IsFiltering = true; });
                     string path = Path.Combine(_currentDevicePath, item.ToString());
                     BaseUtility.Helper.FileHelper.RemoveDirectoryReadOnly(path);
                     Directory.Delete(path, true);
@@ -306,7 +324,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         #region 方法
         private bool ShowMessageBox(string message)
         {
-            if(_MessageBox != null)
+            if (_MessageBox != null)
             {
                 return _MessageBox.ShowDialogWarningMsg(message);
             }
@@ -324,131 +342,47 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         }
         private void LoadData(string devicePath)
         {
+            if (IsFiltering)
+                return;
+            IsFiltering = true;
             Task.Factory.StartNew(() =>
             {
-                IsFiltering = true;
-                //string DB_PATH = @"C:\Users\fhjun\Desktop\test.db";
-                //string DBBMK_PATH = @"C:\Users\fhjun\Desktop\test_bmk.db";
-                //if (File.Exists(DB_PATH))
-                //{
-                //    File.Delete(DB_PATH);
-                //}
-                //if (File.Exists(DBBMK_PATH))
-                //{
-                //    File.Delete(DBBMK_PATH);
-                //}
-                //var treeSource = new TreeDataSource();
-                //treeSource.TreeNodes = new List<TreeNode>();
-                //treeSource.PluginInfo = new DataParsePluginInfo() { Guid = "微信", Name = "微信" };
-
-                //for (int i = 0; i < 2; i++)
-                //{
-                //    TreeNode t = new TreeNode();
-                //    t.Text = "账号" + i;
-                //    treeSource.TreeNodes.Add(t);
-
-                //    TreeNode accouts = new TreeNode();
-                //    accouts.Text = "好友列表";
-                //    accouts.IsHideChildren = true;
-                //    t.TreeNodes.Add(accouts);
-                //    accouts.Type = typeof(WeChatFriendShow);
-                //    accouts.Items = new DataItems<WeChatFriendShow>(DB_PATH);
-                //    for (int j = 0; j < 10; j++)
-                //    {
-                //        accouts.Items.Add(new WeChatFriendShow() { Nick = "昵称" + j, WeChatId = "账号" + j, Remark = "XLY_张三" + j });
-                //    }
-
-                //    TreeNode accouts2 = new TreeNode();
-                //    accouts2.Text = "聊天记录";
-                //    accouts2.IsHideChildren = i % 2 == 0;
-                //    accouts2.Type = typeof(WeChatFriendShowX);
-                //    accouts2.Items = new DataItems<WeChatFriendShowX>(DB_PATH);
-                //    t.TreeNodes.Add(accouts2);
-                //    for (int j = 0; j < 15; j += 2)
-                //    {
-                //        accouts2.Items.Add(new WeChatFriendShowX() { DataState = j % 3 == 0 ? EnumDataState.Deleted : EnumDataState.Normal, Nick = "昵称" + j, WeChatId = "账号" + j, Remark = "XLY_李四" + j });
-                //        TreeNode friend = new TreeNode();
-                //        friend.Text = "昵称" + j;
-                //        friend.Type = typeof(MessageCore);
-                //        friend.Items = new DataItems<MessageCore>(DB_PATH);
-                //        accouts2.TreeNodes.Add(friend);
-
-                //        friend.Items.Add(new MessageCore() { SenderName = friend.Text, SenderImage = "images/zds.png", Receiver = t.Text, Content = "http://www.sohu.com", SendState = EnumSendState.Send, Type = EnumColumnType.URL });
-                //        for (int k = 0; k < 130; k++)
-                //        {
-                //            MessageCore msg = new MessageCore() { SenderName = friend.Text, SenderImage = "images/zds.png", Receiver = t.Text, Content = "消息内容" + k, MessageType = k % 4 == 0 ? "图片" : "文本", SendState = EnumSendState.Send, Date = DateTime.Now.AddHours(k * 3) };
-                //            friend.Items.Add(msg);
-                //            MessageCore msg2 = new MessageCore() { Receiver = friend.Text, SenderImage = "images/zjq.png", SenderName = t.Text, Content = "返回消息内容" + k, MessageType = k % 5 == 0 ? "图片" : "文本", SendState = EnumSendState.Receive, Date = DateTime.Now.AddHours(k * 3) };
-                //            friend.Items.Add(msg2);
-                //        }
-                //    }
-
-                //    TreeNode accouts3 = new TreeNode();
-                //    accouts3.Text = "群消息";
-                //    accouts3.IsHideChildren = true;
-                //    t.TreeNodes.Add(accouts3);
-
-                //    TreeNode accouts4 = new TreeNode();
-                //    accouts4.Text = "发现";
-                //    accouts4.IsHideChildren = true;
-                //    t.TreeNodes.Add(accouts4);
-                //}
-                //treeSource.BuildParent();
-
-                //var sms = new SimpleDataSource();
-                //sms.PluginInfo = new DataParsePluginInfo() { Guid = "短信", Name = "短信" };
-                //sms.Type = typeof(SMS);
-                //sms.Items = new DataItems<SMS>(DB_PATH);
-                //for (int i = 0; i < 10; i++)
-                //{
-                //    sms.Items.Add(new SMS() { StartDate = DateTime.Now.AddDays(i), Content = "短信内容内容" + i, DataState = i % 3 == 0 ? EnumDataState.None : EnumDataState.Deleted });
-                //}
-                //sms.Items.Add(new SMS() { StartDate = DateTime.Now.AddDays(99), Content = "http://www.234.com", DataState = EnumDataState.Deleted });
-                //sms.BuildParent();
-
-                //sms.Filter<AbstractDataItem>();
-                //treeSource.Filter<AbstractDataItem>();
-
-                //var dataList = new ObservableCollection<DataExtactionItem>() {
-                //    new DataExtactionItem(){Text = "自动提取", Total = 511, IsItemStyle=true, TreeNodes = new ObservableCollection<DataExtactionItem>(){
-                //        new DataExtactionItem(){Text = "基础信息", IsItemStyle=false,TreeNodes = new ObservableCollection<DataExtactionItem>(){
-                //           new DataExtactionItem(){Text = "短信",Data = sms, IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionItem>() }
-                //    } }, new DataExtactionItem(){Text = "社交聊天", IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionItem>(){
-                //           new DataExtactionItem(){Text = "微信", IsItemStyle=false, Data = treeSource, TreeNodes = new ObservableCollection<DataExtactionItem>() }
-                //    }}}},
-                //    new DataExtactionItem(){Text = "镜像提取", Total = 11, IsItemStyle=true, TreeNodes = new ObservableCollection<DataExtactionItem>(){
-                //        new DataExtactionItem(){Text = "基础信息", IsItemStyle=false,TreeNodes = new ObservableCollection<DataExtactionItem>(){
-                //           new DataExtactionItem(){Text = "短信",Data = sms, IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionItem>() }
-                //    } }, new DataExtactionItem(){Text = "社交聊天", IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionItem>(){
-                //           new DataExtactionItem(){Text = "微信", IsItemStyle=false, Data = treeSource, TreeNodes = new ObservableCollection<DataExtactionItem>() }
-                //    }}}},
-                //     new DataExtactionItem(){Text = "APP降级提取",Total = 0, IsItemStyle=true, TreeNodes = new ObservableCollection<DataExtactionItem>(){
-                //        new DataExtactionItem(){Text = "基础信息", IsItemStyle=false,TreeNodes = new ObservableCollection<DataExtactionItem>(){
-                //           new DataExtactionItem(){Text = "短信",Data = sms, IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionItem>() }
-                //    } }, new DataExtactionItem(){Text = "社交聊天", IsItemStyle=false, TreeNodes = new ObservableCollection<DataExtactionItem>(){
-                //           new DataExtactionItem(){Text = "微信", IsItemStyle=false, Data = treeSource, TreeNodes = new ObservableCollection<DataExtactionItem>() }
-                //    }}}}
-                //};
-
-                //devicePath = @"C:\Users\fhjun\Desktop\默认案例_20171115[081055]\默认案例_20171115[081055]\R7007_20171115[081055]";
-                _currentDevicePath = devicePath;
-                var dataList = DeviceExternsion.LoadDeviceData(devicePath);
-                foreach (var item in dataList)
+                try
                 {
-                    item.BuildParent();
+                    //AsyncOperator.Execute(() => IsFiltering = true);
+
+                    //devicePath = @"C:\Users\fhjun\Desktop\默认案例_20171115[081055]\默认案例_20171115[081055]\R7007_20171115[081055]";
+                    _currentDevicePath = devicePath;
+                    var dataList = DeviceExternsion.LoadDeviceData(devicePath);
+                    foreach (var item in dataList)
+                    {
+                        item.BuildParent();
+                    }
+                    AsyncOperator.Execute(() =>
+                    {
+                        DataList = dataList;
+
+                        //重置数据
+                        MessageAggregation.SendGeneralMsg(new GeneralArgs<ObservableCollection<DataExtactionItem>>(MessageKeys.SetDataListKey) { Parameters = DataList });
+
+                        IsFiltering = false;
+                        HasDataList = DataList != null && DataList.Count > 0;
+
+                        SelectDefaultNode(DataList);
+                    });
                 }
-                AsyncOperator.Execute(() =>
+                catch (Exception ex)
                 {
-                    DataList = dataList;
 
-                    //重置数据
-                    MessageAggregation.SendGeneralMsg(new GeneralArgs<ObservableCollection<DataExtactionItem>>(MessageKeys.SetDataListKey) { Parameters = DataList });
-
-                    IsFiltering = false;
-                    HasDataList = DataList != null && DataList.Count > 0;
-
-                    SelectDefaultNode(DataList);
-                });
+                }
+                finally
+                {
+                    AsyncOperator.Execute(() => 
+                    {
+                        IsFiltering = false;
+                        MessageAggregation.SendGeneralMsg(new GeneralArgs<object>(MessageKeys.DataLoadedCompletedKey) { Parameters = true });
+                    });
+                }
             });
         }
 
@@ -463,7 +397,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                 CurrentOperation = Languagekeys.Searching;
                 IsFiltering = obj.Parameters;
 
-                if(!IsFiltering)
+                if (!IsFiltering)
                 {
                     SelectDefaultNode(DataList);
                 }
@@ -475,21 +409,21 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         /// </summary>
         private bool SelectDefaultNode(ObservableCollection<DataExtactionItem> nodes)
         {
-            if(nodes == null)
+            if (nodes == null)
             {
                 return false;
             }
             foreach (var item in nodes)
             {
-                if(item != null && item.Data != null)
+                if (item != null && item.Data != null)
                 {
                     item.IsSelected = true;
                     DoSelecedAppChanged(item);
                     return true;
                 }
-                if(item.TreeNodes != null)
+                if (item.TreeNodes != null)
                 {
-                    if(SelectDefaultNode(item.TreeNodes))
+                    if (SelectDefaultNode(item.TreeNodes))
                     {
                         return true;
                     }
@@ -500,5 +434,5 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         #endregion
     }
 
-   
+
 }

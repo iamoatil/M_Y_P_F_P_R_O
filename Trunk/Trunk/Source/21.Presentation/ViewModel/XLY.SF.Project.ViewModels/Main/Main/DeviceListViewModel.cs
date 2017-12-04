@@ -15,6 +15,7 @@ using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Project.ViewModels.Main.CaseManagement;
 using System.Linq;
 using XLY.SF.Project.ViewDomain.Model.PresentationNavigationElement;
+using XLY.SF.Framework.Language;
 
 namespace XLY.SF.Project.ViewModels.Main
 {
@@ -44,7 +45,7 @@ namespace XLY.SF.Project.ViewModels.Main
             _moveToCommandProxy = new ProxyRelayCommand<DeviceExtractionAdorner>(MoveTo);
             _deleteCommandProxy = new ProxyRelayCommand<DeviceExtractionAdorner>(Delete);
             PopupCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<DeviceExtractionAdorner>(Popup);
-            MessageAggregation.RegisterGeneralMsg<DeviceExtractionAdorner>(this, ExportKeys.DeviceWindowClosedMsg, (d) => BackToList(d.Parameters));
+            MessageAggregation.RegisterGeneralMsg<object>(this, ExportKeys.DeviceWindowClosedMsg, (d) => BackToList(d.Parameters as DeviceExtractionAdorner));
         }
 
         #endregion
@@ -165,7 +166,13 @@ namespace XLY.SF.Project.ViewModels.Main
         private void Popup(DeviceExtractionAdorner de)
         {
             Items.Remove(de);
-            NavigationForNewWindow(ExportKeys.DeviceWindowContentView, de, true);
+            //NavigationForNewWindow(ExportKeys.DeviceWindowContentView, de, true);
+
+            //TODO
+            //由于窗体导航在Shell里面，DeviceExtractionAdorner在ViewModel里面
+            //所以此处创建object数组，Shell解析时，固定用此格式
+            //
+            NavigationForNewWindow(ExportKeys.DeviceMainView, new object[] { de.Device.ID, de });
         }
 
         /// <summary>
@@ -230,7 +237,7 @@ namespace XLY.SF.Project.ViewModels.Main
         /// <returns></returns>
         private String Delete(DeviceExtractionAdorner de)
         {
-            if (MessageBox.ShowDialogWarningMsg(""))
+            if (MessageBox.ShowDialogWarningMsg(SystemContext.LanguageManager[Languagekeys.SourceSelection_DeletePrompt]))
             {
                 var log = $"确认删除设备[{de.Name}]";
 

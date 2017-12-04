@@ -2,6 +2,7 @@
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.Android
 {
@@ -13,8 +14,8 @@ namespace XLY.SF.Project.Plugin.Android
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{EE9D9548-1206-45EA-B2D3-98B1CCF055A2}";
-            pluginInfo.Name = "通话记录";
-            pluginInfo.Group = "基本信息";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_Call);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_BasicInfo);
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
@@ -23,7 +24,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             pluginInfo.AppName = "com.android.providers.contacts";
             pluginInfo.Icon = "\\icons\\call.png";
-            pluginInfo.Description = "提取安卓设备通话记录信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_AndroidCall);
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/data/data/com.android.providers.contacts/databases/#F");
 

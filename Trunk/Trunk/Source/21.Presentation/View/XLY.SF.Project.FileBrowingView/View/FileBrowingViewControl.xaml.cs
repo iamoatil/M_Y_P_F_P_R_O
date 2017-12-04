@@ -1,6 +1,9 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
+using XLY.SF.Framework.Core.Base.MefIoc;
+using XLY.SF.Framework.Core.Base.MessageAggregation;
+using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base.ViewModel;
+using XLY.SF.Project.ViewDomain.MefKeys;
 
 namespace XLY.SF.Project.FileBrowingView
 {
@@ -14,6 +17,33 @@ namespace XLY.SF.Project.FileBrowingView
         public FileBrowingViewControl()
         {
             InitializeComponent();
+
+            var preview = IocManagerSingle.Instance.GetViewPart(ExportKeys.DataPreView);
+            if (preview != null)
+            {
+                preview.DataSource.LoadViewModel();
+                _preVM = preview.DataSource;
+                preView.Content = preview;
+
+                MsgAggregation.Instance.RegisterGeneralMsg<object>(this, MessageKeys.PreviewKey, RefreshPreview);
+            }
+        }
+
+        private ViewModelBase _preVM = null;
+
+        private void RefreshPreview(object data)
+        {
+            if (data is GeneralArgs<object> g)
+            {
+                if (g.Parameters == null)
+                {
+                    _preVM?.Release();
+                }
+                else
+                {
+                    _preVM?.ReceiveParameters(g.Parameters);
+                }
+            }
         }
 
         [Import("ExportKey_ModuleFileBowingViewModel", typeof(ViewModelBase))]

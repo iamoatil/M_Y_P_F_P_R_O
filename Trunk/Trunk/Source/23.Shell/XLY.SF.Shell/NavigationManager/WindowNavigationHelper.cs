@@ -15,6 +15,9 @@ using XLY.SF.Project.Themes;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Shell.CommWindow;
 using XLY.SF.Project.Extension.Helper;
+using ProjectExtend.Context;
+using XLY.SF.Project.ViewDomain.Model.PresentationNavigationElement;
+using XLY.SF.Framework.Log4NetService;
 
 
 /*************************************************
@@ -74,10 +77,55 @@ namespace XLY.SF.Shell.NavigationManager
         //打开非模式对话框
         private void OpenNewWindowCallback(NormalNavigationArgs args)
         {
-            var targetView = NavigationViewCreater.CreateView(args.MsgToken,args.Parameter);
-            var newWindow = WindowHelper.Instance.CreateShellWindow(targetView, args.ShowInTaskBar, Application.Current.MainWindow);
-            newWindow.Closed += NewWindow_Closed;
-            newWindow.Show();
+            /*
+             * TODO
+             * 
+             * 由于可以同时提取多个手机，所以设备主页会多次打开【通过设备ID区分界面】
+             * 设备主页同时会在新窗口中显示【默认在主界面导航】
+             * 此处需要从缓存中查找和创建
+             * 由于主进程Shell未引用ViewModel模块，所以此处只能折中使用object[]传值【主要需要Device.ID来区分界面，object[0]为Device.ID】
+             * 
+             */
+            UcViewBase targetView = null;
+            if (args.MsgToken == ExportKeys.DeviceMainView)
+            {
+                var devTmp = args.Parameter as object[];
+                if (devTmp != null && devTmp.Length == 2)
+                {
+                    PreCacheToken delToken = new PreCacheToken(devTmp[0].ToString(), ExportKeys.DeviceMainView);
+
+                    if (!SystemContext.Instance.CurCacheViews.TryGetFirstView(delToken, out targetView))
+                    {
+                        targetView = NavigationViewCreater.CreateView(args.MsgToken, devTmp[1]);
+                        SystemContext.Instance.CurCacheViews.AddViewCache(delToken, targetView);
+                    }
+                    targetView.Title = devTmp[0].ToString();
+
+                    //此处暂用Tag存储Device.ID
+                    targetView.Tag = devTmp[1];
+                }
+            }
+            else
+            {
+                targetView = NavigationViewCreater.CreateView(args.MsgToken, args.Parameter);
+            }
+            if (targetView != null)
+            {
+                var newWindow = WindowHelper.Instance.CreateShellWindow(targetView, args.ShowInTaskBar, Application.Current.MainWindow);
+                if (args.MsgToken == ExportKeys.DeviceMainView)
+                {
+                    //此处暂用Tag存储Device.ID
+                    newWindow.Tag = targetView.Tag;
+
+                    newWindow.IsBackWindow = true;
+                    newWindow.Width = 1500;
+                    newWindow.Height = 1000;
+                    newWindow.SizeToContent = SizeToContent.Manual;
+                }
+                
+                newWindow.Closed += NewWindow_Closed;
+                newWindow.Show();
+            }
         }
 
         #endregion

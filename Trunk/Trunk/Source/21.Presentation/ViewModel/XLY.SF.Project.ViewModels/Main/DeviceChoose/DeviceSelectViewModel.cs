@@ -133,7 +133,7 @@ namespace XLY.SF.Project.ViewModels.Device
         /// </summary>
         private void DoSelectFolderCommond()
         {
-            string path = _fileDlg.OpenFileDialog();
+            string path = _fileDlg.SelectFolderDialog();
             if (string.IsNullOrWhiteSpace(path))
             {
                 return;

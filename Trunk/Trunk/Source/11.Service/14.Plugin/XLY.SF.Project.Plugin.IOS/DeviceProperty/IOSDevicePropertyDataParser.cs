@@ -10,6 +10,7 @@ using System.Linq;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.Android
 {
@@ -21,8 +22,8 @@ namespace XLY.SF.Project.Plugin.Android
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{3FFB8BFE-1B67-43A1-8177-DC9C7711F19B}";
-            pluginInfo.Name = "设备信息";
-            pluginInfo.Group = "基本信息";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_DeviceProperty);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_BasicInfo);
             pluginInfo.DeviceOSType = EnumOSType.IOS;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror;
@@ -31,7 +32,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             pluginInfo.AppName = "com.app.ios";
             pluginInfo.Icon = "\\icons\\device.png";
-            pluginInfo.Description = "提取IOS设备属性信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_IosDeviceProperty);
             pluginInfo.SourcePath = new SourceFileItems();
 
             PluginInfo = pluginInfo;
@@ -101,18 +102,18 @@ namespace XLY.SF.Project.Plugin.Android
                 }
             }
 
-            dataSource.Items.Add(new KeyValueItem("序列号", serialnumber));
-            dataSource.Items.Add(new KeyValueItem("设备名称", name));
-            dataSource.Items.Add(new KeyValueItem("设备品牌", manufacture));
-            dataSource.Items.Add(new KeyValueItem("设备型号", model));
-            dataSource.Items.Add(new KeyValueItem("操作系统", OSType));
-            dataSource.Items.Add(new KeyValueItem("系统版本", OSVersion));
-            dataSource.Items.Add(new KeyValueItem("是否越狱", root));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_Serialnumber), serialnumber));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_DeviceName), name));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_Manufacture), manufacture));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_Model), model));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_OSType), OSType));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_OSVersion), OSVersion));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_IsJailbreak), root));
             dataSource.Items.Add(new KeyValueItem("IMEI", IMEI));
             dataSource.Items.Add(new KeyValueItem("IMSI", IMSI));
-            dataSource.Items.Add(new KeyValueItem("WIFI地址", WiFiAddress));
-            dataSource.Items.Add(new KeyValueItem("蓝牙的MAC地址", BMac));
-            dataSource.Items.Add(new KeyValueItem("WIFI的MAC地址", TMac));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_WiFiAddress), WiFiAddress));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_BMac), BMac));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_TMac), TMac));
         }
     }
 }

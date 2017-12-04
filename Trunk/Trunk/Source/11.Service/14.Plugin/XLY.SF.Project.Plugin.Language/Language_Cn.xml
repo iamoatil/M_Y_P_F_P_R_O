@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageResource>
+
+  <!--插件分组-->
+  <PluginGroupName>
+    <BasicInfo>基本信息</BasicInfo>
+    <SocialChat>社交聊天</SocialChat>
+    <LifeTravel>生活旅游</LifeTravel>
+    <WebMark>Web痕迹</WebMark>
+    <WebMail>主流邮箱</WebMail>
+    <BusMap>地图公交</BusMap>
+    <FileExtraction>文件提取</FileExtraction>
+  </PluginGroupName>
+
+  <!--插件名称-->
+  <PluginName>
+    <DeviceProperty>设备信息</DeviceProperty>
+    <InstalledApp>安装应用</InstalledApp>
+    <Contacts>联系人</Contacts>
+    <Call>通话记录</Call>
+    <Sms>短信</Sms>
+    <Mms>彩信</Mms>
+    <Calendar>日历信息</Calendar>
+    <SwitchTime>开关机时间</SwitchTime>
+    <Bluetooth>蓝牙信息</Bluetooth>
+    <WIFI>WIFI信息</WIFI>
+    <QQ>QQ</QQ>
+    <Wechat>微信</Wechat>
+    <EimQQ>企业QQ</EimQQ>
+    <EntQQ>QQ国际版</EntQQ>
+    <QQLite>QQ轻聊版</QQLite>
+    <Email163>网易邮箱</Email163>
+    <LocalBrowse>内置浏览器</LocalBrowse>
+    <QQBrowse>QQ浏览器</QQBrowse>
+    <QQEmail>QQ邮箱</QQEmail>
+    <TencentMap>腾讯地图</TencentMap>
+    <Twitter>Twitter</Twitter>
+    <UCBrowse>UC浏览器</UCBrowse>
+
+
+  </PluginName>
+
+  <!--插件描述-->
+  <PluginDescription>
+
+    <AndroidDeviceProperty>提取安卓设备属性信息</AndroidDeviceProperty>
+    <AndroidMirrorDeviceProperty>提取安卓设备属性信息（镜像）</AndroidMirrorDeviceProperty>
+    <AndroidInstalledApp>提取安卓设备安装的应用列表</AndroidInstalledApp>
+    <AndroidMirrorInstalledApp>提取安卓设备安装的应用列表（镜像）</AndroidMirrorInstalledApp>
+    <AndroidContact>提取安卓设备联系人信息</AndroidContact>
+    <AndroidCall>提取安卓设备通话记录信息</AndroidCall>
+    <AndroidSms>提取安卓设备短信信息</AndroidSms>
+    <AndroidMms>提取安卓设备彩信信息</AndroidMms>
+    <AndroidCalendar>提取安卓设备日历信息</AndroidCalendar>
+    <AndroidSwitchTime>提取安卓设备开关机时间信息</AndroidSwitchTime>
+    <AndroidBluetooth>提取安卓设备蓝牙信息</AndroidBluetooth>
+    <AndroidWIFI>提取安卓设备WIFI信息</AndroidWIFI>
+    <AndroidQQ>提取安卓设备QQ信息</AndroidQQ>
+    <AndroidEimQQ>提取安卓设备企业QQ信息</AndroidEimQQ>
+    <AndroidQQLite>提取安卓设备QQ轻聊版信息</AndroidQQLite>
+    <AndroidWechat>提取安卓设备微信信息</AndroidWechat>
+    <AndroidEmail163>提取安卓设备网易163邮箱信息</AndroidEmail163>
+    <AndroidLocalBrowse>提取安卓设备内置浏览器信息</AndroidLocalBrowse>
+    <AndroidQQBrowse>提取安卓设备QQ浏览器信息</AndroidQQBrowse>
+    <AndroidQQEmail>提取安卓设备QQ邮箱信息</AndroidQQEmail>
+    <AndroidTencentMap>提取安卓设备腾讯地图信息</AndroidTencentMap>
+    <AndroidTwitter>提取安卓设备Twitter信息</AndroidTwitter>
+    <AndroidUCBrowse>提取安卓设备UC浏览器信息</AndroidUCBrowse>
+
+
+    <IosDeviceProperty>提取IOS设备属性信息</IosDeviceProperty>
+    <IosInstalledApp>提取IOS设备安装的应用列表</IosInstalledApp>
+    <IosContact>提取IOS设备联系人信息</IosContact>
+    <IosCall>提取IOS设备安装的应用列表</IosCall>
+    <IosSms>提取IOS设备短信信息</IosSms>
+    <IosMms>提取IOS设备彩信信息</IosMms>
+    <IosQQ>提取IOS设备QQ信息</IosQQ>
+    <IosEimQQ>提取IOS设备企业QQ信息</IosEimQQ>
+    <IosEntQQ>提取IOS设备企业QQ信息</IosEntQQ>
+    <IosWechat>提取IOS设备微信信息</IosWechat>
+
+  </PluginDescription>
+
+  <!--设备信息插件-->
+  <PluginDeviceProperty>
+    <PhoneNumber>手机号码</PhoneNumber>
+    <CarrierOperator>运营商</CarrierOperator>
+    <Serialnumber>序列号</Serialnumber>
+    <DeviceName>设备名称</DeviceName>
+    <Manufacture>设备品牌</Manufacture>
+    <Model>设备型号</Model>
+    <OSType>操作系统</OSType>
+    <OSVersion>系统版本</OSVersion>
+    <Root>是否ROOT</Root>
+    <WiFiAddress>WIFI地址</WiFiAddress>
+    <BMac>蓝牙的MAC地址</BMac>
+    <TMac>WIFI的MAC地址</TMac>
+    <IsJailbreak>是否越狱</IsJailbreak>
+  </PluginDeviceProperty>
+
+  <!--联系人插件-->
+  <PluginContacts>
+    <Times>联系次数</Times>
+    <PhoneType>号码类型</PhoneType>
+    <PhoneType1>移动电话</PhoneType1>
+    <PhoneType2>住宅电话</PhoneType2>
+    <PhoneType3>工作电话</PhoneType3>
+    <PhoneType4>iPhone电话</PhoneType4>
+    <PhoneType5>主要电话</PhoneType5>
+    <PhoneType6>住宅传真</PhoneType6>
+    <PhoneType7>工作传真</PhoneType7>
+    <PhoneType8>其他传真</PhoneType8>
+    <PhoneType9>传呼</PhoneType9>
+    <Nickname>昵称</Nickname>
+    <Organization>组织名称</Organization>
+    <Department>部门名称</Department>
+    <Note>关键备注</Note>
+    <Birthday>生日</Birthday>
+    <JobTitle>工作职务</JobTitle>
+  </PluginContacts>
+
+  <!--短信插件-->
+  <PluginSMS>
+    <QunSend>群发消息</QunSend>
+    <IsRead>消息已读</IsRead>
+    <NotRead>消息未读</NotRead>
+    <SendFail>消息发送失败</SendFail>
+    <Attachment>附件路径</Attachment>
+  </PluginSMS>
+
+  <!--微信插件-->
+  <PluginWechat>
+    <AddressBook>通讯录</AddressBook>
+    <Public>公众号</Public>
+    <FriendMsg>好友消息</FriendMsg>
+    <PublicMsg>公众号消息</PublicMsg>
+    <SystemMsg>系统消息</SystemMsg>
+    <WeChatRedPack>微信红包</WeChatRedPack>
+    <ChatRoom>群聊</ChatRoom>
+    <ChatRoomMsg>群聊消息</ChatRoomMsg>
+    <MassendMsg>群发消息</MassendMsg>
+    <OtherDelMsg>其他删除消息</OtherDelMsg>
+    <WordDelMsg>文字消息</WordDelMsg>
+    <NumDelMsg>数字消息</NumDelMsg>
+    <Sns>朋友圈</Sns>
+    <Favorite>我的收藏</Favorite>
+    <AppBrand>微信小程序</AppBrand>
+    <MyWalle>微信支付</MyWalle>
+    <SafeDevice>常用设备</SafeDevice>
+    <Image>图片</Image>
+    <String>文本</String>
+    <Audio>语音</Audio>
+    <Video>视频</Video>
+    <Location>位置信息</Location>
+    <Card>名片</Card>
+    <VideoChat>视频聊天</VideoChat>
+    <Emoji>动画表情</Emoji>
+    <WeChatTransfer>微信转账</WeChatTransfer>
+    <File>文件</File>
+    <Link>网页链接</Link>
+    <TransferOK>我已经确认转账！</TransferOK>
+    <LocationInfo>位置信息--标题:{0},地址:{1},坐标:{2},{3}</LocationInfo>
+    <HtmlInfoA>分享链接--标题:{0}, 描述:{1}</HtmlInfoA>
+    <HtmlInfoB>分享链接--标题:{0}, 描述:{1}, 链接:{2}</HtmlInfoB>
+    <XmlInfoA>微信账号:{0}  别名:{1}</XmlInfoA>
+    <XmlInfoB>昵称:{0} 性别:{1} 城市:{2}-{3}</XmlInfoB>
+    <XmlInfoC>个性签名:{0}</XmlInfoC>
+    <Man>男</Man>
+    <WoMan>女</WoMan>
+    <Lat>经度</Lat>
+    <Lng>纬度</Lng>
+    <Msg>聊天记录</Msg>
+    <Custom>自定义</Custom>
+    <TotalInfo>共{0}条</TotalInfo>
+
+    <MsgType>消息类型</MsgType>
+    <FilePath>文件路径</FilePath>
+    <Content>内容</Content>
+    <Source>来源</Source>
+    <SendTime>发送时间</SendTime>
+    <Sender>发送者</Sender>
+    <Receiver>接收者</Receiver>
+
+    <SendSns>发表朋友圈</SendSns>
+    <Like>点赞</Like>
+    <Comment>评论</Comment>
+
+  </PluginWechat>
+
+
+
+
+</LanguageResource>
+
+

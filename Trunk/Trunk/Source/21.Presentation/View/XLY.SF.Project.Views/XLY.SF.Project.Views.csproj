@@ -128,6 +128,12 @@
     <Compile Include="Main\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Management\Giude\GuideHome.xaml.cs">
+      <DependentUpon>GuideHome.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Management\PluginListView.xaml.cs">
+      <DependentUpon>PluginListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Management\Settings\BasicSettingsView.xaml.cs">
       <DependentUpon>BasicSettingsView.xaml</DependentUpon>
     </Compile>
@@ -177,6 +183,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -238,6 +245,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Main\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Management\Giude\GuideHome.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Management\PluginListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

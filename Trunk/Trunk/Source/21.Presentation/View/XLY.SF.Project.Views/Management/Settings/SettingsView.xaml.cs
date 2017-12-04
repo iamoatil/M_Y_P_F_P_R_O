@@ -27,6 +27,8 @@ namespace XLY.SF.Project.Views.Management.Settings
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class SettingsView : UcViewBase
     {
+        private double[] ItemHeights;
+
         public SettingsView()
         {
             InitializeComponent();
@@ -38,6 +40,69 @@ namespace XLY.SF.Project.Views.Management.Settings
                 SystemContext.LanguageManager[Languagekeys.ViewLanguage_Management_Settings_Inspection],
             };
             Blocks.ItemsSource = items;
+            Blocks.SelectedIndex = 0;
+
+            Blocks.SelectionChanged += Blocks_SelectionChanged;
+            sv.ScrollChanged += Sv_ScrollChanged;
+        }
+
+        private void SettingsView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ItemHeights = new double[sp.Children.Count];
+            for (int i = 0; i < ItemHeights.Length; i++)
+            {
+                var uiTmp = sp.Children[i] as FrameworkElement;
+                ItemHeights[i] = uiTmp.ActualHeight;
+            }
+        }
+
+        bool isMouseScroll;
+        private void Blocks_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!isMouseScroll)
+            {
+                var a = GetOffsetHeight(Blocks.SelectedIndex);
+                sv.ScrollToVerticalOffset(a);
+            }
+        }
+
+        private void Sv_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            isMouseScroll = true;
+            //向下
+            int index = 0;
+            double tmpOffset = ItemHeights[index];
+            while (tmpOffset <= e.VerticalOffset)
+            {
+                index++;
+                tmpOffset += ItemHeights[index];
+            }
+            Blocks.SelectedIndex = index;
+
+            //if (e.VerticalChange > 0)
+            //{
+            //}
+            //else if (e.VerticalChange < 0)
+            //{
+            //    //向上
+
+            //}
+        }
+
+        private double GetOffsetHeight(int selectedIndex)
+        {
+            double result = 0;
+            selectedIndex--;
+            for (int i = selectedIndex; i >= 0; i--)
+            {
+                result += ItemHeights[i];
+            }
+            return result;
+        }
+
+        private void Blocks_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            isMouseScroll = false;
         }
     }
 }

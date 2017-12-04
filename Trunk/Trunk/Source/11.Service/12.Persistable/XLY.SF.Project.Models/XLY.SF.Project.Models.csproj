@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Entities\Basic.cs" />
     <Compile Include="Entities\CaseType.cs" />
+    <Compile Include="Entities\ExtractionPlan.cs" />
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\Inspection.cs" />
     <Compile Include="Entities\OperationLog.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="IRecordContext.cs" />
     <Compile Include="IRecordContextExtension.cs" />
     <Compile Include="ISettings.cs" />
+    <Compile Include="Logical\ExtractionPlanModel.cs" />
     <Compile Include="Logical\LogicalModelBase.cs" />
     <Compile Include="Logical\OperationLogEntityModel.cs" />
     <Compile Include="Logical\UserInfoReadOnlyModel.cs" />

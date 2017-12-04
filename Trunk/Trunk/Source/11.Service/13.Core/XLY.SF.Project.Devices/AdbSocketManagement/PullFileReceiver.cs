@@ -14,7 +14,7 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
     public class PullFileReceiver : AbstractOutputReceiver
     {
         private string _Local;
-        
+
         /// <summary>
         /// 缓冲区大小
         /// </summary>
@@ -36,12 +36,17 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
         /// 执行数据接收
         /// </summary>
         /// <param name="socket">数据接收的端口</param>
-        public void DoReceive(Socket socket)
+        public bool DoReceive(Socket socket)
         {
             //read check result
             byte[] pullResult = new byte[8];
             AdbSocketHelper.Read(socket, pullResult);
-            CheckPullFileResult(pullResult);
+
+            if (!CheckPullFileResult(pullResult))
+            {
+                return false;
+            }
+
             byte[] data = new byte[BufferSize];
             FileInfo f = new FileInfo(_Local);
             FileStream fos = fos = new FileStream(f.FullName, System.IO.FileMode.Create, FileAccess.Write);
@@ -55,7 +60,7 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
                     }
                     if (AdbSocketHelper.CheckResult(pullResult, Encoding.Default.GetBytes("DATA")) == false)
                     {
-                        throw new ADBConnectionException();
+                        return false;
                     }
                     //get an check buffer length
                     int length = ArrayHelper.Swap32bitFromArray(pullResult, 4);
@@ -90,6 +95,8 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
                     throw new ApplicationException("Writing local file failed!", e);
                 }
             }
+
+            return true;
         }
 
         /// <summary>
@@ -112,12 +119,16 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
 
         /****************** private methods ******************/
 
-        private void CheckPullFileResult(byte[] result)
+        private bool CheckPullFileResult(byte[] result)
         {
             if (AdbSocketHelper.CheckResult(result, Encoding.Default.GetBytes("DATA")) == false &&
                                 AdbSocketHelper.CheckResult(result, Encoding.Default.GetBytes("DONE")) == false)
             {
-                throw new ADBConnectionException();
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
     }

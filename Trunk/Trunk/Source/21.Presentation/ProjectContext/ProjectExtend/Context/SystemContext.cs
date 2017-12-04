@@ -9,6 +9,8 @@ using XLY.SF.Framework.Core.Base;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Models;
 using XLY.SF.Framework.Language;
+using XLY.SF.Project.Models.Entities;
+using System.Windows.Data;
 
 /*
  * 创建人：Bob
@@ -50,12 +52,10 @@ namespace ProjectExtend.Context
 
         static SystemContext()
         {
-            LanguageManager lm = LanguageManager.Current;
-            lm.Switched += (a, b) => LanguageProvider.Document = LanguageManager.Document;
-            LanguageManager = lm;
-#if DEBUG
-            LanguageManager.SwitchAll(LanguageType.Cn);
-#endif
+            Settings = IocManagerSingle.Instance.GetPart<ISettings>();
+            LanguageProvider = new XmlDataProvider { XPath = "LanguageResource" };
+            LanguageManager = LanguageManager.Current;
+            LanguageManager.Switched += (a, b) => LanguageProvider.Document = LanguageManager.Document;
         }
 
         private SystemContext()
@@ -66,7 +66,10 @@ namespace ProjectExtend.Context
             CurCacheViews = new XLY.SF.Framework.Core.Base.MessageBase.Navigation.NavigationCacheManager<XLY.SF.Project.ViewDomain.Model.PresentationNavigationElement.PreCacheToken>();
 
             //获取默认文件夹
-            SaveDefaultFolderName = _configService.GetSysConfigValueByKey("SaveDefaultFolderName");
+            if (String.IsNullOrWhiteSpace(SaveDefaultFolderName))
+            {
+                SaveDefaultFolderName = @"XLY\SpfData";
+            }
             if (string.IsNullOrWhiteSpace(SaveDefaultFolderName))
                 throw new NullReferenceException("存储默认文件夹名为NULL");
         }
@@ -85,6 +88,8 @@ namespace ProjectExtend.Context
                 return _instance;
             }
         }
+
+        public static ISettings Settings { get; }
 
         #endregion
     }

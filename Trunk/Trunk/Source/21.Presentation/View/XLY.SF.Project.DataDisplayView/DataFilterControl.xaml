@@ -6,6 +6,7 @@
              xmlns:ctrl="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
              xmlns:theme="clr-namespace:XLY.SF.Project.Themes;assembly=XLY.SF.Project.Themes"
              xmlns:local="clr-namespace:XLY.SF.Project.DataDisplayView"
+             xmlns:ee="http://schemas.microsoft.com/expression/2010/effects"
              mc:Ignorable="d" 
              d:DesignHeight="60" d:DesignWidth="1000">
     <UserControl.Resources>
@@ -13,6 +14,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
+
             <Style TargetType="ComboBoxItem">
                 <Setter Property="Template" Value="{DynamicResource cb_DefaultItemCt}"/>
                 <Setter Property="Padding" Value="20 0 0 0"/>
@@ -20,10 +24,68 @@
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
                 <Setter Property="Foreground" Value="White"/>
             </Style>
+
+            <!--<DataTemplate x:Key="inspectionItem">
+                <Border x:Name="bd1" Background="#379be6" CornerRadius="5" Height="25">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Image Source="{Binding Icon}" Width="16" Height="16"/>
+                        <TextBlock Text="{Binding Name}" Foreground="White" Margin="0 0 16 0"/>
+                    </StackPanel>
+                </Border>
+                <DataTemplate.Triggers>
+                    <Trigger Property="ListBoxItem.IsSelected" Value="False">
+                        <Setter TargetName="bd1" Property="Background" Value="#05FFFFFF"/>
+                    </Trigger>
+                    <Trigger Property="ListBoxItem.IsSelected" Value="True">
+                        <Setter TargetName="bd1" Property="Background" Value="#379be6"/>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="true">
+                        <Setter Property="ListBoxItem.Background" Value="#3ca5f5"/>
+                    </Trigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>-->
+
+            <Style x:Key="inspectionItem" TargetType="ListBoxItem">
+                <Setter Property="Margin" Value="5 0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Border x:Name="bd1" Background="#05FFFFFF" CornerRadius="5" Height="28">
+                                <StackPanel x:Name="panel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Image Source="{Binding Icon}" Width="16" Height="16"/>
+                                    <TextBlock FontSize="14" Text="{Binding Name}" Foreground="#9BA6B7" Margin="0 0 16 0"/>
+                                </StackPanel>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsSelected" Value="False">
+                                    <Setter TargetName="bd1" Property="Background" Value="#05FFFFFF"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="bd1" Property="Background" Value="#379be6"/>
+                                    <Setter Property="Effect" TargetName="panel">
+                                        <Setter.Value>
+                                            <ee:EmbossedEffect Color="White"></ee:EmbossedEffect>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter TargetName="bd1" Property="Background" Value="#10FFFFFF"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                
+                
+            </Style>
         </ResourceDictionary>
         
     </UserControl.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
             <!--时间范围-->
             <DatePicker Margin="10 15 2 15" Width="150" SelectedDate="{Binding StartTime}"></DatePicker>
@@ -35,20 +97,8 @@
             
             <!--应用筛选-->
             <ctrl:PopupControl Margin="2 15" Width="100" FontSize="14" Text="{local:Lang Key=AllApps}">
-                <Popup Width="200" MaxHeight="400" PopupAnimation="Slide" StaysOpen="True" VerticalOffset="6" HorizontalOffset="-10">
+                <Popup Width="200" MaxHeight="400" PopupAnimation="Slide" StaysOpen="False" VerticalOffset="6" HorizontalOffset="-10">
                     <Border Background="#485374" >
-                        <!--<ctrl:TreeViewEx x:Name="treeDataList" Background="#0FFFFFFF" BorderThickness="0"  ItemsSource="{Binding DataListSource}">
-                            <ctrl:TreeViewEx.ItemContainerStyle>
-                                <Style TargetType="ctrl:TreeViewItemEx" BasedOn="{StaticResource stTreeViewItem}">
-                                    <Setter Property="IsItemStyle" Value="{Binding IsItemStyle}"></Setter>
-                                </Style>
-                            </ctrl:TreeViewEx.ItemContainerStyle>
-                            <ctrl:TreeViewEx.ItemTemplate >
-                                <HierarchicalDataTemplate  ItemsSource="{Binding Path=TreeNodes}">
-                                    <TextBlock Text="{Binding Text}"  />
-                                </HierarchicalDataTemplate>
-                            </ctrl:TreeViewEx.ItemTemplate>
-                        </ctrl:TreeViewEx>-->
                         <TreeView BorderThickness="0" theme:AttachHelper.IsShowSelectedGripper="False"  theme:AttachHelper.IsShowCheckBox="True" theme:AttachHelper.IsHideUnCheckedNode="False" theme:AttachHelper.IsHideChildren="False"  Background="#0FFFFFFF" ItemsSource="{Binding DataListSource}">
                             <TreeView.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding TreeNodes}">
@@ -69,7 +119,7 @@
             <!--关键词和正则-->
             <Border Margin="2 15"  BorderThickness="1" CornerRadius="5" Background="#414b69">
                 <StackPanel Orientation="Horizontal">
-                    <ctrl:ComboBoxEx Width="75" FontSize="14"  TitlePadding="10 0 0 0"  Background="Transparent" ItemsSource="{Binding KeywordTypeSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding KeywordType}"></ctrl:ComboBoxEx>
+                    <ctrl:ComboBoxEx Width="85" FontSize="14"  TitlePadding="10 0 0 0"  Background="Transparent" ItemsSource="{Binding KeywordTypeSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding KeywordType}"></ctrl:ComboBoxEx>
                     <ctrl:TextBoxEx HorizontalContentAlignment="Left" TitlePadding="0"  Watermark="{local:Lang Key=KeyWordWatermark}" Width="140" Padding="5 0" FontSize="14" BorderThickness="0" CaretBrush="#FFFFFF" Background="Transparent" Text="{Binding Keyword}" Foreground="White" VerticalContentAlignment="Center"></ctrl:TextBoxEx>
                 </StackPanel>
             </Border>
@@ -79,6 +129,11 @@
             <Button Style="{StaticResource btn_GrayIcon}" Width="30" Height="24" Margin="0 15 0 15" Command="{Binding ClearCommond}" ToolTip="{local:Lang Key=ClearTip}">
                 <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_filter_clear.png" Width="13" Height="13"/>
             </Button>
-        </StackPanel>    
+        </StackPanel>
+
+        <!--智能预警筛选条件-->
+        <StackPanel Margin="10 0 10 10" Orientation="Horizontal" Grid.Row="1" Visibility="{Binding IsInspection, Converter={StaticResource booleanToVisibilityConverter}}">
+            <ListBox Template="{StaticResource horizontalListBox}" ItemsSource="{Binding InspectionList}" ItemContainerStyle="{StaticResource inspectionItem}" SelectedValue="{Binding SelectedInspectionItem}"></ListBox>
+        </StackPanel>
     </Grid>
 </UserControl>

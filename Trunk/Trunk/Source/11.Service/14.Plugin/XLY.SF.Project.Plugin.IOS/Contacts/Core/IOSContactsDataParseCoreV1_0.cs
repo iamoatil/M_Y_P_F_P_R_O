@@ -12,6 +12,7 @@ using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Persistable.Primitive;
+using XLY.SF.Project.Plugin.Language;
 using XLY.SF.Project.Services;
 
 namespace XLY.SF.Project.Plugin.IOS
@@ -120,43 +121,43 @@ namespace XLY.SF.Project.Plugin.IOS
             string labelId = DynamicConvert.ToSafeString(contractObj.label);
             if (!string.IsNullOrWhiteSpace(labelId))
             {
-                remarkBuilder.Append("号码类型:" + GetNumberType(labelId));
+                remarkBuilder.Append(LanguageHelper.GetString(Languagekeys.PluginContacts_PhoneType1) + ":" + GetNumberType(labelId));
             }
 
             string nickname = DynamicConvert.ToSafeString(contractObj.Nickname);
             if (!string.IsNullOrWhiteSpace(nickname))
             {
-                remarkBuilder.Append("; 昵称:" + nickname);
+                remarkBuilder.AppendFormat("; {0}:{1}", LanguageHelper.GetString(Languagekeys.PluginContacts_Nickname), nickname);
             }
 
             string organization = DynamicConvert.ToSafeString(contractObj.Organization);
             if (!string.IsNullOrWhiteSpace(organization))
             {
-                remarkBuilder.Append("; 组织名称:" + organization);
+                remarkBuilder.AppendFormat("; {0}:{1}", LanguageHelper.GetString(Languagekeys.PluginContacts_Organization), organization);
             }
 
             string department = DynamicConvert.ToSafeString(contractObj.Department);
             if (!string.IsNullOrWhiteSpace(department))
             {
-                remarkBuilder.Append("; 部门名称:" + department);
+                remarkBuilder.AppendFormat("; {0}:{1}", LanguageHelper.GetString(Languagekeys.PluginContacts_Department), department);
             }
 
             string note = DynamicConvert.ToSafeString(contractObj.Note);
             if (!string.IsNullOrWhiteSpace(note))
             {
-                remarkBuilder.Append("; 关键备注:" + note);
+                remarkBuilder.AppendFormat("; {0}:{1}", LanguageHelper.GetString(Languagekeys.PluginContacts_Note), note);
             }
 
             string birthday = DynamicConvert.ToSafeString(DynamicConvert.ToSafeDateTime(contractObj.Birthday));
             if (!string.IsNullOrWhiteSpace(birthday))
             {
-                remarkBuilder.Append("; 生日:" + birthday);
+                remarkBuilder.AppendFormat("; {0}:{1}", LanguageHelper.GetString(Languagekeys.PluginContacts_Birthday), birthday);
             }
 
             string jobTitle = DynamicConvert.ToSafeString(contractObj.JobTitle);
             if (!string.IsNullOrWhiteSpace(jobTitle))
             {
-                remarkBuilder.Append("; 工作职务:" + jobTitle);
+                remarkBuilder.AppendFormat("; {0}:{1}", LanguageHelper.GetString(Languagekeys.PluginContacts_JobTitle), jobTitle);
             }
             return remarkBuilder;
         }
@@ -166,27 +167,26 @@ namespace XLY.SF.Project.Plugin.IOS
             switch (labelId)
             {
                 case "1":
-                    return "移动电话";
+                    return LanguageHelper.GetString(Languagekeys.PluginContacts_PhoneType1);
                 case "2":
-                    return "住宅电话";
+                    return LanguageHelper.GetString(Languagekeys.PluginContacts_PhoneType2);
                 case "3":
-                    return "工作电话";
+                    return LanguageHelper.GetString(Languagekeys.PluginContacts_PhoneType3);
                 case "4":
-                    return "iphone电话";
+                    return LanguageHelper.GetString(Languagekeys.PluginContacts_PhoneType4);
                 case "5":
-                    return "主要电话";
+                    return LanguageHelper.GetString(Languagekeys.PluginContacts_PhoneType5);
                 case "6":
-                    return "住宅传真";
+                    return LanguageHelper.GetString(Languagekeys.PluginContacts_PhoneType6);
                 case "8":
-                    return "工作传真";
+                    return LanguageHelper.GetString(Languagekeys.PluginContacts_PhoneType7);
                 case "10":
-                    return "其他传真";
+                    return LanguageHelper.GetString(Languagekeys.PluginContacts_PhoneType8);
                 case "9":
-                    return "传呼";
+                    return LanguageHelper.GetString(Languagekeys.PluginContacts_PhoneType9);
                 default:
                     return string.Empty;
             }
         }
-
     }
 }

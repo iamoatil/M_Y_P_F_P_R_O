@@ -27,7 +27,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal" Margin="0 0 0 0" Background="Transparent" Height="40" VerticalAlignment="Top">
-                <control:TextBoxEx Width="700" Margin="15 0 0 0" HasColon="False" Text="{Binding SelectManager.CurFolderLevel.FullPath}" x:Name="tb_Path"
+                <control:TextBoxEx Width="700" Margin="15 0 0 0" Text="{Binding SelectManager.CurFolderLevel.FullPath}" x:Name="tb_Path"
                                    Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/TextBoxOpenIcon.png"
                                    IconWidth="7" IconHeight="12" Height="34"
                                    Command="{Binding InPathCommand}" CommandParmeter="{Binding Text,RelativeSource={RelativeSource Mode=Self}}"/>
@@ -164,7 +164,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock x:Name="tb_Name" Text="{Binding XPath=ViewLanguage/View_SelectControl_FolderName, Source={x:Static ex:SystemContext.LanguageProvider},StringFormat={}{0}：}" FontSize="14" Foreground="#9ba5b9" VerticalAlignment="Center" HorizontalAlignment="Right"/>
 
-                        <control:TextBoxEx HasColon="False" Grid.Column="1" Height="30" Margin="5 0 10 0" Text="{Binding CurSelectedItemInFolder.Name,Mode=TwoWay}"/>
+                        <control:TextBoxEx Grid.Column="1" Height="30" Margin="5 0 10 0" Text="{Binding CurSelectedItemInFolder.Name,Mode=TwoWay}"/>
                         <Button x:Name="btn_Name" Margin="0 0 10 0" Grid.Column="2" Content="{Binding XPath=ViewLanguage/View_SelectControl_SelectFolderTitle, Source={x:Static ex:SystemContext.LanguageProvider}}" Width="80" Height="30" Command="{Binding SelectedCompleteCommand}"/>
                         <Button Grid.Column="3" Width="80" Height="30" Content="{Binding XPath=ViewLanguage/Management/User/Cancel, Source={x:Static ex:SystemContext.LanguageProvider}}" Command="{Binding CancelSelectCommand}"/>
                     </Grid>

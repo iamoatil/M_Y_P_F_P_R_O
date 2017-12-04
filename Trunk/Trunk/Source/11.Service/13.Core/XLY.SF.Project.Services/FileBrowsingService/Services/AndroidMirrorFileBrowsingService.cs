@@ -133,11 +133,11 @@ namespace XLY.SF.Project.Services
             }
         }
 
-        protected override void DownLoadFile(FileBrowingNode fileNode, string savePath, bool persistRelativePath, CancellationTokenSource cancellationTokenSource, FileBrowingIAsyncTaskProgress async)
+        protected override string DownLoadFile(FileBrowingNode fileNode, string savePath, bool persistRelativePath, CancellationTokenSource cancellationTokenSource, FileBrowingIAsyncTaskProgress async)
         {
             var mPnode = fileNode as AndroidMirrorFileBrowingNode;
 
-            FileServiceX.ExportFileX(mPnode.FNode, savePath, persistRelativePath, isThrowEx: true);
+            return FileServiceX.ExportFileX(mPnode.FNode, savePath, persistRelativePath, isThrowEx: true);
         }
 
         /// <summary>

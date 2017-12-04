@@ -22,9 +22,8 @@ namespace XLY.SF.Project.EarlyWarningView
         public List<DeviceDataSource> DataSources { get { return _dataSources; } }
         List<DeviceDataSource> _dataSources = new List<DeviceDataSource>();
 
-        public void LoadDeviceData()
+        public void LoadDeviceData(string dir)
         {
-            string dir = @"C:\Users\litao\Desktop\迭代66\123_20171123[021724]\R7_20171123[021726]";
             DataSources.Clear();
             if (!Directory.Exists(dir))
             {
@@ -61,7 +60,7 @@ namespace XLY.SF.Project.EarlyWarningView
         /// </summary>
         /// <param name="devicePath"></param>
         /// <returns></returns>
-        private ObservableCollection<DataExtactionItem> LoadDeviceData(string devicePath)
+        private ObservableCollection<DataExtactionItem> LoadDeviceData2(string devicePath)
         {
             var dataList = new ObservableCollection<DataExtactionItem>();
             if (!Directory.Exists(devicePath))

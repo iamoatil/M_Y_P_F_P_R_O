@@ -22,7 +22,7 @@
     <GroupBox Header="{Binding XPath=ViewLanguage/Management/Settings/CaseType,Source={x:Static ex:SystemContext.LanguageProvider}}">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50" />
+                <RowDefinition Height="30" />
                 <RowDefinition Height="10" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -31,8 +31,8 @@
                 <ColumnDefinition Width="10" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <pro:TextBoxEx Title="{Binding XPath=ViewLanguage/Management/Settings/CaseType,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                           Text="{Binding CaseTypeName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            <pro:TextBoxEx Watermark="{Binding XPath=ViewLanguage/Management/Settings/CaseType,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                           Text="{Binding CaseTypeName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
             <ListBox Grid.Column="0"
                      Grid.Row="2"
                      BorderBrush="#2E3856"

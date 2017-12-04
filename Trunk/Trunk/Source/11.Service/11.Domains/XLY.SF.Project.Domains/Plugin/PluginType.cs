@@ -33,6 +33,12 @@ namespace XLY.SF.Project.Domains
         /// 数据预览插件
         /// </summary>
         SpfDataPreview,
+
+        /// <summary>
+        /// 预警插件
+        /// </summary>
+        SpfEarlyWarning,
+
         /// <summary>
         /// 综合分析插件
         /// </summary>

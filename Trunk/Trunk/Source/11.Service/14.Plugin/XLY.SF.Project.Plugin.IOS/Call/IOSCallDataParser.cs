@@ -12,6 +12,7 @@ using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.IOS
 {
@@ -23,8 +24,8 @@ namespace XLY.SF.Project.Plugin.IOS
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{2021D32A-258A-40A5-8121-DB64A09B1FB4}";
-            pluginInfo.Name = "通话记录";
-            pluginInfo.Group = "基本信息";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_Call);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_BasicInfo);
             pluginInfo.DeviceOSType = EnumOSType.IOS;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
@@ -33,7 +34,7 @@ namespace XLY.SF.Project.Plugin.IOS
 
             pluginInfo.AppName = "HomeDomain";
             pluginInfo.Icon = "\\icons\\call.png";
-            pluginInfo.Description = "提取IOS设备通话记录信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_IosCall);
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/HomeDomain/Library/CallHistoryDB");
             pluginInfo.SourcePath.AddItem("/HomeDomain/Library/AddressBook");

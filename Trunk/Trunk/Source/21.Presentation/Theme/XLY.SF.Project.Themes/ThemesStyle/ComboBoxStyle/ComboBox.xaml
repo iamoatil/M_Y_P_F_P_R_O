@@ -169,7 +169,7 @@
                         <TextBlock x:Name="tb_Title" VerticalAlignment="Center" 
                                        Foreground="{Binding TitleForeground,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:ComboBoxEx}}" 
                                        Text="{Binding Title,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:ComboBoxEx}}"/>
-                        <TextBlock Text="：" Visibility="{Binding HasColon,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:ComboBoxEx},Converter={StaticResource bToV}}" VerticalAlignment="Center"
+                        <TextBlock x:Name="tb_Colon" Text="：" VerticalAlignment="Center"
                            Foreground="{Binding TitleForeground,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:ComboBoxEx}}"/>
                     </StackPanel>
                     <Popup x:Name="PART_Popup" Width="{TemplateBinding Width,Converter={StaticResource add},ConverterParameter=32}" HorizontalOffset="-16" AllowsTransparency="true" Grid.ColumnSpan="3" VerticalOffset="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
@@ -196,6 +196,9 @@
             <Border x:Name="br" CornerRadius="4" BorderBrush="#4b5a78" BorderThickness="2" Visibility="Collapsed"/>
         </Grid>
         <ControlTemplate.Triggers>
+            <Trigger Property="Title" Value="">
+                <Setter Property="Visibility" Value="Collapsed" TargetName="tb_Colon"/>
+            </Trigger>
             <Trigger Property="IsMouseOver" Value="true">
                 <Setter Property="Visibility" Value="Visible" TargetName="br"/>
             </Trigger>

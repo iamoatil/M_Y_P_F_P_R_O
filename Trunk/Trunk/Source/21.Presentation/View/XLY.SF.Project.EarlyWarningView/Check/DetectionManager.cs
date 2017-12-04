@@ -4,39 +4,22 @@
 * Create Date：2017/11/23 10:16:23
 * ==============================================================================*/
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data.Common;
-using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
+using XLY.SF.Project.DataDisplayView.ViewModel;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Models;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
     internal class DetectionManager
     {
-        #region 单例
+        /// <summary>
+        /// 配置数据的过滤
+        /// </summary>
+        private readonly ConfigDataFilter ConfigDataFilter = new ConfigDataFilter();
 
-        private DetectionManager()
-        {
-            ConfigDataManager.Initialize();
-            ConfigDataManager.UpdateValidateData();
-
-        }
-
-        private static DetectionManager _instance = new DetectionManager();
-
-        public static DetectionManager Instance
-        {
-            get { return _instance; }
-        }
-
-        #endregion     
-        
         /// <summary>
         /// 检测的结果放于CategoryManager中
         /// </summary>
@@ -46,50 +29,50 @@ namespace XLY.SF.Project.EarlyWarningView
         }
 
         private readonly ExtactionCategoryCollectionManager _categoryManager =
-            new ExtactionCategoryCollectionManager() {Name = "智能检视"};
-
-        public DataExtactionItemCollection DataExtactionItemCollection
-        {
-            get { return _dataExtactionItemCollection; }
-        }
-
-        DataExtactionItemCollection _dataExtactionItemCollection = new DataExtactionItemCollection();
-
-        public SqlFile SqlFile { get { return _sqlFile; } }
-        SqlFile _sqlFile = new SqlFile();
-
+            new ExtactionCategoryCollectionManager() {Name = "智能检视"};        
+        
         public ConfigDataToDB ConfigDbManager { get { return _configDbManager; } }
         ConfigDataToDB _configDbManager = new ConfigDataToDB();
 
+
         /// <summary>
-        /// 基础数据管理
+        /// 是否已经初始化
         /// </summary>
-        public readonly ConfigDataFilter ConfigDataManager = new ConfigDataFilter();
+        public bool IsInitialized { get; private set; }
+
+        public void Initialize(IRecordContext<Models.Entities.Inspection> setting)
+        {
+            if (IsInitialized)
+            {
+                return;
+            }
+            ConfigDataFilter.Initialize();
+            ConfigDataFilter.Setting = setting;
+            IsInitialized = true;
+        }
 
         /// <summary>
         /// 检测
         /// </summary>
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public void Detect()
+        public void Detect(string sourceDir)
         {
-            //SqlFile.Initialize();
+            if (!IsInitialized)
+            {
+                return;
+            }
+            //先根据设置（读取数据库获得设置选项），过滤配置文件中的内容
+            ConfigDataFilter.UpdateValidateData();
+            ConfigDbManager.GenerateDbFile(ConfigDataFilter.ValidateDataNodes.Select(it => it.SensitiveData));
+            
+            //读取提取的数据
             DeviceDataParser parser = new DeviceDataParser();
-            parser.LoadDeviceData();
+            parser.LoadDeviceData(sourceDir);
             List<DeviceDataSource> dataSources = parser.DataSources;
-
-            ConfigDataManager.UpdateValidateData();
-            ConfigDbManager.GenerateDbFile(ConfigDataManager.ValidateDataNodes.Select(it => it.SensitiveData));
+            //检测提取的数据
             foreach (var item in dataSources)
             {
-                Match(item, ConfigDataManager.ValidateDataNodes);
-            }
-
-            //DataExtactionItemCollection.SelectDefaultNode();
-        }
-
-        public void Reset()
-        {
-
+                Match(item, ConfigDataFilter.ValidateDataNodes);
+            }            
         }
 
         
@@ -101,17 +84,14 @@ namespace XLY.SF.Project.EarlyWarningView
             {
                 return;
             }
-           
+
+            //dataSource.GetType();
             string dir = Path.GetDirectoryName(Path.GetDirectoryName(ds.DsFilePath));
             string extactionName = dir.Substring(dir.LastIndexOf("\\") + 1);
 
             ExtactionCategoryCollection categoryCollection = (ExtactionCategoryCollection)_categoryManager.GetChild(extactionName);
             ExtactionCategory category = (ExtactionCategory)categoryCollection.GetChild(dataSource.PluginInfo.Group);
-            ExtactionSubCategory subCategory = (ExtactionSubCategory)category.GetChild(dataSource.PluginInfo.Name);
-
-            //DataExtactionItem cateColl=_dataExtactionItemCollection.GetCategoryCollection(extactionName);
-            //DataExtactionItem cate = _dataExtactionItemCollection.GetCategory(dataSource.PluginInfo.Group, cateColl);
-            //DataExtactionItem subCate = _dataExtactionItemCollection.GetSubCategoryn(dataSource.PluginInfo.Name, dataSource, cate);
+            ExtactionSubCategory subCategory = (ExtactionSubCategory)category.GetChild(dataSource.PluginInfo.Name);            
 
             foreach (DataNode dataNode in dataNodes)
             {
@@ -119,207 +99,9 @@ namespace XLY.SF.Project.EarlyWarningView
                 IEnumerable<dynamic> result = dataSource.Items.FilterByCmd<dynamic>(cmd);
                 foreach (AbstractDataItem item in result)
                 {
-                    item.SensitiveId = ConstDefinition.Categorys.IndexOf(dataNode.SensitiveData.RootNodeName)+1;
+                    item.SensitiveId = dataNode.SensitiveData.SensitiveId;
                 }
-                //SqlFile.WriteResult(result, (AbstractDataSource)dataSource);
             }           
-        }
-
-        private void Match2(DeviceDataSource ds, List<DataNode> dataNodes)
-        {
-            //读取数据库中JsonColumnName列，并且匹配
-            IDataSource dataSource = ds.DataSource;
-            if (dataSource.Items == null)
-            {
-                return;
-            }
-            string dir = Path.GetDirectoryName(Path.GetDirectoryName(ds.DsFilePath));
-            string extactionName = dir.Substring(dir.LastIndexOf("\\") + 1);
-            ExtactionCategoryCollection categoryCollection = (ExtactionCategoryCollection)_categoryManager.GetChild(extactionName);
-            ExtactionCategory category = (ExtactionCategory)categoryCollection.GetChild(dataSource.PluginInfo.Group);
-            ExtactionSubCategory subCategory = (ExtactionSubCategory)category.GetChild(dataSource.PluginInfo.Name);
-
-            SqliteDbFile sqliteDbFile = dataSource.Items.DbInstance;
-            string connectString = sqliteDbFile.DbConnectionStr;
-            string tableName = dataSource.Items.DbTableName;
-            string cmdText = string.Format("select * from {0}", tableName);
-            IEnumerable view = dataSource.Items.View;
-
-            using (SQLiteConnection connect = new SQLiteConnection(connectString))
-            {
-                connect.Open();
-                using (var command = new SQLiteCommand(connect))
-                {
-                    command.CommandText = cmdText;
-                    SQLiteDataReader reader = command.ExecuteReader();
-                    try
-                    {
-                        foreach (DbDataRecord dataRecord in reader)
-                        {
-                            if (dataRecord.FieldCount > 0)
-                            {
-                                string jsonContent = (string)dataRecord[SqliteDbFile.JsonColumnName];
-                                foreach (DataNode item in dataNodes)
-                                {
-                                    bool ret = jsonContent.Contains(item.SensitiveData.Value);
-                                    if (ret)
-                                    {
-                                        //ExtactionItem extactionItem = subCategory.AddItem(jsonContent);
-
-                                        // extactionItem.SetActualData(dataSource);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e.InnerException);
-                    }
-                }
-            }
-        }
-
-        private void Match3(DeviceDataSource ds, List<DataNode> dataNodes)
-        {
-            //读取数据库中JsonColumnName列，并且匹配
-            IDataSource dataSource = ds.DataSource;
-            if (dataSource.Items == null)
-            {
-                return;
-            }
-            string dir = Path.GetDirectoryName(Path.GetDirectoryName(ds.DsFilePath));
-            string extactionName = dir.Substring(dir.LastIndexOf("\\") + 1);
-            ExtactionCategoryCollection categoryCollection = (ExtactionCategoryCollection)_categoryManager.GetChild(extactionName);
-            ExtactionCategory category = (ExtactionCategory)categoryCollection.GetChild(dataSource.PluginInfo.Group);
-            ExtactionSubCategory subCategory = (ExtactionSubCategory)category.GetChild(dataSource.PluginInfo.Name);
-
-            AbstractDataSource abstractDataSource = (AbstractDataSource)dataSource;
-            if (dataSource.Total < 1)
-            {
-                return;
-            }
-
-            PropertyInfo[] allPropertyInfos = ((Type)abstractDataSource.Type).GetProperties();
-            List<PropertyInfo> propertyInfos = new List<PropertyInfo>();
-            foreach (var propertyInfo in allPropertyInfos)
-            {
-                //if (propertyInfo.Attributes == typeof(string))
-                //{
-                //    propertyInfos.Add(propertyInfo);
-                //}
-            }
-
-            IEnumerable view = dataSource.Items.View;
-            foreach (AbstractDataItem dataItem in view)
-            {
-                foreach (var propertyInfo in propertyInfos)
-                {
-                    object ob = propertyInfo.GetValue(dataItem);
-                    if (ob == null)
-                    {
-                        continue;
-                    }
-                    string content = ob.ToString();
-                    if (!string.IsNullOrEmpty(content))
-                    {
-
-                        //bool ret = OnDetect(content, validateDataNodes);
-                        //if (ret)
-                        //{
-                        //    ExtactionItem extactionItem = subCategory.AddItem(subItem.Text);
-                        //    extactionItem.SetActualData(dataItem);
-                        //}
-                    }
-                }
-            }
-        }
-
-
-        //private bool OnDetect(string content, IEnumerable<DataNode> validateDataNodes)
-        //{
-        //    return validateDataNodes.Any(item => item.Data.Value == content);
-        //}
-
-        //private void DetectResultList2(ObservableCollection<DataExtactionItem> resultList,
-        //    List<DataNode> validateDataNodes)
-        //{
-        //    foreach (var dirItem in resultList)
-        //    {
-        //        string dirItemPath = dirItem.Text;
-        //        if (!Directory.Exists(dirItemPath))
-        //        {
-        //            Directory.CreateDirectory(dirItemPath);
-        //        }
-        //        ExtactionCategoryCollection categoryCollection =
-        //            (ExtactionCategoryCollection) CategoryManager.GetChild(dirItem.Text);
-
-        //        foreach (var typeItem in dirItem.TreeNodes)
-        //        {
-        //            string typeItemPath = dirItemPath + @"\" + typeItem.Text;
-        //            if (!Directory.Exists(typeItemPath))
-        //            {
-        //                Directory.CreateDirectory(typeItemPath);
-        //            }
-
-        //            ExtactionCategory category = (ExtactionCategory) categoryCollection.GetChild(typeItem.Text);
-
-        //            foreach (var subItem in typeItem.TreeNodes)
-        //            {
-        //                string subItemPath = typeItemPath + @"\" + subItem.Text + @".txt";
-        //                AbstractDataSource dataSource = (AbstractDataSource) subItem.Data;
-        //                if (dataSource.Total < 1)
-        //                {
-        //                    continue;
-        //                }
-
-        //                ExtactionSubCategory subCategory = (ExtactionSubCategory) category.GetChild(subItem.Text);
-
-        //                using (FileStream fs = new FileStream(subItemPath, FileMode.Create))
-        //                {
-        //                    StreamWriter streamWriter = new StreamWriter(fs);
-        //                    if (dataSource.Items != null)
-        //                    {
-        //                        PropertyInfo[] allPropertyInfos = ((Type) dataSource.Type).GetProperties();
-        //                        List<PropertyInfo> propertyInfos = new List<PropertyInfo>();
-        //                        foreach (var propertyInfo in allPropertyInfos)
-        //                        {
-        //                            if (propertyInfo.PropertyType == typeof (string))
-        //                            {
-        //                                propertyInfos.Add(propertyInfo);
-        //                            }
-        //                        }
-
-        //                        IEnumerable view = dataSource.Items.View;
-        //                        foreach (AbstractDataItem dataItem in view)
-        //                        {
-        //                            foreach (var propertyInfo in propertyInfos)
-        //                            {
-        //                                object ob = propertyInfo.GetValue(dataItem);
-        //                                if (ob == null)
-        //                                {
-        //                                    continue;
-        //                                }
-        //                                string content = ob.ToString();
-        //                                if (!string.IsNullOrEmpty(content))
-        //                                {
-        //                                    bool ret = OnDetect(content, validateDataNodes);
-        //                                    if (ret)
-        //                                    {
-        //                                        //ExtactionItem extactionItem = subCategory.AddItem(subItem.Text);
-        //                                        //extactionItem.SetActualData(dataItem);
-        //                                    }
-
-        //                                    streamWriter.WriteLine(content);
-        //                                }
-        //                            }
-        //                        }
-        //                        streamWriter.Close();
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
+        }        
     }
 }

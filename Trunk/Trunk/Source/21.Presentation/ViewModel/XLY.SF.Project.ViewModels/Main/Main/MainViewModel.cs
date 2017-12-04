@@ -194,6 +194,7 @@ namespace XLY.SF.Project.ViewModels.Main
             UserManagementCommand = new ProxyRelayCommand(ExecuteUserManagementCommand);
             CaseManagementCommand = new ProxyRelayCommand(ExecuteCaseManagementCommand);
             SysSettingCommand = new ProxyRelayCommand(ExecuteSysSettingCommand);
+            PluginManagementCommand = new ProxyRelayCommand(ExecutePluginManagementCommand);
         }
 
         private void Instance_CaseChanged(object sender, PropertyChangedEventArgs<Project.CaseManagement.Case> e)
@@ -235,6 +236,7 @@ namespace XLY.SF.Project.ViewModels.Main
         //案例管理
         private string ExecuteCaseManagementCommand()
         {
+            base.NavigationForNewWindow(ExportKeys.CaseListView);
             return "打开案例管理";
         }
 
@@ -243,6 +245,12 @@ namespace XLY.SF.Project.ViewModels.Main
         {
             base.NavigationForNewWindow(ExportKeys.SettingsUserListView);
             return "打开用户管理";
+        }
+
+        private string ExecutePluginManagementCommand()
+        {
+            base.NavigationForNewWindow(ExportKeys.SettingsPluginListView);
+            return string.Empty;
         }
 
         #endregion

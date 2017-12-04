@@ -82,6 +82,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Plugins\HexPreviewPlugin.cs" />
     <Compile Include="Plugins\WordPreviewPlugin.cs" />
     <Compile Include="Plugins\TextPreviewPlugin.cs" />
     <Compile Include="Plugins\HtmlPreviewPlugin.cs" />
@@ -90,9 +91,13 @@
     <Compile Include="Plugins\AudioPreviewPlugin.cs" />
     <Compile Include="Plugins\FilePropertyPreviewPlugin.cs" />
     <Compile Include="Plugins\PropertyPreviewPlugin.cs" />
+    <Compile Include="View\HexViewControl.xaml.cs">
+      <DependentUpon>HexViewControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\HtmlViewControl.xaml.cs">
       <DependentUpon>HtmlViewControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\IDataPreviewRelease.cs" />
     <Compile Include="View\ImageViewControl.xaml.cs">
       <DependentUpon>ImageViewControl.xaml</DependentUpon>
     </Compile>
@@ -159,6 +164,10 @@
     <None Include="Libs\Net\Vlc.DotNet.Wpf.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="View\HexViewControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\HtmlViewControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

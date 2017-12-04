@@ -828,13 +828,13 @@ namespace XLY.SF.Project.Devices
         /// 获取安卓手机内存容量信息
         /// </summary>
         /// <param name="device"></param>
-        public void GetDiskCapacityInfo(Device device)
+        public void GetDiskCapacityInfo(Device device, string cmd = "df -h")
         {
             try
             {
                 var receiver = new DefaultReceiver();
-                ExecuteRemoteAutoCommand("df", device, receiver);
-                var res = receiver.Data.Replace("\r\n", ";").Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                ExecuteRemoteAutoCommand(cmd, device, receiver);
+                var res = receiver.Data.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
                 device.TotalDiskCapacity = 0;
                 device.TotalDiskAvailable = 0;
@@ -844,7 +844,7 @@ namespace XLY.SF.Project.Devices
                 foreach (var line in res.Skip(1))//第一行是列头，直接跳过
                 {
                     var dataArr = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                    if (dataArr.Length != 5)
+                    if (dataArr.Length < 5)
                     {
                         continue;
                     }
@@ -870,12 +870,16 @@ namespace XLY.SF.Project.Devices
 #if DEBUG
                 LoggerManagerSingle.Instance.Error(exception, "GetDiskCapacityInfo Error");
 #endif
+                if (cmd == "df -h")
+                {
+                    GetDiskCapacityInfo(device, "df");
+                }
             }
         }
 
         private UInt64 GetUInt64FromString(string val)
         {
-            UInt64 beishu = 0;
+            UInt64 beishu = 1;
             if (val.EndsWith("K"))
             {
                 beishu = 1024;
@@ -1645,27 +1649,24 @@ namespace XLY.SF.Project.Devices
                 //request
                 var request = AdbSocketHelper.FormPullFileRequest(sourceFile);
                 AdbSocketHelper.Write(socket, request);
-                receiver.DoReceive(socket);
-            }
-            catch (ADBConnectionException cex)
-            {
-                var mes = string.Format("pull file[{0}] failed:{1}", sourceFile, cex.AllMessage());
-                LoggerManagerSingle.Instance.Error(cex, mes);
-                if (trycat)
+                if (!receiver.DoReceive(socket))
                 {
-                    //mes = string.Format("try to cat file:{0} ", sourceFile);
-                    //LogHelper.Warn(mes);
-                    var rec = new CatToFileReceiver(local);
-                    rec.OnReceiveData = receiver.OnReceiveData;
-                    var rt = CatToFile(device, sourceFile, local, rec);
-                    if (rt != string.Empty)
+                    if (trycat)
                     {
-                        throw new Exception(rt);
+                        //mes = string.Format("try to cat file:{0} ", sourceFile);
+                        //LogHelper.Warn(mes);
+                        var rec = new CatToFileReceiver(local);
+                        rec.OnReceiveData = receiver.OnReceiveData;
+                        var rt = CatToFile(device, sourceFile, local, rec);
+                        if (rt != string.Empty)
+                        {
+                            throw new Exception(rt);
+                        }
                     }
-                }
-                else
-                {
-                    throw new ApplicationException(mes, cex);
+                    else
+                    {
+                        throw new ApplicationException(string.Format("pull file[{0}] failed", sourceFile));
+                    }
                 }
             }
             catch (Exception ex)

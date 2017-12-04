@@ -124,7 +124,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <!--#endregion-->
-    
+
     <!--#endregion-->
 
     <!--#region 样式-->
@@ -390,6 +390,37 @@
         </Setter>
     </Style>
     <!--#endregion-->
+
+    <!--#region 还原按钮-->
+    <Style x:Key="BackToDevMainStyle" TargetType="Button">
+        <Setter Property="Width" Value="31"/>
+        <Setter Property="Height" Value="34"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template" Value="{StaticResource btn_EmptyCT}"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/BackToDevMainIcon_normal.png"/>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/BackToDevMainIcon_hover.png"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter Property="Background">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/BackToDevMainIcon_clik.png"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!--#endregion-->
+
     <!--#endregion-->
 
 </ResourceDictionary>

@@ -671,6 +671,8 @@ namespace XLY.SF.Framework.BaseUtility
     {
         private SQLiteDataReader Reader { get; set; }
 
+        public bool HasRows { get => Reader.HasRows; }
+
         public DBDataReader(SQLiteDataReader reader)
         {
             Reader = reader;

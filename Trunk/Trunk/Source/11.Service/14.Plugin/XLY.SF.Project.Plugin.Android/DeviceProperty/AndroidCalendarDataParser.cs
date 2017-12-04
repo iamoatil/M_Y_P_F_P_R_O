@@ -16,6 +16,7 @@ using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Persistable.Primitive;
 using System.IO;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.Android
 {
@@ -27,8 +28,8 @@ namespace XLY.SF.Project.Plugin.Android
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{38921FD4-77CD-42C3-859E-E4EFD1672680}";
-            pluginInfo.Name = "日历信息";
-            pluginInfo.Group = "基本信息";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_Calendar);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_BasicInfo);
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror;
@@ -37,7 +38,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             pluginInfo.AppName = "com.android.providers.calendar";
             pluginInfo.Icon = "\\icons\\Calendar.png";
-            pluginInfo.Description = "提取安卓设备日历信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_AndroidCalendar);
             pluginInfo.SourcePath = new SourceFileItems();
             //安卓内置
             pluginInfo.SourcePath.AddItem("/data/data/com.android.providers.calendar/databases/#F");

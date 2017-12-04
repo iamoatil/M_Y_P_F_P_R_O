@@ -14,6 +14,7 @@ using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.Android
 {
@@ -25,8 +26,8 @@ namespace XLY.SF.Project.Plugin.Android
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{BE64DDEE-6CB6-41E9-99DC-614AD88978D5}";
-            pluginInfo.Name = "设备信息";
-            pluginInfo.Group = "基本信息";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_DeviceProperty);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_BasicInfo);
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB;
@@ -35,7 +36,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             pluginInfo.AppName = "com.app.android";
             pluginInfo.Icon = "\\icons\\device.png";
-            pluginInfo.Description = "提取安卓设备属性信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_AndroidDeviceProperty);
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/data/data/com.oppo.safe/shared_prefs/TMSProperties.xml");
             pluginInfo.SourcePath.AddItem("/data/misc/bluetoothd/#F");
@@ -211,14 +212,14 @@ namespace XLY.SF.Project.Plugin.Android
                         {
                             simdata = "ICCID:" + sim.icc_id + ",";
                             if (!string.IsNullOrEmpty(sim.number))
-                                simdata += "手机号码" + sim.number + ",";
+                                simdata += LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_PhoneNumber) + sim.number + ",";
                             else
-                                simdata += "手机号码:NA";
+                                simdata += LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_PhoneNumber) + ":NA";
 
                             if (!string.IsNullOrEmpty(sim.display_name))
-                                simdata += "运行商" + sim.display_name;
+                                simdata += LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_CarrierOperator) + sim.display_name;
                             else
-                                simdata += "运行商:NA";
+                                simdata += LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_CarrierOperator) + ":NA";
 
                             listsimdata.Add(simdata);
                         }
@@ -237,14 +238,14 @@ namespace XLY.SF.Project.Plugin.Android
                         {
                             simdata = "ICCID:" + sim.card_iccid + ",";
                             if (!string.IsNullOrEmpty(sim.card_number))
-                                simdata += "手机号码" + sim.card_number + ",";
+                                simdata += LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_PhoneNumber) + sim.card_number + ",";
                             else
-                                simdata += "手机号码:NA";
+                                simdata += LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_PhoneNumber) + ":NA";
 
                             if (!string.IsNullOrEmpty(sim.card_name))
-                                simdata += "运行商" + sim.card_name;
+                                simdata += LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_CarrierOperator) + sim.card_name;
                             else
-                                simdata += "运行商:NA";
+                                simdata += LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_CarrierOperator) + ":NA";
 
                             if (!string.IsNullOrEmpty(sim.card_id))
                                 simdata += "IMSI" + sim.card_id;
@@ -274,18 +275,18 @@ namespace XLY.SF.Project.Plugin.Android
             }
             catch { }
 
-            dataSource.Items.Add(new KeyValueItem("序列号", serialnumber));
-            dataSource.Items.Add(new KeyValueItem("设备名称", name));
-            dataSource.Items.Add(new KeyValueItem("设备品牌", manufacture));
-            dataSource.Items.Add(new KeyValueItem("设备型号", model));
-            dataSource.Items.Add(new KeyValueItem("操作系统", OSType));
-            dataSource.Items.Add(new KeyValueItem("系统版本", OSVersion));
-            dataSource.Items.Add(new KeyValueItem("是否ROOT", root));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_Serialnumber), serialnumber));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_DeviceName), name));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_Manufacture), manufacture));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_Model), model));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_OSType), OSType));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_OSVersion), OSVersion));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_Root), root));
             dataSource.Items.Add(new KeyValueItem("IMEI", IMEI));
             dataSource.Items.Add(new KeyValueItem("IMSI", IMSI));
-            dataSource.Items.Add(new KeyValueItem("WIFI地址", WiFiAddress));
-            dataSource.Items.Add(new KeyValueItem("蓝牙的MAC地址", BMac));
-            dataSource.Items.Add(new KeyValueItem("WIFI的MAC地址", TMac));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_WiFiAddress), WiFiAddress));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_BMac), BMac));
+            dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_TMac), TMac));
 
             int id = 0;
             foreach (var sim in listsimdata)

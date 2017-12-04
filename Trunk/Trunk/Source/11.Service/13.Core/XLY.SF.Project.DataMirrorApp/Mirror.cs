@@ -29,16 +29,16 @@ namespace XLY.SF.Project.DataMirrorApp
         public MirrorFile MirrorFile { get; private set; }
 
         /// <summary>
-        /// 可否执行
+        /// 是否已经初始化
         /// </summary>
-        bool _canExecute = false;
+        public bool IsInitialized { get; private set; }
 
         /// <summary>
         /// 在Initialize方法中打开设备，并且初始化
         /// </summary>
         public void Initialize(string deviceSerialnumber,int isHtc,string path)
         {
-            _canExecute = false;
+            IsInitialized = false;
             try
             {
                 MirrorFile = new MirrorFile(path);
@@ -62,12 +62,12 @@ namespace XLY.SF.Project.DataMirrorApp
                 return;
             }
 
-            _canExecute = true;
+            IsInitialized = true;
         }
 
         public void Start(string block,long startedPos)
         {
-            if(_canExecute == true)
+            if(IsInitialized == true)
             {
                 try
                 {
@@ -100,7 +100,7 @@ namespace XLY.SF.Project.DataMirrorApp
         {
             MirrorFile.Close();
             Console.WriteLine("{0}|{1}",CmdStrings.Exception, msg);
-            _canExecute = false;
+            IsInitialized = false;
         }
 
         /// <summary>

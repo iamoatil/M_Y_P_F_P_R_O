@@ -31,7 +31,7 @@
             </Grid.RowDefinitions>
 
             <!--数据过滤-->
-            <Border Grid.ColumnSpan="2" Height="60">
+            <Border Grid.ColumnSpan="2">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                         <GradientStop Offset="0" Color="#2b385a"/>

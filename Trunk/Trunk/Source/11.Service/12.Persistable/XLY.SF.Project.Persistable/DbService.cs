@@ -29,6 +29,7 @@ namespace XLY.SF.Project.Persistable
     [Export(typeof(IRecordContext<OperationLog>))]
     [Export(typeof(IRecordContext<UserInfo>))]
     [Export(typeof(IRecordContext<RecentCase>))]
+    [Export(typeof(IRecordContext<ExtractionPlan>))]
     [Export(typeof(ILogicalDataContext))]
     [PartCreationPolicy(CreationPolicy.Shared)]
     public class DbService : DbContext, ILogicalDataContext
@@ -50,11 +51,15 @@ namespace XLY.SF.Project.Persistable
 
         public DbSet<RecentCase> RecentCases { get; set; }
 
+        public DbSet<ExtractionPlan> ExtractionPlans { get; set; }
+
         IQueryable<OperationLog> IRecordContext<OperationLog>.Records => OperationLogs;
 
         IQueryable<UserInfo> IRecordContext<UserInfo>.Records => UserInfos;
 
         IQueryable<RecentCase> IRecordContext<RecentCase>.Records => RecentCases;
+
+        IQueryable<ExtractionPlan> IRecordContext<ExtractionPlan>.Records => ExtractionPlans;
 
         #endregion
 
@@ -145,6 +150,13 @@ namespace XLY.SF.Project.Persistable
             return SaveChanges() == 1;
         }
 
+        public Boolean Add(ExtractionPlan record)
+        {
+            if (record == null) return false;
+            ExtractionPlans.Add(record);
+            return SaveChanges() == 1;
+        }
+
         public void AddRange(params OperationLog[] records)
         {
             if (records.Length == 0) return;
@@ -163,6 +175,13 @@ namespace XLY.SF.Project.Persistable
         {
             if (records.Length == 0) return;
             RecentCases.AddRange(records);
+            SaveChanges();
+        }
+
+        public void AddRange(params ExtractionPlan[] records)
+        {
+            if (records.Length == 0) return;
+            ExtractionPlans.AddRange(records);
             SaveChanges();
         }
 
@@ -193,6 +212,15 @@ namespace XLY.SF.Project.Persistable
             return SaveChanges() == 1;
         }
 
+        public Boolean Remove(ExtractionPlan record)
+        {
+            if (record == null) return false;
+            var attached = ExtractionPlans.Attach(record);
+            if (attached == null) return false;
+            ExtractionPlans.Remove(attached);
+            return SaveChanges() == 1;
+        }
+
         public void RemoveRange(params OperationLog[] records)
         {
             if (records.Length == 0) return;
@@ -211,6 +239,13 @@ namespace XLY.SF.Project.Persistable
         {
             if (records.Length == 0) return;
             RecentCases.RemoveRange(records);
+            SaveChanges();
+        }
+
+        public void RemoveRange(params ExtractionPlan[] records)
+        {
+            if (records.Length == 0) return;
+            ExtractionPlans.RemoveRange(records);
             SaveChanges();
         }
 
@@ -236,6 +271,15 @@ namespace XLY.SF.Project.Persistable
         {
             if (record == null) return false;
             var attached = RecentCases.Attach(record);
+            if (attached == null) return false;
+            Entry(attached).State = EntityState.Modified;
+            return SaveChanges() == 1;
+        }
+
+        public Boolean Update(ExtractionPlan record)
+        {
+            if (record == null) return false;
+            var attached = ExtractionPlans.Attach(record);
             if (attached == null) return false;
             Entry(attached).State = EntityState.Modified;
             return SaveChanges() == 1;

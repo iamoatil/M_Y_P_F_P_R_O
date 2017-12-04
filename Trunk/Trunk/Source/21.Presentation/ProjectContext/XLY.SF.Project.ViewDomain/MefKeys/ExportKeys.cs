@@ -171,9 +171,20 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         /// </summary>
         public const string ExtractionViewModel = "ExportKey_ExtractionViewModel";
 
+        /// <summary>
         /// 文件浏览页
         /// </summary>
         public const string FileBrowingView = "ExportKey_ModuleFileBowingView";
+
+        /// <summary>
+        /// 智能预警页面
+        /// </summary>
+        public const string AutoWarningView = "ExportKey_AutoWarningView";
+
+        /// <summary>
+        /// 智能预警页面
+        /// </summary>
+        public const string AutoWarningViewModel = "ExportKey_AutoWarningViewModel";
 
         #endregion
 
@@ -246,6 +257,22 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         public const String SettingsInspectionViewModel = "ExportKey_Settings_InspectionViewModel";
 
         public const String SettingsView = "ExportKey_SettingsView";
+
+        #endregion
+
+        #region 插件管理
+
+        public const String SettingsPluginListView = "ExportKey_Settings_PluginListView";
+
+        public const String SettingsPluginListViewViewModel = "ExportKey_Settings_PluginListViewModel ";
+
+        #endregion
+
+        #region 操作指引
+
+        public const String SettingsGuideHomeView = "ExportKey_Settings_GuideHomeView";
+
+        public const String SettingsGuideHomeViewModel = "ExportKey_Settings_GuideHomeViewModel";
 
         #endregion
 

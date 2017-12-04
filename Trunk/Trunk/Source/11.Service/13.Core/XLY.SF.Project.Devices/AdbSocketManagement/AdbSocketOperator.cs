@@ -89,9 +89,9 @@ namespace XLY.SF.Project.Devices.AdbSocketManagement
 
                 IsOpened = true;
             }
-            catch (Exception ex)
+            catch 
             {
-                LoggerManagerSingle.Instance.Error(ex);
+                //LoggerManagerSingle.Instance.Error(ex);
 
                 IsOpened = false;
             }

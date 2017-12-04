@@ -129,10 +129,13 @@ namespace XLY.SF.Shell.NavigationManager
                 newWindow.WindowState = view.IsMaxView ? WindowState.Maximized : WindowState.Normal;
                 Binding s = new Binding("Title") { Source = view };
                 newWindow.SetBinding(Window.TitleProperty, s);
+                newWindow.ShowMaxsize = newWindow.ShowMinsize = view.NeedMaxsizeAndMinsize;
                 if (view.Height > 0 && view.Width > 0)
                 {
-                    newWindow.Width = view.Width;
-                    newWindow.Height = view.Height;
+                    //TODO
+                    //此处由于阴影问题，所以需要给实际展示内容增加80像素
+                    newWindow.Width = view.Width + 40 * 2;
+                    newWindow.Height = view.Height + 40 * 2;
                 }
                 else
                     newWindow.SizeToContent = SizeToContent.WidthAndHeight;

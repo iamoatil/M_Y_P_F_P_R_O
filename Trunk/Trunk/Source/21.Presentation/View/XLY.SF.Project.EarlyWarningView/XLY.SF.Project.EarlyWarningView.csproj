@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{5E39B1BF-D987-4B78-AE11-CB1C070B027B}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>XLY.SF.Project.EarlyWarningView</RootNamespace>
     <AssemblyName>XLY.SF.Project.EarlyWarningView</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -14,13 +14,17 @@
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\..\..\31.Build\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -29,7 +33,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\..\31.Build\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -53,6 +57,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
@@ -77,6 +82,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapter\AbstractEarlyWarningPlugin.cs" />
+    <Compile Include="Adapter\EarlyWarningPluginAdapter.cs" />
     <Compile Include="Check\Helper.cs" />
     <Compile Include="ConfigData\ConfigDataFilter.cs" />
     <Compile Include="ConfigData\ConfigDataToDB.cs" />
@@ -84,6 +91,17 @@
     <Compile Include="ConfigData\ConfigNode.cs" />
     <Compile Include="ConstDefinition.cs" />
     <Compile Include="Interface.cs" />
+    <Compile Include="Language\LanguageHelper.cs" />
+    <Compile Include="Language\LanguageTextTeamplate1.LanguageElement.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LanguageTextTeamplate.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Plugins\AppWarningPlugin.cs" />
+    <Compile Include="Plugins\KeyWordWarningPlugin.cs" />
+    <Compile Include="Plugins\Md5WarningPlugin.cs" />
+    <Compile Include="Plugins\PhoneWarningPlugin.cs" />
+    <Compile Include="Plugins\UrlWarningPlugin.cs" />
     <Compile Include="ResultData\DataExtactionItemCollection.cs" />
     <Compile Include="ResultData\SensitiveSetting.cs" />
     <Compile Include="ResultData\SqlFile.cs" />
@@ -94,34 +112,37 @@
     <Compile Include="EarlyWarningResultPage.xaml.cs">
       <DependentUpon>EarlyWarningResultPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EarlyWarningSetting.xaml.cs">
-      <DependentUpon>EarlyWarningSetting.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Check\DetectionManager.cs" />
     <Compile Include="DeviceData\DeviceDataParser.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setting\SettingManager.cs" />
     <Compile Include="ResultData\AbstractCategory.cs" />
     <Compile Include="ResultData\ExtactionCategory.cs" />
-    <Compile Include="ViewModel\ResultViewModel.cs" />
+    <Compile Include="ViewModel\EarlyWarningViewModel.cs" />
     <Compile Include="ResultData\ICategory.cs" />
     <Compile Include="Setting\SettingCollection.cs" />
     <Compile Include="Setting\SettingItem.cs" />
-    <Compile Include="ViewModel\SettingViewModel.cs" />
+    <Content Include="EarlyWarningConfig\Custom.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EarlyWarningConfig\EconomySafety.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EarlyWarningConfig\Livehood.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EarlyWarningConfig\PublicSafety.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Language\LanguageTextTeamplate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LanguageTextTeamplate1.LanguageElement.cs</LastGenOutput>
+    </Content>
+    <Content Include="Language\Language_Cn.xml" />
+    <Content Include="Language\Language_En.xml" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="EarlyWarningResultPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="EarlyWarningSetting.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -147,13 +168,37 @@
       <Project>{68F2D8A3-05A8-4AAA-A9E2-00071188595B}</Project>
       <Name>XLY.SF.Project.Domains</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\11.Service\12.Persistable\XLY.SF.Project.Models\XLY.SF.Project.Models.csproj">
+      <Project>{85971D45-4FAF-4DBD-AD3E-D73E79262011}</Project>
+      <Name>XLY.SF.Project.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\11.Service\12.Persistable\XLY.SF.Project.Persistable\XLY.SF.Project.Persistable.csproj">
+      <Project>{E65AA84E-A943-4197-8D2B-631A7CD8565E}</Project>
+      <Name>XLY.SF.Project.Persistable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\11.Service\13.Core\XLY.SF.Project.DataFilter\XLY.SF.Project.DataFilter.csproj">
       <Project>{22661B55-AD41-4232-8EE7-485CAE0F4F3D}</Project>
       <Name>XLY.SF.Project.DataFilter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\11.Service\14.Plugin\XLY.SF.Project.Plugin.Adapter\XLY.SF.Project.Plugin.Adapter.csproj">
+      <Project>{78424848-06CB-4D68-81D2-6338F56AACAD}</Project>
+      <Name>XLY.SF.Project.Plugin.Adapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ProjectContext\ProjectExtend\XLY.SF.Project.Extension.csproj">
+      <Project>{E280C623-F0DD-47A8-AC87-80A0B5BBAFDB}</Project>
+      <Name>XLY.SF.Project.Extension</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ProjectContext\XLY.SF.Project.ViewDomain\XLY.SF.Project.ViewDomain.csproj">
+      <Project>{3048CC82-28C9-4833-8D71-EA86FEA3FB20}</Project>
+      <Name>XLY.SF.Project.ViewDomain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Theme\XLY.SF.Project.Themes\XLY.SF.Project.Themes.csproj">
       <Project>{c4c4fc67-5d56-4426-acc5-b53cd24c6b69}</Project>
       <Name>XLY.SF.Project.Themes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ViewModel\XLY.SF.Project.ViewModels\XLY.SF.Project.ViewModels.csproj">
+      <Project>{9D2B3936-A461-4B11-AB1B-FAFD1AEAB5DC}</Project>
+      <Name>XLY.SF.Project.ViewModels</Name>
     </ProjectReference>
     <ProjectReference Include="..\XLY.SF.Project.DataDisplayView\XLY.SF.Project.DataDisplayView.csproj">
       <Project>{26B3C073-8944-4917-A7AF-94A10A5B5A7C}</Project>
@@ -169,9 +214,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\..\23.Shell\XLY.SF.Shell\packages\System.Data.SQLite.Core.1.0.106.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\..\..\23.Shell\XLY.SF.Shell\packages\System.Data.SQLite.Core.1.0.106.0\build\net45\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

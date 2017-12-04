@@ -141,21 +141,6 @@ public class Languagekeys
 		public const string ViewLanguage_View_MainWin_MenuLogout = "LanguageResource/ViewLanguage/View_MainWin_MenuLogout";
 				
         /// <summary>
-        /// 打开文件
-        /// </summary>
-		public const string ViewLanguage_View_SelectControl_OpenTitle = "LanguageResource/ViewLanguage/View_SelectControl_OpenTitle";
-				
-        /// <summary>
-        /// 保存文件
-        /// </summary>
-		public const string ViewLanguage_View_SelectControl_SaveTitle = "LanguageResource/ViewLanguage/View_SelectControl_SaveTitle";
-				
-        /// <summary>
-        /// 选择文件夹
-        /// </summary>
-		public const string ViewLanguage_View_SelectControl_SelectFolderTitle = "LanguageResource/ViewLanguage/View_SelectControl_SelectFolderTitle";
-				
-        /// <summary>
         /// 打开
         /// </summary>
 		public const string ViewLanguage_View_HomePageOpen = "LanguageResource/ViewLanguage/View_HomePageOpen";
@@ -476,6 +461,41 @@ public class Languagekeys
 		public const string ViewLanguage_View_DevHomePage_IOSRoot = "LanguageResource/ViewLanguage/View_DevHomePage_IOSRoot";
 				
         /// <summary>
+        /// 格式
+        /// </summary>
+		public const string ViewLanguage_View_SelectControl_Format = "LanguageResource/ViewLanguage/View_SelectControl_Format";
+				
+        /// <summary>
+        /// 选择文件
+        /// </summary>
+		public const string ViewLanguage_View_SelectControl_SelectFile = "LanguageResource/ViewLanguage/View_SelectControl_SelectFile";
+				
+        /// <summary>
+        /// 打开文件
+        /// </summary>
+		public const string ViewLanguage_View_SelectControl_OpenTitle = "LanguageResource/ViewLanguage/View_SelectControl_OpenTitle";
+				
+        /// <summary>
+        /// 保存文件
+        /// </summary>
+		public const string ViewLanguage_View_SelectControl_SaveTitle = "LanguageResource/ViewLanguage/View_SelectControl_SaveTitle";
+				
+        /// <summary>
+        /// 文件夹名
+        /// </summary>
+		public const string ViewLanguage_View_SelectControl_FolderName = "LanguageResource/ViewLanguage/View_SelectControl_FolderName";
+				
+        /// <summary>
+        /// 选择文件夹
+        /// </summary>
+		public const string ViewLanguage_View_SelectControl_SelectFolderTitle = "LanguageResource/ViewLanguage/View_SelectControl_SelectFolderTitle";
+				
+        /// <summary>
+        /// 数据导出
+        /// </summary>
+		public const string ViewLanguage_Export_ExportData = "LanguageResource/ViewLanguage/Export/ExportData";
+				
+        /// <summary>
         /// 用户管理
         /// </summary>
 		public const string ViewLanguage_Management_User_ListTitle = "LanguageResource/ViewLanguage/Management/User/ListTitle";
@@ -571,6 +591,16 @@ public class Languagekeys
 		public const string ViewLanguage_Management_Settings_Unit = "LanguageResource/ViewLanguage/Management/Settings/Unit";
 				
         /// <summary>
+        /// 单位
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_UnitInputBox = "LanguageResource/ViewLanguage/Management/Settings/UnitInputBox";
+				
+        /// <summary>
+        /// 编号
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_NumberInputBox = "LanguageResource/ViewLanguage/Management/Settings/NumberInputBox";
+				
+        /// <summary>
         /// 智能检视
         /// </summary>
 		public const string ViewLanguage_Management_Settings_Inspection = "LanguageResource/ViewLanguage/Management/Settings/Inspection";
@@ -579,6 +609,11 @@ public class Languagekeys
         /// 检视项（对MD5的检视可能导致系统变慢）：
         /// </summary>
 		public const string ViewLanguage_Management_Settings_InspectionDescription = "LanguageResource/ViewLanguage/Management/Settings/InspectionDescription";
+				
+        /// <summary>
+        /// 默认开启智能检视
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_InspectionTooltip = "LanguageResource/ViewLanguage/Management/Settings/InspectionTooltip";
 				
         /// <summary>
         /// 语言
@@ -594,6 +629,21 @@ public class Languagekeys
         /// 数据过滤
         /// </summary>
 		public const string ViewLanguage_Management_Settings_DataFilter = "LanguageResource/ViewLanguage/Management/Settings/DataFilter";
+				
+        /// <summary>
+        /// 提取结果自动去重并过滤无效数据
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_DataFilterDescription = "LanguageResource/ViewLanguage/Management/Settings/DataFilterDescription";
+				
+        /// <summary>
+        /// 添加
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_Add = "LanguageResource/ViewLanguage/Management/Settings/Add";
+				
+        /// <summary>
+        /// 删除
+        /// </summary>
+		public const string ViewLanguage_Management_Settings_Remove = "LanguageResource/ViewLanguage/Management/Settings/Remove";
 				
         /// <summary>
         /// 中文
@@ -768,22 +818,47 @@ public class Languagekeys
         /// <summary>
         /// 弹出
         /// </summary>
-		public const string DeviceLanguage_Device_PopUp = "LanguageResource/DeviceLanguage/Device_PopUp";
+		public const string SourceSelection_PopUp = "LanguageResource/SourceSelection/PopUp";
 				
         /// <summary>
         /// 移动
         /// </summary>
-		public const string DeviceLanguage_Device_Move = "LanguageResource/DeviceLanguage/Device_Move";
+		public const string SourceSelection_Move = "LanguageResource/SourceSelection/Move";
 				
         /// <summary>
         /// 删除
         /// </summary>
-		public const string DeviceLanguage_Device_Delete = "LanguageResource/DeviceLanguage/Device_Delete";
+		public const string SourceSelection_Delete = "LanguageResource/SourceSelection/Delete";
 				
         /// <summary>
         /// 关闭
         /// </summary>
-		public const string DeviceLanguage_Device_Close = "LanguageResource/DeviceLanguage/Device_Close";
+		public const string SourceSelection_Close = "LanguageResource/SourceSelection/Close";
+				
+        /// <summary>
+        /// 请选择要移动到的案例（移动过程可能需要较长时间）
+        /// </summary>
+		public const string SourceSelection_MoveDescription = "LanguageResource/SourceSelection/MoveDescription";
+				
+        /// <summary>
+        /// 确定
+        /// </summary>
+		public const string SourceSelection_Confirm = "LanguageResource/SourceSelection/Confirm";
+				
+        /// <summary>
+        /// 取消
+        /// </summary>
+		public const string SourceSelection_Cancel = "LanguageResource/SourceSelection/Cancel";
+				
+        /// <summary>
+        /// 数据源选择
+        /// </summary>
+		public const string SourceSelection_Title = "LanguageResource/SourceSelection/Title";
+				
+        /// <summary>
+        /// 是否确定删除？
+        /// </summary>
+		public const string SourceSelection_DeletePrompt = "LanguageResource/SourceSelection/DeletePrompt";
 				
         /// <summary>
         /// 未找到表

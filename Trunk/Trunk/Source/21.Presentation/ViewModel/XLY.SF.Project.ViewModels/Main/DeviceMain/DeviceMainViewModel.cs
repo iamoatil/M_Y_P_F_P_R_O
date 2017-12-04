@@ -5,6 +5,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using XLY.SF.Framework.Core.Base.MefIoc;
 using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base.MessageBase.Navigation;
@@ -21,6 +22,32 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class DeviceMainViewModel : ViewModelBase
     {
+        #region 子界面类型
+        /// <summary>
+        /// 子界面类型
+        /// </summary>
+        public enum DevMainSubViewType
+        {
+            /// <summary>
+            /// 提取主页
+            /// </summary>
+            DevHomePage,
+            /// <summary>
+            /// 提取结果
+            /// </summary>
+            ExtractResult,
+            /// <summary>
+            /// 文件浏览
+            /// </summary>
+            FileView,
+            /// <summary>
+            /// 智能预警
+            /// </summary>
+            AutoWarning,
+        }
+
+        #endregion
+
         #region Properties
 
         #region 设备信息
@@ -45,6 +72,24 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         #endregion
 
         #region 设备主页导航
+
+        private DevMainSubViewType _curSubViewType;
+        /// <summary>
+        /// 当前子界面类型
+        /// </summary>
+        public DevMainSubViewType CurSubViewType
+        {
+            get
+            {
+                return this._curSubViewType;
+            }
+
+            set
+            {
+                this._curSubViewType = value;
+                base.OnPropertyChanged();
+            }
+        }
 
         private object _subView;
         /// <summary>
@@ -74,7 +119,7 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         #endregion
 
         #region Commands
-
+        
         /// <summary>
         /// 文件浏览
         /// </summary>
@@ -84,6 +129,12 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         /// 数据提取结果
         /// </summary>
         public ProxyRelayCommand ExtractionResultCommand { get; private set; }
+
+        /// <summary>
+        /// 跳转到智能预警
+        /// </summary>
+        public ProxyRelayCommand EarlyWarningCommand { get; private set; }
+
         /// <summary>
         /// 跳转到设备首页
         /// </summary>
@@ -96,6 +147,7 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
             base.MessageAggregation.RegisterGeneralMsg<bool>(this, GeneralKeys.ExtractTaskCompleteMsg, TaskCompleteCallback);
             ExtractionResultCommand = new ProxyRelayCommand(ExeucteExtractionResultCommand);
             FileViewCommand = new ProxyRelayCommand(ExecuteFileViewCommand);
+            EarlyWarningCommand = new ProxyRelayCommand(EarlyWarningViewCommand);
             DeviceHomePageCommand = new ProxyRelayCommand(ExecuteDeviceHomePageCommand);
         }
 
@@ -112,32 +164,73 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
 
                 //首次加载使用设备首页
-                SubView = DevNavigationManager.GetOrCreateView(ExportKeys.DeviceHomePageView, CurDevModel);
+                SwitchSubView(DevMainSubViewType.DevHomePage, CurDevModel);
+                //SubView = DevNavigationManager.GetOrCreateView(ExportKeys.DeviceHomePageView, CurDevModel);
             }
         }
 
         #region ExecuteCommands
 
+        #region 此命令仅此一处使用【返回设备列表用】
+
+        //private void ExecuteBackToDevMainCommand(object devID)
+        //{
+        //    var devTmp = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
+        //    if (devID?.ToString() == devTmp.Device.ID)
+        //    {
+        //        MessageAggregation.SendGeneralMsg(new GeneralArgs<DeviceExtractionAdorner>(ExportKeys.DeviceWindowClosedMsg)
+        //        {
+        //            Parameters = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner
+        //        });
+        //    }
+        //}
+
+        #endregion
+
         private string ExecuteFileViewCommand()
         {
-            SubView = DevNavigationManager.GetOrCreateView(ExportKeys.FileBrowingView, CurDevModel.IDevSource);
+            //SubView = DevNavigationManager.GetOrCreateView(ExportKeys.FileBrowingView, CurDevModel.IDevSource);
+            SwitchSubView(DevMainSubViewType.FileView, CurDevModel.IDevSource);
             return string.Empty;
         }
 
+        private string EarlyWarningViewCommand()
+        {
+            //SubView = DevNavigationManager.GetOrCreateView(ExportKeys.FileBrowingView, CurDevModel.IDevSource);
+            SwitchSubView(DevMainSubViewType.AutoWarning, CurDevModel.IDevSource);
+            return string.Empty;
+        }
+
+
         private string ExecuteDeviceHomePageCommand()
         {
-            SubView = DevNavigationManager.GetOrCreateView(ExportKeys.DeviceHomePageView, CurDevModel);
+            SwitchSubView(DevMainSubViewType.DevHomePage, CurDevModel);
+            //SubView = DevNavigationManager.GetOrCreateView(ExportKeys.DeviceHomePageView, CurDevModel);
             return string.Empty;
         }
 
         private string ExeucteExtractionResultCommand()
         {
             var tmp = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
-            SubView = DevNavigationManager.GetOrCreateView(ExportKeys.DataDisplayView, tmp.Target.Path);
+            //SubView = DevNavigationManager.GetOrCreateView(ExportKeys.DataDisplayView, tmp.Target.Path);
+            SwitchSubView(DevMainSubViewType.ExtractResult, tmp.Target.Path);
+            SetAutoWarningPath(tmp.Target.Path);
             return string.Empty;
         }
 
         #endregion
+
+        /// <summary>
+        /// 设置智能预警的文件路径
+        /// </summary>
+        private void SetAutoWarningPath(string path)
+        {
+            var viewTmp = DevNavigationManager.GetOrCreateView(ExportKeys.AutoWarningView, path);
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                viewTmp.DataSource.ReceiveParameters(path);
+            }
+        }
 
         #region Tools
 
@@ -181,7 +274,7 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
                 SerialNumber = tmpDev.SerialNumber,
                 System = string.Format("{0}{1}", tmpDev.OSType, tmpDev.OSVersion),
                 IsAndroid = tmpDev.OSType == EnumOSType.Android,
-                
+
                 DeviceTotalSize = tmpDev.TotalDiskCapacity * 1.0 / 1024 / 1024 / 1024,
                 UnusedTotalSizeOfDevice = tmpDev.TotalDiskAvailable * 1.0 / 1024 / 1024 / 1024,
                 SDCardTotalSize = tmpDev.TotalDataCapacity * 1.0 / 1024 / 1024 / 1024,
@@ -233,9 +326,48 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         {
             //跳转
             var tmp = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
-            var a = DevNavigationManager.GetOrCreateView(ExportKeys.DataDisplayView, tmp.Target.Path);
-            a.DataSource.ReceiveParameters(args.Parameters);
-            SubView = a;          
+            //var a = DevNavigationManager.GetOrCreateView(ExportKeys.DataDisplayView, tmp.Target.Path);
+            //a.DataSource.ReceiveParameters(args.Parameters);
+            //SubView = a;
+
+
+            SwitchSubView(DevMainSubViewType.ExtractResult, tmp.Target.Path, args.Parameters);
+            SetAutoWarningPath(tmp.Target.Path);
+        }
+
+        #endregion
+
+        #region 界面切换
+
+        /// <summary>
+        /// 切换子界面
+        /// </summary>
+        /// <param name="subType">子界面类型</param>
+        /// <param name="initParams">初始化参数</param>
+        /// <param name="params">参数</param>
+        private void SwitchSubView(DevMainSubViewType subType, object initParams, object @params = null)
+        {
+            string exportKey = string.Empty;
+            switch (subType)
+            {
+                case DevMainSubViewType.DevHomePage:
+                    exportKey = ExportKeys.DeviceHomePageView;
+                    break;
+                case DevMainSubViewType.ExtractResult:
+                    exportKey = ExportKeys.DataDisplayView;
+                    break;
+                case DevMainSubViewType.FileView:
+                    exportKey = ExportKeys.FileBrowingView;
+                    break;
+                case DevMainSubViewType.AutoWarning:
+                    exportKey = ExportKeys.AutoWarningView;
+                    break;
+            }
+            CurSubViewType = subType;
+            var viewTmp = DevNavigationManager.GetOrCreateView(exportKey, initParams);
+            if (@params != null)
+                viewTmp.DataSource.ReceiveParameters(@params);
+            SubView = viewTmp;
         }
 
         #endregion

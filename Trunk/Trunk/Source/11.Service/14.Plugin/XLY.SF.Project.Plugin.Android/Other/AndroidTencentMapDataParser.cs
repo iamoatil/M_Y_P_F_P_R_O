@@ -9,6 +9,7 @@
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.Android
 {
@@ -23,8 +24,8 @@ namespace XLY.SF.Project.Plugin.Android
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{A222D040-78C6-490A-9142-D4651C0BA18B}";
-            pluginInfo.Name = "腾讯地图";
-            pluginInfo.Group = "地图公交";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_TencentMap);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_BusMap);
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "4.1.2";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
@@ -33,7 +34,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             pluginInfo.AppName = "com.tencent.map";
             pluginInfo.Icon = "\\icons\\TencentMap.png";
-            pluginInfo.Description = "提取安卓设备腾讯地图信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_AndroidTencentMap);
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/data/data/com.tencent.map/databases/#F");
             pluginInfo.SourcePath.AddItem("/data/data/com.tencent.map/shared_prefs/#F");

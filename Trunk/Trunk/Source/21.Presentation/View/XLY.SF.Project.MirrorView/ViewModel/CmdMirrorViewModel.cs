@@ -94,7 +94,7 @@ namespace XLY.SF.Project.MirrorView
             }
             else if (state.IsType(CmdStrings.Exception))
             {
-                _msgBox.ShowDialogSuccessMsg("镜像失败" + state.GetChildCmd());
+                _msgBox.ShowErrorMsg("镜像失败" + state.GetChildCmd());
                 SourcePosition.IsMirroring = false;
             }
             else if (state.Match(CmdStrings.StopMirror))

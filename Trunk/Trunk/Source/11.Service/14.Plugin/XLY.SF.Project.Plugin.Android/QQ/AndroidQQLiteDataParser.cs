@@ -2,6 +2,7 @@
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.Android
 {
@@ -13,8 +14,8 @@ namespace XLY.SF.Project.Plugin.Android
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{D20DF00D-8E5E-432E-9F1A-563CD0C2EDCE}";
-            pluginInfo.Name = "QQ轻聊版";
-            pluginInfo.Group = "社交聊天";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_QQLite);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_SocialChat);
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
@@ -23,7 +24,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             pluginInfo.AppName = "com.tencent.qqlite";
             pluginInfo.Icon = "\\icons\\Icon-qq.png";
-            pluginInfo.Description = "提取安卓设备QQ轻聊版信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_AndroidQQLite);
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/data/data/com.tencent.qqlite/databases/#F");
             pluginInfo.SourcePath.AddItem("/data/data/com.tencent.qqlite/shared_prefs/#F");
@@ -48,7 +49,7 @@ namespace XLY.SF.Project.Plugin.Android
                 //com.tencent.qqlite
                 var qqPath = new DirectoryInfo(databasesPath).Parent.FullName;
 
-                var parser = new AndroidQQLiteDataParseCoreV1_0(pi.SaveDbPath, "QQ轻聊版", qqPath, "");
+                var parser = new AndroidQQLiteDataParseCoreV1_0(pi.SaveDbPath, LanguageHelper.GetString(Languagekeys.PluginName_QQLite), qqPath, "");
 
                 var qqNode = parser.BuildTree();
 

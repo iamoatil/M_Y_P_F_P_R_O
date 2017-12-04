@@ -58,9 +58,36 @@ namespace XLY.SF.Project.Themes.CustromControl
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            _spMain = this.Template.FindName("sp_Main",this) as StackPanel;
+            _spMain = this.Template.FindName("sp_Main", this) as StackPanel;
             _sbOnLoading = this.Template.Resources["OnLoading"] as Storyboard;
             _sbOnLoading.Begin(_spMain);
+
+            RtFills = new Brush[6];
+            SdColors = new Color[6];
+
+            char[] colorTmp = new char[] { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'A', 'B', 'C', 'D', 'E', 'F' };
+            
+            GetRandomColor(colorTmp);
         }
+
+        private void GetRandomColor(char[] colorTmp)
+        {
+            StringBuilder sb = new StringBuilder();
+            Random r = new Random();
+            for (int i = 0; i < 6; i++)
+            {
+                sb.Append('#');
+                for (int ii = 0; ii < 6; ii++)
+                {
+                    sb.Append(colorTmp[r.Next(colorTmp.Length - 1)]);
+                }
+                SdColors[i]= (Color)ColorConverter.ConvertFromString(sb.ToString());
+                RtFills[i] = new SolidColorBrush(SdColors[i]);
+                sb.Clear();
+            }
+        }
+
+        public Brush[] RtFills { get; set; }
+        public Color[] SdColors { get; set; }
     }
 }

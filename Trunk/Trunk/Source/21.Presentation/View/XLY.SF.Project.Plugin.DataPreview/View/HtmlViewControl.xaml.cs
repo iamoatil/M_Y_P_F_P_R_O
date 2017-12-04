@@ -1,47 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace XLY.SF.Project.Plugin.DataPreview.View
 {
     /// <summary>
     /// HtmlViewControl.xaml 的交互逻辑
     /// </summary>
-    public partial class HtmlViewControl : UserControl
+    public partial class HtmlViewControl : UserControl, IDataPreviewRelease
     {
         public HtmlViewControl()
         {
             InitializeComponent();
         }
 
+        public void Release()
+        {
+            web.Dispose();
+        }
+
+        private bool IsUserControl_Loaded = false;
+
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            DataPreviewPluginArgument arg = this.DataContext as DataPreviewPluginArgument;
-            if (arg != null && arg.CurrentData is string fileName)
-            {
-                if (File.Exists(fileName))
-                {
-                    try
-                    {
-                        WebBrowserExtensions.SuppressScriptErrors(web, true);
-                        web.Navigate(new Uri(fileName, UriKind.RelativeOrAbsolute));
-                    }
-                    catch (Exception)
-                    {
+            if (!IsUserControl_Loaded)
+            {//只加载一次
+                IsUserControl_Loaded = true;
 
+                DataPreviewPluginArgument arg = this.DataContext as DataPreviewPluginArgument;
+                if (arg != null && arg.CurrentData is string fileName)
+                {
+                    if (File.Exists(fileName))
+                    {
+                        try
+                        {
+                            WebBrowserExtensions.SuppressScriptErrors(web, true);
+                            web.Navigate(new Uri(fileName, UriKind.RelativeOrAbsolute));
+                        }
+                        catch (Exception)
+                        {
+
+                        }
                     }
                 }
             }

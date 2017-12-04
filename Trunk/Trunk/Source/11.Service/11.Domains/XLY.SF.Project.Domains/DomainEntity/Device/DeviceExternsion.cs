@@ -86,7 +86,7 @@ namespace XLY.SF.Project.Domains
         public static ObservableCollection<DataExtactionItem> LoadDeviceData(string devicePath)
         {
             var dataList = new ObservableCollection<DataExtactionItem>();
-            if (!Directory.Exists(devicePath))
+            if (devicePath == null || !Directory.Exists(devicePath))
             {
                 return dataList;
             }

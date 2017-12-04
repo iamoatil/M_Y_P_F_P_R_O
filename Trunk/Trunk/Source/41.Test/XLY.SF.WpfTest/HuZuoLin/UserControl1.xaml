@@ -23,6 +23,6 @@
         
     </UserControl.Resources>
     <Grid>
-        <control:LoadingControl Width="300" Height="30"/>
+        <control:TextBoxEx Title="" Width="300" Height="30"/>
     </Grid>
 </UserControl>

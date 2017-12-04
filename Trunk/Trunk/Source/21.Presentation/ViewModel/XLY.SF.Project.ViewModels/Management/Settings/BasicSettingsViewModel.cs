@@ -1,10 +1,13 @@
-﻿using ProjectExtend.Context;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using ProjectExtend.Context;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Framework.Language;
@@ -35,6 +38,7 @@ namespace XLY.SF.Project.ViewModels.Management.Settings
                 SystemContext.LanguageManager[Languagekeys.ViewLanguage_Management_Settings_Chinese],
                 SystemContext.LanguageManager[Languagekeys.ViewLanguage_Management_Settings_English],
             };
+            SelectPathCommand = new RelayCommand(SelectPath);
         }
 
         #endregion
@@ -52,10 +56,11 @@ namespace XLY.SF.Project.ViewModels.Management.Settings
         public String Path
         {
             get => GetValue(SystemContext.DefaultPathKey);
-            set
+            private set
             {
                 SetValue(SystemContext.DefaultPathKey, value);
                 MessageAggregation.SendGeneralMsg(new GeneralArgs(GeneralKeys.SettingsChangedMsg));
+                OnPropertyChanged();
             }
         }
 
@@ -77,11 +82,23 @@ namespace XLY.SF.Project.ViewModels.Management.Settings
             }
         }
 
+        [Import(typeof(IPopupWindowService))]
+        public IPopupWindowService PopupService { get; set; }
+
+        public ICommand SelectPathCommand { get; }
+
         #endregion
 
         #region Methods
 
         #region Private
+
+        private void SelectPath()
+        {
+            String str = PopupService.SelectFolderDialog();
+            if (String.IsNullOrWhiteSpace(str)) return;
+            Path = str;
+        }
 
         private String GetValue(String key)
         {

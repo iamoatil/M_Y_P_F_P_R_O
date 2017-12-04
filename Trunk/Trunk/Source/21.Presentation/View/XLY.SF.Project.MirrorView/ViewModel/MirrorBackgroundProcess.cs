@@ -86,7 +86,14 @@ namespace XLY.SF.Project.MirrorView
         {
             if(_isInitialized)
             {
-                _curProcess.StandardInput.WriteLine(cmd.ToString());
+                if(_curProcess.HasExited)
+                {
+                    OnCallBack(string.Format("{0}|Background Application Has Stopped!", CmdStrings.StopMirror));
+                }
+                else
+                {
+                    _curProcess.StandardInput.WriteLine(cmd.ToString());
+                }                
             }           
         }
 

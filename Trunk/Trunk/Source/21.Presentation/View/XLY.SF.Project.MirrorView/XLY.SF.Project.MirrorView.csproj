@@ -148,6 +148,10 @@
       <Project>{68F2D8A3-05A8-4AAA-A9E2-00071188595B}</Project>
       <Name>XLY.SF.Project.Domains</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ProjectContext\ProjectExtend\XLY.SF.Project.Extension.csproj">
+      <Project>{E280C623-F0DD-47A8-AC87-80A0B5BBAFDB}</Project>
+      <Name>XLY.SF.Project.Extension</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ProjectContext\XLY.SF.Project.Proxy\XLY.SF.Project.ProxyService\XLY.SF.Project.ProxyService.csproj">
       <Project>{22FCD4A7-053E-4FFB-AB33-4CA9A93903EE}</Project>
       <Name>XLY.SF.Project.ProxyService</Name>

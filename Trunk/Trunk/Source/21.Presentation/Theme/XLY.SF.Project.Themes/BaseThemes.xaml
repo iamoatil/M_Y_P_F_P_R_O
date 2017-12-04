@@ -27,6 +27,7 @@
         <ResourceDictionary Source="ThemesStyle/Sliderbar/SliderbarStyle.xaml"/>
         <ResourceDictionary Source="ThemesStyle/HexViewerStyle/HexViewerStyle.xaml"/>
         <ResourceDictionary Source="ThemesStyle/LoadingStyle/Loading.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/Listbox/ListboxStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <!--系统默认样式加载-->

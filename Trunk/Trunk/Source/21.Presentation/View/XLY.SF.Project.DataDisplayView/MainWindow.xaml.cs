@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base;
 using XLY.SF.Framework.Core.Base.MefIoc;
 using XLY.SF.Project.Domains;
@@ -31,6 +32,17 @@ namespace XLY.SF.Project.DataDisplayView
             InitializeComponent();
 
             string devicePath = StartupArgment.Instance.Get("DevicePath", "");      //从命令行中读取传入的设备路径
+            //devicePath = @"E:\XLY\SPFData\默认案例_20171130[034313]\R7007_20171130[034315]";
+            var inspection = new ViewModel.InspectionConfig(){ Config = new List<ViewModel.Inspection>() {
+                new ViewModel.Inspection(){ ID = 1, CategoryCn = "涉及国安", CategoryEn = "GuoAn"},
+                new ViewModel.Inspection(){ ID = 2, CategoryCn = "涉及经济", CategoryEn = "Guojj"},
+                new ViewModel.Inspection(){ ID = 3, CategoryCn = "涉及周期", CategoryEn = "Guozq"},
+                new ViewModel.Inspection(){ ID = 4, CategoryCn = "涉及地方", CategoryEn = "Guodf"},
+            },
+                DevicePath = @"E:\XLY\SPFData\默认案例_20171130[034313]\R7007_20171130[034315]"
+            };
+            devicePath = Serializer.JsonSerializerIO(inspection);
+            var obj = Serializer.JsonDeserializeIO<ViewModel.InspectionConfig>(devicePath);
 
             //加载插件列表
             PluginAdapter.Instance.Initialization(null, AssemblyHelper.Instance.PluginPath.ToArray());

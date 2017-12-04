@@ -4,8 +4,8 @@
 
     <ControlTemplate x:Key="defaultLoadingCt" TargetType="{x:Type local:LoadingControl}">
         <ControlTemplate.Resources>
-            <Storyboard x:Key="OnLoading" RepeatBehavior="Forever">
-                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="rectangle">
+            <Storyboard x:Key="OnLoading" RepeatBehavior="Forever" AutoReverse="True">
+                <!--<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="rectangle">
                     <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="0"/>
@@ -52,17 +52,96 @@
                     <EasingDoubleKeyFrame KeyTime="0:0:1.6" Value="0"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:1.7" Value="1"/>
                     <EasingDoubleKeyFrame KeyTime="0:0:2.2" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>-->
+
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="rectangle">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="1">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <BounceEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="rectangle1">
+                    <EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:1.7" Value="1">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <BounceEase EasingMode="EaseIn"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="rectangle2">
+                    <EasingDoubleKeyFrame KeyTime="0:0:2.2" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:2.7" Value="1">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <ElasticEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="rectangle3">
+                    <EasingDoubleKeyFrame KeyTime="0:0:3.2" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:3.7" Value="1">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <ElasticEase EasingMode="EaseIn"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="rectangle4">
+                    <EasingDoubleKeyFrame KeyTime="0:0:4.2" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:4.7" Value="1">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <BounceEase EasingMode="EaseInOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="rectangle5">
+                    <EasingDoubleKeyFrame KeyTime="0:0:5.2" Value="0"/>
+                    <EasingDoubleKeyFrame KeyTime="0:0:5.7" Value="1">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <ElasticEase EasingMode="EaseInOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
                 </DoubleAnimationUsingKeyFrames>
             </Storyboard>
         </ControlTemplate.Resources>
         <Border BorderThickness="0">
             <StackPanel Orientation="Horizontal" x:Name="sp_Main">
-                <Rectangle x:Name="rectangle" Height="10" Width="10" Fill="White" Opacity="0"/>
+                <!--<Rectangle x:Name="rectangle" Height="10" Width="10" Fill="White" Opacity="0"/>
                 <Rectangle x:Name="rectangle1" Height="10" Width="10" Fill="White" Margin="5 0 5 0" Opacity="0"/>
                 <Rectangle x:Name="rectangle2" Height="10" Width="10" Fill="White" Opacity="0"/>
                 <Rectangle x:Name="rectangle3" Height="10" Width="10" Fill="White" Margin="5 0 5 0" Opacity="0"/>
                 <Rectangle x:Name="rectangle4" Height="10" Width="10" Fill="White" Opacity="0"/>
-                <Rectangle x:Name="rectangle5" Height="10" Width="10" Fill="White" Margin="5 0 0 0" Opacity="0"/>
+                <Rectangle x:Name="rectangle5" Height="10" Width="10" Fill="White" Margin="5 0 0 0" Opacity="0"/>-->
+                <Rectangle x:Name="rectangle" Height="10" Width="10" Fill="{Binding RtFills[0],RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:LoadingControl}}" Opacity="0" RadiusX="5" RadiusY="5">
+                    <Rectangle.Effect>
+                        <DropShadowEffect Color="{Binding SdColors[0],RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:LoadingControl}}" ShadowDepth="0" BlurRadius="11"/>
+                    </Rectangle.Effect>
+                </Rectangle>
+                <Rectangle x:Name="rectangle1" Height="10" Width="10" Fill="{Binding RtFills[1],RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:LoadingControl}}" Margin="5 0 5 0" Opacity="0" RadiusX="5" RadiusY="5">
+                    <Rectangle.Effect>
+                        <DropShadowEffect Color="{Binding SdColors[1],RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:LoadingControl}}" ShadowDepth="0" BlurRadius="11"/>
+                    </Rectangle.Effect>
+                </Rectangle>
+                <Rectangle x:Name="rectangle2" Height="10" Width="10" Fill="{Binding RtFills[2],RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:LoadingControl}}" Opacity="0" RadiusX="5" RadiusY="5">
+                    <Rectangle.Effect>
+                        <DropShadowEffect Color="{Binding SdColors[2],RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:LoadingControl}}" ShadowDepth="0" BlurRadius="11"/>
+                    </Rectangle.Effect>
+                </Rectangle>
+                <Rectangle x:Name="rectangle3" Height="10" Width="10" Fill="{Binding RtFills[3],RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:LoadingControl}}" Margin="5 0 5 0" Opacity="0" RadiusX="5" RadiusY="5">
+                    <Rectangle.Effect>
+                        <DropShadowEffect Color="{Binding SdColors[3],RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:LoadingControl}}" ShadowDepth="0" BlurRadius="11"/>
+                    </Rectangle.Effect>
+                </Rectangle>
+                <Rectangle x:Name="rectangle4" Height="10" Width="10" Fill="{Binding RtFills[4],RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:LoadingControl}}" Opacity="0" RadiusX="5" RadiusY="5">
+                    <Rectangle.Effect>
+                        <DropShadowEffect Color="{Binding SdColors[4],RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:LoadingControl}}" ShadowDepth="0" BlurRadius="11"/>
+                    </Rectangle.Effect>
+                </Rectangle>
+                <Rectangle x:Name="rectangle5" Height="10" Width="10" Fill="{Binding RtFills[5],RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:LoadingControl}}" Margin="5 0 0 0" Opacity="0" RadiusX="5" RadiusY="5">
+                    <Rectangle.Effect>
+                        <DropShadowEffect Color="{Binding SdColors[5],RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:LoadingControl}}" ShadowDepth="0" BlurRadius="11"/>
+                    </Rectangle.Effect>
+                </Rectangle>
             </StackPanel>
         </Border>
     </ControlTemplate>

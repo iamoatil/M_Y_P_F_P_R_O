@@ -77,6 +77,15 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
 
         #endregion
 
+        #region 是否需要最大化和最小化
+
+        /// <summary>
+        /// 是否需要最大化和最小化
+        /// </summary>
+        public bool NeedMaxsizeAndMinsize { get; set; }
+
+        #endregion
+
         #region 当前ViewID
 
         /// <summary>

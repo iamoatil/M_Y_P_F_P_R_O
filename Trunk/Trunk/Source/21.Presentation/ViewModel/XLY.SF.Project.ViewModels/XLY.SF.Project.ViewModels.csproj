@@ -101,6 +101,7 @@
     <Compile Include="Main\Main\DeviceListViewModel.cs" />
     <Compile Include="Main\Main\MainNavigationManager.cs" />
     <Compile Include="Main\Main\MainViewModel.cs" />
+    <Compile Include="Management\PluginListViewModel.cs" />
     <Compile Include="Management\Settings\BasicSettingsViewModel.cs" />
     <Compile Include="Management\Settings\CaseTypeSettingsViewModel.cs" />
     <Compile Include="Management\Settings\InspectionSettingsViewModel.cs" />
@@ -155,6 +156,10 @@
       <Project>{78424848-06CB-4D68-81D2-6338F56AACAD}</Project>
       <Name>XLY.SF.Project.Plugin.Adapter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\11.Service\14.Plugin\XLY.SF.Project.Plugin.DataReport\XLY.SF.Project.Plugin.DataReport.csproj">
+      <Project>{cdb4f4f4-7131-4a29-828d-cc9f5a43536d}</Project>
+      <Name>XLY.SF.Project.Plugin.DataReport</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ProjectContext\ProjectExtend\XLY.SF.Project.Extension.csproj">
       <Project>{E280C623-F0DD-47A8-AC87-80A0B5BBAFDB}</Project>
       <Name>XLY.SF.Project.Extension</Name>
@@ -173,6 +178,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

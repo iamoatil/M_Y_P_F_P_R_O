@@ -149,7 +149,7 @@ namespace XLY.SF.Project.Services
             base.BeginSearch(node, args, cancellationTokenSource, async);
         }
 
-        protected override void DownLoadFile(FileBrowingNode fileNode, string savePath, bool persistRelativePath, CancellationTokenSource cancellationTokenSource, FileBrowingIAsyncTaskProgress async)
+        protected override string DownLoadFile(FileBrowingNode fileNode, string savePath, bool persistRelativePath, CancellationTokenSource cancellationTokenSource, FileBrowingIAsyncTaskProgress async)
         {
             FileHelper.CreateDirectory(savePath);
 
@@ -167,6 +167,11 @@ namespace XLY.SF.Project.Services
                     tSavePath = Path.Combine(savePath, ifileNode.Name).Replace('/', '\\');
                 }
 
+                if(FileHelper.IsValid(tSavePath))
+                {
+                    return tSavePath;
+                }
+
                 FileHelper.CreateDirectory(FileHelper.GetFilePath(tSavePath));
 
                 // 1，设置服务
@@ -174,6 +179,8 @@ namespace XLY.SF.Project.Services
 
                 // 2，下载
                 result = IOSDeviceCoreDll.CopyOneIosFile(IPhone.ID, ifileNode.SourcePath, tSavePath);
+
+                return tSavePath;
             }
             catch
             {
@@ -183,6 +190,8 @@ namespace XLY.SF.Project.Services
                 // 3，关闭服务
                 IOSDeviceCoreDll.CloseIphoneFileService(IPhone.ID);
             }
+
+            return null;
         }
 
         /// <summary>

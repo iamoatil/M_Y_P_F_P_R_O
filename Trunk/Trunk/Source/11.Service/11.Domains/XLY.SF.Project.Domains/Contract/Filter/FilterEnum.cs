@@ -58,5 +58,9 @@ namespace XLY.SF.Project.Domains.Contract
         /// 位置信息查询，输入地点描述或经纬度范围
         /// </summary>
         Location = 0x200,
+        /// <summary>
+        /// 智能预警分类查询，输入分类编号
+        /// </summary>
+        Sensitive = 0x400,
     }
 }

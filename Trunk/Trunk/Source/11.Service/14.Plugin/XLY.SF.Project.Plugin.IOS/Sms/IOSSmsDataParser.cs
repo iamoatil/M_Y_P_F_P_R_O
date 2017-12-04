@@ -10,6 +10,7 @@ using System.IO;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.IOS
 {
@@ -21,8 +22,8 @@ namespace XLY.SF.Project.Plugin.IOS
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{245006E7-5C32-44FD-B373-47515B9104C8}";
-            pluginInfo.Name = "短信";
-            pluginInfo.Group = "基本信息";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_Sms);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_BasicInfo);
             pluginInfo.DeviceOSType = EnumOSType.IOS;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
@@ -31,7 +32,7 @@ namespace XLY.SF.Project.Plugin.IOS
 
             pluginInfo.AppName = "HomeDomain";
             pluginInfo.Icon = "\\icons\\sms.png";
-            pluginInfo.Description = "提取IOS设备短信信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_IosSms);
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/HomeDomain/Library/SMS");
             pluginInfo.SourcePath.AddItem("/MediaDomain");

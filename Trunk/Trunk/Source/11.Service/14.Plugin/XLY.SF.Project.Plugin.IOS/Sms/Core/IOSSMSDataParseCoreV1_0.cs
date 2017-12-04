@@ -13,6 +13,7 @@ using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Persistable.Primitive;
+using XLY.SF.Project.Plugin.Language;
 using XLY.SF.Project.Services;
 
 namespace XLY.SF.Project.Plugin.IOS
@@ -121,7 +122,7 @@ namespace XLY.SF.Project.Plugin.IOS
                                     numbersBuilder.Append(GetPhoteNumber(DynamicConvert.ToSafeInt(oneHandle.handle_id), handleDynamicList));
                                     numbersBuilder.Append(";");
                                 }
-                                sms.Remark = "群发消息; ";
+                                sms.Remark = LanguageHelper.GetString(Languagekeys.PluginSMS_QunSend) + "; ";
                                 sms.Number = numbersBuilder.ToString().TrimEnd(";");
                             }
                         }
@@ -140,13 +141,14 @@ namespace XLY.SF.Project.Plugin.IOS
                         int isSent = DynamicConvert.ToSafeInt(smsObj.is_sent);
                         if (sms.SmsState == EnumSMSState.ReceiveSMS)
                         {
-                            sms.Remark += DynamicConvert.ToSafeInt(smsObj.is_read) == 1 ? string.Format("{0};", "消息已读") : string.Format("{0};", "消息未读");
+                            sms.Remark += DynamicConvert.ToSafeInt(smsObj.is_read) == 1 ?
+                            string.Format("{0};", LanguageHelper.GetString(Languagekeys.PluginSMS_IsRead)) : string.Format("{0};", LanguageHelper.GetString(Languagekeys.PluginSMS_NotRead));
                         }
                         else
                         {
                             if (isDelivered == 0 && isSent == 0)
                             {
-                                sms.Remark += "消息发送失败; ";
+                                sms.Remark += LanguageHelper.GetString(Languagekeys.PluginSMS_SendFail) + "; ";
                             }
                         }
 
@@ -156,7 +158,7 @@ namespace XLY.SF.Project.Plugin.IOS
                         if (cache_has_attachments == 1)
                         {
                             var attachmentIdList = messageAttachmentJoinDynamicList.FindAll(maj => DynamicConvert.ToSafeInt(maj.message_id) != 0 && DynamicConvert.ToSafeInt(maj.message_id) == smsId);
-                            sms.Remark += "附件路径; ";
+                            sms.Remark += LanguageHelper.GetString(Languagekeys.PluginSMS_Attachment) + "; ";
 
                             foreach (var oneAttachIdObj in attachmentIdList)
                             {
@@ -177,7 +179,7 @@ namespace XLY.SF.Project.Plugin.IOS
                         #endregion
 
                         sms.Remark = sms.Remark.TrimEnd("；");
-                        if (sms.Remark.Contains("未读"))
+                        if (sms.Remark.Contains(LanguageHelper.GetString(Languagekeys.PluginSMS_NotRead)))
                             sms.ReadState = EnumReadState.Unread;
                         else
                             sms.ReadState = EnumReadState.Read;
@@ -216,6 +218,5 @@ namespace XLY.SF.Project.Plugin.IOS
 
             return string.Empty;
         }
-
     }
 }

@@ -223,7 +223,7 @@ namespace XLY.SF.Project.Domains
                         {
                             if (dis.Visibility != EnumDisplayVisibility.ShowInUI)        //只在界面展示的列不需要存储
                             {
-                                sb.AppendFormat(",{0} {1}", dis.Key, dis.DataType);
+                                sb.AppendFormat(",{0} {1}", dis.PropertyName, dis.DataType);
                             }
                         }
                         sb.AppendFormat(",{0} TEXT", JsonColumnName);
@@ -305,8 +305,16 @@ namespace XLY.SF.Project.Domains
             {
                 if (dis.Visibility != EnumDisplayVisibility.ShowInUI)
                 {
-                    sb.AppendFormat(",@{0}", dis.Key);
-                    parameters.Add(new SQLiteParameter(string.Format("@{0}", dis.Key), System.Data.DbType.String) { Value = dis.GetValue(obj) });
+                    sb.AppendFormat(",@{0}", dis.PropertyName);
+                    if(dis.Owner.PropertyType == typeof(DateTime) || dis.Owner.PropertyType == typeof(DateTime?))
+                    {
+                        var dt = dis.GetValue(obj);
+                        parameters.Add(new SQLiteParameter(string.Format("@{0}", dis.PropertyName), System.Data.DbType.String) { Value = dt == null ? "" : ((DateTime)dt).ToString("yyyy-MM-dd HH:mm:ss") });
+                    }
+                    else
+                    {
+                        parameters.Add(new SQLiteParameter(string.Format("@{0}", dis.PropertyName), System.Data.DbType.String) { Value = dis.GetValue(obj) });
+                    }
                 }
             }
             sb.AppendFormat(",@{0}", JsonColumnName);
@@ -386,8 +394,8 @@ namespace XLY.SF.Project.Domains
             {
                 if (dis.Visibility != EnumDisplayVisibility.ShowInUI)
                 {
-                    sb.AppendFormat("{0} = @{0}, ", dis.Key);
-                    parameters.Add(new SQLiteParameter($"@{dis.Key}", System.Data.DbType.String) { Value = dis.GetValue(obj) });
+                    sb.AppendFormat("{0} = @{0}, ", dis.PropertyName);
+                    parameters.Add(new SQLiteParameter($"@{dis.PropertyName}", System.Data.DbType.String) { Value = dis.GetValue(obj) });
                 }
             }
             sb.AppendFormat("{0} = @{0}", JsonColumnName);

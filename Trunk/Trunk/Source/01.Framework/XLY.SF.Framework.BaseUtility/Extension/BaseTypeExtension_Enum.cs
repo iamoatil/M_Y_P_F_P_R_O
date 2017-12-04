@@ -125,6 +125,43 @@ namespace XLY.SF.Framework.BaseUtility
         }
 
         /// <summary>
+        /// 尝试将一个字符串转换为指定的枚举类型。
+        /// </summary>
+        /// <typeparam name="T">枚举类型。</typeparam>
+        /// <param name="str">字符串。</param>
+        /// <param name="value">转换结果。</param>
+        /// <returns>成功返回true；否则返回false。</returns>
+        public static Boolean TryToEnum<T>(this String str,out T value)
+            where T : struct
+        {
+            value = default(T);
+            if (!typeof(T).IsEnum) return false;
+            return Enum.TryParse<T>(str, out value);
+        }
+
+        /// <summary>
+        /// 测试一个枚举中是否包含指定的枚举值。
+        /// </summary>
+        /// <param name="souce">要测试的枚举值。</param>
+        /// <param name="matchTo">要匹配到的枚举。</param>
+        /// <returns>包含返回true；否则返回false。</returns>
+        public static Boolean IsSet(this Enum souce, Enum matchTo)
+        {
+            return matchTo.ToString().Contains(souce.ToString());
+        }
+
+        /// <summary>
+        /// 测试一个枚举中是否包含指定的字符串。
+        /// </summary>
+        /// <param name="souce">要测试的字符串。</param>
+        /// <param name="matchTo">要匹配到的枚举。</param>
+        /// <returns>包含返回true；否则返回false。</returns>
+        public static Boolean IsSet(this String source, Enum matchTo)
+        {
+            return matchTo.ToString().Contains(source ?? String.Empty,StringComparison.OrdinalIgnoreCase);
+        }
+
+        /// <summary>
         /// 将一个或多个枚举常数的名称或数字值的字符串表示转换成等效的枚举对象。
         /// </summary>
         public static T ToEnum<T>(this int value)

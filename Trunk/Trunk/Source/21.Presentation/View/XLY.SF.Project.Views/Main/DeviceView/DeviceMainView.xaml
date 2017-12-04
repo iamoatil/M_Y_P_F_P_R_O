@@ -9,7 +9,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
 		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
              xmlns:control="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
-             mc:Ignorable="d">
+             mc:Ignorable="d" NeedMaxsizeAndMinsize="True">
     <core:UcViewBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -57,19 +57,20 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <control:MenuRadioButton x:Name="mr" IsChecked="True" GroupName="devHomePage" 
+                <control:MenuRadioButton x:Name="m_HomePage" IsChecked="True" GroupName="devHomePage" 
                                          Content="{Binding XPath=ViewLanguage/View_DevHomePage_MenuExtract, Source={x:Static ex:SystemContext.LanguageProvider}}" 
                                          Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageIcon.png" Height="50"
                                          Command="{Binding DeviceHomePageCommand.ViewExecuteCmd}"/>
-                <Rectangle Grid.Column="1" Fill="{Binding Background,ElementName=mr}"/>
+                <Rectangle Grid.Column="1" Fill="{Binding Background,ElementName=m_HomePage}"/>
                 <!--提取状态-->
                 <Button Grid.Column="1" Visibility="Hidden" Style="{StaticResource loadingControlStyle}" Width="24" Height="24" Margin="0 0 35 0"/>
             </Grid>
-            <control:MenuRadioButton GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_MenuResult, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageResultIcon.png" Height="50" Margin="0 5 0 5"
+            <control:MenuRadioButton x:Name="m_Result" GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_MenuResult, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageResultIcon.png" Height="50" Margin="0 5 0 5"
                                      Command="{Binding ExtractionResultCommand.ViewExecuteCmd}"/>
-            <control:MenuRadioButton GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_FileView, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageFileViewIcon.png" Height="50" Margin="0 0 0 5"
+            <control:MenuRadioButton x:Name="m_FileView" GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_FileView, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageFileViewIcon.png" Height="50" Margin="0 0 0 5"
                                      Command="{Binding FileViewCommand.ViewExecuteCmd}"/>
-            <control:MenuRadioButton GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_Warning, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageWarningIcon.png" Height="50"/>
+            <control:MenuRadioButton x:Name="m_Warning" GroupName="devHomePage" Content="{Binding XPath=ViewLanguage/View_DevHomePage_Warning, Source={x:Static ex:SystemContext.LanguageProvider}}" Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageWarningIcon.png" Height="50" Margin="0 0 0 5"
+                                      Command="{Binding EarlyWarningCommand.ViewExecuteCmd}"/>
             <StackPanel.Effect>
                 <DropShadowEffect Color="#181D3A" Opacity="0.4" Direction="0" BlurRadius="30" ShadowDepth="4" RenderingBias="Quality"/>
             </StackPanel.Effect>
@@ -81,6 +82,18 @@
             <ei:DataTrigger Binding="{Binding CurDevModel.IsAndroid}" Value="False">
                 <ei:ChangePropertyAction PropertyName="Content" TargetObject="{Binding ElementName=cb_Root}" 
                                          Value="{Binding XPath=ViewLanguage/View_DevHomePage_IOSRoot, Source={x:Static ex:SystemContext.LanguageProvider}}"/>
+            </ei:DataTrigger>
+            <ei:DataTrigger Binding="{Binding CurSubViewType}" Value="DevHomePage">
+                <ei:ChangePropertyAction PropertyName="IsChecked" Value="True" TargetName="m_HomePage"/>
+            </ei:DataTrigger>
+            <ei:DataTrigger Binding="{Binding CurSubViewType}" Value="ExtractResult">
+                <ei:ChangePropertyAction PropertyName="IsChecked" Value="True" TargetName="m_Result"/>
+            </ei:DataTrigger>
+            <ei:DataTrigger Binding="{Binding CurSubViewType}" Value="FileView">
+                <ei:ChangePropertyAction PropertyName="IsChecked" Value="True" TargetName="m_FileView"/>
+            </ei:DataTrigger>
+            <ei:DataTrigger Binding="{Binding CurSubViewType}" Value="AutoWarning">
+                <ei:ChangePropertyAction PropertyName="IsChecked" Value="True" TargetName="m_Warning"/>
             </ei:DataTrigger>
         </i:Interaction.Triggers>
     </Grid>

@@ -8,8 +8,6 @@
                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                  xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
                  mc:Ignorable="d" 
-                 Width="420"
-                 Height="440"
                  Title="{Binding XPath=DeviceLanguage/Device_Move,Source={x:Static ex:SystemContext.LanguageProvider}}">
     <core:UcViewBase.Resources>
         <ResourceDictionary>
@@ -21,7 +19,9 @@
 
         </ResourceDictionary>
     </core:UcViewBase.Resources>
-    <Grid Margin="20,0,20,0">
+    <Grid Margin="20,0,20,0" 
+                 Width="420"
+                 Height="440">
         <Grid.RowDefinitions>
             <RowDefinition Height="32" />
             <RowDefinition Height="Auto" />

@@ -14,6 +14,7 @@ using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Persistable.Primitive;
+using XLY.SF.Project.Plugin.Language;
 using XLY.SF.Project.Services;
 
 namespace XLY.SF.Project.Plugin.Android
@@ -26,8 +27,8 @@ namespace XLY.SF.Project.Plugin.Android
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{73C8EEBD-EE62-4560-BADE-1F7A208B05CB}";
-            pluginInfo.Name = "彩信";
-            pluginInfo.Group = "基本信息";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_Mms);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_BasicInfo);
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
@@ -36,7 +37,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             pluginInfo.AppName = "com.android.providers.telephony";
             pluginInfo.Icon = "\\icons\\sms.png";
-            pluginInfo.Description = "提取安卓设备彩信信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_AndroidMms);
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/data/data/com.android.providers.telephony/databases/mmssms.db");
             pluginInfo.SourcePath.AddItem("/data/user/0/com.android.providers.telephony/app_parts/#F");

@@ -36,10 +36,14 @@ namespace XLY.SF.Project.ViewModels.Tools
         /// 设置子界面状态
         /// </summary>
         /// <param name="isExpanded">是否展开创建案例界面</param>
-        /// <param name="exportKey">收回案例编辑页，跳转到目标页</param>
-        public static void SetEditCaseViewStatus(bool isExpanded, string exportKey = null)
+        /// <param name="needCollapsedNavigation">是否需要折叠导航，true：折叠案例编辑界面时自动返回最后一个非案例编辑界面</param>
+        public static void SetEditCaseViewStatus(bool isExpanded, bool needCollapsedNavigation = true)
         {
+            CurEditViewOpenStatus = isExpanded;
+
+            //便于以后扩展用
             SubViewMsgModel curStatus = new SubViewMsgModel(isExpanded);
+            //展开或收起案例名
             SysCommonMsgArgs<SubViewMsgModel> sysArgs = new SysCommonMsgArgs<SubViewMsgModel>(SystemKeys.SetSubViewStatus);
             sysArgs.Parameters = curStatus;
             MsgAggregation.Instance.SendSysMsg<SubViewMsgModel>(sysArgs);
@@ -50,7 +54,7 @@ namespace XLY.SF.Project.ViewModels.Tools
                 NormalNavigationArgs args = NormalNavigationArgs.CreateMainViewNavigationArgs(ExportKeys.CaseCreationView, null);
                 MsgAggregation.Instance.SendNavigationMsgForMainView(args);
             }
-            else
+            else if (needCollapsedNavigation)
             {
                 /*
                  * TODO
@@ -73,7 +77,6 @@ namespace XLY.SF.Project.ViewModels.Tools
                     MsgAggregation.Instance.SendNavigationMsgForMainView(args);
                 }
             }
-            CurEditViewOpenStatus = isExpanded;
         }
 
         /// <summary>

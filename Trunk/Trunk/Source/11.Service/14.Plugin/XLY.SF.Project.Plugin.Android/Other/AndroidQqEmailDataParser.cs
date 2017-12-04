@@ -16,6 +16,7 @@ using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Persistable.Primitive;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.Android
 {
@@ -33,8 +34,8 @@ namespace XLY.SF.Project.Plugin.Android
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{611D613F-E749-442B-86D5-EB40209F27E3}";
-            pluginInfo.Name = "QQ邮箱";
-            pluginInfo.Group = "主流邮箱";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_QQEmail);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_WebMail);
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "2.0.4";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
@@ -43,7 +44,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             pluginInfo.AppName = "com.tencent.androidqqmail";
             pluginInfo.Icon = "\\icons\\QQMail.png";
-            pluginInfo.Description = "提取安卓设备QQ邮箱信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_AndroidQQEmail);
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/data/data/com.tencent.androidqqmail/databases/#F");
             pluginInfo.SourcePath.AddItem("/data/data/com.tencent.androidqqmail/shared_prefs/user_info.xml");

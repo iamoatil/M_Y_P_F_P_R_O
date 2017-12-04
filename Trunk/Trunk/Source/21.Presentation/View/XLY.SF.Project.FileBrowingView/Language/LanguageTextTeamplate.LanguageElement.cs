@@ -136,6 +136,61 @@ internal class Languagekeys
 		public const string FileBrowing_View_ExportViewModel_Exporting = "LanguageResource/FileBrowing/View_ExportViewModel_Exporting";
 				
         /// <summary>
+        /// 所有类型
+        /// </summary>
+		public const string FileBrowing_View_FileType_All = "LanguageResource/FileBrowing/View_FileType_All";
+				
+        /// <summary>
+        /// 文本文件
+        /// </summary>
+		public const string FileBrowing_View_FileType_Txt = "LanguageResource/FileBrowing/View_FileType_Txt";
+				
+        /// <summary>
+        /// 图片文件
+        /// </summary>
+		public const string FileBrowing_View_FileType_Image = "LanguageResource/FileBrowing/View_FileType_Image";
+				
+        /// <summary>
+        /// 音频文件
+        /// </summary>
+		public const string FileBrowing_View_FileType_Voice = "LanguageResource/FileBrowing/View_FileType_Voice";
+				
+        /// <summary>
+        /// 视频文件
+        /// </summary>
+		public const string FileBrowing_View_FileType_Video = "LanguageResource/FileBrowing/View_FileType_Video";
+				
+        /// <summary>
+        /// 压缩文件
+        /// </summary>
+		public const string FileBrowing_View_FileType_Rar = "LanguageResource/FileBrowing/View_FileType_Rar";
+				
+        /// <summary>
+        /// 数据库文件
+        /// </summary>
+		public const string FileBrowing_View_FileType_DB = "LanguageResource/FileBrowing/View_FileType_DB";
+				
+        /// <summary>
+        /// 其他文件
+        /// </summary>
+		public const string FileBrowing_View_FileType_Other = "LanguageResource/FileBrowing/View_FileType_Other";
+				
+        /// <summary>
+        /// 无法预览
+        /// </summary>
+		public const string FileBrowing_View_PreView_NoPre = "LanguageResource/FileBrowing/View_PreView_NoPre";
+				
+        /// <summary>
+        /// 文件下载失败
+        /// </summary>
+		public const string FileBrowing_View_PreView_DownloadError = "LanguageResource/FileBrowing/View_PreView_DownloadError";
+				
+        /// <summary>
+        /// 文件大小为0，无法预览
+        /// </summary>
+		public const string FileBrowing_View_PreView_FileZero = "LanguageResource/FileBrowing/View_PreView_FileZero";
+				
+        /// <summary>
         /// 所有状态
         /// </summary>
 		public const string FileBrowing_View_Search_DataStateAll = "LanguageResource/FileBrowing/View_Search_DataStateAll";

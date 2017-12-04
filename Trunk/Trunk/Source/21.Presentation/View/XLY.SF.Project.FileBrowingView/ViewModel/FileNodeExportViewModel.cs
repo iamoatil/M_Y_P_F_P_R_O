@@ -169,7 +169,8 @@ namespace XLY.SF.Project.FileBrowingView
         /// </summary>
         /// <param name="fileNode">导出节点</param>
         /// <param name="isSuccess">是否成功</param>
-        private void DownloadIts_ExportFileNodeHandle(FileBrowingNode fileNode, bool isSuccess)
+        /// <param name="localPath">本地保存路径</param>
+        private void DownloadIts_ExportFileNodeHandle(FileBrowingNode fileNode, bool isSuccess, string localPath)
         {
             AsyncOperation.Post((t) =>
             {

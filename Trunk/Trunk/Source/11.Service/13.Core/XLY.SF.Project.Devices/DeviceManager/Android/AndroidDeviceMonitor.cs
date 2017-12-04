@@ -111,6 +111,8 @@ namespace XLY.SF.Project.Devices
                 iRestartAttemptCount++;
                 if (null == devices && iRestartAttemptCount >= ConstCodeHelper.MONITOR_ATTEMPTCOUNT)
                 {//如果多次查找都返回null 说明adb连接失败 考虑重启ADB服务
+                    LoggerManagerSingle.Instance.Error("多次创建ADB连接失败，开始重启ADB服务！");
+
                     AndroidDeviceHelper.StopADB();
                     AndroidDeviceHelper.StartADB();
                     return;

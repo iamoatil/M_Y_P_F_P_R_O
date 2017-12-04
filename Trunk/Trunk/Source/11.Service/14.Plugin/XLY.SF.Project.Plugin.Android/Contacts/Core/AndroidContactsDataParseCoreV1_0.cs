@@ -12,6 +12,7 @@ using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Persistable.Primitive;
+using XLY.SF.Project.Plugin.Language;
 using XLY.SF.Project.Services;
 
 namespace XLY.SF.Project.Plugin.Android
@@ -132,7 +133,7 @@ namespace XLY.SF.Project.Plugin.Android
                         item.DataState = EnumDataState.Deleted;
                     }
 
-                    if (times > 0) item.Remark = string.Format("联系次数:{0} ", times);
+                    if (times > 0) item.Remark = string.Format("{0}:{1} ", LanguageHelper.GetString(Languagekeys.PluginContacts_Times), times);
                     items.Add(item);
                 }
                 catch

@@ -55,7 +55,7 @@ namespace XLY.SF.Project.Themes.CustromControl
         /// 图标按钮
         /// </summary>
         private Button _btnIcon;
-
+        
         static TextBoxEx()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(TextBoxEx), new FrameworkPropertyMetadata(typeof(TextBoxEx)));
@@ -83,15 +83,15 @@ namespace XLY.SF.Project.Themes.CustromControl
 
         #region Title
 
-        public bool HasColon
-        {
-            get { return (bool)GetValue(HasColonProperty); }
-            set { SetValue(HasColonProperty, value); }
-        }
+        //public bool HasColon
+        //{
+        //    get { return (bool)GetValue(HasColonProperty); }
+        //    set { SetValue(HasColonProperty, value); }
+        //}
 
-        // Using a DependencyProperty as the backing store for HasColon.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty HasColonProperty =
-            DependencyProperty.Register("HasColon", typeof(bool), typeof(TextBoxEx), new PropertyMetadata(true));
+        //// Using a DependencyProperty as the backing store for HasColon.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty HasColonProperty =
+        //    DependencyProperty.Register("HasColon", typeof(bool), typeof(TextBoxEx), new PropertyMetadata(true));
 
         public string Title
         {

@@ -2,6 +2,7 @@
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.Android
 {
@@ -13,8 +14,8 @@ namespace XLY.SF.Project.Plugin.Android
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{7BFC4BE3-EBAC-41C3-8D0D-2C7AD659C9AB}";
-            pluginInfo.Name = "QQ";
-            pluginInfo.Group = "社交聊天";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_QQ);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_SocialChat);
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
@@ -23,7 +24,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             pluginInfo.AppName = "com.tencent.mobileqq";
             pluginInfo.Icon = "\\icons\\Icon-qq.png";
-            pluginInfo.Description = "提取安卓设备QQ信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_AndroidQQ);
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/data/data/com.tencent.mobileqq/databases/#F");
             pluginInfo.SourcePath.AddItem("/data/data/com.tencent.mobileqq/shared_prefs/#F");
@@ -48,7 +49,7 @@ namespace XLY.SF.Project.Plugin.Android
                 //com.tencent.mobileqq文件夹路径
                 var qqPath = new DirectoryInfo(databasesPath).Parent.FullName;
 
-                var parser = new AndroidQQDataParseCoreV1_0(pi.SaveDbPath, "安卓QQ", qqPath, "");
+                var parser = new AndroidQQDataParseCoreV1_0(pi.SaveDbPath, LanguageHelper.GetString(Languagekeys.PluginName_QQ), qqPath, "");
 
                 var qqNode = parser.BuildTree();
 

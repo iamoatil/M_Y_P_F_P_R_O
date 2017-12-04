@@ -151,6 +151,7 @@
                                           Command="{Binding DataContext.SelectItemCommand,ElementName=Root}"
                                           CommandParameter="{Binding}"
                                           Foreground="{Binding IsChecked,RelativeSource={RelativeSource Self},Converter={StaticResource SelectToForgroundConverter}}"
+                                          Click="cb_Click"
                                           Grid.Column="0"
                                           Margin="0,0,20,0" />
                                 <Rectangle Fill="Transparent"
@@ -220,7 +221,8 @@
                       Foreground="{Binding IsChecked,RelativeSource={RelativeSource Self},Converter={StaticResource SelectToForgroundConverter}}"
                       DockPanel.Dock="Left" />
         </DockPanel>
-        <ListBox Grid.Row="2"
+        <ListBox x:Name="ExtractItems"
+                 Grid.Row="2"
                  Margin="30,0,30,0"
                  BorderThickness="0"
                  Background="Transparent"

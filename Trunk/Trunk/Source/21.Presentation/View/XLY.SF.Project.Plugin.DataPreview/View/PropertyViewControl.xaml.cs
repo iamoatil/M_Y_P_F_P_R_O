@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
@@ -22,7 +12,7 @@ namespace XLY.SF.Project.Plugin.DataPreview.View
     /// <summary>
     /// PropertyViewControl.xaml 的交互逻辑
     /// </summary>
-    public partial class PropertyViewControl : UserControl
+    public partial class PropertyViewControl : UserControl, IDataPreviewRelease
     {
         public PropertyViewControl()
         {
@@ -30,8 +20,24 @@ namespace XLY.SF.Project.Plugin.DataPreview.View
             this.Loaded += PropertyViewControl_Loaded;
         }
 
+        public void Release()
+        {
+
+        }
+
+        private bool IsUserControl_Loaded = false;
+
         private void PropertyViewControl_Loaded(object sender, RoutedEventArgs e)
         {
+            if (!IsUserControl_Loaded)
+            {//只加载一次
+                IsUserControl_Loaded = true;
+            }
+            else
+            {
+                return;
+            }
+
             if (this.DataContext == null)
             {
                 return;
@@ -40,7 +46,7 @@ namespace XLY.SF.Project.Plugin.DataPreview.View
             Dictionary<string, string> dic = new Dictionary<string, string>();
             if (obj.CurrentData is string file)
             {
-                if(!File.Exists(file))
+                if (!File.Exists(file))
                 {
                     return;
                 }
@@ -53,7 +59,7 @@ namespace XLY.SF.Project.Plugin.DataPreview.View
                 dic[Languagekeys.AccessTime] = fi.LastAccessTime.ToString();
                 dic[Languagekeys.Attributes] = fi.Attributes.HasFlag(FileAttributes.ReadOnly) ? (string)Languagekeys.ZhiDu : "";
             }
-            else if(obj.CurrentData != null)
+            else if (obj.CurrentData != null)
             {
                 //foreach (var pro in obj.CurrentData.GetType().GetProperties())
                 //{
@@ -65,9 +71,9 @@ namespace XLY.SF.Project.Plugin.DataPreview.View
                         continue;
                     dic[attr.Text] = attr.GetValue(obj.CurrentData).ToSafeString();
                 }
-             }
+            }
 
-                int row = 0;
+            int row = 0;
             foreach (var p in dic)
             {
                 grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(0, GridUnitType.Auto) });

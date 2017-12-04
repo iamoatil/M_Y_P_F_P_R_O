@@ -65,7 +65,9 @@
     <Compile Include="VModel\Main\MainModel.cs" />
     <Compile Include="VModel\SelectControl\FilterElement.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.Core.Base\XLY.SF.Framework.Core.Base.csproj">
       <Project>{28682FE4-EC72-42A3-BB2C-27D19F55E14F}</Project>

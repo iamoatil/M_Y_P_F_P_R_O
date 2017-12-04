@@ -174,6 +174,22 @@ namespace XLY.SF.Project.Domains.Contract
     }
 
     /// <summary>
+    /// 智能预警分类查询，输入分类编号
+    /// </summary>
+    public class FilterBySensitiveArgs : FilterArgs
+    {
+        public override FilterEnum FilterType => FilterEnum.BookmarkState;
+        /// <summary>
+        /// 智能预警的分类ID,小于0则为非智能预警
+        /// </summary>
+        public int SensitiveId { get; set; }
+        public override string ToString()
+        {
+            return $"智能预警:{SensitiveId}";
+        }
+    }
+
+    /// <summary>
     /// 账号查询，输入查询的账号(即只查询账号名称或ID)
     /// </summary>
     public class FilterByAccountArgs : FilterArgs

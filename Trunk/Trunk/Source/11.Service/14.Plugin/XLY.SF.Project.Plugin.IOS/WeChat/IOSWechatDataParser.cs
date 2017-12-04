@@ -13,6 +13,7 @@ using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.IOS
 {
@@ -24,8 +25,8 @@ namespace XLY.SF.Project.Plugin.IOS
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{488C0354-2C93-4FF7-A197-8C29ECA3F3D4}";
-            pluginInfo.Name = "微信";
-            pluginInfo.Group = "社交聊天";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_Wechat);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_SocialChat);
             pluginInfo.DeviceOSType = EnumOSType.IOS;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
@@ -34,7 +35,7 @@ namespace XLY.SF.Project.Plugin.IOS
 
             pluginInfo.AppName = "com.tencent.xin";
             pluginInfo.Icon = "\\icons\\weixin.png";
-            pluginInfo.Description = "提取IOS设备微信信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_IosWechat);
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/com.tencent.xin/Documents/");
             pluginInfo.SourcePath.AddItem("/im.pre.inhouse.app1/Documents/");

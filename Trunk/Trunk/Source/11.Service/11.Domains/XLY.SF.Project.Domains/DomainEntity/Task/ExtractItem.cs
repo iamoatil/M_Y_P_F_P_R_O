@@ -28,6 +28,11 @@ namespace XLY.SF.Project.Domains
         public string GroupName { get; set; }
 
         /// <summary>
+        /// 标记。
+        /// </summary>
+        public String Token => $"{GroupName}-{Name}";
+
+        /// <summary>
         /// 图标路径
         /// </summary>
         public string Icon { get; set; }
@@ -53,7 +58,7 @@ namespace XLY.SF.Project.Domains
 
         public override string ToString()
         {
-            return $"{GroupName}-{AppName}";
+            return Token;
         }
 
     }

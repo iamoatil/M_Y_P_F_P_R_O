@@ -29,7 +29,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50" />
+                <RowDefinition Height="30" />
                 <RowDefinition Height="10" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -37,11 +37,11 @@
                          Grid.Row="0"
                          Grid.Column="0"
                          Grid.ColumnSpan="3">
-                <pro:TextBoxEx Title="{Binding XPath=ViewLanguage/Management/Settings/UnitInputBox,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                               Text="{Binding UnitName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                <pro:TextBoxEx Title="{Binding XPath=ViewLanguage/Management/Settings/NumberInputBox,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                <pro:TextBoxEx Watermark="{Binding XPath=ViewLanguage/Management/Settings/UnitInputBox,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                               Text="{Binding UnitName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                <pro:TextBoxEx Watermark="{Binding XPath=ViewLanguage/Management/Settings/NumberInputBox,Source={x:Static ex:SystemContext.LanguageProvider}}"
                                Margin="10,0,0,0"
-                               Text="{Binding Number,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                               Text="{Binding Number,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             </UniformGrid>
             <ListBox Grid.Row="2"
                      Grid.Column="0"

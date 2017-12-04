@@ -13,6 +13,8 @@ using XLY.SF.Framework.BaseUtility;
 using System.Collections.Generic;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using ProjectExtend.Context;
+using System.Threading.Tasks;
+using XLY.SF.Shell.CommWindow;
 
 namespace XLY.SF.Shell
 {
@@ -51,6 +53,7 @@ namespace XLY.SF.Shell
             _navigationManager = new WindowNavigationHelper();
             //错误监听
             _exceptionHelper = new ExceptionHelper();
+
             //创建主窗体
             Current.MainWindow = new Shell()
             {
@@ -60,16 +63,17 @@ namespace XLY.SF.Shell
 
             //监听系统消息
             MsgAggregation.Instance.RegisterSysMsg<string>(this, SystemKeys.ShutdownProgram, ShutdownProgramCallback);
+
         }
 
         private void Load()
         {
+            //加载语言
+            XLY.SF.Framework.Language.LanguageManager.SwitchAll(SystemContext.Language);
             //初始化异常服务（既：监听未捕获异常）
             _exceptionHelper.Init();
             //注册窗口导航消息
             _navigationManager.RegisterNavigation();
-            //确认当前设置的语言
-            LoadCurrentLanguage();
             //开始加载程序（初始化）
             _navigationManager.ExecuteProgramInitialise();
             //此加载模块，有需要时可以打开使用
@@ -77,27 +81,6 @@ namespace XLY.SF.Shell
             //c.InitModule();
             ProjectExtend.Context.SystemContext.Instance.LoadAsyncOperation();
         }
-
-        #region 读取当前语言设置
-
-        /// <summary>
-        /// 加载当前语言设置
-        /// </summary>
-        private void LoadCurrentLanguage()
-        {
-            var configHelper = IocManagerSingle.Instance.GetPart<ISystemConfigService>(CoreExportKeys.SysConfigHelper);
-            var curLanguage = configHelper.GetSysConfigValueByKey("Language");
-            //转换语言配置，默认为中文
-            var curLangType = curLanguage.ToSafeEnum<LanguageType>(LanguageType.Cn);
-#if DEBUG
-            SystemContext.LanguageManager.Switch(curLangType);
-#else
-
-            LanguageManager.SwitchAll(curLangType);
-#endif
-        }
-
-        #endregion
 
         #region 确认是否关闭程序
 

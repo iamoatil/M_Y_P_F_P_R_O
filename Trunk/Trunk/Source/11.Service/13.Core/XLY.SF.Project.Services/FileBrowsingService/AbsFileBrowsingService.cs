@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains.Contract;
 
@@ -100,6 +101,27 @@ namespace XLY.SF.Project.Services
         }
 
         /// <summary>
+        /// 无效时间
+        /// 当无法获取文件的相关时间时，设置为该值
+        /// </summary>
+        private readonly static DateTime InvalidDateTime = new DateTime(1970, 1, 1);
+
+        private static DateTime GetValidDateTime(DateTime? value)
+        {
+            if (null == value || !value.HasValue)
+            {
+                return InvalidDateTime;
+            }
+
+            if (value.Value.Year == 1)
+            {
+                return InvalidDateTime;
+            }
+
+            return value.Value;
+        }
+
+        /// <summary>
         /// 下载
         /// </summary>
         /// <param name="node">下载节点 可以是文件或者文件夹</param>
@@ -122,12 +144,31 @@ namespace XLY.SF.Project.Services
             {
                 try
                 {
-                    DownLoadFile(node, savePath, persistRelativePath, cancellationTokenSource, async);
+                    if (node.FileSize == 0)
+                    {
+                        return;
+                    }
 
-                    async.OnExportFileNodeSuccessHandle(node, true);
+                    var filefullname = DownLoadFile(node, savePath, persistRelativePath, cancellationTokenSource, async);
+
+                    if (FileHelper.IsValid(filefullname))
+                    {
+                        ////修改文件时间
+                        //File.SetCreationTime(filefullname, GetValidDateTime(node.CreateTime));
+                        //File.SetLastWriteTime(filefullname, GetValidDateTime(node.LastWriteTime));
+                        //File.SetLastAccessTime(filefullname, GetValidDateTime(node.LastAccessTime));
+
+                        async.OnExportFileNodeSuccessHandle(node, true, filefullname);
+                    }
+                    else
+                    {
+                        async.OnExportFileNodeSuccessHandle(node, false);
+                    }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    LoggerManagerSingle.Instance.Error(ex, "文件导出失败！");
+
                     async.OnExportFileNodeSuccessHandle(node, false);
                 }
             }
@@ -156,8 +197,10 @@ namespace XLY.SF.Project.Services
                         DoDownload(cnode, cSavePath, persistRelativePath, cancellationTokenSource, async);
                     }
                 }
-                catch
+                catch (Exception ex)
                 {
+                    LoggerManagerSingle.Instance.Error(ex, "文件夹导出失败！");
+
                     async.OnExportFileNodeSuccessHandle(node, false);
                 }
             }
@@ -173,7 +216,8 @@ namespace XLY.SF.Project.Services
         /// <param name="persistRelativePath"></param>
         /// <param name="cancellationTokenSource"></param>
         /// <param name="async"></param>
-        protected abstract void DownLoadFile(FileBrowingNode fileNode, string savePath, bool persistRelativePath,
+        /// <returns>文件本地保存路径</returns>
+        protected abstract string DownLoadFile(FileBrowingNode fileNode, string savePath, bool persistRelativePath,
             CancellationTokenSource cancellationTokenSource, FileBrowingIAsyncTaskProgress async);
 
         #endregion
@@ -302,6 +346,12 @@ namespace XLY.SF.Project.Services
                             return false;
                         }
                         break;
+                    case FilterByEnumFileTypeArgs filetypeArg://文件类型查询
+                        if (!Filter(filenode, filetypeArg))
+                        {
+                            return false;
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -352,6 +402,11 @@ namespace XLY.SF.Project.Services
             }
         }
 
+        protected virtual bool Filter(FileBrowingNode filenode, FilterByEnumFileTypeArgs arg)
+        {
+            return filenode.FileType == arg.FileType;
+        }
+
         #endregion
 
     }
@@ -369,7 +424,7 @@ namespace XLY.SF.Project.Services
         /// <summary>
         /// 文件导出通知
         /// </summary>
-        public event Action<FileBrowingNode, bool> ExportFileNodeHandle;
+        public event Action<FileBrowingNode, bool, string> ExportFileNodeHandle;
 
         internal void OnSearchFileNodeHande(FileBrowingNode node)
         {
@@ -383,11 +438,11 @@ namespace XLY.SF.Project.Services
             }
         }
 
-        internal void OnExportFileNodeSuccessHandle(FileBrowingNode node, bool isSuccess)
+        internal void OnExportFileNodeSuccessHandle(FileBrowingNode node, bool isSuccess, string filesavepath = null)
         {
             try
             {
-                ExportFileNodeHandle?.Invoke(node, isSuccess);
+                ExportFileNodeHandle?.Invoke(node, isSuccess, filesavepath);
             }
             catch
             {

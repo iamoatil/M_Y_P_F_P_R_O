@@ -124,18 +124,7 @@ namespace XLY.SF.Project.DataExtraction
         internal Boolean IsSelfHost
         {
             get => _isSelfHost;
-            set
-            {
-                _isSelfHost = value;
-                //if (value)
-                //{
-                //    MessageAggregation.UnRegisterMsg<GeneralArgs<Pump>>(this, "SetDataExtractionParamsMsg", SetPump);
-                //}
-                //else
-                //{
-                //    MessageAggregation.RegisterGeneralMsg<Pump>(this, "SetDataExtractionParamsMsg", SetPump);
-                //}
-            }
+            set=> _isSelfHost = value;
         }
 
         #endregion
@@ -215,7 +204,54 @@ namespace XLY.SF.Project.DataExtraction
 
         #region Methods
 
+        #region Public
+
+        public String[] GetSelectedItems()
+        {
+            return Items?.Where(x => x.IsChecked).Select(x => x.Target.Token).ToArray();
+        }
+
+        public void SetSelectedItems(params String[] ids)
+        {
+            if (Items == null) return;
+            ExtractionItem[] items = Items.ToArray();
+            if (items.Length == 0) return;
+            SetSelectedItems(items, ids);
+        }
+
+        #endregion
+
         #region Private
+
+        private void SetSelectedItems(ExtractionItem[] items, String[] ids)
+        {
+            ClearSelectedItems(items);
+            for (Int32 j = 0; j < ids.Length; j++)
+            {
+                for (Int32 i = 0; i < items.Length; i++)
+                {
+                    if (items[i].Target.Token == ids[j])
+                    {
+                        items[i].IsChecked = true;
+                        //产生一次通知，更新父级CheckBox状态
+                        SelectItem(items[i]);
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void ClearSelectedItems(ExtractionItem[] items)
+        {
+            for (Int32 i = 0; i < items.Length; i++)
+            {
+                if (items[i].IsChecked)
+                {
+                    items[i].IsChecked = false;
+                    SelectItem(items[i]);
+                }
+            }
+        }
 
         private void LoadHeader(RoutedEventArgs args)
         {
@@ -256,21 +292,18 @@ namespace XLY.SF.Project.DataExtraction
         private void SelectItem(ExtractionItem o)
         {
             CheckBox cb = _headers[o.Group];
-            if (cb.IsChecked.HasValue)
+            var temp = Items.Where(x => x.Group == o.Group);
+            if (temp.All(x => x.IsChecked))
             {
-                cb.IsChecked = null;
+                cb.IsChecked = true;
+            }
+            else if (temp.All(x => !x.IsChecked))
+            {
+                cb.IsChecked = false;
             }
             else
             {
-                var temp = Items.Where(x => x.Group == o.Group);
-                if (temp.All(x => x.IsChecked))
-                {
-                    cb.IsChecked = true;
-                }
-                else if (temp.All(x => !x.IsChecked))
-                {
-                    cb.IsChecked = false;
-                }
+                cb.IsChecked = null;
             }
             OnPropertyChanged("IsSelectAll");
         }
@@ -284,11 +317,6 @@ namespace XLY.SF.Project.DataExtraction
         {
             Pump = parameters as Pump;
         }
-
-        //private void SetPump(GeneralArgs<Pump> args)
-        //{
-        //    Pump = args.Parameters;
-        //}
 
         private void Start()
         {
@@ -420,6 +448,7 @@ namespace XLY.SF.Project.DataExtraction
         {
             _timer.Stop();
             CanSelect = true;
+            if (IsSelfHost) return;
             MessageAggregation.SendGeneralMsgToUI<Boolean>(new GeneralArgs<Boolean>("GeneralKeys_TaskCompleteMsg")
             {
                 Parameters = !e.IsFailed

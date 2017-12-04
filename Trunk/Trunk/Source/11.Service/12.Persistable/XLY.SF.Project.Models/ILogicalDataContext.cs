@@ -11,7 +11,7 @@ namespace XLY.SF.Project.Models
     /// <summary>
     /// 提供业务数据存取功能。
     /// </summary>
-    public interface ILogicalDataContext : IRecordContextExtension, IRecordContext<OperationLog>, IRecordContext<UserInfo>, IRecordContext<RecentCase>
+    public interface ILogicalDataContext : IRecordContextExtension, IRecordContext<OperationLog>, IRecordContext<UserInfo>, IRecordContext<RecentCase>, IRecordContext<ExtractionPlan>
     {
     }
 }

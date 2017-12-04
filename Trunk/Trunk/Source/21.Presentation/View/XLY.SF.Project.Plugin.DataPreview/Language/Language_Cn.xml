@@ -20,6 +20,7 @@
   <Attributes>属性</Attributes>
   <ZhiDu>只读</ZhiDu>
   <Bytes>字节</Bytes>
+  <Hex>16进制</Hex>
 </LanguageResource>
 
 

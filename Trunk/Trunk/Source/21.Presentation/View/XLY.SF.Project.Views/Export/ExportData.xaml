@@ -8,6 +8,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+
         xmlns:convert="clr-namespace:XLY.SF.Project.Views.Converters"
         mc:Ignorable="d"
         IsMaxView="False"
@@ -100,8 +101,27 @@
                 <RowDefinition Height="125"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid Margin="30,0">
-                <Button  Content="立即导出" 
-                 Width="200" Height="90" Command="{Binding LoginCommand.ViewExecuteCmd}" ></Button>
+                <Button x:Name="FastStart"  Content="开始导出" 
+                 Width="200" Height="90" Command="{Binding FastStartCommand}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=FastStart}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
+                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=StopStart}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
+                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=prompt}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Button x:Name="StopStart"  Content="停止导出"  Visibility="Hidden"
+                 Width="200" Height="90" Command="{Binding FastStartCommand}" Template="{StaticResource RedButtonCt}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=FastStart}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
+                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=StopStart}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
+                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=prompt}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <TextBlock x:Name="prompt" Visibility="Hidden" Text="默认导出选中设备全部数据" FontSize="14" Foreground="#6e7891" HorizontalAlignment="Center" Margin="0,250,0,0"></TextBlock>
                 <ProgressBar  Height="14" VerticalAlignment="Bottom"></ProgressBar>
             </Grid>
             <Grid Grid.Row="1" Margin="30,0">
@@ -120,30 +140,40 @@
                 <Rectangle Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" Fill="#3c4664"></Rectangle>
                 <StackPanel Orientation="Horizontal"  Grid.Row="1">
                     <CheckBox Content="报表" Width="70"   Foreground="{Binding IsChecked,RelativeSource={RelativeSource Self},Converter={StaticResource SelectToForgroundConverter}}"></CheckBox>
-                    <ctrl:ComboBoxEx  HasColon="False" Width="110" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
+                    <ctrl:ComboBoxEx   Width="110" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding ReportType}" SelectedValue="{Binding SelectReportType}"></ctrl:ComboBoxEx>
                     <Grid  Width="460" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="211*"/>
                             <ColumnDefinition Width="20*"/>
                         </Grid.ColumnDefinitions>
-                        <ctrl:TextBoxEx Title="存放路径：" TitlePadding="20,0,0,0"  Grid.ColumnSpan="2" Text="{Binding TargetPosition.DirPath}" />
-                        <Button Content=". . ." Grid.Column="1" Margin="0,0,0,5" Background="Transparent" Foreground="Wheat" Command="{Binding TargetPosition.SetTargetPathCommand}" VerticalAlignment="Center"/>
+                        <ctrl:TextBoxEx   Grid.ColumnSpan="2"
+                               Title="{Binding XPath=ViewLanguage/View_StorePath,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                               Text="{Binding FastReportPath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                               Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/CaseCreation_Path.png" IconWidth="18" IconHeight="18"
+                               Command="{Binding FastReportFormsPathCommand}" 
+                               ToolTip="{Binding FastReportPath,Mode=OneWay}"/>
+                       
                     </Grid>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="3">
                     <CheckBox Content="上传包" Width="70" Foreground="{Binding IsChecked,RelativeSource={RelativeSource Self},Converter={StaticResource SelectToForgroundConverter}}"></CheckBox>
-                    <ctrl:ComboBoxEx HasColon="False"  Width="110"  FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
+                    <ctrl:ComboBoxEx   Width="110"  FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding UploadType}"  SelectedValue="{Binding SelectUploadType}"></ctrl:ComboBoxEx>
                     <Grid  Width="460" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="211*"/>
                             <ColumnDefinition Width="20*"/>
                         </Grid.ColumnDefinitions>
-                        <ctrl:TextBoxEx Title="存放路径：" TitlePadding="20,0,0,0"  Grid.ColumnSpan="2" Text="{Binding TargetPosition.DirPath}" />
-                        <Button Content=". . ." Grid.Column="1" Margin="0,0,0,5" Background="Transparent" Foreground="Wheat" Command="{Binding TargetPosition.SetTargetPathCommand}" VerticalAlignment="Center"/>
+                        <ctrl:TextBoxEx   Grid.ColumnSpan="2"
+                               Title="{Binding XPath=ViewLanguage/View_StorePath,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                               Text="{Binding FastReportPath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                               Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/CaseCreation_Path.png" IconWidth="18" IconHeight="18"
+                               Command="{Binding FastBcpPathCommand}" 
+                               ToolTip="{Binding FastBcpPath,Mode=OneWay}"/>
                     </Grid>
                 </StackPanel>
-                <ctrl:ComboBoxEx HasColon="False" Grid.Column="2" Grid.Row="1" Foreground="White" HorizontalAlignment="Right"  Width="130" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
-                <ctrl:ComboBoxEx HasColon="False" Grid.Column="2" Grid.Row="3" Foreground="White" HorizontalAlignment="Right" Width="130" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
+                <ctrl:ComboBoxEx  Grid.Column="2" Grid.Row="1" Foreground="White" HorizontalAlignment="Right"  Width="130" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding Items}" DisplayMemberPath="Name" SelectedItem="{Binding SelectDevice}"></ctrl:ComboBoxEx>
+                <!--<ctrl:ComboBoxEx HasColon="False" Grid.Column="2" Grid.Row="3" Foreground="White" HorizontalAlignment="Right" Width="130" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>-->
+                <ctrl:ComboBoxEx  Grid.Column="2" Grid.Row="3" Foreground="White" HorizontalAlignment="Right" Width="130" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding WorkUnits}"  DisplayMemberPath="Unit"  SelectedItem="{Binding SelctedWorkUnits}"></ctrl:ComboBoxEx>
             </Grid>
         </Grid>
         <!--高级导出-->
@@ -153,7 +183,8 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal"  VerticalAlignment="Bottom">
-                <CheckBox x:Name="FirstStep" IsChecked="True" Content="1、选择数据"   Height="36"  Width="415"   Style="{DynamicResource CheckBoxStyle1}"  FontSize="14"/>
+                <CheckBox 
+                    x:Name="FirstStep" IsChecked="True" Content="1、选择数据"   Height="36"  Width="415"   Style="{DynamicResource CheckBoxStyle1}"  FontSize="14"/>
                 <CheckBox x:Name="LastStep" IsChecked="False" Content="2、导出设置"  Height="36"  Width="415" Margin="-7,0,0,0" Style="{DynamicResource CheckBoxStyle2}"    FontSize="14" />
             </StackPanel>
             
@@ -292,17 +323,17 @@
                 <TextBlock Text="单位：" Grid.Row="4" Grid.Column="1" Margin="0"></TextBlock>
                 <TextBlock Text="格式路径：" Grid.Row="5" Grid.Column="1" Margin="0"></TextBlock>
 
-                <ctrl:TextBoxEx Title="存放路径：" TitlePadding="20,0,0,0"  Grid.Column="2" Grid.Row="1" Height="30" VerticalAlignment="Top" Text="{Binding TargetPosition.DirPath}" />
+                <ctrl:TextBoxEx Title="存放路径" TitlePadding="20,0,0,0"  Grid.Column="2" Grid.Row="1" Height="30" VerticalAlignment="Top" Text="{Binding TargetPosition.DirPath}" />
                 <Button Content=". . ." FontWeight="Bold" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,15,3" VerticalAlignment="Top" Background="Transparent" Foreground="Wheat" Command="{Binding TargetPosition.SetTargetPathCommand}" />
 
-                <ctrl:ComboBoxEx  HasColon="False" Grid.Column="2" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left"  Width="170" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
+                <ctrl:ComboBoxEx   Grid.Column="2" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left"  Width="170" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
 
-                <ctrl:TextBoxEx Title="存放路径：" TitlePadding="20,0,0,0"  Grid.Column="2" Grid.Row="3" Height="30" VerticalAlignment="Top" Text="{Binding TargetPosition.DirPath}" />
+                <ctrl:TextBoxEx Title="存放路径" TitlePadding="20,0,0,0"  Grid.Column="2" Grid.Row="3" Height="30" VerticalAlignment="Top" Text="{Binding TargetPosition.DirPath}" />
                 <Button Content=". . ." FontWeight="Bold" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Right" Margin="0,0,15,3" VerticalAlignment="Top" Background="Transparent" Foreground="Wheat" Command="{Binding TargetPosition.SetTargetPathCommand}" />
 
-                <ctrl:ComboBoxEx HasColon="False" Grid.Column="2" Grid.Row="4" VerticalAlignment="Top" HorizontalAlignment="Left"  Width="170" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
+                <ctrl:ComboBoxEx  Grid.Column="2" Grid.Row="4" VerticalAlignment="Top" HorizontalAlignment="Left"  Width="170" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
 
-                <ctrl:ComboBoxEx HasColon="False" Grid.Column="2" Grid.Row="5" VerticalAlignment="Top" HorizontalAlignment="Left"  Width="170" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
+                <ctrl:ComboBoxEx  Grid.Column="2" Grid.Row="5" VerticalAlignment="Top" HorizontalAlignment="Left"  Width="170" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
                 <ProgressBar   Grid.Row="6" Grid.ColumnSpan="4"></ProgressBar>
 
                 <Button Width="100"  Grid.Row="7" Height="30" Content="上一步"  >

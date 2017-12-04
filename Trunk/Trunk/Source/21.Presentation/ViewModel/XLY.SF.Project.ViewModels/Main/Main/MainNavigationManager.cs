@@ -103,7 +103,18 @@ namespace XLY.SF.Project.ViewModels.Main
             }
             else
             {
-                //缓存设备首页视图
+                /*
+                 * TODO
+                 * 由于设备是多路提取，所以设备主页以及附属内容需要缓存
+                 * 当案例编辑界面展开，此时的所有导航都需要折叠案例编辑界面
+                 * 
+                 */
+                if (EditCaseNavigationHelper.CurEditViewOpenStatus)
+                {
+                    //折叠案例编辑界面
+                    EditCaseNavigationHelper.SetEditCaseViewStatus(false, false);
+                }
+
                 if (args.MsgToken == ExportKeys.DeviceMainView)
                 {
                     var devTmp = args.Parameter as DeviceExtractionAdorner;

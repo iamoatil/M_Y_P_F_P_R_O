@@ -1,19 +1,23 @@
-﻿<Root  Name="EconomySafety" Description="涉及经济" >
-  <AppCollection >
-    <Content Value="涉及经济123456"/>
-    <Content Value="涉及经济12"/>
+﻿<Root  Name="EconomySafety" Description="涉及经济" SensitiveId="3">
+  <AppCollection Description="App" >
+    <Content Value="涉及国123456"/>
+    <Content Value="涉及国12"/>
   </AppCollection>
- <FileMd5Collection >
-    <Content Value="涉及经济123456"/>
-    <Content Value="涉及经济12"/>
- </FileMd5Collection>
- <KeyWordCollection >
-    <Content Value="涉及经济123456"/>
-    <Content Value="涉及经济12"/>
+  <FileMd5Collection Description="MD5" >
+    <Content Value="涉及国123456"/>
+    <Content Value="涉及国12"/>
+  </FileMd5Collection>
+  <KeyWordCollection Description="关键字" >
+    <Content Value="17360135167"/>
+    <Content Value="涉及国安12"/>
   </KeyWordCollection>
- <UrlCollection >
-    <Content Value="涉及经济123456"/>
-    <Content Value="涉及经济12"/>
+  <UrlCollection  Description="URL" >
+    <Content Value="涉及国安123456"/>
+    <Content Value="涉及国安12"/>
   </UrlCollection>
+  <PhoneCollection Description="电话" >
+    <Content Value="涉及国123456"/>
+    <Content Value="涉及国12"/>
+  </PhoneCollection>
 </Root>
   

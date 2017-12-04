@@ -9,6 +9,7 @@
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.Android
 {
@@ -20,8 +21,8 @@ namespace XLY.SF.Project.Plugin.Android
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{D9C21B1D-945F-4BB9-B580-7E8599347AC2}";
-            pluginInfo.Name = "安装应用";
-            pluginInfo.Group = "基本信息";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_InstalledApp);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_BasicInfo);
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB;
@@ -30,7 +31,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             pluginInfo.AppName = "com.app";
             pluginInfo.Icon = "\\icons\\app.png";
-            pluginInfo.Description = "提取安卓设备安装的应用列表";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_AndroidInstalledApp);
             pluginInfo.SourcePath = new SourceFileItems();
 
             PluginInfo = pluginInfo;

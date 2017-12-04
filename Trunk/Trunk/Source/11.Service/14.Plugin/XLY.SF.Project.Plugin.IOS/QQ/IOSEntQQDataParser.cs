@@ -10,6 +10,7 @@ using System.IO;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.IOS
 {
@@ -21,8 +22,8 @@ namespace XLY.SF.Project.Plugin.IOS
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{0BE1A2C5-1E41-47C7-8363-1AB37D8AA919}";
-            pluginInfo.Name = "QQ国际版";
-            pluginInfo.Group = "社交聊天";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_EntQQ);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_SocialChat);
             pluginInfo.DeviceOSType = EnumOSType.IOS;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
@@ -31,7 +32,7 @@ namespace XLY.SF.Project.Plugin.IOS
 
             pluginInfo.AppName = "com.tencent.mQQi";
             pluginInfo.Icon = "\\icons\\Icon-qq.png";
-            pluginInfo.Description = "提取IOS设备QQ国际版信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_IosEntQQ);
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/com.tencent.mQQi/Documents/");
 

@@ -13,6 +13,7 @@ using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.Android
 {
@@ -24,8 +25,8 @@ namespace XLY.SF.Project.Plugin.Android
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{FCED4544-3A7F-4CCB-B5D5-66FEBE025367}";
-            pluginInfo.Name = "WIFI信息";
-            pluginInfo.Group = "基本信息";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_WIFI);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_BasicInfo);
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror;
@@ -34,7 +35,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             pluginInfo.AppName = "com.android.WIFI";
             pluginInfo.Icon = "\\icons\\wifi.png";
-            pluginInfo.Description = "提取安卓设备WIFI信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_AndroidWIFI);
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/misc/wifi/wpa_supplicant.conf");
             pluginInfo.SourcePath.AddItem("/data/misc/wifi/wpa_supplicant.conf");

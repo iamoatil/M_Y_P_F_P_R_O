@@ -67,7 +67,6 @@ namespace ProjectExtend.Context
         
         #region 默认文件夹名
 
-        private string _saveDefaultFolderName;
         /// <summary>
         /// 默认文件夹名
         /// </summary>
@@ -75,12 +74,12 @@ namespace ProjectExtend.Context
         {
             get
             {
-                return this._saveDefaultFolderName;
+                return Settings.GetValue(DefaultPathKey);
             }
 
             private set
             {
-                this._saveDefaultFolderName = value;
+                Settings.SetValue(DefaultPathKey, value);
                 base.OnPropertyChanged();
             }
         }
@@ -251,11 +250,23 @@ namespace ProjectExtend.Context
 
         #region 语言
 
-        public static XmlDataProvider LanguageProvider { get; } = new XmlDataProvider { XPath = "LanguageResource" };
+        public static LanguageType Language
+        {
+            get
+            {
+                String str = Settings.GetValue(LanguageKey) ?? String.Empty;
+                switch (str.ToLower())
+                {
+                    case "en":
+                        return LanguageType.En;
+                    default:
+                        return LanguageType.Cn;
+                }
+            }
+        }
 
-        /// <summary>
-        /// 当前语言
-        /// </summary>
+        public static XmlDataProvider LanguageProvider { get; }
+
         public static LanguageManager LanguageManager { get; }
 
         #endregion

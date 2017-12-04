@@ -110,7 +110,6 @@
     <Compile Include="PluginFeatureMathch\PluginFeatureRule\PathExistPluginFeatureRule.cs" />
     <Compile Include="PluginFeatureMathch\PluginFeatureRule\TableExistPluginFeatureRule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SearchService.cs" />
     <Compile Include="PluginFeatureMathch\PluginFeatureMathchService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -149,9 +148,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\PluginFeatureMathchConfig_Android.xml" />

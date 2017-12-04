@@ -6,7 +6,8 @@
         xmlns:themes="clr-namespace:XLY.SF.Project.Themes;assembly=XLY.SF.Project.Themes"
         xmlns:param="clr-namespace:XLY.SF.Shell.NavigationManager"
         xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
-        Closing="Window_Closing"
+		xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+		xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         PreviewKeyDown="Window_PreviewKeyDown"
         PreviewKeyUp="Window_PreviewKeyUp"
         MouseMove="Window_MouseMove"
@@ -20,154 +21,60 @@
     <themes:WindowEx.Style>
         <Style TargetType="{x:Type local:Shell}">
             <Setter Property="Template">
-                <Setter.Value>
-                    <!--#region 旧样式-->
-                    <!--<ControlTemplate TargetType="{x:Type local:Shell}">
-                        <Border x:Name="br" Padding="50" Background="Transparent">
-                            <Border x:Name="br_Main" VerticalAlignment="Center" HorizontalAlignment="Center" CornerRadius="10" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                <Border.Background>
-                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                                        <GradientStop Color="#2d3c5f" Offset="0"/>
-                                        <GradientStop Color="#232d4b" Offset="1"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                                <Border.Effect>
-                                    <DropShadowEffect BlurRadius="60" ShadowDepth="0" Opacity="0.8"/>
-                                </Border.Effect>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="auto"/>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="10" x:Name="bottom"/>
-                                    </Grid.RowDefinitions>
-                                    <Border x:Name="br1" Background="#28375a" Height="50" CornerRadius="10">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            -->
-                    <!--拖动条-->
-                    <!--
-                                            <Button Grid.ColumnSpan="3" PreviewMouseLeftButtonDown="Button_PreviewMouseLeftButtonDown" Background="Transparent">
-                                                <Button.Style>
-                                                    <Style TargetType="Button">
-                                                        <Setter Property="Template">
-                                                            <Setter.Value>
-                                                                <ControlTemplate TargetType="Button">
-                                                                    <Border Background="{TemplateBinding Background}">
-                                                                        <ContentPresenter/>
-                                                                    </Border>
-                                                                </ControlTemplate>
-                                                            </Setter.Value>
-                                                        </Setter>
-                                                    </Style>
-                                                </Button.Style>
-                                            </Button>
-                                            -->
-                    <!--标题-->
-                    <!--
-                                            <TextBlock x:Name="tb_Title" Margin="20 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{TemplateBinding Title}" FontSize="16" RenderTransformOrigin="0.5,0.5">
-                                                <TextBlock.RenderTransform>
-                                                    <TransformGroup>
-                                                        <ScaleTransform/>
-                                                        <SkewTransform/>
-                                                        <RotateTransform/>
-                                                        <TranslateTransform/>
-                                                    </TransformGroup>
-                                                </TextBlock.RenderTransform>
-                                            </TextBlock>
-                                            -->
-                    <!--关闭，最小化按钮-->
-                    <!--
-                                            <StackPanel Grid.Column="2" Orientation="Horizontal">
-                                                <StackPanel.Resources>
-                                                    <BooleanToVisibilityConverter x:Key="bToV"/>
-                                                </StackPanel.Resources>
-                                                <Button ToolTip="{Binding XPath=ViewLanguage/View_MainWin_MinSize,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                                                    Style="{StaticResource btn_Minsize}" Click="Button_Click"/>
-                                                <ToggleButton x:Name="tb_WinStatus" IsChecked="False" Margin="10 0 10 0" Click="Button_Click_2" Visibility="{Binding CanResize,Converter={StaticResource bToV}}" 
-                                                          ToolTip="{Binding XPath=ViewLanguage/View_MainWin_MinSize,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                                                          Style="{StaticResource tlbtn_MaxsizeAndNormal}"></ToggleButton>
-                                                <Button Click="Button_Click_1" Margin="0 0 3 0" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_Close,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                                                    Style="{StaticResource btn_Close}"/>
-                                            </StackPanel>
-                                            <Rectangle VerticalAlignment="Bottom" Height="10" Fill="#28375a" Grid.ColumnSpan="3"/>
-                                        </Grid>
-                                    </Border>
-                                    -->
-                    <!--<Border Grid.Row="1" x:Name="cp_Main" Margin="0 0 0 0" RenderTransformOrigin="0.5,0.5">
-                                        <Border.RenderTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform/>
-                                                <SkewTransform/>
-                                                <RotateTransform/>
-                                                <TranslateTransform/>
-                                            </TransformGroup>
-                                        </Border.RenderTransform>
-                                    </Border>-->
-                    <!--
-                                    <AdornerDecorator Grid.Row="1" x:Name="cp_Main" RenderTransformOrigin="0.5,0.5">
-                                        <ContentPresenter>
-                                            <ContentPresenter.RenderTransform>
-                                                <TransformGroup>
-                                                    <ScaleTransform/>
-                                                    <SkewTransform/>
-                                                    <RotateTransform/>
-                                                    <TranslateTransform/>
-                                                </TransformGroup>
-                                            </ContentPresenter.RenderTransform>
-                                        </ContentPresenter>
-                                    </AdornerDecorator>
-                                </Grid>
-                            </Border>
-                        </Border>
+                <Setter.Value>                    
+                    <ControlTemplate TargetType="themes:WindowEx">
                         <ControlTemplate.Resources>
-                            <Storyboard x:Key="OnLoaded">
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="cp_Main">
-                                    <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
-                                </DoubleAnimationUsingKeyFrames>
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="tb_Title">
-                                    <EasingDoubleKeyFrame KeyTime="0:0:0.45" Value="1"/>
-                                </DoubleAnimationUsingKeyFrames>
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="tb_Title">
-                                    <EasingDoubleKeyFrame KeyTime="0:0:0.45" Value="1"/>
-                                </DoubleAnimationUsingKeyFrames>
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="tb_Title">
-                                    <SplineDoubleKeyFrame KeySpline="0,1,1,1" KeyTime="0:0:0.4" Value="0"/>
-                                    <SplineDoubleKeyFrame KeyTime="0:0:0.8" Value="0" KeySpline="0,0,0.12,0.86"/>
-                                </DoubleAnimationUsingKeyFrames>
-                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="tb_Title">
-                                    <EasingDoubleKeyFrame KeyTime="0" Value="100"/>
-                                    <EasingDoubleKeyFrame KeyTime="0:0:0.45" Value="100"/>
-                                    <SplineDoubleKeyFrame KeyTime="0:0:0.8" Value="0" KeySpline="0,1,0.12,0.86"/>
-                                </DoubleAnimationUsingKeyFrames>
+                            <Storyboard x:Key="OnLoaded1">
                                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="tb_Title">
                                     <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                    <EasingDoubleKeyFrame KeyTime="0:0:0.45" Value="0"/>
-                                    <EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
+                                        <EasingDoubleKeyFrame.EasingFunction>
+                                            <CircleEase EasingMode="EaseOut"/>
+                                        </EasingDoubleKeyFrame.EasingFunction>
+                                    </EasingDoubleKeyFrame>
+                                </DoubleAnimationUsingKeyFrames>
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="tb_Title">
+                                    <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
+                                        <EasingDoubleKeyFrame.EasingFunction>
+                                            <CircleEase EasingMode="EaseOut"/>
+                                        </EasingDoubleKeyFrame.EasingFunction>
+                                    </EasingDoubleKeyFrame>
+                                </DoubleAnimationUsingKeyFrames>
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="tb_Title">
+                                    <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
+                                        <EasingDoubleKeyFrame.EasingFunction>
+                                            <CircleEase EasingMode="EaseOut"/>
+                                        </EasingDoubleKeyFrame.EasingFunction>
+                                    </EasingDoubleKeyFrame>
+                                </DoubleAnimationUsingKeyFrames>
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="tb_Title">
+                                    <EasingDoubleKeyFrame KeyTime="0" Value="-40"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+                                        <EasingDoubleKeyFrame.EasingFunction>
+                                            <CircleEase EasingMode="EaseOut"/>
+                                        </EasingDoubleKeyFrame.EasingFunction>
+                                    </EasingDoubleKeyFrame>
+                                </DoubleAnimationUsingKeyFrames>
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="cp_Content">
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1">
+                                        <EasingDoubleKeyFrame.EasingFunction>
+                                            <CircleEase EasingMode="EaseInOut"/>
+                                        </EasingDoubleKeyFrame.EasingFunction>
+                                    </EasingDoubleKeyFrame>
+                                </DoubleAnimationUsingKeyFrames>
+                                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="cp_Content">
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="100"/>
+                                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
+                                        <EasingDoubleKeyFrame.EasingFunction>
+                                            <CircleEase EasingMode="EaseInOut"/>
+                                        </EasingDoubleKeyFrame.EasingFunction>
+                                    </EasingDoubleKeyFrame>
                                 </DoubleAnimationUsingKeyFrames>
                             </Storyboard>
                         </ControlTemplate.Resources>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="WindowState" Value="Maximized">
-                                <Setter Property="Padding" TargetName="br" Value="0"/>
-                                <Setter Property="Effect" TargetName="br_Main" Value="{x:Null}"/>
-                            </Trigger>
-                            <DataTrigger Binding="{Binding Text,ElementName= tb_Title}" Value="">
-                                <Setter Property="Visibility" Value="Collapsed" TargetName="br1"/>
-                                <Setter Property="Height" Value="0" TargetName="bottom"/>
-                            </DataTrigger>
-                            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                                <BeginStoryboard Storyboard="{StaticResource OnLoaded}"/>
-                            </EventTrigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>-->
-                    <!--#endregion-->
-                    
-                    <ControlTemplate TargetType="themes:WindowEx">
                         <Border x:Name="br" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent" CornerRadius="10" Padding="40">
                             <Border x:Name="br_Main" CornerRadius="10">
                                 <Border.Background>
@@ -209,7 +116,7 @@
                                             </Button>
 
                                             <!--标题-->
-                                            <TextBlock x:Name="tb_Title" Margin="20 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{TemplateBinding Title}" FontSize="16" RenderTransformOrigin="0.5,0.5">
+                                            <TextBlock x:Name="tb_Title" Opacity="0" Margin="20 0 0 0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{TemplateBinding Title}" FontSize="16" RenderTransformOrigin="0.5,0.5">
                                                 <TextBlock.RenderTransform>
                                                     <TransformGroup>
                                                         <ScaleTransform/>
@@ -226,17 +133,29 @@
                                                     <BooleanToVisibilityConverter x:Key="bToV"/>
                                                 </StackPanel.Resources>
                                                 <Button ToolTip="{Binding XPath=ViewLanguage/View_MainWin_MinSize,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                                                    Style="{StaticResource btn_Minsize}" Click="Button_Click"/>
-                                                <ToggleButton x:Name="tb_WinStatus" IsChecked="False" Margin="10 0 10 0" Click="Button_Click_2" Visibility="{Binding CanResize,Converter={StaticResource bToV}}" 
+                                                    Style="{StaticResource btn_Minsize}" Click="Button_Click" Visibility="{Binding ShowMinsize,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:Shell},Converter={StaticResource bToV}}"/>
+                                                <ToggleButton x:Name="tb_WinStatus" IsChecked="False" Margin="10 0 10 0" Click="Button_Click_2" Visibility="{Binding ShowMaxsize,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:Shell},Converter={StaticResource bToV}}" 
                                                           ToolTip="{Binding XPath=ViewLanguage/View_MainWin_MinSize,Source={x:Static ex:SystemContext.LanguageProvider}}"
                                                           Style="{StaticResource tlbtn_MaxsizeAndNormal}"></ToggleButton>
-                                                <Button Click="Button_Click_1" Margin="0 0 3 0" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_Close,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                                                    Style="{StaticResource btn_Close}"/>
+                                                <!--返回到设备列表-->
+                                                <Button x:Name="btn_Back" Click="btn_Back_Click" Visibility="{Binding IsBackWindow,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:Shell},Converter={StaticResource bToV}}" 
+                                                        Style="{StaticResource BackToDevMainStyle}" Margin="0 0 3 0"/>
+                                                <Button x:Name="btn_Close" Click="Button_Click_1" Margin="0 0 3 0" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_Close,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                                    Style="{StaticResource btn_Close}" Visibility="{Binding CollapsedCloseBtn,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:Shell},Converter={StaticResource bToV}}"/>
                                             </StackPanel>
                                             <Rectangle VerticalAlignment="Bottom" Height="10" Fill="#28375a" Grid.ColumnSpan="3"/>
                                         </Grid>
                                     </Border>
-                                    <ContentPresenter Grid.Row="1" Margin="0"/>
+                                    <ContentPresenter x:Name="cp_Content" Opacity="0" Grid.Row="1" Margin="0" RenderTransformOrigin="0.5,0.5">
+                                        <ContentPresenter.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform/>
+                                                <SkewTransform/>
+                                                <RotateTransform/>
+                                                <TranslateTransform/>
+                                            </TransformGroup>
+                                        </ContentPresenter.RenderTransform>
+                                    </ContentPresenter>
                                 </Grid>
                             </Border>
                         </Border>
@@ -250,6 +169,9 @@
                             <DataTrigger Binding="{Binding Text,ElementName= tb_Title}" Value="">
                                 <Setter Property="Visibility" Value="Collapsed" TargetName="br1"/>
                             </DataTrigger>
+                            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                <BeginStoryboard Storyboard="{StaticResource OnLoaded1}"/>
+                            </EventTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>

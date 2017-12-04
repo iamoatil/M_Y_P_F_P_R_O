@@ -160,39 +160,5 @@ namespace ProjectExtend.Context
         }
 
         #endregion
-
-        #region 设置路径
-
-        /// <summary>
-        /// 设置当前系统存储路径
-        /// </summary>
-        /// <param name="sysSaveFullPath"></param>
-        /// <param name="inConfig">是否写入配置文件</param>
-        public void SetSysSaveFullPath(string sysSaveFullPath, bool inConfig = false)
-        {
-            if (string.IsNullOrWhiteSpace(sysSaveFullPath) && Directory.Exists(sysSaveFullPath))
-            {
-                SysSaveFullPath = sysSaveFullPath;
-                if (inConfig)
-                    _configService.SetSysConfigValueBykey("SysSaveFullPath", SysSaveFullPath);
-            }
-        }
-
-        /// <summary>
-        /// 设置当前案例存储路径
-        /// </summary>
-        /// <param name="caseSaveFullPath"></param>
-        /// <param name="inConfig">是否写入配置文件</param>
-        public void SetCaseSaveFullPath(string caseSaveFullPath, bool inConfig = false)
-        {
-            if (string.IsNullOrWhiteSpace(caseSaveFullPath) && Directory.Exists(caseSaveFullPath))
-            {
-                CaseSaveFullPath = caseSaveFullPath;
-                if (inConfig)
-                    _configService.SetSysConfigValueBykey("CaseSaveFullPath", CaseSaveFullPath);
-            }
-        }
-
-        #endregion
     }
 }

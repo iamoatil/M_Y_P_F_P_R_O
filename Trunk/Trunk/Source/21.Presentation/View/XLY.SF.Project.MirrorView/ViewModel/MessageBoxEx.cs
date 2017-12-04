@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjectExtend.Context;
+using System;
 using System.Windows;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Core.Base.MefIoc;
@@ -27,7 +28,10 @@ namespace XLY.SF.Project.MirrorView
         {
             if (_msgBox != null)
             {
-                return _msgBox.ShowDialogErrorMsg(errorText);
+                bool ret = false;
+                SystemContext.Instance.AsyncOperation.SynchronizationContext.Post(
+                    state => { ret = _msgBox.ShowDialogErrorMsg(errorText); }, null);
+                return ret;
             }
             else
             {
@@ -40,7 +44,10 @@ namespace XLY.SF.Project.MirrorView
         {
             if (_msgBox != null)
             {
-                return _msgBox.ShowDialogWarningMsg(text);
+                bool ret = false;
+                SystemContext.Instance.AsyncOperation.SynchronizationContext.Post(
+                    state => { ret = _msgBox.ShowDialogWarningMsg(text); }, null);
+                return ret;
             }
             else
             {
@@ -52,7 +59,8 @@ namespace XLY.SF.Project.MirrorView
         {
             if (_msgBox != null)
             {
-                _msgBox.ShowErrorMsg(errorText);
+                SystemContext.Instance.AsyncOperation.SynchronizationContext.Post(
+                    state => {_msgBox.ShowErrorMsg(errorText); }, null);
             }
             else
             {
@@ -64,7 +72,10 @@ namespace XLY.SF.Project.MirrorView
         {
             if (_msgBox != null)
             {
-                return _msgBox.ShowDialogSuccessMsg(text);
+                bool ret = false;
+                SystemContext.Instance.AsyncOperation.SynchronizationContext.Post(
+                    state => { ret = _msgBox.ShowDialogSuccessMsg(text); }, null);
+                return ret;
             }
             else
             {
@@ -77,7 +88,10 @@ namespace XLY.SF.Project.MirrorView
         {
             if (_msgBox != null)
             {
-                return _msgBox.ShowDialogSuccessMsg(text);
+                bool ret = false;
+                SystemContext.Instance.AsyncOperation.SynchronizationContext.Post(
+                    state => { ret = _msgBox.ShowDialogSuccessMsg(text); }, null);
+                return ret;
             }
             else
             {
@@ -101,7 +115,8 @@ namespace XLY.SF.Project.MirrorView
         {
             if (_msgBox != null)
             {
-                _msgBox.ShowWarningMsg(warningText);
+                SystemContext.Instance.AsyncOperation.SynchronizationContext.Post(
+                    state => {_msgBox.ShowWarningMsg(warningText); }, null);
             }
             else
             {
@@ -113,7 +128,8 @@ namespace XLY.SF.Project.MirrorView
         {
             if (_msgBox != null)
             {
-                _msgBox.ShowSuccessMsg(successText);
+                SystemContext.Instance.AsyncOperation.SynchronizationContext.Post(
+                    state => { _msgBox.ShowSuccessMsg(successText); }, null);
             }
             else
             {

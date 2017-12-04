@@ -143,7 +143,7 @@ namespace XLY.SF.Project.Plugin.DataReport
                 foreach (var c in DisplayAttributeHelper.FindDisplayAttributes(itemType))
                 {
                     if (c.Visibility != EnumDisplayVisibility.ShowInDatabase)
-                        cols.Add(new JsonExportColumn() { field = c.Key, title = c.Text });
+                        cols.Add(new JsonExportColumn() { field = c.PropertyName, title = c.Text });
                 }
                 sw.Write(Serializer.JsonFastSerilize(cols));
                 sw.Write(";");

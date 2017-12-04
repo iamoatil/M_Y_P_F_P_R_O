@@ -23,7 +23,6 @@
     <StackPanel>
         <GroupBox Header="{Binding XPath=ViewLanguage/Management/Settings/Language,Source={x:Static ex:SystemContext.LanguageProvider}}">
             <pro:ComboBoxEx SelectedValue="{Binding Language, Converter={StaticResource LanguageConverter}}"
-                            Title="{Binding XPath=ViewLanguage/Management/Settings/Language,Source={x:Static ex:SystemContext.LanguageProvider}}"
                             Width="200"
                             Height="30"
                             HorizontalAlignment="Left"
@@ -31,12 +30,14 @@
 
         </GroupBox>
         <GroupBox Header="{Binding XPath=ViewLanguage/Management/Settings/DefaultPath,Source={x:Static ex:SystemContext.LanguageProvider}}">
-            <pro:TextBoxEx Title="{Binding XPath=ViewLanguage/Management/Settings/DefaultPath,Source={x:Static ex:SystemContext.LanguageProvider}}"
+            <pro:TextBoxEx Watermark="{Binding XPath=ViewLanguage/Management/Settings/DefaultPath,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                           Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/CaseCreation_Path.png"
                            Width="412"
                            Height="30"
+                           Command="{Binding SelectPathCommand}"
                            HorizontalAlignment="Left"
                            IsReadOnly="True"
-                           Text="{Binding Path,Mode=TwoWay}" />
+                           Text="{Binding Path}" />
         </GroupBox>
         <GroupBox Header="{Binding XPath=ViewLanguage/Management/Settings/DataFilter,Source={x:Static ex:SystemContext.LanguageProvider}}">
             <CheckBox Content="{Binding XPath=ViewLanguage/Management/Settings/DataFilterDescription,Source={x:Static ex:SystemContext.LanguageProvider}}"

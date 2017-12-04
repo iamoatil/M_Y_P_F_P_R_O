@@ -11,7 +11,7 @@ using System.Windows.Interactivity;
 namespace XLY.SF.Project.Themes.Behavior
 {
     /// <summary>
-    /// DataGrid行双击行为
+    /// DataGrid行为
     /// </summary>
     public class DataGridBehavior : Behavior<DataGrid>
     {
@@ -19,6 +19,7 @@ namespace XLY.SF.Project.Themes.Behavior
         {
             base.OnAttached();
             base.AssociatedObject.AddHandler(DataGridRow.MouseDoubleClickEvent, new MouseButtonEventHandler(RowDoubleClickCallback));
+            base.AssociatedObject.AddHandler(DataGridRow.PreviewMouseLeftButtonDownEvent, new MouseButtonEventHandler(RowMouseLeftButtonDownCallback));
         }
 
         private void RowDoubleClickCallback(object sender, MouseButtonEventArgs e)
@@ -28,6 +29,15 @@ namespace XLY.SF.Project.Themes.Behavior
 
             if (DataGridRowDoubleClickCommand != null && doubleClickRow != null)
                 DataGridRowDoubleClickCommand.Execute(feTmp.DataContext);
+        }
+
+        private void RowMouseLeftButtonDownCallback(object sender, MouseButtonEventArgs e)
+        {
+            var feTmp = e.OriginalSource as FrameworkElement;
+            var ClickRow = base.AssociatedObject.ItemContainerGenerator.ContainerFromItem(feTmp.DataContext);
+
+            if (DataGridRowMouseLeftButtonDownCommand != null && ClickRow != null)
+                DataGridRowMouseLeftButtonDownCommand.Execute(feTmp.DataContext);
         }
 
         #region 行双击命令
@@ -43,5 +53,20 @@ namespace XLY.SF.Project.Themes.Behavior
             DependencyProperty.Register("DataGridRowDoubleClickCommand", typeof(ICommand), typeof(DataGridBehavior), new PropertyMetadata(null));
 
         #endregion
+
+        #region 行单击命令
+
+        public ICommand DataGridRowMouseLeftButtonDownCommand
+        {
+            get { return (ICommand)GetValue(DataGridRowMouseLeftButtonDownCommandProperty); }
+            set { SetValue(DataGridRowMouseLeftButtonDownCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MouseLeftButtonDownCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty DataGridRowMouseLeftButtonDownCommandProperty =
+            DependencyProperty.Register("DataGridRowMouseLeftButtonDownCommand", typeof(ICommand), typeof(DataGridBehavior), new PropertyMetadata(null));
+
+        #endregion
+
     }
 }

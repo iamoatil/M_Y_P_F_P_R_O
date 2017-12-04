@@ -1,19 +1,23 @@
-﻿<Root Name="CountrySafety" Description="涉及国安" >
-  <AppCollection>
+﻿<Root Name="CountrySafety" Description="涉及国安"  SensitiveId="1">
+  <AppCollection Description="App" >
     <Content Value="涉及国123456"/>
     <Content Value="涉及国12"/>
   </AppCollection>
- <FileMd5Collection>
+ <FileMd5Collection Description="MD5" >
     <Content Value="涉及国123456"/>
     <Content Value="涉及国12"/>
  </FileMd5Collection>
- <KeyWordCollection>
+ <KeyWordCollection Description="关键字" >
     <Content Value="17360135167"/>
     <Content Value="涉及国安12"/>
   </KeyWordCollection>
- <UrlCollection >
+   <UrlCollection  Description="URL" >
     <Content Value="涉及国安123456"/>
     <Content Value="涉及国安12"/>
   </UrlCollection>
+  <PhoneCollection Description="电话" >
+    <Content Value="涉及国123456"/>
+    <Content Value="涉及国12"/>
+  </PhoneCollection>
 </Root>
   

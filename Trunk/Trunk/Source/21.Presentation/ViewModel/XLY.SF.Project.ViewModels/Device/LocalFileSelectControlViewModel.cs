@@ -193,6 +193,7 @@ namespace XLY.SF.Project.ViewModels.Device
             {
                 return;
             }
+            SelectedFileName = path;
             SelectedPlatform = ProxyFactory.LocalFile.GetOSType(path).GetDescriptionX();       //自动判断文件类型
         }
 

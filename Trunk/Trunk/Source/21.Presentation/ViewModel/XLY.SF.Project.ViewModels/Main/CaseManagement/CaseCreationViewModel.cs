@@ -143,7 +143,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         {
             String directory = PopupService.SelectFolderDialog();
             CaseInfo.Path = directory;
-            OnPropertyChanged("CaseInfo.Path");
+            OnPropertyChanged("CaseInfo");
         }
 
         private void LoadCaseTypes(GeneralArgs args)

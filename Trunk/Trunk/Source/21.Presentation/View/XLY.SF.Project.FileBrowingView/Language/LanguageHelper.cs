@@ -23,8 +23,6 @@ namespace XLY.SF.Project.FileBrowingView.Language
                 LanguageProvider.Document = LanguageManager.Document;
             };
             LanguageManager = lm;
-
-            XLY.SF.Framework.Language.LanguageManager.SwitchAll(XLY.SF.Framework.Language.LanguageType.Cn);
         }
 
         public static LanguageManager LanguageManager { get; }

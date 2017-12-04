@@ -80,6 +80,8 @@ namespace XLY.SF.Project.ViewModels.Login
             _dbService.Records.FirstOrDefault();
             AllUser =new ObservableCollection<UserInfo>(_dbService.Records.OrderByDescending(p=>p.LoginTime).Take(5)); //获取本地前5条用户记录
 
+            AssemblyHelper.Instance.Load();
+
             return opertionResult;
         }
 

@@ -10,7 +10,7 @@
                  xmlns:local="clr-namespace:XLY.SF.Project.Views.Management.Settings"
                  Title="{Binding XPath=ViewLanguage/Management/Settings/Title,Source={x:Static ex:SystemContext.LanguageProvider}}"
                  Background="#FF24314E"
-                 mc:Ignorable="d">
+                 mc:Ignorable="d" SizeChanged="SettingsView_SizeChanged">
     <core:UcViewBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -102,17 +102,18 @@
     </core:UcViewBase.Resources>
     <Grid Width="780" Height="460">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="170" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="Blocks"
+
+        <ListBox x:Name="Blocks" ListBoxItem.PreviewMouseLeftButtonDown="Blocks_PreviewMouseLeftButtonDown"
                  Background="#2E3856"
                  BorderBrush="#FF24314E"
                  BorderThickness="1,1,0,1"
                  ItemContainerStyle="{StaticResource BlockStyle}"
                  Grid.Column="0" />
-        <ScrollViewer Grid.Column="1">
-            <StackPanel Grid.IsSharedSizeScope="True"
+        <ScrollViewer x:Name="sv" Grid.Column="1">
+            <StackPanel Grid.IsSharedSizeScope="True" x:Name="sp"
                         Margin="40,20,40,20">
                 <local:BasicSettingsView />
                 <local:CaseTypeSettingsView />

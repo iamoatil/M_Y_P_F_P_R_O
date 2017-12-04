@@ -17,6 +17,8 @@ namespace XLY.SF.Project.EarlyWarningView
         /// </summary>
         protected bool IsInitialize;
 
+        private const string NodeName = "Description";
+
         public virtual bool Initialize(string dir)
         {
             IsInitialize = false;
@@ -57,14 +59,16 @@ namespace XLY.SF.Project.EarlyWarningView
                 }
                 if (xmdDoc.DocumentElement == null
                     ||xmdDoc.DocumentElement.Name != ConstDefinition.RootName
-                    || !xmdDoc.DocumentElement.HasAttribute("Name"))
+                    || !xmdDoc.DocumentElement.HasAttribute(NodeName)
+                    || !xmdDoc.DocumentElement.HasAttribute("SensitiveId"))
                 {
                     continue;
                 }
 
                 //新建、获取RootNode节点curRootNode
-                string rootNodeName = xmdDoc.DocumentElement.GetAttribute("Name");
-                if(!rootNodeManager.Children.Keys.Contains(rootNodeName))
+                string rootNodeName = xmdDoc.DocumentElement.GetAttribute(NodeName);
+                string sensitiveId = xmdDoc.DocumentElement.GetAttribute("SensitiveId");
+                if (!rootNodeManager.Children.Keys.Contains(rootNodeName))
                 {
                     rootNodeManager.Children.Add(rootNodeName, new RootNode(rootNodeName));
                 }
@@ -74,7 +78,12 @@ namespace XLY.SF.Project.EarlyWarningView
                 foreach (XmlElement categoryNode in categoryNodes)
                 {
                     //新建、获取CategoryNode节点curNode
-                    string categoryName = categoryNode.Name;
+                    if(!categoryNode.HasAttribute(NodeName))
+                    {
+                        continue;
+                    }
+                    
+                    string categoryName = categoryNode.GetAttribute(NodeName);
                     if (!curRootNode.Children.Keys.Contains(categoryName))
                     {                       
                         CategoryNode node = new CategoryNode() { NodeName = categoryName };
@@ -88,7 +97,7 @@ namespace XLY.SF.Project.EarlyWarningView
                         if (item.HasAttribute("Value"))
                         {
                             string value = item.Attributes["Value"].Value;
-                            curCategoryNode.DataList.Add(new DataNode() { SensitiveData = new SensitiveData(rootNodeName, categoryName, value) });
+                            curCategoryNode.DataList.Add(new DataNode() { SensitiveData = new SensitiveData(rootNodeName, categoryName, sensitiveId, value) });
                         }
                     }
                 }

@@ -48,6 +48,15 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
             };
 
             MessageAggregation.RegisterGeneralMsg<ObservableCollection<DataExtactionItem>>(this, MessageKeys.SetDataListKey, SetDataListKey);
+            MessageAggregation.RegisterGeneralMsg<object>(this, MessageKeys.DataLoadedCompletedKey, b=> OnDataLoadedCompleted());
+            //设置智能预警参数
+            MessageAggregation.RegisterGeneralMsg<List<Inspection>>(this, MessageKeys.InspectionKey, b =>
+            {
+                IsInspection = true;
+                InspectionList.Clear();
+                InspectionList.AddRange(b.Parameters.Select(i => new InspectionItem() { Id = i.ID, Name = LanguageHelper.LanguageManager.Type == Framework.Language.LanguageType.En ? i.CategoryEn : i.CategoryCn, Icon = null }));
+                //SelectedInspectionItem = InspectionList.FirstOrDefault();
+            });
         }
 
         #region 绑定数据源
@@ -222,6 +231,59 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         }
         #endregion
 
+        #region 是否是智能预警
+        private bool _IsInspection = false;
+
+        /// <summary>
+        /// 是否是智能预警
+        /// </summary>	
+        public bool IsInspection
+        {
+            get { return _IsInspection; }
+            set
+            {
+                _IsInspection = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
+        #region 智能预警分类列表
+        private ObservableCollection<InspectionItem> _InspectionList = new ObservableCollection<InspectionItem>();
+
+        /// <summary>
+        /// 智能预警分类列表
+        /// </summary>	
+        public ObservableCollection<InspectionItem> InspectionList
+        {
+            get { return _InspectionList; }
+            set
+            {
+                _InspectionList = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
+        #region 当前选择的智能预警项
+        private InspectionItem _SelectedInspectionItem = null;
+
+        /// <summary>
+        /// 当前选择的智能预警项
+        /// </summary>	
+        public InspectionItem SelectedInspectionItem
+        {
+            get { return _SelectedInspectionItem; }
+            set
+            {
+                _SelectedInspectionItem = value;
+                OnPropertyChanged();
+
+                DoStartFilterCommond();
+            }
+        }
+        #endregion
+
         #endregion
 
         #region 命令
@@ -252,35 +314,11 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         /// </summary>
         private void DoStartFilterCommond()
         {
-            List<FilterArgs> list = new List<FilterArgs>();
-            if(StartTime != null || EndTime != null)
-            {
-                list.Add(new FilterByDateRangeArgs() { StartTime = StartTime, EndTime = EndTime });
-            }
-            if(!string.IsNullOrWhiteSpace(Keyword))
-            {
-                if(KeywordType == 0)
-                {
-                    list.Add(new FilterByStringContainsArgs() { PatternText = Keyword });
-                }
-                else
-                {
-                    list.Add(new FilterByRegexArgs() { Regex = new System.Text.RegularExpressions.Regex(Keyword) });
-                }
-            }
-            if(BookmarkId != -2)
-            {
-                list.Add(new FilterByBookmarkArgs() { BookmarkId = BookmarkId });
-            }
-            if(DataState != EnumDataState.None)
-            {
-                list.Add(new FilterByEnumStateArgs() { State = DataState });
-            }
-
+            var args = GetFilterArgs();
             Task.Factory.StartNew(() => 
             {
                 MessageAggregation.SendGeneralMsg(new GeneralArgs<bool>(MessageKeys.StartFilterKey) { Parameters = true });
-                Filter(DataListSource, list.ToArray());
+                Filter(DataListSource, args);
                 MessageAggregation.SendGeneralMsg(new GeneralArgs<bool>(MessageKeys.StartFilterKey) { Parameters = false });
             });
         }
@@ -308,9 +346,9 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         }
         #endregion
 
-
         #endregion
 
+        #region 方法
         /// <summary>
         /// 重新设置数据
         /// </summary>
@@ -320,6 +358,96 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
             DataListSource = obj.Parameters;
             DoClearCommond();
         }
-     
+
+        /// <summary>
+        /// 数据加载完成后更新
+        /// </summary>
+        private void OnDataLoadedCompleted()
+        {
+            if(IsInspection)
+            {
+                SelectedInspectionItem = InspectionList.FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// 获取当前设置的过滤参数
+        /// </summary>
+        /// <returns></returns>
+        private FilterArgs[] GetFilterArgs()
+        {
+            List<FilterArgs> list = new List<FilterArgs>();
+            if (StartTime != null || EndTime != null)
+            {
+                list.Add(new FilterByDateRangeArgs() { StartTime = StartTime, EndTime = EndTime });
+            }
+            if (!string.IsNullOrWhiteSpace(Keyword))
+            {
+                if (KeywordType == 0)
+                {
+                    list.Add(new FilterByStringContainsArgs() { PatternText = Keyword });
+                }
+                else
+                {
+                    list.Add(new FilterByRegexArgs() { Regex = new System.Text.RegularExpressions.Regex(Keyword) });
+                }
+            }
+            if (BookmarkId != -2)
+            {
+                list.Add(new FilterByBookmarkArgs() { BookmarkId = BookmarkId });
+            }
+            if (DataState != EnumDataState.None)
+            {
+                list.Add(new FilterByEnumStateArgs() { State = DataState });
+            }
+
+            if(IsInspection && SelectedInspectionItem != null)
+            {
+                list.Add(new FilterBySensitiveArgs() { SensitiveId = SelectedInspectionItem.Id });
+            }
+            return list.ToArray();
+        }
+        #endregion
     }
+
+    /// <summary>
+    /// 智能预警项
+    /// </summary>
+    public class InspectionItem
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Icon { get; set; }
+
+    }
+
+    public class Inspection
+    {
+        public Int32 ID { get; set; }
+
+        public String NameCn { get; set; }
+
+        public String CategoryCn { get; set; }
+
+        public String NameEn { get; set; }
+
+        public String CategoryEn { get; set; }
+
+        public String ConfigFile { get; set; }
+
+        public Int32 SelectedToken { get; set; }
+
+        public Boolean IsSelected
+        {
+            get => SelectedToken > 0;
+            set => SelectedToken = value ? 1 : 0;
+        }
+    }
+
+    public class InspectionConfig
+    {
+        public List<Inspection> Config { get; set; }
+        public string DevicePath { get; set; }
+    }
+
 }

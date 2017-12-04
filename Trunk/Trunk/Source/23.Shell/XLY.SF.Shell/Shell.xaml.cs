@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,14 +21,30 @@ using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Framework.Language;
 using XLY.SF.Project.Themes;
+using XLY.SF.Project.ViewDomain.MefKeys;
 
 namespace XLY.SF.Shell
 {
     /// <summary>
     /// Shell.xaml 的交互逻辑
     /// </summary>
-    public partial class Shell : WindowEx
+    public partial class Shell : WindowEx, INotifyPropertyChanged
     {
+        #region PropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        /// <summary>
+        /// 属性更新（不用给propertyName赋值）
+        /// </summary>
+        /// <param name="propertyName"></param>
+        public void OnPropertyChanged([CallerMemberName]string propertyName = null)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
+
         #region Propertes
 
         /// <summary>
@@ -53,7 +71,7 @@ namespace XLY.SF.Shell
         /// <summary>
         /// 界面承载器
         /// </summary>
-        public Shell(bool canResize = false)
+        public Shell()
         {
             InitializeComponent();
         }
@@ -75,54 +93,54 @@ namespace XLY.SF.Shell
             }
         }
 
-       #endregion
+        #endregion
 
         #region 窗口关闭
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            if (!_isPlayCloseStoryboard)
-            {
-                //动画播放开始
-                _isPlayCloseStoryboard = true;
-                //播放动画
-                e.Cancel = true;
+        //private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        //{
+        //    if (!_isPlayCloseStoryboard)
+        //    {
+        //        //动画播放开始
+        //        _isPlayCloseStoryboard = true;
+        //        //播放动画
+        //        e.Cancel = true;
 
-                #region 创建关闭动画
+        //        #region 创建关闭动画
 
-                Storyboard _closeWindow = new Storyboard();
+        //        Storyboard _closeWindow = new Storyboard();
 
-                DoubleAnimationUsingKeyFrames keyFrame3 = new DoubleAnimationUsingKeyFrames();
-                EasingDoubleKeyFrame ea = new EasingDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(1)));
-                BackEase be = new BackEase();
-                be.EasingMode = EasingMode.EaseIn;
-                ea.EasingFunction = be;
-                keyFrame3.KeyFrames.Add(ea);
-                Storyboard.SetTarget(keyFrame3, Win_Main);
-                Storyboard.SetTargetProperty(keyFrame3, new PropertyPath("(UIElement.Opacity)"));
-                _closeWindow.Children.Add(keyFrame3);
+        //        DoubleAnimationUsingKeyFrames keyFrame3 = new DoubleAnimationUsingKeyFrames();
+        //        EasingDoubleKeyFrame ea = new EasingDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(1)));
+        //        BackEase be = new BackEase();
+        //        be.EasingMode = EasingMode.EaseIn;
+        //        ea.EasingFunction = be;
+        //        keyFrame3.KeyFrames.Add(ea);
+        //        Storyboard.SetTarget(keyFrame3, Win_Main);
+        //        Storyboard.SetTargetProperty(keyFrame3, new PropertyPath("(UIElement.Opacity)"));
+        //        _closeWindow.Children.Add(keyFrame3);
 
-                DoubleAnimationUsingKeyFrames keyFrame5 = new DoubleAnimationUsingKeyFrames();
-                ea = new EasingDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.4)));
-                ea = new EasingDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.6)));
-                be = new BackEase();
-                be.EasingMode = EasingMode.EaseIn;
-                ea.EasingFunction = be;
-                keyFrame5.KeyFrames.Add(ea);
-                Storyboard.SetTarget(keyFrame5, this);
-                Storyboard.SetTargetProperty(keyFrame5, new PropertyPath("(UIElement.Opacity)"));
-                _closeWindow.Children.Add(keyFrame5);
+        //        DoubleAnimationUsingKeyFrames keyFrame5 = new DoubleAnimationUsingKeyFrames();
+        //        ea = new EasingDoubleKeyFrame(1, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.4)));
+        //        ea = new EasingDoubleKeyFrame(0, KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0.6)));
+        //        be = new BackEase();
+        //        be.EasingMode = EasingMode.EaseIn;
+        //        ea.EasingFunction = be;
+        //        keyFrame5.KeyFrames.Add(ea);
+        //        Storyboard.SetTarget(keyFrame5, this);
+        //        Storyboard.SetTargetProperty(keyFrame5, new PropertyPath("(UIElement.Opacity)"));
+        //        _closeWindow.Children.Add(keyFrame5);
 
-                #endregion
+        //        #endregion
 
-                _closeWindow.Completed += _closeWindow_Completed;
-                _closeWindow.Begin();
-            }
-            else
-            {
-                e.Cancel = !_isCloseStoryboardCompleted;
-            }
-        }
+        //        _closeWindow.Completed += _closeWindow_Completed;
+        //        _closeWindow.Begin();
+        //    }
+        //    else
+        //    {
+        //        e.Cancel = !_isCloseStoryboardCompleted;
+        //    }
+        //}
 
         void _closeWindow_Completed(object sender, EventArgs e)
         {
@@ -268,7 +286,7 @@ namespace XLY.SF.Shell
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             var a = sender as ToggleButton;
-            this.WindowState = a.IsChecked.HasValue&&a.IsChecked.Value ? WindowState.Maximized : WindowState.Normal;
+            this.WindowState = a.IsChecked.HasValue && a.IsChecked.Value ? WindowState.Maximized : WindowState.Normal;
         }
 
         //最小化
@@ -289,5 +307,39 @@ namespace XLY.SF.Shell
         }
 
         #endregion
+
+        #region 最大化最小化标识
+
+        /// <summary>
+        /// 是否显示最大化和还原
+        /// </summary>
+        public bool ShowMaxsize { get; set; }
+
+        /// <summary>
+        /// 是否显示最小化
+        /// </summary>
+        public bool ShowMinsize { get; set; }
+
+        #endregion
+
+        #region 普通窗口和返回窗口
+        
+        /// <summary>
+        /// 是否为返回窗口
+        /// </summary>
+        public bool IsBackWindow { get; set; }
+
+        public bool CollapsedCloseBtn { get { return !IsBackWindow; } }
+
+        #endregion
+
+        private void btn_Back_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+            MsgAggregation.Instance.SendGeneralMsg(new GeneralArgs<object>(ExportKeys.DeviceWindowClosedMsg)
+            {
+                Parameters = this.Tag
+            });
+        }
     }
 }

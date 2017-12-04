@@ -119,6 +119,14 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
 
         }
 
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        public virtual void Release()
+        {
+
+        }
+
         #endregion
 
         #region 导航

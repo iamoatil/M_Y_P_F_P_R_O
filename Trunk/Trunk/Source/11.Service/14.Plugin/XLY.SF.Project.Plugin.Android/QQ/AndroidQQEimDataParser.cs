@@ -2,6 +2,7 @@
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.Android
 {
@@ -13,8 +14,8 @@ namespace XLY.SF.Project.Plugin.Android
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{A53B67FC-AD6F-47D5-98C6-0953E01C541C}";
-            pluginInfo.Name = "企业QQ";
-            pluginInfo.Group = "社交聊天";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_EimQQ);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_SocialChat);
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "0.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
@@ -23,7 +24,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             pluginInfo.AppName = "com.tencent.eim";
             pluginInfo.Icon = "\\icons\\eimQQ.png";
-            pluginInfo.Description = "提取安卓设备企业QQ信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_AndroidEimQQ);
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/data/data/com.tencent.eim/databases/#F");
             pluginInfo.SourcePath.AddItem("/data/data/com.tencent.eim/shared_prefs/#F");
@@ -48,7 +49,7 @@ namespace XLY.SF.Project.Plugin.Android
                 //com.tencent.eim
                 var qqPath = new DirectoryInfo(databasesPath).Parent.FullName;
 
-                var parser = new AndroidQQEimDataParseCoreV1_0(pi.SaveDbPath, "企业QQ", qqPath, "");
+                var parser = new AndroidQQEimDataParseCoreV1_0(pi.SaveDbPath, LanguageHelper.GetString(Languagekeys.PluginName_EimQQ), qqPath, "");
 
                 var qqNode = parser.BuildTree();
 

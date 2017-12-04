@@ -112,7 +112,10 @@ namespace XLY.SF.Project.DataMirrorApp
             }
 
             //返回当前状态
-            SendSate(operateCmd);
+            if(_mirror.IsInitialized)
+            {
+                SendSate(operateCmd);
+            }            
         }
 
         /// <summary>

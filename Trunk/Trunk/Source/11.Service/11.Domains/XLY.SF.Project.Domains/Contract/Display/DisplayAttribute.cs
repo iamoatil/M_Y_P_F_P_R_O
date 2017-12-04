@@ -117,6 +117,11 @@ namespace XLY.SF.Project.Domains
 
         public PropertyInfo Owner { get; set; }
 
+        /// <summary>
+        /// 对应的属性名称
+        /// </summary>
+        public string PropertyName => Owner?.Name;
+
 
         /// <summary>
         /// 获取该特性对应属性的值

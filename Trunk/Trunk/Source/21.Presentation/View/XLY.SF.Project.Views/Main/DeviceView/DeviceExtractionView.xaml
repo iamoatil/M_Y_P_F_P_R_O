@@ -19,7 +19,7 @@
 
         </ResourceDictionary>
     </core:UcViewBase.Resources>
-    <Grid>
+    <Grid x:Name="Root">
         <Grid.RowDefinitions>
             <RowDefinition Height="60" />
             <RowDefinition Height="76" />
@@ -42,6 +42,8 @@
                           VerticalScrollBarVisibility="Disabled">
                 <ListBox Grid.Column="1"
                          BorderThickness="0"
+                         ItemsSource="{Binding Plans}"
+                         SelectedItem="{Binding SelectedPlan,Mode=TwoWay}"
                          Background="Transparent">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -58,7 +60,7 @@
                             <Setter Property="Margin"
                                     Value="5,0,0,0" />
                             <Setter Property="ToolTip"
-                                    Value="{Binding Text}" />
+                                    Value="{Binding Name}" />
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -73,13 +75,15 @@
                                                     <ColumnDefinition Width="3" />
                                                     <ColumnDefinition Width="Auto" />
                                                 </Grid.ColumnDefinitions>
-                                                <TextBlock Text="{Binding Text}"
+                                                <TextBlock Text="{Binding Name}"
                                                            TextTrimming="CharacterEllipsis"
                                                            Grid.Column="0"
                                                            VerticalAlignment="Center"
                                                            Foreground="White"/>
                                                 <Button Content="X"
-                                                        Grid.Column="2"/>
+                                                        Grid.Column="2"
+                                                        Command="{Binding DataContext.RemovePlanCommand,ElementName=Root}"
+                                                        CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}"/>
                                             </Grid>
                                         </Border>
                                         <ControlTemplate.Triggers>
@@ -104,15 +108,16 @@
                 </ListBox>
             </ScrollViewer>
             <pro:TextBoxEx Watermark="自定义名称"
-                           HasColon="False"
                            Height="30"
                            Width="120"
-                           Grid.Column="3"/>
+                           Grid.Column="3"
+                           Text="{Binding PlanName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
             <Button Content="添加当前方案"
                     Margin="10,0,0,0"
                     Width="120"
                     Height="30"
-                    Grid.Column="5"/>
+                    Grid.Column="5"
+                    Command="{Binding AddPlanCommand}"/>
         </Grid>
     </Grid>
 </core:UcViewBase>

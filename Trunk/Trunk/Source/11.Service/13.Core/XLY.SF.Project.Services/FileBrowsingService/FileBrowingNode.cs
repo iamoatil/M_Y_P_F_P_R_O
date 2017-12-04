@@ -11,6 +11,7 @@ using System.Linq;
 using System.Collections.Generic;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Domains.Contract;
 
 namespace XLY.SF.Project.Services
 {
@@ -26,6 +27,7 @@ namespace XLY.SF.Project.Services
             ".midi", ".aiff", ".aaif" };
         private readonly static string[] _LsVideo = { ".avi", ".mp4", ".m4v", ".mov", ".3gp", ".wmv", ".afs", ".asx", ".rm", ".rmvb", ".mpg", ".mpeg", ".mpe", ".dat", ".flv", ".vob" };
         private readonly static string[] _LsRAR = { ".rar", ".zip", ".cab", ".lzh", ".ace", ".7z", ".tar", ".gzip", ".gz", ".uue", ".bz2", ".jar", ".iso", ".z" };
+        private readonly static string[] _LsDB = { ".db", ".sqlite", ".sqlitedb" };
 
         /// <summary>
         /// 父节点
@@ -92,6 +94,10 @@ namespace XLY.SF.Project.Services
                         else if (_LsRAR.Contains(ext))
                         {
                             _FileType = EnumFileType.Rar;
+                        }
+                        else if (_LsDB.Contains(ext))
+                        {
+                            _FileType = EnumFileType.DB;
                         }
                         else
                         {
@@ -160,6 +166,17 @@ namespace XLY.SF.Project.Services
                 return _FullPath;
             }
         }
+
+        /// <summary>
+        /// 是否是本地文件
+        /// </summary>
+        public virtual bool IsLocalFile { get; set; } = false;
+
+        /// <summary>
+        /// 本地文件路径
+        /// </summary>
+        public virtual string LocalFilePath { get; set; }
+
     }
 
     /// <summary>
@@ -191,6 +208,10 @@ namespace XLY.SF.Project.Services
     public enum EnumFileType
     {
         /// <summary>
+        /// 所有类型
+        /// </summary>
+        All = 0,
+        /// <summary>
         /// 文件夹
         /// </summary>
         Directory,
@@ -215,8 +236,23 @@ namespace XLY.SF.Project.Services
         /// </summary>
         Rar,
         /// <summary>
+        /// 数据库文件
+        /// </summary>
+        DB,
+        /// <summary>
         /// 其他文件
         /// </summary>
         Other,
     }
+
+    public class FilterByEnumFileTypeArgs : FilterArgs
+    {
+        public FilterByEnumFileTypeArgs(EnumFileType ft)
+        {
+            FileType = ft;
+        }
+
+        public EnumFileType FileType { get; set; }
+    }
+
 }

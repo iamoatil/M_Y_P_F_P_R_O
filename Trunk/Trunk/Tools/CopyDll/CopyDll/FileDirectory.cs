@@ -40,17 +40,21 @@ namespace CopyDll
         {
             foreach (string path in sourceDir._filePaths)
             {
-                string fakeTargetPath = path.Replace(sourceDir._dirPath, targetDir._dirPath);
-                bool isExisted=targetDir._filePaths.Contains(fakeTargetPath);
-                if (!isExisted)
+                try
                 {
-                    string dirName = Path.GetDirectoryName(fakeTargetPath);
-                    if (!Directory.Exists(dirName))
+                    string fakeTargetPath = path.Replace(sourceDir._dirPath, targetDir._dirPath);
+                    bool isExisted = targetDir._filePaths.Contains(fakeTargetPath);
+                    if (!isExisted)
                     {
-                        Directory.CreateDirectory(dirName);
+                        string dirName = Path.GetDirectoryName(fakeTargetPath);
+                        if (!Directory.Exists(dirName))
+                        {
+                            Directory.CreateDirectory(dirName);
+                        }
+                        File.Copy(path, fakeTargetPath);
                     }
-                    File.Copy(path,fakeTargetPath);
                 }
+                catch { }
             }
         }
         
@@ -64,29 +68,33 @@ namespace CopyDll
             Console.Write("正在拷贝目录：" + sourceDir._dirPath);
             foreach (string path in sourceDir._filePaths)
             {
-                string fakeTargetPath = path.Replace(sourceDir._dirPath, targetDir._dirPath);
-                bool isExisted = targetDir._filePaths.Contains(fakeTargetPath);
-                if (!isExisted)
+                try
                 {
-                    string dirName = Path.GetDirectoryName(fakeTargetPath);
-                    if (!Directory.Exists(dirName))
+                    string fakeTargetPath = path.Replace(sourceDir._dirPath, targetDir._dirPath);
+                    bool isExisted = targetDir._filePaths.Contains(fakeTargetPath);
+                    if (!isExisted)
                     {
-                        Directory.CreateDirectory(dirName);
-                    }
-                    Console.Write(".");
-                    File.Copy(path, fakeTargetPath);
-                }
-                else
-                {
-                    DateTime targetFileTime=File.GetLastWriteTime(fakeTargetPath);
-                    DateTime sourceFileTime = File.GetLastWriteTime(path);
-
-                    if (sourceFileTime > targetFileTime)
-                    {
+                        string dirName = Path.GetDirectoryName(fakeTargetPath);
+                        if (!Directory.Exists(dirName))
+                        {
+                            Directory.CreateDirectory(dirName);
+                        }
                         Console.Write(".");
-                        File.Copy(path, fakeTargetPath,true);
+                        File.Copy(path, fakeTargetPath);
+                    }
+                    else
+                    {
+                        DateTime targetFileTime = File.GetLastWriteTime(fakeTargetPath);
+                        DateTime sourceFileTime = File.GetLastWriteTime(path);
+
+                        if (sourceFileTime > targetFileTime)
+                        {
+                            Console.Write(".");
+                            File.Copy(path, fakeTargetPath, true);
+                        }
                     }
                 }
+                catch { }
             }
             Console.WriteLine("\n拷贝结束");
         }

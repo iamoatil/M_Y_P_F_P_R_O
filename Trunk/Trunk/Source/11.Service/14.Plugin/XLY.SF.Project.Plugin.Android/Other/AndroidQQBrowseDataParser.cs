@@ -12,6 +12,7 @@ using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Persistable.Primitive;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.Android
 {
@@ -29,8 +30,8 @@ namespace XLY.SF.Project.Plugin.Android
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{4BF9F483-AC87-47BD-9E46-7B5B3CE8D25B}";
-            pluginInfo.Name = "QQ浏览器";
-            pluginInfo.Group = "Web痕迹";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_QQBrowse);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_WebMark);
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "1.1";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
@@ -39,7 +40,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             pluginInfo.AppName = "com.tencent.mtt";
             pluginInfo.Icon = "\\icons\\IOS_QQBrowser.png";
-            pluginInfo.Description = "提取安卓设备QQ浏览器信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_AndroidQQBrowse);
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/data/data/com.tencent.mtt/databases/database");
             pluginInfo.SourcePath.AddItem("/data/data/com.tencent.mtt/databases/default_user.db");

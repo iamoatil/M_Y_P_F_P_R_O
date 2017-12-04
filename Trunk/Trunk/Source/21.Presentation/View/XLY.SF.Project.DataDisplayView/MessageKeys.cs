@@ -22,5 +22,7 @@ namespace XLY.SF.Project.DataDisplayView
         public const string ClearKey = "ClearKey";
         public const string StartFilterKey = "StartFilterKey";
         public const string PreviewKey = "PreviewKey";
+        public const string InspectionKey = "InspectionKey";
+        public const string DataLoadedCompletedKey = "DataLoadedCompletedKey";
     }
 }

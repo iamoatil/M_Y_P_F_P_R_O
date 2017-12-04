@@ -31,7 +31,7 @@
                         <TextBlock x:Name="tb_Title" VerticalAlignment="Center" 
                            Foreground="{Binding TitleForeground,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"                            
                            Text="{Binding Title,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"/>
-                        <TextBlock Text="：" Visibility="{Binding HasColon,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx},Converter={StaticResource bToV}}" VerticalAlignment="Center"
+                        <TextBlock x:Name="tb_Colon" Text="：" VerticalAlignment="Center"
                            Foreground="{Binding TitleForeground,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"/>
                     </StackPanel>
                     <!--水印-->
@@ -47,6 +47,9 @@
             </Border>
         </Grid>
         <ControlTemplate.Triggers>
+            <Trigger Property="Title" Value="">
+                <Setter Property="Visibility" Value="Collapsed" TargetName="tb_Colon"/>
+            </Trigger>
             <Trigger Property="IsFocused" Value="true">
                 <Setter Property="Effect" TargetName="img_Icon">
                     <Setter.Value>

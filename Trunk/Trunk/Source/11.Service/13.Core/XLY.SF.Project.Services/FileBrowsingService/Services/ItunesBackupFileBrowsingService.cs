@@ -138,7 +138,7 @@ namespace XLY.SF.Project.Services
             base.BeginSearch(node, args, cancellationTokenSource, async);
         }
 
-        protected override void DownLoadFile(FileBrowingNode fileNode, string savePath, bool persistRelativePath, CancellationTokenSource cancellationTokenSource, FileBrowingIAsyncTaskProgress async)
+        protected override string DownLoadFile(FileBrowingNode fileNode, string savePath, bool persistRelativePath, CancellationTokenSource cancellationTokenSource, FileBrowingIAsyncTaskProgress async)
         {
             var ifileNode = fileNode as ItunesBackupFileBrowingNode;
 
@@ -157,11 +157,14 @@ namespace XLY.SF.Project.Services
                 FileHelper.CreateDirectory(FileHelper.GetFilePath(tSavePath));
 
                 File.Copy(ifileNode.SourcePath, tSavePath);
+
+                return tSavePath;
             }
             catch
             {
 
             }
+            return null;
         }
 
         /// <summary>
@@ -173,6 +176,10 @@ namespace XLY.SF.Project.Services
             /// 源路径
             /// </summary>
             public string SourcePath { get; internal set; }
+
+            public override bool IsLocalFile { get; set; } = true;
+
+            public override string LocalFilePath { get => SourcePath; }
 
             public override string ToString()
             {

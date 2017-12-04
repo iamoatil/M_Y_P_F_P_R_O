@@ -27,6 +27,18 @@
     <View_ExportView_BtnOpenPath>打开路径</View_ExportView_BtnOpenPath>
     <View_ExportViewModel_Exporting>开始导出...</View_ExportViewModel_Exporting>
 
+    <View_FileType_All>所有类型</View_FileType_All>
+    <View_FileType_Txt>文本文件</View_FileType_Txt>
+    <View_FileType_Image>图片文件</View_FileType_Image>
+    <View_FileType_Voice>音频文件</View_FileType_Voice>
+    <View_FileType_Video>视频文件</View_FileType_Video>
+    <View_FileType_Rar>压缩文件</View_FileType_Rar>
+    <View_FileType_DB>数据库文件</View_FileType_DB>
+    <View_FileType_Other>其他文件</View_FileType_Other>
+
+    <View_PreView_NoPre>无法预览</View_PreView_NoPre>
+    <View_PreView_DownloadError>文件下载失败</View_PreView_DownloadError>
+    <View_PreView_FileZero>文件大小为0，无法预览</View_PreView_FileZero>
 
     <View_Search_DataStateAll>所有状态</View_Search_DataStateAll>
     <View_Search_DataStateNormal>正常数据</View_Search_DataStateNormal>

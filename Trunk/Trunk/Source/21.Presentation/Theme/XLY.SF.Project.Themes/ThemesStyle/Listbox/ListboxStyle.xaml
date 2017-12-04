@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:XLY.SF.Project.Themes">
+
+    <!--水平排列的Listbox-->
+    <ControlTemplate x:Key="horizontalListBox" TargetType="ListBox">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <WrapPanel Orientation="Horizontal" IsItemsHost="True" ScrollViewer.CanContentScroll="True"/>
+        </ScrollViewer>
+    </ControlTemplate>
+</ResourceDictionary>

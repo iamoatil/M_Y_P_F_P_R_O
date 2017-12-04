@@ -109,6 +109,11 @@ namespace XLY.SF.Project.Plugin.DataPreview
         /// 字节
         /// </summary>
 		public static readonly Languagekeys Bytes = "LanguageResource/Bytes";
+				
+        /// <summary>
+        /// 16进制
+        /// </summary>
+		public static readonly Languagekeys Hex = "LanguageResource/Hex";
 		
 		public string Key { get; set; }
 

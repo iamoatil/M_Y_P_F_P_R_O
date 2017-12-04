@@ -99,7 +99,7 @@ namespace XLY.SF.Project.Plugin.Android
 
                 // 解密后文件路径
                 var fi = new FileInfo(sqliteFile);
-                var newFile = Path.Combine(fi.DirectoryName, string.Format("Decrypt_{0}", fi.Name));
+                resultFile = Path.Combine(fi.DirectoryName, string.Format("Decrypt_{0}", fi.Name));
 
                 //创建数据库存储数据
                 var saveDbPath = sqliteFile + ".data.db";
@@ -112,7 +112,7 @@ namespace XLY.SF.Project.Plugin.Android
                 saveDb.UsingSafeTransaction(c =>
                 {
                     //数据库解密
-                    var result = WXDeCryptedCoreDll.WXDeCryptedDBToFileBakdata(wxHandle, newFile, pHandel =>
+                    var result = WXDeCryptedCoreDll.WXDeCryptedDBToFileBakdata(wxHandle, resultFile, pHandel =>
                     {
                         WxbakMsgdata data = (WxbakMsgdata)Marshal.PtrToStructure(pHandel, typeof(WxbakMsgdata));
                         var sb = new StringBuilder();
@@ -133,13 +133,9 @@ namespace XLY.SF.Project.Plugin.Android
                         return 0;
                     });
 
-                    if (0 != result || !File.Exists(newFile))
+                    if (0 != result || !File.Exists(resultFile))
                     {
                         LoggerManagerSingle.Instance.Error(string.Format("解密安卓微信数据库时打开数据库文件失败！ 解密文件：{0} 错误码：{1}", sqliteFile, result));
-                    }
-                    else
-                    {
-                        resultFile = newFile;
                     }
                 });
             }

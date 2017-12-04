@@ -201,6 +201,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="ThemesStyle\Listbox\ListboxStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ThemesStyle\LoadingStyle\Loading.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -498,7 +502,17 @@
     <Resource Include="Resources\Images\Icons\ExportBcp.png" />
     <Resource Include="Resources\Images\Icons\ExportStatement.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Images\data_filebrowing_icon8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\BackToDevMainIcon_clik.png" />
+    <Resource Include="Resources\Images\Icons\BackToDevMainIcon_hover.png" />
+    <Resource Include="Resources\Images\Icons\BackToDevMainIcon_normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\drop_right.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

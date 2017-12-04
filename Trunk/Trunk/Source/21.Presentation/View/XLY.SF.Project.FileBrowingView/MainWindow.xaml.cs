@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using XLY.SF.Framework.Core.Base;
+using XLY.SF.Framework.Core.Base.MefIoc;
+using XLY.SF.Project.Plugin.Adapter;
 
 namespace XLY.SF.Project.FileBrowingView
 {
@@ -23,6 +16,14 @@ namespace XLY.SF.Project.FileBrowingView
         public MainWindow()
         {
             InitializeComponent();
+
+            //加载插件列表
+            PluginAdapter.Instance.Initialization(null, AssemblyHelper.Instance.PluginPath.ToArray());
+
+            //IOC加载
+            List<Assembly> asm = new List<Assembly>() { GetType().Assembly };
+            asm.AddRange(AssemblyHelper.Instance.IocPath.Select(f => Assembly.LoadFile(f)));
+            IocManagerSingle.Instance.LoadParts(asm.ToArray());
         }
     }
 }

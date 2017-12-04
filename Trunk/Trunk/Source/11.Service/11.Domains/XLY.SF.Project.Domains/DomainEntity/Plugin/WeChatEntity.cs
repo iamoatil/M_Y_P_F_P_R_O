@@ -310,6 +310,7 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// 微信删除消息 只有消息内容
     /// </summary>
+    [Serializable]
     public class DelWeChatMessageCore : AbstractDataItem
     {
         [Display]

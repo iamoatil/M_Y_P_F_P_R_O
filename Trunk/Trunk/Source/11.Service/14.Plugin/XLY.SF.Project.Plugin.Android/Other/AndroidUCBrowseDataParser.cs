@@ -9,6 +9,7 @@
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.Android
 {
@@ -26,8 +27,8 @@ namespace XLY.SF.Project.Plugin.Android
         {
             DataParsePluginInfo pluginInfo = new DataParsePluginInfo();
             pluginInfo.Guid = "{E0D8A355-C796-4584-8681-A719115F9655}";
-            pluginInfo.Name = "UC浏览器";
-            pluginInfo.Group = "Web痕迹";
+            pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_UCBrowse);
+            pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_WebMark);
             pluginInfo.DeviceOSType = EnumOSType.Android;
             pluginInfo.VersionStr = "11.2.0.880";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
@@ -36,7 +37,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             pluginInfo.AppName = "com.UCMobile";
             pluginInfo.Icon = "\\icons\\Uc_icon.png";
-            pluginInfo.Description = "提取安卓设备UC浏览器信息";
+            pluginInfo.Description = LanguageHelper.GetString(Languagekeys.PluginDescription_AndroidUCBrowse);
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/data/data/com.UCMobile/UCMobile/userdata/account/#F");
             pluginInfo.SourcePath.AddItem("/data/data/com.UCMobile/databases/#F");

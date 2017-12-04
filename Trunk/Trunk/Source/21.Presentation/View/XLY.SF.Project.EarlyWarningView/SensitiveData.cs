@@ -24,12 +24,20 @@ namespace XLY.SF.Project.EarlyWarningView
 
         public string CategoryName { get; private set; }
 
+        /// <summary>
+        /// SensitiveId
+        /// </summary>
+        public int SensitiveId { get; private set; }
 
-        public SensitiveData(string rootNodeName, string categoryName, string value)
+        public SensitiveData(string rootNodeName, string categoryName, string sensitiveId,string value)
         {
             this.RootNodeName = rootNodeName;
             this.CategoryName = categoryName;
             this.Value = value;
+            if(!int.TryParse(sensitiveId,out int SensitiveId))
+            {
+                SensitiveId = 0;
+            }
         }
     }
 }

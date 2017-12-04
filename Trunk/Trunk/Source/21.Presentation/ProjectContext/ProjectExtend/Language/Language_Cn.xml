@@ -135,7 +135,7 @@
         <Confirm>确认</Confirm>
       </User>
       <Settings>
-        <Title>设置</Title>
+        <Title>系统设置</Title>
         <Basic>基本设置</Basic>
         <CaseType>案例类型</CaseType>
         <Unit>单位设置</Unit>
@@ -153,6 +153,10 @@
         <Chinese>中文</Chinese>
         <English>英文</English>
       </Settings>
+      <Plugin>
+        <Title>插件管理</Title>
+
+      </Plugin>
     </Management>
 
 
@@ -215,16 +219,17 @@
     <Notes_AnZhuangBaoJieXiSB>安装包信息解析失败：</Notes_AnZhuangBaoJieXiSB>
   </MessageLanguage>
 
-  <DeviceLanguage Prompt="设备相关语言资源">
-    <Device_PopUp>弹出</Device_PopUp>
-    <Device_Move>移动</Device_Move>
-    <Device_Delete>删除</Device_Delete>
-    <Device_Close>关闭</Device_Close>
-    <Device_Move_Description>请选择要移动到的案例（移动过程可能需要较长时间）</Device_Move_Description>
-    <Device_Confirm>确定</Device_Confirm>
-    <Device_Cancel>取消</Device_Cancel>
-    <Deivce_DataSource>数据源</Deivce_DataSource>
-  </DeviceLanguage>
+  <SourceSelection Prompt="数据源选择语言资源">
+    <PopUp>弹出</PopUp>
+    <Move>移动</Move>
+    <Delete>删除</Delete>
+    <Close>关闭</Close>
+    <MoveDescription>请选择要移动到的案例（移动过程可能需要较长时间）</MoveDescription>
+    <Confirm>确定</Confirm>
+    <Cancel>取消</Cancel>
+    <Title>数据源</Title>
+    <DeletePrompt>是否确定删除？</DeletePrompt>
+  </SourceSelection>
 
   <ErrorMessageLanguage Prompt="错误提示信息语言资源">
     <ErrMsg_NotFindTable>未找到表</ErrMsg_NotFindTable>

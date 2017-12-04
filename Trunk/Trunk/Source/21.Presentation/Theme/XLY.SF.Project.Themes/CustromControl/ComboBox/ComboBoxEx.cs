@@ -53,15 +53,15 @@ namespace XLY.SF.Project.Themes.CustromControl
 
         #region Title
 
-        public bool HasColon
-        {
-            get { return (bool)GetValue(HasColonProperty); }
-            set { SetValue(HasColonProperty, value); }
-        }
+        //public bool HasColon
+        //{
+        //    get { return (bool)GetValue(HasColonProperty); }
+        //    set { SetValue(HasColonProperty, value); }
+        //}
 
-        // Using a DependencyProperty as the backing store for HasColon.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty HasColonProperty =
-            DependencyProperty.Register("HasColon", typeof(bool), typeof(ComboBoxEx), new PropertyMetadata(true));
+        //// Using a DependencyProperty as the backing store for HasColon.  This enables animation, styling, binding, etc...
+        //public static readonly DependencyProperty HasColonProperty =
+        //    DependencyProperty.Register("HasColon", typeof(bool), typeof(ComboBoxEx), new PropertyMetadata(true));
 
         public string Title
         {

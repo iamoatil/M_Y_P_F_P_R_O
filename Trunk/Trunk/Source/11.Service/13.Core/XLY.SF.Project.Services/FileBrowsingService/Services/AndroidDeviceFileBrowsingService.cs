@@ -139,9 +139,9 @@ namespace XLY.SF.Project.Services
             base.BeginSearch(node, args, cancellationTokenSource, async);
         }
 
-        protected override void DownLoadFile(FileBrowingNode fileNode, string savePath, bool persistRelativePath, CancellationTokenSource cancellationTokenSource, FileBrowingIAsyncTaskProgress async)
+        protected override string DownLoadFile(FileBrowingNode fileNode, string savePath, bool persistRelativePath, CancellationTokenSource cancellationTokenSource, FileBrowingIAsyncTaskProgress async)
         {
-            AndroidHelper.Instance.CopyFile(AndroidPhone, (fileNode as AndroidDeviceFileBrowingNode).SourcePath, savePath, null, persistRelativePath);
+            return AndroidHelper.Instance.CopyFile(AndroidPhone, (fileNode as AndroidDeviceFileBrowingNode).SourcePath, savePath, null, persistRelativePath);
         }
 
         /// <summary>

@@ -13,6 +13,8 @@ using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Project.Plugin.DataPreview;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Plugin.DataPreview.View;
+using System.Windows.Controls;
 
 /* ==============================================================================
 * Assembly   ：	XLY.SF.Project.DataPreview.ViewModel.MainPreviewModel
@@ -32,7 +34,7 @@ namespace XLY.SF.Project.DataPreview.ViewModel
     {
         public MainPreviewModel()
         {
-            
+
         }
 
         #region 事件
@@ -108,6 +110,8 @@ namespace XLY.SF.Project.DataPreview.ViewModel
         /// </summary>
         private void ResetLayout(object parameters)
         {
+            Release();
+
             LayoutViewItems = new ObservableCollection<object>();
             if (parameters != null)
             {
@@ -128,6 +132,33 @@ namespace XLY.SF.Project.DataPreview.ViewModel
             }
             SelectedLayoutViewItem = LayoutViewItems.FirstOrDefault(); //设置默认选中第一项
         }
+
+        /// <summary>
+        /// 释放视图
+        /// </summary>
+        public override void Release()
+        {
+            base.Release();
+
+            if (LayoutViewItems.IsValid())
+            {
+                foreach (var view in LayoutViewItems)
+                {
+                    if (view is TabItem ti)
+                    {
+                        if (null != ti && null != ti.Content && ti.Content is IDataPreviewRelease rv)
+                        {
+                            rv?.Release();
+                        }
+                    }
+                }
+            }
+
+            LayoutViewItems?.Clear();
+            LayoutViewItems = null;
+            SelectedLayoutViewItem = null;
+        }
+
         #endregion
 
         #region Tree
@@ -148,6 +179,4 @@ namespace XLY.SF.Project.DataPreview.ViewModel
         #endregion
 
     }
-
-   
 }

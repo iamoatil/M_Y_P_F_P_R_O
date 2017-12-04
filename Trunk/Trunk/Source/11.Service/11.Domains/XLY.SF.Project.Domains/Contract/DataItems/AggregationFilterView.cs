@@ -188,6 +188,9 @@ namespace XLY.SF.Project.Domains
                     case FilterByEnumStateArgs stateArg:
                         sb.AppendFormat("AND a.DataState = '{0}' ", stateArg.State.ToString());
                         break;
+                    case FilterBySensitiveArgs senstiveArg:
+                        sb.AppendFormat("AND a.SensitiveId = {0} ", senstiveArg.SensitiveId);
+                        break;
                     default:
                         break;
                 }
@@ -213,6 +216,7 @@ namespace XLY.SF.Project.Domains
         private String[] GetDateTimeColumnsName()
         {
             if (_dateTimeColumnsName != null) return _dateTimeColumnsName;
+            var displays = DisplayAttributeHelper.FindDisplayAttributes(typeof(TResult));
             PropertyInfo[] proppertyInfos = typeof(TResult).GetProperties();
             String[] columnsName = proppertyInfos.Where(x =>
             {
@@ -223,8 +227,9 @@ namespace XLY.SF.Project.Domains
                     x.PropertyType == typeof(DateTime));
             }).Select(y =>
             {
-                DisplayAttribute atrribute = y.GetCustomAttribute<DisplayAttribute>();
-                return atrribute.Key;// String.IsNullOrWhiteSpace(atrribute.Text) ? y.Name : atrribute.Text;
+                //DisplayAttribute atrribute = y.GetCustomAttribute<DisplayAttribute>();
+                //return atrribute.PropertyName;// String.IsNullOrWhiteSpace(atrribute.Text) ? y.Name : atrribute.Text;
+                return displays.FirstOrDefault(d => d.Owner == y)?.PropertyName;
             }).ToArray();
             _dateTimeColumnsName = columnsName;
             return columnsName;

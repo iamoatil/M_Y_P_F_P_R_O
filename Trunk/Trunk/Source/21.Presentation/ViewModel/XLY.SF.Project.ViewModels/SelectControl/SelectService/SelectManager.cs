@@ -114,9 +114,13 @@ namespace XLY.SF.Project.ViewModels.SelectControl.SelectService
 
             foreach (var item in Environment.GetLogicalDrives())
             {
-                FolderElement tmpEmt = new FolderElement(new System.IO.DirectoryInfo(item));
-                tmpEmt.LoadSubFolderAndFiles(_fileFilter, _curStatus == SelectControlType.SelectFile);
-                result.Add(tmpEmt);
+                DirectoryInfo dirTmp = new System.IO.DirectoryInfo(item);
+                if (dirTmp.Exists)
+                {
+                    FolderElement tmpEmt = new FolderElement(dirTmp);
+                    tmpEmt.LoadSubFolderAndFiles(_fileFilter, _curStatus == SelectControlType.SelectFile);
+                    result.Add(tmpEmt);
+                }
             }
             return result;
         }

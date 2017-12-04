@@ -630,8 +630,8 @@ namespace XLY.SF.Project.Services
         /// <param name="persistRelativePath">是否保留相对路径</param>
         /// <param name="savePath">保存文件路径</param>
         /// <param name="isCover">是否覆盖已存在的文件</param>
-        /// <returns></returns>
-        public void ExportFileX(FNodeX file, string savePath, bool persistRelativePath = true, bool isMedia = false, bool isCover = false, bool isThrowEx = false)
+        /// <returns>如果是文件 则返回本地保存路径  如果是文件夹 暂时返回null</returns>
+        public string ExportFileX(FNodeX file, string savePath, bool persistRelativePath = true, bool isMedia = false, bool isCover = false, bool isThrowEx = false)
         {
             try
             {
@@ -641,7 +641,7 @@ namespace XLY.SF.Project.Services
                 }
                 else
                 {
-                    ExportFile(file, savePath, persistRelativePath, isMedia, isCover);
+                    return ExportFile(file, savePath, persistRelativePath, isMedia, isCover);
                 }
             }
             catch (Exception ex)
@@ -653,6 +653,7 @@ namespace XLY.SF.Project.Services
                     throw;
                 }
             }
+            return null;
         }
 
         /// <summary>
@@ -693,7 +694,7 @@ namespace XLY.SF.Project.Services
         /// 导出单个文件到指定目录
         /// isCover是否覆盖已存在的文件，默认不覆盖
         /// </summary>
-        private void ExportFile(FNodeX file, string savePath, bool persistRelativePath = true, bool isMedia = false, bool isCover = false)
+        private string ExportFile(FNodeX file, string savePath, bool persistRelativePath = true, bool isMedia = false, bool isCover = false)
         {
             var path = string.Empty;
             if (persistRelativePath)
@@ -711,13 +712,9 @@ namespace XLY.SF.Project.Services
             }
             if (!isCover && File.Exists(path))
             {
-                return;
+                return path;
             }
-            const int t = 500 * 1024 * 1024;
-            if (file.Size > t)
-            {
-                return;
-            }
+
             Directory.CreateDirectory(FileHelper.GetFilePath(path));
 
             RecoveryFile(file, path);
@@ -740,6 +737,8 @@ namespace XLY.SF.Project.Services
             {
                 File.SetLastWriteTime(path, (DateTime)modifyTime);
             }
+
+            return path;
         }
 
         public string FilterLinuxFileName(string filename)

@@ -130,6 +130,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.DataPreview"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.Plugin.DataPreview", "..\..\21.Presentation\View\XLY.SF.Project.Plugin.DataPreview\XLY.SF.Project.Plugin.DataPreview.csproj", "{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.EarlyWarningView", "..\..\21.Presentation\View\XLY.SF.Project.EarlyWarningView\XLY.SF.Project.EarlyWarningView.csproj", "{5E39B1BF-D987-4B78-AE11-CB1C070B027B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XLY.SF.Project.Plugin.Language", "..\..\11.Service\14.Plugin\XLY.SF.Project.Plugin.Language\XLY.SF.Project.Plugin.Language.csproj", "{86A35DE5-5B18-457F-A972-E3D8240606B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -512,7 +516,6 @@ Global
 		{85971D45-4FAF-4DBD-AD3E-D73E79262011}.Release|x86.ActiveCfg = Release|Any CPU
 		{85971D45-4FAF-4DBD-AD3E-D73E79262011}.Release|x86.Build.0 = Release|Any CPU
 		{45BAAD0B-FB78-4E6E-BD80-AB513212FEF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{45BAAD0B-FB78-4E6E-BD80-AB513212FEF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45BAAD0B-FB78-4E6E-BD80-AB513212FEF1}.Debug|x64.ActiveCfg = Debug|x64
 		{45BAAD0B-FB78-4E6E-BD80-AB513212FEF1}.Debug|x64.Build.0 = Debug|x64
 		{45BAAD0B-FB78-4E6E-BD80-AB513212FEF1}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -524,7 +527,6 @@ Global
 		{45BAAD0B-FB78-4E6E-BD80-AB513212FEF1}.Release|x86.ActiveCfg = Release|Any CPU
 		{45BAAD0B-FB78-4E6E-BD80-AB513212FEF1}.Release|x86.Build.0 = Release|Any CPU
 		{FA4759AB-A043-44B2-B634-5EFE402D372D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FA4759AB-A043-44B2-B634-5EFE402D372D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA4759AB-A043-44B2-B634-5EFE402D372D}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{FA4759AB-A043-44B2-B634-5EFE402D372D}.Debug|x64.Build.0 = Debug|Any CPU
 		{FA4759AB-A043-44B2-B634-5EFE402D372D}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -679,6 +681,30 @@ Global
 		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}.Release|x64.Build.0 = Release|Any CPU
 		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}.Release|x86.ActiveCfg = Release|Any CPU
 		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4}.Release|x86.Build.0 = Release|Any CPU
+		{5E39B1BF-D987-4B78-AE11-CB1C070B027B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E39B1BF-D987-4B78-AE11-CB1C070B027B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E39B1BF-D987-4B78-AE11-CB1C070B027B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5E39B1BF-D987-4B78-AE11-CB1C070B027B}.Debug|x64.Build.0 = Debug|Any CPU
+		{5E39B1BF-D987-4B78-AE11-CB1C070B027B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5E39B1BF-D987-4B78-AE11-CB1C070B027B}.Debug|x86.Build.0 = Debug|Any CPU
+		{5E39B1BF-D987-4B78-AE11-CB1C070B027B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E39B1BF-D987-4B78-AE11-CB1C070B027B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E39B1BF-D987-4B78-AE11-CB1C070B027B}.Release|x64.ActiveCfg = Release|Any CPU
+		{5E39B1BF-D987-4B78-AE11-CB1C070B027B}.Release|x64.Build.0 = Release|Any CPU
+		{5E39B1BF-D987-4B78-AE11-CB1C070B027B}.Release|x86.ActiveCfg = Release|Any CPU
+		{5E39B1BF-D987-4B78-AE11-CB1C070B027B}.Release|x86.Build.0 = Release|Any CPU
+		{86A35DE5-5B18-457F-A972-E3D8240606B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86A35DE5-5B18-457F-A972-E3D8240606B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86A35DE5-5B18-457F-A972-E3D8240606B5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{86A35DE5-5B18-457F-A972-E3D8240606B5}.Debug|x64.Build.0 = Debug|Any CPU
+		{86A35DE5-5B18-457F-A972-E3D8240606B5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{86A35DE5-5B18-457F-A972-E3D8240606B5}.Debug|x86.Build.0 = Debug|Any CPU
+		{86A35DE5-5B18-457F-A972-E3D8240606B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86A35DE5-5B18-457F-A972-E3D8240606B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86A35DE5-5B18-457F-A972-E3D8240606B5}.Release|x64.ActiveCfg = Release|Any CPU
+		{86A35DE5-5B18-457F-A972-E3D8240606B5}.Release|x64.Build.0 = Release|Any CPU
+		{86A35DE5-5B18-457F-A972-E3D8240606B5}.Release|x86.ActiveCfg = Release|Any CPU
+		{86A35DE5-5B18-457F-A972-E3D8240606B5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -739,12 +765,14 @@ Global
 		{25E2AA7A-10B9-481A-B249-4820924D225D} = {3782972E-78FA-4989-845D-120B6382E7DE}
 		{07436026-639D-45C1-8D3F-A8CD0EE626FB} = {3782972E-78FA-4989-845D-120B6382E7DE}
 		{38D36E6F-BC44-47DE-9D59-C4C3373D15E4} = {3782972E-78FA-4989-845D-120B6382E7DE}
+		{5E39B1BF-D987-4B78-AE11-CB1C070B027B} = {3782972E-78FA-4989-845D-120B6382E7DE}
+		{86A35DE5-5B18-457F-A972-E3D8240606B5} = {64F16A97-5640-487E-9079-A2F438DB5B0A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3A587B29-35A1-47EC-AA7B-9EC40EA8AE9A}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 46
+		SccNumberOfProjects = 48
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.0.16:8080/tfs/xlyteamprojects
 		SccLocalPath0 = .
@@ -927,5 +955,13 @@ Global
 		SccProjectTopLevelParentUniqueName45 = XLY.SF.Shell.sln
 		SccProjectName45 = ../../21.Presentation/View/XLY.SF.Project.Plugin.DataPreview
 		SccLocalPath45 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.Plugin.DataPreview
+		SccProjectUniqueName46 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.EarlyWarningView\\XLY.SF.Project.EarlyWarningView.csproj
+		SccProjectTopLevelParentUniqueName46 = XLY.SF.Shell.sln
+		SccProjectName46 = ../../21.Presentation/View/XLY.SF.Project.EarlyWarningView
+		SccLocalPath46 = ..\\..\\21.Presentation\\View\\XLY.SF.Project.EarlyWarningView
+		SccProjectUniqueName47 = ..\\..\\11.Service\\14.Plugin\\XLY.SF.Project.Plugin.Language\\XLY.SF.Project.Plugin.Language.csproj
+		SccProjectTopLevelParentUniqueName47 = XLY.SF.Shell.sln
+		SccProjectName47 = ../../11.Service/14.Plugin/XLY.SF.Project.Plugin.Language
+		SccLocalPath47 = ..\\..\\11.Service\\14.Plugin\\XLY.SF.Project.Plugin.Language
 	EndGlobalSection
 EndGlobal
