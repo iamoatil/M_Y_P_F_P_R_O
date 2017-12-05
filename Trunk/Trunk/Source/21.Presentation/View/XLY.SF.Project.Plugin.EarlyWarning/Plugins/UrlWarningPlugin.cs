@@ -29,8 +29,10 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             EarlyWarningPluginArgument ewArg = (EarlyWarningPluginArgument)arg;
             DeviceDataSource ds = ewArg.DeviceDataSource;
+            EarlyWarningResult earlyWarningResult = ewArg.EarlyWarningResult;
+
             List<DataNode> dataNodes = ewArg.DataNodes;
-            IDataSource dataSource = ds.DataSource;
+            IDataSource dataSource = ds.DataSource;            
 
             TreeDataSource treeDataSource = dataSource as TreeDataSource;
             if(treeDataSource == null
@@ -45,7 +47,7 @@ namespace XLY.SF.Project.EarlyWarningView
                 {
                     continue;
                 }
-                //todo 此处可以直接匹配，书签和历史记录             
+                //todo 此处可以直接匹配，书签和历史记录           
                 foreach (TreeNode treeNode in treeDataSource.TreeNodes)
                 {
                     string cmd = string.Format("{1} like '%{2}%'", treeNode.Items.DbTableName, SqliteDbFile.JsonColumnName, dataNode.SensitiveData.Value);
@@ -54,9 +56,16 @@ namespace XLY.SF.Project.EarlyWarningView
                     {
                         item.SensitiveId = dataNode.SensitiveData.SensitiveId;
                     }
-                }               
+                    earlyWarningResult.SqlDb.WriteResult(result, treeNode.Items.DbTableName, (Type)treeNode.Type);
+                    earlyWarningResult.Serializer.Serialize(treeDataSource);
+                }
             }
             return null;
+        }
+
+        public override void Execute(object arg0)
+        {
+            throw new NotImplementedException();
         }
     }
 }

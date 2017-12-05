@@ -29,8 +29,16 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             EarlyWarningPluginArgument ewArg = (EarlyWarningPluginArgument)arg;
             DeviceDataSource ds = ewArg.DeviceDataSource;
+            EarlyWarningResult earlyWarningResult = ewArg.EarlyWarningResult;
+
             List<DataNode> dataNodes = ewArg.DataNodes;
-            IDataSource dataSource = ds.DataSource;
+            AbstractDataSource dataSource = ds.DataSource as AbstractDataSource;
+            
+            if (dataSource == null
+                || dataSource.Items == null)
+            {
+                return null;
+            }
 
             foreach (DataNode dataNode in dataNodes)
             {
@@ -46,8 +54,15 @@ namespace XLY.SF.Project.EarlyWarningView
                 {
                     item.SensitiveId = dataNode.SensitiveData.SensitiveId;
                 }
+                earlyWarningResult.SqlDb.WriteResult(result, dataSource.Items.DbTableName, (Type)dataSource.Type);
+                earlyWarningResult.Serializer.Serialize(dataSource);
             }
             return null;
+        }
+
+        public override void Execute(object arg0)
+        {
+            throw new NotImplementedException();
         }
     }
 }

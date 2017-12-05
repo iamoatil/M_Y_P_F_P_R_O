@@ -30,24 +30,44 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             EarlyWarningPluginArgument ewArg = (EarlyWarningPluginArgument)arg;
             DeviceDataSource ds = ewArg.DeviceDataSource;
+            EarlyWarningResult earlyWarningResult = ewArg.EarlyWarningResult;
+
             List<DataNode> dataNodes = ewArg.DataNodes;
-            IDataSource dataSource = ds.DataSource;
+            AbstractDataSource dataSource = ds.DataSource as AbstractDataSource;
+
+            if (dataSource == null
+                || dataSource.Items == null)
+            {
+                return null;
+            }
 
             foreach (DataNode dataNode in dataNodes)
             {
-                //todo 此处dataNode.SensitiveData.CategoryName != "App"为硬代码
+                //todo 此处dataNode.SensitiveData.CategoryName != "关键字"为硬代码
                 if (dataNode.SensitiveData.CategoryName != "App")
                 {
                     continue;
                 }
+
                 string cmd = string.Format("{1} like '%{2}%'", dataSource.Items.DbTableName, SqliteDbFile.JsonColumnName, dataNode.SensitiveData.Value);
                 IEnumerable<dynamic> result = dataSource.Items.FilterByCmd<dynamic>(cmd);
                 foreach (AbstractDataItem item in result)
                 {
                     item.SensitiveId = dataNode.SensitiveData.SensitiveId;
                 }
+                earlyWarningResult.SqlDb.WriteResult(result, dataSource.Items.DbTableName, (Type)dataSource.Type);
+                earlyWarningResult.Serializer.Serialize(dataSource);
             }
             return null;
+        }
+
+        public override void Execute(object arg)
+        {
+            EarlyWarningPluginArgument ewArg = (EarlyWarningPluginArgument)arg;
+            DeviceDataSource ds = ewArg.DeviceDataSource;
+            IDataSource dataSource = ds.DataSource;
+
+
         }
     }
 }

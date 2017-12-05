@@ -22,7 +22,7 @@ namespace XLY.SF.Project.EarlyWarningView
                 Name = "KeyWordWarningPlugin",
                 OrderIndex = 1,
                 PluginType = PluginType.SpfEarlyWarning,
-               
+
             };
             PluginInfo = p;
         }
@@ -31,30 +31,69 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             EarlyWarningPluginArgument ewArg = (EarlyWarningPluginArgument)arg;
             DeviceDataSource ds = ewArg.DeviceDataSource;
+            EarlyWarningResult earlyWarningResult = ewArg.EarlyWarningResult;
+
             List<DataNode> dataNodes = ewArg.DataNodes;
-            IDataSource dataSource = ds.DataSource;        
+            AbstractDataSource dataSource = ds.DataSource as AbstractDataSource;
 
-            foreach (DataNode dataNode in dataNodes)
+            TreeDataSource treeDataSource = dataSource as TreeDataSource;
+            if (dataSource != null
+                && dataSource.Items != null)
             {
-                //todo 此处dataNode.SensitiveData.CategoryName != "关键字"为硬代码
-                if (dataNode.SensitiveData.CategoryName != "关键字")
+                foreach (DataNode dataNode in dataNodes)
                 {
-                    continue;
-                }
-
-                if (dataSource.Items != null)
-                {
-                    string cmd = string.Format("{1} like '%{2}%'", dataSource.Items.DbTableName, SqliteDbFile.JsonColumnName, dataNode.SensitiveData.Value);
-                    IEnumerable<dynamic> result = dataSource.Items.FilterByCmd<dynamic>(cmd);
-                    foreach (AbstractDataItem item in result)
+                    //todo 此处dataNode.SensitiveData.CategoryName != "关键字"为硬代码
+                    if (dataNode.SensitiveData.CategoryName != "关键字")
                     {
-                        item.SensitiveId = dataNode.SensitiveData.SensitiveId;
+                        continue;
+                    }
+
+                    if (dataSource.Items != null)
+                    {
+                        string cmd = string.Format("{1} like '%{2}%'", dataSource.Items.DbTableName, SqliteDbFile.JsonColumnName, dataNode.SensitiveData.Value);
+                        IEnumerable<dynamic> result = dataSource.Items.FilterByCmd<dynamic>(cmd);
+                        foreach (AbstractDataItem item in result)
+                        {
+                            item.SensitiveId = dataNode.SensitiveData.SensitiveId;
+                        }
+                        earlyWarningResult.SqlDb.WriteResult(result, dataSource.Items.DbTableName, (Type)dataSource.Type);
+                        earlyWarningResult.Serializer.Serialize(dataSource);
+                    }
+                    //todo TreeDataSource
+
+                }
+            }
+            else if (treeDataSource != null
+                && treeDataSource.TreeNodes.Count > 1)
+            {
+                foreach (DataNode dataNode in dataNodes)
+                {
+                    //todo 此处dataNode.SensitiveData.CategoryName != "URL"为硬代码
+                    if (dataNode.SensitiveData.CategoryName != "关键字")
+                    {
+                        continue;
+                    }
+                    //todo 此处可以直接匹配，书签和历史记录           
+                    foreach (TreeNode treeNode in treeDataSource.TreeNodes)
+                    {
+                        string cmd = string.Format("{1} like '%{2}%'", treeNode.Items.DbTableName, SqliteDbFile.JsonColumnName, dataNode.SensitiveData.Value);
+                        IEnumerable<dynamic> result = treeNode.Items.FilterByCmd<dynamic>(cmd);
+                        foreach (AbstractDataItem item in result)
+                        {
+                            item.SensitiveId = dataNode.SensitiveData.SensitiveId;
+                        }
+                        earlyWarningResult.SqlDb.WriteResult(result, treeNode.Items.DbTableName, (Type)treeNode.Type);
+                        earlyWarningResult.Serializer.Serialize(treeDataSource);
                     }
                 }
-                //todo TreeDataSource
-                
             }
+
             return null;
+        }
+
+        public override void Execute(object arg0)
+        {
+            throw new NotImplementedException();
         }
     }
 }

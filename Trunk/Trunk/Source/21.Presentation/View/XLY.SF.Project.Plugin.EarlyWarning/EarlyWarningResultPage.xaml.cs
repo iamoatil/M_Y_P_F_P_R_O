@@ -13,7 +13,7 @@ namespace XLY.SF.Project.EarlyWarningView
     /// <summary>
     /// EarlyWarningMainPage.xaml 的交互逻辑
     /// </summary>
-    //[Export(ExportKeys.AutoWarningView, typeof(UcViewBase))]
+    [Export(ExportKeys.AutoWarningView, typeof(UcViewBase))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
 
     public partial class EarlyWarningResultPage : UcViewBase

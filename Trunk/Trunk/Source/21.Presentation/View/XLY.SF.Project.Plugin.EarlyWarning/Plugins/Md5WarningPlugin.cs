@@ -30,5 +30,10 @@ namespace XLY.SF.Project.EarlyWarningView
 
             return null;
         }
+
+        public override void Execute(object arg0)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

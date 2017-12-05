@@ -58,13 +58,15 @@ namespace XLY.SF.Project.EarlyWarningView
                 SQLiteConnection.CreateFile(DbPath);
             }
             //打开数据
-            SQLiteConnection dbConnection = new SQLiteConnection(string.Format("Data Source={0}", DbPath));
-            dbConnection.Open();
-            //创建Table
-            StringBuilder sb = new StringBuilder();
-            sb.AppendFormat("CREATE TABLE IF NOT EXISTS {0}('{1}' TEXT,'{2}' TEXT ,'{3}' TEXT);", TableName, RootNodeColumn, CategoryColumn, ValueColumn);
-            SQLiteCommand command = new SQLiteCommand(sb.ToString(), dbConnection);
-            command.ExecuteNonQuery();
+            using (SQLiteConnection dbConnection = new SQLiteConnection(string.Format("Data Source={0}", DbPath)))
+            {
+                dbConnection.Open();
+                //创建Table
+                StringBuilder sb = new StringBuilder();
+                sb.AppendFormat("CREATE TABLE IF NOT EXISTS {0}('{1}' TEXT,'{2}' TEXT ,'{3}' TEXT);", TableName, RootNodeColumn, CategoryColumn, ValueColumn);
+                SQLiteCommand command = new SQLiteCommand(sb.ToString(), dbConnection);
+                command.ExecuteNonQuery();
+            }           
         }
 
         /// <summary>
@@ -88,31 +90,33 @@ namespace XLY.SF.Project.EarlyWarningView
                 return;
             }
             //打开数据
-            SQLiteConnection dbConnection = new SQLiteConnection(string.Format("Data Source={0}", DbPath));
-            dbConnection.Open();
-
-            //记录，当前数据库中没有条目
-            List<SensitiveData> ls = new List<SensitiveData>();
-            foreach (SensitiveData item in DbDatas)
+            using (SQLiteConnection dbConnection = new SQLiteConnection(string.Format("Data Source={0}", DbPath)))
             {
-                SQLiteCommand cmd = new SQLiteCommand(string.Format("select * from {0} where {1} = '{2}' and {3} = '{4}' and {5} = '{6}'",
-                    TableName, RootNodeColumn, item.RootNodeName, CategoryColumn, item.CategoryName, ValueColumn, item.Value),
-                    dbConnection);
-                SQLiteDataReader reader = cmd.ExecuteReader();
-                if (!reader.HasRows)
+                dbConnection.Open();
+
+                //记录，当前数据库中没有条目
+                List<SensitiveData> ls = new List<SensitiveData>();
+                foreach (SensitiveData item in DbDatas)
                 {
-                    ls.Add(item);
+                    SQLiteCommand cmd = new SQLiteCommand(string.Format("select * from {0} where {1} = '{2}' and {3} = '{4}' and {5} = '{6}'",
+                        TableName, RootNodeColumn, item.RootNodeName, CategoryColumn, item.CategoryName, ValueColumn, item.Value),
+                        dbConnection);
+                    SQLiteDataReader reader = cmd.ExecuteReader();
+                    if (!reader.HasRows)
+                    {
+                        ls.Add(item);
+                    }
                 }
-            }
 
-            //添加数据
-            StringBuilder sb = new StringBuilder();
-            foreach (SensitiveData item in ls)
-            {
-                sb.AppendFormat("insert into {0} values('{1}','{2}','{3}');", TableName, item.RootNodeName, item.CategoryName, item.Value);
-            }
-            SQLiteCommand command = new SQLiteCommand(sb.ToString(), dbConnection);
-            command.ExecuteNonQuery();
+                //添加数据
+                StringBuilder sb = new StringBuilder();
+                foreach (SensitiveData item in ls)
+                {
+                    sb.AppendFormat("insert into {0} values('{1}','{2}','{3}');", TableName, item.RootNodeName, item.CategoryName, item.Value);
+                }
+                SQLiteCommand command = new SQLiteCommand(sb.ToString(), dbConnection);
+                command.ExecuteNonQuery();
+            }           
         }
     }
 }
