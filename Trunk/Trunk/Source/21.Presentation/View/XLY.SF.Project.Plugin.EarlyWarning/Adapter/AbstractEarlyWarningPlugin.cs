@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Domains.Plugin;
 
 /* ==============================================================================
 * Description：AbstractEarlyWarningPlugin  
@@ -11,7 +12,8 @@ using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    abstract class AbstractEarlyWarningPlugin : IPlugin
+    [Plugin]
+    public abstract class AbstractEarlyWarningPlugin : IPlugin
     {
         public IPluginInfo PluginInfo { get; set; }
 
@@ -32,6 +34,11 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             DeviceDataSource = deviceDataSource;
             DataNodes = dataNodes;
+        }
+
+        public EarlyWarningPluginArgument(DeviceDataSource deviceDataSource)
+        {
+            DeviceDataSource = deviceDataSource;
         }
 
         /// <summary>

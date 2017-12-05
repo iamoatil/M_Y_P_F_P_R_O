@@ -13,13 +13,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Persistable.Primitive;
+using XLY.SF.Project.Plugin.Language;
 using XLY.SF.Project.Services;
 
 namespace XLY.SF.Project.Plugin.IOS
@@ -226,7 +224,7 @@ namespace XLY.SF.Project.Plugin.IOS
             var friendNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "好友列表",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_FriendList),
                 Type = typeof(QQFriendShow),
                 Items = new DataItems<QQFriendShow>(DbFilePath),
                 Id = QQAccount.QQNumber
@@ -287,13 +285,13 @@ namespace XLY.SF.Project.Plugin.IOS
                 switch (qqNumber)
                 {
                     case "2711679534":
-                        friend.Nick = "QQ钱包";
+                        friend.Nick = LanguageHelper.GetString(Languagekeys.PluginQQ_QQWallet);
                         break;
                     case "2010741172":
-                        friend.Nick = "QQ邮箱";
+                        friend.Nick = LanguageHelper.GetString(Languagekeys.PluginQQ_QQEmail);
                         break;
                     case "1344242394":
-                        friend.Nick = "QQ红包";
+                        friend.Nick = LanguageHelper.GetString(Languagekeys.PluginQQ_QQRedPack);
                         break;
                 }
 
@@ -315,7 +313,7 @@ namespace XLY.SF.Project.Plugin.IOS
             var msgRootNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "好友消息",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_FriendMsg),
             };
 
             accountNode.TreeNodes.Add(msgRootNode);
@@ -343,7 +341,7 @@ namespace XLY.SF.Project.Plugin.IOS
             var troopNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "群成员",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_TroopMember),
                 Type = typeof(QQGroupShow),
                 Items = new DataItems<QQGroupShow>(DbFilePath),
             };
@@ -413,7 +411,7 @@ namespace XLY.SF.Project.Plugin.IOS
             var troopMsgNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "群消息",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_TroopMsg),
             };
 
             accountNode.TreeNodes.Add(troopMsgNode);
@@ -441,7 +439,7 @@ namespace XLY.SF.Project.Plugin.IOS
             var discussNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "讨论组成员",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_DiscussMember),
                 Type = typeof(QQDiscussShow),
                 Items = new DataItems<QQDiscussShow>(DbFilePath),
             };
@@ -508,7 +506,7 @@ namespace XLY.SF.Project.Plugin.IOS
             var disMsgNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "讨论组消息",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_DiscussMsg),
             };
 
             accountNode.TreeNodes.Add(disMsgNode);
@@ -534,7 +532,7 @@ namespace XLY.SF.Project.Plugin.IOS
             var treeNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "通讯录",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_AddressList),
                 Type = typeof(QQAddrBookFriendShow),
                 Items = new DataItems<QQAddrBookFriendShow>(DbFilePath),
             };
@@ -575,7 +573,7 @@ namespace XLY.SF.Project.Plugin.IOS
             var treeNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "通话记录",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_CallLog),
                 Type = typeof(QQCallRecordShow),
                 Items = new DataItems<QQCallRecordShow>(DbFilePath),
             };
@@ -609,11 +607,11 @@ namespace XLY.SF.Project.Plugin.IOS
                          record.Time = DynamicConvert.ToSafeFromUnixTime(call.time, 1);
                          if (record.DiscussGroupUin.IsValid() && record.DiscussGroupUin != "0")
                          {
-                             record.CallType = "群组通话";
+                             record.CallType = LanguageHelper.GetString(Languagekeys.PluginQQ_CallGroup);
                          }
                          else
                          {
-                             record.CallType = "个人通话";
+                             record.CallType = LanguageHelper.GetString(Languagekeys.PluginQQ_CallPerson);
                          }
 
                          //数据完善，剔除无效数据显示
@@ -1213,53 +1211,53 @@ namespace XLY.SF.Project.Plugin.IOS
             {
                 case "0":
                     msg.Type = EnumColumnType.String;
-                    msg.MessageType = "文本";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_String);
                     break;
                 case "1":
                 case "3847":
                     msg.Type = EnumColumnType.Image;
-                    msg.MessageType = "图片";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Image);
                     break;
                 case "3":
                 case "3849":
                     msg.Type = EnumColumnType.Audio;
-                    msg.MessageType = "语音";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Audio);
                     break;
                 case "4":
                     msg.Type = EnumColumnType.File;
-                    msg.MessageType = "文件传输";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_File);
                     break;
                 case "181":
                 case "3848":
                     msg.Type = EnumColumnType.Video;
-                    msg.MessageType = "视频";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Video);
                     break;
                 case "12":
                     msg.Type = EnumColumnType.VideoChat;
-                    msg.MessageType = "视频通话";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_VideoChat);
                     break;
                 case "147":
                     msg.Type = EnumColumnType.AudioCall;
-                    msg.MessageType = "语音通话";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_AudioCall);
                     break;
                 case "157":
                     msg.Type = EnumColumnType.String;
-                    msg.MessageType = "窗口抖动";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_WinDoudong);
                     break;
                 case "8":
                 case "143":
                 case "7141":
                 case "7132":
                     msg.Type = EnumColumnType.System;
-                    msg.MessageType = "系统消息";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_SystemMsg);
                     break;
                 case "141":
                     msg.Type = EnumColumnType.String;
-                    msg.MessageType = "其他消息";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_OtherMsg);
                     break;
                 default:
                     msg.Type = EnumColumnType.String;
-                    msg.MessageType = "文本";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_String);
                     break;
             }
         }

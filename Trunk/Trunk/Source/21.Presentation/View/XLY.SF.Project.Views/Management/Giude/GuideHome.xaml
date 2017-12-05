@@ -32,21 +32,6 @@
                                    HorizontalAlignment="Center"
                                    Stretch="Fill" />
                         </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-                                <Setter Property="Background">
-                                    <Setter.Value>
-                                        <LinearGradientBrush StartPoint="0,0.5">
-                                            <GradientStop Color="#9ba5b9"
-                                                          Offset="1" />
-                                            <GradientStop Color="Transparent"
-                                                          Offset="0" />
-                                        </LinearGradientBrush>
-                                    </Setter.Value>
-                                </Setter>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>

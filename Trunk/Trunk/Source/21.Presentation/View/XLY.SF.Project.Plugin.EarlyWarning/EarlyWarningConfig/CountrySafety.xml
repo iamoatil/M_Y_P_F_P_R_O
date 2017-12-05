@@ -1,6 +1,6 @@
 ﻿<Root Name="CountrySafety" Description="涉及国安"  SensitiveId="1">
   <AppCollection Description="App" >
-    <Content Value="涉及国123456"/>
+    <Content Value="com.android.defcontainer"/>
     <Content Value="涉及国12"/>
   </AppCollection>
  <FileMd5Collection Description="MD5" >
@@ -12,11 +12,11 @@
     <Content Value="涉及国安12"/>
   </KeyWordCollection>
    <UrlCollection  Description="URL" >
-    <Content Value="涉及国安123456"/>
+    <Content Value="http://f.10086.cn"/>
     <Content Value="涉及国安12"/>
   </UrlCollection>
   <PhoneCollection Description="电话" >
-    <Content Value="涉及国123456"/>
+    <Content Value="com.android.defcontainer"/>
     <Content Value="涉及国12"/>
   </PhoneCollection>
 </Root>

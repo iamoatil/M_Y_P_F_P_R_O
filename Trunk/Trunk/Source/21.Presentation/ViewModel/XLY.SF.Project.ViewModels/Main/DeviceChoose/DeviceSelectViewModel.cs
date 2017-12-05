@@ -7,6 +7,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base.ViewModel;
@@ -35,6 +36,7 @@ namespace XLY.SF.Project.ViewModels.Device
         {
             SelectFileCommond = new RelayCommand(DoSelectFileCommond);
             SelectFolderCommond= new RelayCommand(DoSelectFolderCommond);
+            OpenGuideCommand = new RelayCommand(OpenGuide);
         }
 
         #region 属性
@@ -114,13 +116,21 @@ namespace XLY.SF.Project.ViewModels.Device
 
         #region Commond
 
+
+        public ICommand OpenGuideCommand { get; }
+
+        private void OpenGuide()
+        {
+            _fileDlg.ShowDialogWindow(ExportKeys.SettingsGuideHomeView);
+        }
+
         public RelayCommand SelectFileCommond { get; set; }
         /// <summary>
         /// 选择单个文件
         /// </summary>
         private void DoSelectFileCommond()
         {
-            LocalFileDevice file = _fileDlg.ShowDialogWindow(ExportKeys.DeviceSelectFileView, null) as LocalFileDevice;
+            LocalFileDevice file = _fileDlg.ShowDialogWindow(ExportKeys.DeviceSelectFileView) as LocalFileDevice;
             if(file != null)
             {
                 CreateDevice(file);

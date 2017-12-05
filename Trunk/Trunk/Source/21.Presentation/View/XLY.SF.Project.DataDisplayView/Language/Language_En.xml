@@ -18,6 +18,8 @@
   <DeleteNotice>Do you want to delete data '{0}'?</DeleteNotice>
   <DeleteNoticeTitle>System</DeleteNoticeTitle>
   <DeletingData>Delete data now...</DeletingData>
+  <NotOpenInspectionTip>Inspection is closed!</NotOpenInspectionTip>
+  <NotOpenInspectionTip2>Please open Inspection at setting</NotOpenInspectionTip2>
 </LanguageResource>
 
 

@@ -51,28 +51,9 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         #region 事件
         protected override void InitLoad(object parameters)
         {
-            _currentDevicePath = parameters?.ToString();
             LoadPlugin();
 
-            //判断是否是智能预警
-            if(!string.IsNullOrWhiteSpace(_currentDevicePath))
-            {
-                if(_currentDevicePath.StartsWith("{"))
-                {
-                    try
-                    {
-                        var inspectConfig = Serializer.JsonDeserializeIO<ViewModel.InspectionConfig>(_currentDevicePath);
-                        _currentDevicePath = inspectConfig.DevicePath;
-                        MessageAggregation.SendGeneralMsg(new GeneralArgs<List<Inspection>>(MessageKeys.InspectionKey) { Parameters = inspectConfig.Config });
-                    }
-                    catch (Exception)
-                    {
-
-                    }
-                }
-            }
-
-            LoadData(_currentDevicePath);
+            RefreshData(parameters?.ToString(), false);
         }
 
         /// <summary>
@@ -82,7 +63,43 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         public override void ReceiveParameters(object parameters)
         {
             base.ReceiveParameters(parameters);
-            LoadData(_currentDevicePath);
+            RefreshData(parameters?.ToString(), true);
+        }
+
+        private void RefreshData(string parameter, bool isLoadData = false)
+        {
+            if (!string.IsNullOrWhiteSpace(parameter))
+            {
+                if (parameter.StartsWith("Inspection;")) //判断是否是智能预警
+                {
+                    try
+                    {
+                        //var inspectConfig = Serializer.JsonDeserializeIO<ViewModel.InspectionConfig>(_currentDevicePath);
+                        var Config = new List<ViewModel.Inspection>(){
+                                new ViewModel.Inspection(){ ID = 1, CategoryCn = "涉及国安", CategoryEn = "GuoAn"},
+                                new ViewModel.Inspection(){ ID = 2, CategoryCn = "涉及经济", CategoryEn = "Guojj"},
+                                new ViewModel.Inspection(){ ID = 3, CategoryCn = "涉及周期", CategoryEn = "Guozq"},
+                                new ViewModel.Inspection(){ ID = 4, CategoryCn = "涉及地方", CategoryEn = "Guodf"},
+                        };
+                        _currentDevicePath = parameter.Substring("Inspection;".Length);
+                        MessageAggregation.SendGeneralMsg(new GeneralArgs<List<Inspection>>(MessageKeys.InspectionKey) { Parameters = Config });
+                    }
+                    catch (Exception)
+                    {
+
+                    }
+                }
+                else
+                {
+                    _currentDevicePath = parameter;
+                    MessageAggregation.SendGeneralMsg(new GeneralArgs<List<Inspection>>(MessageKeys.InspectionKey) { Parameters = null });
+                }
+
+                if(isLoadData)
+                {
+                    LoadData(_currentDevicePath);
+                }
+            }
         }
         #endregion
 

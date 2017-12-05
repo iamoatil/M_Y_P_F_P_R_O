@@ -174,6 +174,7 @@
     <Compile Include="DomainEntity\Pump\PumpSolution.cs" />
     <Compile Include="DomainEntity\Report\ExportCollectionInfo.cs" />
     <Compile Include="DomainEntity\Report\ExportDeviceInfo.cs" />
+    <Compile Include="DomainEntity\Report\DeviceExportReport.cs" />
     <Compile Include="Language\LanguageTextTeamplate.LanguageElement.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -257,6 +258,10 @@
     <ProjectReference Include="..\..\13.Core\XLY.SF.Project.DataFilter\XLY.SF.Project.DataFilter.csproj">
       <Project>{22661B55-AD41-4232-8EE7-485CAE0F4F3D}</Project>
       <Name>XLY.SF.Project.DataFilter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\14.Plugin\XLY.SF.Project.Plugin.Language\XLY.SF.Project.Plugin.Language.csproj">
+      <Project>{86A35DE5-5B18-457F-A972-E3D8240606B5}</Project>
+      <Name>XLY.SF.Project.Plugin.Language</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

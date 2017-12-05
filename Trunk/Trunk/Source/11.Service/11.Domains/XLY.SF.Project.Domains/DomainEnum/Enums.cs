@@ -85,107 +85,103 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 整形
         /// </summary>
-        Int = 1,
+        Int,
         /// <summary>
         /// 浮点型
         /// </summary>
-        Double = 2,
+        Double,
         /// <summary>
         /// 日期时间
         /// </summary>
-        DateTime = 3,
+        DateTime,
         /// <summary>
         /// 图片
         /// </summary>
-        Image = 4,
+        Image,
         /// <summary>
         /// URL
         /// </summary>
-        URL = 5,
+        URL,
         /// <summary>
         /// 视频
         /// </summary>
-        Video = 6,
+        Video,
         /// <summary>
         /// 音频
         /// </summary>
-        Audio = 7,
+        Audio,
         /// <summary>
         /// 文档
         /// </summary>
-        Word = 17,
+        Word,
         /// <summary>
         /// html
         /// </summary>
-        HTML = 8,
+        HTML,
         /// <summary>
         /// 枚举
         /// </summary>
-        Enum = 9,
+        Enum,
         /// <summary>
         /// 地理位置
         /// </summary>
-        Location = 10,
+        Location,
         /// <summary>
         /// 名片
         /// </summary>
-        Card = 11,
+        Card,
         /// <summary>
         /// 视频聊天
         /// </summary>
-        VideoChat = 12,
+        VideoChat,
         /// <summary>
         /// 邮件
         /// </summary>
-        Mail = 13,
+        Mail,
         /// <summary>
         /// 集合
         /// </summary>
-        List = 14,
+        List,
         /// <summary>
         /// 系统消息
         /// </summary>
-        System = 15,
+        System,
         /// <summary>
         /// 未知类型
         /// </summary>
-        None = 16,
-        /// <summary>
-        /// 视频通话
-        /// </summary>
-        VideoCall = 18,
+        None,
         /// <summary>
         /// 文件
         /// </summary>
-        File = 19,
+        File,
         /// <summary>
         /// 语音聊天
         /// </summary>
-        AudioCall = 20,
+        AudioCall,
         /// <summary>
         /// 微信红包
         /// </summary>
-        WeChatRedPack = 21,
+        WeChatRedPack,
         /// <summary>
         /// 表情
         /// </summary>
-        Emoji = 22,
+        Emoji,
         /// <summary>
         /// 缩略图
         /// </summary>
-        Thumbnail = 23,
+        Thumbnail,
         /// <summary>
         /// 微信转账
         /// </summary>
-        WeChatTransfer = 24,
+        WeChatTransfer,
         /// <summary>
         /// 微信支付
         /// </summary>
-        WeChatZhifu = 25,
+        WeChatZhifu,
         /// <summary>
         /// 公众号
         /// </summary>
-        GongZhongHao = 26,
+        GongZhongHao,
     }
 
     #endregion

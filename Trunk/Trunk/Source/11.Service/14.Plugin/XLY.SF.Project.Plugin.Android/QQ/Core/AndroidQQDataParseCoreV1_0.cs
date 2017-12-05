@@ -17,6 +17,7 @@ using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Persistable.Primitive;
+using XLY.SF.Project.Plugin.Language;
 using XLY.SF.Project.Services;
 
 namespace XLY.SF.Project.Plugin.Android
@@ -267,10 +268,11 @@ namespace XLY.SF.Project.Plugin.Android
         /// </summary>
         private void BuildQQFriendTree(TreeNode accountTree)
         {
+            
             //好友分组信息树
             var friendRootSet = new TreeNode()
             {
-                Text = "好友列表",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_FriendList),
                 Type = typeof(QQFriendSetShow),
                 Items = new DataItems<QQFriendSetShow>(DbFilePath)
             };
@@ -287,11 +289,11 @@ namespace XLY.SF.Project.Plugin.Android
                         }
                     });
             }
-
+            
             //陌生人/黑名单特殊处理
             var OtherFriendTree = new TreeNode()
             {
-                Text = "陌生人、黑名单、其他",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_OtherFriend),
                 Id = "-1",
                 Type = typeof(QQFriendShow),
                 DataState = EnumDataState.Normal,
@@ -321,7 +323,7 @@ namespace XLY.SF.Project.Plugin.Android
             //好友消息树
             var friendMsgRootSet = new TreeNode()
             {
-                Text = "好友消息",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_FriendMsg),
             };
             accountTree.TreeNodes.Add(friendMsgRootSet);
 
@@ -356,10 +358,10 @@ namespace XLY.SF.Project.Plugin.Android
         private void BuildTroopTree(TreeNode accountTree)
         {
             AllGroups = new List<QQGroupShow>();
-
+            
             var troopMemberTree = new TreeNode()
             {
-                Text = "群成员",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_TroopMember),
                 Type = typeof(QQGroupShow),
                 Items = new DataItems<QQGroupShow>(DbFilePath)
             };
@@ -483,10 +485,10 @@ namespace XLY.SF.Project.Plugin.Android
             //群消息树
             var troopMsgRootSet = new TreeNode()
             {
-                Text = "群消息",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_TroopMsg),
             };
             accountTree.TreeNodes.Add(troopMsgRootSet);
-
+            
             foreach (var group in AllGroups)
             {
                 if (!group.QQNumber.IsMatch(@"^\d+$"))
@@ -518,10 +520,10 @@ namespace XLY.SF.Project.Plugin.Android
         private void BuildDiscussTree(TreeNode accountTree)
         {
             AllDiscusss = new List<QQDiscussShow>();
-
+            
             var discussMemberTree = new TreeNode()
             {
-                Text = "讨论组成员",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_TroopMember),
                 Type = typeof(QQDiscussShow),
                 Items = new DataItems<QQDiscussShow>(DbFilePath)
             };
@@ -624,10 +626,10 @@ namespace XLY.SF.Project.Plugin.Android
             //讨论组消息树
             var discussMsgRootSet = new TreeNode()
             {
-                Text = "讨论组消息",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_TroopMsg),
             };
             accountTree.TreeNodes.Add(discussMsgRootSet);
-
+            
             foreach (var discuss in AllDiscusss)
             {
                 if (!discuss.QQNumber.IsMatch(@"^\d+$"))
@@ -660,12 +662,12 @@ namespace XLY.SF.Project.Plugin.Android
         {
             var recentTree = new TreeNode()
             {
-                Text = "最近联系人",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_RecentFriend),
                 Type = typeof(QQRecentShow),
                 Items = new DataItems<QQRecentShow>(DbFilePath)
             };
             accountTree.TreeNodes.Add(recentTree);
-
+            
             if (!MainDbContext.ExistTable("recent"))
             {
                 return;
@@ -820,13 +822,13 @@ namespace XLY.SF.Project.Plugin.Android
                             switch (friendQQNumber)
                             {
                                 case "1344242394":
-                                    friendShow.Nick = "QQ红包";
+                                    friendShow.Nick =LanguageHelper.GetString(Languagekeys.PluginQQ_QQRedPack);
                                     break;
                                 case "2010741172":
-                                    friendShow.Nick = "QQ邮箱";
+                                    friendShow.Nick = LanguageHelper.GetString(Languagekeys.PluginQQ_QQEmail);
                                     break;
                                 case "2711679534":
-                                    friendShow.Nick = "QQ钱包";
+                                    friendShow.Nick = LanguageHelper.GetString(Languagekeys.PluginQQ_QQWallet);
                                     break;
                             }
 
@@ -1272,8 +1274,8 @@ namespace XLY.SF.Project.Plugin.Android
             switch (friendMsg.Type)
             {
                 case EnumColumnType.Image:
-                    friendMsg.MessageType = "图片";
-
+                    friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Image);
+                    
                     #region 图片处理
 
                     sourcePath = RegexMediaFile.Match(friendMsg.Content).Value;
@@ -1295,8 +1297,8 @@ namespace XLY.SF.Project.Plugin.Android
 
                     break;
                 case EnumColumnType.Audio:
-                    friendMsg.MessageType = "语音";
-
+                    friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Audio);
+                    
                     #region 语音处理
 
                     var resultAudio = Regex.Match(friendMsg.Content, "(?<=ptt/).*?(amr|slk)");
@@ -1322,7 +1324,7 @@ namespace XLY.SF.Project.Plugin.Android
 
                     break;
                 case EnumColumnType.Video:
-                    friendMsg.MessageType = "视频";
+                    friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Video); 
 
                     #region 视频处理
 
@@ -1340,8 +1342,8 @@ namespace XLY.SF.Project.Plugin.Android
 
                     break;
                 case EnumColumnType.File:
-                    friendMsg.MessageType = "文件";
-
+                    friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_File);
+                    
                     #region 文件处理
 
                     var fileMangerInfo = LsFileManager.FirstOrDefault(c => c.uniseq == friendDyMsg.uniseq);
@@ -1369,24 +1371,24 @@ namespace XLY.SF.Project.Plugin.Android
                         {
                             case 0:
                                 friendMsg.Type = EnumColumnType.Image;
-                                friendMsg.MessageType = "图片";
+                                friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Image);
                                 break;
                             case 1:
                                 friendMsg.Type = EnumColumnType.Audio;
-                                friendMsg.MessageType = "文件";
+                                friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Audio);
                                 break;
                             case 2:
                                 friendMsg.Type = EnumColumnType.Video;
-                                friendMsg.MessageType = "视频";
+                                friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Video);
                                 break;
                         }
                     }
 
                     #endregion
 
-                    break;
+                    break; 
                 case EnumColumnType.String:
-                    friendMsg.MessageType = "文本";
+                    friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_String);
 
                     break;
             }

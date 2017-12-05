@@ -117,22 +117,22 @@ namespace XLY.SF.Project.Plugin.Android
             foreach (var currDbName in accountsDbNames)
             {
                 var sendTree = new TreeNode();
-                sendTree.Text = "发件箱";
+                sendTree.Text = LanguageHelper.GetString(Languagekeys.PluginEmail_SendBox);
                 sendTree.Type = typeof(EmailInfo);
                 sendTree.Items = new DataItems<EmailInfo>(dbfilePath);
 
                 var receiveTree = new TreeNode();
-                receiveTree.Text = "收件箱";
+                receiveTree.Text = LanguageHelper.GetString(Languagekeys.PluginEmail_ReceiveBox);
                 receiveTree.Type = typeof(EmailInfo);
                 receiveTree.Items = new DataItems<EmailInfo>(dbfilePath);
 
                 var draftsTree = new TreeNode();
-                draftsTree.Text = "草稿箱";
+                draftsTree.Text = LanguageHelper.GetString(Languagekeys.PluginEmail_DraftsBox);
                 draftsTree.Type = typeof(EmailInfo);
                 draftsTree.Items = new DataItems<EmailInfo>(dbfilePath);
 
                 var deleteTree = new TreeNode();
-                deleteTree.Text = "删除邮件";
+                deleteTree.Text = LanguageHelper.GetString(Languagekeys.PluginEmail_DeleteBox);
                 deleteTree.Type = typeof(EmailInfo);
                 deleteTree.Items = new DataItems<EmailInfo>(dbfilePath);
 

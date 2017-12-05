@@ -34,9 +34,9 @@ namespace XLY.SF.Project.Extension.Helper
                     {
                         try
                         {
-                            targetView.DataSource.LoadViewModel(parameter);
+                            targetView.DataSource?.LoadViewModel(parameter);
                             //加载ViewContainer
-                            targetView.DataSource.SetViewContainer(targetView);
+                            targetView.DataSource?.SetViewContainer(targetView);
                         }
                         catch (Exception ex)
                         {

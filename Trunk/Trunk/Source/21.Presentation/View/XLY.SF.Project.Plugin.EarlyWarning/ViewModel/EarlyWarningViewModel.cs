@@ -23,7 +23,7 @@ using XLY.SF.Project.Plugin.Adapter;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    [Export(ExportKeys.AutoWarningViewModel, typeof(ViewModelBase))]
+    //[Export(ExportKeys.AutoWarningViewModel, typeof(ViewModelBase))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     class EarlyWarningViewModel : ViewModelBase
     {

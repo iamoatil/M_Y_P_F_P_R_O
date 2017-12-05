@@ -13,13 +13,11 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Persistable.Primitive;
+using XLY.SF.Project.Plugin.Language;
 using XLY.SF.Project.Services;
 
 namespace XLY.SF.Project.Plugin.IOS
@@ -226,7 +224,7 @@ namespace XLY.SF.Project.Plugin.IOS
             var friendNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "好友列表",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_FriendList),
                 Type = typeof(QQFriendShow),
                 Items = new DataItems<QQFriendShow>(DbFilePath),
                 Id = QQAccount.QQNumber
@@ -237,36 +235,39 @@ namespace XLY.SF.Project.Plugin.IOS
             LsAllFriends = new List<QQFriendShow>();
 
             //1.从QQ.db的tb_userSummary表获取数据
-            MainContext.UsingSafeConnection("SELECT * FROM tb_userSummary", r =>
-             {
-                 dynamic summ;
-                 QQFriendShow friendInfo;
+            if (MainContext.ExistTable("tb_userSummary"))
+            {
+                MainContext.UsingSafeConnection("SELECT * FROM tb_userSummary", r =>
+                        {
+                            dynamic summ;
+                            QQFriendShow friendInfo;
 
-                 while (r.Read())
-                 {
-                     summ = r.ToDynamic();
-                     friendInfo = new QQFriendShow();
+                            while (r.Read())
+                            {
+                                summ = r.ToDynamic();
+                                friendInfo = new QQFriendShow();
 
-                     friendInfo.QQNumber = DynamicConvert.ToSafeString(summ.uin);
-                     friendInfo.Nick = DynamicConvert.ToSafeString(summ.nick);
-                     friendInfo.Remark = DynamicConvert.ToSafeString(summ.remark);
-                     friendInfo.Alias = DynamicConvert.ToSafeString(summ.showName);
-                     friendInfo.Sex = DynamicConvert.ToSafeString(summ.gender) == "1" ? EnumSex.Female : EnumSex.Male;
-                     friendInfo.Age = DynamicConvert.ToSafeInt(summ.age);
-                     friendInfo.Address = string.Format("{0}-{1}-{2}",
-                         DynamicConvert.ToSafeString(summ.country), DynamicConvert.ToSafeString(summ.province), DynamicConvert.ToSafeString(summ.city));
-                     friendInfo.BrithDay = ConvertIOSQQDateTime(DynamicConvert.ToSafeString(summ.birth));
-                     friendInfo.BindPhone = DynamicConvert.ToSafeString(summ.bindPhoneInfo);
-                     friendInfo.Company = DynamicConvert.ToSafeString(summ.company);
-                     friendInfo.School = DynamicConvert.ToSafeString(summ.school);
-                     friendInfo.ContactName = DynamicConvert.ToSafeString(summ.contactName);
-                     friendInfo.ContactPhone = DynamicConvert.ToSafeString(summ.mobileNum);
-                     friendInfo.Feed = DynamicConvert.ToSafeString(summ.qzoneFeedsDesc);
-                     friendInfo.DataState = DynamicConvert.ToEnumByValue<EnumDataState>(summ.XLY_DataType, EnumDataState.Normal);
+                                friendInfo.QQNumber = DynamicConvert.ToSafeString(summ.uin);
+                                friendInfo.Nick = DynamicConvert.ToSafeString(summ.nick);
+                                friendInfo.Remark = DynamicConvert.ToSafeString(summ.remark);
+                                friendInfo.Alias = DynamicConvert.ToSafeString(summ.showName);
+                                friendInfo.Sex = DynamicConvert.ToSafeString(summ.gender) == "1" ? EnumSex.Female : EnumSex.Male;
+                                friendInfo.Age = DynamicConvert.ToSafeInt(summ.age);
+                                friendInfo.Address = string.Format("{0}-{1}-{2}",
+                                    DynamicConvert.ToSafeString(summ.country), DynamicConvert.ToSafeString(summ.province), DynamicConvert.ToSafeString(summ.city));
+                                friendInfo.BrithDay = ConvertIOSQQDateTime(DynamicConvert.ToSafeString(summ.birth));
+                                friendInfo.BindPhone = DynamicConvert.ToSafeString(summ.bindPhoneInfo);
+                                friendInfo.Company = DynamicConvert.ToSafeString(summ.company);
+                                friendInfo.School = DynamicConvert.ToSafeString(summ.school);
+                                friendInfo.ContactName = DynamicConvert.ToSafeString(summ.contactName);
+                                friendInfo.ContactPhone = DynamicConvert.ToSafeString(summ.mobileNum);
+                                friendInfo.Feed = DynamicConvert.ToSafeString(summ.qzoneFeedsDesc);
+                                friendInfo.DataState = DynamicConvert.ToEnumByValue<EnumDataState>(summ.XLY_DataType, EnumDataState.Normal);
 
-                     LsAllFriends.Add(friendInfo);
-                 }
-             });
+                                LsAllFriends.Add(friendInfo);
+                            }
+                        });
+            }
 
             //2.从消息表获取QQ号码
             var listMsgTable = MainContext.Find("select * from sqlite_master where type = 'table' and name like 'tb_c2cMsg_%'");
@@ -287,16 +288,16 @@ namespace XLY.SF.Project.Plugin.IOS
                 switch (qqNumber)
                 {
                     case "2711679534":
-                        friend.Nick = "QQ钱包";
+                        friend.Nick = LanguageHelper.GetString(Languagekeys.PluginQQ_QQWallet);
                         break;
                     case "2010741172":
-                        friend.Nick = "QQ邮箱";
+                        friend.Nick = LanguageHelper.GetString(Languagekeys.PluginQQ_QQEmail);
                         break;
                     case "1344242394":
-                        friend.Nick = "QQ红包";
+                        friend.Nick = LanguageHelper.GetString(Languagekeys.PluginQQ_QQRedPack);
                         break;
                 }
-
+                
                 LsAllFriends.Add(friend);
             }
 
@@ -315,9 +316,9 @@ namespace XLY.SF.Project.Plugin.IOS
             var msgRootNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "好友消息",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_FriendMsg),
             };
-
+            
             accountNode.TreeNodes.Add(msgRootNode);
 
             TreeNode node;
@@ -343,65 +344,68 @@ namespace XLY.SF.Project.Plugin.IOS
             var troopNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "群成员",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_TroopMember),
                 Type = typeof(QQGroupShow),
                 Items = new DataItems<QQGroupShow>(DbFilePath),
             };
-
+            
             accountNode.TreeNodes.Add(troopNode);
 
-            MainContext.UsingSafeConnection("SELECT * FROM tb_troop", r =>
-             {
-                 dynamic groupDy;
-                 QQGroupShow groupInfo;
-
-                 while (r.Read())
+            if (MainContext.ExistTable("tb_troop"))
+            {
+                MainContext.UsingSafeConnection("SELECT * FROM tb_troop", r =>
                  {
-                     groupDy = r.ToDynamic();
-                     groupInfo = new QQGroupShow();
+                     dynamic groupDy;
+                     QQGroupShow groupInfo;
 
-                     groupInfo.DataState = DynamicConvert.ToEnumByValue(groupDy.XLY_DataType, EnumDataState.None);
-                     groupInfo.Name = DynamicConvert.ToSafeString(groupDy.GroupName);
-                     groupInfo.GroupId = DynamicConvert.ToSafeString(groupDy.groupid);
-                     groupInfo.QQNumber = DynamicConvert.ToSafeString(groupDy.groupcode);
-                     groupInfo.MemberCount = DynamicConvert.ToSafeInt(groupDy.groupMemNum);
-
-                     var groupMemTree = new TreeNode
+                     while (r.Read())
                      {
-                         DataState = EnumDataState.Normal,
-                         Text = groupInfo.FullName,
-                         Type = typeof(QQGroupMemberShow),
-                         Items = new DataItems<QQGroupMemberShow>(DbFilePath),
-                     };
+                         groupDy = r.ToDynamic();
+                         groupInfo = new QQGroupShow();
 
-                     LsAllGroups.Add(groupInfo);
-                     groupMemTree.Items.Add(groupInfo);
-                     troopNode.TreeNodes.Add(groupMemTree);
+                         groupInfo.DataState = DynamicConvert.ToEnumByValue(groupDy.XLY_DataType, EnumDataState.None);
+                         groupInfo.Name = DynamicConvert.ToSafeString(groupDy.GroupName);
+                         groupInfo.GroupId = DynamicConvert.ToSafeString(groupDy.groupid);
+                         groupInfo.QQNumber = DynamicConvert.ToSafeString(groupDy.groupcode);
+                         groupInfo.MemberCount = DynamicConvert.ToSafeInt(groupDy.groupMemNum);
 
-                     MainContext.UsingSafeConnection(string.Format("SELECT * FROM tb_TroopMem WHERE GroupCode = '{0}'", groupInfo.QQNumber), rd =>
-                      {
-                          dynamic memberDy;
-                          QQGroupMemberShow memberInfo;
+                         var groupMemTree = new TreeNode
+                         {
+                             DataState = EnumDataState.Normal,
+                             Text = groupInfo.FullName,
+                             Type = typeof(QQGroupMemberShow),
+                             Items = new DataItems<QQGroupMemberShow>(DbFilePath),
+                         };
 
-                          while (rd.Read())
+                         LsAllGroups.Add(groupInfo);
+                         groupMemTree.Items.Add(groupInfo);
+                         troopNode.TreeNodes.Add(groupMemTree);
+
+                         MainContext.UsingSafeConnection(string.Format("SELECT * FROM tb_TroopMem WHERE GroupCode = '{0}'", groupInfo.QQNumber), rd =>
                           {
-                              memberDy = rd.ToDynamic();
-                              memberInfo = new QQGroupMemberShow();
+                              dynamic memberDy;
+                              QQGroupMemberShow memberInfo;
 
-                              memberInfo.DataState = DynamicConvert.ToEnumByValue(memberDy.XLY_DataType, EnumDataState.None);
-                              memberInfo.QQNumber = DynamicConvert.ToSafeString(memberDy.MemUin);
-                              memberInfo.Nick = DynamicConvert.ToSafeString(memberDy.Nick);
-                              memberInfo.SpecialTitle = DynamicConvert.ToSafeString(memberDy.SpecialTitle);
-                              memberInfo.Sex = DynamicConvert.ToSafeString(memberDy.Gender) == "1" ? EnumSex.Female : EnumSex.Male;
-                              memberInfo.Age = DynamicConvert.ToSafeInt(memberDy.Age);
-                              memberInfo.JoinTime = DynamicConvert.ToSafeDateTime(memberDy.JoinTime);
-                              memberInfo.LastSpeakTime = DynamicConvert.ToSafeDateTime(memberDy.LastSpeakTime);
+                              while (rd.Read())
+                              {
+                                  memberDy = rd.ToDynamic();
+                                  memberInfo = new QQGroupMemberShow();
 
-                              groupMemTree.Items.Add(memberInfo);
-                          }
-                      });
-                 }
-             });
+                                  memberInfo.DataState = DynamicConvert.ToEnumByValue(memberDy.XLY_DataType, EnumDataState.None);
+                                  memberInfo.QQNumber = DynamicConvert.ToSafeString(memberDy.MemUin);
+                                  memberInfo.Nick = DynamicConvert.ToSafeString(memberDy.Nick);
+                                  memberInfo.SpecialTitle = DynamicConvert.ToSafeString(memberDy.SpecialTitle);
+                                  memberInfo.Sex = DynamicConvert.ToSafeString(memberDy.Gender) == "1" ? EnumSex.Female : EnumSex.Male;
+                                  memberInfo.Age = DynamicConvert.ToSafeInt(memberDy.Age);
+                                  memberInfo.JoinTime = DynamicConvert.ToSafeDateTime(memberDy.JoinTime);
+                                  memberInfo.LastSpeakTime = DynamicConvert.ToSafeDateTime(memberDy.LastSpeakTime);
+
+                                  groupMemTree.Items.Add(memberInfo);
+                              }
+                          });
+                     }
+                 });
+            }
         }
 
         /// <summary>
@@ -413,9 +417,9 @@ namespace XLY.SF.Project.Plugin.IOS
             var troopMsgNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "群消息",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_TroopMsg),
             };
-
+            
             accountNode.TreeNodes.Add(troopMsgNode);
 
             TreeNode node;
@@ -441,14 +445,16 @@ namespace XLY.SF.Project.Plugin.IOS
             var discussNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "讨论组成员",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_DiscussMember),
                 Type = typeof(QQDiscussShow),
                 Items = new DataItems<QQDiscussShow>(DbFilePath),
             };
-
+            
             accountNode.TreeNodes.Add(discussNode);
 
-            MainContext.UsingSafeConnection("SELECT * FROM tb_discussGrp_list", r =>
+            if (MainContext.ExistTable("tb_discussGrp_list"))
+            {
+                MainContext.UsingSafeConnection("SELECT * FROM tb_discussGrp_list", r =>
             {
                 dynamic disDy;
                 QQDiscussShow disInfo;
@@ -497,6 +503,7 @@ namespace XLY.SF.Project.Plugin.IOS
                     });
                 }
             });
+            }
         }
 
         /// <summary>
@@ -508,9 +515,9 @@ namespace XLY.SF.Project.Plugin.IOS
             var disMsgNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "讨论组消息",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_DiscussMsg),
             };
-
+            
             accountNode.TreeNodes.Add(disMsgNode);
 
             TreeNode node;
@@ -534,11 +541,11 @@ namespace XLY.SF.Project.Plugin.IOS
             var treeNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "通讯录",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_AddressList),
                 Type = typeof(QQAddrBookFriendShow),
                 Items = new DataItems<QQAddrBookFriendShow>(DbFilePath),
             };
-
+            
             accountNode.TreeNodes.Add(treeNode);
 
             var plistFile = Path.Combine(QQDbPath, @"Friends\RecommendedPeople.data");
@@ -575,11 +582,11 @@ namespace XLY.SF.Project.Plugin.IOS
             var treeNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
-                Text = "通话记录",
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_CallLog),
                 Type = typeof(QQCallRecordShow),
                 Items = new DataItems<QQCallRecordShow>(DbFilePath),
             };
-
+            
             accountNode.TreeNodes.Add(treeNode);
 
             var dbFile = Path.Combine(QQDbPath, "QQ_Mix.db");
@@ -590,49 +597,52 @@ namespace XLY.SF.Project.Plugin.IOS
 
             using (var dbContent = new SqliteContext(dbFile))
             {
-                dbContent.UsingSafeConnection("SELECT uin,nickname,time,duration,discussGroupUin,msgcontent,phonecode FROM tb_callRecord ORDER BY time DESC", r =>
-                 {
-                     dynamic call;
-                     QQCallRecordShow record;
-
-                     while (r.Read())
+                if (dbContent.ExistTable("tb_callRecord"))
+                {
+                    dbContent.UsingSafeConnection("SELECT uin,nickname,time,duration,discussGroupUin,msgcontent,phonecode FROM tb_callRecord ORDER BY time DESC", r =>
                      {
-                         call = r.ToDynamic();
+                         dynamic call;
+                         QQCallRecordShow record;
 
-                         record = new QQCallRecordShow() { DataState = EnumDataState.Normal };
-                         record.Uin = DynamicConvert.ToSafeString(call.uin);
-                         record.DiscussGroupUin = DynamicConvert.ToSafeString(call.discussGroupUin);
-                         record.NickName = DynamicConvert.ToSafeString(call.nickname);
-                         record.MsgContent = DynamicConvert.ToSafeString(call.msgcontent);
-                         record.PhoneCode = DynamicConvert.ToSafeString(call.phonecode);
-                         record.Duration = DynamicConvert.ToSafeString(call.duration);
-                         record.Time = DynamicConvert.ToSafeFromUnixTime(call.time, 1);
-                         if (record.DiscussGroupUin.IsValid() && record.DiscussGroupUin != "0")
+                         while (r.Read())
                          {
-                             record.CallType = "群组通话";
-                         }
-                         else
-                         {
-                             record.CallType = "个人通话";
-                         }
+                             call = r.ToDynamic();
 
-                         //数据完善，剔除无效数据显示
-                         if ("0" == record.Uin.Trim())
-                         {
-                             record.Uin = string.Empty;
-                         }
-                         if ("0" == record.DiscussGroupUin.Trim())
-                         {
-                             record.DiscussGroupUin = string.Empty;
-                         }
-                         if ("+0" == record.PhoneCode.Trim() || "+(null)" == record.PhoneCode.Trim())
-                         {
-                             record.PhoneCode = string.Empty;
-                         }
+                             record = new QQCallRecordShow() { DataState = EnumDataState.Normal };
+                             record.Uin = DynamicConvert.ToSafeString(call.uin);
+                             record.DiscussGroupUin = DynamicConvert.ToSafeString(call.discussGroupUin);
+                             record.NickName = DynamicConvert.ToSafeString(call.nickname);
+                             record.MsgContent = DynamicConvert.ToSafeString(call.msgcontent);
+                             record.PhoneCode = DynamicConvert.ToSafeString(call.phonecode);
+                             record.Duration = DynamicConvert.ToSafeString(call.duration);
+                             record.Time = DynamicConvert.ToSafeFromUnixTime(call.time, 1);
+                             if (record.DiscussGroupUin.IsValid() && record.DiscussGroupUin != "0")
+                             {
+                                 record.CallType = LanguageHelper.GetString(Languagekeys.PluginQQ_CallGroup);
+                             }
+                             else
+                             {
+                                 record.CallType = LanguageHelper.GetString(Languagekeys.PluginQQ_CallPerson);
+                             }
+                             
+                             //数据完善，剔除无效数据显示
+                             if ("0" == record.Uin.Trim())
+                             {
+                                 record.Uin = string.Empty;
+                             }
+                             if ("0" == record.DiscussGroupUin.Trim())
+                             {
+                                 record.DiscussGroupUin = string.Empty;
+                             }
+                             if ("+0" == record.PhoneCode.Trim() || "+(null)" == record.PhoneCode.Trim())
+                             {
+                                 record.PhoneCode = string.Empty;
+                             }
 
-                         treeNode.Items.Add(record);
-                     }
-                 });
+                             treeNode.Items.Add(record);
+                         }
+                     });
+                }
             }
         }
 
@@ -678,12 +688,18 @@ namespace XLY.SF.Project.Plugin.IOS
                     {
                         using (var db = new SqliteContext(dbFile))
                         {
-                            var data = db.Find(string.Format("SELECT * FROM tb_userSummary WHERE uin = '{0}'", account.QQNumber)).FirstOrDefault();
+                            if (db.ExistTable("tb_userSummary"))
+                            {
+                                var data = db.Find(string.Format("SELECT * FROM tb_userSummary WHERE uin = '{0}'", account.QQNumber)).FirstOrDefault();
 
-                            account.Age = DynamicConvert.ToSafeInt(data.age);
-                            account.PhoneNumber = DynamicConvert.ToSafeString(data.bindPhoneInfo);
-                            account.Company = DynamicConvert.ToSafeString(data.company);
-                            account.School = DynamicConvert.ToSafeString(data.school);
+                                if (null != data)
+                                {
+                                    account.Age = DynamicConvert.ToSafeInt(data.age);
+                                    account.PhoneNumber = DynamicConvert.ToSafeString(data.bindPhoneInfo);
+                                    account.Company = DynamicConvert.ToSafeString(data.company);
+                                    account.School = DynamicConvert.ToSafeString(data.school);
+                                }
+                            }
                         }
                     }
                 }
@@ -1213,53 +1229,53 @@ namespace XLY.SF.Project.Plugin.IOS
             {
                 case "0":
                     msg.Type = EnumColumnType.String;
-                    msg.MessageType = "文本";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_String); 
                     break;
                 case "1":
                 case "3847":
                     msg.Type = EnumColumnType.Image;
-                    msg.MessageType = "图片";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Image);
                     break;
                 case "3":
                 case "3849":
                     msg.Type = EnumColumnType.Audio;
-                    msg.MessageType = "语音";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Audio);
                     break;
                 case "4":
                     msg.Type = EnumColumnType.File;
-                    msg.MessageType = "文件传输";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_File);
                     break;
                 case "181":
                 case "3848":
                     msg.Type = EnumColumnType.Video;
-                    msg.MessageType = "视频";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Video); 
                     break;
                 case "12":
                     msg.Type = EnumColumnType.VideoChat;
-                    msg.MessageType = "视频通话";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_VideoChat);
                     break;
                 case "147":
                     msg.Type = EnumColumnType.AudioCall;
-                    msg.MessageType = "语音通话";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_AudioCall);
                     break;
                 case "157":
-                    msg.Type = EnumColumnType.String;
-                    msg.MessageType = "窗口抖动";
+                    msg.Type = EnumColumnType.String; 
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_WinDoudong);
                     break;
                 case "8":
                 case "143":
                 case "7141":
                 case "7132":
                     msg.Type = EnumColumnType.System;
-                    msg.MessageType = "系统消息";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_SystemMsg);
                     break;
                 case "141":
                     msg.Type = EnumColumnType.String;
-                    msg.MessageType = "其他消息";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_OtherMsg);
                     break;
                 default:
                     msg.Type = EnumColumnType.String;
-                    msg.MessageType = "文本";
+                    msg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_String);
                     break;
             }
         }

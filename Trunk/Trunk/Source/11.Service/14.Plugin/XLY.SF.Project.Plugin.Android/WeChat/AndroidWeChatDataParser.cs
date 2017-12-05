@@ -28,6 +28,7 @@ namespace XLY.SF.Project.Plugin.Android
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/data/data/com.tencent.mm/MicroMsg/#F");
             pluginInfo.SourcePath.AddItem("/data/data/com.tencent.mm/shared_prefs/#F");//注意，C#插件本身不会使用该文件夹内的数据，但是底层数据库解密需要，所以不能删除！
+            pluginInfo.SourcePath.AddItem("SDCard:/tencent/MicroMsg/#F");//微信多媒体文件夹
 
             PluginInfo = pluginInfo;
         }
@@ -40,16 +41,22 @@ namespace XLY.SF.Project.Plugin.Android
             {
                 var pi = PluginInfo as DataParsePluginInfo;
                 var databasesPath = pi.SourcePath[0].Local;
+                var mediaPath = pi.SourcePath[2].Local;
 
                 if (!FileHelper.IsValidDictory(databasesPath))
                 {
                     return ds;
                 }
 
+                if (!FileHelper.IsValidDictory(mediaPath))
+                {
+                    mediaPath = string.Empty;
+                }
+
                 //com.tencent.mm文件夹路径
                 var mmPath = new DirectoryInfo(databasesPath).Parent.FullName;
 
-                var parser = new AndroidWeChatDataParseCoreV1_0(pi.SaveDbPath, LanguageHelper.GetString(Languagekeys.PluginName_Wechat), mmPath, "");
+                var parser = new AndroidWeChatDataParseCoreV1_0(pi.SaveDbPath, LanguageHelper.GetString(Languagekeys.PluginName_Wechat), mmPath, mediaPath);
 
                 var qqNode = parser.BuildTree();
 

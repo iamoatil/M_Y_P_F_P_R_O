@@ -84,27 +84,27 @@ namespace XLY.SF.Project.Plugin.Android
         {
 
             var bookMarkTree = new TreeNode();
-            bookMarkTree.Text = "书签";
+            bookMarkTree.Text = LanguageHelper.GetString(Languagekeys.PluginBrowser_BookMark);
             bookMarkTree.Type = typeof(BookMark);
             bookMarkTree.Items = new DataItems<BookMark>(dbfilePath);
 
             var historyTree = new TreeNode();
-            historyTree.Text = "历史记录";
+            historyTree.Text = LanguageHelper.GetString(Languagekeys.PluginBrowser_History);
             historyTree.Type = typeof(History);
             historyTree.Items = new DataItems<History>(dbfilePath);
 
             var pwdTree = new TreeNode();
-            pwdTree.Text = "站点密码";
+            pwdTree.Text = LanguageHelper.GetString(Languagekeys.PluginBrowser_Pwd);
             pwdTree.Type = typeof(WebSitPassword);
             pwdTree.Items = new DataItems<WebSitPassword>(dbfilePath);
 
             var cookieTree = new TreeNode();
-            cookieTree.Text = "Cookie";
+            cookieTree.Text = LanguageHelper.GetString(Languagekeys.PluginBrowser_Cookie);
             cookieTree.Type = typeof(WebCookie);
             cookieTree.Items = new DataItems<WebCookie>(dbfilePath);
 
-            var cacheTree = new TreeNode();
-            cacheTree.Text = "缓存";
+            var cacheTree = new TreeNode(); 
+            cacheTree.Text = LanguageHelper.GetString(Languagekeys.PluginBrowser_Cache);
             cacheTree.Type = typeof(WebCache);
             cacheTree.Items = new DataItems<WebCache>(dbfilePath);
 
@@ -186,7 +186,7 @@ namespace XLY.SF.Project.Plugin.Android
                             mark.DataState = DynamicConvert.ToEnumByValue(source.XLY_DataType, EnumDataState.Normal);
                             mark.Title = DynamicConvert.ToSafeString(source.title);
                             mark.Url = url;
-                            mark.IsDeleted = (int)DynamicConvert.ToSafeInt(source.deleted) == 0 ? "正常" : "已删除";
+                            mark.IsDeleted = (int)DynamicConvert.ToSafeInt(source.deleted) == 0 ?  LanguageHelper.GetString(Languagekeys.PluginBrowser_Normal) : LanguageHelper.GetString(Languagekeys.PluginBrowser_Delete);
                             mark.CreatedTime = DynamicConvert.ToSafeDateTime(source.created);
                             bookmarks.Add(mark);
                         }

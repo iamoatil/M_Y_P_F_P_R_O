@@ -754,6 +754,231 @@ public class Languagekeys
         /// 评论
         /// </summary>
 		public const string PluginWechat_Comment = "LanguageResource/PluginWechat/Comment";
+				
+        /// <summary>
+        /// Ai.粉色微信
+        /// </summary>
+		public const string PluginWechat_AiWechat = "LanguageResource/PluginWechat/AiWechat";
+				
+        /// <summary>
+        /// 微信分身
+        /// </summary>
+		public const string PluginWechat_OtherWechat = "LanguageResource/PluginWechat/OtherWechat";
+				
+        /// <summary>
+        /// 本次通话时长{0}秒
+        /// </summary>
+		public const string PluginWechat_VideoCallTime = "LanguageResource/PluginWechat/VideoCallTime";
+				
+        /// <summary>
+        /// 语音通话
+        /// </summary>
+		public const string PluginWechat_VideoCall = "LanguageResource/PluginWechat/VideoCall";
+				
+        /// <summary>
+        /// 好友列表
+        /// </summary>
+		public const string PluginQQ_FriendList = "LanguageResource/PluginQQ/FriendList";
+				
+        /// <summary>
+        /// 陌生人、黑名单、其他
+        /// </summary>
+		public const string PluginQQ_OtherFriend = "LanguageResource/PluginQQ/OtherFriend";
+				
+        /// <summary>
+        /// 好友消息
+        /// </summary>
+		public const string PluginQQ_FriendMsg = "LanguageResource/PluginQQ/FriendMsg";
+				
+        /// <summary>
+        /// 群成员
+        /// </summary>
+		public const string PluginQQ_TroopMember = "LanguageResource/PluginQQ/TroopMember";
+				
+        /// <summary>
+        /// 群消息
+        /// </summary>
+		public const string PluginQQ_TroopMsg = "LanguageResource/PluginQQ/TroopMsg";
+				
+        /// <summary>
+        /// 讨论组成员
+        /// </summary>
+		public const string PluginQQ_DiscussMember = "LanguageResource/PluginQQ/DiscussMember";
+				
+        /// <summary>
+        /// 讨论组消息
+        /// </summary>
+		public const string PluginQQ_DiscussMsg = "LanguageResource/PluginQQ/DiscussMsg";
+				
+        /// <summary>
+        /// 最近联系人
+        /// </summary>
+		public const string PluginQQ_RecentFriend = "LanguageResource/PluginQQ/RecentFriend";
+				
+        /// <summary>
+        /// QQ红包
+        /// </summary>
+		public const string PluginQQ_QQRedPack = "LanguageResource/PluginQQ/QQRedPack";
+				
+        /// <summary>
+        /// QQ邮箱
+        /// </summary>
+		public const string PluginQQ_QQEmail = "LanguageResource/PluginQQ/QQEmail";
+				
+        /// <summary>
+        /// QQ钱包
+        /// </summary>
+		public const string PluginQQ_QQWallet = "LanguageResource/PluginQQ/QQWallet";
+				
+        /// <summary>
+        /// 图片
+        /// </summary>
+		public const string PluginQQ_Image = "LanguageResource/PluginQQ/Image";
+				
+        /// <summary>
+        /// 语音
+        /// </summary>
+		public const string PluginQQ_Audio = "LanguageResource/PluginQQ/Audio";
+				
+        /// <summary>
+        /// 视频
+        /// </summary>
+		public const string PluginQQ_Video = "LanguageResource/PluginQQ/Video";
+				
+        /// <summary>
+        /// 文件
+        /// </summary>
+		public const string PluginQQ_File = "LanguageResource/PluginQQ/File";
+				
+        /// <summary>
+        /// 文本
+        /// </summary>
+		public const string PluginQQ_String = "LanguageResource/PluginQQ/String";
+				
+        /// <summary>
+        /// 通讯录
+        /// </summary>
+		public const string PluginQQ_AddressList = "LanguageResource/PluginQQ/AddressList";
+				
+        /// <summary>
+        /// 通话记录
+        /// </summary>
+		public const string PluginQQ_CallLog = "LanguageResource/PluginQQ/CallLog";
+				
+        /// <summary>
+        /// 群组通话
+        /// </summary>
+		public const string PluginQQ_CallGroup = "LanguageResource/PluginQQ/CallGroup";
+				
+        /// <summary>
+        /// 个人通话
+        /// </summary>
+		public const string PluginQQ_CallPerson = "LanguageResource/PluginQQ/CallPerson";
+				
+        /// <summary>
+        /// 视频聊天
+        /// </summary>
+		public const string PluginQQ_VideoChat = "LanguageResource/PluginQQ/VideoChat";
+				
+        /// <summary>
+        /// 语音通话
+        /// </summary>
+		public const string PluginQQ_AudioCall = "LanguageResource/PluginQQ/AudioCall";
+				
+        /// <summary>
+        /// 窗口抖动
+        /// </summary>
+		public const string PluginQQ_WinDoudong = "LanguageResource/PluginQQ/WinDoudong";
+				
+        /// <summary>
+        /// 系统消息
+        /// </summary>
+		public const string PluginQQ_SystemMsg = "LanguageResource/PluginQQ/SystemMsg";
+				
+        /// <summary>
+        /// 其他消息
+        /// </summary>
+		public const string PluginQQ_OtherMsg = "LanguageResource/PluginQQ/OtherMsg";
+				
+        /// <summary>
+        /// 书签
+        /// </summary>
+		public const string PluginBrowser_BookMark = "LanguageResource/PluginBrowser/BookMark";
+				
+        /// <summary>
+        /// 历史记录
+        /// </summary>
+		public const string PluginBrowser_History = "LanguageResource/PluginBrowser/History";
+				
+        /// <summary>
+        /// 站点密码
+        /// </summary>
+		public const string PluginBrowser_Pwd = "LanguageResource/PluginBrowser/Pwd";
+				
+        /// <summary>
+        /// Cookie
+        /// </summary>
+		public const string PluginBrowser_Cookie = "LanguageResource/PluginBrowser/Cookie";
+				
+        /// <summary>
+        /// 缓存
+        /// </summary>
+		public const string PluginBrowser_Cache = "LanguageResource/PluginBrowser/Cache";
+				
+        /// <summary>
+        /// 收藏
+        /// </summary>
+		public const string PluginBrowser_Favorite = "LanguageResource/PluginBrowser/Favorite";
+				
+        /// <summary>
+        /// 头条
+        /// </summary>
+		public const string PluginBrowser_HeadLine = "LanguageResource/PluginBrowser/HeadLine";
+				
+        /// <summary>
+        /// 下载/文件
+        /// </summary>
+		public const string PluginBrowser_DowloadFile = "LanguageResource/PluginBrowser/DowloadFile";
+				
+        /// <summary>
+        /// 搜索记录
+        /// </summary>
+		public const string PluginBrowser_SearchHistory = "LanguageResource/PluginBrowser/SearchHistory";
+				
+        /// <summary>
+        /// 小说书架
+        /// </summary>
+		public const string PluginBrowser_Novels = "LanguageResource/PluginBrowser/Novels";
+				
+        /// <summary>
+        /// 正常
+        /// </summary>
+		public const string PluginBrowser_Normal = "LanguageResource/PluginBrowser/Normal";
+				
+        /// <summary>
+        /// 已删除
+        /// </summary>
+		public const string PluginBrowser_Delete = "LanguageResource/PluginBrowser/Delete";
+				
+        /// <summary>
+        /// 发件箱
+        /// </summary>
+		public const string PluginEmail_SendBox = "LanguageResource/PluginEmail/SendBox";
+				
+        /// <summary>
+        /// 收件箱
+        /// </summary>
+		public const string PluginEmail_ReceiveBox = "LanguageResource/PluginEmail/ReceiveBox";
+				
+        /// <summary>
+        /// 草稿箱
+        /// </summary>
+		public const string PluginEmail_DraftsBox = "LanguageResource/PluginEmail/DraftsBox";
+				
+        /// <summary>
+        /// 删除邮件
+        /// </summary>
+		public const string PluginEmail_DeleteBox = "LanguageResource/PluginEmail/DeleteBox";
 		}
 
 

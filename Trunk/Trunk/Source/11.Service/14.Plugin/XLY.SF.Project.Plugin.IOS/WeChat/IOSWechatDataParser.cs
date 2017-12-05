@@ -61,13 +61,13 @@ namespace XLY.SF.Project.Plugin.IOS
             {
                 var pi = PluginInfo as DataParsePluginInfo;
 
-                BuildData(ds, pi.SaveDbPath, "IOS微信", pi.SourcePath[0].Local);
+                BuildData(ds, pi.SaveDbPath, LanguageHelper.GetString(Languagekeys.PluginName_Wechat), pi.SourcePath[0].Local);
 
-                BuildData(ds, pi.SaveDbPath, "Ai.粉色微信", pi.SourcePath[1].Local);
+                BuildData(ds, pi.SaveDbPath, LanguageHelper.GetString(Languagekeys.PluginWechat_AiWechat), pi.SourcePath[1].Local);
 
                 foreach (var source in pi.SourcePath.Skip(2))
                 {
-                    BuildData(ds, pi.SaveDbPath, "微信分身", source.Local);
+                    BuildData(ds, pi.SaveDbPath, LanguageHelper.GetString(Languagekeys.PluginWechat_OtherWechat), source.Local);
                 }
             }
             catch (Exception ex)

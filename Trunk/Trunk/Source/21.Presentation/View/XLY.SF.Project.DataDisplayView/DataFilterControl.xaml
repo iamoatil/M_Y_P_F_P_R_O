@@ -53,7 +53,7 @@
                             <Border x:Name="bd1" Background="#05FFFFFF" CornerRadius="5" Height="28">
                                 <StackPanel x:Name="panel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <Image Source="{Binding Icon}" Width="16" Height="16"/>
-                                    <TextBlock FontSize="14" Text="{Binding Name}" Foreground="#9BA6B7" Margin="0 0 16 0"/>
+                                    <TextBlock x:Name="tb" FontSize="14" Text="{Binding Name}" Foreground="#9BA6B7" Margin="0 0 16 0"/>
                                 </StackPanel>
                             </Border>
                             <ControlTemplate.Triggers>
@@ -69,7 +69,8 @@
                                     </Setter>
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter TargetName="bd1" Property="Background" Value="#10FFFFFF"/>
+                                    <Setter TargetName="bd1" Property="Background" Value="#379be6"/>
+                                    <Setter TargetName="tb" Property="Foreground" Value="White"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>

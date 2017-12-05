@@ -297,7 +297,7 @@ namespace XLY.SF.Project.FileBrowingView
 
             CurFileBrowingTreeNode = node;
 
-            if (node.AllChildrenNodes == null)
+            if (node.AllChildrenNodes.IsInvalid())
             {
                 LoadingData(async () =>
                 {

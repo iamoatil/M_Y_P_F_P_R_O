@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains.Contract;
@@ -48,7 +49,7 @@ namespace XLY.SF.Project.Services
         {
             return await Task.Run(() =>
             {
-                if (null == parentNode.ChildNodes)
+                if (parentNode.ChildNodes.IsInvalid())
                 {
                     var list = DoGetChildNodes(parentNode);
 
@@ -144,19 +145,14 @@ namespace XLY.SF.Project.Services
             {
                 try
                 {
-                    if (node.FileSize == 0)
-                    {
-                        return;
-                    }
-
                     var filefullname = DownLoadFile(node, savePath, persistRelativePath, cancellationTokenSource, async);
 
-                    if (FileHelper.IsValid(filefullname))
+                    if (FileHelper.IsExist(filefullname))
                     {
-                        ////修改文件时间
-                        //File.SetCreationTime(filefullname, GetValidDateTime(node.CreateTime));
-                        //File.SetLastWriteTime(filefullname, GetValidDateTime(node.LastWriteTime));
-                        //File.SetLastAccessTime(filefullname, GetValidDateTime(node.LastAccessTime));
+                        //修改文件时间
+                        File.SetCreationTime(filefullname, GetValidDateTime(node.CreateTime));
+                        File.SetLastWriteTime(filefullname, GetValidDateTime(node.LastWriteTime));
+                        File.SetLastAccessTime(filefullname, GetValidDateTime(node.LastAccessTime));
 
                         async.OnExportFileNodeSuccessHandle(node, true, filefullname);
                     }

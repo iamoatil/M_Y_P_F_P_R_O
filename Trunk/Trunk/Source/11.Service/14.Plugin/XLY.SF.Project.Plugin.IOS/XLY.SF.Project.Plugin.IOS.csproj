@@ -146,8 +146,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>xcopy /r /y $(TargetDir)$(TargetName).*  $(ProjectDir)..\..\..\31.Build\$(ConfigurationName)
+xcopy /r /y $(TargetDir)$(TargetName).*  $(ProjectDir)..\..\..\31.Build\$(ConfigurationName)\solution\DataExtractionService</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\..\..\23.Shell\XLY.SF.Shell\packages\System.Data.SQLite.Core.1.0.106.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\..\..\23.Shell\XLY.SF.Shell\packages\System.Data.SQLite.Core.1.0.106.0\build\net45\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

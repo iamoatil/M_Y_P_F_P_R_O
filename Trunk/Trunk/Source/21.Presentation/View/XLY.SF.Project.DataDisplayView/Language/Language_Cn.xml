@@ -18,6 +18,8 @@
   <DeleteNotice>是否删除数据'{0}'?</DeleteNotice>
   <DeleteNoticeTitle>系统提示</DeleteNoticeTitle>
   <DeletingData>正在删除数据...</DeletingData>
+  <NotOpenInspectionTip>未打开智能检视!</NotOpenInspectionTip>
+  <NotOpenInspectionTip2>请在设置中勾选"默认打开智能检视"</NotOpenInspectionTip2>
 </LanguageResource>
 
 

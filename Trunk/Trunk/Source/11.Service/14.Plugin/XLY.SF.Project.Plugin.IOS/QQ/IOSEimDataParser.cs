@@ -55,7 +55,7 @@ namespace XLY.SF.Project.Plugin.IOS
 
                 var mqqPath = new DirectoryInfo(databasesPath).Parent.FullName;
 
-                var parser = new IOSEimQQDataParseCoreV1_0(pi.SaveDbPath, "IOS 企业QQ", mqqPath);
+                var parser = new IOSEimQQDataParseCoreV1_0(pi.SaveDbPath, LanguageHelper.GetString(Languagekeys.PluginName_EimQQ), mqqPath);
 
                 var qqNode = parser.BuildTree();
 

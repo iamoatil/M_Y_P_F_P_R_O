@@ -185,11 +185,69 @@
     <Like>点赞</Like>
     <Comment>评论</Comment>
 
+    <AiWechat>Ai.粉色微信</AiWechat>
+    <OtherWechat>微信分身</OtherWechat>
+    <VideoCallTime>本次通话时长{0}秒</VideoCallTime>
+    <VideoCall>语音通话</VideoCall>
+
   </PluginWechat>
 
+  <!--QQ相关插件-->
+  <PluginQQ>
+    <FriendList>好友列表</FriendList>
+    <OtherFriend>陌生人、黑名单、其他</OtherFriend>
+    <FriendMsg>好友消息</FriendMsg>
+    <TroopMember>群成员</TroopMember>
+    <TroopMsg>群消息</TroopMsg>
+    <DiscussMember>讨论组成员</DiscussMember>
+    <DiscussMsg>讨论组消息</DiscussMsg>
+    <RecentFriend>最近联系人</RecentFriend>
+    <QQRedPack>QQ红包</QQRedPack>
+    <QQEmail>QQ邮箱</QQEmail>
+    <QQWallet>QQ钱包</QQWallet>
+    <Image>图片</Image>
+    <Audio>语音</Audio>
+    <Video>视频</Video>
+    <File>文件</File>
+    <String>文本</String>
+    <AddressList>通讯录</AddressList>
+    <CallLog>通话记录</CallLog>
+    <CallGroup>群组通话</CallGroup>
+    <CallPerson>个人通话</CallPerson>
+    <VideoChat>视频聊天</VideoChat>
+    <AudioCall>语音通话</AudioCall>
+    <WinDoudong>窗口抖动</WinDoudong>
+    <SystemMsg>系统消息</SystemMsg>
+    <OtherMsg>其他消息</OtherMsg>
+    
+  </PluginQQ>
 
+  <!--浏览器相关插件-->
+  <PluginBrowser>
+    <BookMark>书签</BookMark>
+    <History>历史记录</History>
+    <Pwd>站点密码</Pwd>
+    <Cookie>Cookie</Cookie>
+    <Cache>缓存</Cache>
+    <Favorite>收藏</Favorite>
+    <HeadLine>头条</HeadLine>
+    <DowloadFile>下载/文件</DowloadFile>
+    <SearchHistory>搜索记录</SearchHistory>
+    <Novels>小说书架</Novels>
+    <Normal>正常</Normal>
+    <Delete>已删除</Delete>
+  </PluginBrowser>
 
-
+  <!--邮箱相关插件-->
+  <PluginEmail>
+    <SendBox>发件箱</SendBox>
+    <ReceiveBox>收件箱</ReceiveBox>
+    <DraftsBox>草稿箱</DraftsBox>
+    <DeleteBox>删除邮件</DeleteBox>
+    
+  </PluginEmail>
+  
+  
 </LanguageResource>
 
 

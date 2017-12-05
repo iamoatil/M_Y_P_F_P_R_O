@@ -29,5 +29,16 @@ namespace XLY.SF.Project.Themes.CustromControl
         // 控制TreeViewItemEx的前台两种展现方式
         public static readonly DependencyProperty IsFirstStyleProperty =
             DependencyProperty.Register("IsFirstStyle", typeof(bool), typeof(TreeViewItemExport), new PropertyMetadata(false));
+
+
+        public bool IsChecked
+        {
+            get { return (bool)GetValue(IsCheckedProperty); }
+            set { SetValue(IsCheckedProperty, value); }
+        }
+
+        // 控制TreeViewItemEx的前台两种展现方式
+        public static readonly DependencyProperty IsCheckedProperty =
+            DependencyProperty.Register("IsChecked", typeof(bool), typeof(TreeViewItemExport), new PropertyMetadata(true));
     }
 }

@@ -47,21 +47,18 @@ namespace XLY.SF.Project.DataExtraction
 
         #region Public
 
-        [Export("XLY.SF.Project.DataExtraction.ExtractionView.GetSelectedItems", typeof(Func<String[]>))]
         public String[] GetSelectedItems()
         {
             ExtractionViewModel vm = (ExtractionViewModel)DataSource;
             return vm.GetSelectedItems();
         }
 
-        [Export("XLY.SF.Project.DataExtraction.ExtractionView.SetSelectedItems", typeof(Action<String[]>))]
         public void SetSelectedItems(params String[] ids)
         {
             ExtractionViewModel vm = (ExtractionViewModel)DataSource;
             vm.SetSelectedItems(ids);
         }
 
-        [Export("XLY.SF.Project.DataExtraction.ExtractionView.SetSelectionChangedHandler", typeof(Action<Action<String>>))]
         public void SetSelectionChangedHandler(Action<String> selectionChangedCallback)
         {
             _selectionChangedCallback = selectionChangedCallback;

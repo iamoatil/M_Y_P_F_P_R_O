@@ -24,7 +24,7 @@ namespace XLY.SF.Project.Domains
         {
             get
             {
-                return ItemType == SourceFileItemType.AndroidSDCardPath ? Config.TrimEnd("SDCard:") : Config;
+                return ItemType == SourceFileItemType.AndroidSDCardPath ? Config.TrimStart("SDCard:") : Config;
             }
         }
 

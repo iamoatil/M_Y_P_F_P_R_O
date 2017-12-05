@@ -16,6 +16,7 @@ using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Persistable.Primitive;
+using XLY.SF.Project.Plugin.Language;
 
 namespace XLY.SF.Project.Plugin.Android
 {
@@ -62,37 +63,37 @@ namespace XLY.SF.Project.Plugin.Android
         public void BuildData(TreeDataSource browseDs)
         {
             var bookMarkTree = new TreeNode();
-            bookMarkTree.Text = "书签";
+            bookMarkTree.Text = LanguageHelper.GetString(Languagekeys.PluginBrowser_BookMark);
             bookMarkTree.Type = typeof(BookMark);
             bookMarkTree.Items = new DataItems<BookMark>(DbFilePath);
 
             var favoriteTree = new TreeNode();
-            favoriteTree.Text = "收藏";
+            favoriteTree.Text = LanguageHelper.GetString(Languagekeys.PluginBrowser_Favorite);
             favoriteTree.Type = typeof(Favorite);
             favoriteTree.Items = new DataItems<Favorite>(DbFilePath);
 
             var historyTree = new TreeNode();
-            historyTree.Text = "浏览记录";
+            historyTree.Text = LanguageHelper.GetString(Languagekeys.PluginBrowser_History);
             historyTree.Type = typeof(History);
             historyTree.Items = new DataItems<History>(DbFilePath);
 
             var headLineTree = new TreeNode();
-            headLineTree.Text = "头条";
+            headLineTree.Text = LanguageHelper.GetString(Languagekeys.PluginBrowser_HeadLine);
             headLineTree.Type = typeof(HeadLine);
             headLineTree.Items = new DataItems<HeadLine>(DbFilePath);
 
             var downloadFileTree = new TreeNode();
-            downloadFileTree.Text = "下载/文件";
+            downloadFileTree.Text = LanguageHelper.GetString(Languagekeys.PluginBrowser_DowloadFile);
             downloadFileTree.Type = typeof(DownloadFile);
             downloadFileTree.Items = new DataItems<DownloadFile>(DbFilePath);
 
             var searchHistoryTree = new TreeNode();
-            searchHistoryTree.Text = "搜索记录";
+            searchHistoryTree.Text = LanguageHelper.GetString(Languagekeys.PluginBrowser_SearchHistory);
             searchHistoryTree.Type = typeof(SearchHistory);
             searchHistoryTree.Items = new DataItems<SearchHistory>(DbFilePath);
 
             var novels = new TreeNode();
-            novels.Text = "小说书架";
+            novels.Text = LanguageHelper.GetString(Languagekeys.PluginBrowser_Novels);
             novels.Type = typeof(Novels);
             novels.Items = new DataItems<Novels>(DbFilePath);
 

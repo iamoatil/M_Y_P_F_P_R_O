@@ -52,10 +52,13 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
             //设置智能预警参数
             MessageAggregation.RegisterGeneralMsg<List<Inspection>>(this, MessageKeys.InspectionKey, b =>
             {
-                IsInspection = true;
+                IsInspection = b.Parameters != null;
                 InspectionList.Clear();
-                InspectionList.AddRange(b.Parameters.Select(i => new InspectionItem() { Id = i.ID, Name = LanguageHelper.LanguageManager.Type == Framework.Language.LanguageType.En ? i.CategoryEn : i.CategoryCn, Icon = null }));
-                //SelectedInspectionItem = InspectionList.FirstOrDefault();
+                if(IsInspection)
+                {
+                    InspectionList.AddRange(b.Parameters.Select(i => new InspectionItem() { Id = i.ID, Name = LanguageHelper.LanguageManager.Type == Framework.Language.LanguageType.En ? i.CategoryEn : i.CategoryCn, Icon = null }));
+                    //SelectedInspectionItem = InspectionList.FirstOrDefault();
+                }
             });
         }
 

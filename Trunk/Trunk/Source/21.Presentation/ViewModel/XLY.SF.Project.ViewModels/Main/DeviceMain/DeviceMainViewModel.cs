@@ -6,11 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.MefIoc;
 using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base.MessageBase.Navigation;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Domains;
+using XLY.SF.Project.Models;
+using XLY.SF.Project.Models.Entities;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Project.ViewDomain.VModel.DevHomePage;
 using XLY.SF.Project.ViewModels.Main.CaseManagement;
@@ -119,7 +122,7 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         #endregion
 
         #region Commands
-        
+
         /// <summary>
         /// 文件浏览
         /// </summary>
@@ -171,33 +174,25 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
         #region ExecuteCommands
 
-        #region 此命令仅此一处使用【返回设备列表用】
-
-        //private void ExecuteBackToDevMainCommand(object devID)
-        //{
-        //    var devTmp = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
-        //    if (devID?.ToString() == devTmp.Device.ID)
-        //    {
-        //        MessageAggregation.SendGeneralMsg(new GeneralArgs<DeviceExtractionAdorner>(ExportKeys.DeviceWindowClosedMsg)
-        //        {
-        //            Parameters = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner
-        //        });
-        //    }
-        //}
-
-        #endregion
-
         private string ExecuteFileViewCommand()
         {
-            //SubView = DevNavigationManager.GetOrCreateView(ExportKeys.FileBrowingView, CurDevModel.IDevSource);
             SwitchSubView(DevMainSubViewType.FileView, CurDevModel.IDevSource);
             return string.Empty;
         }
 
         private string EarlyWarningViewCommand()
         {
-            //SubView = DevNavigationManager.GetOrCreateView(ExportKeys.FileBrowingView, CurDevModel.IDevSource);
-            SwitchSubView(DevMainSubViewType.AutoWarning, CurDevModel.IDevSource);
+            var tmp = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
+            //var settings = IocManagerSingle.Instance.GetPart<IRecordContext<Inspection>>();
+            //var inspection = new
+            //{
+            //    Config = settings.Records.ToList().ConvertAll(i => new { ID = i.ID, CategoryCn = i.CategoryCn, CategoryEn = i.CategoryEn }),
+            //    DevicePath = tmp.Target.Path
+            //};
+
+            //var devicePath = Serializer.JsonSerializerIO(inspection);
+            var inspection = "Inspection;" + tmp.Target.Path;
+            SwitchSubView(DevMainSubViewType.AutoWarning, inspection);
             return string.Empty;
         }
 
@@ -205,14 +200,12 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         private string ExecuteDeviceHomePageCommand()
         {
             SwitchSubView(DevMainSubViewType.DevHomePage, CurDevModel);
-            //SubView = DevNavigationManager.GetOrCreateView(ExportKeys.DeviceHomePageView, CurDevModel);
             return string.Empty;
         }
 
         private string ExeucteExtractionResultCommand()
         {
             var tmp = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
-            //SubView = DevNavigationManager.GetOrCreateView(ExportKeys.DataDisplayView, tmp.Target.Path);
             SwitchSubView(DevMainSubViewType.ExtractResult, tmp.Target.Path);
             SetAutoWarningPath(tmp.Target.Path);
             return string.Empty;
@@ -331,7 +324,7 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
             //SubView = a;
 
 
-            SwitchSubView(DevMainSubViewType.ExtractResult, tmp.Target.Path, args.Parameters);
+            SwitchSubView(DevMainSubViewType.ExtractResult, tmp.Target.Path);
             SetAutoWarningPath(tmp.Target.Path);
         }
 

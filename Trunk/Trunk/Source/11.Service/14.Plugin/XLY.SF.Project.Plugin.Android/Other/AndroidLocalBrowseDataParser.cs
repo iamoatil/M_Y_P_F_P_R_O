@@ -80,22 +80,22 @@ namespace XLY.SF.Project.Plugin.Android
         private void BuildData(string dbfilePath, TreeDataSource datasource, string browser2File, string webviewCookiesChromiumFile, string webviewFile)
         {
             var bookMarkTree = new TreeNode();
-            bookMarkTree.Text = "书签";
+            bookMarkTree.Text = LanguageHelper.GetString(Languagekeys.PluginBrowser_BookMark);
             bookMarkTree.Type = typeof(BookMark);
             bookMarkTree.Items = new DataItems<BookMark>(dbfilePath);
 
             var historyTree = new TreeNode();
-            historyTree.Text = "历史记录";
+            historyTree.Text = LanguageHelper.GetString(Languagekeys.PluginBrowser_History);
             historyTree.Type = typeof(History);
             historyTree.Items = new DataItems<History>(dbfilePath);
 
             var pwdTree = new TreeNode();
-            pwdTree.Text = "站点密码";
+            pwdTree.Text = LanguageHelper.GetString(Languagekeys.PluginBrowser_Pwd);
             pwdTree.Type = typeof(WebSitPassword);
             pwdTree.Items = new DataItems<WebSitPassword>(dbfilePath);
 
             var cookieTree = new TreeNode();
-            cookieTree.Text = "Cookie";
+            cookieTree.Text = LanguageHelper.GetString(Languagekeys.PluginBrowser_Cookie);
             cookieTree.Type = typeof(WebCookie);
             cookieTree.Items = new DataItems<WebCookie>(dbfilePath);
 
@@ -178,7 +178,8 @@ namespace XLY.SF.Project.Plugin.Android
                             book.Title = DynamicConvert.ToSafeString(source.title);
                             book.Url = url;
                             book.CreatedTime = DynamicConvert.ToSafeDateTime(source.created);
-                            book.IsDeleted = DynamicConvert.ToSafeInt(source.deleted) == 0 ? "正常" : "已删除";
+                            book.IsDeleted = DynamicConvert.ToSafeInt(source.deleted) == 0 ?
+                                            LanguageHelper.GetString(Languagekeys.PluginBrowser_Normal) : LanguageHelper.GetString(Languagekeys.PluginBrowser_Delete);
                             bookmarks.Add(book);
                         }
                     }

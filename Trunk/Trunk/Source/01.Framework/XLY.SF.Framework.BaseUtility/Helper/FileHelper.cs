@@ -33,6 +33,7 @@ namespace XLY.SF.Project.BaseUtility.Helper
         #endregion
 
         #region 检测文件名是否合法
+
         /// <summary>
         /// 判断文件是否可用，字符为空、文件不存在，文件大小为0都 表示文件不可用。
         /// true表示文件合法可用。
@@ -48,6 +49,21 @@ namespace XLY.SF.Project.BaseUtility.Helper
                 return false;
             return true;
         }
+
+        /// <summary>
+        /// 判断文件是否存在
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public static bool IsExist(string file)
+        {
+            if (String.IsNullOrEmpty(file))
+                return false;
+            if (!File.Exists(file))
+                return false;
+            return true;
+        }
+
         #endregion
 
         #region 是否合法的文件夹

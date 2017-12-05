@@ -110,7 +110,7 @@
     <Compile Include="MessageBase\Navigation\NavigationLogHelper.cs" />
     <Compile Include="MessageBase\Navigation\NavigationViewElement.cs" />
     <Compile Include="MessageBase\SysCommonMsgArgs.cs" />
-    <Compile Include="ModuleBase\IModule.cs" />
+    <Compile Include="ModuleBase\ExternalModuleAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StartupArgument\AssemblyHelper.cs" />
     <Compile Include="StartupArgument\StartupArgment.cs" />

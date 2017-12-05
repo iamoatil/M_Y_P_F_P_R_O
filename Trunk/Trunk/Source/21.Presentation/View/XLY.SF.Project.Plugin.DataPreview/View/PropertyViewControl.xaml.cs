@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -14,6 +15,11 @@ namespace XLY.SF.Project.Plugin.DataPreview.View
     /// </summary>
     public partial class PropertyViewControl : UserControl, IDataPreviewRelease
     {
+        /// <summary>
+        /// 无效时间
+        /// </summary>
+        private readonly static DateTime InvalidDateTime = new DateTime(1970, 1, 1);
+
         public PropertyViewControl()
         {
             InitializeComponent();
@@ -54,9 +60,30 @@ namespace XLY.SF.Project.Plugin.DataPreview.View
                 dic[Languagekeys.FileName] = fi.Name;
                 dic[Languagekeys.FullPath] = fi.FullName;
                 dic[Languagekeys.FileSize] = $"{FileHelper.GetFileSize(fi.Length)} ({fi.Length} {Languagekeys.Bytes})";
-                dic[Languagekeys.CreateTime] = fi.CreationTime.ToString();
-                dic[Languagekeys.ModifyTime] = fi.LastWriteTime.ToString();
-                dic[Languagekeys.AccessTime] = fi.LastAccessTime.ToString();
+                if (fi.CreationTime.Equals(InvalidDateTime))
+                {
+                    dic[Languagekeys.CreateTime] = String.Empty;
+                }
+                else
+                {
+                    dic[Languagekeys.CreateTime] = fi.CreationTime.ToString();
+                }
+                if (fi.LastWriteTime.Equals(InvalidDateTime))
+                {
+                    dic[Languagekeys.ModifyTime] = String.Empty;
+                }
+                else
+                {
+                    dic[Languagekeys.ModifyTime] = fi.LastWriteTime.ToString();
+                }
+                if (fi.LastAccessTime.Equals(InvalidDateTime))
+                {
+                    dic[Languagekeys.AccessTime] = String.Empty;
+                }
+                else
+                {
+                    dic[Languagekeys.AccessTime] = fi.LastAccessTime.ToString();
+                }
                 dic[Languagekeys.Attributes] = fi.Attributes.HasFlag(FileAttributes.ReadOnly) ? (string)Languagekeys.ZhiDu : "";
             }
             else if (obj.CurrentData != null)
