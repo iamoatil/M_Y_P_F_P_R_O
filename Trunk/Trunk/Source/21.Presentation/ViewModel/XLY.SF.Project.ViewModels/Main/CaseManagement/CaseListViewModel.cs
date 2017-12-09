@@ -39,12 +39,12 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         public CaseListViewModel()
         {
             FilterArgs = new CaseFilterArgs();
-            _openCommandProxy = new ProxyRelayCommand<RecentCaseEntityModel>(Open);
-            _removeCommandProxy = new ProxyRelayCommand<CaseItem>(Remove);
-            _searchCommandProxy = new ProxyRelayCommand(Search);
+            _openCommandProxy = new ProxyRelayCommand<RecentCaseEntityModel>(Open, base.ModelName);
+            _removeCommandProxy = new ProxyRelayCommand<CaseItem>(Remove, base.ModelName);
+            _searchCommandProxy = new ProxyRelayCommand(Search, base.ModelName);
             SelectAllCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<Boolean>(SelectAll, (b) => Items != null && Items.Count != 0);
             SelectCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<Boolean>(Select);
-            _removeBatchCommandProxy = new ProxyRelayCommand(RemoveBatch);
+            _removeBatchCommandProxy = new ProxyRelayCommand(RemoveBatch, base.ModelName);
         }
 
         #endregion

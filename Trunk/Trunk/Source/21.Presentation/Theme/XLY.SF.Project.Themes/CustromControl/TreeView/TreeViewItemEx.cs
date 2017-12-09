@@ -36,15 +36,17 @@ namespace XLY.SF.Project.Themes.CustromControl
         public TreeViewItemEx()
         {
             this.Selected += TreeViewItemEx_Selected;
-            this.PreviewMouseLeftButtonUp += TreeViewItemEx_PreviewMouseLeftButtonUp;
+            this.Expanded += TreeViewItemEx_Expanded;
         }
-        private void TreeViewItemEx_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+
+        private void TreeViewItemEx_Expanded(object sender, RoutedEventArgs e)
         {
-            if (this.IsSelected)
+            if(!IsExpanded)
             {
-                this.IsExpanded = !this.IsExpanded;
+                IsExpanded = true;
             }
         }
+
         private void TreeViewItemEx_Selected(object sender, RoutedEventArgs e)
         {
             if (this.IsSelected)
@@ -69,10 +71,11 @@ namespace XLY.SF.Project.Themes.CustromControl
                         }
                         this.Tag = false;
                     }
-
                 }
 
                 list.Clear();
+
+                this.IsExpanded = true;
             }
             else
             {
@@ -81,8 +84,8 @@ namespace XLY.SF.Project.Themes.CustromControl
             }
 
             list.Add(this);
-
         }
+
         /// <summary>
         /// 设置当前节点的选中样式
         /// </summary>
@@ -114,6 +117,7 @@ namespace XLY.SF.Project.Themes.CustromControl
                 img2.Effect = ct;
             }
         }
+
         /// <summary>
         /// 设置当前节点的所有父节点样式
         /// </summary>
@@ -138,6 +142,7 @@ namespace XLY.SF.Project.Themes.CustromControl
             }
 
         }
+
         protected override DependencyObject GetContainerForItemOverride()
         {
             return new TreeViewItemEx();

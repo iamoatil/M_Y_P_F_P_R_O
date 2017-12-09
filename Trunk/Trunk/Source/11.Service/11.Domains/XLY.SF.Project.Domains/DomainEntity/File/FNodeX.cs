@@ -109,7 +109,6 @@ namespace XLY.SF.Project.Domains
             get { return _fileName; }
             set
             {
-                // 20160628 by luochao 文件名中不允许使用的字符使用相似字符进行替换，其它均替换为空
                 _fileName = FileHelper.FilterInvalidFileName(value);
             }
         }

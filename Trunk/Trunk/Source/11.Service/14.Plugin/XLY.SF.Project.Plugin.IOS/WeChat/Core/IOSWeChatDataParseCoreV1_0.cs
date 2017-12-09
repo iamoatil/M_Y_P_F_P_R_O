@@ -1329,6 +1329,8 @@ namespace XLY.SF.Project.Plugin.IOS
                 Items = new DataItems<MessageCore>(DbFilePath)
             };
 
+            bool hasRows = false;
+
             var accountName = WeChatAccountShowName;
             var friendName = friend.ShowName;
             var friendMd5 = CryptographyHelper.MD5FromString(friend.WeChatId);
@@ -1344,6 +1346,10 @@ namespace XLY.SF.Project.Plugin.IOS
                      dynamic msg;
                      MessageCore message;
 
+                     if (r.HasRows)
+                     {
+                         hasRows = true;
+                     }
                      while (r.Read())
                      {
                          try
@@ -1427,6 +1433,10 @@ namespace XLY.SF.Project.Plugin.IOS
                      MessageCore mc;
                      dynamic msg;
 
+                     if (r.HasRows)
+                     {
+                         hasRows = true;
+                     }
                      while (r.Read())
                      {
                          msg = r.ToDynamic();
@@ -1443,7 +1453,7 @@ namespace XLY.SF.Project.Plugin.IOS
 
             #endregion
 
-            return msgNode;
+            return hasRows ? msgNode : null;
         }
 
         /// <summary>
@@ -1460,6 +1470,8 @@ namespace XLY.SF.Project.Plugin.IOS
                 Items = new DataItems<MessageCore>(DbFilePath)
             };
 
+            bool hasRows = false;
+
             var accountName = WeChatAccountShowName;
             var groupName = group.ShowName;
             var groupMd5 = CryptographyHelper.MD5FromString(group.WeChatId);
@@ -1475,6 +1487,10 @@ namespace XLY.SF.Project.Plugin.IOS
                     dynamic msg;
                     MessageCore message;
 
+                    if (r.HasRows)
+                    {
+                        hasRows = true;
+                    }
                     while (r.Read())
                     {
                         try
@@ -1567,6 +1583,10 @@ namespace XLY.SF.Project.Plugin.IOS
                     MessageCore mc;
                     dynamic msg;
 
+                    if (r.HasRows)
+                    {
+                        hasRows = true;
+                    }
                     while (r.Read())
                     {
                         msg = r.ToDynamic();
@@ -1583,7 +1603,7 @@ namespace XLY.SF.Project.Plugin.IOS
 
             #endregion
 
-            return msgNode;
+            return hasRows ? msgNode : null;
         }
 
         #region 解析消息
@@ -1687,32 +1707,32 @@ namespace XLY.SF.Project.Plugin.IOS
             switch (msg.Type)
             {
                 case EnumColumnType.Audio:
-                    mess.Message = MessageToVoice.MessageConvert(mess, GetMediaPath("Audio", friendMd5));
+                    msg.Content = MessageToVoice.MessageConvert(mess, GetMediaPath("Audio", friendMd5));
                     return;
                 case EnumColumnType.Image:
-                    mess.Message = MessageToImage.MessageConvert(mess, GetMediaPath("Img", friendMd5));
+                    msg.Content = MessageToImage.MessageConvert(mess, GetMediaPath("Img", friendMd5));
                     return;
                 case EnumColumnType.Video:
-                    mess.Message = MessageToVideo.MessageConvert(mess, GetMediaPath("Video", friendMd5));
+                    msg.Content = MessageToVideo.MessageConvert(mess, GetMediaPath("Video", friendMd5));
                     return;
                 case EnumColumnType.Emoji:
-                    mess.Message = MessageToEmoji(mess);
+                    msg.Content = MessageToEmoji(mess);
                     return;
                 case EnumColumnType.Location:
-                    mess.Message = MessageToLocation(mess);
+                    msg.Content = MessageToLocation(mess);
                     return;
                 case EnumColumnType.AudioCall:
-                    mess.Message = MessageToAudioCall(mess);
+                    msg.Content = MessageToAudioCall(mess);
                     return;
                 case EnumColumnType.HTML:
-                    mess.Message = MessageToHTML(mess, ref msg);
+                    msg.Content = MessageToHTML(mess, ref msg);
                     return;
                 case EnumColumnType.System:
-                    mess.Message = MessageToSystem(mess, ref msg);
+                    msg.Content = MessageToSystem(mess, ref msg);
                     return;
             }
 
-            mess.Message = DynamicConvert.ToSafeString(mess.Message);
+            msg.Content = DynamicConvert.ToSafeString(mess.Message);
         }
 
         /// <summary>

@@ -8,6 +8,7 @@ using X64Service;
 using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.Domains;
+using System.Collections.Generic;
 
 namespace XLY.SF.Project.Devices
 {
@@ -94,7 +95,20 @@ namespace XLY.SF.Project.Devices
             {
                 var devInfo = (UsbDeviceInfo)Marshal.PtrToStructure(devicePtr, typeof(UsbDeviceInfo));
 
-                DeviceConnected?.Invoke(new UsbDevice() { VID = devInfo.VID, PID = devInfo.PID });
+                var pDeviceIDArray = devicePtr + Marshal.SizeOf(typeof(UsbDeviceInfo));
+                List<string> list = new List<string>();
+                byte[] arr;
+                for (int pos = 1; pos <= devInfo.ICount; pos++)
+                {
+                    arr = new byte[UsbDeviceInfo.StrLength];
+                    Marshal.Copy(pDeviceIDArray, arr, 0, arr.Length);
+
+                    list.Add(Encoding.Unicode.GetString(arr).Trim('\0').Trim().ToUpper());
+
+                    pDeviceIDArray += UsbDeviceInfo.StrLength;
+                }
+
+                DeviceConnected?.Invoke(new UsbDevice() { VID = devInfo.VID, PID = devInfo.PID, DeviceIDArray = list });
                 LoggerManagerSingle.Instance.Info($"设备连接：vid={devInfo.VID:X}, pid={devInfo.PID:X}, isPhone={devInfo.IsPhone}, desc={devInfo.GetDeviceDesc()}, type={devInfo.GetDeviceType()}");
             }
             else   //设备断开

@@ -39,9 +39,9 @@
                     <ScrollViewer Grid.Column="1" x:Name="PART_ContentHost" Foreground="{TemplateBinding Foreground}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                     <Button Grid.Column="2" Focusable="False" Template="{DynamicResource btn_EmptyCT}" Background="Transparent" x:Name="btn_Icon">
                         <Image x:Name="img_Icon" Width="{Binding IconWidth,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}" 
-                       Height="{Binding IconHeight,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
-                       Source="{Binding Icon,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
-                       Visibility="{Binding Icon,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx},Converter={StaticResource imgContentToBool}}" Margin="10 0 10 0"/>
+                               Height="{Binding IconHeight,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
+                               Source="{Binding Icon,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
+                               Visibility="{Binding Icon,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx},Converter={StaticResource imgContentToBool}}" Margin="10 0 10 0"/>
                     </Button>
                 </Grid>
             </Border>

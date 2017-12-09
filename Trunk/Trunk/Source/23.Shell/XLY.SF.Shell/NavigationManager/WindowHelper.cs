@@ -98,16 +98,23 @@ namespace XLY.SF.Shell.NavigationManager
         /// 删除已打开的窗体
         /// </summary>
         /// <param name="viewModelID">已打开的ViewModelID</param>
-        /// <param name="needClose">是否需要关闭操作</param>
-        public void RemoveOpenedWindowAndCleanUp(Guid viewModelID, bool needClose)
+        public void RemoveOpenedWindowAndCleanUp(Guid viewModelID)
         {
             if (_curOpenWindows.ContainsKey(viewModelID))
             {
-                if (needClose)
-                    _curOpenWindows[viewModelID].Close();
                 _curOpenWindows[viewModelID].Content.DataSource?.ViewClosedCallback();
                 _curOpenWindows.Remove(viewModelID);
             }
+        }
+
+        /// <summary>
+        /// 关闭已打开的窗体
+        /// </summary>
+        /// <param name="viewModelID">已打开的ViewModelID</param>
+        public void CloseOpenedWindow(Guid viewModelID)
+        {
+            if (_curOpenWindows.ContainsKey(viewModelID))
+                _curOpenWindows[viewModelID].Close(); 
         }
 
         #endregion

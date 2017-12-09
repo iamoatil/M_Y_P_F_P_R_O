@@ -46,20 +46,6 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                 {0, Languagekeys.Keyword },
                 {1, Languagekeys.ZhengZe},
             };
-
-            MessageAggregation.RegisterGeneralMsg<ObservableCollection<DataExtactionItem>>(this, MessageKeys.SetDataListKey, SetDataListKey);
-            MessageAggregation.RegisterGeneralMsg<object>(this, MessageKeys.DataLoadedCompletedKey, b=> OnDataLoadedCompleted());
-            //设置智能预警参数
-            MessageAggregation.RegisterGeneralMsg<List<Inspection>>(this, MessageKeys.InspectionKey, b =>
-            {
-                IsInspection = b.Parameters != null;
-                InspectionList.Clear();
-                if(IsInspection)
-                {
-                    InspectionList.AddRange(b.Parameters.Select(i => new InspectionItem() { Id = i.ID, Name = LanguageHelper.LanguageManager.Type == Framework.Language.LanguageType.En ? i.CategoryEn : i.CategoryCn, Icon = null }));
-                    //SelectedInspectionItem = InspectionList.FirstOrDefault();
-                }
-            });
         }
 
         #region 绑定数据源
@@ -356,20 +342,31 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         /// 重新设置数据
         /// </summary>
         /// <param name="obj"></param>
-        private void SetDataListKey(GeneralArgs<ObservableCollection<DataExtactionItem>> obj)
+        public void SetDataListKey(ObservableCollection<DataExtactionItem> obj)
         {
-            DataListSource = obj.Parameters;
+            DataListSource = obj;
             DoClearCommond();
         }
 
         /// <summary>
         /// 数据加载完成后更新
         /// </summary>
-        private void OnDataLoadedCompleted()
+        public void OnDataLoadedCompleted()
         {
             if(IsInspection)
             {
                 SelectedInspectionItem = InspectionList.FirstOrDefault();
+            }
+        }
+
+        public void SetInspectionConfig(List<Inspection> config)
+        {
+            IsInspection = config != null;
+            InspectionList.Clear();
+            if (IsInspection)
+            {
+                InspectionList.AddRange(config.Select(i => new InspectionItem() { Id = i.ID, Name = LanguageHelper.LanguageManager.Type == Framework.Language.LanguageType.En ? i.CategoryEn : i.CategoryCn, Icon = null }));
+                //SelectedInspectionItem = InspectionList.FirstOrDefault();
             }
         }
 

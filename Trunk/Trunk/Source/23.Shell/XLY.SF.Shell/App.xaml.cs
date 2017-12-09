@@ -60,7 +60,7 @@ namespace XLY.SF.Shell
                 CanResize = false
             };
             Current.MainWindow.WindowState = WindowState.Maximized;
-
+            string a = string.Empty;
             //监听系统消息
             MsgAggregation.Instance.RegisterSysMsg<string>(this, SystemKeys.ShutdownProgram, ShutdownProgramCallback);
 

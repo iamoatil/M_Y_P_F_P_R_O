@@ -13,7 +13,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 using XLY.SF.Framework.BaseUtility;
+using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Persistable.Primitive;
@@ -225,16 +227,57 @@ namespace XLY.SF.Project.Plugin.IOS
             {
                 DataState = EnumDataState.Normal,
                 Text = LanguageHelper.GetString(Languagekeys.PluginQQ_FriendList),
-                Type = typeof(QQFriendShow),
-                Items = new DataItems<QQFriendShow>(DbFilePath),
-                Id = QQAccount.QQNumber
             };
 
             accountNode.TreeNodes.Add(friendNode);
 
             LsAllFriends = new List<QQFriendShow>();
 
-            //1.从QQ.db的tb_userSummary表获取数据
+            var tempListFriends = new List<QQFriendShow>();
+            List<FriendDataInfo> qqFriendList;
+            var allGroup = new Dictionary<string, IEnumerable<FriendDataInfo>>();
+
+            //1.先从QQFriendList_v3.plist获取好友分组信息
+            try
+            {
+                var plistFile = Path.Combine(QQDbPath, "QQFriendList_v3.plist");
+                if (File.Exists(plistFile))
+                {
+                    var saveFile = Path.Combine(QQDbPath, "temp.data");
+                    var res = X64Service.AppleQQFriendListCoreDll.GetAppleQQFriendList(plistFile, saveFile);
+                    if (0 == res && File.Exists(saveFile))
+                    {
+                        var doc = new XmlDocument();
+                        doc.Load(saveFile);
+
+                        string groupName, QQNumber, nickName, remarkName;
+
+                        foreach (XmlNode groupNode in doc.SelectNodes("/QQFriendInfo/GroupInfo"))
+                        {
+                            groupName = groupNode.Attributes["GroupName"].Value;
+                            //var friendNumber = groupNode.Attributes["FriendNumber"].Value;
+                            qqFriendList = new List<FriendDataInfo>();
+
+                            foreach (XmlNode friendXMLNode in groupNode.SelectNodes("./QQinfo"))
+                            {
+                                QQNumber = friendXMLNode.Attributes["QQnumber"].Value;
+                                nickName = friendXMLNode.SelectSingleNode("./nickname").InnerText;
+                                remarkName = friendXMLNode.SelectSingleNode("./QQName").InnerText;
+
+                                qqFriendList.Add(new FriendDataInfo(QQNumber, nickName, remarkName));
+                            }
+
+                            allGroup.Add(groupName, qqFriendList);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerManagerSingle.Instance.Error(ex, "获取IOSQQ好友分组信息失败！");
+            }
+
+            //2.从QQ.db的tb_userSummary表获取数据
             if (MainContext.ExistTable("tb_userSummary"))
             {
                 MainContext.UsingSafeConnection("SELECT * FROM tb_userSummary", r =>
@@ -248,6 +291,12 @@ namespace XLY.SF.Project.Plugin.IOS
                                 friendInfo = new QQFriendShow();
 
                                 friendInfo.QQNumber = DynamicConvert.ToSafeString(summ.uin);
+
+                                if (friendInfo.QQNumber == QQAccount.QQNumber)
+                                {
+                                    continue;
+                                }
+
                                 friendInfo.Nick = DynamicConvert.ToSafeString(summ.nick);
                                 friendInfo.Remark = DynamicConvert.ToSafeString(summ.remark);
                                 friendInfo.Alias = DynamicConvert.ToSafeString(summ.showName);
@@ -264,12 +313,12 @@ namespace XLY.SF.Project.Plugin.IOS
                                 friendInfo.Feed = DynamicConvert.ToSafeString(summ.qzoneFeedsDesc);
                                 friendInfo.DataState = DynamicConvert.ToEnumByValue<EnumDataState>(summ.XLY_DataType, EnumDataState.Normal);
 
-                                LsAllFriends.Add(friendInfo);
+                                tempListFriends.Add(friendInfo);
                             }
                         });
             }
 
-            //2.从消息表获取QQ号码
+            //3.从消息表获取QQ号码
             var listMsgTable = MainContext.Find("select * from sqlite_master where type = 'table' and name like 'tb_c2cMsg_%'");
             string qqNumber;
             QQFriendShow friend;
@@ -277,7 +326,7 @@ namespace XLY.SF.Project.Plugin.IOS
             {
                 qqNumber = DynamicConvert.ToSafeString(msgTable.name);
                 qqNumber = qqNumber.TrimStart("tb_c2cMsg_");
-                if (LsAllFriends.Any(f => f.QQNumber == qqNumber))
+                if (tempListFriends.Any(f => f.QQNumber == qqNumber))
                 {
                     continue;
                 }
@@ -297,14 +346,53 @@ namespace XLY.SF.Project.Plugin.IOS
                         friend.Nick = LanguageHelper.GetString(Languagekeys.PluginQQ_QQRedPack);
                         break;
                 }
-                
-                LsAllFriends.Add(friend);
+
+                tempListFriends.Add(friend);
             }
 
-            foreach (var friendF in LsAllFriends)
+            //4.构建数据
+            foreach (var groupInfo in allGroup)
             {
-                friendNode.Items.Add(friendF);
+                var groupNode = new TreeNode
+                {
+                    DataState = EnumDataState.Normal,
+                    Text = groupInfo.Key,
+                    Type = typeof(QQFriendShow),
+                    Items = new DataItems<QQFriendShow>(DbFilePath),
+                };
+                friendNode.TreeNodes.Add(groupNode);
+
+                foreach (var frindt in groupInfo.Value)
+                {
+                    var temFriend = tempListFriends.FirstOrDefault(f => f.QQNumber == frindt.QQNumber);
+                    if (null != temFriend)
+                    {
+                        temFriend.Nick = frindt.NickName;
+                        temFriend.Remark = frindt.Remark;
+
+                        tempListFriends.Remove(temFriend);
+                    }
+                    else
+                    {
+                        temFriend = new QQFriendShow() { QQNumber = frindt.QQNumber, Nick = frindt.NickName, Remark = frindt.Remark };
+                    }
+
+                    LsAllFriends.Add(temFriend);
+                    groupNode.Items.Add(temFriend);
+                }
             }
+
+            //陌生人、其他分组
+            var otherNode = new TreeNode
+            {
+                DataState = EnumDataState.Normal,
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_OtherFriend),
+                Type = typeof(QQFriendShow),
+                Items = new DataItems<QQFriendShow>(DbFilePath),
+            };
+            friendNode.TreeNodes.Add(otherNode);
+
+            otherNode.Items.AddRange(tempListFriends);
         }
 
         /// <summary>
@@ -348,12 +436,26 @@ namespace XLY.SF.Project.Plugin.IOS
                 Type = typeof(QQGroupShow),
                 Items = new DataItems<QQGroupShow>(DbFilePath),
             };
-            
+
             accountNode.TreeNodes.Add(troopNode);
 
+            var tableName = string.Empty;
             if (MainContext.ExistTable("tb_troop"))
             {
-                MainContext.UsingSafeConnection("SELECT * FROM tb_troop", r =>
+                tableName = "tb_troop";
+            }
+            else if (MainContext.ExistTable("tb_troop_new"))
+            {
+                tableName = "tb_troop_new";
+            }
+            else
+            {
+                return;
+            }
+
+            if (MainContext.ExistTable(tableName))
+            {
+                MainContext.UsingSafeConnection($"SELECT * FROM {tableName}", r =>
                  {
                      dynamic groupDy;
                      QQGroupShow groupInfo;
@@ -718,7 +820,7 @@ namespace XLY.SF.Project.Plugin.IOS
         {
             var mainDbFile = Path.Combine(QQDbPath, "QQ.db");
 
-            string[] baseTables = { "tb_File", "tb_recentC2CMsg", "tb_userSummary", "tb_troop", "tb_TroopMem", "tb_SecSession", "tb_SecMsg", "tb_discussGrp_list", "tb_discussGrp_member" };
+            string[] baseTables = { "tb_File", "tb_recentC2CMsg", "tb_userSummary", "tb_troop", "tb_troop_new", "tb_TroopMem", "tb_SecSession", "tb_SecMsg", "tb_discussGrp_list", "tb_discussGrp_member" };
             var allTables = SqliteRecoveryHelper.ButtomGetAllTables(mainDbFile);
             var recoveryTables = string.Join(",", allTables.Where(table => baseTables.Contains(table) || table.StartsWith("tb_TroopMsg_") || table.StartsWith("tb_c2cMsg_") || table.StartsWith("tb_discussGrp_") || table.StartsWith("tb_SecMsg_")));
 
@@ -787,6 +889,7 @@ namespace XLY.SF.Project.Plugin.IOS
                 Items = new DataItems<MessageCore>(DbFilePath),
             };
 
+            bool hasRows = false;
             bool bAll = true;
 
             var accountName = QQAccount.FullName;
@@ -800,6 +903,10 @@ namespace XLY.SF.Project.Plugin.IOS
             {
                 MainContext.UsingSafeConnection(string.Format("SELECT * FROM {0}", msgTableName), r =>
                 {
+                    if (r.HasRows)
+                    {
+                        hasRows = true;
+                    }
                     if (r.Read())
                     {
                         bAll = false;
@@ -817,6 +924,10 @@ namespace XLY.SF.Project.Plugin.IOS
 
             MainContext.UsingSafeConnection(string.Format("SELECT * FROM tb_recentC2CMsg where uin = '{0}' and XLY_DataType = 1", friend.QQNumber), r =>
             {
+                if (r.HasRows)
+                {
+                    hasRows = true;
+                }
                 while (r.Read())
                 {
                     CreateFriendMessageCore(friend.QQNumber, r.ToDynamic(), friendMsgNode, accountName, friendName);
@@ -862,6 +973,10 @@ namespace XLY.SF.Project.Plugin.IOS
 
                 FTSMsgContext.UsingSafeConnection(new SQLiteString(sql), r =>
                 {
+                    if (r.HasRows)
+                    {
+                        hasRows = true;
+                    }
                     while (r.Read())
                     {
                         friendMsgNode.Items.Add(CreateFriendMessageCoreFromFTSMsg(r.ToDynamic(), accountName, friendName));
@@ -871,7 +986,7 @@ namespace XLY.SF.Project.Plugin.IOS
 
             #endregion
 
-            return friendMsgNode;
+            return hasRows ? friendMsgNode : null;
         }
 
         /// <summary>
@@ -889,6 +1004,7 @@ namespace XLY.SF.Project.Plugin.IOS
                 Items = new DataItems<MessageCore>(DbFilePath),
             };
 
+            bool hasRows = false;
             bool bAll = true;
 
             var accountName = QQAccount.FullName;
@@ -902,6 +1018,10 @@ namespace XLY.SF.Project.Plugin.IOS
             {
                 MainContext.UsingSafeConnection(string.Format("SELECT * FROM {0}", msgTableName), r =>
                 {
+                    if (r.HasRows)
+                    {
+                        hasRows = true;
+                    }
                     if (r.Read())
                     {
                         bAll = false;
@@ -954,6 +1074,10 @@ namespace XLY.SF.Project.Plugin.IOS
 
                 FTSMsgContext.UsingSafeConnection(new SQLiteString(sql), r =>
                 {
+                    if (r.HasRows)
+                    {
+                        hasRows = true;
+                    }
                     while (r.Read())
                     {
                         groupMsgNode.Items.Add(CreateTroopMessageCoreFromFTSMsg(r.ToDynamic(), accountName, groupName));
@@ -963,7 +1087,7 @@ namespace XLY.SF.Project.Plugin.IOS
 
             #endregion
 
-            return groupMsgNode;
+            return hasRows ? groupMsgNode : null;
         }
 
         /// <summary>
@@ -981,6 +1105,7 @@ namespace XLY.SF.Project.Plugin.IOS
                 Items = new DataItems<MessageCore>(DbFilePath),
             };
 
+            bool hasRows = false;
             bool bAll = true;
 
             var accountName = QQAccount.FullName;
@@ -994,6 +1119,10 @@ namespace XLY.SF.Project.Plugin.IOS
             {
                 MainContext.UsingSafeConnection(string.Format("SELECT * FROM {0}", msgTableName), r =>
                 {
+                    if (r.HasRows)
+                    {
+                        hasRows = true;
+                    }
                     if (r.Read())
                     {
                         bAll = false;
@@ -1046,6 +1175,10 @@ namespace XLY.SF.Project.Plugin.IOS
 
                 FTSMsgContext.UsingSafeConnection(new SQLiteString(sql), r =>
                 {
+                    if (r.HasRows)
+                    {
+                        hasRows = true;
+                    }
                     while (r.Read())
                     {
                         disMsgNode.Items.Add(CreateTroopMessageCoreFromFTSMsg(r.ToDynamic(), accountName, disName));
@@ -1055,7 +1188,7 @@ namespace XLY.SF.Project.Plugin.IOS
 
             #endregion
 
-            return null;
+            return hasRows ? disMsgNode : null;
         }
 
         /// <summary>
@@ -1542,5 +1675,29 @@ namespace XLY.SF.Project.Plugin.IOS
 
         #endregion
 
+        private class FriendDataInfo
+        {
+            /// <summary>
+            /// QQ号
+            /// </summary>
+            public string QQNumber { get; set; }
+
+            /// <summary>
+            /// 昵称
+            /// </summary>
+            public string NickName { get; set; }
+
+            /// <summary>
+            /// 备注
+            /// </summary>
+            public string Remark { get; set; }
+
+            public FriendDataInfo(string qq, string nick = null, string remark = null)
+            {
+                QQNumber = qq;
+                NickName = nick;
+                Remark = remark;
+            }
+        }
     }
 }

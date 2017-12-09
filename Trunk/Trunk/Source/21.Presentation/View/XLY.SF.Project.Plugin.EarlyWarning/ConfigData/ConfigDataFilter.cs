@@ -34,34 +34,22 @@ namespace XLY.SF.Project.EarlyWarningView
         private bool _isInitialized;
 
         /// <summary>
+        ///通过导入获取setting对象。其用于读取数据库中的数据
+        /// </summary>
+        private IRecordContext<Inspection> _setting;
+
+        /// <summary>
         /// 输出的有效节点列表
         /// </summary>
         public readonly List<DataNode> ValidateDataNodes = new List<DataNode>();
-
-        /// <summary>
-        /// 设置管理
-        /// </summary>
-        public SettingManager SettingManager { get { return _settingManager; } }
-        private readonly SettingManager _settingManager = new SettingManager();        
-
-        /// <summary>
-        ///通过导入获取setting对象。其用于读取数据库中的数据
-        /// </summary>
-        public IRecordContext<Inspection> Setting { get; set; }
-
+        
         /// <summary>
         /// 对象要初始化后才能使用
         /// </summary>
         /// <returns></returns>
-        public bool Initialize()
+        public bool Initialize(IRecordContext<Inspection> Setting)
         {
-            _isInitialized = false;
-
-            //_rootNodeManager.Children.Add(ConstDefinition.CountrySafety, new RootNode(ConstDefinition.CountrySafety));
-            //_rootNodeManager.Children.Add(ConstDefinition.PublicSafety, new RootNode(ConstDefinition.PublicSafety));
-            //_rootNodeManager.Children.Add(ConstDefinition.EconomySafety, new RootNode(ConstDefinition.EconomySafety));
-            //_rootNodeManager.Children.Add(ConstDefinition.Livehood, new RootNode(ConstDefinition.Livehood));
-            //_rootNodeManager.Children.Add(ConstDefinition.Custom, new RootNode(ConstDefinition.Custom));
+            _isInitialized = false;            
 
             _baseDir = Path.GetFullPath(@"EarlyWarningConfig\");
             //读取配置文件的数据到_rootNodeManager中
@@ -73,56 +61,9 @@ namespace XLY.SF.Project.EarlyWarningView
             }
             configFile.GetAllData(_rootNodeManager);
 
+            _setting = Setting;
             _isInitialized = true;
             return _isInitialized;
-        }
-
-        /// <summary>
-        /// 根据参数配置，更新有效数据
-        /// </summary>
-        private void UpdateValidateDataBySettingManager()
-        {
-            if(!_isInitialized)
-            {
-                return;
-            }
-            ValidateDataNodes.Clear();
-            //SettingManager对应-- -》RootNodeManager
-            if (!SettingManager.IsEnable)
-            {
-                return;
-            }
-
-            foreach (SettingCollection rootSetting in SettingManager.Items)
-            {
-                //  SettingCollection对应 ---》RootNode
-                bool rootEnable = rootSetting.IsEnable;
-                string rootName = rootSetting.Name;
-                if (!rootEnable)
-                {
-                    continue;
-                }
-                if (!_rootNodeManager.Children.Keys.Contains(rootName))
-                {
-                    continue;
-                }
-                RootNode rootNode = (RootNode)_rootNodeManager.Children[rootName];
-                foreach (SettingItem item in rootSetting.Items)
-                {
-                    //  SettingItem对应 ---》CategoryNode
-                    bool categoryEnable = item.IsEnable;
-                    string categoryName = item.Name;
-                    if (!categoryEnable)
-                    {
-                        continue;
-                    }
-                    if (rootNode.Children.Keys.Contains(categoryName))
-                    {
-                        CategoryNode categoryNode = (CategoryNode)rootNode.Children[categoryName];
-                        ValidateDataNodes.AddRange(categoryNode.DataList);
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -134,9 +75,17 @@ namespace XLY.SF.Project.EarlyWarningView
             {
                 return;
             }
+            
             ValidateDataNodes.Clear();
+            //没有设置对象时，有效数据就是全部数据
+            if (_setting == null)
+            {
+                ValidateDataNodes.AddRange(_rootNodeManager.ValidateDataNodes);
+                return;
+            }
+
             //如果总开关没有开，则直接返回。ValidateDataNodes为空
-            ISettings settings = (ISettings)Setting;
+            ISettings settings = (ISettings)_setting;           
             string str = settings.GetValue(SystemContext.EnableInspectionKey);
             if (!bool.TryParse(str, out bool b))
             {
@@ -144,7 +93,7 @@ namespace XLY.SF.Project.EarlyWarningView
             }
 
             //获取数据库中的配置，并按之过滤数据
-            IEnumerable<InspectionModel> models = Setting.Records.ToArray().Select(x => new InspectionModel(x, Setting));
+            IEnumerable<InspectionModel> models = _setting.Records.ToArray().Select(x => new InspectionModel(x, _setting));
             var groups = models.GroupBy(x => x.Category).ToDictionary(x => x.Key, y => y.ToArray());
             foreach (var group in groups)
             {

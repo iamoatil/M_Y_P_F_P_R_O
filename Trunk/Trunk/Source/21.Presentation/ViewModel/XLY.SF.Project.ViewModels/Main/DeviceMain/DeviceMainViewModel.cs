@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using ProjectExtend.Context;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -11,9 +12,11 @@ using XLY.SF.Framework.Core.Base.MefIoc;
 using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base.MessageBase.Navigation;
 using XLY.SF.Framework.Core.Base.ViewModel;
+using XLY.SF.Framework.Language;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Models;
 using XLY.SF.Project.Models.Entities;
+using XLY.SF.Project.ProxyService;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using XLY.SF.Project.ViewDomain.VModel.DevHomePage;
 using XLY.SF.Project.ViewModels.Main.CaseManagement;
@@ -148,10 +151,11 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         public DeviceMainViewModel()
         {
             base.MessageAggregation.RegisterGeneralMsg<bool>(this, GeneralKeys.ExtractTaskCompleteMsg, TaskCompleteCallback);
-            ExtractionResultCommand = new ProxyRelayCommand(ExeucteExtractionResultCommand);
-            FileViewCommand = new ProxyRelayCommand(ExecuteFileViewCommand);
-            EarlyWarningCommand = new ProxyRelayCommand(EarlyWarningViewCommand);
-            DeviceHomePageCommand = new ProxyRelayCommand(ExecuteDeviceHomePageCommand);
+            ExtractionResultCommand = new ProxyRelayCommand(ExeucteExtractionResultCommand, base.ModelName);
+            FileViewCommand = new ProxyRelayCommand(ExecuteFileViewCommand, base.ModelName);
+            EarlyWarningCommand = new ProxyRelayCommand(EarlyWarningViewCommand, base.ModelName);
+            DeviceHomePageCommand = new ProxyRelayCommand(ExecuteDeviceHomePageCommand, base.ModelName);
+            ProxyFactory.DeviceMonitor.OnDeviceConnected += DeviceMonitor_OnDeviceConnected;
         }
 
         protected override void InitLoad(object parameters)
@@ -207,25 +211,24 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         {
             var tmp = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
             SwitchSubView(DevMainSubViewType.ExtractResult, tmp.Target.Path);
-            SetAutoWarningPath(tmp.Target.Path);
             return string.Empty;
         }
 
         #endregion
 
-        /// <summary>
-        /// 设置智能预警的文件路径
-        /// </summary>
-        private void SetAutoWarningPath(string path)
+        #region Tools
+
+        #region 设备上下线通知
+
+        private void DeviceMonitor_OnDeviceConnected(IDevice dev, bool isOnline)
         {
-            var viewTmp = DevNavigationManager.GetOrCreateView(ExportKeys.AutoWarningView, path);
-            if (string.IsNullOrWhiteSpace(path))
+            if (CurDevModel?.IDevSource.ID == dev.ID)
             {
-                viewTmp.DataSource.ReceiveParameters(path);
+                CurDevModel.OnlineStatus = isOnline;
             }
         }
 
-        #region Tools
+        #endregion
 
         #region 设备类型转换
 
@@ -244,7 +247,7 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
                     break;
                 case EnumDeviceType.Chip:
                     break;
-                case EnumDeviceType.Disk:
+                case EnumDeviceType.LocalFile:
                     CurDevModel = GetLocalFileDevice(idev);
                     break;
                 case EnumDeviceType.SDCard:
@@ -258,7 +261,7 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         private DeviceModel GetPhoneDevice(DeviceExtractionAdorner idev)
         {
             var tmpDev = idev.Device as XLY.SF.Project.Domains.Device;
-            DeviceModel targetDev = new PhoneDevModel()
+            var targetDev = new PhoneDevModel()
             {
                 Name = idev.Name,
                 DevModel = tmpDev.Model,
@@ -267,15 +270,23 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
                 SerialNumber = tmpDev.SerialNumber,
                 System = string.Format("{0}{1}", tmpDev.OSType, tmpDev.OSVersion),
                 IsAndroid = tmpDev.OSType == EnumOSType.Android,
-
+                OnlineStatus = true,
                 DeviceTotalSize = tmpDev.TotalDiskCapacity * 1.0 / 1024 / 1024 / 1024,
                 UnusedTotalSizeOfDevice = tmpDev.TotalDiskAvailable * 1.0 / 1024 / 1024 / 1024,
                 SDCardTotalSize = tmpDev.TotalDataCapacity * 1.0 / 1024 / 1024 / 1024,
                 UnusedTotalSizeOfSD = tmpDev.TotalDataAvailable * 1.0 / 1024 / 1024 / 1024,
-
                 DeviceExtractionAdorner = idev,
-                IDevSource = idev.Device
+                IDevSource = idev.Device,
             };
+            if (tmpDev.OSType == EnumOSType.Android)
+            {
+                targetDev.RootDesc = tmpDev.IsRoot ? "Root" : "UnRoot";
+            }
+            else if (tmpDev.OSType == EnumOSType.IOS)
+            {
+                targetDev.RootDesc = tmpDev.IsRoot ? SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_DevHomePage_IOSRoot] :
+                    SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_DevHomePage_UnIOSRoot];
+            }
 
             return targetDev;
         }
@@ -289,7 +300,8 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
                 FilePath = lfDev.PathName,
                 FileTypeName = "默认类型",
                 DeviceExtractionAdorner = idev,
-                IDevSource = idev.Device
+                IDevSource = idev.Device,
+                OnlineStatus = true,
             };
             return targetDev;
         }
@@ -303,6 +315,7 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
                 MemoryCardTypeName = "",
                 Number = sdCDev.DiskNumber.ToString(),
                 DeviceExtractionAdorner = idev,
+                OnlineStatus = true,
                 IDevSource = idev.Device
             };
             return targetDev;
@@ -319,13 +332,14 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         {
             //跳转
             var tmp = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
-            //var a = DevNavigationManager.GetOrCreateView(ExportKeys.DataDisplayView, tmp.Target.Path);
-            //a.DataSource.ReceiveParameters(args.Parameters);
+            var a = DevNavigationManager.GetOrCreateView(ExportKeys.DataDisplayView, tmp.Target.Path);
+            a.DataSource.ReceiveParameters(tmp.Target.Path);
             //SubView = a;
 
+            var b = DevNavigationManager.GetOrCreateView(ExportKeys.AutoWarningView, tmp.Target.Path);
+            b.DataSource.ReceiveParameters("Inspection;" + tmp.Target.Path);
 
             SwitchSubView(DevMainSubViewType.ExtractResult, tmp.Target.Path);
-            SetAutoWarningPath(tmp.Target.Path);
         }
 
         #endregion

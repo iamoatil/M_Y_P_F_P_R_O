@@ -82,7 +82,7 @@ namespace XLY.SF.Project.ViewModels.Main
         private void DeleteCacheViewCallback(GeneralArgs<PreCacheToken> obj)
         {
             if (obj.Parameters != null)
-                SystemContext.Instance.CurCacheViews.RemoveViewCache(obj.Parameters);
+                SystemContext.Instance.CurCacheViews.RemoveAllViewCache(obj.Parameters);
         }
 
         //主界面导航回调
@@ -112,7 +112,7 @@ namespace XLY.SF.Project.ViewModels.Main
                 if (EditCaseNavigationHelper.CurEditViewOpenStatus)
                 {
                     //折叠案例编辑界面
-                    EditCaseNavigationHelper.SetEditCaseViewStatus(false, false);
+                    EditCaseNavigationHelper.ResetCurCaseStatus();
                 }
 
                 if (args.MsgToken == ExportKeys.DeviceMainView)

@@ -122,4 +122,50 @@
     
     <!--样式-->
 
+    <!--#region 可输入样式【新建文件夹】-->
+    <ControlTemplate x:Key="CreateNewFolderRadioButtonCT" TargetType="{x:Type local:CreateNewFolderRadioButton}">
+        <Border x:Name="br" CornerRadius="12" BorderBrush="Transparent" BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button x:Name="img_Icon" IsHitTestVisible="True" Width="62" 
+                       Height="53" 
+                       Margin="10">
+                    <Button.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_filebrowing_icon1.png"/>
+                    </Button.Background>
+                </Button>
+                <ToggleButton x:Name="tb" BorderThickness="0" Background="Transparent" Grid.Row="1" Style="{DynamicResource InputTextToggleButtonStyle}"
+                                          Content="{Binding ItemName,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:CreateNewFolderRadioButton}}"
+                                          IsEnabled="{Binding IsChecked,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:CreateNewFolderRadioButton} }" VerticalAlignment="Top"/>
+                <Image x:Name="img_Checked" Visibility="Collapsed" Width="38" Height="38" VerticalAlignment="Top" HorizontalAlignment="Right" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Mirror_Checked.png"/>
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsChecked" Value="true"/>
+                    <Condition Property="IsChecked" Value="true" SourceName="tb"/>
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="IsChecked" Value="True" TargetName="tb"/>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Visibility" Value="Visible" TargetName="img_Checked"/>
+                <Setter Property="BorderBrush" Value="#379be6" TargetName="br"/>
+            </Trigger>
+            <Trigger Property="IsFolder" Value="false">
+                <Setter Property="Background" TargetName="img_Icon">
+                    <Setter.Value>
+                        <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_filebrowing_icon2.png"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+    <!--#endregion-->
+
 </ResourceDictionary>

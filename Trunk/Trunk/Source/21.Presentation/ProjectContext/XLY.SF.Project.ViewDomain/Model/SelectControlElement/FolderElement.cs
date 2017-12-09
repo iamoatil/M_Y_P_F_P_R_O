@@ -87,7 +87,7 @@ namespace XLY.SF.Project.ViewDomain.Model.SelectControlElement
                 return this._fullPath;
             }
 
-            set
+            private set
             {
                 this._fullPath = value;
                 base.OnPropertyChanged();

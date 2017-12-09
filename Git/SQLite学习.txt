@@ -12,6 +12,9 @@ dll：System.Data.SQLite.dll，运行目录下放,其提供了SQLiteConnection，SQLiteComman
             插入数据：string sql = "insert into highscores (name, score) values ('Me', 3000)";
             查询数据：string sql = "select * from highscores order by score desc";
             
+ while (reader.Read())
+                Console.WriteLine("Name: " + reader["name"] + "\tScore: " + reader["score"]);
+
  一般会把常用的功能封装成SQLiteHelper类
  https://www.cnblogs.com/luxiaoxun/p/3784729.html
  Codeproject上的一个封装：http://www.codeproject.com/Articles/746191/SQLite-Helper-Csharp

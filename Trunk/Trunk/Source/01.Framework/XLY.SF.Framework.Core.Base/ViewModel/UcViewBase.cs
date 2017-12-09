@@ -35,9 +35,9 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
             }
             set
             {
-                if (value != null)
-                    value.SetViewContainer(this);
+                value.SetViewContainer(this);
                 value.SetViewID(ViewID);
+                value.SetModelName(this.Title);
                 this.DataContext = value;
             }
         }

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.IO.Pipes;
+using System.Text;
 using System.Threading.Tasks;
 using XLY.SF.Project.IsolatedTaskEngine.Common;
 
@@ -9,13 +12,24 @@ namespace XLY.SF.Project.IsolatedTaskEngine
     /// </summary>
     internal class TaskHandler : IDisposable
     {
+        #region Event
+
+        /// <summary>
+        /// 当TaskHandler的任务结束时触发。
+        /// </summary>
+        public event EventHandler Terminate;
+
+        #endregion
+
         #region Fields
 
         private Boolean _isRuning;
 
         private readonly TaskActivator _activator;
 
-        private readonly MessageServerTransceiver _transceiver;
+        private readonly StreamString _ss;
+
+        private readonly NamedPipeServerStream _pipe;
 
         #endregion
 
@@ -24,12 +38,13 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         public TaskHandler(TaskManager owner)
         {
             Owner = owner;
-            _transceiver = new MessageServerTransceiver(owner.Setup.TransceiverName, owner.Setup.MaxParallelTask);
-            _transceiver.Disconnect += (a, b) => TerminateTask();
+            NamedPipeServerStream pipe = new NamedPipeServerStream(owner.Setup.TransceiverName, PipeDirection.InOut, owner.Setup.MaxParallelTask, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
+            _ss = new StreamString(pipe);
+            _pipe = pipe;
             TaskActivator activator = (TaskActivator)Activator.CreateInstance(owner.Setup.EntryType);
             activator.Logger = TaskEngine.Logger;
-            activator.RequestSendMessageCallback = (m) => _transceiver.Send(m);
-            activator.RequestTerminateTask = () => TerminateTask();
+            activator.RequestSendMessageCallback = (m) => Send(m);
+            activator.RequestTerminateTask = () => _pipe.Disconnect();
             _activator = activator;
         }
 
@@ -56,6 +71,11 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         /// </summary>
         public TaskManager Owner { get; }
 
+        /// <summary>
+        /// 任务唯一标识。
+        /// </summary>
+        public Guid Token => _activator.ActivatorToken;
+
         #endregion
 
         #region Methods
@@ -68,29 +88,30 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         public void Launch()
         {
             if (_isRuning || IsDisposed) return;
-            if (_transceiver.Launch())
+            try
             {
-                try
+                _pipe.WaitForConnection();
+                if (_activator.Launch())
                 {
-                    if (_activator.Launch())
+                    _isRuning = true;
+                    Task.Factory.StartNew(Receive, TaskCreationOptions.LongRunning | TaskCreationOptions.AttachedToParent).ContinueWith(t =>
                     {
-                        _isRuning = true;
-                        Task.Factory.StartNew(Handle, TaskCreationOptions.LongRunning | TaskCreationOptions.AttachedToParent);
-                        TaskEngine.Logger.Info("Task handler launched");
-                    }
-                    else
-                    {
-                        OnActivatorError(new Exception("Launch task failed"));
-                    }
+                        Release();
+                    }, TaskContinuationOptions.AttachedToParent);
+                    TaskEngine.Logger.Info("Task handler launched");
                 }
-                catch (Exception ex)
+                else
                 {
-                    OnActivatorError(ex);
+                    OnTaskEngineError(new Exception("Task handler launched failed"));
                 }
             }
-            else
+            catch (IOException)
             {
-                TerminateTask();
+                return;
+            }
+            catch (Exception ex)
+            {
+                OnTaskEngineError(ex);
             }
         }
 
@@ -99,7 +120,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         /// </summary>
         public void Dispose()
         {
-            TerminateTask();
+            Release();
         }
 
         /// <summary>
@@ -114,49 +135,88 @@ namespace XLY.SF.Project.IsolatedTaskEngine
 
         #region Private
 
-        private void Handle()
+        private void Send(Message message)
         {
-            Message message = null;
+            String str = message.SerializeObject();
+            _ss.WriteString(str);
+        }
+
+        private void Receive()
+        {
+            Message message = Message.Invalid;
+            String str = null;
+            Boolean? result = null;
             while (_isRuning)
             {
-                message = _transceiver.Receive();
-                TaskEngine.Logger.Debug($"Received message:[Code]{message?.Code},[Token]{message?.Token}");
-                if (message == null) continue;
-                try
+                str = _ss.ReadString();
+                result = HandleMessage(str,out message);
+                if (!result.HasValue) break;
+                if (result.Value)
                 {
                     _activator.OnReceive(message);
                 }
-                catch (Exception ex)
+                else
                 {
-                    OnActivatorError(ex);
-                    break;
+                    OnTaskEngineError(new InvalidDataException($"Unrecognizable message:[Task]{Token}"));
                 }
             }
+            _isRuning = false;
+            TaskEngine.Logger.Info($"Task handler terminated:{_activator.ActivatorToken}");
         }
 
         /// <summary>
-        /// 终止任务。
+        /// 处理消息。
         /// </summary>
-        private void TerminateTask()
+        /// <param name="str">接收到的字符串。</param>
+        /// <param name="message">将接收到的字符串转换为Message类型实例。</param>
+        /// <returns>如果为true，表示收到正确格式的消息；如果为false，表示消息无法被识别；如果为null，表示连接断开。</returns>
+        private Boolean? HandleMessage(String str, out Message message)
+        {
+            //读取到null，表示客户端断开连接
+            if (str == null)
+            {
+                TaskEngine.Logger.Info($"Disconnect:[Task]{Token}");
+                message = Message.Invalid;
+                return null;
+            }
+            message = Message.ToMessage(str);
+            //读取到无效的消息，表示数据格式不正确
+            if (message == Message.Invalid)
+            {
+                TaskEngine.Logger.Debug($"Unrecognizable message:[Task]{Token}");
+                return false;
+            }
+
+            TaskEngine.Logger.Debug($"Received message:[Code]{message.Code},[Token]{message.Token}");
+            return true;
+        }
+
+        /// <summary>
+        /// 释放资源，断开连接以及关闭管道。
+        /// </summary>
+        private void Release()
         {
             if (IsDisposed) return;
-            _isRuning = false;
             IsDisposed = true;
             _activator.Dispose();
-            _transceiver.Close();
-            TaskEngine.Logger.Info("Task handler terminated");
-            Owner.ReleaseTask(this);
+            //断开连接
+            if (_pipe.IsConnected)
+            {
+                _pipe.Disconnect();
+            }
+            //关闭管道
+            _pipe.Close();
+            Terminate?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
-        /// 触发任务激活器错误事件。
+        /// 触发任务引擎错误事件。
         /// </summary>
         /// <param name="ex">异常信息。</param>
-        private void OnActivatorError(Exception ex)
+        private void OnTaskEngineError(Exception ex)
         {
-            TaskEngine.Logger.Error("Activator Error", ex);
-            Message message = Message.CreateSystemMessage((Int32)SystemMessageCode.ActivatorErrorEvent, new ActivatorErrorEventArgs(ex));
-            _transceiver.Send(message);
+            TaskEngine.Logger.Error($"Task engine Error:{Token}", ex);
+            Message message = Message.CreateSystemMessage((Int32)SystemMessageCode.TaskEngineErrorEvent, new TaskEnginErrorEventArgs(ex));
         }
 
         #endregion

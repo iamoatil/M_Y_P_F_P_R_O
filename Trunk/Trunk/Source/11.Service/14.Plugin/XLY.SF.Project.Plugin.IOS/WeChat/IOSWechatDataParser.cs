@@ -49,6 +49,10 @@ namespace XLY.SF.Project.Plugin.IOS
             pluginInfo.SourcePath.AddItem("/com.HangzhouDingdangTechnology.jiangGanCity2/Documents/");
             pluginInfo.SourcePath.AddItem("/com.HangzhouDingdangTechnology.jiangGanCity3/Documents/");
             pluginInfo.SourcePath.AddItem("/com.HangzhouDingdangTechnology.jiangGanCity4/Documents/");
+            pluginInfo.SourcePath.AddItem("/com.laoaao.laoa03/Documents/");
+            pluginInfo.SourcePath.AddItem("/com.wscq.2/Documents/");
+            pluginInfo.SourcePath.AddItem("/com.wsxlb.01/Documents/");
+            pluginInfo.SourcePath.AddItem("/com.wsxlb.02/Documents/");
 
             PluginInfo = pluginInfo;
         }

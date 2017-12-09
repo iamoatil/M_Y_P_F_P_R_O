@@ -94,7 +94,7 @@ namespace XLY.SF.Project.Domains
             foreach (var dir in Directory.GetDirectories(devicePath))
             {
                 var extact = LoadSingleExtactData(dir);
-                if(extact != null)
+                if (extact != null)
                 {
                     dataList.Add(extact);
                 }
@@ -131,18 +131,20 @@ namespace XLY.SF.Project.Domains
                             Text = ds.PluginInfo?.Name,
                             Index = ds.PluginInfo == null ? 0 : ds.PluginInfo.OrderIndex,
                             Group = ds.PluginInfo?.Group,
+                            GroupIndex = ds.PluginInfo == null ? 0 : ds.PluginInfo.GroupIndex,
                             Data = ds,
                             TreeNodes = new ObservableCollection<DataExtactionItem>()
                         });
                     }
                 }
-                catch(Exception e)
+                catch 
                 {
 
                 }
             }
+
             //所有应用数据的分组和排序
-            foreach (var group in ls.GroupBy(g => g.Group))
+            foreach (var group in ls.OrderBy(f => f.GroupIndex).GroupBy(g => g.Group))
             {
                 DataExtactionItem g = new DataExtactionItem() { Text = group.Key, TreeNodes = new ObservableCollection<DataExtactionItem>() };
                 g.TreeNodes.AddRange(group.ToList().OrderBy(p => p.Index));       //添加该分组的所有插件，并按照序号排序
@@ -153,11 +155,10 @@ namespace XLY.SF.Project.Domains
         }
     }
 
-
     /// <summary>
     /// 用于设备数据的读取
     /// </summary>
-    public class DataExtactionItem: NotifyPropertyBase
+    public class DataExtactionItem: NotifyPropertyBase, ICheckedItem
     {
         /// <summary>
         /// 应用名称
@@ -167,6 +168,10 @@ namespace XLY.SF.Project.Domains
         /// 应用分组
         /// </summary>
         public string Group { get; set; }
+        /// <summary>
+        /// 应用分组序号，用于排序
+        /// </summary>
+        public int GroupIndex { get; set; }
         /// <summary>
         /// 应用序号，用于排序
         /// </summary>
@@ -180,71 +185,73 @@ namespace XLY.SF.Project.Domains
         public bool IsItemStyle { get; set; }
         public int Total { get; set; }
 
-        private bool? isChecked = true;
+        private bool? _isChecked = true;
         public bool? IsChecked
         {
-            get { return isChecked; }
+            get { return _isChecked; }
             set
             {
-                if (this.isChecked != value)
-                {
-                    this.isChecked = value;
-                    OnPropertyChanged();
-                    if (this.isChecked == true) // 如果节点被选中
-                    {
-                        if (this.TreeNodes != null)
-                            foreach (var dt in this.TreeNodes)
-                                dt.IsChecked = true;
-                        if (this.Parent != null)
-                        {
-                            Boolean bExistUncheckedChildren = false;
-                            foreach (var dt in this.Parent.TreeNodes)
-                                if (dt.IsChecked != true)
-                                {
-                                    bExistUncheckedChildren = true;
-                                    break;
-                                }
-                            if (bExistUncheckedChildren)
-                                this.Parent.IsChecked = null;
-                            else
-                                this.Parent.IsChecked = true;
-                        }
-                    }
-                    else if (this.isChecked == false)   // 如果节点未选中
-                    {
-                        if (this.TreeNodes != null)
-                            foreach (var dt in this.TreeNodes)
-                                dt.IsChecked = false;
-                        if (this.Parent != null)
-                        {
-                            Boolean bExistCheckedChildren = false;
-                            foreach (var dt in this.Parent.TreeNodes)
-                                if (dt.IsChecked != false)
-                                {
-                                    bExistCheckedChildren = true;
-                                    break;
-                                }
-                            if (bExistCheckedChildren)
-                                this.Parent.IsChecked = null;
-                            else
-                                this.Parent.IsChecked = false;
-                        }
-                    }
-                    else
-                    {
-                        if (this.Parent != null)
-                            this.Parent.IsChecked = null;
-                    }
-                }
+                this.SetCheckedState(value, ()=> { this._isChecked = value; OnPropertyChanged(); });
+                //if (this.isChecked != value)
+                //{
+                //    this.isChecked = value;
+                //    OnPropertyChanged();
+                //    if (this.isChecked == true) // 如果节点被选中
+                //    {
+                //        if (this.TreeNodes != null)
+                //            foreach (var dt in this.TreeNodes)
+                //                dt.IsChecked = true;
+                //        if (this.Parent != null)
+                //        {
+                //            Boolean bExistUncheckedChildren = false;
+                //            foreach (var dt in this.Parent.TreeNodes)
+                //                if (dt.IsChecked != true)
+                //                {
+                //                    bExistUncheckedChildren = true;
+                //                    break;
+                //                }
+                //            if (bExistUncheckedChildren)
+                //                this.Parent.IsChecked = null;
+                //            else
+                //                this.Parent.IsChecked = true;
+                //        }
+                //    }
+                //    else if (this.isChecked == false)   // 如果节点未选中
+                //    {
+                //        if (this.TreeNodes != null)
+                //            foreach (var dt in this.TreeNodes)
+                //                dt.IsChecked = false;
+                //        if (this.Parent != null)
+                //        {
+                //            Boolean bExistCheckedChildren = false;
+                //            foreach (var dt in this.Parent.TreeNodes)
+                //                if (dt.IsChecked != false)
+                //                {
+                //                    bExistCheckedChildren = true;
+                //                    break;
+                //                }
+                //            if (bExistCheckedChildren)
+                //                this.Parent.IsChecked = null;
+                //            else
+                //                this.Parent.IsChecked = false;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        if (this.Parent != null)
+                //            this.Parent.IsChecked = null;
+                //    }
+                //}
             }
         }
         public bool IsSelected { get; set; }
-        public DataExtactionItem Parent { get; set; }
 
         /// <summary>
         /// 子节点列表
         /// </summary>
         public ObservableCollection<DataExtactionItem> TreeNodes { get; set; }
+
+        public ICheckedItem Parent { get; set; }
 
         public void BuildParent()
         {
@@ -256,6 +263,11 @@ namespace XLY.SF.Project.Domains
                     item.BuildParent();
                 }
             }
+        }
+
+        public IEnumerable<ICheckedItem> GetChildren()
+        {
+            return TreeNodes;
         }
     }
 

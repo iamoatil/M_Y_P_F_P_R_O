@@ -42,6 +42,8 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
             _MessageBox = IocManagerSingle.Instance.GetPart<IMessageBox>();
         }
 
+        public DataFilterViewModel FilterVM = null;
+
         private IMessageBox _MessageBox
         {
             get;
@@ -53,7 +55,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         {
             LoadPlugin();
 
-            RefreshData(parameters?.ToString(), false);
+            RefreshData(parameters?.ToString(), true);
         }
 
         /// <summary>
@@ -82,7 +84,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                                 new ViewModel.Inspection(){ ID = 4, CategoryCn = "涉及地方", CategoryEn = "Guodf"},
                         };
                         _currentDevicePath = parameter.Substring("Inspection;".Length);
-                        MessageAggregation.SendGeneralMsg(new GeneralArgs<List<Inspection>>(MessageKeys.InspectionKey) { Parameters = Config });
+                        FilterVM.SetInspectionConfig(Config);
                     }
                     catch (Exception)
                     {
@@ -92,7 +94,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                 else
                 {
                     _currentDevicePath = parameter;
-                    MessageAggregation.SendGeneralMsg(new GeneralArgs<List<Inspection>>(MessageKeys.InspectionKey) { Parameters = null });
+                    FilterVM.SetInspectionConfig(null);
                 }
 
                 if(isLoadData)
@@ -380,7 +382,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                         DataList = dataList;
 
                         //重置数据
-                        MessageAggregation.SendGeneralMsg(new GeneralArgs<ObservableCollection<DataExtactionItem>>(MessageKeys.SetDataListKey) { Parameters = DataList });
+                        FilterVM.SetDataListKey(DataList);
 
                         IsFiltering = false;
                         HasDataList = DataList != null && DataList.Count > 0;
@@ -397,7 +399,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                     AsyncOperator.Execute(() => 
                     {
                         IsFiltering = false;
-                        MessageAggregation.SendGeneralMsg(new GeneralArgs<object>(MessageKeys.DataLoadedCompletedKey) { Parameters = true });
+                        FilterVM.OnDataLoadedCompleted();
                     });
                 }
             });

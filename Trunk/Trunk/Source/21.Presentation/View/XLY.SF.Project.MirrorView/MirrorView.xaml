@@ -79,7 +79,7 @@
                         <TextBlock Text="全选" Margin="5,-3,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
                     </StackPanel>
 
-                    <ScrollViewer Grid.Row="3" Margin="20,10,10,0" Background="Transparent" Foreground="White" IsEnabled="{Binding SourcePosition.IsMirroring,Converter={StaticResource BoolReverse}}">
+                    <ScrollViewer Grid.Row="3" Margin="20,10,10,0" VerticalScrollBarVisibility="Auto" Background="Transparent" Foreground="White" IsEnabled="{Binding SourcePosition.IsMirroring,Converter={StaticResource BoolReverse}}">
                         <ItemsControl ItemsSource="{Binding SourcePosition.CurrentSelectedDisk.Items}" >
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -155,7 +155,7 @@
                         <ColumnDefinition Width="211*"/>
                         <ColumnDefinition Width="20*"/>
                     </Grid.ColumnDefinitions>
-                    <control:TextBoxEx Title="存放路径：" TitlePadding="20,0,0,0"  Grid.ColumnSpan="2" Text="{Binding TargetPosition.DirPath}" />
+                    <control:TextBoxEx Title="存放路径" TitlePadding="20,0,0,0"  Grid.ColumnSpan="2" Text="{Binding TargetPosition.DirPath}" />
                     <Button Content=". . ." Grid.Column="1" Margin="0,0,0,5" Background="Transparent" Foreground="Wheat" Command="{Binding TargetPosition.SetTargetPathCommand}" VerticalAlignment="Center"/>
                 </Grid>
             </Border>
@@ -170,54 +170,6 @@
 
             <Button Content="继续镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,110,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding ContinueCommand}" Visibility="{Binding SourcePosition.CanContinue, Converter= {StaticResource BoolVisibleConverter}}"/>
             <Button Content="暂停镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,110,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding PauseCommand}" Visibility="{Binding SourcePosition.CanPause, Converter= {StaticResource BoolVisibleConverter}}"/>
-            <!--<TextBlock HorizontalAlignment="Center"  Text="物理镜像" VerticalAlignment="Top" Margin="245,0" Grid.ColumnSpan="2" />
-        <GroupBox x:Name="groupBox" Header="镜像源" Margin="0,0,20,0" Grid.Row="1">
-            <Grid>
-                <TabControl x:Name="tabControl" DataContext="{Binding SourcePosition}" Tag="{Binding CurrentSelectedDisk}">
-                    <TabItem x:Name="tabItem1" Header="手机" DataContext="{Binding PhoneDisks}">
-                        <i:Interaction.Triggers>
-                            <ei:PropertyChangedTrigger Binding="{Binding IsSelected, ElementName=tabItem1}">
-                                <ei:ChangePropertyAction PropertyName="Tag" TargetObject="{Binding ElementName=tabControl}" Value="{Binding DataContext, ElementName=tabItem1}"/>
-                            </ei:PropertyChangedTrigger>
-                        </i:Interaction.Triggers>
-                        <Grid Background="#FFE5E5E5">
-                            <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding CurrentSelectedItem}"/>
-                        </Grid>
-                    </TabItem>
-                    <TabItem x:Name="tabItem2" Header="SIM卡" DataContext="{Binding SimDisk}">
-                        <i:Interaction.Triggers>
-                            <ei:PropertyChangedTrigger Binding="{Binding IsSelected, ElementName=tabItem2}">
-                                <ei:ChangePropertyAction PropertyName="Tag" TargetObject="{Binding ElementName=tabControl}" Value="{Binding DataContext, ElementName=tabItem2}"/>
-                            </ei:PropertyChangedTrigger>
-                        </i:Interaction.Triggers>
-                        <Grid Background="#FFE5E5E5">
-                            <ListBox ItemsSource="{Binding Items}"/>
-                        </Grid>
-                    </TabItem>
-                    <TabItem x:Name="tabItem3" Header="SD卡" DataContext="{Binding SDDisk}">
-                        <i:Interaction.Triggers>
-                            <ei:PropertyChangedTrigger Binding="{Binding IsSelected, ElementName=tabItem3}">
-                                <ei:ChangePropertyAction PropertyName="Tag" TargetObject="{Binding ElementName=tabControl}" Value="{Binding DataContext, ElementName=tabItem3}"/>
-                            </ei:PropertyChangedTrigger>
-                        </i:Interaction.Triggers>
-                        <Grid Background="#FFE5E5E5">
-                            <ListBox ItemsSource="{Binding Items}"/>
-                        </Grid>
-                    </TabItem>
-                </TabControl>
-
-            </Grid>
-        </GroupBox>
-        <GroupBox Header="镜像目标" Margin="20,0,0,0" Grid.Row="1" Grid.Column="1">
-            <Grid>
-                <Button Content="更改存储路径" HorizontalAlignment="Left" Margin="21,10,0,0" VerticalAlignment="Top" Width="84" Command="{Binding TargetPosition.SetTargetPathCommand}"/>
-                <TextBlock TextWrapping="Wrap" Margin="0,40,0,0" Text="{Binding TargetPosition.DirPath}" Background="WhiteSmoke"/>
-
-            </Grid>
-        </GroupBox>
-        <ProgressBar Grid.Row="2" Grid.ColumnSpan="2" LargeChange="0.1" Maximum="{Binding ProgressPosition.TotalSize}" Value="{Binding ProgressPosition.FinishedSize}"/>
-        <Button Content="开始" HorizontalAlignment="Left" VerticalAlignment="Center" Width="75" Grid.Row="3" Command="{Binding StartCommand}"/>
-        <Button Content="停止" VerticalAlignment="Center" HorizontalAlignment="Right" Width="75" Grid.Row="3" Grid.Column="1" Command="{Binding StopCommand}"/>-->
         </Grid>
     </Grid>
 </viewmodel:UcViewBase>

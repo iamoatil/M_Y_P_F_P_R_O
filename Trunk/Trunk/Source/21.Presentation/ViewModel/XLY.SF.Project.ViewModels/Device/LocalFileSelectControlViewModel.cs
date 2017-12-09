@@ -148,7 +148,7 @@ namespace XLY.SF.Project.ViewModels.Device
                 return;
             }
 
-            _selectedFile = new LocalFileDevice() { IsDirectory = false, PathName = SelectedFileName };
+            _selectedFile = new LocalFileDevice(SelectedFileName, false);
             if (selectPlatform == EnumOSType.YunOS)
             {
                 selectPlatform = EnumOSType.Android;
@@ -188,7 +188,7 @@ namespace XLY.SF.Project.ViewModels.Device
         /// </summary>
         private void DoSelectFileDlgCommond()
         {
-            string path = _fileDlg.OpenFileDialog("All Files|*.*");
+            string path = _fileDlg.OpenFileDialog("案例项目文件|*.cp");
             if (string.IsNullOrWhiteSpace(path))
             {
                 return;

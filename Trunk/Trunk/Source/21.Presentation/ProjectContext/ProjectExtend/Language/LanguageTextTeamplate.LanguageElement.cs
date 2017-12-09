@@ -461,6 +461,11 @@ public class Languagekeys
 		public const string ViewLanguage_View_DevHomePage_IOSRoot = "LanguageResource/ViewLanguage/View_DevHomePage_IOSRoot";
 				
         /// <summary>
+        /// 未越狱
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_UnIOSRoot = "LanguageResource/ViewLanguage/View_DevHomePage_UnIOSRoot";
+				
+        /// <summary>
         /// 格式
         /// </summary>
 		public const string ViewLanguage_View_SelectControl_Format = "LanguageResource/ViewLanguage/View_SelectControl_Format";
@@ -571,7 +576,7 @@ public class Languagekeys
 		public const string ViewLanguage_Management_User_Confirm = "LanguageResource/ViewLanguage/Management/User/Confirm";
 				
         /// <summary>
-        /// 设置
+        /// 系统设置
         /// </summary>
 		public const string ViewLanguage_Management_Settings_Title = "LanguageResource/ViewLanguage/Management/Settings/Title";
 				
@@ -654,6 +659,11 @@ public class Languagekeys
         /// 英文
         /// </summary>
 		public const string ViewLanguage_Management_Settings_English = "LanguageResource/ViewLanguage/Management/Settings/English";
+				
+        /// <summary>
+        /// 插件管理
+        /// </summary>
+		public const string ViewLanguage_Management_Plugin_Title = "LanguageResource/ViewLanguage/Management/Plugin/Title";
 				
         /// <summary>
         /// 
@@ -851,12 +861,12 @@ public class Languagekeys
 		public const string SourceSelection_Cancel = "LanguageResource/SourceSelection/Cancel";
 				
         /// <summary>
-        /// 数据源选择
+        /// 数据源
         /// </summary>
 		public const string SourceSelection_Title = "LanguageResource/SourceSelection/Title";
 				
         /// <summary>
-        /// 是否确定删除？
+        /// 是否确定删除？（包含提取的数据）
         /// </summary>
 		public const string SourceSelection_DeletePrompt = "LanguageResource/SourceSelection/DeletePrompt";
 				

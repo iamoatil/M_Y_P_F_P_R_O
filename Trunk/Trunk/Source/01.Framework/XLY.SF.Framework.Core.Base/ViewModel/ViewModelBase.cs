@@ -31,6 +31,29 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// </summary>
         public Guid ViewModelID { get; private set; }
 
+        #region 模块名称
+
+        private string _modelName;
+
+        /// <summary>
+        /// 模块名
+        /// </summary>
+        public string ModelName
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_modelName))
+                    _modelName = "未知模块";
+                return _modelName;
+            }
+            private set
+            {
+                _modelName = value;
+            }
+        }
+
+        #endregion
+
         /// <summary>
         /// 是否加载过
         /// </summary>
@@ -49,11 +72,24 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
 
         #endregion
 
-        #region 构造函数
+        #region 内部调用
         
+        /// <summary>
+        /// 设置ViewID
+        /// </summary>
+        /// <param name="viewID"></param>
         internal void SetViewID(Guid viewID)
         {
             ViewModelID = viewID;
+        }
+
+        /// <summary>
+        /// 设置模块名
+        /// </summary>
+        /// <param name="modelName"></param>
+        internal void SetModelName(string modelName)
+        {
+            ModelName = modelName;
         }
 
         #endregion

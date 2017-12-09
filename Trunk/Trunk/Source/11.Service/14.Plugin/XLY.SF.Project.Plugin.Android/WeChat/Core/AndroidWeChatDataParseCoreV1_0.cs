@@ -1389,7 +1389,13 @@ namespace XLY.SF.Project.Plugin.Android
                 return;
             }
 
-            appBrandContext.UsingSafeConnection("SELECT r.appId,i.brandId,i.appName,i.signature,r.pkgPath,r.downloadURL,i.appIcon FROM AppBrandWxaPkgManifestRecord r,AppBrandWxaAppInfo i WHERE r.appId = i.appId", r =>
+            string sql = "SELECT r.appId,i.brandId,i.appName,i.signature,r.pkgPath,r.downloadURL,i.appIcon FROM AppBrandWxaPkgManifestRecord r,AppBrandWxaAppInfo i WHERE r.appId = i.appId";
+            if (!appBrandContext.ExistField("AppBrandWxaAppInfo", "signature"))
+            {
+                sql = "SELECT r.appId,i.brandId,i.appName,r.pkgPath,r.downloadURL,i.appIcon FROM AppBrandWxaPkgManifestRecord r,AppBrandWxaAppInfo i WHERE r.appId = i.appId";
+            }
+
+            appBrandContext.UsingSafeConnection(sql, r =>
              {
                  dynamic appBrand;
                  WeChatAppBrand item;

@@ -147,17 +147,27 @@ namespace XLY.SF.Project.DataExtract
         /// <param name="extractItems">提取项列表。</param>
         private Boolean Initialization(Pump pump, ExtractItem[] extractItems)
         {
-            if (pump == null) return false;
-            if (extractItems == null || extractItems.Length == 0) return false;
+            if (pump == null)
+                return false;
+
+            if (extractItems == null || extractItems.Length == 0)
+                return false;
+
             _pluginAdapter = PluginAdapter.Instance;
-            if (_pluginAdapter == null) return false;
+            if (_pluginAdapter == null)
+                return false;
+
+            Reporter?.Reset();
+
+            FileHelper.CreateExitsDirectory(pump.SourceStorePath);
+
             DataItemsCount = 0;
             DataPump = pump.GetDataPump();
+
             _extractItems = extractItems;
             _cancelTokenSource = new CancellationTokenSource();
             _cancelToken = _cancelTokenSource.Token;
-            FileHelper.CreateExitsDirectory(pump.SourceStorePath);
-            Reporter?.Reset();
+
             return true;
         }
 

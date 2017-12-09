@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Domains.Contract;
 using XLY.SF.Project.Domains.Contract.DataItemContract;
 
@@ -17,7 +18,7 @@ namespace XLY.SF.Project.Domains
     /// </summary>
     [Serializable]
     [Newtonsoft.Json.JsonObject(Newtonsoft.Json.MemberSerialization.OptOut)]
-    public class TreeNode : IDataState, ITraverse
+    public class TreeNode : NotifyPropertyBase, IDataState,ICheckedItem
     {
         public TreeNode()
         {
@@ -112,6 +113,22 @@ namespace XLY.SF.Project.Domains
             }
         }
 
+        #region CheckState
+
+        private bool? _isChecked = false;
+        /// <summary>
+        /// 当前数据是否被勾选
+        /// </summary>
+        public bool? IsChecked { get => _isChecked; set => this.SetCheckedState(value, () => { this._isChecked = value; OnPropertyChanged(); }); }
+
+        ICheckedItem ICheckedItem.Parent => this.Parent as ICheckedItem;
+
+        public IEnumerable<ICheckedItem> GetChildren()
+        {
+            return TreeNodes;
+        }
+        #endregion
+
         public void Commit()
         {
             if (null != Items)
@@ -138,32 +155,7 @@ namespace XLY.SF.Project.Domains
         {
             return this.Text;
         }
-
-        public void Traverse(Predicate<TreeNode> traverseTreeNode, Predicate<AbstractDataItem> traverseItems)
-        {
-            if (traverseTreeNode != null)
-            {
-                foreach (TreeNode node in TreeNodes)
-                {
-                    if (!traverseTreeNode(node))
-                    {
-                        return;
-                    }
-                    node.Traverse(traverseTreeNode, traverseItems);
-                }
-            }
-            if(traverseItems != null && Items != null)
-            {
-                foreach (AbstractDataItem item in Items.View)
-                {
-                    if (!traverseItems(item))
-                    {
-                        break;
-                    }
-                }
-            }
-        }
-
+       
         #region 数据查询
 
         public IEnumerable<T> Filter<T>(params FilterArgs[] args)
@@ -196,6 +188,10 @@ namespace XLY.SF.Project.Domains
         }
         #endregion
 
+        /// <summary>
+        /// 重新打开数据后，设置当前的数据文件路径
+        /// </summary>
+        /// <param name="path"></param>
         public void SetCurrentPath(string path)
         {
             if (Items != null)

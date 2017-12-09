@@ -321,9 +321,8 @@ namespace XLY.SF.Project.DataExtraction
         private void Start()
         {
             ExtractItem[] items = InitStart();
-            Message message = new Message((Int32)ExtractionCode.Start);
             DataExtractionParams @params = new DataExtractionParams(Pump, items);
-            message.SetContent(@params);
+            Message message = new Message((Int32)ExtractionCode.Start, @params);
             CanSelect = false;
             _proxy.Send(message);
             _timer.Start();
@@ -382,27 +381,6 @@ namespace XLY.SF.Project.DataExtraction
             Process.Start(info);
         }
 
-        private void Receive(Message message)
-        {
-            ExtractionCode code = (ExtractionCode)message.Code;
-            switch (code)
-            {
-                case ExtractionCode.Start:
-                    CanSelect = !message.GetContent<Boolean>();
-                    break;
-                case ExtractionCode.Stop:
-                    break;
-                case ExtractionCode.ProgressChanged:
-                    ChangeProgress(message);
-                    break;
-                case ExtractionCode.Terminate:
-                    Terminate(message);
-                    break;
-                default:
-                    break;
-            }
-        }
-
         private void ChangeProgress(Message message)
         {
             TaskProgressEventArgs args = message.GetContent<TaskProgressEventArgs>();
@@ -439,9 +417,30 @@ namespace XLY.SF.Project.DataExtraction
             }
         }
 
-        private void Disconnect()
+        private void Proxy_Disconnect(Object sender,EventArgs args)
         {
             LaunchService();
+        }
+
+        private void Proxy_MessageArrived(object sender, Message e)
+        {
+            ExtractionCode code = (ExtractionCode)e.Code;
+            switch (code)
+            {
+                case ExtractionCode.Start:
+                    CanSelect = !e.GetContent<Boolean>();
+                    break;
+                case ExtractionCode.Stop:
+                    break;
+                case ExtractionCode.ProgressChanged:
+                    ChangeProgress(e);
+                    break;
+                case ExtractionCode.Terminate:
+                    Terminate(e);
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void _proxy_TaskOver(object sender, TaskOverEventArgs e)
@@ -455,7 +454,7 @@ namespace XLY.SF.Project.DataExtraction
             });
         }
 
-        private void _proxy_ActivatorError(object sender, ActivatorErrorEventArgs e)
+        private void _proxy_ActivatorError(object sender, TaskEnginErrorEventArgs e)
         {
             _timer.Stop();
             CanSelect = true;
@@ -472,13 +471,11 @@ namespace XLY.SF.Project.DataExtraction
         private TaskProxy CreateProxy()
         {
             String name = ConfigurationManager.AppSettings["taskProxy"];
-            TaskProxy proxy = new TaskProxy(name)
-            {
-                DisconnectCallback = Disconnect,
-                ReceiveCallback = Receive
-            };
+            TaskProxy proxy = new TaskProxy(name);
+            proxy.Disconnect += Proxy_Disconnect;
+            proxy.MessageArrived += Proxy_MessageArrived;
             proxy.TaskOver += _proxy_TaskOver;
-            proxy.ActivatorError += _proxy_ActivatorError;
+            proxy.TaskEngineError += _proxy_ActivatorError;
             proxy.Init();
             return proxy;
         }

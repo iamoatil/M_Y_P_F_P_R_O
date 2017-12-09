@@ -48,7 +48,11 @@ namespace XLY.SF.Project.MirrorView
             DialogResult dr = folderBrowserDialog.ShowDialog();
             if (dr == DialogResult.OK)
             {
-                string filePath = folderBrowserDialog.SelectedPath + "\\";
+                string filePath = folderBrowserDialog.SelectedPath;
+                if (!filePath.EndsWith("\\"))
+                {
+                    filePath += "\\";
+                }
                 DirPath = filePath;
             }
         }

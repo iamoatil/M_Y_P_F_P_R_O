@@ -50,12 +50,13 @@ namespace XLY.SF.Project.DataDisplayView
         {
             get
             {
-                return this.DataContext as ViewModelBase;
+                return base.DataSource as ViewModelBase;
             }
             set
             {
-                value.SetViewContainer(this);
-                this.DataContext = value;
+                //value.SetViewContainer(this);
+                base.DataSource = value;
+                (value as ViewModel.MainDisplayViewModel).FilterVM = filterCtrl.DataContext as ViewModel.DataFilterViewModel;
             }
         }
 

@@ -29,6 +29,17 @@ namespace XLY.SF.Project.Domains
         }
 
         /// <summary>
+        /// 植入APP命令
+        /// </summary>
+        public string APPCmd
+        {
+            get
+            {
+                return ItemType == SourceFileItemType.AndroidCmdPath ? Config.TrimStart("APPCmd:") : Config;
+            }
+        }
+
+        /// <summary>
         /// 源文件路径类型
         /// </summary>
         public SourceFileItemType ItemType { get; set; }
@@ -70,6 +81,10 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         AndroidSDCardPath,
         /// <summary>
+        /// 安卓植入APP执行命令结果路径，例如 APPCmd:base_info
+        /// </summary>
+        AndroidCmdPath,
+        /// <summary>
         /// 文件类型，例如 $Audio,m4a;mpeg-4;mp3;wma;wav;ape;acc;ogg;amr;3ga;slk
         /// </summary>
         FileExtension
@@ -97,6 +112,10 @@ namespace XLY.SF.Project.Domains
                 if (configPath.StartsWith("SDCard:"))
                 {// SDCard:/DJI/dji.pilot
                     type = SourceFileItemType.AndroidSDCardPath;
+                }
+                if (configPath.StartsWith("APPCmd:"))
+                {// APPCmd:base_info
+                    type = SourceFileItemType.AndroidCmdPath;
                 }
                 else if (Regex.IsMatch(configPath, @"^\$\S+,"))
                 {// $Audio,m4a;mpeg-4;mp3;wma;wav;ape;acc;ogg;amr;3ga;slk

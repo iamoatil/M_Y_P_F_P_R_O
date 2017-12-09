@@ -62,8 +62,11 @@ namespace XLY.SF.Project.DataPump.Android
                 case SourceFileItemType.NormalPath:
                     HandleWithNormalPath(context);
                     break;
+                case SourceFileItemType.AndroidSDCardPath:
+                    HandleWithAndroidSDCardPath(context);
+                    break;
                 default:
-                    throw new NotSupportedException();
+                    break;
             }
         }
 
@@ -87,7 +90,7 @@ namespace XLY.SF.Project.DataPump.Android
         {
             IFileSystemDevice device = new MirrorDevice
             {
-                Source = Metadata,
+                Source = Metadata.Source,
                 ScanModel = (Byte)Metadata.ScanModel
             };
             return device;
@@ -115,6 +118,22 @@ namespace XLY.SF.Project.DataPump.Android
         {
             SourceFileItem source = context.Source;
             String path = source.Config.TrimEnd("#F").Replace("/", @"\");
+            if (path.StartsWith(@"\data"))
+            {
+                path = path.TrimStart(@"\data");
+            }
+            else if (path.StartsWith(@"\system"))
+            {
+                path = path.TrimStart(@"\system");
+            }
+            source.Local = FileHelper.ConnectPath(context.TargetDirectory, path);
+            FileService.ExportAppFile(path, context.TargetDirectory);
+        }
+
+        private void HandleWithAndroidSDCardPath(DataPumpExecutionContext context)
+        {
+            SourceFileItem source = context.Source;
+            String path = FileHelper.ConnectPath(@"\media\0\", source.SDCardConfig.TrimEnd("#F").Replace("/", @"\"));
             if (path.StartsWith(@"\data"))
             {
                 path = path.TrimStart(@"\data");

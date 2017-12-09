@@ -358,35 +358,39 @@ namespace XLY.SF.Project.Services
                     sb.AppendFormat("select * from FileClass where 1 <> 1 ");
                     RAW_TYPES.ForEach(s => sb.AppendFormat(" or FileType = {0} ", s));
                     SqliteContext sql = new SqliteContext(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "FileRawTypeLib.db"));
-                    DataTable dt = sql.FindDataTable(sb.ToString());
 
-                    IntPtr lastPtr = IntPtr.Zero;
-                    foreach (DataRow dr in dt.Rows)
+                    if (sql.ExistTable("FileClass"))
                     {
-                        FILE_RAW_TYPE_INFO raw = new FILE_RAW_TYPE_INFO();
+                        DataTable dt = sql.FindDataTable(sb.ToString());
 
-                        raw.FileType = dr["FileExName"].ToSafeString().Replace(";", "_"); //dr["FileTypeName"].ToSafeString();
-                        raw.Size = dr["FileDefaultSize"].ToSafeString().ToSafeInt();
-                        raw.ExtensionName = dr["FileExName"].ToSafeString();
-                        raw.HeadMagic = dr["FileHeadFlag"].ToSafeString();
-                        raw.HeadOffsetBytes = (ushort)dr["FileHeadBeginPos"].ToSafeString().ToSafeInt();
-                        raw.FootMagic = dr["FileEndFlag"].ToSafeString();
-                        raw.FootOffsetBytes = dr["FileEndPOS"].ToSafeString().ToSafeInt();
-                        raw.HeadLen = dr["FileHeadLength"].ToSafeString().ToSafeInt();
-                        raw.FootLen = 0;
+                        IntPtr lastPtr = IntPtr.Zero;
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            FILE_RAW_TYPE_INFO raw = new FILE_RAW_TYPE_INFO();
 
-                        LIST_FILE_RAW_TYPE_INFO rawlist = new LIST_FILE_RAW_TYPE_INFO();
-                        rawlist.Check = 1;          //0 - 不检查, 1 - 检查
-                        rawlist.Num = 0;
-                        rawlist.rt = raw;
-                        rawlist.next = lastPtr;
+                            raw.FileType = dr["FileExName"].ToSafeString().Replace(";", "_"); //dr["FileTypeName"].ToSafeString();
+                            raw.Size = dr["FileDefaultSize"].ToSafeString().ToSafeInt();
+                            raw.ExtensionName = dr["FileExName"].ToSafeString();
+                            raw.HeadMagic = dr["FileHeadFlag"].ToSafeString();
+                            raw.HeadOffsetBytes = (ushort)dr["FileHeadBeginPos"].ToSafeString().ToSafeInt();
+                            raw.FootMagic = dr["FileEndFlag"].ToSafeString();
+                            raw.FootOffsetBytes = dr["FileEndPOS"].ToSafeString().ToSafeInt();
+                            raw.HeadLen = dr["FileHeadLength"].ToSafeString().ToSafeInt();
+                            raw.FootLen = 0;
 
-                        int size = Marshal.SizeOf(rawlist);
-                        IntPtr rawptr = Marshal.AllocHGlobal(size);
-                        Marshal.StructureToPtr(rawlist, rawptr, true);
+                            LIST_FILE_RAW_TYPE_INFO rawlist = new LIST_FILE_RAW_TYPE_INFO();
+                            rawlist.Check = 1;          //0 - 不检查, 1 - 检查
+                            rawlist.Num = 0;
+                            rawlist.rt = raw;
+                            rawlist.next = lastPtr;
 
-                        _listRawTypeInfos.Add(rawlist);
-                        lastPtr = rawptr;
+                            int size = Marshal.SizeOf(rawlist);
+                            IntPtr rawptr = Marshal.AllocHGlobal(size);
+                            Marshal.StructureToPtr(rawlist, rawptr, true);
+
+                            _listRawTypeInfos.Add(rawlist);
+                            lastPtr = rawptr;
+                        }
                     }
                 }
                 catch (Exception ex)

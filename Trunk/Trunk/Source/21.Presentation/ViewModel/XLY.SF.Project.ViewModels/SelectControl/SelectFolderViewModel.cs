@@ -29,11 +29,6 @@ namespace XLY.SF.Project.ViewModels.SelectControl
         /// </summary>
         private IMessageBox _msgService;
         /// <summary>
-        /// 当前选择项
-        /// </summary>
-        private FolderElement _curSelectedItem;
-
-        /// <summary>
         /// 文件夹树
         /// </summary>
         public ObservableCollection<FolderElement> Folders { get; set; }
@@ -56,7 +51,7 @@ namespace XLY.SF.Project.ViewModels.SelectControl
                 return this._curSelectedItemInFolder;
             }
 
-            set
+            private set
             {
                 this._curSelectedItemInFolder = value;
                 base.OnPropertyChanged();
@@ -146,7 +141,7 @@ namespace XLY.SF.Project.ViewModels.SelectControl
         public override object GetResult()
         {
             if (DialogResult)
-                return _curSelectedItem.FullPath;
+                return Path.Combine(CurSelectedItemInFolder.Parent.FullPath, CurSelectedItemInFolder.Name);
             return null;
         }
 
@@ -155,18 +150,22 @@ namespace XLY.SF.Project.ViewModels.SelectControl
         //取消选择
         private void ExecuteCancelSelectCommand()
         {
-            _curSelectedItem = null;
+            CurSelectedItemInFolder = null;
             CloseView();
         }
 
         //完成选择【确定按钮】
         private void ExecuteSelectedCompleteCommand()
         {
-            if (_curSelectedItem != null && Directory.Exists(_curSelectedItem.FullPath))
+            if (CurSelectedItemInFolder != null)
             {
-                //确定选择的文件夹
-                base.DialogResult = true;
-                CloseView();
+                var curFullPath = Path.Combine(CurSelectedItemInFolder.Parent.FullPath, CurSelectedItemInFolder.Name);
+                if (Directory.Exists(curFullPath))
+                {
+                    //确定选择的文件夹
+                    base.DialogResult = true;
+                    CloseView();
+                }
             }
         }
 
@@ -180,7 +179,7 @@ namespace XLY.SF.Project.ViewModels.SelectControl
         //选择了某一项
         private void ExecuteSelectedItemCommand(FolderElement obj)
         {
-            _curSelectedItem = obj;
+            //_curSelectedItem = obj;
             CurSelectedItemInFolder = obj;
         }
 
@@ -241,6 +240,7 @@ namespace XLY.SF.Project.ViewModels.SelectControl
             {
                 FolderFileItems.Add(item);
             }
+            CurSelectedItemInFolder = null;
         }
 
         #endregion

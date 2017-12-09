@@ -19,6 +19,26 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
     [Serializable]
     public class NotifyPropertyBase : INotifyPropertyChanged
     {
+
+        #region 选择标识
+
+        [NonSerialized]
+        private bool _isChecked;
+        /// <summary>
+        /// 是否选中
+        /// </summary>
+        public bool IsChecked
+        {
+            get { return _isChecked; }
+            set
+            {
+                _isChecked = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         [field: NonSerializedAttribute()]
         public event PropertyChangedEventHandler PropertyChanged;
         /// <summary>

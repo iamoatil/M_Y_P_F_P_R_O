@@ -89,6 +89,9 @@
     <Compile Include="Export\ExportData.xaml.cs">
       <DependentUpon>ExportData.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Logs\ObtainEvidenceLogView.xaml.cs">
+      <DependentUpon>ObtainEvidenceLogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Main\DeviceView\DeviceExtractionView.xaml.cs">
       <DependentUpon>DeviceExtractionView.xaml</DependentUpon>
     </Compile>
@@ -157,6 +160,9 @@
     <Compile Include="Management\User\UserListView.xaml.cs">
       <DependentUpon>UserListView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PictureView\PictureView.xaml.cs">
+      <DependentUpon>PictureView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -193,6 +199,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Export\ExportData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Logs\ObtainEvidenceLogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -281,6 +291,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Management\User\UserListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PictureView\PictureView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

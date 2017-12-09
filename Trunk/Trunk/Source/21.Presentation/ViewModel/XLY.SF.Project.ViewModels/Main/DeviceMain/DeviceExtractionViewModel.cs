@@ -33,8 +33,8 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         public DeviceExtractionViewModel()
         {
             Content = IocManagerSingle.Instance.GetPart<UcViewBase>("XLY.SF.Project.DataExtraction.ExtractionView");
-            _addPlanCommandProxy = new ProxyRelayCommand(Add, () => PlanName != String.Empty);
-            _removePlanCommandProxy = new ProxyRelayCommand<ExtractionPlanModel>(Remove);
+            _addPlanCommandProxy = new ProxyRelayCommand(Add, base.ModelName,() => PlanName != String.Empty);
+            _removePlanCommandProxy = new ProxyRelayCommand<ExtractionPlanModel>(Remove, base.ModelName);
         }
 
         #endregion

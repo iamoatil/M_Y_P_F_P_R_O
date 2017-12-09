@@ -32,8 +32,8 @@ namespace XLY.SF.Project.ViewModels.Management.Settings
         public UnitSettingsViewModel(IRecordContext<WorkUnit> dbService)
         {
             _dbService = dbService;
-            _addProxyCommand = new ProxyRelayCommand(Add, () => Number != String.Empty && UnitName != String.Empty);
-            _removeProxyCommand = new ProxyRelayCommand(Remove, () => SelctedItem != null);
+            _addProxyCommand = new ProxyRelayCommand(Add, base.ModelName, () => Number != String.Empty && UnitName != String.Empty);
+            _removeProxyCommand = new ProxyRelayCommand(Remove, base.ModelName, () => SelctedItem != null);
             WorkUnit[] cts = dbService.Records.ToArray();
             WorkUnits = new ObservableCollection<WorkUnit>(cts);
         }

@@ -39,6 +39,7 @@ namespace XLY.SF.Project.Persistable
         public DbService()
             : base("System")
         {
+            Database.SetInitializer<DbService>(null);
         }
 
         #endregion

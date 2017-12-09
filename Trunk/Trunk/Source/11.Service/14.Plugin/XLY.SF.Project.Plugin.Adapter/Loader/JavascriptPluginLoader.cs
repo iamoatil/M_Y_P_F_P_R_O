@@ -26,10 +26,35 @@ namespace XLY.SF.Project.Plugin.Adapter.Loader
         {
             List<IPlugin> pluginList = new List<IPlugin>();
 
-            string dir = LanguageManager.Current.Type == LanguageType.Cn ? FileHelper.GetPhysicalPath("\\Script\\cn")
-                : FileHelper.GetPhysicalPath("\\Script\\en");
+            string dir = LanguageManager.Current.Type == LanguageType.En ? FileHelper.GetPhysicalPath("\\Script\\en")
+                : FileHelper.GetPhysicalPath("\\Script\\cn");
+
+            List<string> dirs = new List<string>();
+            dirs.Add(dir);
+            if(pluginPaths != null && pluginPaths.Length > 0)
+            {
+                foreach (var path in pluginPaths)
+                {
+                    string scp = Path.Combine(path, LanguageManager.Current.Type == LanguageType.En ? "en" : "cn");
+                    if(Directory.Exists(scp))
+                    {
+                        dirs.Add(scp);
+                    }
+                }
+            }
+            List<FileInfo> pluginFiles = new List<FileInfo>();
+            foreach (var d in dirs)
+            {
+                foreach (var f in FileHelper.GetFiles(d, new[] { JS_EXT, RELEASE_JS_EXT }))
+                {
+                    if(!pluginFiles.Exists(p=>p.Name == f.Name))
+                    {
+                        pluginFiles.Add(f);
+                    }
+                }
+            }
             
-            var res = System.Threading.Tasks.Parallel.ForEach(FileHelper.GetFiles(dir, new[] { JS_EXT, RELEASE_JS_EXT }), (s) =>
+            var res = System.Threading.Tasks.Parallel.ForEach(pluginFiles, (s) =>
             {
                 var plug = this.LoadFile(s.FullName);
                 lock (pluginList)
@@ -220,12 +245,47 @@ namespace XLY.SF.Project.Plugin.Adapter.Loader
         /// </summary>
         private void ReadDataNode(DataParsePluginInfo plugin, XmlNode node)
         {
+            plugin.DataView = new List<DataView>();
+
             var datas = node.SelectNodes("data");
             if (datas == null || datas.Count <= 0)
             {
                 return;
             }
+            foreach (XmlNode data in datas)
+            {
+                DataView dv = new DataView();
+                plugin.DataView.Add(dv);
 
+                dv.Contract = data.GetSafeAttributeValue("contract");
+                dv.Type = data.GetSafeAttributeValue("type");
+                dv.Items = new List<DataItem>();
+
+                var items = data.SelectNodes("item");
+                if (items == null || items.Count <= 0)
+                {
+                    return;
+                }
+
+                foreach (XmlNode v in items)
+                {
+                    var di = new DataItem()
+                    {
+                        Name = v.GetSafeAttributeValue("name"),
+                        Code = v.GetSafeAttributeValue("code"),
+                        Type = this.ReadEnum(v, "type", EnumColumnType.String),
+                        Width = v.GetSafeAttributeValue("width").ToSafeInt(),
+                        Format = v.GetSafeAttributeValue("format"),
+                        Order = this.ReadEnum(v, "order", EnumOrder.None),
+                        Alignment = this.ReadEnum(v, "alignment", EnumAlignment.Left),
+                        GroupIdex = v.GetSafeAttributeValue("groupindex").ToSafeInt(),
+                        Show = v.GetSafeAttributeValue("show").ToSafeBoolean(true),
+                    };
+                    di.Width = di.Width <= 0 ? 100 : di.Width;
+                    di.GroupIdex = di.GroupIdex > 0 ? di.GroupIdex : -1;
+                    dv.Items.Add(di);
+                }
+            }
         }
 
 

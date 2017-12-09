@@ -37,9 +37,9 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         [ImportingConstructor]
         public CaseCreationViewModel(IRecordContext<CaseType> caseTypeService)
         {
-            _confirmCommandProxy = new ProxyRelayCommand(Confirm, CanConfirm);
-            _updateCaseTypeCommandProxy = new ProxyRelayCommand(UpdateCasetType);
-            _skipCommandProxy = new ProxyRelayCommand(Skip);
+            _confirmCommandProxy = new ProxyRelayCommand(Confirm, base.ModelName, CanConfirm);
+            _updateCaseTypeCommandProxy = new ProxyRelayCommand(UpdateCasetType, base.ModelName);
+            _skipCommandProxy = new ProxyRelayCommand(Skip, base.ModelName);
             SelectDirectoryCommand = new RelayCommand(SelectDirectory);
             _caseTypeService = caseTypeService;
         }

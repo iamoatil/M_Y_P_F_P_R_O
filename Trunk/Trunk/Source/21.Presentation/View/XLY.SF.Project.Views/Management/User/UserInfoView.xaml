@@ -10,7 +10,6 @@
                  xmlns:pro="http://www.spfpro.com"
                  Title="{Binding XPath=ViewLanguage/Management/User/InfoTitle,Source={x:Static ex:SystemContext.LanguageProvider}}"
                  Width="420"
-                 Height="480"
                  mc:Ignorable="d">
     <core:UcViewBase.Resources>
         <ResourceDictionary>

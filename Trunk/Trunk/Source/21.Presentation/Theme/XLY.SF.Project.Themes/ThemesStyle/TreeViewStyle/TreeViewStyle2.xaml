@@ -10,8 +10,6 @@
     <local:TreeViewItemIndentConverter x:Key="treeIndentConverter" Indent="19" />
     <local:TreeViewItemIndentConverter2 x:Key="treeIndentConverter2" Indent="19" />
 
-    
-
     <Style TargetType="{x:Type TreeViewItem}">
         <Setter Property="Foreground" Value="#9ba5b9"/>
         <Setter Property="Background" Value="Transparent"/>
@@ -117,4 +115,110 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!--文件浏览树-->
+    <Style x:Key="FileBrowingstTreeViewItem" TargetType="{x:Type TreeViewItem}">
+        <Setter Property="Foreground" Value="#9ba5b9"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                    <StackPanel>
+                        <Border Name="itemBackground" Background="{TemplateBinding Background}"  
+                                BorderBrush="{TemplateBinding BorderBrush}"   Height="50"
+                                BorderThickness="{TemplateBinding BorderThickness}"  
+                                Padding="{TemplateBinding Padding}">
+                            <Grid Margin="{Binding Converter={StaticResource treeIndentConverter},RelativeSource={RelativeSource TemplatedParent}}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Rectangle x:Name="moveBackGround" Fill="#379CE5" Width="10" Visibility="Collapsed" HorizontalAlignment="Left"  Margin="{Binding Converter={StaticResource treeIndentConverter2},RelativeSource={RelativeSource TemplatedParent}}"/>
+                                <ToggleButton x:Name="Expander"  Grid.Column="0" Style="{StaticResource tb_treeItemExpand}" Margin="20 0 10 0"
+                                             IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"  
+                                             ClickMode="Press" />
+                                <ContentControl x:Name="cbtemplate" Grid.Column="1"/>
+                                <Image x:Name="icon" Grid.Column="2" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/TreeViewFolderIcon.png" Width="14" Height="14" Margin="0 0 10 0" Stretch="UniformToFill"/>
+                                <ContentPresenter Grid.Column="3" x:Name="PART_Header" ContentSource="Header"   VerticalAlignment="Center"
+                                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                            </Grid>
+                        </Border>
+                        <ItemsPresenter x:Name="ItemsHost" />
+                    </StackPanel>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="false">
+                            <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="HasItems" Value="false">
+                            <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter Property="Visibility" TargetName="moveBackGround" Value="Visible"/>
+                            <Setter Property="Background" TargetName="itemBackground" Value="#14000000"/>
+                            <Setter Property="Foreground" Value="#ffffff"/>
+                            <Setter Property="Effect" TargetName="Expander">
+                                <Setter.Value>
+                                    <ee:EmbossedEffect Color="White"></ee:EmbossedEffect>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Effect" TargetName="icon">
+                                <Setter.Value>
+                                    <ee:EmbossedEffect Color="White"></ee:EmbossedEffect>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="true"/>
+                                <Condition Property="IsSelectionActive" Value="false"/>
+                            </MultiTrigger.Conditions>
+                            <!--<Setter Property="Background" TargetName="Expander" Value="#FF404040"/>-->
+                        </MultiTrigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding Path=(local:AttachHelper.IsShowCheckBox),RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}}" Value="True">
+                            <Setter Property="Template" TargetName="cbtemplate">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ContentControl">
+                                        <CheckBox x:Name="cb" IsChecked="{Binding IsChecked, Mode=TwoWay}" Grid.Column="1" Margin="0 0 10 0" VerticalAlignment="Center"/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=(local:AttachHelper.IsShowSelectedGripper),RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}}" Value="False">
+                            <Setter TargetName="moveBackGround" Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(local:AttachHelper.IsHideUnCheckedNode),RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}}" Value="True"/>
+                                <Condition Binding="{Binding IsChecked}" Value="False"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(local:AttachHelper.IsHideChildren),RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}}" Value="True"/>
+                                <Condition Binding="{Binding IsHideChildren}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter TargetName="Expander" Property="Visibility" Value="Hidden"/>
+                        </MultiDataTrigger>
+                        <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=(local:AttachHelper.IsHideChildren),RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TreeView}}}" Value="True"/>
+                                <Condition Binding="{Binding IsHideChildren}" Value="True"/>
+                                <Condition Binding="{Binding IsChecked, ElementName=Expander}" Value="True"/>
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="IsExpanded" Value="False"/>
+                        </MultiDataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

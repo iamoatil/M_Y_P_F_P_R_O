@@ -15,7 +15,7 @@ namespace XLY.SF.Framework.Core.Base.CoreInterface
         /// </summary>
         /// <param name="filter">筛选，【标签|*.后缀;】</param>
         /// <returns></returns>
-        string OpenFileDialog(string filter = "案例项目文件|*.cp");
+        string OpenFileDialog(string filter);
 
         /// <summary>
         /// 选择路径

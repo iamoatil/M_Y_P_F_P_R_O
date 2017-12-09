@@ -40,21 +40,17 @@ namespace CopyDll
         {
             foreach (string path in sourceDir._filePaths)
             {
-                try
+                string fakeTargetPath = path.Replace(sourceDir._dirPath, targetDir._dirPath);
+                bool isExisted = targetDir._filePaths.Contains(fakeTargetPath);
+                if (!isExisted)
                 {
-                    string fakeTargetPath = path.Replace(sourceDir._dirPath, targetDir._dirPath);
-                    bool isExisted = targetDir._filePaths.Contains(fakeTargetPath);
-                    if (!isExisted)
+                    string dirName = Path.GetDirectoryName(fakeTargetPath);
+                    if (!Directory.Exists(dirName))
                     {
-                        string dirName = Path.GetDirectoryName(fakeTargetPath);
-                        if (!Directory.Exists(dirName))
-                        {
-                            Directory.CreateDirectory(dirName);
-                        }
-                        File.Copy(path, fakeTargetPath);
+                        Directory.CreateDirectory(dirName);
                     }
+                    File.Copy(path, fakeTargetPath);
                 }
-                catch { }
             }
         }
         
@@ -63,9 +59,10 @@ namespace CopyDll
         /// </summary>
         /// <param name="sourceDir"></param>
         /// <param name="targetDir"></param>
-        public static void CopyIfNewest(FileDirectory sourceDir, FileDirectory targetDir)
+        public static bool CopyIfNewest(FileDirectory sourceDir, FileDirectory targetDir)
         {
             Console.Write("正在拷贝目录：" + sourceDir._dirPath);
+            bool isSuc = true;
             foreach (string path in sourceDir._filePaths)
             {
                 try
@@ -94,9 +91,15 @@ namespace CopyDll
                         }
                     }
                 }
-                catch { }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    isSuc = false;
+                    return isSuc;
+                }
             }
             Console.WriteLine("\n拷贝结束");
+            return isSuc;
         }
     }
 }

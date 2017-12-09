@@ -4,14 +4,12 @@
 * Create Date：2017/12/2 10:15:26
 * ==============================================================================*/
 
-using System;
-using System.Collections.Generic;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    public class UrlWarningPlugin : AbstractEarlyWarningPlugin
+    internal class UrlWarningPlugin : AbstractEarlyWarningPlugin
     {
         public UrlWarningPlugin()
         {
@@ -29,43 +27,20 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             EarlyWarningPluginArgument ewArg = (EarlyWarningPluginArgument)arg;
             DeviceDataSource ds = ewArg.DeviceDataSource;
-            EarlyWarningResult earlyWarningResult = ewArg.EarlyWarningResult;
+            DbFromConfigData configDbManager = ewArg.ConfigDbManager;
 
-            List<DataNode> dataNodes = ewArg.DataNodes;
-            IDataSource dataSource = ds.DataSource;            
-
-            TreeDataSource treeDataSource = dataSource as TreeDataSource;
-            if(treeDataSource == null
+            TreeDataSource treeDataSource = ds.DataSource as TreeDataSource;
+            if (treeDataSource == null
                 || treeDataSource.TreeNodes.Count < 1)
             {
                 return null;
             }
-            foreach (DataNode dataNode in dataNodes)
+            string keyColumn = "Url";
+            foreach (TreeNode treeNode in treeDataSource.TreeNodes)
             {
-                //todo 此处dataNode.SensitiveData.CategoryName != "URL"为硬代码
-                if (dataNode.SensitiveData.CategoryName != "URL")
-                {
-                    continue;
-                }
-                //todo 此处可以直接匹配，书签和历史记录           
-                foreach (TreeNode treeNode in treeDataSource.TreeNodes)
-                {
-                    string cmd = string.Format("{1} like '%{2}%'", treeNode.Items.DbTableName, SqliteDbFile.JsonColumnName, dataNode.SensitiveData.Value);
-                    IEnumerable<dynamic> result = treeNode.Items.FilterByCmd<dynamic>(cmd);
-                    foreach (AbstractDataItem item in result)
-                    {
-                        item.SensitiveId = dataNode.SensitiveData.SensitiveId;
-                    }
-                    earlyWarningResult.SqlDb.WriteResult(result, treeNode.Items.DbTableName, (Type)treeNode.Type);
-                    earlyWarningResult.Serializer.Serialize(treeDataSource);
-                }
+                ColumnUpdate(treeNode.Items, configDbManager, keyColumn);               
             }
             return null;
-        }
-
-        public override void Execute(object arg0)
-        {
-            throw new NotImplementedException();
-        }
+        }       
     }
 }

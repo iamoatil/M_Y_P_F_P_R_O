@@ -36,13 +36,13 @@ namespace XLY.SF.Project.ViewModels.Management.User
 
         public UserListViewModel()
         {
-            _addProxyCommand = new ProxyRelayCommand(Add);
-            _removeProxyCommand = new ProxyRelayCommand<UserInfoModel>(Remove);
-            _updateProxyCommand = new ProxyRelayCommand<UserInfoModel>(Update);
-            _searchProxyCommand = new ProxyRelayCommand<String>(Search);
+            _addProxyCommand = new ProxyRelayCommand(Add, base.ModelName);
+            _removeProxyCommand = new ProxyRelayCommand<UserInfoModel>(Remove, base.ModelName);
+            _updateProxyCommand = new ProxyRelayCommand<UserInfoModel>(Update, base.ModelName);
+            _searchProxyCommand = new ProxyRelayCommand<String>(Search, base.ModelName);
             SelectAllCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<Boolean>(SelectAll, (b) => Users != null && Users.Count != 0);
             SelectCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<Boolean>(Select);
-            _removeBatchCommand = new ProxyRelayCommand(RemoveBatch);
+            _removeBatchCommand = new ProxyRelayCommand(RemoveBatch, base.ModelName);
         }
 
         #endregion

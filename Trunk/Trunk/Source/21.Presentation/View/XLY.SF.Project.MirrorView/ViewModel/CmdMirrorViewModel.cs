@@ -94,7 +94,7 @@ namespace XLY.SF.Project.MirrorView
             }
             else if (state.IsType(CmdStrings.Exception))
             {
-                _msgBox.ShowErrorMsg("镜像失败" + state.GetChildCmd());
+                _msgBox.ShowDialogErrorMsg("镜像失败" + state.GetChildCmd());
                 SourcePosition.IsMirroring = false;
             }
             else if (state.Match(CmdStrings.StopMirror))
@@ -104,7 +104,7 @@ namespace XLY.SF.Project.MirrorView
             }
             else if(state.Match(CmdStrings.NoSelectedPartition))
             {
-                _msgBox.ShowDialogSuccessMsg("请选择至少一个分区");
+                _msgBox.ShowDialogWarningMsg("请选择至少一个分区");
                 SourcePosition.IsMirroring = false;
             }
             else if(state.Match(CmdStrings.PauseMirror)
@@ -168,6 +168,7 @@ namespace XLY.SF.Project.MirrorView
         private void Pause()
         {
             SourcePosition.Pause();
+            ProgressPosition.Pause();
         }
 
         /// <summary>
@@ -176,6 +177,7 @@ namespace XLY.SF.Project.MirrorView
         private void Continue()
         {          
             SourcePosition.Continue();
+            ProgressPosition.Continue();
         }
 
         private void SetAllCheckState(bool isChecked)

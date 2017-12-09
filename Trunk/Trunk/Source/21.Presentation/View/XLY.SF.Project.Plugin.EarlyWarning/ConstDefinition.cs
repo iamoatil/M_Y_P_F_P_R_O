@@ -14,19 +14,19 @@ namespace XLY.SF.Project.EarlyWarningView
 {
     class ConstDefinition
     {
-        public static readonly string RootName = "Root";
+        public const string RootName = "Root";
 
-        public static readonly string CountrySafety = "CountrySafety";
-        public static readonly string PublicSafety = "PublicSafety";
-        public static readonly string EconomySafety = "EconomySafety";
-        public static readonly string Livehood = "Livehood";
-        public static readonly string Custom = "Custom";
+        public const string CountrySafety = "CountrySafety";
+        public const string PublicSafety = "PublicSafety";
+        public const string EconomySafety = "EconomySafety";
+        public const string Livehood = "Livehood";
+        public const string Custom = "Custom";
+       
+        public const string CallCollection = "AppCollection";
+        public const string FileMd5Collection = "FileMd5Collection";
+        public const string KeyWordCollection = "KeyWordCollection";
+        public const string UrlCollection = "UrlCollection";
 
-        public static readonly List<string> Categorys=new List<string>(){ CountrySafety, PublicSafety, EconomySafety , Livehood, Custom };
-
-        public static readonly string CallCollection = "AppCollection";
-        public static readonly string FileMd5Collection = "FileMd5Collection";
-        public static readonly string KeyWordCollection = "KeyWordCollection";
-        public static readonly string UrlCollection = "UrlCollection";
+        public const string XLYJson = "XLYJson";
     }
 }

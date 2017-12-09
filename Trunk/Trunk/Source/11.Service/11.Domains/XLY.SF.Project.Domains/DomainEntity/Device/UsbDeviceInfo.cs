@@ -15,9 +15,11 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// USB监听设备信息
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Pack = 1)]
     public struct UsbDeviceInfo
     {
+        public const int StrLength = 0XFE;
+
         /// <summary>
         /// 是否为手机
         /// </summary>
@@ -30,14 +32,16 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 设备类型"Android", "iPad", "iPhone"
         /// </summary>
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 50)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = StrLength)]
         public byte[] BusReportedDeviceDesc;
+
+        public uint ICount;
 
         public string GetDeviceDesc()
         {
             if (BusReportedDeviceDesc != null)
             {
-                return Encoding.Unicode.GetString(BusReportedDeviceDesc).Trim();
+                return Encoding.Unicode.GetString(BusReportedDeviceDesc).Trim('\0').Trim();
             }
             return string.Empty;
         }

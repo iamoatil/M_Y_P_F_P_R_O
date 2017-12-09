@@ -13,7 +13,7 @@ namespace CopyDll
 {
     class DllCopyProgram
     {
-        public void Execute(string[] args)
+        public bool Execute(string[] args)
         {
             try
             {
@@ -22,24 +22,29 @@ namespace CopyDll
                 {
                     Console.WriteLine("全部拷贝完成！");
                 }
+                else
+                {
+                    Console.WriteLine("拷贝时发生一定的错误！");
+                    return false;
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("发生错误！");
                 Console.WriteLine(ex.Message + "\n" + ex.StackTrace);
-                Console.WriteLine("按任意键继续");
-                Console.Read();
-            }            
+                return false;
+            }
+            return true;
         }
 
         private bool Exec(string[] args)
         {
             //参数正确性验证
-            bool isValidate = true;
+            bool isSuc = true;
             if (args.Length != 0
                 && args.Length != 2)
             {
-                isValidate = false;
+                isSuc = false;
             }
             string arg1 = null;
             string arg2 = null;
@@ -63,7 +68,7 @@ namespace CopyDll
             {
                 if (!Directory.Exists(arg1))
                 {
-                    isValidate = false;
+                    isSuc = false;
                     Console.WriteLine(arg1 + "源目录不存在");
                 }
                 try
@@ -72,7 +77,7 @@ namespace CopyDll
                 }
                 catch (Exception)
                 {
-                    isValidate = false;
+                    isSuc = false;
                     Console.WriteLine(arg2 + "目的目录不是有效的目录");
                 }
             }
@@ -80,12 +85,12 @@ namespace CopyDll
             {
                 if (!File.Exists(arg2))
                 {
-                    isValidate = false;
+                    isSuc = false;
                     Console.WriteLine(arg2 + "配置文件不存在！");
                 }
             }
 
-            if (isValidate == false)
+            if (isSuc == false)
             {
                 ConsoleColor color = Console.ForegroundColor;
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -111,15 +116,22 @@ namespace CopyDll
                 string[] rows = File.ReadAllLines(exeDir +@"\"+ arg2);
                 foreach (var row in rows)
                 {
+                    if(string.IsNullOrWhiteSpace(row))
+                    {
+                        continue;
+                    }
                     string[] items = row.Split('|');
                     if (items.Length != 2)
                     {
+                        Console.WriteLine(row+" 解析失败！");
+                        isSuc = false;
                         continue;
                     }
                     arg1 = items[0].Trim();
                     arg2 = items[1].Trim();
                     if (!Directory.Exists(arg1))
                     {
+                        isSuc = false;
                         Console.WriteLine(Path.GetFullPath(arg1) + "源目录不存在");
                         continue;
                     }
@@ -129,6 +141,7 @@ namespace CopyDll
                     }
                     catch (Exception)
                     {
+                        isSuc = false;
                         Console.WriteLine(Path.GetFullPath(arg2) + "目的目录不是有效的目录");
                         continue;
                     }
@@ -143,10 +156,14 @@ namespace CopyDll
             //执行拷贝
             foreach (var directoryPair in _directoryPairList)
             {
-                FileDirectory.CopyIfNewest(directoryPair.SourceDir, directoryPair.TargetDir);
+                bool ret=FileDirectory.CopyIfNewest(directoryPair.SourceDir, directoryPair.TargetDir);
+                if (ret == false)
+                {
+                    isSuc = false;
+                }
             }
 
-            return true;
+            return isSuc;
         }
     }
 

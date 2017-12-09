@@ -77,6 +77,8 @@
   <ItemGroup>
     <Compile Include="AttachProperty\AttachHelper.cs" />
     <Compile Include="Behavior\DataGridBehavior.cs" />
+    <Compile Include="Behavior\ResetFileOrFolderNameBehavior.cs" />
+    <Compile Include="Behavior\ScrollPageBehavior.cs" />
     <Compile Include="Converter\AdditionConverter.cs" />
     <Compile Include="Converter\BookmarkToBooleanConverter.cs" />
     <Compile Include="Converter\DateTimeToDateStringConverter.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="CustromControl\ComboBox\ComboBoxEx.cs" />
     <Compile Include="Converter\ImageContentToBoolConverter.cs" />
     <Compile Include="Converter\SubtractionConverter.cs" />
+    <Compile Include="CustromControl\ToggleButton\CreateNewFolderRadioButton.cs" />
     <Compile Include="CustromControl\DeviceSelectControl\DeviceSelectControl.cs" />
     <Compile Include="CustromControl\DeviceSelectControl\DeviceSelectItemControl.cs" />
     <Compile Include="CustromControl\ComboBox\MenuButton.cs" />

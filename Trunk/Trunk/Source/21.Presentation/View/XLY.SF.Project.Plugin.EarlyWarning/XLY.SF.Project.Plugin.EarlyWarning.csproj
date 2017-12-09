@@ -20,7 +20,7 @@
     <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -84,12 +84,16 @@
   <ItemGroup>
     <Compile Include="Adapter\AbstractEarlyWarningPlugin.cs" />
     <Compile Include="Adapter\EarlyWarningPluginAdapter.cs" />
-    <Compile Include="Check\Helper.cs" />
+    <Compile Include="Adapter\ColumnUpdater.cs" />
     <Compile Include="ConfigData\ConfigDataFilter.cs" />
-    <Compile Include="ConfigData\ConfigDataToDB.cs" />
+    <Compile Include="ConfigData\DbFromConfigData.cs" />
     <Compile Include="ConfigData\ConfigFile.cs" />
     <Compile Include="ConfigData\ConfigNode.cs" />
     <Compile Include="ConstDefinition.cs" />
+    <Compile Include="DeviceData\FileDownloader.cs" />
+    <Compile Include="EarlyWarningResultPage.xaml.cs">
+      <DependentUpon>EarlyWarningResultPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Interface.cs" />
     <Compile Include="Language\LanguageHelper.cs" />
     <Compile Include="Language\LanguageTextTeamplate1.LanguageElement.cs">
@@ -102,27 +106,12 @@
     <Compile Include="Plugins\Md5WarningPlugin.cs" />
     <Compile Include="Plugins\PhoneWarningPlugin.cs" />
     <Compile Include="Plugins\UrlWarningPlugin.cs" />
-    <Compile Include="ResultData\DataExtactionItemCollection.cs" />
-    <Compile Include="ResultData\EarlyWarningResult.cs" />
-    <Compile Include="ResultData\EarlyWarningSerializer.cs" />
-    <Compile Include="ResultData\EarlyWarningSqlDb.cs" />
     <Compile Include="SensitiveData.cs" />
     <Content Include="EarlyWarningConfig\CountrySafety.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Compile Include="EarlyWarningResultPage.xaml.cs">
-      <DependentUpon>EarlyWarningResultPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Check\DetectionManager.cs" />
     <Compile Include="DeviceData\DeviceDataParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Setting\SettingManager.cs" />
-    <Compile Include="ResultData\AbstractCategory.cs" />
-    <Compile Include="ResultData\ExtactionCategory.cs" />
-    <Compile Include="ViewModel\EarlyWarningViewModel.cs" />
-    <Compile Include="ResultData\ICategory.cs" />
-    <Compile Include="Setting\SettingCollection.cs" />
-    <Compile Include="Setting\SettingItem.cs" />
     <Content Include="EarlyWarningConfig\Custom.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -141,12 +130,6 @@
     </Content>
     <Content Include="Language\Language_Cn.xml" />
     <Content Include="Language\Language_En.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="EarlyWarningResultPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\01.Framework\XLY.SF.Framework.BaseUtility\XLY.SF.Framework.BaseUtility.csproj">
@@ -180,6 +163,10 @@
     <ProjectReference Include="..\..\..\11.Service\13.Core\XLY.SF.Project.DataFilter\XLY.SF.Project.DataFilter.csproj">
       <Project>{22661B55-AD41-4232-8EE7-485CAE0F4F3D}</Project>
       <Name>XLY.SF.Project.DataFilter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\11.Service\13.Core\XLY.SF.Project.Services\XLY.SF.Project.Services.csproj">
+      <Project>{D13C3F48-EA76-4AF7-9519-BAE2E64ABD3F}</Project>
+      <Name>XLY.SF.Project.Services</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\11.Service\14.Plugin\XLY.SF.Project.Plugin.Adapter\XLY.SF.Project.Plugin.Adapter.csproj">
       <Project>{78424848-06CB-4D68-81D2-6338F56AACAD}</Project>
@@ -219,6 +206,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="EarlyWarningResultPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

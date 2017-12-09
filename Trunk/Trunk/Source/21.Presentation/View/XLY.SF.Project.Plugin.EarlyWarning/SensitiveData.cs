@@ -18,11 +18,14 @@ namespace XLY.SF.Project.EarlyWarningView
         public string RootNodeName { get; private set; }
 
         /// <summary>
+        /// 类型名
+        /// </summary>
+        public string CategoryName { get; private set; }
+
+        /// <summary>
         /// 敏感数据
         /// </summary>
         public string Value { get; private set; }
-
-        public string CategoryName { get; private set; }
 
         /// <summary>
         /// SensitiveId
@@ -34,10 +37,9 @@ namespace XLY.SF.Project.EarlyWarningView
             this.RootNodeName = rootNodeName;
             this.CategoryName = categoryName;
             this.Value = value;
-            if(!int.TryParse(sensitiveId,out int SensitiveId))
-            {
-                SensitiveId = 0;
-            }
+            int i = 0;
+            int.TryParse(sensitiveId, out i);
+            SensitiveId = i;
         }
     }
 }

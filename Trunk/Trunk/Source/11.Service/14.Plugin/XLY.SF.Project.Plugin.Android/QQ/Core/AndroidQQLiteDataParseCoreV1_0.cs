@@ -524,7 +524,7 @@ namespace XLY.SF.Project.Plugin.Android
 
             var discussMemberTree = new TreeNode()
             {
-                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_TroopMember),
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_DiscussMember),
                 Type = typeof(QQDiscussShow),
                 Items = new DataItems<QQDiscussShow>(DbFilePath)
             };
@@ -627,7 +627,7 @@ namespace XLY.SF.Project.Plugin.Android
             //讨论组消息树
             var discussMsgRootSet = new TreeNode()
             {
-                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_TroopMsg),
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_DiscussMsg),
             };
             accountTree.TreeNodes.Add(discussMsgRootSet);
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Domains.Contract;
 
 /* ==============================================================================
@@ -16,7 +17,7 @@ namespace XLY.SF.Project.Domains
     /// </summary>
     [Serializable]
     [Newtonsoft.Json.JsonObject(Newtonsoft.Json.MemberSerialization.OptOut)]
-    public abstract class AbstractDataSource : IDataSource
+    public abstract class AbstractDataSource : NotifyPropertyBase, IDataSource
     {
         /// <summary>
         /// 数据唯一标识
@@ -64,6 +65,20 @@ namespace XLY.SF.Project.Domains
             }
         }
 
+        #region CheckState
+
+        private bool? _isChecked = false;
+        /// <summary>
+        /// 当前数据是否被勾选
+        /// </summary>
+        public bool? IsChecked { get => _isChecked; set => this.SetCheckedState(value, () => { this._isChecked = value; OnPropertyChanged(); }); }
+        public ICheckedItem Parent { get => null; }
+        public IEnumerable<ICheckedItem> GetChildren()
+        {
+            return null;
+        }
+        #endregion
+
         public virtual void BuildParent()
         {
             if (null != Items)
@@ -72,21 +87,11 @@ namespace XLY.SF.Project.Domains
             }
         }
 
-        public virtual void Traverse(Predicate<TreeNode> traverseTreeNode, Predicate<AbstractDataItem> traverseItems)
-        {
-            if (traverseItems != null && Items != null)
-            {
-                foreach (AbstractDataItem item in Items.View)
-                {
-                    if (!traverseItems(item))
-                    {
-                        break;
-                    }
-                }
-            }
-        }
-
         #region 读取数据后补齐路径
+        /// <summary>
+        /// 读取数据后补齐路径
+        /// </summary>
+        /// <param name="path"></param>
         public virtual void SetCurrentPath(string path)
         {
             CurrentTaskPath = path;

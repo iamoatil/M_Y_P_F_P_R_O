@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using XLY.SF.Framework.Core.Base.MessageAggregation;
 using XLY.SF.Project.DataDisplayView.ViewModel;
+using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.DataDisplayView
 {

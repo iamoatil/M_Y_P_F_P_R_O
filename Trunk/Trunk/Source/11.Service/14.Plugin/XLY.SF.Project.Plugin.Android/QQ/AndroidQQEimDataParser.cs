@@ -28,6 +28,7 @@ namespace XLY.SF.Project.Plugin.Android
             pluginInfo.SourcePath = new SourceFileItems();
             pluginInfo.SourcePath.AddItem("/data/data/com.tencent.eim/databases/#F");
             pluginInfo.SourcePath.AddItem("/data/data/com.tencent.eim/shared_prefs/#F");
+            pluginInfo.SourcePath.AddItem("SDCard:/tencent/EimQQ/#F");//多媒体文件夹
 
             PluginInfo = pluginInfo;
         }
@@ -40,16 +41,22 @@ namespace XLY.SF.Project.Plugin.Android
             {
                 var pi = PluginInfo as DataParsePluginInfo;
                 var databasesPath = pi.SourcePath[0].Local;
+                var mediaPath = pi.SourcePath[2].Local;
 
                 if (!FileHelper.IsValidDictory(databasesPath))
                 {
                     return ds;
                 }
 
+                if (!FileHelper.IsValidDictory(mediaPath))
+                {
+                    mediaPath = string.Empty;
+                }
+
                 //com.tencent.eim
                 var qqPath = new DirectoryInfo(databasesPath).Parent.FullName;
 
-                var parser = new AndroidQQEimDataParseCoreV1_0(pi.SaveDbPath, LanguageHelper.GetString(Languagekeys.PluginName_EimQQ), qqPath, "");
+                var parser = new AndroidQQEimDataParseCoreV1_0(pi.SaveDbPath, LanguageHelper.GetString(Languagekeys.PluginName_EimQQ), qqPath, mediaPath);
 
                 var qqNode = parser.BuildTree();
 

@@ -80,7 +80,6 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         /// <summary>
         /// 开启。
         /// </summary>
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Start()
         {
             if (IsRuning) return;
@@ -91,7 +90,6 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         /// <summary>
         /// 停止。
         /// </summary>
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Stop()
         {
             if (IsRuning)

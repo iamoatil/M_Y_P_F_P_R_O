@@ -49,7 +49,7 @@ namespace XLY.SF.Project.ViewDomain.VModel.DevHomePage
                     case EnumDeviceType.Chip:
                         _devIcon = "pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_Sim.png";
                         break;
-                    case EnumDeviceType.Disk:
+                    case EnumDeviceType.LocalFile:
                         break;
                     case EnumDeviceType.SDCard:
                         _devIcon = "pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_SDCard.png";
@@ -186,6 +186,28 @@ namespace XLY.SF.Project.ViewDomain.VModel.DevHomePage
             set
             {
                 this._unusedTotalSizeOfDevice = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region 是否在线
+
+        private bool _onlineStatus;
+        /// <summary>
+        /// 是否在线
+        /// </summary>
+        public bool OnlineStatus
+        {
+            get
+            {
+                return this._onlineStatus;
+            }
+
+            set
+            {
+                this._onlineStatus = value;
                 base.OnPropertyChanged();
             }
         }

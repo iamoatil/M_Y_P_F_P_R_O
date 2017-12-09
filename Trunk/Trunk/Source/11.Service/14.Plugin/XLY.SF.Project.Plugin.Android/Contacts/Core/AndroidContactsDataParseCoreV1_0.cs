@@ -6,9 +6,11 @@
  *
 *****************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using XLY.SF.Framework.BaseUtility;
+using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Persistable.Primitive;
@@ -50,11 +52,13 @@ namespace XLY.SF.Project.Plugin.Android
         /// 解析数据
         /// </summary>
         /// <param name="datasource"></param>
-        public void BuildData(ContactDataSource datasource)
+        public List<Contact> BuildData()
         {
+            var items = new List<Contact>();
+
             if (!FileHelper.IsValid(MainDbPath))
             {
-                return;
+                return items;
             }
 
             SqliteContext mainContext = null;
@@ -74,7 +78,6 @@ namespace XLY.SF.Project.Plugin.Android
                 var groupList = mainContext.Find("SELECT * FROM groups");
 
                 //  联系人解析
-                var items = new List<Contact>();
                 if (contactList.IsValid())
                 {
                     items = TryParseItems(contactList);
@@ -82,16 +85,18 @@ namespace XLY.SF.Project.Plugin.Android
                     TryParseDataView(items, dataViewList, groupList);
                 }
 
-                foreach (var item in items.Where(c => c.Number.IsValid()))
-                {
-                    datasource.Items.Add(item);
-                }
+            }
+            catch (Exception ex)
+            {
+                LoggerManagerSingle.Instance.Error(ex, "AndroidContactsDataParseCoreV1_0 BuildData Error!");
             }
             finally
             {
                 mainContext?.Dispose();
                 mainContext = null;
             }
+
+            return items;
         }
 
         /// <summary>

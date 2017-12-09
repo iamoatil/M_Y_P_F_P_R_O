@@ -211,6 +211,10 @@ namespace XLY.SF.Project.Domains
         /// SIM卡
         /// </summary>
         SIM = 6,
+        /// <summary>
+        /// 本地文件/文件夹
+        /// </summary>
+        LocalFile = 7,
     }
 
     #endregion

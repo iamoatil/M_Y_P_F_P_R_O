@@ -101,7 +101,33 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
 
         #endregion
 
-        #region 模版
+        #region 日志
+
+        /// <summary>
+        /// 取证日志
+        /// </summary>
+        public const string ObtainEvidenceLogView = "ExportKey_Logs_ObtainEvidenceLogView";
+        /// <summary>
+        /// 取证日志
+        /// </summary>
+        public const string ObtainEvidenceLogViewModel = "ExportKey_Logs_ObtainEvidenceLogViewModel";
+
+        #endregion
+
+        #region 图片浏览
+
+        /// <summary>
+        /// 图片浏览
+        /// </summary>
+        public const string PictureView = "ExportKey_PictureView";
+        /// <summary>
+        /// 图片浏览
+        /// </summary>
+        public const string PictureViewModel = "ExportKey_PictureViewModel";
+
+        #endregion
+
+        #region 模版【示例】
 
         /// <summary>
         /// 模版

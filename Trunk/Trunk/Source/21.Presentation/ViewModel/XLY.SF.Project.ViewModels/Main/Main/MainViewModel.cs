@@ -188,13 +188,14 @@ namespace XLY.SF.Project.ViewModels.Main
             //事件注册
             OpenCaseEditCommand = new RelayCommand(ExecuteOpenCaseEditCommand);
             MainViewLoadedCommand = new RelayCommand(ExecuteMainViewLoadedCommand);
-            ShutdownProgramCommand = new ProxyRelayCommand(ExecuteShutdownProgramCommand);
-            CloseCaseCommand = new ProxyRelayCommand(ExecuteCloseCaseCommand);
-            ExportCommand = new ProxyRelayCommand(ExecuteExportCommand);
-            UserManagementCommand = new ProxyRelayCommand(ExecuteUserManagementCommand);
-            CaseManagementCommand = new ProxyRelayCommand(ExecuteCaseManagementCommand);
-            SysSettingCommand = new ProxyRelayCommand(ExecuteSysSettingCommand);
-            PluginManagementCommand = new ProxyRelayCommand(ExecutePluginManagementCommand);
+            ShutdownProgramCommand = new ProxyRelayCommand(ExecuteShutdownProgramCommand, base.ModelName);
+            CloseCaseCommand = new ProxyRelayCommand(ExecuteCloseCaseCommand, base.ModelName);
+            ExportCommand = new ProxyRelayCommand(ExecuteExportCommand, base.ModelName);
+            UserManagementCommand = new ProxyRelayCommand(ExecuteUserManagementCommand, base.ModelName);
+            CaseManagementCommand = new ProxyRelayCommand(ExecuteCaseManagementCommand, base.ModelName);
+            SysSettingCommand = new ProxyRelayCommand(ExecuteSysSettingCommand, base.ModelName);
+            PluginManagementCommand = new ProxyRelayCommand(ExecutePluginManagementCommand, base.ModelName);
+            SysLogCommand = new ProxyRelayCommand(ExecuteSysLogCommand, base.ModelName);
         }
 
         private void Instance_CaseChanged(object sender, PropertyChangedEventArgs<Project.CaseManagement.Case> e)
@@ -225,6 +226,13 @@ namespace XLY.SF.Project.ViewModels.Main
         #region ExecuteCommand
 
         #region 菜单操作
+
+        //取证日志
+        private string ExecuteSysLogCommand()
+        {
+            base.NavigationForNewWindow(ExportKeys.ObtainEvidenceLogView);
+            return "打开取证日志";
+        }
 
         //系统设置
         private string ExecuteSysSettingCommand()

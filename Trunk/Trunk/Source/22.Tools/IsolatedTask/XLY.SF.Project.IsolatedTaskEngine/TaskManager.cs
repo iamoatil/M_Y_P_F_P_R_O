@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using XLY.SF.Project.IsolatedTaskEngine.Common;
+using System.Collections.Concurrent;
 
 namespace XLY.SF.Project.IsolatedTaskEngine
 {
@@ -52,8 +53,9 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         {
             if (IsRuning) return;
             IsRuning = true;
-            Task.Factory.StartNew(Dipatch, TaskCreationOptions.LongRunning);
+            Task task = Task.Factory.StartNew(Dipatch, TaskCreationOptions.LongRunning);
             TaskEngine.Logger.Info("Task manager started");
+            task.Wait();
         }
 
         public void RequestStop()
@@ -61,10 +63,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
             if (_requestStop) return;
             _requestStop = true;
             _semaphore.Dispose();
-            lock (_tasks)
-            {
-                _tasks.ForEach(x => x.Close());
-            }
+            _tasks.ForEach(x => x.Close());
             TaskEngine.Logger.Info("Task manager is stopping...");
         }
 
@@ -74,42 +73,50 @@ namespace XLY.SF.Project.IsolatedTaskEngine
 
         private void Dipatch()
         {
+            TaskHandler handler = null;
             while (!_requestStop)
             {
                 _semaphore.WaitOne();
                 if (_requestStop) break;
-                TaskHandler newHandler = new TaskHandler(this);
-                newHandler.Launch();
-                if (newHandler.IsLaunched)
+                handler = NewHandler();
+                if (handler.IsLaunched)
                 {
-                    lock (_tasks)
+                    if (_requestStop)
                     {
-                        if (_requestStop)
-                        {
-                            newHandler.Close();
-                            break;
-                        }
-                        _tasks.Add(newHandler);
+                        handler.Close();
+                        break;
                     }
                 }
                 else
                 {
-                    newHandler.Close();
+                    handler.Close();
                 }
             }
             IsRuning = false;
             TaskEngine.Logger.Info("Task manager stopped.");
         }
 
-        internal void ReleaseTask(TaskHandler sender)
+        private TaskHandler NewHandler()
+        {
+            TaskHandler newHandler = new TaskHandler(this);
+            newHandler.Terminate += NewHandler_Terminate;
+            lock (_tasks)
+            {
+                _tasks.Add(newHandler);
+            }
+            newHandler.Launch();
+            return newHandler;
+        }
+
+        private void NewHandler_Terminate(object sender, EventArgs e)
         {
             if (_requestStop) return;
             lock (_tasks)
             {
-                _tasks.Remove(sender);
+                _tasks.Remove((TaskHandler)sender);
             }
             _semaphore.Release();
-            TaskEngine.Logger.Info("Task manager recycle one handler.");
+            TaskEngine.Logger.Info($"Task manager recycle one handler:{((TaskHandler)sender).Token}");
         }
 
         #endregion

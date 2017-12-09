@@ -24,7 +24,7 @@
     <View_MainWin_MenuCaseManagement>案例管理</View_MainWin_MenuCaseManagement>
     <View_MainWin_MenuSysSettings>系统设置</View_MainWin_MenuSysSettings>
     <View_MainWin_MenuPluginManagement>插件管理</View_MainWin_MenuPluginManagement>
-    <View_MainWin_MenuSysLog>系统日志</View_MainWin_MenuSysLog>
+    <View_MainWin_MenuSysLog>取证日志</View_MainWin_MenuSysLog>
     <View_MainWin_MenuSysEmpower>系统授权</View_MainWin_MenuSysEmpower>
     <View_MainWin_MenuUserFeedback>用户反馈</View_MainWin_MenuUserFeedback>
     <View_MainWin_MenuSysUpdate>升级</View_MainWin_MenuSysUpdate>
@@ -101,6 +101,7 @@
     <View_DevHomePage_Number>编   号</View_DevHomePage_Number>
     <View_DevHomePage_Port>端   口</View_DevHomePage_Port>
     <View_DevHomePage_IOSRoot>越狱</View_DevHomePage_IOSRoot>
+    <View_DevHomePage_UnIOSRoot>未越狱</View_DevHomePage_UnIOSRoot>
 
     <!--选择文件、文件夹、保存-->
     <View_SelectControl_Format>格式</View_SelectControl_Format>
@@ -109,6 +110,13 @@
     <View_SelectControl_SaveTitle>保存文件</View_SelectControl_SaveTitle>
     <View_SelectControl_FolderName>文件夹名</View_SelectControl_FolderName>
     <View_SelectControl_SelectFolderTitle>选择文件夹</View_SelectControl_SelectFolderTitle>
+    
+    <!--取证日志-->
+    <View_Logs_ObtainEvidenceLogView_Title>取证日志</View_Logs_ObtainEvidenceLogView_Title>
+    <View_Logs_ObtainEvidenceLogView_Operator>操作人员</View_Logs_ObtainEvidenceLogView_Operator>
+    <View_Logs_ObtainEvidenceLogView_OpContent>操作内容</View_Logs_ObtainEvidenceLogView_OpContent>
+    <View_Logs_ObtainEvidenceLogView_OpTime>操作时间</View_Logs_ObtainEvidenceLogView_OpTime>
+    <View_Logs_ObtainEvidenceLogView_Screenshot>截图</View_Logs_ObtainEvidenceLogView_Screenshot>
     
     <!--数据导出-->
     <Export>
@@ -122,7 +130,7 @@
         <InfoTitle>用户信息</InfoTitle>
         <Search>搜索</Search>
         <Number>编号</Number>
-        <Account>用户名</Account>
+        <Account>帐号</Account>
         <Name>姓名</Name>
         <Phone>电话</Phone>
         <Unit>工作单位</Unit>
@@ -158,11 +166,6 @@
 
       </Plugin>
     </Management>
-
-
-
-    <!--操作日志-->
-    <View_Operation1></View_Operation1>
 
 
 
@@ -228,7 +231,7 @@
     <Confirm>确定</Confirm>
     <Cancel>取消</Cancel>
     <Title>数据源</Title>
-    <DeletePrompt>是否确定删除？</DeletePrompt>
+    <DeletePrompt>是否确定删除？（包含提取的数据）</DeletePrompt>
   </SourceSelection>
 
   <ErrorMessageLanguage Prompt="错误提示信息语言资源">

@@ -1,40 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace XLY.SF.Project.IsolatedTaskEngine.Common
 {
     /// <summary>
-    /// 激活器错误事件参数。
+    /// 任务引擎错误事件参数。
     /// </summary>
-    public class ActivatorErrorEventArgs : EventArgs
+    public class TaskEnginErrorEventArgs : EventArgs
     {
         #region Constructors
 
         /// <summary>
-        /// 初始化类型 ActivatorErrorEventArgs 实例。
+        /// 初始化类型 TaskEnginErrorEventArgs 实例。
         /// </summary>
         /// <param name="ex">异常信息。</param>
-        public ActivatorErrorEventArgs(Exception ex)
+        public TaskEnginErrorEventArgs(Exception ex)
         {
             Exception = ex;
         }
 
         /// <summary>
-        /// 初始化类型 ActivatorErrorEventArgs 实例。
+        /// 初始化类型 TaskEnginErrorEventArgs 实例。
         /// </summary>
         /// <param name="errorMessage">错误消息。</param>
-        public ActivatorErrorEventArgs(String errorMessage)
+        public TaskEnginErrorEventArgs(String errorMessage)
             :this(new Exception(errorMessage))
         {
         }
 
         /// <summary>
-        /// 初始化类型 ActivatorErrorEventArgs 实例。
+        /// 初始化类型 TaskEnginErrorEventArgs 实例。
         /// </summary>
-        private ActivatorErrorEventArgs()
+        private TaskEnginErrorEventArgs()
         {
         }
 

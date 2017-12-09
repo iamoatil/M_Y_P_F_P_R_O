@@ -1144,7 +1144,7 @@ namespace XLY.SF.Project.Devices
         {
             if (device.IsRoot && device.RealStatus != EnumDeviceStatus.Recovery)
             {
-                ExecuteRemoteCommand(string.Format("su -c \"{0}\" ", command), device, receiver, buffersize, maxtimeout);
+                ExecuteRemoteCommand(string.Format(device.SU, command), device, receiver, buffersize, maxtimeout);
             }
             else
             {
@@ -1159,12 +1159,21 @@ namespace XLY.SF.Project.Devices
 
         /// <summary>
         /// 执行SPF app指令，并返回结果。
+        /// command参数如下：
+        /// base_info 基本信息
+        /// app_info 安装应用列表
+        /// browser_info 浏览器信息
+        /// sms_info 短信
+        /// calllog_info 通话记录
+        /// contact_info 联系人
+        /// location_info 位置信息
+        /// account_info 帐号信息
         /// </summary>
         /// <param name="device">目标设备</param>
         /// <param name="command">SPF socket命令</param>
         /// <param name="timeout">超时时间</param>
         /// <returns>返回命令执行结果</returns>
-        public string ExecuteSPFAppCommand(Device device, string command = "basic_info", int timeout = ConstCodeHelper.DEFAULT_TIMEOUT)
+        public string ExecuteSPFAppCommand(Device device, string command = "base_info", int timeout = ConstCodeHelper.DEFAULT_TIMEOUT)
         {
             // 服务启动提取失败：是否进行过重试
             int doretry = 0;
@@ -1181,8 +1190,9 @@ namespace XLY.SF.Project.Devices
                  * 组件启动方式：优点是启动服务稳定，缺点是启动组件时屏幕会闪动一下，用户体验比较差
                  * 综合上述两种启动方式，在APP中提供两种启动方式，有限已服务启动，启动失败后再通过组件方式进行启动
                  */
-                // 服务启动
-                if (!AppServiceStart(device, port, 12345) || doretry == 1 || doretry == 2)
+                // 服务启动 
+                // 20171208 songbing 暂不使用服务启动方式
+                //if (!AppServiceStart(device, port, 12345) || doretry == 1 || doretry == 2)
                 {
                     // 组件启动
                     AppAmStart(device, port, 12345);
@@ -1190,11 +1200,11 @@ namespace XLY.SF.Project.Devices
 
                 socket.Connect(IPAddress.Loopback, port);
                 socket.Blocking = true;
-                socket.ReceiveBufferSize = 16 * 1024;
-                socket.SendBufferSize = 16 * 1024;
+                socket.ReceiveBufferSize = ConstCodeHelper.DEFAULT_COMMAND_BUFFER_SIZE;
+                socket.SendBufferSize = ConstCodeHelper.DEFAULT_COMMAND_BUFFER_SIZE;
                 socket.ReceiveTimeout = timeout;
                 socket.SendTimeout = timeout;
-                byte[] request = command.ToBytes(Encoding.UTF8);
+                byte[] request = command.ToBytes(ConstCodeHelper.DEFAULT_ENCODING);
                 AdbSocketHelper.Write(socket, request);
                 var res = AdbSocketHelper.ReadResponse(socket);
                 if (!res.IsOkay)
@@ -1213,13 +1223,13 @@ namespace XLY.SF.Project.Devices
                 var sizebuf = new byte[16];
                 socket.Receive(sizebuf);
                 int length = Convert.ToInt32(sizebuf.GetString(), 16);
-                ;
+
                 var databuf = new byte[length];
                 socket.ReceiveBufferSize = length;
                 AdbSocketHelper.Read(socket, databuf, length);
                 return databuf.GetString(Encoding.UTF8);
             }
-            catch (Exception ex)
+            catch
             {
                 if (doretry <= 1)
                 {
@@ -1228,7 +1238,7 @@ namespace XLY.SF.Project.Devices
                 }
                 else
                 {
-                    throw new Exception("Receive SPF App Data Error,", ex);
+                    return string.Empty;
                 }
             }
             finally
@@ -1257,11 +1267,11 @@ namespace XLY.SF.Project.Devices
             try
             {
                 DefaultReceiver dreceiver = new DefaultReceiver();
-                string sc1 = "am startservice -n mwh.com.spfsocket/mwh.com.spfsocket.MainService";
+                string sc1 = "am startservice -n com.xly.spfsocket/com.xly.spfsocket.MainService";
                 ExecuteRemoteCommand(sc1, device, dreceiver);
                 if (device.IsRoot)
                 {
-                    sc1 = "su -c \"am startservice -n mwh.com.spfsocket/mwh.com.spfsocket.MainService\"";
+                    sc1 = "su -c \"am startservice -n com.xly.spfsocket/com.xly.spfsocket.MainService\"";
                     ExecuteRemoteCommand(sc1, device, dreceiver);
                 }
                 string sc2 = String.Format("host-serial:{0}:forward:tcp:{1};tcp:{2}", device.ID, port, tcp);
@@ -1299,7 +1309,7 @@ namespace XLY.SF.Project.Devices
             try
             {
                 DefaultReceiver dreceiver = new DefaultReceiver();
-                string sc1 = "am start mwh.com.spfsocket/.MainActivity";
+                string sc1 = "am start com.xly.spfsocket/.MainActivity";
                 string sc2 = "am broadcast -a NotifyServiceStop";
                 var sc3 = String.Format("host-serial:{0}:forward:tcp:{1};tcp:{2}", device.ID, port, tcp);
                 var sc4 = "am broadcast -a NotifyServiceStart";

@@ -717,11 +717,6 @@ namespace XLY.SF.Project.BaseUtility.Helper
 
         public static string FilterInvalidFileName(string oriName)
         {
-            if (!IsValid(oriName))
-            {
-                return oriName;
-            }
-
             int index = oriName.IndexOfAny(_InvalidChars);
             while (index >= 0)
             {
@@ -742,7 +737,6 @@ namespace XLY.SF.Project.BaseUtility.Helper
                 index = oriName.IndexOfAny(_InvalidChars);
             }
             return oriName;
-
         }
 
         #endregion

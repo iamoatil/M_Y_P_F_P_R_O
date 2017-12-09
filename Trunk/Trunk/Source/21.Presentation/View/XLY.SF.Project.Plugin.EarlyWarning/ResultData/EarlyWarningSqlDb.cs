@@ -193,9 +193,17 @@ namespace XLY.SF.Project.EarlyWarningView
             }
             if (disposing)
             {
-                _dbConnection.Dispose();
+                if(_dbConnection != null)
+                {
+                    _dbConnection.Dispose();
+                }
+                
                 _isInitialized = false;
-                File.Delete(_path);
+                if (File.Exists(_path))
+                {
+                    File.Delete(_path);
+                }
+                
                 //TODO:释放那些实现IDisposable接口的托管对象
             }
             //TODO:释放非托管资源，设置对象为null

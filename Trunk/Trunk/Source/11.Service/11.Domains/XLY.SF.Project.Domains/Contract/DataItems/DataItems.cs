@@ -34,8 +34,6 @@ namespace XLY.SF.Project.Domains
     {
         #region Fields
 
-        //[NonSerialized]
-        //private readonly DataAggregationFilterView<T> _filterView;
         [NonSerialized]
         private DataAggregationFilterView<T> _filterViewInstance;
         private DataAggregationFilterView<T> _filterView
@@ -96,9 +94,6 @@ namespace XLY.SF.Project.Domains
             {
                 DbInstance.SetTableName(typeof(T).FullName, DbTableName);
             }
-            //_provider = new SQLiteFilterDataProvider(dbFilePath, DbTableName);
-            //_filterView = new DataAggregationFilterView<T>(this, Key);
-            //_filterView.OnAssociatedBookmark += _filterView_OnAssociatedBookmark;
             _empty = new T[0];
         }
 

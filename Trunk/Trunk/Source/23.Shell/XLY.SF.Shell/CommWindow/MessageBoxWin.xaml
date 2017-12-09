@@ -8,9 +8,15 @@
         Title="MessageBoxWin" SizeToContent="WidthAndHeight" ShowInTaskbar="True"
         WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" AllowsTransparency="True" Background="Transparent" Loaded="Window_Loaded">
     <Window.Resources>
-        <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="White"/>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="White"/>
+            </Style>
+        </ResourceDictionary>
     </Window.Resources>
     <Border>
         <Border MinWidth="320" MinHeight="320" Background="#28375a" CornerRadius="10" Mouse.MouseDown="Border_MouseDown" Margin="50">
@@ -20,12 +26,12 @@
             <StackPanel x:Name="grid" Margin="60 40 60 40">
                 <Image x:Name="img_Icon" Width="86" Height="86" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <StackPanel Orientation="Horizontal" Margin="0 20 0 20" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Label x:Name="tb_Title" FontSize="18" FontWeight="Bold" />
+                    <Label x:Name="tb_Title" FontSize="18" FontWeight="Bold" Foreground="White" />
                     <TextBlock FontSize="18" FontWeight="Bold" Text="!" VerticalAlignment="Center"/>
                 </StackPanel>
                 <TextBlock x:Name="tb_Content" Margin="0 0 0 40" Width="200" Text="{Binding MsgContent}" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button x:Name="btn_Ok" Width="80" Height="30" Click="btn_Ok_Click" Content="{Binding XPath=ViewLanguage/Management/User/Confirm,Source={x:Static ex:SystemContext.LanguageProvider}}">
+                    <Button x:Name="btn_Ok" Width="80" Height="30" Click="btn_Ok_Click" Foreground="White" Content="{Binding XPath=ViewLanguage/Management/User/Confirm,Source={x:Static ex:SystemContext.LanguageProvider}}">
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="BorderThickness" Value="0"/>
@@ -98,7 +104,7 @@
                             </Style>
                         </Button.Style>
                     </Button>
-                    <Button x:Name="btn_Cancel" Click="btn_Cancel_Click" Width="80" Height="30" Content="{Binding XPath=ViewLanguage/Management/User/Cancel,Source={x:Static ex:SystemContext.LanguageProvider}}"/>
+                    <Button x:Name="btn_Cancel" Click="btn_Cancel_Click" Width="80" Foreground="White" Height="30" Content="{Binding XPath=ViewLanguage/Management/User/Cancel,Source={x:Static ex:SystemContext.LanguageProvider}}"/>
                 </StackPanel>
 
 

@@ -93,6 +93,10 @@ namespace XLY.SF.Project.ViewModels.SelectControl
 
         #region Commands
         /// <summary>
+        /// 修改文件名称
+        /// </summary>
+        public ICommand ChangedFolderNameCommand { get; private set; }
+        /// <summary>
         /// 新建文件夹
         /// </summary>
         public ICommand CreateNewFolderCommand { get; private set; }
@@ -147,21 +151,23 @@ namespace XLY.SF.Project.ViewModels.SelectControl
             InPathCommand = new RelayCommand<string>(ExecuteInPathCommand);
             BackParentFolderCommand = new RelayCommand(ExecuteBackParentFolderCommand);
             CreateNewFolderCommand = new RelayCommand(ExecuteCreateNewFolderCommand);
+            ChangedFolderNameCommand = new RelayCommand<FolderElement>(ExecuteChangedFolderNameCommand);
 
             //LoadFolders();
         }
 
         public override object GetResult()
         {
-            return _curSelectedItem?.FullPath;
+            if (base.DialogResult && CurSelectedItemInFolder != null)
+                //return CurSelectedItemInFolder?.FullPath;
+                return Path.Combine(CurSelectedItemInFolder.Parent.FullPath, CurSelectedItemInFolder.Name);
+            else
+                return null;
         }
 
         protected override void InitLoad(object parameters)
         {
-            if (parameters != null)
-            {
-                var filters = parameters.ToString().Split(';');
-                FilterItems = new ObservableCollection<FilterElement>()
+            FilterItems = new ObservableCollection<FilterElement>()
                 {
                     new FilterElement()
                     {
@@ -169,6 +175,9 @@ namespace XLY.SF.Project.ViewModels.SelectControl
                         FilterValue = "*.*"
                     }
                 };
+            if (parameters != null)
+            {
+                var filters = parameters.ToString().Split(';');
                 foreach (var item in filters)
                 {
                     if (item.Contains('|'))
@@ -191,6 +200,12 @@ namespace XLY.SF.Project.ViewModels.SelectControl
         }
 
         #region ExecuteCommand
+
+        //修改文件或文件夹名称
+        private void ExecuteChangedFolderNameCommand(FolderElement obj)
+        {
+
+        }
 
         //新建文件夹
         private void ExecuteCreateNewFolderCommand()
@@ -240,23 +255,28 @@ namespace XLY.SF.Project.ViewModels.SelectControl
         //取消选择
         private void ExecuteCancelSelectCommand()
         {
-            _curSelectedItem = null;
+            CurSelectedItemInFolder = null;
             CloseView();
         }
 
         //完成选择【确定按钮】
         private void ExecuteSelectedCompleteCommand()
         {
-            if (_curSelectedItem != null)
+            if (CurSelectedItemInFolder != null)
             {
-                if (_curSelectedItem.IsFolder)
+                var inFolder = Path.Combine(CurSelectedItemInFolder.Parent.FullPath, CurSelectedItemInFolder.Name);
+                if (CurSelectedItemInFolder.IsFolder)
                 {
-                    //进入文件夹
-                    UpdateFolders(SelectManager.InFolderAndUpdateLevel(_curSelectedItem));
+                    if (Directory.Exists(inFolder))
+                    {
+                        FolderElement tmpFolder = new FolderElement(new DirectoryInfo(inFolder));
+                        //进入文件夹
+                        UpdateFolders(SelectManager.InFolderAndUpdateLevel(tmpFolder));
+                    }
                 }
                 else
                 {
-                    if (File.Exists(CurSelectedItemInFolder.FullPath))
+                    if (File.Exists(inFolder))
                     {
                         base.DialogResult = true;
                         CloseView();
@@ -281,7 +301,7 @@ namespace XLY.SF.Project.ViewModels.SelectControl
             else
             {
                 base.DialogResult = true;
-                _curSelectedItem = obj;
+                CurSelectedItemInFolder = obj;
                 base.CloseView();
             }
         }
@@ -289,13 +309,13 @@ namespace XLY.SF.Project.ViewModels.SelectControl
         //选择了某一项
         private void ExecuteSelectedItemCommand(FolderElement obj)
         {
-            _curSelectedItem = obj;
-            if (!_curSelectedItem.IsFolder)
-            {
-                CurSelectedItemInFolder = obj;
-            }
-            else
-                CurSelectedItemInFolder = null;
+            CurSelectedItemInFolder = obj;
+            //if (!obj.IsFolder)
+            //{
+            //    CurSelectedItemInFolder = obj;
+            //}
+            //else
+            //    CurSelectedItemInFolder = null;
         }
 
         private void ExecuteLoadFolderCommand(FolderElement obj)
@@ -318,6 +338,7 @@ namespace XLY.SF.Project.ViewModels.SelectControl
             {
                 FolderFileItems.Add(item);
             }
+            CurSelectedItemInFolder = null;
         }
 
         #endregion

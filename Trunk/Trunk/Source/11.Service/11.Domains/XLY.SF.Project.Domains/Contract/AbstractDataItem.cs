@@ -19,7 +19,7 @@ namespace XLY.SF.Project.Domains
     /// 单行数据的基类
     /// </summary>
     [Serializable]
-    public abstract class AbstractDataItem : NotifyPropertyBase, IDataState, IAOPPropertyChangedMonitor
+    public abstract class AbstractDataItem : NotifyPropertyBase, IDataState, IAOPPropertyChangedMonitor, ICheckedItem
     {
         protected AbstractDataItem()
         {
@@ -55,7 +55,6 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 加入书签的编号，小于0则未加入书签
         /// </summary>
-        //[Display(Visibility = EnumDisplayVisibility.ShowInDatabase)]
         public int BookMarkId
         {
             get => _bookMarkId;
@@ -72,6 +71,20 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         [Display(Visibility = EnumDisplayVisibility.ShowInDatabase)]
         public int SensitiveId { get => _sensitiveId; set { _sensitiveId = value; OnPropertyChanged(); } }
+
+        #region CheckState
+
+        private bool? _isChecked = false;
+        /// <summary>
+        /// 当前数据是否被勾选
+        /// </summary>
+        public bool? IsChecked { get => _isChecked; set => this.SetCheckedState(value, () => { this._isChecked = value; OnPropertyChanged(); }); }
+        public ICheckedItem Parent { get => null; }
+        public IEnumerable<ICheckedItem> GetChildren()
+        {
+            return null;
+        }
+        #endregion
 
         /// <summary>
         /// 属性改变时的事件

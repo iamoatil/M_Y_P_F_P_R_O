@@ -9,7 +9,7 @@
              xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
 		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
-             xmlns:be="clr-namespace:XLY.SF.Project.Views.Behavior"
+             xmlns:be="clr-namespace:XLY.SF.Project.Themes.Behavior;assembly=XLY.SF.Project.Themes"
              mc:Ignorable="d" Title="{Binding XPath=ViewLanguage/View_SelectControl_SelectFile, Source={x:Static ex:SystemContext.LanguageProvider}}" CanResize="False">
     <core:UcViewBase.Resources>
         <ResourceDictionary>
@@ -101,46 +101,6 @@
                                         <GradientStop Color="#232d4b" Offset="1"/>
                                     </LinearGradientBrush>
                                 </ItemsControl.Background>
-                                <ItemsControl.Resources>
-                                    <Style TargetType="RadioButton">
-                                        <Setter Property="BorderThickness" Value="1"/>
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="{x:Type RadioButton}">
-                                                    <Border x:Name="br" CornerRadius="13.5" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="Transparent">
-                                                        <Grid>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="auto"/>
-                                                                <RowDefinition Height="*"/>
-                                                            </Grid.RowDefinitions>
-                                                            <Image Margin="10 10 10 0" x:Name="img_FileIcon" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_filebrowing_icon2.png" 
-                                                                   HorizontalAlignment="Center" Width="62" Height="53"
-                                                                   VerticalAlignment="Center"/>
-                                                            <TextBox x:Name="tb_FileName" Margin="10" Focusable="False" Template="{StaticResource tb_EmptyCt}" Foreground="White" Background="Transparent" IsEnabled="{Binding IsChecked,RelativeSource={RelativeSource Mode=TemplatedParent}}" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" Text="{Binding Name}" TextWrapping="WrapWithOverflow" TextAlignment="Center"></TextBox>
-                                                            <Image x:Name="img_Checked" Grid.RowSpan="2" Visibility="Collapsed" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Mirror_Checked.png" Width="38" Height="38" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-                                                        </Grid>
-                                                    </Border>
-                                                    <ControlTemplate.Triggers>
-                                                        <DataTrigger Binding="{Binding IsFolder}" Value="True">
-                                                            <Setter Property="Source" TargetName="img_FileIcon" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_filebrowing_icon1.png"/>
-                                                        </DataTrigger>
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="BorderBrush" Value="#657192" TargetName="br"/>
-                                                            <Setter Property="Background" Value="#14FFFFFF" TargetName="br"/>
-                                                        </Trigger>
-                                                        <Trigger Property="IsFocused" SourceName="tb_FileName" Value="true">
-
-                                                        </Trigger>
-                                                        <Trigger Property="IsChecked" Value="True">
-                                                            <Setter Property="Visibility" Value="Visible" TargetName="img_Checked"/>
-                                                            <Setter Property="BorderBrush" Value="#379be6" TargetName="br"/>
-                                                        </Trigger>
-                                                    </ControlTemplate.Triggers>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </ItemsControl.Resources>
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
@@ -148,16 +108,17 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <RadioButton x:Name="gd" GroupName="xlyFileSelectGroup" Background="Transparent" Width="106" Height="150" Margin="10"
-                                        Command="{Binding DataContext.SelectedItemCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
-                                        CommandParameter="{Binding }">
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="MouseDoubleClick" SourceObject="{Binding ElementName=gd}">
-                                                    <i:InvokeCommandAction Command="{Binding DataContext.InSelectedItemCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" 
-                                                                   CommandParameter="{Binding }"/>
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                        </RadioButton>
+                                        <control:CreateNewFolderRadioButton x:Name="ff" GroupName="xlyFileSelectGroup" ItemName="{Binding Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Background="Transparent" Width="106" Height="150" Margin="10"
+                                                                            Command="{Binding DataContext.SelectedItemCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                                                            CommandParameter="{Binding }" IsFolder="{Binding IsFolder}"
+                                                                            DoubleClickCommand="{Binding DataContext.InSelectedItemCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                                                            DoubleClickCommandParameter="{Binding }"
+                                                                            ChangedItemNameCommand="{Binding DataContext.InSelectedItemCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                                                            ChangedItemNameCommandParameter="{Binding Parent}">
+                                            <i:Interaction.Behaviors>
+                                                <be:ResetFileOrFolderNameBehavior FullPath="{Binding FullPath}" IsFolder="{Binding IsFolder}"/>
+                                            </i:Interaction.Behaviors>
+                                        </control:CreateNewFolderRadioButton>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>

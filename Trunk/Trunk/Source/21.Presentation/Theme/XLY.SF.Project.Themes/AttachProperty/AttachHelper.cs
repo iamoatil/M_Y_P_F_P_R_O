@@ -163,6 +163,24 @@ namespace XLY.SF.Project.Themes
             return childList;
 
         }
+
+        /// <summary>
+        /// 获取父控件
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static T GetParent<T>(DependencyObject obj) where T : DependencyObject
+        {
+            var parent = VisualTreeHelper.GetParent(obj);
+            while (!(parent is T))
+            {
+                if (parent == null)
+                    return null;
+                parent = VisualTreeHelper.GetParent(parent);
+            }
+            return parent as T;
+        }
         #endregion
     }
 }

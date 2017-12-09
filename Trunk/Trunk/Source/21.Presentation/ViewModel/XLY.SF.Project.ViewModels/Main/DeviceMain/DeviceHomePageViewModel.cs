@@ -168,9 +168,9 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
             StrategyRecommendItems = new ObservableCollection<StrategyElement>();
             ToolkitItems = new ObservableCollection<string>();
 
-            PhoneTakePhotoCommand = new ProxyRelayCommand(ExecutePhoneTakePhotoCommand);
-            StrategyRecommendCommand = new ProxyRelayCommand<StrategyElement>(ExecuteStrategyRecommendCommand);
-            SaveEditCommand = new ProxyRelayCommand<DevHomePageEditItemModel>(ExecuteSaveEditCommand);
+            PhoneTakePhotoCommand = new ProxyRelayCommand(ExecutePhoneTakePhotoCommand, base.ModelName);
+            StrategyRecommendCommand = new ProxyRelayCommand<StrategyElement>(ExecuteStrategyRecommendCommand, base.ModelName);
+            SaveEditCommand = new ProxyRelayCommand<DevHomePageEditItemModel>(ExecuteSaveEditCommand, base.ModelName);
             CancelEditCommand = new RelayCommand(ExecuteCancelEditCommand);
             AutoExtractCommand = new RelayCommand(ExecuteAutoExtractCommand);
 
@@ -255,9 +255,28 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
                                             SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_StrategyRecommend_AutoExtraction]);
 
             Pump @params = new Pump(ei.Path, "data.db");
-            @params.Type = EnumPump.USB;
-            @params.OSType = (CurDevModel.IDevSource as Domains.Device).OSType;
-            @params.Source = CurDevModel.IDevSource;
+
+            switch (CurDevModel.IDevSource)
+            {
+                case Domains.Device phone://手机
+                    @params.Type = EnumPump.USB;
+                    @params.OSType = phone.OSType;
+                    @params.Source = phone;
+                    break;
+                case LocalFileDevice lfDeivce://本地文件/文件夹
+                    if (lfDeivce.IsDirectory)
+                    {//文件夹
+
+                    }
+                    else
+                    {//镜像文件
+                        @params.Type = EnumPump.Mirror;
+                        @params.OSType = lfDeivce.OSType;
+                        @params.Source = lfDeivce.PathName;
+                    }
+                    break;
+            }
+
             SubView = DevHomePageSubViewHelper.GetOrCreateView(ExportKeys.ExtractionView, @params);
         }
 

@@ -30,7 +30,7 @@ namespace XLY.SF.Project.ViewModels.Management
 
         public PluginListViewModel()
         {
-            _searchProxyCommand = new ProxyRelayCommand(Search, () => Plugins != null);
+            _searchProxyCommand = new ProxyRelayCommand(Search, base.ModelName, () => Plugins != null);
         }
 
         #endregion

@@ -8,7 +8,6 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-
         xmlns:convert="clr-namespace:XLY.SF.Project.Views.Converters"
         mc:Ignorable="d"
         IsMaxView="False"
@@ -100,13 +99,27 @@
                 <RowDefinition Height="125"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid Margin="30,0">
-                <Button x:Name="FastStart"  Content="开始导出" 
+                <CheckBox x:Name="FastBtn"  Width="200" Height="90" Style="{StaticResource ReportCheckBoxStyle}" Command="{Binding FastCommand}" IsChecked="{Binding FastChecked,Mode=TwoWay}">
+                    <i:Interaction.Triggers>
+                        <ei:DataTrigger Binding="{Binding ElementName=FastBtn,Path=IsChecked}" Value="True">
+                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=prompt}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
+                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=time}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
+                        </ei:DataTrigger>
+                        <ei:DataTrigger Binding="{Binding ElementName=FastBtn,Path=IsChecked}" Value="True">
+                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=prompt}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
+                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=time}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
+                        </ei:DataTrigger>
+                    </i:Interaction.Triggers>
+                    
+                </CheckBox>
+                <!--<Button x:Name="FastStart"  Content="开始导出" 
                  Width="200" Height="90" Command="{Binding FastStartCommand}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <ei:ChangePropertyAction TargetObject="{Binding ElementName=FastStart}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
                             <ei:ChangePropertyAction TargetObject="{Binding ElementName=StopStart}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
                             <ei:ChangePropertyAction TargetObject="{Binding ElementName=prompt}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
+                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=time}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>
@@ -117,24 +130,23 @@
                             <ei:ChangePropertyAction TargetObject="{Binding ElementName=FastStart}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
                             <ei:ChangePropertyAction TargetObject="{Binding ElementName=StopStart}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
                             <ei:ChangePropertyAction TargetObject="{Binding ElementName=prompt}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
+                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=time}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                </Button>
+                </Button>-->
                 <TextBlock x:Name="prompt" Visibility="Hidden" Text="默认导出选中设备全部数据" FontSize="14" Foreground="#6e7891" HorizontalAlignment="Center" Margin="0,250,0,0"></TextBlock>
-                <StackPanel Orientation="Horizontal" Height="30" VerticalAlignment="Bottom" Margin="0,0,0,30" HorizontalAlignment="Right">
-                    <TextBlock Text="{Binding TotalElapsed,StringFormat={}{0:hh}:{0:mm}:{0:ss}}"
+                <StackPanel x:Name="time" Visibility="Hidden" Orientation="Horizontal" Height="40" VerticalAlignment="Bottom" Margin="0,0,0,30" HorizontalAlignment="Right">
+                    <TextBlock Text="正在导出："  FontFamily="{StaticResource OswaldLightFont}"  VerticalAlignment="Bottom"
+                           FontSize="14"></TextBlock>
+                    <TextBlock Text="{Binding TotalElapsed,StringFormat={}{0:hh}:{0:mm}:{0:ss}}" 
                            HorizontalAlignment="Right"
+                           VerticalAlignment="Bottom"
                            FontFamily="{StaticResource OswaldLightFont}"
                            FontSize="14"
-                           /> 
+                           />
                 </StackPanel>
-                <!--<TextBlock Text="{Binding TotalElapsed,StringFormat={}{0:hh}:{0:mm}:{0:ss}}"
-                           Margin="0,0,0,14"
-                           FontFamily="{StaticResource OswaldLightFont}"
-                           FontSize="14"
-                           VerticalAlignment="Bottom" />-->
                 <ProgressBar  Height="14" VerticalAlignment="Bottom"      Minimum="0"
-                                             Maximum="1"
+                                             Maximum="100"
                                              Value="{Binding Progress}"></ProgressBar>
             </Grid>
             <Grid Grid.Row="1" Margin="30,0">
@@ -164,7 +176,7 @@
                             </ei:DataTrigger>
                         </i:Interaction.Triggers>
                     </CheckBox>
-                    <ctrl:ComboBoxEx  x:Name="reportType"   Width="110" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding ReportType}" SelectedValue="{Binding SelectReportType}"></ctrl:ComboBoxEx>
+                    <ctrl:ComboBoxEx  x:Name="reportType"   Width="110" FontSize="14"  TitlePadding="10 0 0 0"  ItemsSource="{Binding ReportType}" SelectedValue="{Binding SelectReportType}"></ctrl:ComboBoxEx>
                     <Grid  Width="460" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="211*"/>

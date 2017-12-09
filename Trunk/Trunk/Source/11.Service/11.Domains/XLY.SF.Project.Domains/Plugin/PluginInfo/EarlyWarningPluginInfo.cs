@@ -4,7 +4,6 @@
 * Create Date：2017/12/2 10:21:20
 * ==============================================================================*/
 
-using System;
 using System.Collections.Generic;
 using XLY.SF.Project.Plugin.Language;
 
@@ -44,7 +43,10 @@ namespace XLY.SF.Project.Domains
 
     public class Md5EarlyWarningPluginInfo : EarlyWarningPluginInfo
     {
-
+        /// <summary>
+        /// 需要检测目录位置
+        /// </summary>
+        public readonly List<string> DetectDirs = new List<string>();        
     }
 
     public class AppEarlyWarningPluginInfo : EarlyWarningPluginInfo
@@ -75,7 +77,7 @@ namespace XLY.SF.Project.Domains
             _names = new List<string>()
             {
                 LanguageHelper.GetString(Languagekeys.PluginName_Call),
-               LanguageHelper.GetString( Languagekeys.PluginName_Sms),
+                LanguageHelper.GetString( Languagekeys.PluginName_Sms),
                 LanguageHelper.GetString(Languagekeys.PluginName_Mms),
                 LanguageHelper.GetString(Languagekeys.PluginName_Contacts),
             };
@@ -95,5 +97,10 @@ namespace XLY.SF.Project.Domains
 
     public class KeyWordEarlyWarningPluginInfo : EarlyWarningPluginInfo
     {
+
+        public override bool Match(IDataSource dataSource)
+        {
+            return false;
+        }
     }
 }

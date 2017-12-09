@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.SQLite;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Domains.Plugin;
@@ -13,18 +16,33 @@ using XLY.SF.Project.Domains.Plugin;
 namespace XLY.SF.Project.EarlyWarningView
 {
     [Plugin]
-    public abstract class AbstractEarlyWarningPlugin : IPlugin
+    internal abstract class AbstractEarlyWarningPlugin : IPlugin
     {
-        public IPluginInfo PluginInfo { get; set; }
+        /// <summary>
+        /// 列更新器
+        /// </summary>
+        readonly ColumnUpdater _columnUpdater = new ColumnUpdater();
 
+        public IPluginInfo PluginInfo { get; set; }
+        
         public virtual void Dispose()
         {
-
+            _columnUpdater.Dispose();
         }
 
         public abstract object Execute(object arg, IAsyncTaskProgress progress);
 
-        public abstract void Execute(object arg);
+        protected void KeyWordColumnUpdate(IDataItems dataItems, DbFromConfigData configDbManager)
+        {
+            _columnUpdater.Initialize(dataItems.DbFilePath, dataItems.DbTableName, configDbManager.DbPath, ConstDefinition.XLYJson);
+            _columnUpdater.KeyWordColumnUpdate();
+        }
+
+        protected void ColumnUpdate(IDataItems dataItems, DbFromConfigData configDbManager, string keyColumn)
+        {
+            _columnUpdater.Initialize(dataItems.DbFilePath, dataItems.DbTableName, configDbManager.DbPath, keyColumn);
+            _columnUpdater.Update();
+        }
     }
 
     /// <summary>
@@ -32,19 +50,11 @@ namespace XLY.SF.Project.EarlyWarningView
     /// </summary>
     internal class EarlyWarningPluginArgument
     {
-        public EarlyWarningPluginArgument(DeviceDataSource deviceDataSource, List<DataNode> dataNodes, EarlyWarningResult earlyWarningResult)
+        public EarlyWarningPluginArgument(DeviceDataSource deviceDataSource, DbFromConfigData configDbManager)
         {
             DeviceDataSource = deviceDataSource;
-            DataNodes = dataNodes;
-            EarlyWarningResult = earlyWarningResult;
-        }
-
-        public EarlyWarningPluginArgument(DeviceDataSource deviceDataSource)
-        {
-            DeviceDataSource = deviceDataSource;
-        }
-
-        public EarlyWarningResult EarlyWarningResult { get; private set; }
+            ConfigDbManager = configDbManager;
+        }        
 
         /// <summary>
         /// 数据源
@@ -52,8 +62,8 @@ namespace XLY.SF.Project.EarlyWarningView
         public DeviceDataSource DeviceDataSource { get; private set; }
 
         /// <summary>
-        /// 敏感数据列表
+        /// ConfigDataToDB
         /// </summary>
-        public List<DataNode> DataNodes { get; private set; }
+        public DbFromConfigData ConfigDbManager { get; private set; }
     }
 }

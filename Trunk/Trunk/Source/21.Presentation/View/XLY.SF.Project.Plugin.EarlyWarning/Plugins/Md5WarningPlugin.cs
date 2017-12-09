@@ -4,14 +4,12 @@
 * Create Date：2017/12/2 10:14:57
 * ==============================================================================*/
 
-using System;
-using System.Collections.Generic;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    public class Md5WarningPlugin : AbstractEarlyWarningPlugin
+    internal class Md5WarningPlugin : AbstractEarlyWarningPlugin
     {
         public Md5WarningPlugin()
         {
@@ -22,18 +20,19 @@ namespace XLY.SF.Project.EarlyWarningView
                 OrderIndex = 1,
                 PluginType = PluginType.SpfEarlyWarning,
             };
+            p.DetectDirs.Add("path1");
+            p.DetectDirs.Add("path2");
+            p.DetectDirs.Add("path2");
             PluginInfo = p;
         }
 
         public override object Execute(object arg, IAsyncTaskProgress progress)
         {
+            //FileBrowsingServiceFactory.GetFileBrowsingService();
 
             return null;
         }
 
-        public override void Execute(object arg0)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

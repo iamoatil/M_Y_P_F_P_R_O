@@ -6,8 +6,10 @@
  *
 *****************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using XLY.SF.Framework.BaseUtility;
+using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Persistable.Primitive;
@@ -45,8 +47,10 @@ namespace XLY.SF.Project.Plugin.Android
         /// 解析数据
         /// </summary>
         /// <param name="datasource"></param>
-        public void BuildData(CallDataSource datasource)
+        public List<Call> BuildData()
         {
+            var items = new List<Call>();
+
             SqliteContext mainContext = null;
             SqliteContext callsContext = null;
 
@@ -76,14 +80,11 @@ namespace XLY.SF.Project.Plugin.Android
                     }
                 }
 
-
-                var items = new List<Call>();
                 TryParseCall(items, list);
-
-                foreach (var item in items)
-                {
-                    datasource.Items.Add(item);
-                }
+            }
+            catch (Exception ex)
+            {
+                LoggerManagerSingle.Instance.Error(ex, "AndroidCallDataParseCoreV1_0 BuildData Error!");
             }
             finally
             {
@@ -92,6 +93,8 @@ namespace XLY.SF.Project.Plugin.Android
                 mainContext = null;
                 callsContext = null;
             }
+
+            return items;
         }
 
         private void TryParseCall(List<Call> items, IEnumerable<dynamic> calls)

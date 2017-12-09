@@ -59,7 +59,7 @@ namespace XLY.SF.Shell.NavigationManager
         //通过消息关闭打开的窗体
         private void CloseWindowCallback(CloseViewOfNewWindowArgs args)
         {
-            WindowHelper.Instance.RemoveOpenedWindowAndCleanUp(args.CloseViewModelID, true);
+            WindowHelper.Instance.CloseOpenedWindow(args.CloseViewModelID);
         }
 
         //直接关闭窗体触发
@@ -68,7 +68,7 @@ namespace XLY.SF.Shell.NavigationManager
             var curWin = sender as Shell;
             if (curWin != null)
             {
-                WindowHelper.Instance.RemoveOpenedWindowAndCleanUp(curWin.Content.ViewID, false);
+                WindowHelper.Instance.RemoveOpenedWindowAndCleanUp(curWin.Content.ViewID);
             }
         }
 
@@ -164,10 +164,14 @@ namespace XLY.SF.Shell.NavigationManager
             //var loadingWindow = WindowHelper.Instance.CreateShellWindow(loadingView, false);
             //loadingWindow.Show();
 
-            var loginView = IocManagerSingle.Instance.GetViewPart(ExportKeys.ModuleLoginView);
-            loginView.DataSource.LoadViewModel(XLY.SF.Shell.Properties.Resources.ProposedSolutionConfig);         //传递推荐配置内容
-            var loginWindow = WindowHelper.Instance.CreateShellWindow(loginView, true);
-            loginWindow.Show();
+            //var loginView = IocManagerSingle.Instance.GetViewPart(ExportKeys.ModuleLoginView);
+            //loginView.DataSource.LoadViewModel(XLY.SF.Shell.Properties.Resources.ProposedSolutionConfig);         //传递推荐配置内容
+            //var loginWindow = WindowHelper.Instance.CreateShellWindow(loginView, true);
+            //loginWindow.Show();
+
+            NormalNavigationArgs loginArgs = NormalNavigationArgs.CreateWindowNavigationArgs(ExportKeys.ModuleLoginView,
+                XLY.SF.Shell.Properties.Resources.ProposedSolutionConfig, true, true);
+            MsgAggregation.Instance.SendNavigationMsgForWindow(loginArgs);
         }
 
         #endregion        

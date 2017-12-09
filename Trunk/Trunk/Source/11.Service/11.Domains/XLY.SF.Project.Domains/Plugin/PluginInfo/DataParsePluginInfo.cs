@@ -36,11 +36,6 @@ namespace XLY.SF.Project.Domains
         public string Manufacture { get; set; }
 
         /// <summary>
-        /// 组序号
-        /// </summary>
-        public virtual int GroupIndex { get; set; }
-
-        /// <summary>
         /// 视图类型
         /// </summary>
         [XmlIgnore]

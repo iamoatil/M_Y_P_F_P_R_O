@@ -35,7 +35,7 @@ namespace XLY.SF.Project.ViewModels.Device
         public DeviceSelectViewModel()
         {
             SelectFileCommond = new RelayCommand(DoSelectFileCommond);
-            SelectFolderCommond= new RelayCommand(DoSelectFolderCommond);
+            SelectFolderCommond = new RelayCommand(DoSelectFolderCommond);
             OpenGuideCommand = new RelayCommand(OpenGuide);
         }
 
@@ -72,7 +72,7 @@ namespace XLY.SF.Project.ViewModels.Device
                 _selectDevice = value;
                 OnPropertyChanged();
 
-                if(_selectDevice != null)
+                if (_selectDevice != null)
                 {
                     DoSelectDeviceCommond();
                 }
@@ -131,7 +131,7 @@ namespace XLY.SF.Project.ViewModels.Device
         private void DoSelectFileCommond()
         {
             LocalFileDevice file = _fileDlg.ShowDialogWindow(ExportKeys.DeviceSelectFileView) as LocalFileDevice;
-            if(file != null)
+            if (file != null)
             {
                 CreateDevice(file);
             }
@@ -148,7 +148,7 @@ namespace XLY.SF.Project.ViewModels.Device
             {
                 return;
             }
-            LocalFileDevice file = new LocalFileDevice() { IsDirectory = true, PathName = path };
+            LocalFileDevice file = new LocalFileDevice(path, true);
             CreateDevice(file);
         }
 
@@ -177,6 +177,12 @@ namespace XLY.SF.Project.ViewModels.Device
             HasDevice = Devices.Count > 0;
             ProxyFactory.DeviceMonitor.OnDeviceConnected += DeviceMonitor_OnDeviceConnected;
 
+            var listPhone = Devices.Where(f => f is Domains.Device).Select(d => d as Domains.Device).ToList();
+
+            foreach (var phone in listPhone)
+            {
+                DealUsbDevice(phone);
+            }
         }
 
         /// <summary>
@@ -190,15 +196,45 @@ namespace XLY.SF.Project.ViewModels.Device
             {
                 if (isOnline)
                 {
+                    if (dev is Domains.Device phone)
+                    {
+                        DealUsbDevice(phone);
+                    }
                     Devices.Add(dev);
                 }
                 else
                 {
-                    Devices.Remove(Devices.FirstOrDefault(d => d.Equals(dev)));
+                    var fd = Devices.FirstOrDefault(d => d.Equals(dev));
+                    if (null != fd)
+                    {
+                        Devices.Remove(fd);
+                    }
                 }
                 HasDevice = Devices.Count > 0;
             }, null);
         }
+
+        private void DealUsbDevice(Domains.Device phone)
+        {
+            if (string.IsNullOrEmpty(phone.SerialNumber) && string.IsNullOrEmpty(phone.ID))
+            {
+                return;
+            }
+            var dd = Devices.FirstOrDefault(d =>
+                {
+                    if (d is Domains.UsbDevice usb)
+                    {
+                        return usb.DeviceIDArray != null && usb.DeviceIDArray.Any(id => id.Contains(phone.SerialNumber.ToUpper()) || id.Contains(phone.ID.ToUpper()));
+                    }
+
+                    return false;
+                });
+            if (null != dd)
+            {
+                Devices.Remove(dd);
+            }
+        }
+
         #endregion
 
         #region 方法
@@ -209,7 +245,7 @@ namespace XLY.SF.Project.ViewModels.Device
         /// <param name="device"></param>
         private void CreateDevice(IDevice device)
         {
-            if(device.DeviceType == EnumDeviceType.None)
+            if (device.DeviceType == EnumDeviceType.None)
             {
                 return;
             }

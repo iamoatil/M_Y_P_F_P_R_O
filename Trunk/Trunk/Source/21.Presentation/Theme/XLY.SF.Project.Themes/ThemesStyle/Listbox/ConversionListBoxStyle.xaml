@@ -80,10 +80,9 @@
 
     <!--设置内容的模板-->
     <Style x:Key="contentStyle" TargetType="ContentControl">
+        <!--默认使用字符串格式-->
+        <Setter Property="Template" Value="{StaticResource stringContentTemplate}"/>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding Type}" Value="String">
-                <Setter Property="Template" Value="{StaticResource stringContentTemplate}"/>
-            </DataTrigger>
             <DataTrigger Binding="{Binding Type}" Value="URL">
                 <Setter Property="Template" Value="{StaticResource urlContentTemplate}"/>
             </DataTrigger>

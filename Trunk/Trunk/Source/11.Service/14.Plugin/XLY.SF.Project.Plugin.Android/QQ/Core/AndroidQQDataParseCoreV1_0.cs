@@ -40,6 +40,16 @@ namespace XLY.SF.Project.Plugin.Android
             QQName = name;
             DataFileRootPath = datapath;
             MediaFileRootPath = mediapath;
+
+            var index = MediaFileRootPath.IndexOf(@"tencent\MobileQQ");
+            if (index >= 0)
+            {
+                SDCardPath = MediaFileRootPath.Substring(0, MediaFileRootPath.IndexOf(@"tencent\MobileQQ"));
+            }
+            else
+            {
+                SDCardPath = "";
+            }
         }
 
         #region 构造属性
@@ -66,6 +76,11 @@ namespace XLY.SF.Project.Plugin.Android
         /// 该文件夹包含了QQ聊天的相关文件，如图片、语音、视频
         /// </summary>
         private string MediaFileRootPath { get; set; }
+
+        /// <summary>
+        /// 多媒体文件夹根目录
+        /// </summary>
+        private string SDCardPath { get; set; }
 
         #endregion
 
@@ -268,7 +283,7 @@ namespace XLY.SF.Project.Plugin.Android
         /// </summary>
         private void BuildQQFriendTree(TreeNode accountTree)
         {
-            
+
             //好友分组信息树
             var friendRootSet = new TreeNode()
             {
@@ -289,7 +304,7 @@ namespace XLY.SF.Project.Plugin.Android
                         }
                     });
             }
-            
+
             //陌生人/黑名单特殊处理
             var OtherFriendTree = new TreeNode()
             {
@@ -358,7 +373,7 @@ namespace XLY.SF.Project.Plugin.Android
         private void BuildTroopTree(TreeNode accountTree)
         {
             AllGroups = new List<QQGroupShow>();
-            
+
             var troopMemberTree = new TreeNode()
             {
                 Text = LanguageHelper.GetString(Languagekeys.PluginQQ_TroopMember),
@@ -488,7 +503,7 @@ namespace XLY.SF.Project.Plugin.Android
                 Text = LanguageHelper.GetString(Languagekeys.PluginQQ_TroopMsg),
             };
             accountTree.TreeNodes.Add(troopMsgRootSet);
-            
+
             foreach (var group in AllGroups)
             {
                 if (!group.QQNumber.IsMatch(@"^\d+$"))
@@ -520,10 +535,10 @@ namespace XLY.SF.Project.Plugin.Android
         private void BuildDiscussTree(TreeNode accountTree)
         {
             AllDiscusss = new List<QQDiscussShow>();
-            
+
             var discussMemberTree = new TreeNode()
             {
-                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_TroopMember),
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_DiscussMember),
                 Type = typeof(QQDiscussShow),
                 Items = new DataItems<QQDiscussShow>(DbFilePath)
             };
@@ -626,10 +641,10 @@ namespace XLY.SF.Project.Plugin.Android
             //讨论组消息树
             var discussMsgRootSet = new TreeNode()
             {
-                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_TroopMsg),
+                Text = LanguageHelper.GetString(Languagekeys.PluginQQ_DiscussMsg),
             };
             accountTree.TreeNodes.Add(discussMsgRootSet);
-            
+
             foreach (var discuss in AllDiscusss)
             {
                 if (!discuss.QQNumber.IsMatch(@"^\d+$"))
@@ -667,7 +682,7 @@ namespace XLY.SF.Project.Plugin.Android
                 Items = new DataItems<QQRecentShow>(DbFilePath)
             };
             accountTree.TreeNodes.Add(recentTree);
-            
+
             if (!MainDbContext.ExistTable("recent"))
             {
                 return;
@@ -822,7 +837,7 @@ namespace XLY.SF.Project.Plugin.Android
                             switch (friendQQNumber)
                             {
                                 case "1344242394":
-                                    friendShow.Nick =LanguageHelper.GetString(Languagekeys.PluginQQ_QQRedPack);
+                                    friendShow.Nick = LanguageHelper.GetString(Languagekeys.PluginQQ_QQRedPack);
                                     break;
                                 case "2010741172":
                                     friendShow.Nick = LanguageHelper.GetString(Languagekeys.PluginQQ_QQEmail);
@@ -1038,7 +1053,7 @@ namespace XLY.SF.Project.Plugin.Android
         {
             var tableName = LsFriendMsgTables.FirstOrDefault(s => s.Contains(CryptographyHelper.MD5FromStringUpper(friend.QQNumber)));
 
-            if(tableName.IsInvalid())
+            if (tableName.IsInvalid())
             {
                 return;
             }
@@ -1275,7 +1290,7 @@ namespace XLY.SF.Project.Plugin.Android
             {
                 case EnumColumnType.Image:
                     friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Image);
-                    
+
                     #region 图片处理
 
                     sourcePath = RegexMediaFile.Match(friendMsg.Content).Value;
@@ -1298,7 +1313,7 @@ namespace XLY.SF.Project.Plugin.Android
                     break;
                 case EnumColumnType.Audio:
                     friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Audio);
-                    
+
                     #region 语音处理
 
                     var resultAudio = Regex.Match(friendMsg.Content, "(?<=ptt/).*?(amr|slk)");
@@ -1324,14 +1339,14 @@ namespace XLY.SF.Project.Plugin.Android
 
                     break;
                 case EnumColumnType.Video:
-                    friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Video); 
+                    friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Video);
 
                     #region 视频处理
 
                     var videoFile = RegexVideo.Match(friendMsg.Content).Value.TrimStart("/");
                     if (videoFile.IsValid())
                     {
-                        sourcePath = Path.Combine(MediaFileRootPath, videoFile.Replace("Tencent", "tencent").Replace('/', '\\'));
+                        sourcePath = Path.Combine(SDCardPath, videoFile.Replace("Tencent", "tencent").Replace('/', '\\'));
                         if (File.Exists(sourcePath))
                         {
                             friendMsg.Content = sourcePath;
@@ -1343,7 +1358,7 @@ namespace XLY.SF.Project.Plugin.Android
                     break;
                 case EnumColumnType.File:
                     friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_File);
-                    
+
                     #region 文件处理
 
                     var fileMangerInfo = LsFileManager.FirstOrDefault(c => c.uniseq == friendDyMsg.uniseq);
@@ -1359,7 +1374,7 @@ namespace XLY.SF.Project.Plugin.Android
                             var res = sourcePath.Split(new string[] { "/0/" }, StringSplitOptions.RemoveEmptyEntries);
                             if (res.IsValid() && res.Length >= 2)
                             {
-                                sourcePath = Path.Combine(MediaFileRootPath, res[1].Replace("Tencent", "tencent").Replace('/', '\\'));
+                                sourcePath = Path.Combine(SDCardPath, res[1].Replace("Tencent", "tencent").Replace('/', '\\'));
                                 if (File.Exists(sourcePath))
                                 {
                                     friendMsg.Content = sourcePath;
@@ -1386,7 +1401,7 @@ namespace XLY.SF.Project.Plugin.Android
 
                     #endregion
 
-                    break; 
+                    break;
                 case EnumColumnType.String:
                     friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_String);
 
@@ -1715,9 +1730,14 @@ namespace XLY.SF.Project.Plugin.Android
                 var local = Path.Combine(MediaFileRootPath, "diskcache");
                 if (Directory.Exists(local))
                 {
+                    var md5Str = string.Empty;
                     foreach (var file in Directory.GetFiles(local))
                     {
-                        DicMd5Image.Add(CryptographyHelper.MD5FromFileUpper(file), file);
+                        md5Str = CryptographyHelper.MD5FromFileUpper(file);
+                        if (!DicMd5Image.Keys.Contains(md5Str))
+                        {
+                            DicMd5Image.Add(md5Str, file);
+                        }
                     }
                 }
             }

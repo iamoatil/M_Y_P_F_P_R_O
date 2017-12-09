@@ -27,7 +27,11 @@ namespace XLY.SF.Project.EarlyWarningView
 
     class RootNodeManager: AbstractConfigNode
     {
-
+        public List<DataNode> ValidateDataNodes
+        {
+            get { return _validateDataNodes; }
+        }
+        private readonly List<DataNode> _validateDataNodes = new List<DataNode>();
     }
 
     class RootNode : AbstractConfigNode

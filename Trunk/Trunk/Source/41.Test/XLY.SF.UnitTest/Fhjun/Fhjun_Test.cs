@@ -782,5 +782,26 @@ namespace XLY.SF.UnitTest
         }
         #endregion
 
+        #region 导出js插件的配置文件
+
+        /// <summary>
+        /// 导出js插件的配置文件
+        /// </summary>	
+        [TestMethod]
+        public void TestJavaScriptConfig()
+        {
+            Log("-----------开始测试导出js插件的配置文件----------------");
+            PluginAdapter.Instance.Initialization(null, @"C:\Projects\SFProject-new\Trunk\Trunk\Source\21-Build\Script\");
+            foreach (var item in PluginAdapter.Instance.Plugins.Keys)
+            {
+                if(item.PluginType == PluginType.SpfDataParse && item is DataParsePluginInfo it)
+                {
+                    it.Guid = Guid.NewGuid().ToSafeString();
+                    Serializer.SerializeToXML(it, DeskPath($"xml\\{it.DeviceOSType}_{it.Name}_V{it.VersionStr}.config"));
+                }
+            }
+        }
+        #endregion
+
     }
 }

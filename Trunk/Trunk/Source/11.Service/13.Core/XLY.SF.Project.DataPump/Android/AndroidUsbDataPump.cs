@@ -47,7 +47,7 @@ namespace XLY.SF.Project.DataPump.Android
                     HandleWithNormalPath(device, context);
                     break;
                 default:
-                    throw new NotSupportedException();
+                    break;
             }
         }
 

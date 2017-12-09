@@ -101,7 +101,9 @@
     <Compile Include="Contract\DataItems\DataItemJsonConverter.cs" />
     <Compile Include="Contract\DataItems\DataItems.cs" />
     <Compile Include="Contract\DataItems\DbDataReader.cs" />
+    <Compile Include="Contract\DataItems\ICheckedItem.cs" />
     <Compile Include="Contract\DataItems\IDataItems.cs" />
+    <Compile Include="Contract\DataItems\IPage.cs" />
     <Compile Include="Contract\DataItems\MultiSQLiteFilterDataProvider.cs" />
     <Compile Include="Contract\DataItems\SqliteDbFile.cs" />
     <Compile Include="Contract\DataItems\SQLiteFtsTokenizer.cs" />
@@ -111,7 +113,6 @@
     <Compile Include="Contract\Filter\FilterEnum.cs" />
     <Compile Include="Contract\Filter\IFilterItem.cs" />
     <Compile Include="Contract\DataItemContract\IConversion.cs" />
-    <Compile Include="Contract\ITraverse.cs" />
     <Compile Include="Contract\ITree.cs" />
     <Compile Include="Contract\DataItems\IAOPPropertyChangedMonitor.cs" />
     <Compile Include="Contract\MMSDataSource.cs" />
@@ -235,7 +236,6 @@
     <Compile Include="Contract\TreeNode.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CoreDllX64\" />
     <Folder Include="System\" />
   </ItemGroup>
   <ItemGroup>
@@ -280,6 +280,9 @@
     <Content Include="Language\LanguageTextTeamplate.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>LanguageTextTeamplate.LanguageElement.cs</LastGenOutput>
+    </Content>
+    <Content Include="SQLite.Interop.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

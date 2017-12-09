@@ -8,9 +8,23 @@ using XLY.SF.Framework.Core.Base.ViewModel;
 namespace XLY.SF.Framework.Core.Base.MessageBase.Navigation
 {
     /// <summary>
+    /// 缓存基类，包含ID，用于清楚当前ID的所有缓存
+    /// </summary>
+    public class CacheTokenBase
+    {
+        public CacheTokenBase(string id)
+        {
+            ID = id;
+        }
+
+        public string ID { get; }
+    }
+
+    /// <summary>
     /// 导航缓存管理，非线程安全
     /// </summary>
     public class NavigationCacheManager<TToken>
+        where TToken : CacheTokenBase
     {
         /// <summary>
         /// 当前缓存数据
@@ -41,6 +55,20 @@ namespace XLY.SF.Framework.Core.Base.MessageBase.Navigation
         {
             if (_curCacheItems.ContainsKey(token))
                 _curCacheItems.Remove(token);
+        }
+
+        /// <summary>
+        /// 删除当前ID的所有缓存界面
+        /// </summary>
+        /// <param name="token"></param>
+        public void RemoveAllViewCache(TToken token)
+        {
+            var delItems = _curCacheItems.Keys.Where(t => t.ID == token.ID).ToArray();
+
+            foreach (var item in delItems)
+            {
+                _curCacheItems.Remove(item);
+            }
         }
 
         /// <summary>

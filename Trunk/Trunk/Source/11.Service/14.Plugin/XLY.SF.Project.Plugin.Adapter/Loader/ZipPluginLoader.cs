@@ -53,9 +53,8 @@ namespace XLY.SF.Project.Plugin.Adapter
         protected override void LoadPlugin(IAsyncTaskProgress asyn, params string[] pluginPaths)
         {
             List<IPlugin> plugins = new List<IPlugin>();
-            //string dir = SystemContext.Instance.CurLanguage == LanguageType.Cn ? FileHelper.GetPhysicalPath("\\Script\\cn")
-            //    : FileHelper.GetPhysicalPath("\\Script\\en");
-            string dir = FileHelper.GetPhysicalPath("\\Script\\cn");
+            string dir = LanguageManager.Current.Type == LanguageType.Cn ? FileHelper.GetPhysicalPath("\\Script\\cn")
+                : FileHelper.GetPhysicalPath("\\Script\\en");
             foreach (var file in FileHelper.GetFiles(dir, new[] { DebugScriptExtension, ReleaseScriptExtension }))
             {
                 try

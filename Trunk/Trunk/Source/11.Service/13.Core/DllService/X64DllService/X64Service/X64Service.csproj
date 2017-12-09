@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppleQQFriendListCoreDll.cs" />
     <Compile Include="FileServiceCoreDll.cs" />
     <Compile Include="IOSDeviceCoreDll.cs" />
     <Compile Include="MirrorCoreDll.cs" />

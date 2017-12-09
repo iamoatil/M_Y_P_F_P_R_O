@@ -42,22 +42,6 @@ namespace XLY.SF.Project.Domains
             base.BuildParent();
         }
 
-        public override void Traverse(Predicate<TreeNode> traverseTreeNode, Predicate<AbstractDataItem> traverseItems)
-        {
-            if(traverseTreeNode != null)
-            {
-                foreach(TreeNode node in TreeNodes)
-                {
-                    if (!traverseTreeNode(node))
-                    {
-                        break;
-                    }
-                    node.Traverse(traverseTreeNode, traverseItems);
-                }
-            }
-            base.Traverse(traverseTreeNode, traverseItems);
-        }
-
         public override IEnumerable<T> Filter<T>(params FilterArgs[] args)
         {
             IEnumerable<T> result = base.Filter<T>(args);

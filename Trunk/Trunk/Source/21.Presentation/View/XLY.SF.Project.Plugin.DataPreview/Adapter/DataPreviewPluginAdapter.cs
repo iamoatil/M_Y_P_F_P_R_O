@@ -41,27 +41,27 @@ namespace XLY.SF.Project.Plugin.DataPreview
         /// <returns></returns>
         public IEnumerable<AbstractDataPreviewPlugin> GetView(DataPreviewPluginArgument arg)
         {
-            if(arg.CurrentData == null)
+            if (arg.CurrentData == null)
             {
                 return new List<AbstractDataPreviewPlugin>();
             }
 
-            if(arg.CurrentData is string file)     //如果是字符串则认为是文件，此时通过文件后缀名判断
+            if (arg.CurrentData is string file)     //如果是字符串则认为是文件，此时通过文件后缀名判断
             {
-                if(string.IsNullOrEmpty(file) || !System.IO.File.Exists(file))
+                if (string.IsNullOrEmpty(file) || !System.IO.File.Exists(file))
                 {
                     return new List<AbstractDataPreviewPlugin>();
                 }
                 string ext = System.IO.Path.GetExtension(file);
                 var views = Plugins.Where(p =>
-                   ((DataPreviewPluginInfo)p.PluginInfo).ViewType.Any(v => (v.PluginId == "*.*" || v.PluginId.Replace("*","").Split('|').Any(e=>e.Equals(ext, StringComparison.OrdinalIgnoreCase)))))
+                   ((DataPreviewPluginInfo)p.PluginInfo).ViewType.Any(v => v.PluginId != "*" && (v.PluginId == "*.*" || v.PluginId.Replace("*", "").Split('|').Any(e => e.Equals(ext, StringComparison.OrdinalIgnoreCase)))))
                    .OrderByDescending(iv => iv.PluginInfo.OrderIndex)
                    .ToList();
                 return views;
             }
             else   //否则认为是数据对象，此时通过类型判断
             {
-                if(arg.Type == null || arg.PluginId == null)
+                if (arg.Type == null || arg.PluginId == null)
                 {
                     arg.Type = arg.PluginId = "*";
                     //return new List<AbstractDataPreviewPlugin>();

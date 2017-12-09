@@ -72,6 +72,10 @@ namespace XLY.SF.Project.Plugin.DataReport
     public class DataReportPluginArgument
     {
         /// <summary>
+        /// 当前案例路径
+        /// </summary>
+        public string CurrentPath { get; set; }
+        /// <summary>
         /// 导出的目标文件夹或文件名
         /// </summary>
         public string ReportPath { get; set; }

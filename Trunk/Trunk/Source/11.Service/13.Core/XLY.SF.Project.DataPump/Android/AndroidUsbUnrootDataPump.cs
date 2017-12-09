@@ -17,11 +17,25 @@ namespace XLY.SF.Project.DataPump.Android
     {
         #region Fields
 
-        public static readonly String[] Commands;
-
+        /// <summary>
+        /// SPFSocket.apk文件路径
+        /// </summary>
         private static readonly String ApkPath;
 
-        private String _savePath;
+        /// <summary>
+        /// SPFSocket.apk 支持的命令
+        /// </summary>
+        public static readonly String[] Commands;
+
+        /// <summary>
+        /// SPFSocket 命令结果保存路径
+        /// </summary>
+        private String APPCmdSavePath { get; set; }
+
+        /// <summary>
+        /// ADB备份保存路径
+        /// </summary>
+        private String BackupSavePath { get; set; }
 
         #endregion
 
@@ -34,10 +48,10 @@ namespace XLY.SF.Project.DataPump.Android
         {
             Commands = new[]
             {
-                "basic_info","app_info","sms_info",
-                "contact_info","calllog_info"
+                "base_info","app_info","browser_info","sms_info",
+                "contact_info","calllog_info","location_info","account_info"
             };
-            ApkPath = FileHelper.GetPhysicalPath(@"Toolkits\app\SPFSocket.apk");
+            ApkPath = FileHelper.GetPhysicalPath(@"Lib\adb\SPFSocket.apk");
         }
 
         /// <summary>
@@ -61,14 +75,16 @@ namespace XLY.SF.Project.DataPump.Android
         /// <param name="context">执行上下文。</param>
         protected override void ExecuteCore(DataPumpControllableExecutionContext context)
         {
-            Device device = (Device)Metadata.Source;
-            AndroidHelper.Instance.BackupAndResolve(device, FileHelper.ConnectPath(_savePath, $"{device.SerialNumber}.rar"));
-
-            String content = String.Empty;
-            foreach (String command in Commands)
+            var sfi = context.Source;
+            switch (sfi.ItemType)
             {
-                content = AndroidHelper.Instance.ExecuteSPFAppCommand(device, command);
-                File.WriteAllText(FileHelper.ConnectPath(_savePath, $"{command}.txt"), content);
+                case SourceFileItemType.AndroidCmdPath:
+                    sfi.Local = Path.Combine(APPCmdSavePath, $"{sfi.APPCmd}.bin");
+                    break;
+                case SourceFileItemType.AndroidSDCardPath:
+                    break;
+                case SourceFileItemType.NormalPath:
+                    break;
             }
         }
 
@@ -80,19 +96,27 @@ namespace XLY.SF.Project.DataPump.Android
         {
             if (Metadata.Source is Device device)
             {
-                if (AndroidHelper.Instance.InstallPackage(ApkPath, device))
+                //1.植入APP
+                APPCmdSavePath = FileHelper.ConnectPath(Metadata.SourceStorePath, "CmdData");
+                FileHelper.CreateExitsDirectory(APPCmdSavePath);
+
+                if (FileHelper.IsValid(ApkPath) && AndroidHelper.Instance.InstallPackage(ApkPath, device))
                 {
-                    String path = FileHelper.ConnectPath(Metadata.SourceStorePath, $"AndroidData_{Guid.NewGuid()}");
-                    if (Directory.Exists(path))
+                    String content = String.Empty;
+                    foreach (String command in Commands)
                     {
-                        Directory.Delete(path, true);
+                        content = AndroidHelper.Instance.ExecuteSPFAppCommand(device, command);
+                        File.WriteAllText(FileHelper.ConnectPath(APPCmdSavePath, $"{command}.bin"), content);
                     }
-                    FileHelper.CreateDirectory(path);
-                    _savePath = path;
-                    return true;
                 }
+
+                //2.ADB备份
+                BackupSavePath = FileHelper.ConnectPath(Metadata.SourceStorePath, "Backup");
+                FileHelper.CreateExitsDirectory(BackupSavePath);
+
+                //var rarFile = AndroidHelper.Instance.BackupAndResolve(device, FileHelper.ConnectPath(BackupSavePath, $"{device.SerialNumber}.rar"));
             }
-            return false;
+            return true;
         }
 
         #endregion

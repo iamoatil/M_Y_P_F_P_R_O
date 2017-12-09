@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using log4net.Config;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -21,6 +22,7 @@ using System.Runtime.InteropServices;
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
 [assembly: Guid("d638de22-8503-4f73-95f6-8d6e6cbd3a98")]
+[assembly: XmlConfigurator(ConfigFile = "App.config")]
 
 // 程序集的版本信息由下列四个值组成: 
 //

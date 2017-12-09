@@ -7,7 +7,7 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// 数据源定义
     /// </summary>
-    public interface IDataSource : ITraverse
+    public interface IDataSource : ICheckedItem
     {
         /// <summary>
         /// 数据唯一标识

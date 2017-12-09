@@ -106,7 +106,15 @@
     <Style TargetType="control:LoadingControl">
         <Setter Property="Template" Value="{StaticResource defaultLoadingCt}"/>
     </Style>
-    
+
+    <!--#endregion-->
+
+    <!--#region 新建文件夹控件【RadioButton】-->
+
+    <Style TargetType="control:CreateNewFolderRadioButton">
+        <Setter Property="Template" Value="{StaticResource CreateNewFolderRadioButtonCT}"/>
+    </Style>
+
     <!--#endregion-->
 
     <!--#endregion-->
@@ -115,6 +123,12 @@
     <Style TargetType="TextBlock">
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+    <Style TargetType="ToolTip">
+        <Setter Property="Background" Value="#2c3a5d"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="5"/>
     </Style>
     <Style TargetType="Button">
         <Setter Property="Template" Value="{StaticResource btn_EmptyCT}"/>
@@ -135,6 +149,7 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
     <Style TargetType="ComboBoxItem">
         <Setter Property="Template" Value="{DynamicResource cb_DefaultItemCt}"/>
         <Setter Property="Height" Value="42"/>
@@ -170,7 +185,6 @@
         <Setter Property="Template" Value="{StaticResource defaultProgressBar}"/>
     </Style>
     <!--#endregion-->
-
     <!--#endregion-->
 
     <!--#region 字体-->

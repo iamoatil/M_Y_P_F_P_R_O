@@ -109,7 +109,7 @@ namespace XLY.SF.Project.FileBrowingView
                 FileBrowingNode ss = await Service.GetRootNode();
 
                 Roots = new List<FileBrowingTreeNode>() { new FileBrowingTreeNode(ss) };
-                CurFileBrowingTreeNode = Roots[0];
+                OpenFileFolderNode(Roots[0]);
             });
         }
 
@@ -247,6 +247,11 @@ namespace XLY.SF.Project.FileBrowingView
         /// <param name="node"></param>
         public void OnOpenFileNode(FileBrowingTreeNode node)
         {
+            if (null == node)
+            {
+                return;
+            }
+
             if (node.Data.IsFile)
             {//文件
                 Download(node);
@@ -295,15 +300,27 @@ namespace XLY.SF.Project.FileBrowingView
                 return;
             }
 
-            CurFileBrowingTreeNode = node;
+            if (node == CurFileBrowingTreeNode)
+            {
+                return;
+            }
 
+            if(null != CurFileBrowingTreeNode)
+            {
+                CurFileBrowingTreeNode.IsTreeSelected = false;
+            }
+            node.IsTreeSelected = true;
+
+            CurFileBrowingTreeNode = node;
             if (node.AllChildrenNodes.IsInvalid())
             {
                 LoadingData(async () =>
                 {
                     var ss = await Service.GetChildNodes(node.Data);
-                    node.AllChildrenNodes = new List<FileBrowingTreeNode>(ss.Select(f => new FileBrowingTreeNode(f)));
-                    node.ChildrenTreeNodes = new List<FileBrowingTreeNode>(ss.Where(f => !f.IsFile).Select(f => new FileBrowingTreeNode(f)));
+                    var allNodes = new List<FileBrowingTreeNode>(ss.Select(f => new FileBrowingTreeNode(f)));
+
+                    node.AllChildrenNodes = allNodes;
+                    node.ChildrenTreeNodes = allNodes.Where(f => !f.Data.IsFile).ToList();
 
                     TableItems = new ObservableCollection<FileBrowingTreeNode>(node.AllChildrenNodes);
                     IsTableSelectAll = TableItems.All(s => s.IsSelected);
@@ -801,6 +818,21 @@ namespace XLY.SF.Project.FileBrowingView
             set
             {
                 _IsSelected = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private bool _IsTreeSelected;
+
+        /// <summary>
+        /// 是否在导航树选中
+        /// </summary>
+        public bool IsTreeSelected
+        {
+            get => _IsTreeSelected;
+            set
+            {
+                _IsTreeSelected = value;
                 OnPropertyChanged();
             }
         }

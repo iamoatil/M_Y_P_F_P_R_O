@@ -161,14 +161,7 @@ namespace XLY.SF.Project.Services
 
             //IAsync?.Advance(1, LanguageManager.Current[Languagekeys.FileServiceLanguage_File_KaiShiHuiFuYingYongWenJianLieB]);
 
-            string pattern = "com.tencen(.+).mm";
-            Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
-
-            var source = new List<FNodeX>();
-            if (regex.IsMatch(matchPath))
-                source = files.FindAll(o => regex.IsMatch(o.FullPath) && !o.IsDelete);//匹配（第三方）微信
-            else
-                source = files.FindAll(o => o.FullPath.StartsWith(matchPath, StringComparison.OrdinalIgnoreCase) && !o.IsDelete);
+            var source = files.FindAll(o => o.FullPath.StartsWith(matchPath, StringComparison.OrdinalIgnoreCase) && !o.IsDelete);
             foreach (var f in source)
             {
                 fileServiceX.ExportFileX(f, path);

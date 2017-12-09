@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XLY.SF.Framework.BaseUtility;
+using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Persistable.Primitive;
@@ -45,12 +46,13 @@ namespace XLY.SF.Project.Plugin.Android
         /// <summary>
         /// 解析数据
         /// </summary>
-        /// <param name="datasource"></param>
-        public void BuildData(SmsDataSource datasource)
+        public List<SMS> BuildData()
         {
+            List<SMS> items = new List<SMS>();
+
             if (!FileHelper.IsValid(MainDbPath))
             {
-                return;
+                return items;
             }
 
             SqliteContext mainContext = null;
@@ -67,7 +69,7 @@ namespace XLY.SF.Project.Plugin.Android
 
                 if (smssList.IsInvalid())
                 {
-                    return;
+                    return items;
                 }
 
                 var contactList = GetContactList();
@@ -107,18 +109,23 @@ namespace XLY.SF.Project.Plugin.Android
                         item.StartDate = DynamicConvert.ToSafeDateTime(sms.date);
                         item.ReadState = DynamicConvert.ToSafeInt(sms.read) == 0 ? EnumReadState.Unread : EnumReadState.Read;
 
-                        datasource.Items.Add(item);
+                        items.Add(item);
                     }
                     catch
                     {
                     }
                 }
             }
+            catch (Exception ex)
+            {
+                LoggerManagerSingle.Instance.Error(ex, "AndroidSmsDataParseCoreV1_0 BuildData Error!");
+            }
             finally
             {
                 mainContext?.Dispose();
                 mainContext = null;
             }
+            return items;
         }
 
         /// <summary>

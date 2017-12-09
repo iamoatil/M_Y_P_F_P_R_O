@@ -1,0 +1,96 @@
+﻿<core:UcViewBase x:Class="XLY.SF.Project.Views.Logs.ObtainEvidenceLogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
+             xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+             xmlns:be="clr-namespace:XLY.SF.Project.Themes.Behavior;assembly=XLY.SF.Project.Themes"
+             xmlns:local="clr-namespace:XLY.SF.Project.Views.Logs"
+             mc:Ignorable="d" Title="{Binding XPath=ViewLanguage/View_Logs_ObtainEvidenceLogView_Title,Source={x:Static ex:SystemContext.LanguageProvider}}">
+    <core:UcViewBase.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--此处以下添加自己的引用-->
+
+        </ResourceDictionary>
+    </core:UcViewBase.Resources>
+
+    <Grid Height="600" Width="960">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!--搜索-->
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <DatePicker/>
+            <Rectangle Grid.Column="1" Width="15" Height="3" Fill="#FF9CA6B7" Margin="3 0 3 0"/>
+            <DatePicker Grid.Column="2"/>
+            <Button Grid.Column="4" Width="100" Height="30" Style="{StaticResource btn_LoginClose}" Content="{Binding XPath=ViewLanguage/View_MainWin_DataExport,Source={x:Static ex:SystemContext.LanguageProvider}}"/>
+        </Grid>
+        <!--数据展示-->
+        <DataGrid Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" BorderBrush="#FF3A4764" BorderThickness="1"
+                  Margin="10 0 10 20" ItemsSource="{Binding LogItems}" HorizontalScrollBarVisibility="Disabled" VirtualizingPanel.IsVirtualizing="True"
+                  CanUserResizeColumns="False">
+            <DataGrid.Columns>
+                <DataGridCheckBoxColumn Header="测试" Width="50">
+                    <DataGridCheckBoxColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridColumnHeader">
+                                        <Border Background="#0AFFFFFF">
+                                            <CheckBox Margin="10 0 0 0" IsChecked="{Binding DataContext.CheckedAllLogs,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}" 
+                                                      Command="{Binding DataContext.SelectedAllStatusCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
+                                                      CommandParameter="{Binding IsChecked,RelativeSource={RelativeSource Mode=Self}}"
+                                                      VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridCheckBoxColumn.HeaderStyle>
+                    <DataGridCheckBoxColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridCell">
+                                        <Border x:Name="br" Background="Transparent">
+                                            <CheckBox IsChecked="{Binding DataContext.IsChecked,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGridRow}}"
+                                                      Command="{Binding DataContext.CheckedLogCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"
+                                                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" TargetName="br" Value="#1AFFFFFF"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridCheckBoxColumn.CellStyle>
+                </DataGridCheckBoxColumn>
+                <DataGridTextColumn Header="序号" Binding="{Binding Index}"/>
+                <DataGridTextColumn Header="操作人员" Binding="{Binding DisplayOperator}"/>
+                <DataGridTextColumn Header="操作内容" Width="*" Binding="{Binding OpContent}"/>
+                <DataGridTextColumn Header="操作时间" Binding="{Binding OpTime}"/>
+            </DataGrid.Columns>
+            <i:Interaction.Behaviors>
+                <be:DataGridBehavior DataGridRowDoubleClickCommand="{Binding DataContext.ShowOpImageCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}"/>
+            </i:Interaction.Behaviors>
+        </DataGrid>
+    </Grid>
+</core:UcViewBase>

@@ -40,10 +40,10 @@ namespace XLY.SF.Project.ViewModels.Main
 
         public DeviceListViewModel()
         {
-            _selectDeviceCommandProxy = new ProxyRelayCommand(SelectDevice);
+            _selectDeviceCommandProxy = new ProxyRelayCommand(SelectDevice, base.ModelName);
             CloseCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<DeviceExtractionAdorner>(Close);
-            _moveToCommandProxy = new ProxyRelayCommand<DeviceExtractionAdorner>(MoveTo);
-            _deleteCommandProxy = new ProxyRelayCommand<DeviceExtractionAdorner>(Delete);
+            _moveToCommandProxy = new ProxyRelayCommand<DeviceExtractionAdorner>(MoveTo, base.ModelName);
+            _deleteCommandProxy = new ProxyRelayCommand<DeviceExtractionAdorner>(Delete, base.ModelName);
             PopupCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<DeviceExtractionAdorner>(Popup);
             MessageAggregation.RegisterGeneralMsg<object>(this, ExportKeys.DeviceWindowClosedMsg, (d) => BackToList(d.Parameters as DeviceExtractionAdorner));
         }
@@ -172,7 +172,7 @@ namespace XLY.SF.Project.ViewModels.Main
             //由于窗体导航在Shell里面，DeviceExtractionAdorner在ViewModel里面
             //所以此处创建object数组，Shell解析时，固定用此格式
             //
-            NavigationForNewWindow(ExportKeys.DeviceMainView, new object[] { de.Device.ID, de });
+            NavigationForNewWindow(ExportKeys.DeviceMainView, new object[] { de.Device.ID, de }, true);
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace XLY.SF.Project.ViewModels.Main
         private void Close(DeviceExtractionAdorner de)
         {
             Items.Remove(de);
-            PreCacheToken args = new PreCacheToken(de.Id, ExportKeys.DeviceMainView);
+            PreCacheToken args = new PreCacheToken(de.Device.ID, ExportKeys.DeviceMainView);
             MessageAggregation.SendGeneralMsg<PreCacheToken>(new GeneralArgs<PreCacheToken>(GeneralKeys.DeleteCacheView) { Parameters = args });
         }
 

@@ -432,7 +432,7 @@
                 </ei:ChangePropertyAction>
             </ei:DataTrigger>
             <!--设备类型触发器-->
-            <ei:DataTrigger Binding="{Binding CurDevModel.IDevSource.DeviceType}" Value="Disk">
+            <ei:DataTrigger Binding="{Binding CurDevModel.IDevSource.DeviceType}" Value="LocalFile">
                 <ei:ChangePropertyAction PropertyName="Visibility" Value="Collapsed" TargetObject="{Binding ElementName=sp_Phone}"/>
                 <ei:ChangePropertyAction PropertyName="Visibility" Value="Visible" TargetObject="{Binding ElementName=sp_File}"/>
                 <ei:ChangePropertyAction PropertyName="Visibility" Value="Collapsed" TargetObject="{Binding ElementName=sp_Card}"/>

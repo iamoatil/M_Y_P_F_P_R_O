@@ -25,9 +25,9 @@ namespace XLY.SF.Project.DeviceExtractionService
                 PluginAdapter.Instance.Initialization(null);
                 EngineSetup setup = new EngineSetup("isolatedTask", null);
                 TaskEngine engine = new TaskEngine(setup);
+                Console.WriteLine("Task engin is running");
                 engine.Start();
-                Console.WriteLine("Task engin is running...:{0}", engine.IsRuning);
-                Console.Read();
+                Console.WriteLine("Task engin terminate");
                 mutex.ReleaseMutex();
             }
         }

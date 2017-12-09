@@ -20,10 +20,27 @@ namespace XLY.SF.Project.Domains
     [Serializable]
     public class LocalFileDevice : AbstractDevice
     {
-        public LocalFileDevice()
+        /// <summary>
+        /// 本地文件和文件夹设备
+        /// </summary>
+        /// <param name="path">全路径</param>
+        /// <param name="isDir">是否是文件夹</param>
+        public LocalFileDevice(string path, bool isDir)
         {
-            DeviceType = EnumDeviceType.Disk;
+            DeviceType = EnumDeviceType.LocalFile;
             Status = EnumDeviceStatus.Online;
+
+            PathName = path;
+            IsDirectory = isDir;
+
+            if (isDir)
+            {
+                Name = System.IO.Path.GetDirectoryName(path);
+            }
+            else
+            {
+                Name = System.IO.Path.GetFileName(path);
+            }
         }
 
         public override string ID { get => $"本地文件设备:IsDirectory={IsDirectory}&PathName={PathName}"; set => throw new NotImplementedException(); }

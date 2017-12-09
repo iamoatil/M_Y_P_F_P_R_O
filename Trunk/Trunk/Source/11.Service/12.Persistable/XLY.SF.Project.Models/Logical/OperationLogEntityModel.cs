@@ -35,6 +35,16 @@ namespace XLY.SF.Project.Models.Logical
             }
         }
 
+        public string OperationModel
+        {
+            get => Entity.OperationModel;
+            set
+            {
+                Entity.OperationModel = value;
+                OnPropertyChanged();
+            }
+        }
+
         [Required]
         public DateTime OperationDateTime
         {

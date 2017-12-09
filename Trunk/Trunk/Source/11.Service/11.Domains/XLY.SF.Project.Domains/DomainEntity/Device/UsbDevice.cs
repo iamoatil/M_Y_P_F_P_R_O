@@ -31,5 +31,7 @@ namespace XLY.SF.Project.Domains
         public uint VID { get; set; }
 
         public uint PID { get; set; }
+
+        public List<string> DeviceIDArray { get; set; }
     }
 }

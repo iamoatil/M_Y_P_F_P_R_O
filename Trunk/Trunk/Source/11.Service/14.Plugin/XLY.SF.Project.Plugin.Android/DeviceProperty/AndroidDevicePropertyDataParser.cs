@@ -6,6 +6,7 @@
  *
 *****************************************************************************/
 
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -46,6 +47,7 @@ namespace XLY.SF.Project.Plugin.Android
             pluginInfo.SourcePath.AddItem("/data/data/com.android.providers.telephony/databases/telephony.db");
             pluginInfo.SourcePath.AddItem("/data/data/com.samsung.simcardmanagement/databases/simcardmanagement.db");
             pluginInfo.SourcePath.AddItem("/data/system/users/0/settings_global.xml");
+            pluginInfo.SourcePath.AddItem("APPCmd:base_info");
 
             PluginInfo = pluginInfo;
         }
@@ -274,6 +276,49 @@ namespace XLY.SF.Project.Plugin.Android
                 }
             }
             catch { }
+
+            //从APP植入获取设备信息
+
+            if (FileHelper.IsValid(info.SourcePath[8].Local))
+            {
+                try
+                {
+                    JObject jo = JObject.Parse(FileHelper.FileToUTF8String(info.SourcePath[8].Local));
+                    if (serialnumber.IsInvalid())
+                    {
+                        serialnumber = jo["serial"].ToSafeString();
+                    }
+                    if (manufacture.IsInvalid())
+                    {
+                        manufacture = jo["manufacturer"].ToSafeString();
+                    }
+                    if (model.IsInvalid())
+                    {
+                        model = jo["model"].ToSafeString();
+                    }
+                    if (OSVersion.IsInvalid())
+                    {
+                        OSVersion = jo["release"].ToSafeString();
+                    }
+                    if (IMEI.IsInvalid())
+                    {
+                        IMEI = jo["imei"].ToSafeString();
+                    }
+                    if (IMSI.IsInvalid())
+                    {
+                        IMSI = jo["imsi"].ToSafeString();
+                    }
+                    if (WiFiAddress.IsInvalid())
+                    {
+                        WiFiAddress = jo["wifiMac"].ToSafeString();
+                    }
+                    if (BMac.IsInvalid())
+                    {
+                        BMac = jo["btMac"].ToSafeString();
+                    }
+                }
+                catch { }
+            }
 
             dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_Serialnumber), serialnumber));
             dataSource.Items.Add(new KeyValueItem(LanguageHelper.GetString(Languagekeys.PluginDeviceProperty_DeviceName), name));

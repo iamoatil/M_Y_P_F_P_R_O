@@ -15,11 +15,15 @@ namespace CopyDll
 {
     class Program
     {  
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             DllCopyProgram program = new DllCopyProgram();
-            program.Execute(args);
-            return;
+            bool isSuc=program.Execute(args);
+            return isSuc?0:-1;
+        }
+
+        static void Main2(string[] args)
+        {          
             //待拷贝DLL位置
             string sourceDllDir = Path.GetFullPath(@"..\..\..\..\Lib\vcdll");
             string sourceX64DllDir = Path.GetFullPath(@"..\..\..\..\Lib\vcdllX64");

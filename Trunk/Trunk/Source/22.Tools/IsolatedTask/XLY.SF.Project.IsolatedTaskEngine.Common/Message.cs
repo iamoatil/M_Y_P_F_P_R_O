@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System;
 
 namespace XLY.SF.Project.IsolatedTaskEngine.Common
@@ -7,35 +6,28 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
     /// <summary>
     /// 消息。
     /// </summary>
-    public class Message
+    public struct Message : IEquatable<Message>
     {
         #region Fields
 
-        public static readonly JsonSerializerSettings JsonSettings;
+        /// <summary>
+        /// 表示一个无效的消息。
+        /// </summary>
+        public static readonly Message Invalid = new Message { IsValid = false };
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// 初始化类型 Message 。
+        /// 初始化结构 Message 。
         /// </summary>
         static Message()
         {
-            JsonSettings = new JsonSerializerSettings()
-            {
-                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                 PreserveReferencesHandling = PreserveReferencesHandling.None,
-                 TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Full,
-                 TypeNameHandling = TypeNameHandling.Auto
-            };
-            DefaultContractResolver resolver = new DefaultContractResolver();
-            resolver.DefaultMembersSearchFlags |= System.Reflection.BindingFlags.NonPublic;
-            JsonSettings.ContractResolver = resolver;
         }
 
         /// <summary>
-        /// 初始化类型 Message 实例。
+        /// 初始化结构 Message 实例。
         /// </summary>
         /// <param name="code">消息码。</param>
         public Message(Int32 code)
@@ -44,22 +36,45 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         }
 
         /// <summary>
-        /// 初始化类型 Message 实例。
+        /// 初始化结构 Message 实例。
         /// </summary>
-        /// <param name="token">消息唯一标识。</param>
         /// <param name="code">消息码。</param>
-        public Message(Int32 token, Int32 code)
-            : this(token, code, false)
+        /// <param name="content">消息内容。</param>
+        public Message(Int32 code, Object content)
+            : this(Guid.NewGuid().GetHashCode(), code, content)
+
         {
         }
 
         /// <summary>
-        /// 初始化类型 Message 实例。
+        /// 初始化结构 Message 实例。
         /// </summary>
         /// <param name="token">消息唯一标识。</param>
         /// <param name="code">消息码。</param>
+        public Message(Int32 token, Int32 code)
+            : this(token, code, null)
+        {
+        }
+
+        /// <summary>
+        /// 初始化结构 Message 实例。
+        /// </summary>
+        /// <param name="token">消息唯一标识。</param>
+        /// <param name="code">消息码。</param>
+        /// <param name="content">消息内容。</param>
+        public Message(Int32 token, Int32 code, Object content)
+            : this(token, code, content, false)
+        {
+        }
+
+        /// <summary>
+        /// 初始化结构 Message 实例。
+        /// </summary>
+        /// <param name="token">消息唯一标识。</param>
+        /// <param name="code">消息码。</param>
+        /// <param name="content">消息内容。</param>
         /// <param name="isSystemMessage">是否是系统消息。</param>
-        private Message(Int32 token, Int32 code, Boolean isSystemMessage)
+        private Message(Int32 token, Int32 code, Object content, Boolean isSystemMessage)
         {
             if (!isSystemMessage && code < 0)
             {
@@ -67,14 +82,8 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
             }
             Token = token;
             Code = code;
-        }
-
-        /// <summary>
-        /// 初始化类型 Message 实例。
-        /// </summary>
-        private Message()
-        {
-
+            ContentJson = content.SerializeObject();
+            IsValid = true;
         }
 
         #endregion
@@ -82,7 +91,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         #region Properties
 
         /// <summary>
-        /// 命令唯一标识。
+        /// 消息唯一标识。
         /// </summary>
         public Int32 Token { get;  private set; }
 
@@ -94,7 +103,12 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <summary>
         /// 消息内容。
         /// </summary>
-        private String ContentJson { get; set; }
+        public String ContentJson { get; private set; }
+
+        /// <summary>
+        /// 是否是一个有效的消息。
+        /// </summary>
+        public Boolean IsValid { get; private set; }
 
         #endregion
 
@@ -103,79 +117,38 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         #region Public
 
         /// <summary>
+        /// 判断两个结构的实例是否相等。
+        /// </summary>
+        /// <param name="other">另一个实例。</param>
+        /// <returns>相等返回true；否则返回false。</returns>
+        public Boolean Equals(Message other)
+        {
+            return other.IsValid == IsValid
+                && other.Token == Token;
+        }
+
+        /// <summary>
+        /// 判断两个结构的实例是否相等。
+        /// </summary>
+        /// <param name="other">另一个实例。</param>
+        /// <returns>相等返回true；否则返回false。</returns>
+        public override Boolean Equals(Object obj)
+        {
+            if (obj is Message m)
+            {
+                return Equals(m);
+            }
+            return false;
+        }
+
+        /// <summary>
         /// 获取消息的内容。
         /// </summary>
         /// <typeparam name="T">内容的类型。</typeparam>
         /// <returns>消息内容。</returns>
         public T GetContent<T>()
         {
-            return DeserializeObject<T>(ContentJson);
-        }
-
-        /// <summary>
-        /// 反序列化JSON字符串。
-        /// </summary>
-        /// <typeparam name="T">类型。</typeparam>
-        /// <param name="json">JSON字符串。</param>
-        /// <returns>类型 T 的实例。</returns>
-        public static T DeserializeObject<T>(String json)
-        {
-            try
-            {
-                if (json == null) return default(T);
-                return JsonConvert.DeserializeObject<T>(json, Message.JsonSettings);
-            }
-            catch (JsonException)
-            {
-                return default(T);
-            }
-        }
-
-        /// <summary>
-        /// 反序列化JSON字符串。
-        /// </summary>
-        /// <param name="json">JSON字符串。</param>
-        /// <param name="type">类型。</param>
-        /// <returns>实例。</returns>
-        public static Object DeserializeObject(String json, Type type)
-        {
-            try
-            {
-                if (json == null) return null;
-                return JsonConvert.DeserializeObject(json, type, Message.JsonSettings);
-            }
-            catch (JsonException)
-            {
-                return null;
-            }
-        }
-
-
-        /// <summary>
-        /// 反序列化JSON字符串。
-        /// </summary>
-        /// <param name="json">JSON字符串。</param>
-        /// <returns>实例。</returns>
-        public static Object DeserializeObject(String json)
-        {
-            try
-            {
-                if (json == null) return null;
-                return JsonConvert.DeserializeObject(json, Message.JsonSettings);
-            }
-            catch (JsonException)
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
-        /// 设置消息内容。
-        /// </summary>
-        /// <param name="content">消息内容。</param>
-        public void SetContent(Object content)
-        {
-            ContentJson = JsonConvert.SerializeObject(content, Message.JsonSettings);
+            return ContentJson.DeserializeObject<T>();
         }
 
         /// <summary>
@@ -194,9 +167,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <returns>响应消息。</returns>
         public Message CreateResponse(Object returnValue = null)
         {
-            Message response = new Message(Token, Code);
-            response.SetContent(returnValue);
-            return response;
+            return new Message(Token, Code, returnValue);
         }
 
         /// <summary>
@@ -205,7 +176,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <returns>对象的字符串表示。</returns>
         public override String ToString()
         {
-            return JsonConvert.SerializeObject(this, Message.JsonSettings);
+            return ContentJson;
         }
 
         /// <summary>
@@ -215,8 +186,34 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <returns>将JSON字符串转换为Message</returns>
         public static Message ToMessage(String json)
         {
-            return JsonConvert.DeserializeObject<Message>(json, Message.JsonSettings);
+            return json.DeserializeObject<Message>(Message.Invalid);
         }
+
+        /// <summary>
+        /// 重载Message的==操作符。
+        /// </summary>
+        /// <param name="messageA">Message结构实例。</param>
+        /// <param name="messageB">Message结构实例。</param>
+        /// <returns>相等返回true；否则返回false。</returns>
+        public static Boolean operator ==(Message messageA, Message messageB)
+        {
+            return messageA.Equals(messageB);
+        }
+
+        /// <summary>
+        /// 重载Message的!=操作符。
+        /// </summary>
+        /// <param name="messageA">Message结构实例。</param>
+        /// <param name="messageB">Message结构实例。</param>
+        /// <returns>相等返回false；否则返回true。</returns>
+        public static Boolean operator !=(Message messageA, Message messageB)
+        {
+            return !(messageA == messageB);
+        }
+
+        #endregion
+
+        #region Internal
 
         /// <summary>
         /// 创建系统消息。
@@ -227,9 +224,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <returns>系统消息。</returns>
         internal static Message CreateSystemMessage(Int32 token, Int32 code, Object content = null)
         {
-            Message message = new Message(token, code, true);
-            if (content != null) message.SetContent(content);
-            return message;
+            return new Message(token, code, content, true);
         }
 
         /// <summary>

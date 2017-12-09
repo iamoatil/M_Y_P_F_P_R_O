@@ -43,7 +43,7 @@ namespace XLY.SF.Project.ViewModels.Login
         {
             //_dbService = dbService;
             MessageBox = messageBox;
-            LoginCommand = new ProxyRelayCommand(ExecuteLoginCommand, GetViewContainer, null);
+            LoginCommand = new ProxyRelayCommand(ExecuteLoginCommand, base.ModelName, GetViewContainer, null);
             ExitSysCommand = new RelayCommand(ExeucteExitSysCommand);
         }
 

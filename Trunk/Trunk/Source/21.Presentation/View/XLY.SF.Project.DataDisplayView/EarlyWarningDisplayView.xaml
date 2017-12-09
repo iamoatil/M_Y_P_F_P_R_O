@@ -41,7 +41,7 @@
                 <Border.Effect>
                     <DropShadowEffect Color="#181d3a" ShadowDepth="10" Direction="270" BlurRadius="20" Opacity="0.08"/>
                 </Border.Effect>
-                <local:DataFilterControl />
+                <local:DataFilterControl x:Name="filterCtrl"/>
             </Border>
 
             <!--数据列表-->
@@ -144,7 +144,7 @@
             <Border Visibility="{Binding HasDataList, Converter={StaticResource boolToCollapseConverter}, ConverterParameter=True}">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/grid_sort_asc.png" Width="238" Height="99" HorizontalAlignment="Center"/>
-                    <TextBlock FontSize="30" Text="{local:Lang Key=NotOpenInspectionTip}" Foreground="White" HorizontalAlignment="Center"></TextBlock>
+                    <TextBlock FontSize="24" Text="{local:Lang Key=NotOpenInspectionTip}" Foreground="White" HorizontalAlignment="Center" Margin="10"></TextBlock>
                     <TextBlock FontSize="16" Text="{local:Lang Key=NotOpenInspectionTip2}" Foreground="#9ba5b9" HorizontalAlignment="Center"></TextBlock>
                 </StackPanel>
             </Border>

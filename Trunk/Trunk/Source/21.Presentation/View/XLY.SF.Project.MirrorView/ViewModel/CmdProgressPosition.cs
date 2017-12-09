@@ -20,6 +20,11 @@ namespace XLY.SF.Project.MirrorView
         private DateTime _startedDateTime;
 
         /// <summary>
+        /// 暂停的时间点
+        /// </summary>
+        private DateTime _puaseDateTime;
+
+        /// <summary>
         /// 已经完成的大小
         /// </summary>
         public long FinishedSize
@@ -134,6 +139,22 @@ namespace XLY.SF.Project.MirrorView
         public void Stop()
         {
             _startedDateTime = DateTime.Now;
+        }
+
+        /// <summary>
+        /// 暂停时记录时间点，继续时修改_startedDateTime。
+        /// </summary>
+        public void Pause()
+        {
+            _puaseDateTime = DateTime.Now;
+        }
+
+        /// <summary>
+        /// 暂停时记录时间点，继续时修改_startedDateTime
+        /// </summary>
+        public void Continue()
+        {
+            _startedDateTime += (DateTime.Now - _puaseDateTime);
         }
     }
 }

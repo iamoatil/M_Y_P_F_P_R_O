@@ -64,6 +64,7 @@ namespace XLY.SF.Project.DeviceExtractionService
                     _controler.Stop();
                     break;
                 default:
+                    Logger.Info($"Unrecognizable command:[Activator]{ActivatorToken}--[Command]{code}");
                     break;
             }
         }
@@ -72,7 +73,7 @@ namespace XLY.SF.Project.DeviceExtractionService
         {
             base.Dispose(isDisposing);
             _controler.Stop();
-            Logger.Info($"Activator {ActivatorToken} is stopping...");
+            Logger.Info($"Activator {ActivatorToken} terminated");
         }
 
         #endregion
@@ -89,7 +90,6 @@ namespace XLY.SF.Project.DeviceExtractionService
             Logger.Info($"Activator {ActivatorToken}--Task {e.TaskId} terminated: [IsCompleted]{e.IsCompleted},[IsFailed]{e.IsFailed}");
             if (_controler.IsBusy) return;
             OnTerminateActivator(new TaskOverEventArgs());
-            Logger.Info($"Activator {ActivatorToken} terminated");
         }
 
         private void _reporter_ProgressChanged(object sender, TaskProgressEventArgs e)
@@ -115,12 +115,8 @@ namespace XLY.SF.Project.DeviceExtractionService
 
         private void SendMessage(ExtractionCode code,Object obj)
         {
-            Message message = new Message((Int32)code);
+            Message message = new Message((Int32)code, obj);
             Logger.DebugFormat("Send message:[Code]{0},[Token]{1}", message.Code, message.Token);
-            if (obj != null)
-            {
-                message.SetContent(obj);
-            }
             OnSend(message);
         }
 

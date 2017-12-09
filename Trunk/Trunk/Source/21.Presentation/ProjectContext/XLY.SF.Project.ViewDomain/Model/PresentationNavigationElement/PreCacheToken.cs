@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XLY.SF.Framework.Core.Base.MessageBase.Navigation;
 
 /*
  * 创建人：Bob
@@ -18,21 +19,16 @@ namespace XLY.SF.Project.ViewDomain.Model.PresentationNavigationElement
     /// <summary>
     /// 展示层缓存标记
     /// </summary>
-    public class PreCacheToken
+    public class PreCacheToken : CacheTokenBase
     {
-        /// <summary>
-        /// 设备ID
-        /// </summary>
-        public string DevID { get; }
-
         /// <summary>
         /// View导出Key
         /// </summary>
         public string ExportKey { get; }
 
         public PreCacheToken(string devID, string exportKey)
+            : base(devID)
         {
-            DevID = devID;
             ExportKey = exportKey;
         }
 
@@ -43,13 +39,13 @@ namespace XLY.SF.Project.ViewDomain.Model.PresentationNavigationElement
             else
             {
                 var objTmp = obj as PreCacheToken;
-                return objTmp?.DevID == DevID && objTmp?.ExportKey == ExportKey;
+                return objTmp?.ID == ID && objTmp?.ExportKey == ExportKey;
             }
         }
 
         public override int GetHashCode()
         {
-            return (DevID + ExportKey).GetHashCode();
+            return (ID + ExportKey).GetHashCode();
         }
     }
 }

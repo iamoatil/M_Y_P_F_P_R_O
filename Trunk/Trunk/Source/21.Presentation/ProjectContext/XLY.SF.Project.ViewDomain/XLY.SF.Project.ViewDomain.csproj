@@ -52,7 +52,7 @@
     <Compile Include="MefKeys\GeneralKeys.cs" />
     <Compile Include="Model\Device\DeviceConnectedDelegate.cs" />
     <Compile Include="Model\MessageElement\OpenSubViewMsgModel.cs" />
-    <Compile Include="Model\MessageElement\OperationLogParamElement.cs" />
+    <Compile Include="Model\Logs\ObtainEvidenceLogModel.cs" />
     <Compile Include="Model\PresentationNavigationElement\PreCacheToken.cs" />
     <Compile Include="Model\SelectControlElement\FolderElement.cs" />
     <Compile Include="Model\SolutionProposed\StrategyElement.cs" />

@@ -75,7 +75,7 @@ namespace XLY.SF.Shell.CommWindow
         private void btn_Ok_Click(object sender, RoutedEventArgs e)
         {
             if (MsgType == MessageBoxType.Warning)
-                this.DialogResult = true;
+               this.DialogResult = true;
             else
                 this.Close();
         }

@@ -68,6 +68,13 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         [XmlElement("order")]
         public virtual int OrderIndex { get; set; }
+
+        /// <summary>
+        /// 插件分组排序
+        /// </summary>
+        [XmlElement("grouporder")]
+        public virtual int GroupIndex { get; set; }
+
         /// <summary>
         /// 插件状态
         /// </summary>

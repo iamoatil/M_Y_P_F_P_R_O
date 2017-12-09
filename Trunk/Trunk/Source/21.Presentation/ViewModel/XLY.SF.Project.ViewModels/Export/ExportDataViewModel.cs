@@ -38,8 +38,7 @@ namespace XLY.SF.Project.ViewModels.Export
             SeniorReportFormsPathCommand = new RelayCommand(ExecuteSeniorReportFormsPathCommand);
             SeniorBcpPathCommand = new RelayCommand(ExecuteSeniorBcpPathCommand);
 
-            FastStartCommand = new RelayCommand(ExecuteFastStartCommand);
-            FastStopCommand=new RelayCommand(ExecuteFastStopCommand);
+            FastCommand = new RelayCommand(ExecuteFastCommand);
 
             FastSeniorCommand = new RelayCommand<bool>(ExecuteFastSeniorCommand);
             ; 
@@ -53,23 +52,24 @@ namespace XLY.SF.Project.ViewModels.Export
         }
         private void ExecuteFastSeniorCommand(bool obj)
         {
-            if (obj)
-            {
-                DeviceExportReport tmp = null;
-                //DataList = DeviceExternsion.LoadDeviceData(SelectDevice.Target.Path);
-                foreach (var item in DevicesItems)
-                {
-                    tmp = new DeviceExportReport();
-                    tmp.Path=item.Target.Path;
-                    tmp.Name = item.Name;
-                    tmp.IsFirstStyle = true;
-                    foreach (var ExtractItem in item.Target.ExtractItems)
-                    {
-                        tmp.TreeNodes.Add(new DeviceExportReport() { Name= ExtractItem .Mode});
-                    }
-                    //item.Target.ExtractItems
-                }
-            }
+            DataList = DeviceExternsion.LoadDeviceData(SelectDevice.Target.Path);
+            //if (obj)
+            //{
+            //    DeviceExportReport tmp = null;
+            //    //
+            //    foreach (var item in DevicesItems)
+            //    {
+            //        tmp = new DeviceExportReport();
+            //        tmp.Path=item.Target.Path;
+            //        tmp.Name = item.Name;
+            //        tmp.IsFirstStyle = true;
+            //        foreach (var ExtractItem in item.Target.ExtractItems)
+            //        {
+            //            tmp.TreeNodes.Add(new DeviceExportReport() { Name= ExtractItem .Mode});
+            //        }
+            //        //item.Target.ExtractItems
+            //    }
+            //}
             //var tmp = obj  as Boolean;      
             //var tmp = obj as System.Windows.Controls.CheckBox;
             //if (tmp.Checked)
@@ -218,7 +218,7 @@ namespace XLY.SF.Project.ViewModels.Export
             }
         }
 
-        private string _FastReportPath;
+        private string _FastReportPath="";
         /// <summary>
         /// 快速报表路径
         /// </summary>
@@ -230,7 +230,7 @@ namespace XLY.SF.Project.ViewModels.Export
                 base.OnPropertyChanged();
             }
         }
-        private string _FastBcpPath;
+        private string _FastBcpPath = "";
         /// <summary>
         /// 快速bcp路径
         /// </summary>
@@ -243,7 +243,7 @@ namespace XLY.SF.Project.ViewModels.Export
                 base.OnPropertyChanged();
             }
         }
-        private string _SeniorReportPath;
+        private string _SeniorReportPath="";
         /// <summary>
         /// 高级报表路径
         /// </summary>
@@ -256,7 +256,7 @@ namespace XLY.SF.Project.ViewModels.Export
                 base.OnPropertyChanged();
             }
         }
-        private string _SeniorBcpPath;
+        private string _SeniorBcpPath="";
         /// <summary>
         /// 高级报表路径
         /// </summary>
@@ -347,35 +347,16 @@ namespace XLY.SF.Project.ViewModels.Export
             }
         }
 
+        private bool _FastChecked;
 
-
-   
-        //private Boolean? _isSelectAll;
-        //public Boolean? IsSelectAll
-        //{
-        //    get
-        //    {
-        //        if (_headers.Count == 0) return false;
-        //        if (_headers.Values.All(x => x.IsChecked.HasValue && x.IsChecked.Value))
-        //        {
-        //            return true;
-        //        }
-        //        else if (_headers.Values.All(x => x.IsChecked.HasValue && !x.IsChecked.Value))
-        //        {
-        //            return false;
-        //        }
-        //        else
-        //        {
-        //            return null;
-        //        }
-        //    }
-        //    set
-        //    {
-        //        _isSelectAll = value;
-        //        OnPropertyChanged();
-        //        SelectAll(value.Value);
-        //    }
-        //}
+        public bool FastChecked
+        {
+            get { return _FastChecked; }
+            set {
+                _FastChecked = value;
+                OnPropertyChanged();
+            }
+        }
 
         [Import(typeof(IMessageBox))]
         private IMessageBox MessageBox
@@ -396,13 +377,12 @@ namespace XLY.SF.Project.ViewModels.Export
         private void ExecuteFastReportFormsPathCommand()
         {
             String directory = PopupService.SelectFolderDialog();
-            FastReportPath = Path.Combine(directory, CreateExportPath());
-            //OnPropertyChanged("CaseInfo.Path");
+            FastReportPath = directory!="" ? Path.Combine(directory, CreateExportPath()) : "";
         }
         private void ExecuteFastBcpPathCommand()
         {
             String directory = PopupService.SelectFolderDialog();
-            FastBcpPath = Path.Combine(directory, CreateExportPath()); 
+            FastBcpPath = directory != "" ? Path.Combine(directory, CreateExportPath()) : ""; 
         }
         private void ExecuteSeniorReportFormsPathCommand()
         {
@@ -416,7 +396,7 @@ namespace XLY.SF.Project.ViewModels.Export
         }
         private void GetExportData(IList<IDataSource> data, ObservableCollection<DataExtactionItem> treeNodes) {
             foreach (var item in treeNodes)
-            {
+            { 
                 if (item.TreeNodes.Count()>0)
                 {
                     GetExportData(data, item.TreeNodes);
@@ -431,93 +411,110 @@ namespace XLY.SF.Project.ViewModels.Export
         /// <summary>
         /// 快速导出
         /// </summary>
-        private void ExecuteFastStartCommand()
+        private void ExecuteFastCommand()
         {
-
-            if (FastReportCheck == false && FastUploadCheck == false)
+            if (FastChecked)
             {
-                MessageBox.ShowWarningMsg("请勾选至少一项需要导出的数据！");
-                return;
-            } else if (FastReportCheck) {
-                if (FastReportPath=="")
+                if (FastReportCheck == false && FastUploadCheck == false)
                 {
-                    MessageBox.ShowWarningMsg("请选择报表导出的路径！");
+                    MessageBox.ShowDialogWarningMsg("请勾选至少一项需要导出的数据！");
+                    FastChecked = false;
                     return;
                 }
-            } else if (FastUploadCheck) {
-                if (FastBcpPath == "")
+                if (FastReportCheck && FastReportPath == "")
                 {
-                    MessageBox.ShowWarningMsg("请选择上传包导出的路径！");
+                    MessageBox.ShowDialogWarningMsg("请选择报表导出的路径！");
+                    FastChecked = false;
                     return;
                 }
-            }
-            _timer.Start();
-            TotalElapsed = TimeSpan.Zero;
-            Progress = 100;
-            Task.Factory.StartNew(() =>
-            {
-                var pluginModules = PluginAdapter.Instance.GetPluginsByType<DataReportModulePluginInfo>(PluginType.SpfReportModule).ToList().ConvertAll(p => (AbstractDataReportModulePlugin)p.Value)
-               .ConvertAll(m => m.PluginInfo as DataReportModulePluginInfo).OrderBy(m => m.OrderIndex);
-                var reportPlugins = PluginAdapter.Instance.GetPluginsByType<DataReportPluginInfo>(PluginType.SpfReport).ToList().ConvertAll(p => (AbstractDataReportPlugin)p.Value);
-                foreach (var p in reportPlugins)   //添加报表模板信息
+                if (FastUploadCheck && FastBcpPath == "")
                 {
-                    if (p.PluginInfo is DataReportPluginInfo rp)
+                    MessageBox.ShowDialogWarningMsg("请选择上传包导出的路径！");
+                    FastChecked = false;
+                    return;
+                }
+                _timer.Start();
+                TotalElapsed = TimeSpan.Zero;
+                Progress = 0;
+                Task.Factory.StartNew(() =>
+                {
+                    var pluginModules = PluginAdapter.Instance.GetPluginsByType<DataReportModulePluginInfo>(PluginType.SpfReportModule).ToList().ConvertAll(p => (AbstractDataReportModulePlugin)p.Value)
+                   .ConvertAll(m => m.PluginInfo as DataReportModulePluginInfo).OrderBy(m => m.OrderIndex);
+                    var reportPlugins = PluginAdapter.Instance.GetPluginsByType<DataReportPluginInfo>(PluginType.SpfReport).ToList().ConvertAll(p => (AbstractDataReportPlugin)p.Value);
+                    foreach (var p in reportPlugins)   //添加报表模板信息
                     {
-                        rp.Modules = pluginModules.Where(m => m != null && m.ReportId == rp.Guid).ToList();
-                    }
-                }
-                //设备数据源
-                IList<IDataSource> dataSource = new List<IDataSource>();
-                foreach (var item in DeviceExternsion.LoadDeviceData(SelectDevice.Target.Path))
-                {
-                    GetExportData(dataSource, item.TreeNodes);
-                }
-                List<AbstractDataReportPlugin> items = new List<AbstractDataReportPlugin>();
-                if (FastReportCheck)//选择html模版
-                {
-                    items.Add(reportPlugins.FirstOrDefault(pl => pl.PluginInfo.Name.Contains("Html")));
-                }
-                if (FastUploadCheck)//选择bcp模版
-                {
-                    items.Add(reportPlugins.FirstOrDefault(pl => pl.PluginInfo.Name.Contains("BCP")));
-                }
-                foreach (var item in items)
-                {
-                    //执行导出操作
-                    var destPath = item.Execute(new DataReportPluginArgument()
-                    {
-                        DataPool = dataSource,
-                        ReportModuleName = "Html模板2(Bootstrap)",
-                        ReportPath = item.PluginInfo.Name.Contains("Html") ? FastReportPath : FastBcpPath,
-                        CollectionInfo = new ExportCollectionInfo()
+                        if (p.PluginInfo is DataReportPluginInfo rp)
                         {
-                            CaseCode = SelectDevice.Id,
-                            CaseName = SelectDevice.Name,
-                            CaseType = SelectDevice.Type,
-                            //CollectLocation = (SelectDevice.Device as Domains.Device).CollectionInfo.CollectLocation,
-                            //CollectLocationCode = (SelectDevice.Device as Domains.Device).CollectionInfo.CollectLocationCode,
-                            //CollectorCertificateCode = (SelectDevice.Device as Domains.Device).CollectionInfo.CollectorCertificateCode,
-                            //CollectorName = (SelectDevice.Device as Domains.Device).CollectionInfo.CollectorName,
-                            //CollectTime = (SelectDevice.Device as Domains.Device).CollectionInfo.CollectTime
-
-                        },
-                        DeviceInfo = new ExportDeviceInfo()
-                        {
-                            BloothMac = (SelectDevice.Device as Domains.Device).BMac,
-                            IMEI = (SelectDevice.Device as Domains.Device).IMEI,
-                            Name = (SelectDevice.Device as Domains.Device).Name
+                            rp.Modules = pluginModules.Where(m => m != null && m.ReportId == rp.Guid).ToList();
                         }
-                    }, null);
-                    
-                }
+                    }
+                    Progress = 20;
+                    //设备数据源
+                    IList<IDataSource> dataSource = new List<IDataSource>();
+                    ObservableCollection<DataExtactionItem> tmp = DeviceExternsion.LoadDeviceData(SelectDevice.Target.Path);
+                    foreach (var item in tmp)
+                    {
+                        GetExportData(dataSource, item.TreeNodes);
+                    }
+
+                    List<AbstractDataReportPlugin> items = new List<AbstractDataReportPlugin>();
+                    if (FastReportCheck)//选择html模版
+                    {
+                        items.Add(reportPlugins.FirstOrDefault(pl => pl.PluginInfo.Name.Contains("Html")));
+                    }
+                    if (FastUploadCheck)//选择bcp模版
+                    {
+                        items.Add(reportPlugins.FirstOrDefault(pl => pl.PluginInfo.Name.Contains("BCP")));
+                    }
+                    Progress = 40;
+                    foreach (var item in items)
+                    {
+                        //执行导出操作
+                        var destPath = item.Execute(new DataReportPluginArgument()
+                        {
+                            CurrentPath= SelectDevice.Target.Path,
+                            DataPool = dataSource,
+                            ReportModuleName = "Html模板2(Bootstrap)",
+                            ReportPath = item.PluginInfo.Name.Contains("Html") ? FastReportPath : FastBcpPath,
+                            CollectionInfo = new ExportCollectionInfo()
+                            {
+                                CaseCode = SelectDevice.Id,
+                                CaseName = SelectDevice.Name,
+                                CaseType = SelectDevice.Type,
+                                //CollectLocation = (SelectDevice.Device as Domains.Device).CollectionInfo.CollectLocation,
+                                //CollectLocationCode = (SelectDevice.Device as Domains.Device).CollectionInfo.CollectLocationCode,
+                                //CollectorCertificateCode = (SelectDevice.Device as Domains.Device).CollectionInfo.CollectorCertificateCode,
+                                //CollectorName = (SelectDevice.Device as Domains.Device).CollectionInfo.CollectorName,
+                                //CollectTime = (SelectDevice.Device as Domains.Device).CollectionInfo.CollectTime
+
+                            },
+                            DeviceInfo = new ExportDeviceInfo()
+                            {
+                                BloothMac = (SelectDevice.Device as Domains.Device).BMac,
+                                IMEI = (SelectDevice.Device as Domains.Device).IMEI,
+                                Name = (SelectDevice.Device as Domains.Device).Name
+                            }
+                        }, null);
+
+                    }
+                    Progress = 100;
+                    _timer.Stop();
+                    foreach (var item in items)
+                    {
+                        SystemContext.Instance.AsyncOperation.Post(p => {
+                            MessageBox.ShowDialogSuccessMsg(string.Format("导出{0}成功，是否打开导出文件？", item.PluginInfo.Name.Contains("Html") ? "HTML" : "BCP"));
+                            System.Diagnostics.Process.Start(item.PluginInfo.Name.Contains("Html") ? FastReportPath : FastBcpPath);
+
+                        }, null);
+
+                    }
+                });
+            }
+            else
+            {
                 _timer.Stop();
-                
-                //MessageBox.ShowSuccessMsg("导出成功");
-            });
-        }
-        private void ExecuteFastStopCommand()
-        {
-            _timer.Stop();
+               
+            }
         }
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -541,13 +538,9 @@ namespace XLY.SF.Project.ViewModels.Export
         public ICommand SeniorBcpPathCommand { get; set; }
 
         /// <summary>
-        /// 快速开始导出
+        /// 导出按钮
         /// </summary>
-        public ICommand FastStartCommand { get; set; }
-        /// <summary>
-        /// 快速停止导出
-        /// </summary>
-        public ICommand FastStopCommand { get; set; }
+        public ICommand FastCommand { get; set; }
 
         /// <summary>
         /// 快速高级切换

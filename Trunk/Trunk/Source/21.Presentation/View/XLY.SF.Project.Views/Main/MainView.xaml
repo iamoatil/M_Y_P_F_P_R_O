@@ -8,6 +8,7 @@
 		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
              xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
+             xmlns:ee="http://schemas.microsoft.com/expression/2010/effects"
              xmlns:convert="clr-namespace:XLY.SF.Project.Views.Converters"
              xmlns:sys="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
              mc:Ignorable="d"
@@ -90,12 +91,19 @@
                             <Button Template="{StaticResource btn_EmptyCT}" BorderThickness="0" Background="Transparent" PreviewMouseLeftButtonDown="Button_PreviewMouseLeftButtonDown" Grid.ColumnSpan="9"/>
 
                             <!--图标-->
-                            <Image Width="40" Height="40"></Image>
+                            <Image Width="40" Height="35" Stretch="Uniform" Margin="35 0 0 0" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/LoginIcon.png">
+                                <Image.Effect>
+                                    <ee:ColorToneEffect DarkColor="#c7cbd7" LightColor="#c7cbd7"/>
+                                </Image.Effect>
+                            </Image>
                             <StackPanel Grid.Column="1" Margin="10 0 10 0" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding XPath=ViewLanguage/View_MainWinTitle,Source={x:Static ex:SystemContext.LanguageProvider}}" FontSize="20"></TextBlock>
+                                <TextBlock Foreground="#c7cbd7" Text="{Binding XPath=ViewLanguage/View_MainWinTitle,Source={x:Static ex:SystemContext.LanguageProvider}}" FontSize="20"></TextBlock>
                             </StackPanel>
                             <!--工具箱-->
-                            <Button Grid.Column="3" Margin="0 3 0 0" Cursor="Hand" VerticalAlignment="Center" HorizontalAlignment="Center" Template="{StaticResource btn_MainTools}" Width="37" Height="35" Content="{Binding XPath=ViewLanguage/View_MainWin_ToolKitName,Source={x:Static ex:SystemContext.LanguageProvider}}"></Button>
+                            <Button Grid.Column="3" Margin="0 3 0 0" Cursor="Hand" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                    Template="{StaticResource btn_MainTools}" Width="37" Height="35" 
+                                    ToolTip="{Binding Content,RelativeSource={RelativeSource Mode=Self}}" 
+                                    Content="{Binding XPath=ViewLanguage/View_MainWin_ToolKitName,Source={x:Static ex:SystemContext.LanguageProvider}}"></Button>
                             <!--登录用户-->
                             <Grid Grid.Column="4" VerticalAlignment="Center" Margin="40 0 40 0">
                                 <Grid.ColumnDefinitions>

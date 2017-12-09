@@ -82,23 +82,5 @@ namespace XLY.SF.Framework.Core.Base.ValidationBase
             }
             return true;
         }
-
-        #region 选择标识
-
-        private bool _isChecked;
-        /// <summary>
-        /// 是否选中
-        /// </summary>
-        public bool IsChecked
-        {
-            get { return _isChecked; }
-            set
-            {
-                _isChecked = value;
-                base.OnPropertyChanged();
-            }
-        }
-
-        #endregion
     }
 }

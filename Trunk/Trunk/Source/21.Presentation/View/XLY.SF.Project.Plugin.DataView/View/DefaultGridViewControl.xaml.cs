@@ -54,7 +54,7 @@ namespace XLY.SF.Project.Plugin.DataView.View.Controls
         }
 
         /// <summary>
-        /// 点击了全部标记按钮
+        /// 点击了全部勾选按钮
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -65,6 +65,20 @@ namespace XLY.SF.Project.Plugin.DataView.View.Controls
             foreach (var item in _arg.Items.View)
             {
                 (item as AbstractDataItem).BookMarkId = newBmk;
+            }
+        }
+
+        /// <summary>
+        /// 点击了全部标记按钮
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BookmarkAll_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox cb = sender as CheckBox;
+            foreach (var item in _arg.Items.View)
+            {
+                (item as AbstractDataItem).IsChecked = cb.IsChecked;
             }
         }
 
@@ -84,6 +98,10 @@ namespace XLY.SF.Project.Plugin.DataView.View.Controls
             {
                 return;
             }
+            //添加勾选列
+            DataGridTemplateColumn chkCol = this.FindResource("checkboxColumnTemplate") as DataGridTemplateColumn;
+            chkCol.Width = 43;
+            dg.Columns.Add(chkCol);
             //添加书签列
             DataGridTemplateColumn bmkCol = this.FindResource("bookmarkColumnTemplate") as DataGridTemplateColumn;
             dg.Columns.Add(bmkCol);

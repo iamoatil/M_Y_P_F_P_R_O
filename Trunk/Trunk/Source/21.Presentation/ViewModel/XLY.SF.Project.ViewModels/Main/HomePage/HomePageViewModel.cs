@@ -40,10 +40,10 @@ namespace XLY.SF.Project.ViewModels.Main
             _dbService = dbService;
             _winService = service;
 
-            CreateCaseCommand = new ProxyRelayCommand(ExecuteCreateCaseCommand);
-            OpenAllCaseCommand = new ProxyRelayCommand(ExecuteOpenAllCaseCommand);
-            OpenLocalCaseCommand = new ProxyRelayCommand(ExecuteOpenLocalCaseCommand);
-            OpenCaseCommand = new ProxyRelayCommand<RecentCaseEntityModel>(ExecuteOpenCaseCommand);
+            CreateCaseCommand = new ProxyRelayCommand(ExecuteCreateCaseCommand, base.ModelName);
+            OpenAllCaseCommand = new ProxyRelayCommand(ExecuteOpenAllCaseCommand, base.ModelName);
+            OpenLocalCaseCommand = new ProxyRelayCommand(ExecuteOpenLocalCaseCommand, base.ModelName);
+            OpenCaseCommand = new ProxyRelayCommand<RecentCaseEntityModel>(ExecuteOpenCaseCommand, base.ModelName);
 
             RecentCaseItems = new ObservableCollection<RecentCaseEntityModel>();
 
@@ -146,7 +146,7 @@ namespace XLY.SF.Project.ViewModels.Main
 
         private string ExecuteOpenLocalCaseCommand()
         {
-            string fileFullPath = _winService.OpenFileDialog();
+            string fileFullPath = _winService.OpenFileDialog("案例项目文件|*.cp");
             if (!string.IsNullOrWhiteSpace(fileFullPath))
             {
                 var @case = Case.Open(fileFullPath);

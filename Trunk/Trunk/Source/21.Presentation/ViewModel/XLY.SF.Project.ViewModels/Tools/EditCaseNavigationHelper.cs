@@ -39,8 +39,6 @@ namespace XLY.SF.Project.ViewModels.Tools
         /// <param name="needCollapsedNavigation">是否需要折叠导航，true：折叠案例编辑界面时自动返回最后一个非案例编辑界面</param>
         public static void SetEditCaseViewStatus(bool isExpanded, bool needCollapsedNavigation = true)
         {
-            CurEditViewOpenStatus = isExpanded;
-
             //便于以后扩展用
             SubViewMsgModel curStatus = new SubViewMsgModel(isExpanded);
             //展开或收起案例名
@@ -77,6 +75,7 @@ namespace XLY.SF.Project.ViewModels.Tools
                     MsgAggregation.Instance.SendNavigationMsgForMainView(args);
                 }
             }
+            CurEditViewOpenStatus = isExpanded;
         }
 
         /// <summary>
@@ -93,6 +92,12 @@ namespace XLY.SF.Project.ViewModels.Tools
         public static void ResetCurCaseStatus()
         {
             CurEditViewOpenStatus = false;
+            //便于以后扩展用
+            SubViewMsgModel curStatus = new SubViewMsgModel(CurEditViewOpenStatus);
+            //展开或收起案例名
+            SysCommonMsgArgs<SubViewMsgModel> sysArgs = new SysCommonMsgArgs<SubViewMsgModel>(SystemKeys.SetSubViewStatus);
+            sysArgs.Parameters = curStatus;
+            MsgAggregation.Instance.SendSysMsg<SubViewMsgModel>(sysArgs);
         }
     }
 }

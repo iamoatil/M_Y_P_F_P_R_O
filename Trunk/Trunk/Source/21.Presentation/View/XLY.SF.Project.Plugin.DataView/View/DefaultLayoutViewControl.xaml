@@ -136,7 +136,7 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </ctrl:TreeViewEx>-->
-        <TreeView BorderThickness="0" theme:AttachHelper.IsShowSelectedGripper="True"  theme:AttachHelper.IsShowCheckBox="False" theme:AttachHelper.IsHideUnCheckedNode="True" theme:AttachHelper.IsHideChildren="False" 
+        <TreeView BorderThickness="0" theme:AttachHelper.IsShowSelectedGripper="True"  theme:AttachHelper.IsShowCheckBox="True" theme:AttachHelper.IsHideUnCheckedNode="False" theme:AttachHelper.IsHideChildren="False" 
                   Background="#05FFFFFF" Grid.Column="0" MinWidth="200" ItemsSource="{Binding TreeNodes}" Visibility="{Binding IsTreeDataSource, Converter={StaticResource booleanToVisibilityConverter}}">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding TreeNodes}">

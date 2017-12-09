@@ -12,7 +12,7 @@ using XLY.SF.Project.Plugin.Adapter;
 
 namespace XLY.SF.Project.EarlyWarningView
 {
-    class EarlyWarningPluginAdapter
+    public class EarlyWarningPluginAdapter
     {
         /// <summary>
         /// 是否已经初始化
@@ -22,36 +22,17 @@ namespace XLY.SF.Project.EarlyWarningView
         /// <summary>
         /// 此适配器支持的所有插件
         /// </summary>
-        public IEnumerable<AbstractEarlyWarningPlugin> Plugins { get; private set; }
+        internal IEnumerable<AbstractEarlyWarningPlugin> Plugins { get; private set; }
 
         /// <summary>
         /// 关键字预警插件
         /// </summary>
-        public AbstractEarlyWarningPlugin KeyWordPlugin { get; private set; }
+        internal AbstractEarlyWarningPlugin KeyWordPlugin { get; private set; }
 
         /// <summary>
         /// 配置数据的过滤
         /// </summary>
-        private readonly ConfigDataFilter ConfigDataFilter = new ConfigDataFilter();
-
-        /// <summary>
-        /// 检测的结果放于CategoryManager中
-        /// </summary>
-        public ExtactionCategoryCollectionManager CategoryManager
-        {
-            get { return _categoryManager; }
-        }
-
-        private readonly ExtactionCategoryCollectionManager _categoryManager =
-            new ExtactionCategoryCollectionManager() { Name = "智能检视" };
-
-        public ConfigDataToDB ConfigDbManager { get { return _configDbManager; } }
-        ConfigDataToDB _configDbManager = new ConfigDataToDB();
-
-        /// <summary>
-        /// 智能预警的结果
-        /// </summary>
-        EarlyWarningResult earlyWarningResult = new EarlyWarningResult();
+        private readonly ConfigDataFilter ConfigDataFilter = new ConfigDataFilter();          
 
         public void Initialize(IRecordContext<Models.Entities.Inspection> setting)
         {
@@ -63,12 +44,9 @@ namespace XLY.SF.Project.EarlyWarningView
             Plugins = PluginAdapter.Instance.GetPluginsByType<EarlyWarningPluginInfo>(PluginType.SpfEarlyWarning).ToList().ConvertAll(p => (AbstractEarlyWarningPlugin)p.Value);
             KeyWordPlugin = Plugins.Where(it => it.PluginInfo is KeyWordEarlyWarningPluginInfo).FirstOrDefault();
 
-            ConfigDataFilter.Initialize();
-            ConfigDataFilter.Setting = setting;
-
-            ConfigDbManager.Initialize();
-
-            earlyWarningResult.Initialize();
+            ConfigDataFilter.Initialize(setting);
+            //先根据设置（读取数据库获得设置选项），过滤配置文件中的内容
+            ConfigDataFilter.UpdateValidateData();  
 
             IsInitialized = true;
         }
@@ -82,10 +60,12 @@ namespace XLY.SF.Project.EarlyWarningView
             {
                 return;
             }
-            //先根据设置（读取数据库获得设置选项），过滤配置文件中的内容
-            ConfigDataFilter.UpdateValidateData();
+
+            DbFromConfigData configDbManager = new DbFromConfigData();
+            //ConfigDataToDB
+            configDbManager.Initialize(sourceDir);
             //把过滤后的配置写到数据库文件中
-            ConfigDbManager.GenerateDbFile(ConfigDataFilter.ValidateDataNodes.Select(it => it.SensitiveData));
+            configDbManager.GenerateDbFile(ConfigDataFilter.ValidateDataNodes.Select(it => it.SensitiveData));
 
             //读取提取的数据
             DeviceDataParser parser = new DeviceDataParser();
@@ -94,48 +74,28 @@ namespace XLY.SF.Project.EarlyWarningView
             //检测提取的数据
             foreach (var item in dataSources)
             {
-                Match(item, ConfigDataFilter.ValidateDataNodes);
+                Match(item, configDbManager);
             }
         }
 
-        private void Match(DeviceDataSource ds, List<DataNode> dataNodes)
+        private void Match(DeviceDataSource ds, DbFromConfigData configDbManager)
         {
-            //读取数据库中JsonColumnName列，并且匹配
             IDataSource dataSource = ds.DataSource;           
 
+            //寻找恰当的插件处理
             AbstractEarlyWarningPlugin plugin = Plugins.Where(p => ((EarlyWarningPluginInfo)p.PluginInfo).Match(dataSource)).FirstOrDefault(); 
             if(plugin != null)
             {
-                EarlyWarningPluginArgument arg = new EarlyWarningPluginArgument(ds, dataNodes,earlyWarningResult);
+                EarlyWarningPluginArgument arg = new EarlyWarningPluginArgument(ds, configDbManager);
                 plugin.Execute(arg,null);
             }
+            //所有数据都经过关键字处理
             if(KeyWordPlugin != null)
             {
-                EarlyWarningPluginArgument arg = new EarlyWarningPluginArgument(ds, dataNodes, earlyWarningResult);
+                EarlyWarningPluginArgument arg = new EarlyWarningPluginArgument(ds, configDbManager);
                 KeyWordPlugin.Execute(arg,null);
             }
             return;            
-        }
-
-        /// <summary>
-        /// 采用两表联合查询的方式验证预警数据
-        /// </summary>
-        /// <param name="ds"></param>
-        private void Match(DeviceDataSource ds)
-        {
-            //读取数据库中JsonColumnName列，并且匹配
-            IDataSource dataSource = ds.DataSource;
-
-            AbstractEarlyWarningPlugin plugin = Plugins.Where(p => ((EarlyWarningPluginInfo)p.PluginInfo).Match(dataSource)).FirstOrDefault();
-            if (plugin != null)
-            {
-                plugin.Execute(dataSource);
-            }
-            if (KeyWordPlugin != null)
-            {
-                KeyWordPlugin.Execute(dataSource);
-            }
-            return;
         }
     }
 }

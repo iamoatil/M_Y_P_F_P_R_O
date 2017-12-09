@@ -51,7 +51,6 @@
     <Compile Include="Configuration\IsolatedTaskSection.cs" />
     <Compile Include="Configuration\ParamsElement.cs" />
     <Compile Include="EngineSetup.cs" />
-    <Compile Include="MessageServerTransceiver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskManager.cs" />
     <Compile Include="TaskHandler.cs" />

@@ -40,14 +40,14 @@
                     <RowDefinition/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <TextBlock Text="{Binding CurDevModel.DevName}" FontSize="16" FontWeight="Bold" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding CurDevModel.Name}" FontSize="16" FontWeight="Bold" TextWrapping="Wrap"/>
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 14 0 0">
                     <control:IconCheckBox x:Name="cb_Root" Background="#263454" Height="24" Width="84" Content="ROOT" IsEnabled="False"
                                           IsChecked="{Binding CurDevModel.IsRoot}" 
                                           Visibility="{Binding CurDevModel.HasRoot,Converter={StaticResource bToV}}"
                                           Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageIsRootIcon.png" Margin="0 0 2 0"/>
 
-                    <control:IconCheckBox Background="#263454" Height="24" Width="84" IsEnabled="False" 
+                    <control:IconCheckBox Background="#263454" Height="24" Width="84" IsEnabled="False" IsChecked="{Binding CurDevModel.OnlineStatus}"
                                           Content="{Binding XPath=ViewLanguage/View_DevHomePage_UnConnect, Source={x:Static ex:SystemContext.LanguageProvider}}"
                                           Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageConnectIcon.png"/>
                 </StackPanel>

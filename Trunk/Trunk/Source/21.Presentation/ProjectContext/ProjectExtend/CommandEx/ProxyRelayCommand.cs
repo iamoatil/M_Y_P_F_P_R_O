@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using XLY.SF.Framework.Core.Base.MessageAggregation;
 using XLY.SF.Framework.Core.Base.MessageBase;
+using XLY.SF.Project.Extension.CommandEx;
 using XLY.SF.Project.ViewDomain.Model;
 
 namespace GalaSoft.MvvmLight.CommandWpf
@@ -35,6 +36,11 @@ namespace GalaSoft.MvvmLight.CommandWpf
         protected Func<object> _getContainerCallback;
 
         /// <summary>
+        /// 当前命令对应的模块
+        /// </summary>
+        protected string _curCmdModelName;
+
+        /// <summary>
         /// 界面绑定命令
         /// </summary>
         public ICommand ViewExecuteCmd { get; protected set; }
@@ -43,9 +49,9 @@ namespace GalaSoft.MvvmLight.CommandWpf
         /// 写入操作日志
         /// </summary>
         /// <param name="operationResult">操作结果内容</param>
-        public void WriteOperationLog(string operationResult)
+        public void WriteOperationLog(CmdLogModel log)
         {
-            if (!string.IsNullOrWhiteSpace(operationResult))
+            if (log != null)
             {
                 //屏幕截图
                 string screenShotPath = string.Empty;
@@ -57,11 +63,12 @@ namespace GalaSoft.MvvmLight.CommandWpf
                 }
 
                 //记录日志
-                SystemContext.Instance.AddOperationLog(new OperationLogParamElement()
+                SystemContext.Instance.AddOperationLog(new ObtainEvidenceLogModel()
                 {
-                    FunctionModule = "",
-                    OperationContent = operationResult,
-                    ScreenShotPath = screenShotPath
+                    OperationModel = log.ModelName,
+                    OpContent = log.OperationResult,
+                    ImageNameForScreenShot = screenShotPath,
+                    OpTime = DateTime.Now,
                 });
             }
         }
@@ -85,11 +92,12 @@ namespace GalaSoft.MvvmLight.CommandWpf
         /// </summary>
         /// <param name="cmdByReportOpInfo"></param>
         /// <param name="screenShotTarget">是否需要截图</param>
-        public ProxyRelayCommand(Func<T, string> cmdByReportOpInfo, Func<T, bool> canExecute = null)
+        public ProxyRelayCommand(Func<T, string> cmdByReportOpInfo, string modelName, Func<T, bool> canExecute = null)
         {
             _callback = cmdByReportOpInfo ??
                 throw new ArgumentNullException(string.Format("功能方法【cmdByReportOpInfo】不能为NULL"));
 
+            _curCmdModelName = modelName;
             logArgs = new SysCommonMsgArgs(XLY.SF.Framework.Core.Base.SystemKeys.WirteOperationLog);
             if (canExecute != null)
                 ViewExecuteCmd = new RelayCommand<T>(ConcreateExecute, canExecute);
@@ -103,18 +111,18 @@ namespace GalaSoft.MvvmLight.CommandWpf
         /// <param name="cmdByReportOpInfo"></param>
         /// <param name="getViewContainerCallback">获取ViewContainer回调</param>
         /// <param name="canExecute"></param>
-        public ProxyRelayCommand(Func<T, string> cmdByReportOpInfo, Func<object> getViewContainerCallback, Func<T, bool> canExecute)
-            : this(cmdByReportOpInfo, canExecute)
+        public ProxyRelayCommand(Func<T, string> cmdByReportOpInfo, string modelName, Func<object> getViewContainerCallback, Func<T, bool> canExecute)
+            : this(cmdByReportOpInfo, modelName, canExecute)
         {
             _getContainerCallback = getViewContainerCallback;
         }
 
         private void ConcreateExecute(T t)
         {
-            string operationResult = _callback(t);
+            var logResult = _callback(t);
 #if !DEBUG
-            if (!string.IsNullOrWhiteSpace(operationResult))
-                base.WriteOperationLog(operationResult);
+            if (!string.IsNullOrWhiteSpace(logResult))
+                base.WriteOperationLog(new CmdLogModel() { ModelName = _curCmdModelName, OperationResult = logResult });
 #endif
         }
     }
@@ -134,11 +142,12 @@ namespace GalaSoft.MvvmLight.CommandWpf
         /// </summary>
         /// <param name="cmdByReportOpInfo"></param>
         /// <param name="canExecute"></param>
-        public ProxyRelayCommand(Func<string> cmdByReportOpInfo, Func<bool> canExecute = null)
+        public ProxyRelayCommand(Func<string> cmdByReportOpInfo, string modelName, Func<bool> canExecute = null)
         {
             _callback = cmdByReportOpInfo ??
                 throw new ArgumentNullException(string.Format("功能方法【cmdByReportOpInfo】不能为NULL"));
 
+            _curCmdModelName = modelName;
             logArgs = new SysCommonMsgArgs(XLY.SF.Framework.Core.Base.SystemKeys.WirteOperationLog);
             if (canExecute != null)
                 ViewExecuteCmd = new RelayCommand(ConcreateExecute, canExecute);
@@ -152,18 +161,18 @@ namespace GalaSoft.MvvmLight.CommandWpf
         /// <param name="cmdByReportOpInfo"></param>
         /// <param name="getViewContainerCallback">获取ViewContainer回调</param>
         /// <param name="canExecute"></param>
-        public ProxyRelayCommand(Func<string> cmdByReportOpInfo, Func<object> getViewContainerCallback, Func<bool> canExecute)
-            : this(cmdByReportOpInfo, canExecute)
+        public ProxyRelayCommand(Func<string> cmdByReportOpInfo, string modelName, Func<object> getViewContainerCallback, Func<bool> canExecute)
+            : this(cmdByReportOpInfo, modelName, canExecute)
         {
             _getContainerCallback = getViewContainerCallback;
         }
 
         private void ConcreateExecute()
         {
-            string operationResult = _callback();
+            var logResult = _callback();
 #if !DEBUG
-            if (!string.IsNullOrWhiteSpace(operationResult))
-                base.WriteOperationLog(operationResult);
+            if (!string.IsNullOrWhiteSpace(logResult))
+                base.WriteOperationLog(new CmdLogModel() { ModelName = _curCmdModelName, OperationResult = logResult });
 #endif
         }
     }

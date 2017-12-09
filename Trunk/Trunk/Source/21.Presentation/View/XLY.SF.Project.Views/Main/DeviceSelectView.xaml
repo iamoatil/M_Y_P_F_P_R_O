@@ -55,7 +55,7 @@
                 <TextBlock FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald" FontSize="16" Foreground="#9ba5b9" Margin="10 0 10 0">OR</TextBlock>
                 <Line Stroke="#9ba5b9" X1="0" X2="24"  VerticalAlignment="Center" StrokeThickness="1"/>
             </StackPanel>
-            <TextBlock FontSize="16" Foreground="#FFFFFF" HorizontalAlignment="Center">想要导入本地文件/文件夹</TextBlock>
+            <TextBlock FontSize="16" Foreground="#FFFFFF" HorizontalAlignment="Center">想要导入的本地文件/文件夹</TextBlock>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center">
             <Button Margin="10" Command="{Binding SelectFileCommond}" Style="{StaticResource btnChooseFileStyle}">

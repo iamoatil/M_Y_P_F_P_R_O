@@ -769,6 +769,7 @@ namespace XLY.SF.Project.Plugin.IOS
                 Items = new DataItems<MessageCore>(DbFilePath),
             };
 
+            bool hasRows = false;
             bool bAll = true;
 
             var accountName = QQAccount.FullName;
@@ -782,6 +783,10 @@ namespace XLY.SF.Project.Plugin.IOS
             {
                 MainContext.UsingSafeConnection(string.Format("SELECT * FROM {0}", msgTableName), r =>
                 {
+                    if (r.HasRows)
+                    {
+                        hasRows = true;
+                    }
                     if (r.Read())
                     {
                         bAll = false;
@@ -799,6 +804,10 @@ namespace XLY.SF.Project.Plugin.IOS
 
             MainContext.UsingSafeConnection(string.Format("SELECT * FROM tb_recentC2CMsg where uin = '{0}' and XLY_DataType = 1", friend.QQNumber), r =>
             {
+                if (r.HasRows)
+                {
+                    hasRows = true;
+                }
                 while (r.Read())
                 {
                     CreateFriendMessageCore(friend.QQNumber, r.ToDynamic(), friendMsgNode, accountName, friendName);
@@ -844,6 +853,10 @@ namespace XLY.SF.Project.Plugin.IOS
 
                 FTSMsgContext.UsingSafeConnection(new SQLiteString(sql), r =>
                 {
+                    if (r.HasRows)
+                    {
+                        hasRows = true;
+                    }
                     while (r.Read())
                     {
                         friendMsgNode.Items.Add(CreateFriendMessageCoreFromFTSMsg(r.ToDynamic(), accountName, friendName));
@@ -853,7 +866,7 @@ namespace XLY.SF.Project.Plugin.IOS
 
             #endregion
 
-            return friendMsgNode;
+            return hasRows ? friendMsgNode : null;
         }
 
         /// <summary>
@@ -871,6 +884,7 @@ namespace XLY.SF.Project.Plugin.IOS
                 Items = new DataItems<MessageCore>(DbFilePath),
             };
 
+            bool hasRows = false;
             bool bAll = true;
 
             var accountName = QQAccount.FullName;
@@ -884,6 +898,10 @@ namespace XLY.SF.Project.Plugin.IOS
             {
                 MainContext.UsingSafeConnection(string.Format("SELECT * FROM {0}", msgTableName), r =>
                 {
+                    if (r.HasRows)
+                    {
+                        hasRows = true;
+                    }
                     if (r.Read())
                     {
                         bAll = false;
@@ -936,6 +954,10 @@ namespace XLY.SF.Project.Plugin.IOS
 
                 FTSMsgContext.UsingSafeConnection(new SQLiteString(sql), r =>
                 {
+                    if (r.HasRows)
+                    {
+                        hasRows = true;
+                    }
                     while (r.Read())
                     {
                         groupMsgNode.Items.Add(CreateTroopMessageCoreFromFTSMsg(r.ToDynamic(), accountName, groupName));
@@ -945,7 +967,7 @@ namespace XLY.SF.Project.Plugin.IOS
 
             #endregion
 
-            return groupMsgNode;
+            return hasRows ? groupMsgNode : null;
         }
 
         /// <summary>
@@ -963,6 +985,7 @@ namespace XLY.SF.Project.Plugin.IOS
                 Items = new DataItems<MessageCore>(DbFilePath),
             };
 
+            bool hasRows = false;
             bool bAll = true;
 
             var accountName = QQAccount.FullName;
@@ -976,6 +999,10 @@ namespace XLY.SF.Project.Plugin.IOS
             {
                 MainContext.UsingSafeConnection(string.Format("SELECT * FROM {0}", msgTableName), r =>
                 {
+                    if (r.HasRows)
+                    {
+                        hasRows = true;
+                    }
                     if (r.Read())
                     {
                         bAll = false;
@@ -1028,6 +1055,10 @@ namespace XLY.SF.Project.Plugin.IOS
 
                 FTSMsgContext.UsingSafeConnection(new SQLiteString(sql), r =>
                 {
+                    if (r.HasRows)
+                    {
+                        hasRows = true;
+                    }
                     while (r.Read())
                     {
                         disMsgNode.Items.Add(CreateTroopMessageCoreFromFTSMsg(r.ToDynamic(), accountName, disName));
@@ -1037,7 +1068,7 @@ namespace XLY.SF.Project.Plugin.IOS
 
             #endregion
 
-            return null;
+            return hasRows ? disMsgNode : null;
         }
 
         /// <summary>

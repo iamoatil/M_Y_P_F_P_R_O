@@ -23,5 +23,7 @@ namespace XLY.SF.Project.Models.Entities
 
         [ForeignKey("OperationUserID")]
         public UserInfo OperationUser { get; set; }
+
+        public string OperationModel { get; set; }
     }
 }

@@ -44,6 +44,11 @@ namespace XLY.SF.Project.Domains
         string Group { get; set; }
 
         /// <summary>
+        /// 组序号
+        /// </summary>
+        int GroupIndex { get; set; }
+
+        /// <summary>
         /// 插件排序
         /// </summary>
         int OrderIndex { get; set; }

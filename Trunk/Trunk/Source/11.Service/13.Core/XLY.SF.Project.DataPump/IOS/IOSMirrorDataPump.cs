@@ -46,7 +46,7 @@ namespace XLY.SF.Project.DataPump.IOS
             if (String.IsNullOrWhiteSpace(mirrorFile)) return false;
 
             //2.解压
-            String destPath = Path.Combine(Metadata.SourceStorePath, $"IosData_{Guid.NewGuid()}");
+            String destPath = Metadata.SourceStorePath;
             if (Directory.Exists(destPath))
             {
                 Directory.Delete(destPath, true);

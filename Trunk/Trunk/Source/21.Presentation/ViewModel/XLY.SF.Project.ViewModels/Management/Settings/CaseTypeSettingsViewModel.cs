@@ -32,8 +32,8 @@ namespace XLY.SF.Project.ViewModels.Management.Settings
         public CaseTypeSettingsViewModel(IRecordContext<CaseType> dbService)
         {
             _dbService = dbService;
-            _addProxyCommand = new ProxyRelayCommand(Add, () => CaseTypeName != String.Empty);
-            _removeProxyCommand = new ProxyRelayCommand(Remove, () => SelctedItem != null);
+            _addProxyCommand = new ProxyRelayCommand(Add, base.ModelName, () => CaseTypeName != String.Empty);
+            _removeProxyCommand = new ProxyRelayCommand(Remove, base.ModelName, () => SelctedItem != null);
             CaseType[] cts = dbService.Records.ToArray();
             CaseTypes = new ObservableCollection<CaseType>(cts);
         }

@@ -38,7 +38,7 @@ namespace ProjectExtend.Context
                 CurOperationImageFolder = CreatePath(Path.Combine(SysSaveFullPath, OperationImageFolderName, SysStartDateTime.Date.ToString("yyyyMMdd")));
                 //展示内容缓存文件夹
                 SPFCacheFolderName = _configService.GetSysConfigValueByKey("SPFCacheFolderName");
-                SPFCacheFullPath =  CreatePath(Path.Combine(SysSaveFullPath, SPFCacheFolderName));
+                SPFCacheFullPath = CreatePath(Path.Combine(SysSaveFullPath, SPFCacheFolderName));
             }
             return !string.IsNullOrWhiteSpace(SysSaveFullPath) &&
                 !string.IsNullOrWhiteSpace(CaseSaveFullPath) &&
@@ -82,14 +82,15 @@ namespace ProjectExtend.Context
         /// 添加操作日志到数据库
         /// </summary>
         /// <param name="opEmt">操作内容</param>
-        public void AddOperationLog(OperationLogParamElement opEmt)
+        public void AddOperationLog(ObtainEvidenceLogModel opEmt)
         {
             OperationLogEntityModel log = new OperationLogEntityModel()
             {
-                OperationContent = opEmt.OperationContent,
-                OperationDateTime = DateTime.Now,
-                ScreenShotPath = opEmt.ScreenShotPath,
-                OperationUser = this.CurUserInfo
+                OperationContent = opEmt.OpContent,
+                OperationDateTime = opEmt.OpTime,
+                ScreenShotPath = opEmt.ImageNameForScreenShot,
+                OperationUser = this.CurUserInfo,
+                OperationModel = opEmt.OperationModel
             };
             _dbService.Add(log);
         }

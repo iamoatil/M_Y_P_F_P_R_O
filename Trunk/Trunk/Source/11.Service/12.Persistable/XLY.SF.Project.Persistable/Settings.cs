@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Data.Entity;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using XLY.SF.Project.Models;
 using XLY.SF.Project.Models.Entities;
 
@@ -23,6 +20,7 @@ namespace XLY.SF.Project.Persistable
         public Settings()
             : base("System")
         {
+            Database.SetInitializer<Settings>(null);
         }
 
         #endregion

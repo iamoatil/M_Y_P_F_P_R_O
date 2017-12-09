@@ -16,8 +16,8 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// </summary>
         TaskOverEvent = -1,
         /// <summary>
-        /// 激活器错误事件的消息码。
+        /// 任务引擎错误事件的消息码。
         /// </summary>
-        ActivatorErrorEvent = -2,
+        TaskEngineErrorEvent = -2,
     }
 }
