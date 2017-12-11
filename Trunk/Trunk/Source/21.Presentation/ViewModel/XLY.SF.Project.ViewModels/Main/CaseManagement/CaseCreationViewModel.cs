@@ -183,6 +183,8 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
                 Timestamp = DateTime.Parse(CaseInfo.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")),
                 CaseProjectFile = newCase.ProjectFile,
                 Number = newCase.CaseInfo.Number,
+                Author = SystemContext.Instance.CurUserInfo.UserName,
+                Type = CaseInfo.Type,
                 LastOpenTime = DateTime.Now,
             };
             if (!DbService.Add(model))

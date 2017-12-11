@@ -95,7 +95,12 @@ namespace XLY.SF.Project.DataMirrorApp
             if (operateCmd.Match(CmdStrings.StartMirror)
                 || operateCmd.Match(CmdStrings.ContinueMirror))
             {
-                _mirror.Initialize(deviceSerialnumber, isHtc, path);
+                //只有开始状态时，才初始化_mirror
+                if (operateCmd.Match(CmdStrings.StartMirror))
+                {
+                    _mirror.Initialize(deviceSerialnumber, isHtc, path);
+                }
+                
                 _thread = new Thread(
                     o =>
                     {

@@ -60,21 +60,21 @@ namespace XLY.SF.Project.Models.Logical
             set => Entity.Number = value;
         }
 
-        //[Required]
-        //[StringLength(10)]
-        //public String Author
-        //{
-        //    get => Entity.Author;
-        //    set => Entity.Author = value;
-        //}
+        [Required]
+        [StringLength(10)]
+        public String Author
+        {
+            get => Entity.Author;
+            set => Entity.Author = value;
+        }
 
-        //[Required]
-        //[StringLength(30)]
-        //public String Type
-        //{
-        //    get => Entity.Type;
-        //    set => Entity.Type = value;
-        //}
+        [Required]
+        [StringLength(30)]
+        public String Type
+        {
+            get => Entity.Type;
+            set => Entity.Type = value;
+        }
 
         /// <summary>
         /// 创建时间

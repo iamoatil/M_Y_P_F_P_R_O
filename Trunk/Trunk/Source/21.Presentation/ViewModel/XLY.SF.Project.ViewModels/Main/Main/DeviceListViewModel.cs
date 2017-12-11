@@ -148,9 +148,16 @@ namespace XLY.SF.Project.ViewModels.Main
         private void AddDevice(GeneralArgs<DeviceExtractionAdorner> args)
         {
             DeviceExtractionAdorner de = args.Parameters;
-            if (Items.Any(x => x.Device.ID == de.Device.ID)) return;
-            Items.Add(de);
-            SelectedItem = de;
+            DeviceExtractionAdorner found = Items.SingleOrDefault(x => x.Device.ID == de.Device.ID);
+            if (found == null)
+            {
+                Items.Add(de);
+                SelectedItem = de;
+            }
+            else
+            {
+                SelectedItem = found;
+            }
         }
 
         private String SelectDevice()

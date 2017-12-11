@@ -78,6 +78,7 @@ namespace CopyDll
                         }
                         Console.Write(".");
                         File.Copy(path, fakeTargetPath);
+                        File.SetAttributes(fakeTargetPath, FileAttributes.Normal);
                     }
                     else
                     {
@@ -88,6 +89,7 @@ namespace CopyDll
                         {
                             Console.Write(".");
                             File.Copy(path, fakeTargetPath, true);
+                            File.SetAttributes(fakeTargetPath, FileAttributes.Normal);
                         }
                     }
                 }

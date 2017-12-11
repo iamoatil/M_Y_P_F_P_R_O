@@ -1,6 +1,8 @@
 ﻿using System;
 using XLY.SF.Framework.Core.Base.ViewModel;
+using XLY.SF.Project.CaseManagement;
 using XLY.SF.Project.Models.Logical;
+using System.Linq;
 
 namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 {
@@ -12,31 +14,18 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         {
             CaseInfo = caseInfo;
             Index = index;
+            DeviceCount = Case.Open(caseInfo.CaseProjectFile).DeviceExtractions.Count() ;
         }
 
         #endregion
 
         #region Properties
 
-        #region IsChecked
-
-        private Boolean _isChecked;
-
-        public Boolean IsChecked
-        {
-            get => _isChecked;
-            set
-            {
-                _isChecked = value;
-                OnPropertyChanged();
-            }
-        }
-
-        #endregion
-
         public RecentCaseEntityModel CaseInfo { get; }
 
         public Int32 Index { get; }
+
+        public Int32 DeviceCount { get; }
 
         #endregion
     }

@@ -68,15 +68,6 @@ namespace XLY.SF.Project.CaseManagement
 
         #region Methods
 
-        #region Internal
-
-        internal String GetDirectoryName()
-        {
-            return $"{Name}_{Timestamp.ToString("yyyyMMdd[hhmmss]")}";
-        }
-
-        #endregion
-
         #endregion
     }
 }

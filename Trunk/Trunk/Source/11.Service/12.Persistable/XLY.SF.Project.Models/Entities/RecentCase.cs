@@ -35,13 +35,13 @@ namespace XLY.SF.Project.Models.Entities
         [MaxLength(100)]
         public String Number { get; set; }
 
-        //[Required]
-        //[MaxLength(10)]
-        //public String Author { get; set; }
+        [Required]
+        [MaxLength(10)]
+        public String Author { get; set; }
 
-        //[Required]
-        //[MaxLength(30)]
-        //public String Type { get; set; }
+        [Required]
+        [MaxLength(30)]
+        public String Type { get; set; }
 
         /// <summary>
         /// 创建时间

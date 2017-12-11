@@ -122,7 +122,8 @@ namespace XLY.SF.Project.CaseManagement
             if(caseInfo == null) throw new ArgumentNullException("caseInfo");
             CPConfiguration configuration = CPConfiguration.Create(caseInfo);
             if (configuration == null) return null;
-            String file = System.IO.Path.Combine(caseInfo.Path,caseInfo.GetDirectoryName(), $"{projectFileNameWithoutExtension ?? DefaultProjectFile}.cp");
+            String directory = InnerHelper.GetValidDirectory(System.IO.Path.Combine(caseInfo.Path, caseInfo.Name));
+            String file = System.IO.Path.Combine(directory, $"{projectFileNameWithoutExtension ?? DefaultProjectFile}.cp");
             if (!configuration.Save(file)) return null;
             RestrictedCaseInfo rci = configuration.GetCaseInfo(System.IO.Path.GetDirectoryName(file));
             return new Case(rci, configuration, file);
@@ -176,13 +177,13 @@ namespace XLY.SF.Project.CaseManagement
         public DeviceExtraction CreateDeviceExtraction(String name, String type, String fileNameWithoutExtension = null, String directory = null)
         {
             ThrowExceptionIfNotExisted();
-            String directoryName = $"{name}_{DateTime.Now.ToString("yyyyMMdd[hhmmss]")}";
+            String directoryName = name;
             DeviceExtraction de = null;
             //在当前案例所在目录创建设备目录
             if (String.IsNullOrWhiteSpace(directory))
             {
                 //使用相对路径记录设备目录
-                de = DeviceExtraction.Create(type, directoryName, fileNameWithoutExtension, true, this);
+                de = DeviceExtraction.Create(type, directoryName, fileNameWithoutExtension, this);
             }//不在当前案例所在目录创建，并且没有提供绝对路径的情况下抛异常
             else if (!System.IO.Path.IsPathRooted(directory))
             {
@@ -192,8 +193,9 @@ namespace XLY.SF.Project.CaseManagement
             {
                 directory = System.IO.Path.Combine(directory, directoryName);
                 //使用绝对路径记录设备目录
-                de = DeviceExtraction.Create(type, directory, fileNameWithoutExtension, false, this);
+                de = DeviceExtraction.Create(type, directory, fileNameWithoutExtension, this);
             }
+
             if (de != null)
             {
                 Configuration.AddReference(de.Reference);

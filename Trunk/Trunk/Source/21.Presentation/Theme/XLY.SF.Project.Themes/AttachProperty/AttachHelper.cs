@@ -104,6 +104,29 @@ namespace XLY.SF.Project.Themes
 
         #endregion
 
+        #region 表格控件附加属性
+        #region 是否支持滚动翻页，为true则在滚动条滚动到顶部或底部时读取下一页数据
+
+        public static bool GetIsScrollPage(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(IsScrollPageProperty);
+        }
+
+        public static void SetIsScrollPage(DependencyObject obj, bool value)
+        {
+            obj.SetValue(IsScrollPageProperty, value);
+        }
+
+        /// <summary>
+        /// 是否支持滚动翻页
+        /// </summary>
+        public static readonly DependencyProperty IsScrollPageProperty =
+            DependencyProperty.RegisterAttached("IsScrollPage", typeof(bool), typeof(AttachHelper), new PropertyMetadata(false));
+
+        #endregion
+
+        #endregion
+
         #region 辅助方法
         /// <summary>
         /// 获取某个树节点的level

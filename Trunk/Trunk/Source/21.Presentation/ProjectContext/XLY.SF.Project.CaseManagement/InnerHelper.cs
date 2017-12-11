@@ -31,7 +31,7 @@ namespace XLY.SF.Project.CaseManagement
             }
         }
 
-        public static Boolean Save(this XDocument doc, XmlSchemaSet schemaSet,String path)
+        public static Boolean Save(this XDocument doc, XmlSchemaSet schemaSet, String path)
         {
             try
             {
@@ -62,6 +62,24 @@ namespace XLY.SF.Project.CaseManagement
             {
                 throw new FormatException("Invalid value in config file.", m.Exception);
             });
+        }
+
+        public static String GetValidDirectory(String directory)
+        {
+            String parentDirectory = Path.GetDirectoryName(directory);
+            String directoryName = Path.GetFileName(directory);
+            String fullPath = directory;
+            var items = Directory.EnumerateDirectories(parentDirectory, $"{directoryName}*");
+            Int32 i = 1;
+            while (true)
+            {
+                if (items.All(x => x != fullPath))
+                {
+                    break;
+                }
+                fullPath = Path.Combine(parentDirectory, $"{directoryName}{i++}");
+            }
+            return fullPath;
         }
     }
 }

@@ -58,7 +58,7 @@ namespace XLY.SF.Project.Plugin.DataView.View.Controls
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CheckAll_Click(object sender, RoutedEventArgs e)
+        private void BookmarkAll_Click(object sender, RoutedEventArgs e)
         {
             CheckBox cb = sender as CheckBox;
             int newBmk = (bool)cb.IsChecked ? 0 : -1;
@@ -73,7 +73,7 @@ namespace XLY.SF.Project.Plugin.DataView.View.Controls
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BookmarkAll_Click(object sender, RoutedEventArgs e)
+        private void CheckAll_Click(object sender, RoutedEventArgs e)
         {
             CheckBox cb = sender as CheckBox;
             foreach (var item in _arg.Items.View)

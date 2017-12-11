@@ -41,12 +41,17 @@ namespace XLY.SF.Project.Domains
         }
     }
 
-    public class Md5EarlyWarningPluginInfo : EarlyWarningPluginInfo
+    public class Md5EarlyWarningPluginInfo : DataParsePluginInfo
     {
         /// <summary>
-        /// 需要检测目录位置
+        /// 源目录
         /// </summary>
-        public readonly List<string> DetectDirs = new List<string>();        
+        public readonly List<string> SourceDirs = new List<string>(); 
+        
+        /// <summary>
+        /// 目标目录
+        /// </summary>
+        public string TargetDir { get; set; }
     }
 
     public class AppEarlyWarningPluginInfo : EarlyWarningPluginInfo

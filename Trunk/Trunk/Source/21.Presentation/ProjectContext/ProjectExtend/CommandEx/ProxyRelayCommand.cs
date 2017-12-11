@@ -62,7 +62,7 @@ namespace GalaSoft.MvvmLight.CommandWpf
                         screenShotPath = SystemContext.Instance.SaveOperationImageByWindow(container as FrameworkElement);
                 }
 
-                //记录日志
+                //记录日志【此处保存全路径】
                 SystemContext.Instance.AddOperationLog(new ObtainEvidenceLogModel()
                 {
                     OperationModel = log.ModelName,

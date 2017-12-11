@@ -101,13 +101,13 @@ namespace XLY.SF.Project.ViewModels.Management
             }
             else
             {
-                Plugins = _caches.Cast<DataParsePluginInfo>().Where(x => x.Name.Contains(keyword)
-                || x.Group.Contains(keyword)
+                Plugins = _caches.Cast<DataParsePluginInfo>().Where(x => x.Name.Contains(keyword,StringComparison.OrdinalIgnoreCase)
+                || x.Group.Contains(keyword, StringComparison.OrdinalIgnoreCase)
                 || keyword.IsSet(x.DeviceOSType)
                 || keyword.IsSet(x.Pump)
-                || x.AppName.Contains(keyword)
-                || x.Version.ToString().Contains(keyword)
-                || x.Description.Contains(keyword));
+                || x.AppName.Contains(keyword, StringComparison.OrdinalIgnoreCase)
+                || x.Version.ToString().Contains(keyword, StringComparison.OrdinalIgnoreCase)
+                || x.Description.Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
             return $"搜索关键字：{Keyword}";
         }

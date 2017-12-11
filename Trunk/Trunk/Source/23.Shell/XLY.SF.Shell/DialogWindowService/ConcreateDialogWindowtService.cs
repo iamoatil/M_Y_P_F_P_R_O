@@ -86,8 +86,9 @@ namespace XLY.SF.Shell.DialogWindowService
 
             var viewContainer = WindowHelper.Instance.CreateShellWindow(targetView, viewArgs.ShowInTaskBar, Application.Current.MainWindow);
             viewContainer.ShowDialog();
-            if (targetView.DataSource.DialogResult)
-                result = targetView.DataSource.GetResult();
+            if (targetView.DataSource != null)
+                if (targetView.DataSource.DialogResult)
+                    result = targetView.DataSource.GetResult();
 
             return result;
         }
@@ -95,7 +96,7 @@ namespace XLY.SF.Shell.DialogWindowService
         #endregion
 
         #region Tools
-        
+
         /// <summary>
         /// 创建导航消息，但并不用导航事件发送
         /// </summary>

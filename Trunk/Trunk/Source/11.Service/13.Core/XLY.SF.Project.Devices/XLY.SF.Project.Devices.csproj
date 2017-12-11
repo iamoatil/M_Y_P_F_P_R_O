@@ -179,8 +179,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>set ProcessName=XLY.SF.Project.DeviceExtractionService.exe
+tasklist /nh|find /i  "%25ProcessName%25" &gt; null
+if %25ERRORLEVEL%25 equ 0  ( taskkill /f /im "%25ProcessName%25" /T  &gt; null ) else ( exit 0 )
+
+</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>cd /d $(ProjectDir)..\..\..\..\Tools\CopyDll\

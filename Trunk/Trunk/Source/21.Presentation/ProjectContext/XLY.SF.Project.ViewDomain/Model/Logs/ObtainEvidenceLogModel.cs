@@ -135,7 +135,7 @@ namespace XLY.SF.Project.ViewDomain.Model
 
         private string _imageNameForScreenShot;
         /// <summary>
-        /// 截图保存的文件名
+        /// 截图保存的文件名【暂保存全路径】
         /// </summary>
         public string ImageNameForScreenShot
         {

@@ -24,7 +24,6 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         public DeviceExtractionAdorner(DeviceExtraction target)
         {
             Target = target?? throw new ArgumentNullException("target");
-            _name = target["Name"];
         }
 
         /// <summary>
@@ -65,6 +64,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
                         if (!value.Existed) throw new InvalidOperationException("Target is not existed");
                         Id = value.Id;
                         Type = value.Type;
+                        _name = value["Name"];
                     }
                 }
             }

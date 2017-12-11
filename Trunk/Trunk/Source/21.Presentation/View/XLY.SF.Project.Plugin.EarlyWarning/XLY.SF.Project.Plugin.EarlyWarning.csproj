@@ -54,6 +54,10 @@
       <HintPath>..\..\..\31.Build\Debug\XlyToolkits\Mirror\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Lib\Json\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -84,16 +88,18 @@
   <ItemGroup>
     <Compile Include="Adapter\AbstractEarlyWarningPlugin.cs" />
     <Compile Include="Adapter\EarlyWarningPluginAdapter.cs" />
-    <Compile Include="Adapter\ColumnUpdater.cs" />
+    <Compile Include="DataBaseOperate\ColumnUpdater.cs" />
     <Compile Include="ConfigData\ConfigDataFilter.cs" />
     <Compile Include="ConfigData\DbFromConfigData.cs" />
     <Compile Include="ConfigData\ConfigFile.cs" />
     <Compile Include="ConfigData\ConfigNode.cs" />
     <Compile Include="ConstDefinition.cs" />
-    <Compile Include="DeviceData\FileDownloader.cs" />
     <Compile Include="EarlyWarningResultPage.xaml.cs">
       <DependentUpon>EarlyWarningResultPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="FileMd5Plugin\FileMd5.cs" />
+    <Compile Include="FileMd5Plugin\FileMd5DataParser.cs" />
+    <Compile Include="FileMd5Plugin\FileMd5DataSource.cs" />
     <Compile Include="Interface.cs" />
     <Compile Include="Language\LanguageHelper.cs" />
     <Compile Include="Language\LanguageTextTeamplate1.LanguageElement.cs">

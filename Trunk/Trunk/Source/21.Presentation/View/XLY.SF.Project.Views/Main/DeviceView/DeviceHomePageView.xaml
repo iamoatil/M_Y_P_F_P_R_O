@@ -375,21 +375,23 @@
             </ItemsControl>
 
             <!--推荐工具-->
-            <ItemsControl Grid.Row="2" ItemsSource="{Binding ToolkitItems}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <control:IconButton Width="140" Margin="0 0 1 0" Height="80" IconPadding="16 0 12 0"
+            <ScrollViewer Grid.Row="2" Template="{StaticResource ContentScrollViewerCt}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                <ItemsControl ItemsSource="{Binding ToolkitItems}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <control:IconButton Width="140" Margin="0 0 1 0" Height="80" IconPadding="16 0 12 0"
                                     Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/DevHomePageIcon.png">
-                            <TextBlock Text="{Binding }" TextWrapping="WrapWithOverflow" Foreground="#9ba5b9"/>
-                        </control:IconButton>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                                <TextBlock Text="{Binding }" TextWrapping="WrapWithOverflow" Foreground="#9ba5b9"/>
+                            </control:IconButton>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
 
         <!--方案信息说明-->

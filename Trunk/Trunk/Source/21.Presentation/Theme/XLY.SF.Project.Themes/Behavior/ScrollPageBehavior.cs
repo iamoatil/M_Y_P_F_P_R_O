@@ -41,11 +41,22 @@ namespace XLY.SF.Project.Themes
         private ScrollBufferCollection _scrollBuffer;
         #endregion
 
+        #region Properties
+        /// <summary>
+        /// 是否启用滚动分页
+        /// </summary>
+        public bool IsEnabled { get; set; }
+        #endregion
+
         #region Event
 
         protected override void OnAttached()
         {
             base.OnAttached();
+            if(!IsEnabled)
+            {
+                return;
+            }
 
             #region 初始化时加载两页数据
             try

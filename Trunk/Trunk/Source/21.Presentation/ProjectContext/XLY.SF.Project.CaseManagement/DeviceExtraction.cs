@@ -88,7 +88,7 @@ namespace XLY.SF.Project.CaseManagement
         /// <summary>
         /// 设备提取是否存在。
         /// </summary>
-        public Boolean Existed { get; private set; }
+        public Boolean Existed => File.Exists(ConfigurationFile);
 
         /// <summary>
         /// 获取当前设备所有的提取。
@@ -247,44 +247,68 @@ namespace XLY.SF.Project.CaseManagement
             }
             DPConfiguration configuration = DPConfiguration.Open(configFile);
             if (configuration == null) return null;
-            return new DeviceExtraction(configuration, configFile, reference, owner) { Existed = true };
+            return new DeviceExtraction(configuration, configFile, reference, owner);
         }
 
         /// <summary>
         /// 创建新的设备提取。
         /// </summary>
         /// <param name="type">设备类型。</param>
-        /// <param name="directory">设备目录所在路径。</param>
+        /// <param name="directory">设备目录的相对或绝对路径。</param>
         /// <param name="fileNameWithoutExtension">配置文件名称（不含扩展名）。</param>
-        /// <param name="isRelativePath">是否是相对路径。</param>
         /// <param name="owner">创建该设备的案例。</param>
         /// <returns>DeviceExtraction 类型实例。</returns>
-        internal static DeviceExtraction Create(String type, String directory, String fileNameWithoutExtension, Boolean isRelativePath, Case owner)
+        internal static DeviceExtraction Create(String type, String directory, String fileNameWithoutExtension, Case owner)
         {
             DPConfiguration configuration = DPConfiguration.Create(type);
             if (configuration == null) return null;
-            //根据目录的路径生成配置文件的路径
-            //文件可能是相对路径，也可能是绝对路径
-            String file = System.IO.Path.Combine(directory, $"{fileNameWithoutExtension ?? DefaultDeviceExtractionConfigFile}.dp");
-            //生成配置文件的ReferenceItem
-            //ReferenceItem中保存的可能是相对路径，也可能是绝对路径
-            ReferenceItem reference = ReferenceItem.New(file);
-            //如果是相对路径，则根据Case生成绝对路径
-            //此绝对路径仅用于配置文件的保存
+            Boolean isRelativePath = String.IsNullOrWhiteSpace(System.IO.Path.GetPathRoot(directory));
             if (isRelativePath)
             {
-                file = System.IO.Path.Combine(owner.Path, file);
+                return CreateByRelativePath(directory, fileNameWithoutExtension, owner, configuration);
             }
-            if (configuration.Save(file))
+            else
             {
-                return new DeviceExtraction(configuration, file, reference, owner) { Existed = true };
+                return CreateByAbsolutedPath(directory, fileNameWithoutExtension, owner, configuration);
             }
-            return null;
         }
 
         #endregion
 
         #region Private
+
+        private static DeviceExtraction CreateByRelativePath(String directory, String fileNameWithoutExtension, Case owner, DPConfiguration configuration)
+        {
+            //取得相对路径的目录部分用于后面生成新的相对路径
+            //因为GetValidDirectory可能会返回不同的目录名称
+            //因此需要重新拼接
+            String relativeParentDirectory = System.IO.Path.GetDirectoryName(directory);
+            directory = InnerHelper.GetValidDirectory(System.IO.Path.Combine(owner.Path, directory));
+            String directoryName = System.IO.Path.GetFileName(directory);
+            directory = System.IO.Path.Combine(relativeParentDirectory, directoryName);
+            String relatvieFile = System.IO.Path.Combine(directory, $"{fileNameWithoutExtension ?? DefaultDeviceExtractionConfigFile}.dp");
+            ReferenceItem reference = ReferenceItem.New(relatvieFile);
+            String fullPath = System.IO.Path.Combine(owner.Path, relatvieFile);
+            //保存配置文件
+            if (configuration.Save(fullPath))
+            {
+                return new DeviceExtraction(configuration, fullPath, reference, owner);
+            }
+            return null;
+        }
+
+        private static DeviceExtraction CreateByAbsolutedPath(String directory, String fileNameWithoutExtension, Case owner, DPConfiguration configuration)
+        {
+            directory = InnerHelper.GetValidDirectory(directory);
+            String file = System.IO.Path.Combine(directory, $"{fileNameWithoutExtension ?? DefaultDeviceExtractionConfigFile}.dp");
+            ReferenceItem reference = ReferenceItem.New(file);
+            //保存配置文件
+            if (configuration.Save(file))
+            {
+                return new DeviceExtraction(configuration, file, reference, owner);
+            }
+            return null;
+        }
 
         private void Delete(Boolean isEvent)
         {
@@ -298,7 +322,6 @@ namespace XLY.SF.Project.CaseManagement
             {
                 Owner.Configuration.Save(Owner.ProjectFile);
             }
-            Existed = false;
             Deleted?.Invoke(this, EventArgs.Empty);
         }
 

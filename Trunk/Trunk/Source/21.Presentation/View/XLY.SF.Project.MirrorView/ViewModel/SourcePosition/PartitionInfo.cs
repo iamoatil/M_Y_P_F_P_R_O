@@ -20,6 +20,7 @@ namespace XLY.SF.Project.MirrorView
         {
             _targetDir = targetDir;
             SourceBlockPath = blockPath;
+            _targetMirrorFile=_targetDir + SourceBlockPath.TrimStart('/').Replace("/", "_") + "_" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + ".bin";
         }
 
         private string _targetDir;
@@ -28,9 +29,10 @@ namespace XLY.SF.Project.MirrorView
         {
             get
             {
-                return _targetDir + SourceBlockPath.TrimStart('/').Replace("/", "_") + "_" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + ".bin";
+                return _targetMirrorFile;
             }
         }
+        private string _targetMirrorFile;
 
         public string SourceBlockPath { get; private set; }
     }

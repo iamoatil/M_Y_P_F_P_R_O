@@ -70,8 +70,6 @@ namespace ProjectExtend.Context
             {
                 SaveDefaultFolderName = @"XLY\SpfData";
             }
-            if (string.IsNullOrWhiteSpace(SaveDefaultFolderName))
-                throw new NullReferenceException("存储默认文件夹名为NULL");
         }
 
         /// <summary>
