@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2003
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageToXls", "LanguageToXls\LanguageToXls.csproj", "{38FEB37A-66BE-4279-BB35-6DDF9511B735}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageToXlsUnit", "LanguageToXlsUnit\LanguageToXlsUnit.csproj", "{9DA9F648-1CD9-4B67-A229-8C78C038E45D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{38FEB37A-66BE-4279-BB35-6DDF9511B735}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38FEB37A-66BE-4279-BB35-6DDF9511B735}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38FEB37A-66BE-4279-BB35-6DDF9511B735}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38FEB37A-66BE-4279-BB35-6DDF9511B735}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DA9F648-1CD9-4B67-A229-8C78C038E45D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DA9F648-1CD9-4B67-A229-8C78C038E45D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DA9F648-1CD9-4B67-A229-8C78C038E45D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DA9F648-1CD9-4B67-A229-8C78C038E45D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F6EE83B5-F9DB-4FDA-9513-C3A1AD909931}
+	EndGlobalSection
+EndGlobal
