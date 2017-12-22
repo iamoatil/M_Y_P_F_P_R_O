@@ -1,6 +1,9 @@
 ﻿using AForge.Controls;
 using System;
+using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.Integration;
 using System.Windows.Media.Imaging;
@@ -33,8 +36,11 @@ namespace XLY.SF.Project.CameraView
         /// </summary>
         private CameraDevice _currentCameraDevice;
 
-        Thread _thread;
-
+        /// <summary>
+        /// 是否刷新设备停止
+        /// </summary>
+        private bool _isRefreshStop;
+        
         /// <summary>
         /// 是否已经完成初始化
         /// </summary>
@@ -59,20 +65,18 @@ namespace XLY.SF.Project.CameraView
             _defaultImage = new Image();
             _defaultImage.Source = new BitmapImage(new Uri(@"/Resource/no-camera.png", UriKind.Relative));
 
-            _thread = new Thread(state => { RefreshDevice(); Thread.Sleep(1000); });
-            _thread.IsBackground = true;
-            _thread.Start();
+            CameraDeviceManager cameraDeviceManager = new CameraDeviceManager();
+            Task.Run((() => { while (!_isRefreshStop) { RefreshDevice(cameraDeviceManager); Thread.Sleep(1000); } }));
 
-            RefreshDevice();
             return true;
         }
 
         /// <summary>
         ///  刷新界面
         /// </summary>
-        public void RefreshDevice()
+        public void RefreshDevice(CameraDeviceManager cameraDeviceManager)
         {
-            CameraDeviceManager cameraDeviceManager = new CameraDeviceManager();
+            
             bool isChanged = cameraDeviceManager.DetectState();
             if (isChanged)
             {
@@ -82,7 +86,6 @@ namespace XLY.SF.Project.CameraView
 
                     AppThread.Instance.Invoke(() =>
                     {
-                        _currentCameraDevice.ConnnectDevice(_videoSourcePlayer);
                         this.Child = _videoSourcePlayerHost;
                         Start();
                     });                    
@@ -101,8 +104,9 @@ namespace XLY.SF.Project.CameraView
         public void Start()
         {
             if(_currentCameraDevice != null
-                && _currentCameraDevice.IsConnectedToPlayer)
+                && !_currentCameraDevice.IsConnectedToPlayer)
             {
+                _currentCameraDevice.ConnnectDevice(_videoSourcePlayer);
                 _videoSourcePlayer.Start();
             }
         }
@@ -112,8 +116,76 @@ namespace XLY.SF.Project.CameraView
         /// </summary>
         public void Stop()
         {
-            //停止摄像头设备
-            //呈现默认图片
+            _isRefreshStop = true;
+
+            if (_currentCameraDevice != null
+               && _currentCameraDevice.IsConnectedToPlayer)
+            {
+                _videoSourcePlayer.Stop();
+                _currentCameraDevice.DisconnnectDevice(_videoSourcePlayer);
+            }           
+        }
+
+        /// <summary>
+        /// 拍照
+        /// </summary>
+        /// <param name="dir"></param>
+        public void TakePhoto(string path)
+        {
+            string dir = Path.GetDirectoryName(path);
+            //修整目录
+            if(!dir.EndsWith("\\"))
+            {
+                dir += "\\";
+            }
+            if(!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+
+            try
+            {
+                if ((_videoSourcePlayer != null) && (_videoSourcePlayer.IsRunning))
+                {
+                    BitmapSource image = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                                _videoSourcePlayer.GetCurrentVideoFrame().GetHbitmap(),
+                                IntPtr.Zero,
+                                Int32Rect.Empty,
+                                BitmapSizeOptions.FromEmptyOptions());
+
+                    BitmapEncoder encoder = new JpegBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(image));
+                    MemoryStream ms = new MemoryStream();
+                    encoder.Save(ms);
+                    // 剪切图片
+
+                    System.Drawing.Image initImage = System.Drawing.Image.FromStream(ms, true);
+
+                    //对象实例化
+                    System.Drawing.Bitmap pickedImage = new System.Drawing.Bitmap((int)image.PixelWidth, (int)image.PixelHeight);
+                    System.Drawing.Graphics pickedG = System.Drawing.Graphics.FromImage(pickedImage);
+                    //设置质量
+                    pickedG.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    pickedG.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                    //定位
+                    System.Drawing.Rectangle fromR = new System.Drawing.Rectangle(51, 66, (int)image.PixelWidth, (int)image.PixelHeight);
+                    System.Drawing.Rectangle toR = new System.Drawing.Rectangle(0, 0, (int)image.PixelWidth, (int)image.PixelHeight);
+                    //画图
+                    pickedG.DrawImage(initImage, toR, fromR, System.Drawing.GraphicsUnit.Pixel);
+
+                    pickedImage.Save(path);
+
+                    // 释放资源 
+
+                    ms.Close();
+                    pickedImage.Dispose();
+                    pickedG.Dispose();
+
+                }
+            }
+            catch (Exception ex)
+            {
+            }
         }
 
         #region IDisposable
