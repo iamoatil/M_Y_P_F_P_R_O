@@ -168,7 +168,7 @@ namespace XLY.SF.Project.CameraView
                     pickedG.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                     pickedG.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
                     //定位
-                    System.Drawing.Rectangle fromR = new System.Drawing.Rectangle(51, 66, (int)image.PixelWidth, (int)image.PixelHeight);
+                    System.Drawing.Rectangle fromR = new System.Drawing.Rectangle(0, 0, (int)image.PixelWidth, (int)image.PixelHeight);
                     System.Drawing.Rectangle toR = new System.Drawing.Rectangle(0, 0, (int)image.PixelWidth, (int)image.PixelHeight);
                     //画图
                     pickedG.DrawImage(initImage, toR, fromR, System.Drawing.GraphicsUnit.Pixel);

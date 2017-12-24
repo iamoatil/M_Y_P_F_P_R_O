@@ -12,6 +12,7 @@ namespace XLY.SF.Project.CameraView
         public CameraViewModel()
         {
             TakePhotoCommand = new RelayCommand<CameraPlayer>(TakePhoto);
+           
             DevLooksManager = new DeviceLooksManager();
             DevLooksManager.Initialize(Path.GetFullPath("DeviceLooks"));
         }
@@ -31,10 +32,9 @@ namespace XLY.SF.Project.CameraView
             DeviceLooks devLook = DevLooksManager.SelectedItem;
             if(devLook != null)
             {
-                string oldPath = devLook.ImagePath;
-                devLook.ImagePath = null;
-                player.TakePhoto(oldPath);
-                devLook.ImagePath = oldPath;                
+                string path = devLook.ImagePath;
+                player.TakePhoto(path);
+                devLook.CheckValidate();
             }
         }
 

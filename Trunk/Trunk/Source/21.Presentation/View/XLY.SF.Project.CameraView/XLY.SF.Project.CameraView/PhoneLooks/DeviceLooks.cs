@@ -1,7 +1,9 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Command;
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace XLY.SF.Project.CameraView
 {
@@ -10,11 +12,15 @@ namespace XLY.SF.Project.CameraView
         public DeviceLooks(string name, string imagePath)
         {
             this.Name = name;
-            if(File.Exists(imagePath))
-            {
-                this.ImagePath = imagePath;
-            }
+            this.ImagePath = imagePath;
+            DeletePhotoCommand = new RelayCommand(DeletePhoto);
+            CheckValidate();
         }
+
+        /// <summary>
+        /// 删除照片命令
+        /// </summary>
+        public ICommand DeletePhotoCommand { get; private set; }
 
         /// <summary>
         /// 样貌的名字
@@ -26,16 +32,18 @@ namespace XLY.SF.Project.CameraView
         /// </summary>
         public string ImagePath
         {
-            get { return _imagePath; }
-            set
-            {
-                _imagePath = value;
-                IsImagePathInvalidate=!File.Exists(_imagePath);
-                OnPropertyChanged();
-            }
+            get;private set;
         }
-        private string _imagePath;
 
+        /// <summary>
+        /// 检查有效性
+        /// </summary>
+        public void CheckValidate()
+        {
+            IsImagePathInvalidate = !File.Exists(ImagePath);
+            OnPropertyChanged("ImagePath");
+
+        }
         /// <summary>
         /// 图片路径是否无效
         /// </summary>
@@ -54,6 +62,24 @@ namespace XLY.SF.Project.CameraView
         /// 是否被选中
         /// </summary>
         public bool IsSelected { get; set; }
+
+        /// <summary>
+        /// 删除其图片
+        /// </summary>
+        public void DeletePhoto()
+        {
+            if(File.Exists(ImagePath))
+            {
+                try
+                {
+                    File.Delete(ImagePath);
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+            CheckValidate();
+        }
 
         #region INotifyPropertyChanged
 

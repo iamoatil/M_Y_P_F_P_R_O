@@ -25,25 +25,26 @@
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type RadioButton}">
                                 <Grid>
-                                    <Border x:Name="CheckedBorder" BorderThickness="1" BorderBrush="#379be6">
+                                    <Border x:Name="CheckedBorder" BorderThickness="0" BorderBrush="#379be6">
                                         <Grid Background="{TemplateBinding Background}">
-                                            <Viewbox>
-                                                <Border Background="{Binding ImagePath,Converter={StaticResource brushConvertor}}" />
-                                            </Viewbox>
+                                            <Border Background="{Binding ImagePath,Converter={StaticResource brushConvertor}}" />
                                             <Grid x:Name="noPhoto" Background="#374260" Visibility="{Binding IsImagePathInvalidate,Converter={StaticResource BoolVisibleConverter}}">
                                                 <TextBlock Text="待拍摄" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14" Foreground="#9ba5b9"/>
                                             </Grid>
                                             <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="6,6,0,0" Width="44" Height="22" >
-                                                <Border Background="Black" Opacity="0.5" Visibility="{Binding IsImagePathInvalidate,Converter={StaticResource BoolVisibleConverter}}" />
-                                                <TextBlock Text="{Binding Name}" FontSize="14" Foreground="White"/>
+                                                <Border x:Name="SelectBorder" Background="Black" Opacity="0.5" Visibility="{Binding IsImagePathInvalidate,Converter={StaticResource BoolVisibleConverter}}" />
+                                                <TextBlock Text="{Binding Name}" FontSize="14" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                             </Grid>
                                         </Grid>
                                     </Border>
-                                    <Button x:Name="close" Content="X" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Top" />
+                                    <Button x:Name="close" Content="X" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding DeletePhotoCommand}"/>
                                 </Grid>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsChecked" Value="true">
-                                        <Setter Property="Background" Value="Red"/>
+                                        <Setter TargetName="CheckedBorder" Property="BorderThickness" Value="1"/>
+                                    </Trigger>
+                                    <Trigger SourceName="noPhoto" Property="Visibility" Value="Visible">
+                                        <Setter TargetName="close" Property="Visibility" Value="Collapsed"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

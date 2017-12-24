@@ -20,6 +20,7 @@ namespace XLY.SF.Project.CameraView
             Bitmap bitmap = new Bitmap(path);
             MemoryStream stream = new MemoryStream();
             bitmap.Save(stream, ImageFormat.Png);
+            bitmap.Dispose();
             ImageBrush imageBrush = new ImageBrush();
             ImageSourceConverter imageSourceConverter = new ImageSourceConverter();            
             imageBrush.ImageSource = (ImageSource)imageSourceConverter.ConvertFrom(stream);
