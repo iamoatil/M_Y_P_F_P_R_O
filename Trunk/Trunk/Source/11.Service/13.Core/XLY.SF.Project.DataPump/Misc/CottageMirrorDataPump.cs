@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XLY.SF.Project.DataPump.Android;
+using XLY.SF.Project.DataPump;
 using XLY.SF.Project.Domains;
 
-namespace XLY.SF.Project.DataPump.Misc
+namespace XLY.SF.Project.DataPump
 {
     /// <summary>
     /// 棒棒鸡Cottage的镜像数据泵。
@@ -16,7 +16,7 @@ namespace XLY.SF.Project.DataPump.Misc
         #region Constructors
 
         /// <summary>
-        /// 初始化类型 XLY.SF.Project.DataPump.Misc.CottageMirrorDataPump 实例。
+        /// 初始化类型 XLY.SF.Project.DataPump.CottageMirrorDataPump 实例。
         /// </summary>
         /// <param name="metadata">与此数据泵关联的元数据信息。</param>
         public CottageMirrorDataPump(Pump metadata)
@@ -36,14 +36,14 @@ namespace XLY.SF.Project.DataPump.Misc
         /// <returns>实现了 IFileSystemDevice 接口的类型实例。</returns>
         protected override IFileSystemDevice CreateFileSystemDevice()
         {
-            Device device = Metadata.Source as Device;
+            Device device = PumpDescriptor.Source as Device;
             if (device == null) return null;
             IFileSystemDevice fsDevice = new CottageDevice
             {
                 FlshType = device.FlshType,
                 DevType = device.DevType,
-                Source = Metadata.Source,
-                ScanModel = (Byte)Metadata.ScanModel
+                Source = PumpDescriptor.Source,
+                ScanModel = (Byte)PumpDescriptor.ScanModel
             };
             return fsDevice;
         }

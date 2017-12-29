@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using System;
-using System.Windows.Forms;
 using System.Windows.Input;
+using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Core.Base.ViewModel;
 
 /* ==============================================================================
@@ -17,15 +17,19 @@ namespace XLY.SF.Project.MirrorView
     /// </summary>
     public class CmdTargetPosition : NotifyPropertyBase
     {
+        private IPopupWindowService PopupWindowService { get; set; }
+
         public CmdTargetPosition()
         {
             SetTargetPathCommand = new RelayCommand(new Action(() => Set()));
+
+            PopupWindowService = Framework.Core.Base.MefIoc.IocManagerSingle.Instance.GetPart<IPopupWindowService>();
         }
 
         /// <summary>
         /// 镜像文件的路径
         /// </summary>
-        private string _dirPath = @"C:\XLYSFTasks\";
+        private string _dirPath = @"C:\SPFMirror\";
 
         public string DirPath
         {
@@ -35,7 +39,12 @@ namespace XLY.SF.Project.MirrorView
                 _dirPath = value;
                 OnPropertyChanged();
             }
-        }        
+        }
+
+        /// <summary>
+        /// 镜像文件路径
+        /// </summary>
+        public string TargetMirrorFile { get; set; }
 
         public ICommand SetTargetPathCommand { get; private set; }
 
@@ -44,15 +53,15 @@ namespace XLY.SF.Project.MirrorView
         /// </summary>
         public void Set()
         {
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            DialogResult dr = folderBrowserDialog.ShowDialog();
-            if (dr == DialogResult.OK)
+            string filePath = PopupWindowService.SelectFolderDialog();
+
+            if (!String.IsNullOrEmpty(filePath))
             {
-                string filePath = folderBrowserDialog.SelectedPath;
                 if (!filePath.EndsWith("\\"))
                 {
                     filePath += "\\";
                 }
+
                 DirPath = filePath;
             }
         }

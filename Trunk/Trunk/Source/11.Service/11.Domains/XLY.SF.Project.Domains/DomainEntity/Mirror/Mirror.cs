@@ -1,4 +1,6 @@
-﻿namespace XLY.SF.Project.Domains
+﻿using XLY.SF.Project.BaseUtility.Helper;
+
+namespace XLY.SF.Project.Domains
 {
     /// <summary>
     /// 镜像数据模型
@@ -23,7 +25,7 @@
         /// <summary>
         /// 本地镜像文件路径
         /// </summary>
-        public string Local { get; set; }
+        public string Local => FileHelper.ConnectPath(Target, TargetFile);
 
         /// <summary>
         /// 校验码

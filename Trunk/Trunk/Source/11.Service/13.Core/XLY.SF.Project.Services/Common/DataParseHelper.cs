@@ -40,7 +40,7 @@ namespace XLY.SF.Project.Services
         /// <returns>返回处理后的电话号码。</returns>
         public static string NumberToStu(string oriNumber)
         {
-            oriNumber = RegMatchPhone.Match(oriNumber.Replace("-", string.Empty)).Value;
+            oriNumber = RegMatchPhone.Match(oriNumber.ToSafeString().Replace("-", string.Empty)).Value;
 
             if (oriNumber.StartsWith("+86"))
             {

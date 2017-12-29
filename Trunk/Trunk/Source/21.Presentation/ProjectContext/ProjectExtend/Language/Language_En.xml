@@ -1,113 +1,93 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<LanguageResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Modules>
-    <LoadingModule>
-      <LoadingPromptMessage>Fill Content</LoadingPromptMessage>
-    </LoadingModule>
-    <LoginModule>
-      <UserName>Fill Content</UserName>
-      <Password>Fill Content</Password>
-    </LoginModule>
-  </Modules>
-  <MessageBoxModule>
-    <MsgTitle>
-      <MsgTitleOfError>Fill Content</MsgTitleOfError>
-      <MsgTitleOfNotice>Fill Content</MsgTitleOfNotice>
-      <MsgTitleOfSystem>Fill Content</MsgTitleOfSystem>
-    </MsgTitle>
-    <MsgContent>
-      <MsgContentOfSystem_CloseProgram>Fill Content</MsgContentOfSystem_CloseProgram>
-    </MsgContent>
-  </MessageBoxModule>
-  <Common>
-    <Cancel>Fill Content</Cancel>
-    <Exit>Fill Content</Exit>
-    <Confirm>Fill Content</Confirm>
-  </Common>
-  <LogModule>
-    <SysCrash>Fill Content</SysCrash>
-  </LogModule>
-  <PluginModule>
-    <PluginType>Fill Content</PluginType>
-    <DataState>
-      <WeiZhi>Fill Content</WeiZhi>
-      <ZhengChang>Fill Content</ZhengChang>
-      <ShanChu>Fill Content</ShanChu>
-      <SuiPian>Fill Content</SuiPian>
-    </DataState>
-    <AndroidPluginModule>Fill Content</AndroidPluginModule>
-  </PluginModule>
-  <DateTimeFormat>
-    <Year>Fill Content</Year>
-    <Month>Fill Content</Month>
-    <Day>Fill Content</Day>
-    <Hour>Fill Content</Hour>
-    <Minite>Fill Content</Minite>
-    <Second>Fill Content</Second>
-  </DateTimeFormat>
-  <EroMsg>
-    <NotFindTable>Fill Content</NotFindTable>
-    <NotDeviceConnect>Fill Content</NotDeviceConnect>
-    <WriteFileFail>Fill Content</WriteFileFail>
-    <PhoneAccessFail>Fill Content</PhoneAccessFail>
-    <NotExistAccessFile>Fill Content</NotExistAccessFile>
-    <ReadFileFail>Fill Content</ReadFileFail>
-  </EroMsg>
-  <DeviceType>
-    <DeviceType_IOS>Fill Content</DeviceType_IOS>
-    <DeviceType_Android>Fill Content</DeviceType_Android>
-    <DeviceType_BlackBerry>Fill Content</DeviceType_BlackBerry>
-    <Device_IOS_IsRoot_Root>Fill Content</Device_IOS_IsRoot_Root>
-    <Device_IOS_IsRoot_NotRoot>Fill Content</Device_IOS_IsRoot_NotRoot>
-    <Device_Android_IsRoot_Root>Fill Content</Device_Android_IsRoot_Root>
-    <Device_Android_IsRoot_NotRoot>Fill Content</Device_Android_IsRoot_NotRoot>
-  </DeviceType>
-  <FileXProperty>
-    <FileName>Fill Content</FileName>
-    <FullPath>Fill Content</FullPath>
-    <ExtName>Fill Content</ExtName>
-    <FileType>Fill Content</FileType>
-    <FileSize>Fill Content</FileSize>
-    <Property>Fill Content</Property>
-    <CreateDate>Fill Content</CreateDate>
-    <LastAccessDate>Fill Content</LastAccessDate>
-    <LastEditDate>Fill Content</LastEditDate>
-  </FileXProperty>
-  <EntityDescAttribute>
-    <Name>Fill Content</Name>
-    <Age>Fill Content</Age>
-    <FFF>Fill Content</FFF>
-    <DDD>Fill Content</DDD>
-  </EntityDescAttribute>
-  <Unknown>Fill Content</Unknown>
-  <CallIn>Fill Content</CallIn>
-  <CallOut>Fill Content</CallOut>
-  <MissedCallIn>Fill Content</MissedCallIn>
-  <MissedCallInNotViewed>Fill Content</MissedCallInNotViewed>
-  <MissedCallInAlreadyOpen>Fill Content</MissedCallInAlreadyOpen>
-  <MissedCallOut>Fill Content</MissedCallOut>
-  <LANGKEY_GongZuo_00120>Fill Content</LANGKEY_GongZuo_00120>
-  <LANGKEY_GongZuo_00121>Fill Content</LANGKEY_GongZuo_00121>
-  <LANGKEY_GongZuo_00122>Fill Content</LANGKEY_GongZuo_00122>
-  <LANGKEY_ZhuZhai_00123>Fill Content</LANGKEY_ZhuZhai_00123>
-  <LANGKEY_ZhuZhai_00124>Fill Content</LANGKEY_ZhuZhai_00124>
-  <LANGKEY_ZhuZhai_00125>Fill Content</LANGKEY_ZhuZhai_00125>
-  <LANGKEY_ShouJi_00126>Fill Content</LANGKEY_ShouJi_00126>
-  <LANGKEY_ShouJi_00127>Fill Content</LANGKEY_ShouJi_00127>
-  <LANGKEY_ShouJi_00128>Fill Content</LANGKEY_ShouJi_00128>
-  <LANGKEY_GongZuo_00129>Fill Content</LANGKEY_GongZuo_00129>
-  <LANGKEY_GongZuo_00130>Fill Content</LANGKEY_GongZuo_00130>
-  <LANGKEY_GongZuo_00131>Fill Content</LANGKEY_GongZuo_00131>
-  <LANGKEY_ZhuZhai_00132>Fill Content</LANGKEY_ZhuZhai_00132>
-  <LANGKEY_ZhuZhai_00133>Fill Content</LANGKEY_ZhuZhai_00133>
-  <LANGKEY_ZhuZhai_00134>Fill Content</LANGKEY_ZhuZhai_00134>
-  <LANGKEY_YouXiaoShuJu_04367>Fill Content</LANGKEY_YouXiaoShuJu_04367>
-  <LANGKEY_WuXiaoShuJu_04368>Fill Content</LANGKEY_WuXiaoShuJu_04368>
-  <Yes>Fill Content</Yes>
-  <No>Fill Content</No>
-  <LANGKEY_FaSong_04493>Fill Content</LANGKEY_FaSong_04493>
-  <LANGKEY_JieShou_04494>Fill Content</LANGKEY_JieShou_04494>
-  <LANGKEY_FaSongShiBai_04495>Fill Content</LANGKEY_FaSongShiBai_04495>
-  <LANGKEY_YiDu_04424>Fill Content</LANGKEY_YiDu_04424>
-  <LANGKEY_WeiDu_04425>Fill Content</LANGKEY_WeiDu_04425>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<LanguageResource>
+  <ViewLanguage>"Login, load"<View_Loading>"System loading, please wait"</View_Loading><View_Login>Login</View_Login><View_Login_ExitSys>Logout</View_Login_ExitSys><View_Login_UserName>Account</View_Login_UserName><View_Login_Password>Password</View_Login_Password><View_Login_Company>XLY SalvationDATA Technology INC.</View_Login_Company><View_Login_Version>Version 1.0</View_Login_Version><View_Login_SpfPhone> </View_Login_SpfPhone><View_Login_ProductName> </View_Login_ProductName><View_MainWinTitle>SPF SmartPhone Forensic System</View_MainWinTitle><View_MainWinTitle_En>SmartPhone Forensic System</View_MainWinTitle_En><View_MainWin_ToolKitName>Tools</View_MainWin_ToolKitName><View_MainWin_MinSize>Min</View_MainWin_MinSize><View_MainWin_Close>Close</View_MainWin_Close><View_MainWin_DataExport>Export</View_MainWin_DataExport><View_MainWin_ToolTipCloseCase>Close</View_MainWin_ToolTipCloseCase><View_MainWin_OpLogShutdown>Exit</View_MainWin_OpLogShutdown><View_MainWin_MenuUserManagement>User Management</View_MainWin_MenuUserManagement><View_MainWin_MenuCaseManagement>Case Management </View_MainWin_MenuCaseManagement><View_MainWin_MenuSysSettings>Settings</View_MainWin_MenuSysSettings><View_MainWin_MenuPluginManagement>Plugin Management </View_MainWin_MenuPluginManagement><View_MainWin_MenuSysLog>Forensic Log</View_MainWin_MenuSysLog><View_MainWin_MenuSysEmpower>License</View_MainWin_MenuSysEmpower><View_MainWin_MenuUserFeedback>Feedbacks</View_MainWin_MenuUserFeedback><View_MainWin_MenuSysUpdate>Updates</View_MainWin_MenuSysUpdate><View_MainWin_MenuHelp>Helps</View_MainWin_MenuHelp><View_MainWin_MenuAbout>About </View_MainWin_MenuAbout><View_MainWin_MenuLogout>Log out</View_MainWin_MenuLogout><View_HomePageOpen>Open</View_HomePageOpen><View_HomePageOpenAllCase>All Cases</View_HomePageOpenAllCase><View_HomePageOpenLocalCase>Local Cases</View_HomePageOpenLocalCase><View_HomePageCreateCase>New Case</View_HomePageCreateCase><View_HomePageLatelyCase>Recent Cases</View_HomePageLatelyCase><View_HomePageFunctionIllustration>Instructions</View_HomePageFunctionIllustration><View_HomePageUpdateInfo>Details</View_HomePageUpdateInfo><View_HomePageMore>Check more</View_HomePageMore><View_CaseName>Case Name</View_CaseName><View_CaseAuthor>Creator</View_CaseAuthor><View_CaseCreateTime>Created</View_CaseCreateTime><View_UpdateRecentError>Update failed</View_UpdateRecentError><View_CaseListViewTitle>Case Management </View_CaseListViewTitle><View_CaseKeyword>Input keywords</View_CaseKeyword><View_CaseSelectAll>All</View_CaseSelectAll><View_CaseIndex>No.</View_CaseIndex><View_CaseNumber>Case ID</View_CaseNumber><View_CaseType>Type</View_CaseType><View_StorePath>Storage Path</View_StorePath><View_CaseDeviceCount>Devices</View_CaseDeviceCount><View_CaseOperation>Operation</View_CaseOperation><View_CaseCreationConfirm>Confirm</View_CaseCreationConfirm><View_CaseCreationSkip>Skip</View_CaseCreationSkip><View_CaseTypeEdition>Add/Delete</View_CaseTypeEdition><View_CaseNotExist>Case does not exist</View_CaseNotExist><View_CaseListTimeTo>To</View_CaseListTimeTo><View_CaseListDelete>Batch delete</View_CaseListDelete><View_CaseListSearch>Search</View_CaseListSearch><View_CaseOpen>Open</View_CaseOpen><View_CaseListIndex>No.</View_CaseListIndex><View_CaseUpdatePrompt> </View_CaseUpdatePrompt><View_DefaultCaseName> </View_DefaultCaseName><View_DevHomePage_MenuExtract>Acquire Homepage</View_DevHomePage_MenuExtract><View_DevHomePage_MenuResult>Acquisition Result</View_DevHomePage_MenuResult><View_DevHomePage_FileView>File Explor</View_DevHomePage_FileView><View_DevHomePage_Warning>Alarm</View_DevHomePage_Warning><View_DevHomePage_DevName>Device</View_DevHomePage_DevName><View_DevHomePage_Model>Model</View_DevHomePage_Model><View_DevHomePage_System>System</View_DevHomePage_System><View_DevHomePage_SerialNumber>Serial No.</View_DevHomePage_SerialNumber><View_DevHomePage_Power>Access</View_DevHomePage_Power><View_DevHomePage_TakePhoto>Photo</View_DevHomePage_TakePhoto><View_DevHomePage_Device>Device</View_DevHomePage_Device><View_DevHomePage_SDCard>SD Card</View_DevHomePage_SDCard><View_DevHomePage_Used>Used</View_DevHomePage_Used><View_DevHomePage_Unused>Free</View_DevHomePage_Unused><View_DevHomePage_No>No.</View_DevHomePage_No><View_DevHomePage_Holder>Owner</View_DevHomePage_Holder><View_DevHomePage_CredentialsType>Credential</View_DevHomePage_CredentialsType><View_DevHomePage_HolderCredentialsNo>Number</View_DevHomePage_HolderCredentialsNo><View_DevHomePage_CensorshipPerson>Submitted by</View_DevHomePage_CensorshipPerson><View_DevHomePage_UnitName>Bureau</View_DevHomePage_UnitName><View_DevHomePage_CensorshipPersonCredentialsNo>Submitter ID</View_DevHomePage_CensorshipPersonCredentialsNo><View_DevHomePage_Operator>Operator</View_DevHomePage_Operator><View_DevHomePage_CredentialsNo>Credential No.</View_DevHomePage_CredentialsNo><View_DevHomePage_Desciption>Description</View_DevHomePage_Desciption><View_DevHomePage_Edit>Edit</View_DevHomePage_Edit><View_DevHomePage_ClickESCCancel>Press ESC to Cancel</View_DevHomePage_ClickESCCancel><View_DevHomePage_UnConnect>Disconnected</View_DevHomePage_UnConnect><View_DevHomePage_Connect> </View_DevHomePage_Connect><View_DevHomePage_FileName>Filename</View_DevHomePage_FileName><View_DevHomePage_FileType>File Type</View_DevHomePage_FileType><View_DevHomePage_FilePath>File Path</View_DevHomePage_FilePath><View_DevHomePage_Type>Type</View_DevHomePage_Type><View_DevHomePage_Number>No.</View_DevHomePage_Number><View_DevHomePage_Port>Port</View_DevHomePage_Port><View_DevHomePage_IOSRoot>Jailbreak</View_DevHomePage_IOSRoot><View_DevHomePage_UnIOSRoot>No Jailbreak</View_DevHomePage_UnIOSRoot><View_DevHomePage_DdentityCard>ID Card</View_DevHomePage_DdentityCard><View_DevHomePage_CertificateOfOfficers>Officer Card</View_DevHomePage_CertificateOfOfficers><View_DevHomePage_Passport>Passport</View_DevHomePage_Passport><View_DevHomePage_StudentCard>Student ID</View_DevHomePage_StudentCard><View_DevHomePage_TemporaryResidentialPermit>Temporary Residential Permit</View_DevHomePage_TemporaryResidentialPermit><View_SelectControl_Format>Format</View_SelectControl_Format><View_SelectControl_SelectFile>Select a file</View_SelectControl_SelectFile><View_SelectControl_OpenTitle>Open a file</View_SelectControl_OpenTitle><View_SelectControl_SaveTitle>Save</View_SelectControl_SaveTitle><View_SelectControl_FolderName>Folder</View_SelectControl_FolderName><View_SelectControl_SelectFolderTitle>Select a folder</View_SelectControl_SelectFolderTitle><View_Logs_ObtainEvidenceLogView_Title>Forensic Log</View_Logs_ObtainEvidenceLogView_Title><View_Logs_ObtainEvidenceLogView_Operator>Operator</View_Logs_ObtainEvidenceLogView_Operator><View_Logs_ObtainEvidenceLogView_OpContent>Operation</View_Logs_ObtainEvidenceLogView_OpContent><View_Logs_ObtainEvidenceLogView_OpTime>Time </View_Logs_ObtainEvidenceLogView_OpTime><View_Logs_ObtainEvidenceLogView_Screenshot>Screenshot</View_Logs_ObtainEvidenceLogView_Screenshot><Export><ExportData>Export</ExportData></Export><Management><User><ListTitle>User Management </ListTitle><InfoTitle>User Info</InfoTitle><Search>Search</Search><Number>No.</Number><Account>Account</Account><Name>Name</Name><Phone>Phone</Phone><Unit>Organization</Unit><Id>ID</Id><Add>Add</Add><RemoveBatch>Batch delete</RemoveBatch><OldPassword> </OldPassword><InputPassword>Input Password</InputPassword><ConfirmPassword>Confirm Password</ConfirmPassword><SetPassword>Set Password</SetPassword><ModifyPasswordErrorPrompt> </ModifyPasswordErrorPrompt><Cancel>Cancel</Cancel><Confirm>Confirm</Confirm><AddErrorPrompt> </AddErrorPrompt><UpdateErrorPrompt> </UpdateErrorPrompt></User><Settings><Title>Settings</Title><Basic>Basics</Basic><CaseType>Case Type</CaseType><Unit>Organizations</Unit><UnitInputBox>Organization</UnitInputBox><NumberInputBox>No.</NumberInputBox><Inspection>Inspection</Inspection><InspectionDescription>Inspection Items</InspectionDescription><InspectionTooltip>Enable Inspection</InspectionTooltip><Language>Language</Language><DefaultPath>Default Path</DefaultPath><DataFilter>Filter</DataFilter><DataFilterDescription>Ignore duplicated/invalid data</DataFilterDescription><Add>Add</Add><Remove>Delete</Remove><Chinese>Chinese</Chinese><English>English</English></Settings><Plugin><Title>Plugin Management </Title></Plugin><Guide><Upgrade> </Upgrade><IOS><Title> </Title><Step1> </Step1><Step2> </Step2></IOS><Android4_0><Title> </Title><Step1> </Step1><Step2> </Step2><Step3> </Step3><Step4> </Step4><Step5> </Step5><Step6> </Step6></Android4_0><Android4_1><Title> </Title><Step1> </Step1><Step2> </Step2><Step3> </Step3><Step4> </Step4><Step5> </Step5><Step6> </Step6></Android4_1><Android5_0><Title> </Title><Step1> </Step1><Step2> </Step2><Step3> </Step3><Step4> </Step4></Android5_0><Developer><Title> </Title><Step1> </Step1><Step2> </Step2><Step3> </Step3><Step4> </Step4><Step5> </Step5><Step6> </Step6></Developer></Guide></Management><View_Common_HaveNot>Not</View_Common_HaveNot><View_Common_Save>Save</View_Common_Save><View_Common_Cancel>Cancel</View_Common_Cancel><View_StrategyRecommend_AutoExtraction>Auto-extraction</View_StrategyRecommend_AutoExtraction><View_MessageBox_Error>Sorry</View_MessageBox_Error><View_MessageBox_Success>Success</View_MessageBox_Success><View_MessageBox_Warning>Warning</View_MessageBox_Warning></ViewLanguage>
+  <MessageLanguage>
+    <Notes_ZhunBeiKaiShi> </Notes_ZhunBeiKaiShi>
+    <Notes_BeiFenChengGong>Backup Completed Successfully</Notes_BeiFenChengGong>
+    <Notes_BeiFenShiBai>Backup Failed</Notes_BeiFenShiBai>
+    <Notes_BeiFenWanChengYingYong> </Notes_BeiFenWanChengYingYong>
+    <Notes_WeiXuanZeYingYong>No App selected for extraction</Notes_WeiXuanZeYingYong>
+    <Notes_YingYongTiQuShiBai>Failed to acquire App data</Notes_YingYongTiQuShiBai>
+    <Notes_TiQuWenJian>File acquisition:</Notes_TiQuWenJian>
+    <Notes_TiQuWenJianShiBai>File acquisition failed:</Notes_TiQuWenJianShiBai>
+    <Notes_QiDongAppFuWu>Launching App service</Notes_QiDongAppFuWu>
+    <Notes_QiDongAppShiBai>Launching App service failed</Notes_QiDongAppShiBai>
+    <Notes_JieXiDuanXinXiZhong>Analysing SMS</Notes_JieXiDuanXinXiZhong>
+    <Notes_JieXiAnZhuangBaoZhong>Analysing APKs</Notes_JieXiAnZhuangBaoZhong>
+    <Notes_JieXiLianXiRenZhong>Analysing Contacts</Notes_JieXiLianXiRenZhong>
+    <Notes_JieXiTongHuaJiLu>Analysing PhoneCalls</Notes_JieXiTongHuaJiLu>
+    <Notes_JieXiLanYa>Analysing Bluetooth</Notes_JieXiLanYa>
+    <Notes_JieXiWifi>Analysing WiFi</Notes_JieXiWifi>
+    <Notes_JieXiIMEI>Analysing IMEI</Notes_JieXiIMEI>
+    <Notes_KeNengXuYaoNinZaiShou>Please allow plugin installation on the phone</Notes_KeNengXuYaoNinZaiShou>
+    <Notes_AnZhuangBaoXinXi>"Failed to parse installation pakcage info, messages, contacts, call logs"</Notes_AnZhuangBaoXinXi>
+    <Notes_AnZhuangAppTiQu>To extract the basic information via installing a APP to the phone</Notes_AnZhuangAppTiQu>
+    <Notes_YinYongShuJuTiQuShiBai>Failed to acquire app data</Notes_YinYongShuJuTiQuShiBai>
+    <Notes_BeiFengWeiKong>Backup for app data is null</Notes_BeiFengWeiKong>
+    <Notes_YinYongTiQuChengGong>App data acquired successfully</Notes_YinYongTiQuChengGong>
+    <Notes_AnZhuangBaoJieXiSB>Failed to acquire info from APK:</Notes_AnZhuangBaoJieXiSB>
+  </MessageLanguage>
+  <SourceSelection>
+    <PopUp>Eject</PopUp>
+    <Move>Remove</Move>
+    <Delete>Delete</Delete>
+    <Close>Close</Close>
+    <MoveDescription>Please select a target case(the process may take a while)</MoveDescription>
+    <Confirm>OK</Confirm>
+    <Cancel>Cancel</Cancel>
+    <Title>Data Source</Title>
+    <DeletePrompt>Confirm to delete?(including the data extracted)</DeletePrompt>
+  </SourceSelection>
+  <ErrorMessageLanguage>
+    <ErrMsg_NotFindTable>Table not found</ErrMsg_NotFindTable>
+    <ErrMsg_NotDeviceConnect>No device connected</ErrMsg_NotDeviceConnect>
+    <ErrMsg_WriteFileFail>Failed to write</ErrMsg_WriteFileFail>
+    <ErrMsg_PhoneAccessFail>Failed to access device!</ErrMsg_PhoneAccessFail>
+    <ErrMsg_NotExistAccessFile>Files to be accessed do not exist</ErrMsg_NotExistAccessFile>
+    <ErrMsg_ReadFileFail>Read Failure</ErrMsg_ReadFileFail>
+    <ErrMsg_IOSDllErrorID> </ErrMsg_IOSDllErrorID>
+  </ErrorMessageLanguage>
+  <AboutUsLanguage>
+    <AboutUs_Name> </AboutUs_Name>
+    <AboutUs_Version> </AboutUs_Version>
+    <AboutUs_SecretTime> </AboutUs_SecretTime>
+    <AboutUs_SecretLogout> </AboutUs_SecretLogout>
+    <AboutUs_ContactInformation> </AboutUs_ContactInformation>
+    <AboutUs_BusinessConsulting> </AboutUs_BusinessConsulting>
+    <AboutUs_Postcode> </AboutUs_Postcode>
+    <AboutUs_CustomerServiceAll> </AboutUs_CustomerServiceAll>
+    <AboutUs_EmailAddress> </AboutUs_EmailAddress>
+    <AboutUs_TechnicalConsulting> </AboutUs_TechnicalConsulting>
+    <AboutUs_15982165287> </AboutUs_15982165287>
+    <AboutUs_OfficialWebsite> </AboutUs_OfficialWebsite>
+    <AboutUs_Address> </AboutUs_Address>
+    <AboutUs_HeadQuartersAddress> </AboutUs_HeadQuartersAddress>
+    <AboutUs_RdCenter> </AboutUs_RdCenter>
+    <AboutUs_CompanyName> </AboutUs_CompanyName>
+    <AboutUs_WeChat> </AboutUs_WeChat>
+    <AboutUs_Copyright> </AboutUs_Copyright>
+    <AboutUs_Permanent> </AboutUs_Permanent>
+    <AboutUs_cancellatioOfAuthorization> </AboutUs_cancellatioOfAuthorization>
+  </AboutUsLanguage>
+  <ExportReportLanguage>
+    <ExportReport_ExportContent> </ExportReport_ExportContent>
+    <ExportReport_DeviceSelection> </ExportReport_DeviceSelection>
+    <ExportReport_AllEquipment> </ExportReport_AllEquipment>
+    <ExportReport_DataContent> </ExportReport_DataContent>
+    <ExportReport_DataState> </ExportReport_DataState>
+    <ExportReport_DeleteData> </ExportReport_DeleteData>
+    <ExportReport_NotDeleteData> </ExportReport_NotDeleteData>
+    <ExportReport_ExportFormat> </ExportReport_ExportFormat>
+    <ExportReport_AllData> </ExportReport_AllData>
+    <ExportReport_CheckData> </ExportReport_CheckData>
+    <ExportReport_TagData> </ExportReport_TagData>
+    <ExportReport_StorePath> </ExportReport_StorePath>
+    <ExportReport_FormatSelection> </ExportReport_FormatSelection>
+    <ExportReport_Unit> </ExportReport_Unit>
+    <ExportReport_BeganExport> </ExportReport_BeganExport>
+  </ExportReportLanguage>
+  <DeviceEditLanguage>
+    <DeviceEdit_SearchContent> </DeviceEdit_SearchContent>
+    <DeviceEdit_BrandChoice> </DeviceEdit_BrandChoice>
+  </DeviceEditLanguage>
 </LanguageResource>

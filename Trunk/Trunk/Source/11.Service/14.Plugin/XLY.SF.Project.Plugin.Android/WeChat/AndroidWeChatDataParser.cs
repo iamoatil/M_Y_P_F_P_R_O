@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
@@ -17,7 +18,7 @@ namespace XLY.SF.Project.Plugin.Android
             pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_Wechat);
             pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_SocialChat);
             pluginInfo.DeviceOSType = EnumOSType.Android;
-            pluginInfo.VersionStr = "0.0";
+            pluginInfo.VersionStr = "1.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
             pluginInfo.GroupIndex = 1;
             pluginInfo.OrderIndex = 0;
@@ -63,6 +64,24 @@ namespace XLY.SF.Project.Plugin.Android
                 if (null != qqNode)
                 {
                     ds.TreeNodes.Add(qqNode);
+                }
+
+                //微信分身
+                var rootPath = new DirectoryInfo(databasesPath).Parent.Parent.FullName;
+                var lsWechat = new DirectoryInfo(rootPath).GetDirectories("MicroMsg", SearchOption.AllDirectories).Where(f => f.Parent.FullName != mmPath).ToList();
+
+                foreach (var cwechat in lsWechat)
+                {
+                    parser = new AndroidWeChatDataParseCoreV1_0(pi.SaveDbPath, "微信分身", cwechat.Parent.FullName, mediaPath);
+
+                    qqNode = parser.BuildTree();
+
+                    if (null != qqNode)
+                    {
+                        qqNode.Text = $"微信分身[{cwechat.Parent.Name}]";
+
+                        ds.TreeNodes.Add(qqNode);
+                    }
                 }
             }
             catch (System.Exception ex)

@@ -439,6 +439,10 @@ namespace XLY.SF.Framework.BaseUtility
                         callBack(new DBDataReader(reader));
                         reader.Close();
                     }
+                    catch (SQLiteException)
+                    {
+
+                    }
                     catch (Exception ex)
                     {
                         Log4NetService.LoggerManagerSingle.Instance.Error(ex, string.Format("SQLite database [{0}] occurse errors", DataSource));
@@ -466,6 +470,10 @@ namespace XLY.SF.Framework.BaseUtility
                         var reader = com.ExecuteReader();
                         callBack(reader);
                         reader.Close();
+                    }
+                    catch (SQLiteException)
+                    {
+
                     }
                     catch (Exception ex)
                     {
@@ -496,6 +504,10 @@ namespace XLY.SF.Framework.BaseUtility
                         var reader = com.ExecuteReader();
                         callBack(new DBDataReader(reader));
                         reader.Close();
+                    }
+                    catch (SQLiteException)
+                    {
+
                     }
                     catch (Exception ex)
                     {

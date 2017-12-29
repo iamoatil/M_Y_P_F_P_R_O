@@ -33,7 +33,7 @@ namespace XLY.SF.Project.Plugin.Android
         /// <summary>
         /// 小米备份联系人数据解析核心类
         /// </summary>
-        /// <param name="mainDbPath">calllog.store文件路径</param>
+        /// <param name="mainDbPath">addressbook.store文件路径</param>
         /// <param name="bakFile">miui_bak/_tmp_bak文件路径</param>
         public XiaomiContactsDataParseCoreV1_0(string mainDbPath, string bakFile)
         {

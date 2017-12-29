@@ -33,6 +33,10 @@ namespace XLY.SF.Project.DataMirrorApp
         /// </summary>
         public bool IsInitialized { get; private set; }
 
+        //镜像是否已经关闭
+        private bool _isClosed;
+        private object _closeLocker = new object();
+
         /// <summary>
         /// 在Initialize方法中打开设备，并且初始化
         /// </summary>
@@ -93,6 +97,18 @@ namespace XLY.SF.Project.DataMirrorApp
         }
 
         /// <summary>
+        /// 关闭镜像
+        /// </summary>
+        public void Close()
+        {
+            lock(_closeLocker)
+            {
+                _isClosed = true;
+            }
+            MirrorFile.Close();
+        }
+
+        /// <summary>
         /// 发送异常状态到调用端
         /// </summary>
         /// <param name="msg"></param>
@@ -109,11 +125,17 @@ namespace XLY.SF.Project.DataMirrorApp
         /// <returns></returns>
         private int ImageDataCallBack(IntPtr data, int datasize, ref int stop)
         {
-            var buff = new byte[datasize];
-            Marshal.Copy(data, buff, 0, datasize);
+            lock (_closeLocker)
+            {
+                if (!_isClosed)
+                {
+                    var buff = new byte[datasize];
+                    Marshal.Copy(data, buff, 0, datasize);
 
-            MirrorFile.Write(buff);
-            Console.WriteLine("{0}|{1}", CmdStrings.Progress, MirrorFile.WritedSize.ToString());
+                    MirrorFile.Write(buff);
+                    Console.WriteLine("{0}|{1}", CmdStrings.Progress, MirrorFile.WritedSize.ToString());
+                }
+            }
             return 0;
         }
     }    

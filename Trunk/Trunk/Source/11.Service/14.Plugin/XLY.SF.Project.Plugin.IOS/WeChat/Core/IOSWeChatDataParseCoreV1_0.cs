@@ -285,6 +285,7 @@ namespace XLY.SF.Project.Plugin.IOS
             {
                 DataState = EnumDataState.Normal,
                 Text = LanguageHelper.GetString(Languagekeys.PluginWechat_FriendMsg),
+                Type = typeof(DefaultMessageList),
                 Id = WeChatAccount.WeChatId
             };
 
@@ -292,6 +293,7 @@ namespace XLY.SF.Project.Plugin.IOS
             {
                 DataState = EnumDataState.Normal,
                 Text = LanguageHelper.GetString(Languagekeys.PluginWechat_PublicMsg),
+                Type = typeof(DefaultMessageList),
                 Id = WeChatAccount.WeChatId
             };
 
@@ -349,6 +351,7 @@ namespace XLY.SF.Project.Plugin.IOS
             {
                 DataState = EnumDataState.Normal,
                 Text = LanguageHelper.GetString(Languagekeys.PluginWechat_ChatRoomMsg),
+                Type = typeof(DefaultMessageList),
                 Id = WeChatAccount.WeChatId
             };
 
@@ -474,6 +477,7 @@ namespace XLY.SF.Project.Plugin.IOS
                 DataState = EnumDataState.Normal,
                 Text = LanguageHelper.GetString(Languagekeys.PluginWechat_OtherDelMsg),
                 Id = WeChatAccount.WeChatId,
+                Items = new DataItems<MessageCore>(DbFilePath),
                 Type = typeof(MessageCore)
             };
             var wordMsg = new TreeNode
@@ -481,6 +485,7 @@ namespace XLY.SF.Project.Plugin.IOS
                 DataState = EnumDataState.Normal,
                 Text = LanguageHelper.GetString(Languagekeys.PluginWechat_WordDelMsg),
                 Id = WeChatAccount.WeChatId,
+                Items = new DataItems<MessageCore>(DbFilePath),
                 Type = typeof(MessageCore)
             };
             var numMsg = new TreeNode
@@ -488,6 +493,7 @@ namespace XLY.SF.Project.Plugin.IOS
                 DataState = EnumDataState.Normal,
                 Text = LanguageHelper.GetString(Languagekeys.PluginWechat_NumDelMsg),
                 Id = WeChatAccount.WeChatId,
+                Items = new DataItems<MessageCore>(DbFilePath),
                 Type = typeof(MessageCore)
             };
 

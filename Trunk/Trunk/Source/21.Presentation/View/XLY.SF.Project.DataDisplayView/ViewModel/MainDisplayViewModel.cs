@@ -43,6 +43,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         }
 
         public DataFilterViewModel FilterVM = null;
+        public ViewModelBase PreviewVM = null;
 
         private IMessageBox _MessageBox
         {
@@ -97,7 +98,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                     FilterVM.SetInspectionConfig(null);
                 }
 
-                if(isLoadData)
+                if (isLoadData)
                 {
                     LoadData(_currentDevicePath);
                 }
@@ -226,6 +227,23 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         }
         #endregion
 
+        #region 当前数据列表是否为空，是则显示提示信息
+        private bool _HasDataList2 = true;
+
+        /// <summary>
+        /// 当前数据列表是否为空，是则显示提示信息
+        /// </summary>	
+        public bool HasDataList2
+        {
+            get { return _HasDataList2; }
+            set
+            {
+                _HasDataList2 = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
         #region 是否正在查询数据
         private bool _IsFiltering = false;
 
@@ -243,6 +261,23 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         }
         #endregion
 
+        #region 是否正在加载数据
+        private bool _IsLoadingData = false;
+
+        /// <summary>
+        /// 是否正在加载数据
+        /// </summary>	
+        public bool IsLoadingData
+        {
+            get { return _IsLoadingData; }
+            set
+            {
+                _IsLoadingData = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
         #region 当前正在执行的操作
         private string _CurrentOperation = "";
 
@@ -255,6 +290,23 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
             set
             {
                 _CurrentOperation = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
+        #region 当前选择的数据列表节点
+        private object _SelectedTreeNode = null;
+
+        /// <summary>
+        /// 当前选择的数据列表节点
+        /// </summary>	
+        public object SelectedTreeNode
+        {
+            get { return _SelectedTreeNode; }
+            set
+            {
+                _SelectedTreeNode = value;
                 OnPropertyChanged();
             }
         }
@@ -294,7 +346,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         /// <param name="data"></param>
         private void OnDataViewSelectedItemChanged(object data)
         {
-            MessageAggregation.SendGeneralMsg<object>(new GeneralArgs<object>(MessageKeys.PreviewKey) { Parameters = data });
+            PreviewVM.ReceiveParameters(data);
         }
 
         #endregion
@@ -319,14 +371,21 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                     AsyncOperator.Execute(() => { CurrentOperation = Languagekeys.DeletingData; IsFiltering = true; });
                     string path = Path.Combine(_currentDevicePath, item.ToString());
                     BaseUtility.Helper.FileHelper.RemoveDirectoryReadOnly(path);
-                    Directory.Delete(path, true);
+                    try
+                    {
+                        Directory.Delete(path, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        ShowMessageBox(Languagekeys.DeleteDataError);
+                    }
                     AsyncOperator.Execute(() =>
                     {
                         IsFiltering = false;
                         var d = DataList.FirstOrDefault(e => e.Text == item.ToString());
                         DataList.Remove(d);
                         HasDataList = DataList != null && DataList.Count > 0;
-                        if (!SelectDefaultNode(DataList))
+                        if (!SelectDefaultNode())
                         {
                             LayoutViewItems = new ObservableCollection<object>();
                             SelectedLayoutViewItem = null;
@@ -364,19 +423,21 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
             if (IsFiltering)
                 return;
             IsFiltering = true;
+            IsLoadingData = true;
+            HasDataList2 = true;
+            HasDataList = false;
+            CurrentOperation = Languagekeys.dingData;
             Task.Factory.StartNew(() =>
             {
                 try
                 {
-                    //AsyncOperator.Execute(() => IsFiltering = true);
-
-                    //devicePath = @"C:\Users\fhjun\Desktop\默认案例_20171115[081055]\默认案例_20171115[081055]\R7007_20171115[081055]";
                     _currentDevicePath = devicePath;
                     var dataList = DeviceExternsion.LoadDeviceData(devicePath);
                     foreach (var item in dataList)
                     {
                         item.BuildParent();
                     }
+
                     AsyncOperator.Execute(() =>
                     {
                         DataList = dataList;
@@ -387,7 +448,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                         IsFiltering = false;
                         HasDataList = DataList != null && DataList.Count > 0;
 
-                        SelectDefaultNode(DataList);
+                        SelectDefaultNode();
                     });
                 }
                 catch (Exception ex)
@@ -396,8 +457,10 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                 }
                 finally
                 {
-                    AsyncOperator.Execute(() => 
+                    AsyncOperator.Execute(() =>
                     {
+                        IsLoadingData = false;
+                        HasDataList2 = HasDataList;
                         IsFiltering = false;
                         FilterVM.OnDataLoadedCompleted();
                     });
@@ -418,9 +481,19 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
 
                 if (!IsFiltering)
                 {
-                    SelectDefaultNode(DataList);
+                    SelectDefaultNode();
                 }
             });
+        }
+
+        /// <summary>
+        /// 选择默认的节点，当刷新数据后设置
+        /// </summary>
+        private bool SelectDefaultNode()
+        {
+            SelectedTreeNode = null;
+            SelectDefaultNode(DataList);
+            return SelectedTreeNode != null;
         }
 
         /// <summary>
@@ -434,9 +507,9 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
             }
             foreach (var item in nodes)
             {
-                if (item != null && item.Data != null)
+                if (item != null && item.IsVisible != false && (item.Data as IDataSource) != null && (item.Data as IDataSource).Total > 0)
                 {
-                    item.IsSelected = true;
+                    SelectedTreeNode = item;
                     DoSelecedAppChanged(item);
                     return true;
                 }
@@ -452,6 +525,4 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         }
         #endregion
     }
-
-
 }

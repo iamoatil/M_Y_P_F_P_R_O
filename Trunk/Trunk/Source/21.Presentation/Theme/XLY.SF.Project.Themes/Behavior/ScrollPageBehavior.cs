@@ -41,38 +41,31 @@ namespace XLY.SF.Project.Themes
         private ScrollBufferCollection _scrollBuffer;
         #endregion
 
-        #region Properties
-        /// <summary>
-        /// 是否启用滚动分页
-        /// </summary>
-        public bool IsEnabled { get; set; }
-        #endregion
-
         #region Event
 
         protected override void OnAttached()
         {
             base.OnAttached();
-            if(!IsEnabled)
-            {
-                return;
-            }
-
+            
             #region 初始化时加载两页数据
             try
             {
                 var dg = AttachHelper.GetParent<ItemsControl>(AssociatedObject);
-                _page = new PageSource(dg.ItemsSource);
-                _scrollBuffer = new ScrollBufferCollection();
-                _scrollBuffer.Transaction(() =>
+                if (dg == null)
+                    return;
+                if(dg.ItemsSource == null)
                 {
-                    _scrollBuffer.AddRange(_page.View);
-                    if (_page.NextPage())
+                    dg.Loaded += (s,e)=> 
                     {
-                        _scrollBuffer.AddRange(_page.View);
-                    }
-                });
-                dg.ItemsSource = _scrollBuffer;
+                        if (dg.ItemsSource == null)
+                            return;
+                        InitPage(dg);
+                    };
+                }
+                else
+                {
+                    InitPage(dg);
+                }
             }
             catch  //如果是非分页数据源集合，则直接返回
             {
@@ -89,6 +82,26 @@ namespace XLY.SF.Project.Themes
             base.OnDetaching();
         }
 
+        /// <summary>
+        /// 初始化时加载两页数据
+        /// </summary>
+        /// <param name="container"></param>
+        private void InitPage(ItemsControl container)
+        {
+            _page = new PageSource(container.ItemsSource);
+            _page.PageSize = (int)container.GetValue(AttachHelper.ScrollPageSizeProperty);
+            _scrollBuffer = new ScrollBufferCollection();
+            _scrollBuffer.Transaction(() =>
+            {
+                _scrollBuffer.AddRange(_page.View);
+                if (_page.NextPage())
+                {
+                    _scrollBuffer.AddRange(_page.View);
+                }
+            });
+            container.ItemsSource = _scrollBuffer;
+        }
+
         private void OnScroll()
         {
             if (AssociatedObject.ScrollableHeight == 0)
@@ -96,10 +109,11 @@ namespace XLY.SF.Project.Themes
             #region 如果滚动到底部，则向后翻页
             if (AssociatedObject.VerticalOffset >= AssociatedObject.ScrollableHeight)
             {
+                _lastScrollDirection = false;
                 #region 如果上一次滚动是往下滚
                 if (_lastScrollDirection == null || _lastScrollDirection == false)
                 {
-                    if (_page.Cursor >= _page.Total - _page.PageSize)  //只需要滚动到倒数第二页，缓冲区是2页数据
+                    if (_page.Cursor >= _page.Count - _page.PageSize)  //只需要滚动到倒数第二页，缓冲区是2页数据
                         return;
                     _scrollBuffer.Transaction(() =>
                     {
@@ -110,12 +124,14 @@ namespace XLY.SF.Project.Themes
                             _scrollBuffer.AddRange(_page.View);
                         }
                     });
+
+                    AssociatedObject.ScrollToVerticalOffset(Math.Max(0, AssociatedObject.VerticalOffset - _page.PageSize));
                 }
                 #endregion
                 #region 如果上一次滚动是往上滚
                 else
                 {
-                    if (_page.Cursor >= _page.Total)
+                    if (_page.Cursor >= _page.Count)
                         return;
                     _scrollBuffer.Transaction(() =>
                     {
@@ -129,17 +145,17 @@ namespace XLY.SF.Project.Themes
                             _scrollBuffer.AddRange(_page.View);
                         }
                     });
+
+                    AssociatedObject.ScrollToVerticalOffset(Math.Max(1, AssociatedObject.VerticalOffset - _page.PageSize));
                 }
                 #endregion
-
-                _lastScrollDirection = false;
-                AssociatedObject.ScrollToVerticalOffset(AssociatedObject.VerticalOffset - _page.PageSize);
+                
+                //AssociatedObject.ScrollToVerticalOffset(Math.Max(0, AssociatedObject.VerticalOffset - _page.PageSize));
             }
             #endregion
             #region 如果滚动到顶部，则向前翻页
             else if (AssociatedObject.VerticalOffset <= 0)
             {
-                var dg = AttachHelper.GetParent<ItemsControl>(AssociatedObject);
                 if (_page.Cursor <= 0)
                     return;
                 #region 如果上一次滚动是往上滚
@@ -300,25 +316,32 @@ namespace XLY.SF.Project.Themes
             public PageSource(object obj)
             {
                 _owner = obj;
+                PageSize = 50;
             }
 
             private dynamic _owner;
 
-            public int PageSize { get => _owner.PageSize; }
-            public int Cursor { get => _owner.Cursor; }
+            public int PageSize { get; set; }
+            public int Cursor { get; set; }
 
-            public int Total => _owner.Total;
+            public int Count => _owner.Count;
 
-            public IEnumerable View => _owner.View;
+            public IEnumerable View => _owner.GetView(Cursor, PageSize);
 
             public bool NextPage()
             {
-                return _owner.NextPage();
+                if (Cursor + PageSize >= Count)
+                    return false;
+                Cursor += PageSize;
+                return true;
             }
 
             public bool PrePage()
             {
-                return _owner.PrePage();
+                if (Cursor <= 0)
+                    return false;
+                Cursor -= PageSize;
+                return true;
             }
         }
     }

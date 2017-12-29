@@ -83,6 +83,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Call\OppoCallDataParser.cs" />
+    <Compile Include="Call\HuaweiCallDataParser.cs" />
+    <Compile Include="Call\MeizuCallDataParser.cs" />
+    <Compile Include="Call\SamsungCallDataParser.cs" />
+    <Compile Include="Call\ZhongXingCallDataParser.cs" />
+    <Compile Include="Call\XiaoMiCallDataParser.cs" />
+    <Compile Include="Call\VivoCallDataParser.cs" />
+    <Compile Include="Call\KuPaiCallDataParser.cs" />
     <Compile Include="Call\AndroidCallDataParser.cs" />
     <Compile Include="Call\Core\AndroidCallDataParseCoreV1_0.cs" />
     <Compile Include="Call\Core\XiaomiCallDataParseCoreV1_0.cs" />
@@ -93,6 +101,11 @@
     <Compile Include="Call\Core\MeizuCallDataParseCoreV1_0.cs" />
     <Compile Include="Call\Core\KupaiCallDataParseCoreV1_0.cs" />
     <Compile Include="Call\Core\HuaweiCallDataParseCoreV1_0.cs" />
+    <Compile Include="Contacts\OppoContactDataParser.cs" />
+    <Compile Include="Contacts\HuaweiContactDataParser.cs" />
+    <Compile Include="Contacts\XiaomiContactDataParser.cs" />
+    <Compile Include="Contacts\VivoContactDataParser.cs" />
+    <Compile Include="Contacts\KuPaiContactDataParser.cs" />
     <Compile Include="Contacts\AndroidContactsDataParser.cs" />
     <Compile Include="Contacts\Core\XiaomiContactsDataParseCoreV1_0.cs" />
     <Compile Include="Contacts\Core\VivoContactsDataParseCoreV1_0.cs" />
@@ -106,9 +119,21 @@
     <Compile Include="DeviceProperty\AndroidBluetoothDataParser.cs" />
     <Compile Include="DeviceProperty\AndroidDevicePropertyDataParser.cs" />
     <Compile Include="DeviceProperty\AndroidMirrorDevicePropertyDataParser.cs" />
+    <Compile Include="File\AndroidAudioDataParser.cs" />
+    <Compile Include="File\AndroidMirrorAudioDataParser.cs" />
+    <Compile Include="File\AndroidPictureDataParser.cs" />
+    <Compile Include="File\AndroidMirrorPictureDataParser.cs" />
+    <Compile Include="File\AndroidVideoDataParser.cs" />
+    <Compile Include="File\AndroidMirrorVideoDataParser.cs" />
+    <Compile Include="File\AndroidWordDataParser.cs" />
+    <Compile Include="File\AndroidMirrorWordDataParser.cs" />
     <Compile Include="InstalledApp\AndroidInstalledAppDataParser.cs" />
     <Compile Include="InstalledApp\AndroidMirrorInstalledAppDataParser.cs" />
     <Compile Include="Mms\AndroidMMSDataParser.cs" />
+    <Compile Include="MTP\MTPAudioDataParser.cs" />
+    <Compile Include="MTP\MTPPictureDataParser.cs" />
+    <Compile Include="MTP\MTPVideoDataParser.cs" />
+    <Compile Include="MTP\MTPWordDataParser.cs" />
     <Compile Include="Other\Android163EmailDataParser.cs" />
     <Compile Include="Other\AndroidLocalBrowseDataParser.cs" />
     <Compile Include="Other\AndroidQQBrowseDataParser.cs" />
@@ -132,6 +157,11 @@
     <Compile Include="QQ\Core\AndroidQQLiteDataParseCoreV1_0.cs" />
     <Compile Include="QQ\Core\AndroidQQEimDataParseCoreV1_0.cs" />
     <Compile Include="QQ\Core\AndroidQQDataParseCoreV1_0.cs" />
+    <Compile Include="Sms\OppoSMSDataParser.cs" />
+    <Compile Include="Sms\HuaweiSMSDataParser.cs" />
+    <Compile Include="Sms\XiaoMiSMSDataParser.cs" />
+    <Compile Include="Sms\VivoSMSDataParser.cs" />
+    <Compile Include="Sms\KuPaiSMSDataParser.cs" />
     <Compile Include="Sms\AndroidSmsDataParser.cs" />
     <Compile Include="Sms\Core\AndroidSmsDataParseCoreV1_0.cs" />
     <Compile Include="Sms\Core\XiaomiSmsDataParseCoreV1_0.cs" />
@@ -139,6 +169,8 @@
     <Compile Include="Sms\Core\OppoSmsDataParseCoreV1_0.cs" />
     <Compile Include="Sms\Core\KupaiSmsDataParseCoreV1_0.cs" />
     <Compile Include="Sms\Core\HuaweiSmsDataParseCoreV1_0.cs" />
+    <Compile Include="WeChat\Core\WeChatBackupDataParserCoreV1_0.cs" />
+    <Compile Include="WeChat\WeChatBackupDataParser.cs" />
     <Compile Include="WeChat\AndroidWeChatDataParser.cs" />
     <Compile Include="WeChat\Core\AndroidWeChatDataParseCoreV1_0.cs" />
     <Compile Include="WeChat\Core\WeChatDataParseHelper.cs" />
@@ -185,6 +217,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /r /y $(TargetDir)$(TargetName).*  $(ProjectDir)..\..\..\31.Build\$(ConfigurationName)

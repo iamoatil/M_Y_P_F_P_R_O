@@ -60,16 +60,22 @@ namespace XLY.SF.Project.Domains
         [XmlElement("data")]
         public List<DataView> DataView { get; set; }
 
+        [XmlIgnore]
+        [NonSerialized]
+        private Device _Phone;
+
         /// <summary>
         /// 提取的手机，用于插件
         /// </summary>
         [XmlIgnore]
-        public Device Phone { get; set; }
+        public Device Phone { get => _Phone; set { _Phone = value; } }
 
         /// <summary>
         /// 插件文件名，相对路径，表示解析器调用的主插件
         /// </summary>
-        public override string ScriptFile => "main.py";
+        public override string ScriptFile { get; set; }
+        [XmlIgnore]
+        public string FileFullPath { get; set; }
 
         public override void AfterReadConfigure()
         {
@@ -78,6 +84,10 @@ namespace XLY.SF.Project.Domains
             {
                 SourcePath = new SourceFileItems();
                 SourcePath.AddItems(SourcePathStr);
+            }
+            if(DataView != null)
+            {
+                DataView.ForEach(dv => dv.Plugin = this);
             }
         }
     }

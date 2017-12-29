@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
-using XLY.SF.Project.Domains;
 using XLY.SF.Project.ScriptEngine.Engine;
 
 /* ==============================================================================
@@ -18,10 +16,13 @@ namespace XLY.SF.Project.ScriptEngine
     /// <summary>
     /// 执行JavaScript脚本
     /// </summary>
-    [ExportMetadata("PluginLanguage", PluginLanguage.JavaScript)]
-    [Export("ScriptContext", typeof(IScriptContext))]
     public class JavaScriptContext : IScriptContext
     {
+        /// <summary>
+        /// 特征库文件的基本路径，为脚本文件的目录
+        /// </summary>
+        public string CharatorBasePath { get; set; }
+
         /// <summary>
         /// 执行JavaScript脚本，该脚本同源SPF脚本格式，在后续只兼容执行，不再添加新脚本
         /// </summary>
@@ -37,8 +38,11 @@ namespace XLY.SF.Project.ScriptEngine
             {
                 using (JavascriptContext context = new JavascriptContext())
                 {
-                    context.SetParameter("XLY", SingleWrapperHelper<XLYEngine>.Instance);
-                    var ac = new Action<object>(s => { SingleWrapperHelper<XLYEngine>.Instance.Debug.Write(s); });
+                    XLYEngine engine = new XLYEngine();
+                    engine.Sqlite.CharatorBasePath = CharatorBasePath;
+
+                    context.SetParameter("XLY", engine);
+                    var ac = new Action<object>(s => { engine.Debug.Write(s); });
                     context.SetParameter("log", ac);
                     if (paramValues != null)
                     {
@@ -59,6 +63,7 @@ namespace XLY.SF.Project.ScriptEngine
             }
             catch (Exception ex)
             {
+                Console.WriteLine("JavaScriptContext Error! " + ex.Message + ex.StackTrace);
                 if (isThrowExeception)
                 {
                     throw ex;

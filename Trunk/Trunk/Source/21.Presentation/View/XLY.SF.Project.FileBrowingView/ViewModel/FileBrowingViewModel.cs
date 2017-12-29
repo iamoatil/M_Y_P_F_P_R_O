@@ -15,7 +15,6 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Core.Base.MessageAggregation;
@@ -105,11 +104,26 @@ namespace XLY.SF.Project.FileBrowingView
             //初始化服务
             LoadingData(async () =>
             {
-                Service = FileBrowsingServiceFactory.GetFileBrowsingService(Source);
-                FileBrowingNode ss = await Service.GetRootNode();
+                if (parameters is LocalFileDevice ld)
+                {
+                    Service = FileBrowsingServiceFactory.GetFileBrowsingService(ld.PathName);
+                }
+                else
+                {
+                    Service = FileBrowsingServiceFactory.GetFileBrowsingService(Source);
+                }
+                if (null != Service)
+                {
+                    CanFileBrowing = true;
+                    FileBrowingNode ss = await Service.GetRootNode();
 
-                Roots = new List<FileBrowingTreeNode>() { new FileBrowingTreeNode(ss) };
-                OpenFileFolderNode(Roots[0]);
+                    Roots = new List<FileBrowingTreeNode>() { new FileBrowingTreeNode(ss) };
+                    OpenFileFolderNode(Roots[0]);
+                }
+                else
+                {
+                    CanFileBrowing = false;
+                }
             });
         }
 
@@ -209,6 +223,21 @@ namespace XLY.SF.Project.FileBrowingView
             }
         }
 
+        private bool _CanFileBrowing = false;
+
+        /// <summary>
+        /// 是否可以文件浏览
+        /// </summary>
+        public bool CanFileBrowing
+        {
+            get => _CanFileBrowing;
+            set
+            {
+                _CanFileBrowing = value;
+                OnPropertyChanged();
+            }
+        }
+
         private bool _IsLoading = false;
 
         /// <summary>
@@ -305,7 +334,7 @@ namespace XLY.SF.Project.FileBrowingView
                 return;
             }
 
-            if(null != CurFileBrowingTreeNode)
+            if (null != CurFileBrowingTreeNode)
             {
                 CurFileBrowingTreeNode.IsTreeSelected = false;
             }
@@ -478,7 +507,7 @@ namespace XLY.SF.Project.FileBrowingView
         {
             if (null == TableItems || !TableItems.Any(f => f.IsSelected))
             {//没有可以下载的文件节点
-                MessageBox.ShowDialogErrorMsg(LanguageHelper.LanguageManager[Languagekeys.FileBrowing_Msg_SelectDownloadFileNode]);
+                MessageBox.ShowErrorMsg(LanguageHelper.LanguageManager[Languagekeys.FileBrowing_Msg_SelectDownloadFileNode]);
             }
             else
             {

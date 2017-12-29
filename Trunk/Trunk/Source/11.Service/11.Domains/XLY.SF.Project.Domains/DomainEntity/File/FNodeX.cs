@@ -133,16 +133,6 @@ namespace XLY.SF.Project.Domains
         public DIR_FILE_NODE_INFO Source { get; set; }
 
         /// <summary>
-        /// 当前节点的FILEX对象
-        /// </summary>
-        /// <returns></returns>
-        public FileX GetFileX()
-        {
-            return new FileX();
-        }
-
-
-        /// <summary>
         /// 当前节点的全路径
         /// </summary>
         public string FullPath

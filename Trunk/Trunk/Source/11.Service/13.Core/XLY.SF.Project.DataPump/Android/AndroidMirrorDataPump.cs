@@ -8,12 +8,12 @@ using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Services;
 
-namespace XLY.SF.Project.DataPump.Android
+namespace XLY.SF.Project.DataPump
 {
     /// <summary>
     /// Android镜像数据泵。
     /// </summary>
-    public class AndroidMirrorDataPump : ControllableDataPumpBase
+    public class AndroidMirrorDataPump : InitAtExecutionDataPump
     {
         #region Fields
 
@@ -24,7 +24,7 @@ namespace XLY.SF.Project.DataPump.Android
         #region Constructors
 
         /// <summary>
-        /// 初始化类型 XLY.SF.Project.DataPump.Android.AndroidMirrorDataPump 实例。
+        /// 初始化类型 XLY.SF.Project.DataPump.AndroidMirrorDataPump 实例。
         /// </summary>
         /// <param name="metadata">与此数据泵关联的元数据信息。</param>
         public AndroidMirrorDataPump(Pump metadata)
@@ -48,11 +48,7 @@ namespace XLY.SF.Project.DataPump.Android
 
         #region Protected
 
-        /// <summary>
-        /// 使用特定的执行上下文执行服务。
-        /// </summary>
-        /// <param name="context">执行上下文。</param>
-        protected sealed override void ExecuteCore(DataPumpControllableExecutionContext context)
+        protected sealed override void OverrideExecute(DataPumpExecutionContext context)
         {
             switch (context.Source.ItemType)
             {
@@ -71,10 +67,11 @@ namespace XLY.SF.Project.DataPump.Android
         }
 
         /// <summary>
-        /// 初始化数据泵。
+        /// 初始化
         /// </summary>
+        /// <param name="context">执行上下文。</param>
         /// <returns>成功返回true；否则返回false。</returns>
-        protected override Boolean InitializeCore()
+        protected override Boolean InitAtFirstTime(DataPumpExecutionContext context)
         {
             IFileSystemDevice device = CreateFileSystemDevice();
             if (device == null) return false;
@@ -90,8 +87,8 @@ namespace XLY.SF.Project.DataPump.Android
         {
             IFileSystemDevice device = new MirrorDevice
             {
-                Source = Metadata.Source,
-                ScanModel = (Byte)Metadata.ScanModel
+                Source = PumpDescriptor.Source,
+                ScanModel = (Byte)PumpDescriptor.ScanModel
             };
             return device;
         }
@@ -103,7 +100,7 @@ namespace XLY.SF.Project.DataPump.Android
         private void HandleWithFileExtension(DataPumpExecutionContext context)
         {
             SourceFileItem source = context.Source;
-            String[] configs = source.Config.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+            String[] configs = source.Config.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             if (configs.Length == 0) return;
             KeyValueItem kv = new KeyValueItem
             {

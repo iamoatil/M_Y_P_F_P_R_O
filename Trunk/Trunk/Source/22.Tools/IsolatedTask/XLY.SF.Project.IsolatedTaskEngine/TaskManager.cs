@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using XLY.SF.Project.IsolatedTaskEngine.Common;
-using System.Collections.Concurrent;
 
 namespace XLY.SF.Project.IsolatedTaskEngine
 {
@@ -116,7 +111,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
                 _tasks.Remove((TaskHandler)sender);
             }
             _semaphore.Release();
-            TaskEngine.Logger.Info($"Task manager recycle one handler:{((TaskHandler)sender).Token}");
+            TaskEngine.Logger.Info($"Task manager recycle one handler:{((TaskHandler)sender).HandlerId}");
         }
 
         #endregion

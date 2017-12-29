@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Core.Base.ViewModel;
-using XLY.SF.Project.DataPump.Android;
-using XLY.SF.Project.DataPump.IOS;
+using XLY.SF.Project.DataPump;
 using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.DataPump
@@ -34,51 +33,17 @@ namespace XLY.SF.Project.DataPump
                 case EnumPump.Mirror:
                     dp = GetMirrorDataPump(pump);
                     break;
+                case EnumPump.LocalData:
+                    dp = new LocalFileDataPump(pump);
+                    break;
+                case EnumPump.MTP:
+                    dp = new MtpDataPump(pump);
+                    break;
                 default:
                     break;
             }
             dp?.Initialize();
             return dp;
-        }
-
-        /// <summary>
-        /// 执行数据泵。
-        /// </summary>
-        /// <param name="dataPump">元数据。</param>
-        /// <param name="source">数据源。</param>
-        /// <param name="reporter">异步通知器。</param>
-        /// <param name="items">提取项列表。</param>
-        /// <returns>数据泵任务执行上下文。</returns>
-        public static DataPumpExecutionContext Execute(this DataPumpBase dataPump, SourceFileItem source, MultiTaskReporterBase reporter, params ExtractItem[] items)
-        {
-            DataPumpExecutionContext context = dataPump.CreateContext(source);
-            context.ExtractItems = items;
-            DataPumpControllableExecutionContext contextEx = context as DataPumpControllableExecutionContext;
-            if (contextEx != null) contextEx.Reporter = reporter;
-            dataPump.Execute(context);
-            return context;
-        }
-
-        /// <summary>
-        /// 取消指定执行上下文关联的任务。
-        /// </summary>
-        /// <param name="context">执行上下文关联。</param>
-        public static void Cancel(this DataPumpControllableExecutionContext context)
-        {
-            if (context == null) return;
-            ControllableDataPumpBase dataPump = context.Owner as ControllableDataPumpBase;
-            dataPump.Cancel(context);
-        }
-
-        /// <summary>
-        /// 取消指定执行上下文关联的任务。
-        /// </summary>
-        /// <param name="context">执行上下文关联。</param>
-        public static void Cancel(this DataPumpExecutionContext context)
-        {
-            DataPumpControllableExecutionContext contextEx = context as DataPumpControllableExecutionContext;
-            if (contextEx == null) return;
-            Cancel(contextEx);
         }
 
         /// <summary>
@@ -118,29 +83,6 @@ namespace XLY.SF.Project.DataPump
 
         #endregion
 
-        #region Internal
-
-        /// <summary>
-        /// 创建执行上下文。
-        /// </summary>
-        /// <param name="dataPump">数据泵。</param>
-        /// <param name="metaData">元数据。</param>
-        /// <param name="rootSavePath">保存路径。</param>
-        /// <param name="source">数据源。</param>
-        /// <param name="extractItems">提取项列表。</param>
-        /// <param name="asyn">异步通知器。</param>
-        /// <returns>执行上下文。</returns>
-        internal static DataPumpExecutionContext CreateContext(this DataPumpBase dataPump, Pump metaData, String rootSavePath, SourceFileItem source, IEnumerable<ExtractItem> extractItems, DefaultMultiTaskReporter asyn = null)
-        {
-            DataPumpExecutionContext context = dataPump.CreateContext(source);
-            context.ExtractItems = extractItems;
-            DataPumpControllableExecutionContext contextEx = context as DataPumpControllableExecutionContext;
-            if (contextEx != null) contextEx.Reporter = asyn;
-            return contextEx;
-        }
-
-        #endregion
-
         #region Private
 
         private static DataPumpBase GetUsbDataDataPump(Pump pump)
@@ -148,18 +90,15 @@ namespace XLY.SF.Project.DataPump
             switch (pump.OSType)
             {
                 case EnumOSType.Android when pump.Source is Device device:
+                    if ((pump.Solution & PumpSolution.Downgrading) == PumpSolution.Downgrading)
+                    {
+                        return new AndroidDowngradingDataPump(pump);
+                    }
                     if (device.IsRoot || device.Status == EnumDeviceStatus.Recovery)
                     {
                         return new AndroidUsbDataPump(pump);
                     }
-                    else if (device.Brand.ToSafeString().ToLower() == "vivo" || device.Manufacture.ToSafeString().ToLower() == "vivo")
-                    {
-                        return new AndroidVivoBackupDataPump(pump);
-                    }
-                    else
-                    {
-                        return new AndroidUsbUnrootDataPump(pump);
-                    }
+                    return new AndroidUsbUnrootDataPump(pump);
                 case EnumOSType.IOS when pump.Source is Device:
                     return new IOSUsbDataPump(pump);
                 default:

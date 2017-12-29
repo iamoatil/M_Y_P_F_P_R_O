@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 
-namespace XLY.SF.Project.DataPump.IOS
+namespace XLY.SF.Project.DataPump
 {
     /// <summary>
     /// IOS镜像数据泵。
@@ -24,7 +24,7 @@ namespace XLY.SF.Project.DataPump.IOS
         #region Constructors
 
         /// <summary>
-        /// 初始化类型 XLY.SF.Project.DataPump.IOS.IOSMirrorDataPump 实例。
+        /// 初始化类型 XLY.SF.Project.DataPump.IOSMirrorDataPump 实例。
         /// </summary>
         /// <param name="metadata">与此数据泵关联的元数据信息。</param>
         public IOSMirrorDataPump(Pump metadata)
@@ -41,12 +41,10 @@ namespace XLY.SF.Project.DataPump.IOS
 
         protected override Boolean InitializeCore()
         {
-            //1.获取镜像文件路径
-            String mirrorFile = Metadata.Source as String;
+            String mirrorFile = PumpDescriptor.Source as String;
             if (String.IsNullOrWhiteSpace(mirrorFile)) return false;
 
-            //2.解压
-            String destPath = Metadata.SourceStorePath;
+            String destPath = PumpDescriptor.SourceStorePath;
             if (Directory.Exists(destPath))
             {
                 Directory.Delete(destPath, true);
@@ -55,10 +53,11 @@ namespace XLY.SF.Project.DataPump.IOS
             return true;
         }
 
-        protected override Boolean InitAtFirstTime()
+        protected override Boolean InitAtFirstTime(DataPumpExecutionContext context)
         {
-            String mirrorFile = (String)Metadata.Source;
-            ZipFile.ExtractToDirectory(mirrorFile, _destPath);
+            String mirrorFile = (String)PumpDescriptor.Source;
+
+            Framework.BaseUtility.WinRARCSharp.UnRAR(_destPath, FileHelper.GetFilePath(mirrorFile), FileHelper.GetFileName(mirrorFile));
 
             //3.处理app文件夹
             var directories = Directory.GetDirectories(_destPath);
@@ -72,11 +71,11 @@ namespace XLY.SF.Project.DataPump.IOS
             return true;
         }
 
-        protected override void OverrideExecute(DataPumpControllableExecutionContext context)
+        protected override void OverrideExecute(DataPumpExecutionContext context)
         {
             if (context.Source.ItemType == Domains.SourceFileItemType.NormalPath)
             {
-                context.Source.Local = FileHelper.ConnectPath(_destPath, context.Source.Config);
+                context.Source.Local = FileHelper.ConnectPath(_destPath, context.Source.Config.Replace('/', '\\'));
             }
         }
 

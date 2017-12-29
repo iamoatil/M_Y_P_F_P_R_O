@@ -20,6 +20,8 @@
   <DeletingData>正在删除数据...</DeletingData>
   <NotOpenInspectionTip>未打开智能检视!</NotOpenInspectionTip>
   <NotOpenInspectionTip2>请在设置中勾选"默认打开智能检视"</NotOpenInspectionTip2>
+  <DeleteDataError>删除失败，请手动删除数据后再加载数据!</DeleteDataError>
+  <LoadingData>正在加载数据...</LoadingData>
 </LanguageResource>
 
 

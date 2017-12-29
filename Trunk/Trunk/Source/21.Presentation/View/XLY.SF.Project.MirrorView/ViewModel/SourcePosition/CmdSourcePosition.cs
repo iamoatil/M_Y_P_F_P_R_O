@@ -97,12 +97,24 @@ namespace XLY.SF.Project.MirrorView
         }
         private bool _isPausing;
 
+        /// <summary>
+        /// 镜像设备是否支持暂停
+        /// </summary>
+        private bool DeviceCanPause { get; set; }
+
         public bool CanPause
         {
             get { return _canPause; }
             private set
             {
-                _canPause = value;
+                if (value && DeviceCanPause)
+                {//只有设备支持暂停镜像才设置为可暂停
+                    _canPause = value;
+                }
+                else
+                {
+                    _canPause = false;
+                }
                 OnPropertyChanged();
             }
         }
@@ -128,19 +140,18 @@ namespace XLY.SF.Project.MirrorView
         /// <summary>
         /// 刷新分区信息
         /// </summary>
-        public void RefreshPartitions(IDevice dev)
+        public void RefreshPartitions(Device device)
         {
-            Device device = (Device)dev;
             if (device == null)
             {
                 return;
             }
 
             List<Partition> partitions = device.GetPartitons();
-            List<CmdDiskPartitions.PartitionElement> partitionList = new List<CmdDiskPartitions.PartitionElement>();
+            List<PartitionElement> partitionList = new List<PartitionElement>();
             foreach (var item in partitions)
             {
-                partitionList.Add(new CmdDiskPartitions.PartitionElement(item));
+                partitionList.Add(new PartitionElement(item));
             }
 
             if (device.DeviceType == EnumDeviceType.Phone)
@@ -155,7 +166,11 @@ namespace XLY.SF.Project.MirrorView
             {
                 SDDisk.Items = partitionList;
             }
+
+            DeviceCanPause = device.OSType == EnumOSType.Android;
         }
+
+        public string TargetMirrorFile { get; set; }
 
         /// <summary>
         /// 开始执行镜像
@@ -173,6 +188,8 @@ namespace XLY.SF.Project.MirrorView
                         if (item.IsChecked)
                         {
                             list.Add(new MirrorBlockInfo(targetDir, item.Path));
+
+                            TargetMirrorFile = list[0].TargetMirrorFile;
                         }
                     }
                 }
@@ -186,6 +203,11 @@ namespace XLY.SF.Project.MirrorView
             {
                 _mirrorControlerBox.Stop();
             }
+
+            IsPausing = false;
+            IsMirroring = false;
+            CanPause = false;
+            CanContinue = false;
         }
 
         internal void Pause()

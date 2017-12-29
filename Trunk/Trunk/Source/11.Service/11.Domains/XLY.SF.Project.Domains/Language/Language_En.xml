@@ -1,3 +1,716 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<LanguageResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<LanguageResource>
+  <DeviceLanguage>
+    <DeviceType_IOS>IOS</DeviceType_IOS>
+    <DeviceUseableValidation_InUse> </DeviceUseableValidation_InUse>
+    <DeviceUseableValidation_Offline> </DeviceUseableValidation_Offline>
+    <DeviceUseableValidation_IsInvalid> </DeviceUseableValidation_IsInvalid>
+    <Device_PopUp>Eject</Device_PopUp>
+    <Device_Move>Remove</Device_Move>
+    <Device_Delete>Delete</Device_Delete>
+    <Device_Close>Close</Device_Close>
+    <Partition_all>All Memory Chips</Partition_all>
+    <Partition_data>Database</Partition_data>
+    <Partition_system>System</Partition_system>
+    <Partition_sdcard>Internal Storage</Partition_sdcard>
+    <Partition_cache>Cache </Partition_cache>
+    <Partition_IsInvalid>No image source available</Partition_IsInvalid>
+    <IOSExtractLocalApps>Acquiring app data from device {0}</IOSExtractLocalApps>
+    <IOSExtractNotLocalApps>Acquiring {1} app data from  device {0}…</IOSExtractNotLocalApps>
+    <IOSExtractNotLocalAppsOver> {0} APP data acquisition completed </IOSExtractNotLocalAppsOver>
+    <IOSInitProgress>Initialization progress is at {0}%</IOSInitProgress>
+    <IOSCopyProgress> {0}MB copied</IOSCopyProgress>
+    <IOSCopyDataOver> </IOSCopyDataOver>
+    <IOSExtractLocalOver>App data acquisition completed</IOSExtractLocalOver>
+    <IOSLastStepProgress> </IOSLastStepProgress>
+    <IOSCopyError>Error occurred while copying</IOSCopyError>
+    <IOSUserExit>Exit</IOSUserExit>
+    <IOSExtractLocalAppsReport> </IOSExtractLocalAppsReport>
+    <IOSExtractNotLocalAppProgress> </IOSExtractNotLocalAppProgress>
+    <IOSDeviceCopyError> </IOSDeviceCopyError>
+  </DeviceLanguage>
+  <OtherLanguage>
+    <PluginModule_WeiZhi>Unknown</PluginModule_WeiZhi>
+    <PluginModule_ZhengChang>Normal</PluginModule_ZhengChang>
+    <PluginModule_ShanChu>Deleted</PluginModule_ShanChu>
+    <PluginModule_SuiPian>Fragmented</PluginModule_SuiPian>
+    <DateTimeFormat_Year>Year</DateTimeFormat_Year>
+    <DateTimeFormat_Month>Month</DateTimeFormat_Month>
+    <DateTimeFormat_Day>Day</DateTimeFormat_Day>
+    <DateTimeFormat_Hour>Hour</DateTimeFormat_Hour>
+    <DateTimeFormat_Minite>Minute</DateTimeFormat_Minite>
+    <DateTimeFormat_Second>Second</DateTimeFormat_Second>
+    <DeviceType_IOS>iPhone</DeviceType_IOS>
+    <DeviceType_Android>Android</DeviceType_Android>
+    <DeviceType_BlackBerry>Blackberry</DeviceType_BlackBerry>
+    <Device_IOS_IsRoot_Root>Jailbreaked</Device_IOS_IsRoot_Root>
+    <Device_IOS_IsRoot_NotRoot>No Jailbreak</Device_IOS_IsRoot_NotRoot>
+    <Device_Android_IsRoot_Root>Rooted</Device_Android_IsRoot_Root>
+    <Device_Android_IsRoot_NotRoot>No Root</Device_Android_IsRoot_NotRoot>
+    <FileXProperty_FileName>Filename</FileXProperty_FileName>
+    <FileXProperty_FullPath>FullPath</FileXProperty_FullPath>
+    <FileXProperty_ExtName>Extension</FileXProperty_ExtName>
+    <FileXProperty_FileType>Type</FileXProperty_FileType>
+    <FileXProperty_FileSize>Size</FileXProperty_FileSize>
+    <FileXProperty_Property>Attributes</FileXProperty_Property>
+    <FileXProperty_CreateDate>Created Date</FileXProperty_CreateDate>
+    <FileXProperty_LastAccessDate>Accessed Date</FileXProperty_LastAccessDate>
+    <FileXProperty_LastEditDate>Modified Date</FileXProperty_LastEditDate>
+    <EntityDescAttribute_Name>Name</EntityDescAttribute_Name>
+    <EntityDescAttribute_Age>Age</EntityDescAttribute_Age>
+    <EnumCallType_Unknown>Unknown</EnumCallType_Unknown>
+    <EnumCallType_CallIn>Incoming Calls</EnumCallType_CallIn>
+    <EnumCallType_CallOut>Outgoing Calls</EnumCallType_CallOut>
+    <EnumCallType_MissedCallIn>Missed Calls</EnumCallType_MissedCallIn>
+    <EnumCallType_MissedCallInNotViewed>Missed Incoming Calls(not checked)</EnumCallType_MissedCallInNotViewed>
+    <EnumCallType_MissedCallInAlreadyOpen>Missed Incoming Calls(not checked)</EnumCallType_MissedCallInAlreadyOpen>
+    <EnumCallType_MissedCallOut>Abandoned Calls</EnumCallType_MissedCallOut>
+    <AddressBook_Work>Work</AddressBook_Work>
+    <AddressBook_House>Home</AddressBook_House>
+    <AddressBook_Mobile>Mobile</AddressBook_Mobile>
+    <ResultType_YouXiaoShuJu>Valid</ResultType_YouXiaoShuJu>
+    <ResultType_WuXiaoShuJu>Invalid</ResultType_WuXiaoShuJu>
+    <Status_Yes>Yes</Status_Yes>
+    <Status_No>No</Status_No>
+    <Message_Send>Send</Message_Send>
+    <Message_Receive>Receive</Message_Receive>
+    <Message_SendFail>Sending Failed</Message_SendFail>
+    <MessageStatus_Read>Read</MessageStatus_Read>
+    <MessageStatus_UnRead>Unread</MessageStatus_UnRead>
+  </OtherLanguage>
+  <EnumEntityLanguage>
+    <None>Null</None>
+    <Android>Android</Android>
+    <IOS>iOS</IOS>
+    <WindowsPhone>Windows Phone</WindowsPhone>
+    <SDCard>SD Card</SDCard>
+    <SIMCard>SIM Card</SIMCard>
+    <Mirror>Image</Mirror>
+    <HtcNoUsbMode>HTC without USB debugging</HtcNoUsbMode>
+    <BlackBerry>Blackberry</BlackBerry>
+    <Symbian>Symbian(Nokia)</Symbian>
+    <MTK>Media Tek(MTK)</MTK>
+    <MStar>MStar</MStar>
+    <Spreadtrum>Spread Trum</Spreadtrum>
+    <WindowsMobile>Windows Mobile</WindowsMobile>
+    <WebOS>Palm webOS</WebOS>
+    <Bada>BADA</Bada>
+    <Brew>BREW</Brew>
+    <Infineon>Infineon</Infineon>
+    <CoolSand>CoolSand</CoolSand>
+    <ADI>ADI</ADI>
+    <Sky>Sky</Sky>
+    <SingleDatabaseFile>Single database file</SingleDatabaseFile>
+    <AdbBackupFile>ADB backup file</AdbBackupFile>
+    <YunOS>YunOS</YunOS>
+  </EnumEntityLanguage>
+  <DataEntityLanguage>
+    <AbstractDataItem_DataState>Data Status</AbstractDataItem_DataState>
+    <AbstractDataItem_MD5>MD5</AbstractDataItem_MD5>
+    <AppEntity_Icon>Icon</AppEntity_Icon>
+    <AppEntity_Name>Name</AppEntity_Name>
+    <AppEntity_Type>Type</AppEntity_Type>
+    <AppEntity_AppId>App No.</AppEntity_AppId>
+    <AppEntity_VersionDesc>Description</AppEntity_VersionDesc>
+    <AppEntity_Descritpion>Description</AppEntity_Descritpion>
+    <AppEntity_InstallPath>Installation Path</AppEntity_InstallPath>
+    <AppEntity_DataPath>Data Path</AppEntity_DataPath>
+    <AppEntity_InstallDate>Installation Date</AppEntity_InstallDate>
+    <AppEntity_DataState>Data Status</AppEntity_DataState>
+    <AppEntity_MD5>MD5</AppEntity_MD5>
+    <Bluetooth_LocalAddress>Local Address</Bluetooth_LocalAddress>
+    <Bluetooth_TargetAddress>Target Address</Bluetooth_TargetAddress>
+    <Bluetooth_TargetName>Target Name</Bluetooth_TargetName>
+    <Bluetooth_LastConnectDateTime>Last Connection</Bluetooth_LastConnectDateTime>
+    <Bluetooth_DataState>Data Status</Bluetooth_DataState>
+    <Bluetooth_MD5>MD5</Bluetooth_MD5>
+    <Calendar_Title>Title</Calendar_Title>
+    <Calendar_EventLocation>Event Location</Calendar_EventLocation>
+    <Calendar_Description>Description</Calendar_Description>
+    <Calendar_DtStart>Start Time</Calendar_DtStart>
+    <Calendar__DtStart>Start Time</Calendar__DtStart>
+    <Calendar_DtEnd>End Time</Calendar_DtEnd>
+    <Calendar__DtEnd>End Time</Calendar__DtEnd>
+    <Calendar_Url>URL</Calendar_Url>
+    <Calendar_Duration>Duration</Calendar_Duration>
+    <Calendar_DataState>Data Status</Calendar_DataState>
+    <Calendar_MD5>MD5</Calendar_MD5>
+    <Call_Number>Phone Number</Call_Number>
+    <Call_Name>Name</Call_Name>
+    <Call_StartDate>Start Date</Call_StartDate>
+    <Call_Type>Call Type</Call_Type>
+    <Call_DurationSecond>Duration</Call_DurationSecond>
+    <Call_LocationInfo>Attribution</Call_LocationInfo>
+    <Call_DataState>Data Status</Call_DataState>
+    <Call_MD5>MD5</Call_MD5>
+    <Contact_Number>Phone No.</Contact_Number>
+    <Contact_Name>Name</Contact_Name>
+    <Contact_GroupName>Group</Contact_GroupName>
+    <Contact_LocationInfo>Attribution</Contact_LocationInfo>
+    <邮箱>Mail</邮箱>
+    <组织>Organization</组织>
+    <地址>Address</地址>
+    <Contact_LastContactDate>Last Contect</Contact_LastContactDate>
+    <Contact_Remark>Remarks</Contact_Remark>
+    <Contact_CreateDate>Created</Contact_CreateDate>
+    <Contact_ImNumber>IM Number</Contact_ImNumber>
+    <Contact_DataState>Data Status</Contact_DataState>
+    <Contact_MD5>MD5</Contact_MD5>
+    <EmailInfo_Sender>Sender</EmailInfo_Sender>
+    <EmailInfo_Receiver>Recipient</EmailInfo_Receiver>
+    <EmailInfo_Subject>Subject</EmailInfo_Subject>
+    <EmailInfo_TextContent>Content</EmailInfo_TextContent>
+    <EmailInfo_StartDate>Time Sent</EmailInfo_StartDate>
+    <EmailInfo_RecvDataTime>Time Received</EmailInfo_RecvDataTime>
+    <EmailInfo_DataState>Data Status</EmailInfo_DataState>
+    <EmailInfo_MD5>MD5</EmailInfo_MD5>
+    <EmailAccount_Nick>Nickname</EmailAccount_Nick>
+    <EmailAccount_EmailAddress>Address</EmailAccount_EmailAddress>
+    <EmailAccount_DataState>Data Status</EmailAccount_DataState>
+    <EmailAccount_MD5>MD5</EmailAccount_MD5>
+    <KeyValueItem_Key>Name</KeyValueItem_Key>
+    <KeyValueItem_Value>Value</KeyValueItem_Value>
+    <KeyValueItem_DataState>Data Status</KeyValueItem_DataState>
+    <KeyValueItem_MD5>MD5</KeyValueItem_MD5>
+    <Memo_Title>Title</Memo_Title>
+    <Memo_Content>Content</Memo_Content>
+    <Creation_Time>Created</Creation_Time>
+    <Memo_ModificationDate>Modified</Memo_ModificationDate>
+    <Memo_DataState>Data Status</Memo_DataState>
+    <Memo_MD5>MD5</Memo_MD5>
+    <MessageCore_SenderName>Sender</MessageCore_SenderName>
+    <MessageCore_Receiver>Recipient</MessageCore_Receiver>
+    <MessageCore_Content>Content</MessageCore_Content>
+    <MessageCore_MessageType>Type </MessageCore_MessageType>
+    <MessageCore_Date>Date </MessageCore_Date>
+    <MessageCore_SenderImage>Profile Photo</MessageCore_SenderImage>
+    <MessageCore_Type>Type</MessageCore_Type>
+    <MessageCore_SendState>Send Status</MessageCore_SendState>
+    <MessageCore_DataState>Data Status</MessageCore_DataState>
+    <MessageCore_MD5>MD5</MessageCore_MD5>
+    <MMS_SenderName>Sender</MMS_SenderName>
+    <MMS_Date>Receipt Time</MMS_Date>
+    <MMS_ReadDate>Read Time</MMS_ReadDate>
+    <MMS_Content>Content</MMS_Content>
+    <MMS_SenderImage>Profile Photo</MMS_SenderImage>
+    <MMS_Type>Type</MMS_Type>
+    <MMS_SendState>Send Status</MMS_SendState>
+    <MMS_DataState>Data Status</MMS_DataState>
+    <MMS_MD5>MD5</MMS_MD5>
+    <SMS_Number>Phone Number</SMS_Number>
+    <SMS_ContactName>Contact Name</SMS_ContactName>
+    <SMS_Content>Text</SMS_Content>
+    <SMS_StartDate>Time Sent</SMS_StartDate>
+    <SMS_SmsState>Type</SMS_SmsState>
+    <SMS_LocationInfo>Attribution</SMS_LocationInfo>
+    <SMS_Remark>Remarks</SMS_Remark>
+    <SMS_ReadState>Read Status</SMS_ReadState>
+    <SMS_DataState>Data Status</SMS_DataState>
+    <SMS_MD5>MD5</SMS_MD5>
+    <QQAccountShow_QQNumber>QQ No.</QQAccountShow_QQNumber>
+    <QQAccountShow_Nick>Nickname</QQAccountShow_Nick>
+    <QQAccountShow_Age>Age</QQAccountShow_Age>
+    <QQAccountShow_Sex>Gender</QQAccountShow_Sex>
+    <QQAccountShow_Signature>Signature</QQAccountShow_Signature>
+    <QQAccountShow_PhoneNumber>Phone No.</QQAccountShow_PhoneNumber>
+    <QQAccountShow_Email>Mail</QQAccountShow_Email>
+    <QQAccountShow_Address>Address</QQAccountShow_Address>
+    <QQAccountShow_Company>Company</QQAccountShow_Company>
+    <QQAccountShow_School>School</QQAccountShow_School>
+    <QQAccountShow_PersonNote>Profile </QQAccountShow_PersonNote>
+    <QQAccountShow_RecentLoginDate>Last Login</QQAccountShow_RecentLoginDate>
+    <QQAccountShow_DataState>Data Status</QQAccountShow_DataState>
+    <QQAccountShow_MD5>MD5</QQAccountShow_MD5>
+    <QQFriendShow_QQNumber>QQ No.</QQFriendShow_QQNumber>
+    <QQFriendShow_Nick>Nickname</QQFriendShow_Nick>
+    <QQFriendShow_Remark>Remark</QQFriendShow_Remark>
+    <QQFriendShow_Alias>Alias</QQFriendShow_Alias>
+    <QQFriendShow_Sex>Gender</QQFriendShow_Sex>
+    <QQFriendShow_Age>Age</QQFriendShow_Age>
+    <QQFriendShow_Signature>Signature</QQFriendShow_Signature>
+    <QQFriendShow_Address>Address</QQFriendShow_Address>
+    <QQFriendShow_BindPhone>Signature</QQFriendShow_BindPhone>
+    <QQFriendShow_Company>Company</QQFriendShow_Company>
+    <QQFriendShow_School>School</QQFriendShow_School>
+    <QQFriendShow_ContactName>Contacts</QQFriendShow_ContactName>
+    <QQFriendShow_ContactPhone>Phone Number</QQFriendShow_ContactPhone>
+    <QQFriendShow_Feed>Moments</QQFriendShow_Feed>
+    <QQFriendShow_LatestUpdate>Last Update</QQFriendShow_LatestUpdate>
+    <QQFriendShow_DataState>Data Status</QQFriendShow_DataState>
+    <QQFriendShow_MD5>MD5</QQFriendShow_MD5>
+    <QQFriendSetShow_Name>Group</QQFriendSetShow_Name>
+    <QQFriendSetShow_MemberCount>Members</QQFriendSetShow_MemberCount>
+    <QQFriendSetShow_DataState>Data Status</QQFriendSetShow_DataState>
+    <QQFriendSetShow_MD5>MD5</QQFriendSetShow_MD5>
+    <QQGroupShow_Name>Group Name</QQGroupShow_Name>
+    <QQGroupShow_QQNumber>Group No.</QQGroupShow_QQNumber>
+    <QQGroupShow_GroupId>Group ID</QQGroupShow_GroupId>
+    <QQGroupShow_Creator>Creator</QQGroupShow_Creator>
+    <QQGroupShow_Desc>Description</QQGroupShow_Desc>
+    <QQGroupShow_Notice>Announcement</QQGroupShow_Notice>
+    <QQGroupShow_CreateTime>Created</QQGroupShow_CreateTime>
+    <QQGroupShow_MemberCount>Members</QQGroupShow_MemberCount>
+    <QQGroupShow_DataState>Data Status</QQGroupShow_DataState>
+    <QQGroupShow_MD5>MD5</QQGroupShow_MD5>
+    <QQGroupMemberShow_QQNumber>QQ No.</QQGroupMemberShow_QQNumber>
+    <QQGroupMemberShow_Nick>Nickname</QQGroupMemberShow_Nick>
+    <QQGroupMemberShow_SpecialTitle>Title</QQGroupMemberShow_SpecialTitle>
+    <QQGroupMemberShow_Sex>Gender</QQGroupMemberShow_Sex>
+    <QQGroupMemberShow_Age>Age</QQGroupMemberShow_Age>
+    <QQGroupMemberShow_JoinTime>Joined</QQGroupMemberShow_JoinTime>
+    <QQGroupMemberShow_LastSpeakTime>Last Spoke</QQGroupMemberShow_LastSpeakTime>
+    <QQGroupMemberShow_DataState>Data Status</QQGroupMemberShow_DataState>
+    <QQGroupMemberShow_MD5>MD5</QQGroupMemberShow_MD5>
+    <QQDiscussShow_Name>Discussion Group</QQDiscussShow_Name>
+    <QQDiscussShow_QQNumber>Group No.</QQDiscussShow_QQNumber>
+    <QQDiscussShow_Creator>Creator</QQDiscussShow_Creator>
+    <QQDiscussShow_CreateTime>Created</QQDiscussShow_CreateTime>
+    <QQDiscussShow_MemberCount>Members</QQDiscussShow_MemberCount>
+    <QQDiscussShow_DataState>Data Status</QQDiscussShow_DataState>
+    <QQDiscussShow_MD5>Md5</QQDiscussShow_MD5>
+    <QQRecentShow_QQNumber>QQ No.</QQRecentShow_QQNumber>
+    <QQRecentShow_Name>Name</QQRecentShow_Name>
+    <QQRecentShow_RecentDatetime>Last Contact</QQRecentShow_RecentDatetime>
+    <QQRecentShow_DataState>Data Status</QQRecentShow_DataState>
+    <QQRecentShow_MD5>MD5</QQRecentShow_MD5>
+    <QQAddrBookFriendShow_QQNumber>QQ No.</QQAddrBookFriendShow_QQNumber>
+    <QQAddrBookFriendShow_Name>Name</QQAddrBookFriendShow_Name>
+    <QQAddrBookFriendShow_NickName>Nickname</QQAddrBookFriendShow_NickName>
+    <QQAddrBookFriendShow_PhoneCode>Phone Number</QQAddrBookFriendShow_PhoneCode>
+    <QQAddrBookFriendShow_DataState>Data Status</QQAddrBookFriendShow_DataState>
+    <QQAddrBookFriendShow_MD5>MD5</QQAddrBookFriendShow_MD5>
+    <QQCallRecordShow_CallType>Call Type</QQCallRecordShow_CallType>
+    <QQCallRecordShow_Uin>QQ No.</QQCallRecordShow_Uin>
+    <QQCallRecordShow_DiscussGroupUin>Group No.</QQCallRecordShow_DiscussGroupUin>
+    <QQCallRecordShow_NickName>Nickname</QQCallRecordShow_NickName>
+    <QQCallRecordShow_PhoneCode>Phone Number</QQCallRecordShow_PhoneCode>
+    <QQCallRecordShow_Time>Time</QQCallRecordShow_Time>
+    <QQCallRecordShow_Duration>Duration(s)</QQCallRecordShow_Duration>
+    <QQCallRecordShow_MsgContent>Remarks</QQCallRecordShow_MsgContent>
+    <QQCallRecordShow_DataState>Data Status</QQCallRecordShow_DataState>
+    <QQCallRecordShow_MD5>MD5</QQCallRecordShow_MD5>
+    <SinaMicoBlogUser_Nick>Tag</SinaMicoBlogUser_Nick>
+    <isVip>VIP</isVip>
+    <FriendGroupName>Group</FriendGroupName>
+    <SinaMicoBlogUser_Level>Level</SinaMicoBlogUser_Level>
+    <SinaMicoBlogUser_Portrait>Photo</SinaMicoBlogUser_Portrait>
+    <SinaMicoBlogUser_Introduction>Introduction</SinaMicoBlogUser_Introduction>
+    <SinaMicoBlogUser_DataState>Data Status</SinaMicoBlogUser_DataState>
+    <SinaMicoBlogUser_MD5>MD5</SinaMicoBlogUser_MD5>
+    <SinaMicroBlogContent_PicPath>Picture</SinaMicroBlogContent_PicPath>
+    <SinaMicroBlogContent_SendPlatform>Source Platform</SinaMicroBlogContent_SendPlatform>
+    <SinaMicroBlogContent_Longitude>Longtitude</SinaMicroBlogContent_Longitude>
+    <SinaMicroBlogContent_Latitude>Latitude</SinaMicroBlogContent_Latitude>
+    <SinaMicroBlogContent_NickForwarded>Forwarder</SinaMicroBlogContent_NickForwarded>
+    <SinaMicroBlogContent_ReasonForwarded>Reason</SinaMicroBlogContent_ReasonForwarded>
+    <SinaMicroBlogContent_CountForwarded>Count of Forwards</SinaMicroBlogContent_CountForwarded>
+    <SinaMicroBlogContent_CountComment>Comments</SinaMicroBlogContent_CountComment>
+    <SinaMicroBlogContent_SenderName>Sender</SinaMicroBlogContent_SenderName>
+    <SinaMicroBlogContent_Receiver>Recipient</SinaMicroBlogContent_Receiver>
+    <SinaMicroBlogContent_Content>Content</SinaMicroBlogContent_Content>
+    <SinaMicroBlogContent_MessageType>Type</SinaMicroBlogContent_MessageType>
+    <SinaMicroBlogContent_Date>Date</SinaMicroBlogContent_Date>
+    <SinaMicroBlogContent_SenderImage>Profile Photo</SinaMicroBlogContent_SenderImage>
+    <SinaMicroBlogContent_Type>Data Type</SinaMicroBlogContent_Type>
+    <SinaMicroBlogContent_SendState>Send Status</SinaMicroBlogContent_SendState>
+    <SinaMicroBlogContent_DataState>Data Status</SinaMicroBlogContent_DataState>
+    <SinaMicroBlogContent_MD5>MD5</SinaMicroBlogContent_MD5>
+    <SinaMicroBlogLetter_AttachName>Attachment </SinaMicroBlogLetter_AttachName>
+    <SinaMicroBlogLetter_AttachSize>Size</SinaMicroBlogLetter_AttachSize>
+    <SinaMicroBlogLetter_AttachType>Type</SinaMicroBlogLetter_AttachType>
+    <SinaMicroBlogLetter_AttachUrl>Path</SinaMicroBlogLetter_AttachUrl>
+    <SinaMicroBlogLetter_Latitude>Latitude</SinaMicroBlogLetter_Latitude>
+    <SinaMicroBlogLetter_Longituid>Longtitude</SinaMicroBlogLetter_Longituid>
+    <SinaMicroBlogLetter_ReadTime>Local Time</SinaMicroBlogLetter_ReadTime>
+    <SinaMicroBlogLetter_IsSendSuccess>Sent</SinaMicroBlogLetter_IsSendSuccess>
+    <SinaMicroBlogLetter_SenderName>Sender</SinaMicroBlogLetter_SenderName>
+    <SinaMicroBlogLetter_Receiver>Recipient</SinaMicroBlogLetter_Receiver>
+    <SinaMicroBlogLetter_Content>Content</SinaMicroBlogLetter_Content>
+    <SinaMicroBlogLetter_MessageType>Type</SinaMicroBlogLetter_MessageType>
+    <SinaMicroBlogLetter_Date>Time</SinaMicroBlogLetter_Date>
+    <SinaMicroBlogLetter_SenderImage>Profile Photo</SinaMicroBlogLetter_SenderImage>
+    <SinaMicroBlogLetter_Type>Data Type</SinaMicroBlogLetter_Type>
+    <SinaMicroBlogLetter_SendState>Send Status</SinaMicroBlogLetter_SendState>
+    <SinaMicroBlogLetter_DataState>Data Status</SinaMicroBlogLetter_DataState>
+    <SinaMicroBlogLetter_MD5>MD5</SinaMicroBlogLetter_MD5>
+    <SinaMicoBlogGroup_GroupName>Group</SinaMicoBlogGroup_GroupName>
+    <Avatar>Profile Photo</Avatar>
+    <SinaMicoBlogGroup_GroupCount>Members</SinaMicoBlogGroup_GroupCount>
+    <SinaMicoBlogGroup_GroupOwner>Creator</SinaMicoBlogGroup_GroupOwner>
+    <SinaMicoBlogGroup_DataState>Data Status</SinaMicoBlogGroup_DataState>
+    <SinaMicoBlogGroup_MD5>MD5</SinaMicoBlogGroup_MD5>
+    <SinaMicoBlogSearchEntry_SearchTime>Search Time</SinaMicoBlogSearchEntry_SearchTime>
+    <SinaMicoBlogSearchEntry_Content>Content</SinaMicoBlogSearchEntry_Content>
+    <SinaMicoBlogSearchEntry_ResultDesc>Result</SinaMicoBlogSearchEntry_ResultDesc>
+    <SinaMicoBlogSearchEntry_DataState>Data Status</SinaMicoBlogSearchEntry_DataState>
+    <SinaMicoBlogSearchEntry_MD5>MD5</SinaMicoBlogSearchEntry_MD5>
+    <SwitchTimeInfo_Type>Power Switch</SwitchTimeInfo_Type>
+    <SwitchTimeInfo_SwitchTimeInfoDate>Time</SwitchTimeInfo_SwitchTimeInfoDate>
+    <SwitchTimeInfo_DataState>Data Status</SwitchTimeInfo_DataState>
+    <SwitchTimeInfo_MD5>MD5</SwitchTimeInfo_MD5>
+    <AbstractTencentMapEntity_DataState>Data Status</AbstractTencentMapEntity_DataState>
+    <AbstractTencentMapEntity_MD5>MD5</AbstractTencentMapEntity_MD5>
+    <TencentMapAccount_UserId>User ID</TencentMapAccount_UserId>
+    <TencentMapAccount_NickName>Nickname</TencentMapAccount_NickName>
+    <TencentMapAccount_LastLoginTime>Last Login Time</TencentMapAccount_LastLoginTime>
+    <TencentMapAccount_LastLoginCity>Last Login City</TencentMapAccount_LastLoginCity>
+    <TencentMapAccount_DataState>Data Status</TencentMapAccount_DataState>
+    <TencentMapAccount_MD5>MD5</TencentMapAccount_MD5>
+    <TencentMapSearchAddress_Key>Keywords</TencentMapSearchAddress_Key>
+    <TencentMapSearchAddress_ResultAddress>Search Results</TencentMapSearchAddress_ResultAddress>
+    <TencentMapSearchAddress_LastTime>Last Search Time</TencentMapSearchAddress_LastTime>
+    <TencentMapSearchAddress_SearchCount>Counts</TencentMapSearchAddress_SearchCount>
+    <TencentMapSearchAddress_DataState>Data Status</TencentMapSearchAddress_DataState>
+    <TencentMapSearchAddress_MD5>MD5</TencentMapSearchAddress_MD5>
+    <TencentMapSearchRoute_Key>Keywords</TencentMapSearchRoute_Key>
+    <TencentMapSearchRoute_RouteFrom>From</TencentMapSearchRoute_RouteFrom>
+    <TencentMapSearchRoute_RouteTo>To</TencentMapSearchRoute_RouteTo>
+    <TencentMapSearchRoute_LastTime>Last Searched</TencentMapSearchRoute_LastTime>
+    <TencentMapSearchRoute_SearchCount>Counts</TencentMapSearchRoute_SearchCount>
+    <TencentMapSearchRoute_DataState>Data Status</TencentMapSearchRoute_DataState>
+    <TencentMapSearchRoute_MD5>MD5</TencentMapSearchRoute_MD5>
+    <TencentMapFavoriteAddr_Name>Name</TencentMapFavoriteAddr_Name>
+    <TencentMapFavoriteAddr_Time>Time</TencentMapFavoriteAddr_Time>
+    <TencentMapFavoriteAddr_Lon>Longtitude</TencentMapFavoriteAddr_Lon>
+    <TencentMapFavoriteAddr_Lat>Latitude</TencentMapFavoriteAddr_Lat>
+    <TencentMapFavoriteAddr_Tag>Label</TencentMapFavoriteAddr_Tag>
+    <TencentMapFavoriteAddr_DataState>Data Status</TencentMapFavoriteAddr_DataState>
+    <TencentMapFavoriteAddr_MD5>MD5</TencentMapFavoriteAddr_MD5>
+    <TencentMapFavoriteRoute_Name>Name</TencentMapFavoriteRoute_Name>
+    <TencentMapFavoriteRoute_From>From</TencentMapFavoriteRoute_From>
+    <TencentMapFavoriteRoute_To>To</TencentMapFavoriteRoute_To>
+    <TencentMapFavoriteRoute_RouteType>Type</TencentMapFavoriteRoute_RouteType>
+    <TencentMapFavoriteRoute_TakeTime>Time Spent</TencentMapFavoriteRoute_TakeTime>
+    <TencentMapFavoriteRoute_DataState>Data Status</TencentMapFavoriteRoute_DataState>
+    <TencentMapFavoriteRoute_MD5>MD5</TencentMapFavoriteRoute_MD5>
+    <TencentMapFavoriteStreet_Name>Name</TencentMapFavoriteStreet_Name>
+    <TencentMapFavoriteStreet_Time>Time</TencentMapFavoriteStreet_Time>
+    <TencentMapFavoriteStreet_FileInfo>File Info</TencentMapFavoriteStreet_FileInfo>
+    <TencentMapFavoriteStreet_DataState>Data Status</TencentMapFavoriteStreet_DataState>
+    <TencentMapFavoriteStreet_MD5>MD5</TencentMapFavoriteStreet_MD5>
+    <TencentMapTongxingMsg_GroupId>Group ID</TencentMapTongxingMsg_GroupId>
+    <TencentMapTongxingMsg_Sender>Sender</TencentMapTongxingMsg_Sender>
+    <TencentMapTongxingMsg_Time>Time</TencentMapTongxingMsg_Time>
+    <TencentMapTongxingMsg_Msg>Message</TencentMapTongxingMsg_Msg>
+    <TencentMapTongxingMsg_DataState>Data Status</TencentMapTongxingMsg_DataState>
+    <TencentMapTongxingMsg_MD5>MD5</TencentMapTongxingMsg_MD5>
+    <TencentMicroBlog_ForwardCount>Count of Shares</TencentMicroBlog_ForwardCount>
+    <TencentMicroBlog_ForwardNick>Forwarder</TencentMicroBlog_ForwardNick>
+    <TencentMicroBlog_ContentUrl>URL</TencentMicroBlog_ContentUrl>
+    <TencentMicroBlog_SenderName>Sender</TencentMicroBlog_SenderName>
+    <TencentMicroBlog_Receiver>Recipient</TencentMicroBlog_Receiver>
+    <TencentMicroBlog_Content>Content</TencentMicroBlog_Content>
+    <TencentMicroBlog_MessageType>Type</TencentMicroBlog_MessageType>
+    <TencentMicroBlog_Date>Time</TencentMicroBlog_Date>
+    <TencentMicroBlog_SenderImage>Profile Photo</TencentMicroBlog_SenderImage>
+    <TencentMicroBlog_Type>Type</TencentMicroBlog_Type>
+    <TencentMicroBlog_SendState>Send Status</TencentMicroBlog_SendState>
+    <TencentMicroBlog_DataState>Data Status</TencentMicroBlog_DataState>
+    <TencentMicroBlog_MD5>MD5</TencentMicroBlog_MD5>
+    <TencentLetters_AttachUrl>Attachment</TencentLetters_AttachUrl>
+    <TencentLetters_SenderName>Sender</TencentLetters_SenderName>
+    <TencentLetters_Receiver>Recipient</TencentLetters_Receiver>
+    <TencentLetters_Content>Content</TencentLetters_Content>
+    <TencentLetters_MessageType>Type</TencentLetters_MessageType>
+    <TencentLetters_Date>Time</TencentLetters_Date>
+    <TencentLetters_SenderImage>Sender Photo</TencentLetters_SenderImage>
+    <TencentLetters_Type>Type</TencentLetters_Type>
+    <TencentLetters_SendState>Send Status</TencentLetters_SendState>
+    <TencentLetters_DataState>Data Status</TencentLetters_DataState>
+    <TencentLetters_MD5>MD5</TencentLetters_MD5>
+    <TencentMicroBlogUser_MicroBlogId>Weibo Account</TencentMicroBlogUser_MicroBlogId>
+    <TencentMicroBlogUser_Nick>Nickname</TencentMicroBlogUser_Nick>
+    <TencentMicroBlogUser_Gender>Gender</TencentMicroBlogUser_Gender>
+    <TencentMicroBlogUser_IsVip>VIP</TencentMicroBlogUser_IsVip>
+    <TencentMicroBlogUser_Portrait>Profile Photo</TencentMicroBlogUser_Portrait>
+    <TencentMicroBlogUser__RelateTime>Engaged Date</TencentMicroBlogUser__RelateTime>
+    <TencentMicroBlogUser_DataState>Data Status</TencentMicroBlogUser_DataState>
+    <TencentMicroBlogUser_MD5>MD5</TencentMicroBlogUser_MD5>
+    <MicroBlogComment_Commentor>Commentor</MicroBlogComment_Commentor>
+    <MicroBlogContent>Comment</MicroBlogContent>
+    <MicroBlogComment_OriMicroBlogComent>Original Comment</MicroBlogComment_OriMicroBlogComent>
+    <MicroBlogComment_OriSender>Original Commentor</MicroBlogComment_OriSender>
+    <MicroBlogComment__Time>Time</MicroBlogComment__Time>
+    <MicroBlogComment_DataState>Data Status</MicroBlogComment_DataState>
+    <MicroBlogComment_MD5>MD5</MicroBlogComment_MD5>
+    <CommentType_OneType>Comment Type</CommentType_OneType>
+    <AbstractTwitterEntity_DataState>Data Status</AbstractTwitterEntity_DataState>
+    <AbstractTwitterEntity_MD5>MD5</AbstractTwitterEntity_MD5>
+    <TwitterAccount_UserId>User ID</TwitterAccount_UserId>
+    <TwitterAccount_UserName>Name</TwitterAccount_UserName>
+    <TwitterAccount_NickName>Nickname</TwitterAccount_NickName>
+    <TwitterAccount_Description>Description</TwitterAccount_Description>
+    <TwitterAccount_WebUrl>Personal URL</TwitterAccount_WebUrl>
+    <TwitterAccount_ImageUrl>Image URL</TwitterAccount_ImageUrl>
+    <TwitterAccount_HeadUrl>Profile Photo URL</TwitterAccount_HeadUrl>
+    <TwitterAccount_Location>Location</TwitterAccount_Location>
+    <TwitterAccount_Followers>Followers</TwitterAccount_Followers>
+    <TwitterAccount_Friends>Friends</TwitterAccount_Friends>
+    <TwitterAccount_Statuses>Statuses</TwitterAccount_Statuses>
+    <TwitterAccount_Favorites>Favorites</TwitterAccount_Favorites>
+    <TwitterAccount_MediaCount>Medias</TwitterAccount_MediaCount>
+    <TwitterAccount_DataState>Data Status</TwitterAccount_DataState>
+    <TwitterAccount_MD5>MD5</TwitterAccount_MD5>
+    <TwitterStatuses_StatusesId>User ID</TwitterStatuses_StatusesId>
+    <TwitterStatuses_AuthorDesc>Author</TwitterStatuses_AuthorDesc>
+    <TwitterStatuses_Content>Content</TwitterStatuses_Content>
+    <TwitterStatuses_SourceDesc>Source</TwitterStatuses_SourceDesc>
+    <TwitterStatuses_CreateTime>Created</TwitterStatuses_CreateTime>
+    <TwitterStatuses_TwitterStatusesType>Type</TwitterStatuses_TwitterStatusesType>
+    <TwitterStatuses_InRUserDesc>Replied Users</TwitterStatuses_InRUserDesc>
+    <TwitterStatuses_InRStatusDesc>Tweet ID</TwitterStatuses_InRStatusDesc>
+    <TwitterStatuses_FavoritesDesc>Favorited</TwitterStatuses_FavoritesDesc>
+    <TwitterStatuses_RetweetedDesc>Retweeted</TwitterStatuses_RetweetedDesc>
+    <TwitterStatuses_FavoriteCount>Favorites</TwitterStatuses_FavoriteCount>
+    <TwitterStatuses_RetweetCount>Retweets</TwitterStatuses_RetweetCount>
+    <TwitterStatuses_SourceUrl>Source URL</TwitterStatuses_SourceUrl>
+    <TwitterStatuses_DataState>Data Status</TwitterStatuses_DataState>
+    <TwitterStatuses_MD5>MD5</TwitterStatuses_MD5>
+    <TwitterGroupConverstation_ConversationId>Group ID</TwitterGroupConverstation_ConversationId>
+    <TwitterGroupConverstation_GroupName>Group Name</TwitterGroupConverstation_GroupName>
+    <TwitterGroupConverstation_GroupMembersCount>Members</TwitterGroupConverstation_GroupMembersCount>
+    <TwitterGroupConverstation_GroupMembers>Member Info</TwitterGroupConverstation_GroupMembers>
+    <TwitterGroupConverstation_DataState>Data Status</TwitterGroupConverstation_DataState>
+    <TwitterGroupConverstation_MD5>MD5</TwitterGroupConverstation_MD5>
+    <TwitterConverstationEntry_UserID>Sender ID</TwitterConverstationEntry_UserID>
+    <TwitterConverstationEntry_UserName>Sender Account</TwitterConverstationEntry_UserName>
+    <TwitterConverstationEntry_NickName>Sender Name</TwitterConverstationEntry_NickName>
+    <TwitterConverstationEntry_CreateTime>Time Sent</TwitterConverstationEntry_CreateTime>
+    <TwitterConverstationEntry_Context>Content</TwitterConverstationEntry_Context>
+    <TwitterConverstationEntry_ContextType>Message Type</TwitterConverstationEntry_ContextType>
+    <TwitterConverstationEntry_EntryTypeDesc>Status</TwitterConverstationEntry_EntryTypeDesc>
+    <TwitterConverstationEntry_DataState>Data Status</TwitterConverstationEntry_DataState>
+    <TwitterConverstationEntry_MD5>MD5</TwitterConverstationEntry_MD5>
+    <TwitterSearchEntry_SearchTime>Search Time</TwitterSearchEntry_SearchTime>
+    <TwitterSearchEntry_Context>Search Content</TwitterSearchEntry_Context>
+    <TwitterSearchEntry_ResultDesc>Search Type</TwitterSearchEntry_ResultDesc>
+    <TwitterSearchEntry_DataState>Data Status</TwitterSearchEntry_DataState>
+    <TwitterSearchEntry_MD5>MD5</TwitterSearchEntry_MD5>
+    <TwitterViewEntry_OwnerID>Name</TwitterViewEntry_OwnerID>
+    <TwitterViewEntry_OwnerName>Nickname</TwitterViewEntry_OwnerName>
+    <TwitterViewEntry_Title>Title</TwitterViewEntry_Title>
+    <TwitterViewEntry_Subtitle>Description</TwitterViewEntry_Subtitle>
+    <TwitterViewEntry_DataState>Data Status</TwitterViewEntry_DataState>
+    <TwitterViewEntry_MD5>MD5</TwitterViewEntry_MD5>
+    <TwitterMomentEntry_Title>Title</TwitterMomentEntry_Title>
+    <TwitterMomentEntry_Subcategory>Author</TwitterMomentEntry_Subcategory>
+    <TwitterMomentEntry_SubcategoryUrl>Profile Photo</TwitterMomentEntry_SubcategoryUrl>
+    <TwitterMomentEntry_Description>Content</TwitterMomentEntry_Description>
+    <TwitterMomentEntry_MomentUrl>Link</TwitterMomentEntry_MomentUrl>
+    <TwitterMomentEntry_Time>Published</TwitterMomentEntry_Time>
+    <TwitterMomentEntry_DataState>Data Status</TwitterMomentEntry_DataState>
+    <TwitterMomentEntry_MD5>MD5</TwitterMomentEntry_MD5>
+    <WebBrowseInfo_Title>Title</WebBrowseInfo_Title>
+    <WebBrowseInfo_Content>Content</WebBrowseInfo_Content>
+    <WebBrowseInfo__StartDate>Engaged Date</WebBrowseInfo__StartDate>
+    <WebBrowseInfo_Remark>Remark</WebBrowseInfo_Remark>
+    <WebCache_Url>URL</WebCache_Url>
+    <WebCache_ExpresTime>Expiration Time</WebCache_ExpresTime>
+    <WebCache_Contentlength>Size</WebCache_Contentlength>
+    <WebCache_MimeType>MIME Type</WebCache_MimeType>
+    <WebCache_Encoding>Encoding</WebCache_Encoding>
+    <WebCache_HttpSatus>Http Status</WebCache_HttpSatus>
+    <WebCache_DataState>Data Status</WebCache_DataState>
+    <WebCache_MD5>MD5</WebCache_MD5>
+    <WebCookie_Name>Cookie Name</WebCookie_Name>
+    <WebCookie_Value>Cookie Value</WebCookie_Value>
+    <WebCookie_Domain>Domain</WebCookie_Domain>
+    <WebCookie__ExpresTime>Expiration Time</WebCookie__ExpresTime>
+    <WebCookie_DataState>Data Status</WebCookie_DataState>
+    <WebCookie_MD5>MD5</WebCookie_MD5>
+    <History_Name>Name</History_Name>
+    <History_Url>URL</History_Url>
+    <History_OriginalURL>Source URL</History_OriginalURL>
+    <History__VisitTime>Accessed Time</History__VisitTime>
+    <History_Source>Source</History_Source>
+    <History_Visits>Times of Access</History_Visits>
+    <History_IconUrl>Icon Hyperlink</History_IconUrl>
+    <History_DataState>Data Status</History_DataState>
+    <History_MD5>MD5</History_MD5>
+    <BookMark_Path>Index</BookMark_Path>
+    <BookMark_Title>Title</BookMark_Title>
+    <BookMark_Url>URL</BookMark_Url>
+    <CreatedTime>Created</CreatedTime>
+    <BookMark_DataState>Data Status</BookMark_DataState>
+    <BookMark_MD5>MD5</BookMark_MD5>
+    <WebSitPassword_Host>URL</WebSitPassword_Host>
+    <WebSitPassword_UserName>Name</WebSitPassword_UserName>
+    <WebSitPassword_Password>Password</WebSitPassword_Password>
+    <WebSitPassword_DataState>Data Status</WebSitPassword_DataState>
+    <WebSitPassword_MD5>MD5</WebSitPassword_MD5>
+    <Favorite_Title>Title</Favorite_Title>
+    <Favorite_URL>URL</Favorite_URL>
+    <Favorite_OriginalURL>Source URL</Favorite_OriginalURL>
+    <Favorite_Source>Source</Favorite_Source>
+    <Favorite_IconPath>Icon Path</Favorite_IconPath>
+    <Favorite_IconUrl>Icon Hyperlink</Favorite_IconUrl>
+    <Favorite__AddTime>Time Added</Favorite__AddTime>
+    <Favorite_ImageList>Images</Favorite_ImageList>
+    <Favorite_DataState>Data Status</Favorite_DataState>
+    <Favorite_MD5>MD5</Favorite_MD5>
+    <HeadLine_Name>Name</HeadLine_Name>
+    <HeadLine_Title>Title</HeadLine_Title>
+    <HeadLine__ReadStatus>Read Status</HeadLine__ReadStatus>
+    <HeadLine_Url>URL</HeadLine_Url>
+    <HeadLine__UpTime>Updated</HeadLine__UpTime>
+    <HeadLine_DataState>Data Status</HeadLine_DataState>
+    <HeadLine_MD5>MD5</HeadLine_MD5>
+    <SubscriptionNumber_Data>Data</SubscriptionNumber_Data>
+    <SubscriptionNumber_Expires>Released</SubscriptionNumber_Expires>
+    <SubscriptionNumber_DataState>Data Status</SubscriptionNumber_DataState>
+    <SubscriptionNumber_MD5>MD5</SubscriptionNumber_MD5>
+    <DownloadFile_Name>Name</DownloadFile_Name>
+    <DownloadFile__Type>Type</DownloadFile__Type>
+    <DownloadFile_Size>Size</DownloadFile_Size>
+    <DownloadFile_Path>Path</DownloadFile_Path>
+    <DownloadFile__LastModified>Last Modified</DownloadFile__LastModified>
+    <DownloadFile_DataState>Data Status</DownloadFile_DataState>
+    <DownloadFile_MD5>MD5</DownloadFile_MD5>
+    <SearchHistory_Search_Context>Search Content</SearchHistory_Search_Context>
+    <SearchHistory_Search_Url>Search URL</SearchHistory_Search_Url>
+    <SearchHistory__Search_Datetime>Search Time</SearchHistory__Search_Datetime>
+    <SearchHistory_DataState>Data Status</SearchHistory_DataState>
+    <SearchHistory_MD5>MD5</SearchHistory_MD5>
+    <Novels_Novel_Name>Name</Novels_Novel_Name>
+    <Novels_Novel_Author>Author</Novels_Novel_Author>
+    <Novels_Summary>Chapters</Novels_Summary>
+    <Novels_SummaryDetial>Details</Novels_SummaryDetial>
+    <Novels__Expire_Time>Expired</Novels__Expire_Time>
+    <Novels__Update_Time>Updated</Novels__Update_Time>
+    <Novels_DataState>Data Status</Novels_DataState>
+    <Novels_MD5>MD5</Novels_MD5>
+    <WeChatLoginShow_WeChatId>WeChat ID</WeChatLoginShow_WeChatId>
+    <WeChatLoginShow_WeChatAccout>WeChat Account</WeChatLoginShow_WeChatAccout>
+    <WeChatLoginShow_Nick>Nickname</WeChatLoginShow_Nick>
+    <WeChatLoginShow_Signature>Signature</WeChatLoginShow_Signature>
+    <WeChatLoginShow_Gender>Gender</WeChatLoginShow_Gender>
+    <Address>Address</Address>
+    <BindingQQ>Linked QQ ID</BindingQQ>
+    <BindingPhone>Linked Phone No.</BindingPhone>
+    <BindingEmail>Linked Email</BindingEmail>
+    <BindingWeiBo>Linked Weibo ID</BindingWeiBo>
+    <BindingWeiBoNick>Weibo Nickname</BindingWeiBoNick>
+    <WeChatLoginShow_HeadPng>Profile Photo</WeChatLoginShow_HeadPng>
+    <WeChatLoginShow_HeadUrl>Photo URL</WeChatLoginShow_HeadUrl>
+    <WeChatLoginShow_DataState>Data Status</WeChatLoginShow_DataState>
+    <WeChatLoginShow_MD5>MD5</WeChatLoginShow_MD5>
+    <WeChatFriendShow_WeChatId>WeChat ID</WeChatFriendShow_WeChatId>
+    <WeChatFriendShow_WeChatAccout>WeChat Account</WeChatFriendShow_WeChatAccout>
+    <WeChatFriendShow_Nick>Nickname</WeChatFriendShow_Nick>
+    <WeChatFriendShow_Remark>Remark</WeChatFriendShow_Remark>
+    <WeChatFriendShow_Gender>Gender</WeChatFriendShow_Gender>
+    <WeChatFriendShow_FriendType>Type</WeChatFriendShow_FriendType>
+    <WeChatFriendShow_HeadPng>Profile Photo</WeChatFriendShow_HeadPng>
+    <WeChatFriendShow_HeadUrl>Photo URL</WeChatFriendShow_HeadUrl>
+    <WeChatFriendShow_Address>Location</WeChatFriendShow_Address>
+    <WeChatFriendShow_Signature>Signature</WeChatFriendShow_Signature>
+    <WeChatFriendShow_Description>Description</WeChatFriendShow_Description>
+    <WeChatFriendShow_Email>Email</WeChatFriendShow_Email>
+    <WeChatFriendShow_Mobile>Mobile</WeChatFriendShow_Mobile>
+    <WeChatFriendShow_DataState>Data Status</WeChatFriendShow_DataState>
+    <WeChatFriendShow_MD5>MD5</WeChatFriendShow_MD5>
+    <WeChatFriendShowX_WeChatId>WeChat ID</WeChatFriendShowX_WeChatId>
+    <WeChatFriendShowX_WeChatAccout>WeChat Account</WeChatFriendShowX_WeChatAccout>
+    <WeChatFriendShowX_Nick>Nickname</WeChatFriendShowX_Nick>
+    <WeChatFriendShowX_Remark>Remark</WeChatFriendShowX_Remark>
+    <WeChatFriendShowX_Gender>Gender</WeChatFriendShowX_Gender>
+    <WeChatFriendShowX_FriendType>Type</WeChatFriendShowX_FriendType>
+    <WeChatFriendShowX_HeadPng>Profile Photo</WeChatFriendShowX_HeadPng>
+    <WeChatFriendShowX_HeadUrl>Photo URL</WeChatFriendShowX_HeadUrl>
+    <WeChatFriendShowX_Address>Location</WeChatFriendShowX_Address>
+    <WeChatFriendShowX_Signature>Signature</WeChatFriendShowX_Signature>
+    <WeChatFriendShowX_Description>Description</WeChatFriendShowX_Description>
+    <WeChatFriendShowX_Email>Email</WeChatFriendShowX_Email>
+    <WeChatFriendShowX_Mobile>Mobile</WeChatFriendShowX_Mobile>
+    <WeChatFriendShowX_DataState>Data Status</WeChatFriendShowX_DataState>
+    <WeChatFriendShowX_MD5>MD5</WeChatFriendShowX_MD5>
+    <WeChatGroupShow_WeChatId>WeChat ID</WeChatGroupShow_WeChatId>
+    <WeChatGroupShow_GroupName>Group Name</WeChatGroupShow_GroupName>
+    <WeChatGroupShow_RemarkName>Remark</WeChatGroupShow_RemarkName>
+    <Creator>Creator</Creator>
+    <MemberCount>Number of Members</MemberCount>
+    <Member>Group Member</Member>
+    <WeChatGroupShow_LastMessageTime>Last Updated</WeChatGroupShow_LastMessageTime>
+    <Notice>Announcement</Notice>
+    <WeChatGroupShow_HeadPng>Profile Photo</WeChatGroupShow_HeadPng>
+    <WeChatGroupShow_HeadUrl>Photo URL</WeChatGroupShow_HeadUrl>
+    <WeChatGroupShow_DataState>Data Status</WeChatGroupShow_DataState>
+    <WeChatGroupShow_MD5>MD5</WeChatGroupShow_MD5>
+    <DelWeChatMessageCore_Content>Content</DelWeChatMessageCore_Content>
+    <DelWeChatMessageCore_DataState>Data Status</DelWeChatMessageCore_DataState>
+    <DelWeChatMessageCore_MD5>MD5</DelWeChatMessageCore_MD5>
+    <NickName>Nickname</NickName>
+    <WeChatBottleContact_DataState>Data Status</WeChatBottleContact_DataState>
+    <WeChatBottleContact_MD5>MD5</WeChatBottleContact_MD5>
+    <Signature>Signature</Signature>
+    <Distance>Distance</Distance>
+    <WeChatShakeItem_DataState>Data Status</WeChatShakeItem_DataState>
+    <WeChatShakeItem_MD5>MD5</WeChatShakeItem_MD5>
+    <WeChatBackCard_BankName>Bank </WeChatBackCard_BankName>
+    <WeChatBackCard_BankType>Card Type</WeChatBackCard_BankType>
+    <WeChatBackCard_Number>Card No.</WeChatBackCard_Number>
+    <WeChatBackCard_Phone>Mobile</WeChatBackCard_Phone>
+    <WeChatBackCard_DataState>Data Status</WeChatBackCard_DataState>
+    <WeChatBackCard_MD5>MD5</WeChatBackCard_MD5>
+    <WeChatSafeDevice_Guid>Phone Label</WeChatSafeDevice_Guid>
+    <WeChatSafeDevice_DeviceName>Device</WeChatSafeDevice_DeviceName>
+    <WeChatSafeDevice_SystemType>System</WeChatSafeDevice_SystemType>
+    <WeChatSafeDevice__LoginTime>Login</WeChatSafeDevice__LoginTime>
+    <WeChatSafeDevice_DataState>Data Status</WeChatSafeDevice_DataState>
+    <WeChatSafeDevice_MD5>MD5</WeChatSafeDevice_MD5>
+    <WeChatSns_WeChatId>Wechat ID</WeChatSns_WeChatId>
+    <WeChatSns_NickName>Nickname</WeChatSns_NickName>
+    <WeChatSns_TypeDesc>Type</WeChatSns_TypeDesc>
+    <WeChatSns_Content>Content</WeChatSns_Content>
+    <WeChatSns_MediaList>Attachmentt</WeChatSns_MediaList>
+    <WeChatSns_CreateTime>Created</WeChatSns_CreateTime>
+    <WeChatSns_Location>Location</WeChatSns_Location>
+    <WeChatSns_DataState>Data Status</WeChatSns_DataState>
+    <WeChatSns_MD5>MD5</WeChatSns_MD5>
+    <WeChatIosSns_Creater>Publisher</WeChatIosSns_Creater>
+    <WeChatIosSns_Createtime>Time</WeChatIosSns_Createtime>
+    <WeChatIosSns_Content>Content</WeChatIosSns_Content>
+    <WeChatIosSns_LocationInfo>Location</WeChatIosSns_LocationInfo>
+    <WeChatIosSns_MediaList>Attachmentts</WeChatIosSns_MediaList>
+    <WeChatIosSns_MediaCount>Number of Attachments</WeChatIosSns_MediaCount>
+    <WeChatIosSns_Comment>Comments</WeChatIosSns_Comment>
+    <WeChatIosSns_CommentCount>Number of Comments</WeChatIosSns_CommentCount>
+    <WeChatIosSns_Like>Likes</WeChatIosSns_Like>
+    <WeChatIosSns_LikeCount>Number of likes </WeChatIosSns_LikeCount>
+    <WeChatIosSns_LikeFlagDes>Like</WeChatIosSns_LikeFlagDes>
+    <WeChatIosSns_AppName>AppName</WeChatIosSns_AppName>
+    <WeChatIosSns_DataState>Data Status</WeChatIosSns_DataState>
+    <WeChatIosSns_MD5>MD5</WeChatIosSns_MD5>
+    <WeChatFavorite_DataType>Data Type</WeChatFavorite_DataType>
+    <WeChatFavorite_Text>Content</WeChatFavorite_Text>
+    <WeChatFavorite_Tag>Label</WeChatFavorite_Tag>
+    <WeChatFavorite_Source>Source</WeChatFavorite_Source>
+    <WeChatFavorite_Sender>Sender</WeChatFavorite_Sender>
+    <WeChatFavorite_Receiver>Recipient</WeChatFavorite_Receiver>
+    <WeChatFavorite_Time>Added to Favorites</WeChatFavorite_Time>
+    <WeChatFavorite_UpdateTime>Updated</WeChatFavorite_UpdateTime>
+    <WeChatFavorite_DataState>Data Status</WeChatFavorite_DataState>
+    <WeChatFavorite_MD5>MD5</WeChatFavorite_MD5>
+    <Icon>Icon</Icon>
+    <AppId>App ID</AppId>
+    <Account>Account</Account>
+    <Name>Name</Name>
+    <Description>Description</Description>
+    <FilePath>File Path</FilePath>
+    <Source>Source</Source>
+    <WeChatAppBrand_DataState>Data Status</WeChatAppBrand_DataState>
+    <WeChatAppBrand_MD5>MD5</WeChatAppBrand_MD5>
+    <Key>Name</Key>
+    <Type>Type</Type>
+    <WeChatAppBrandKVData_DataSize>Size</WeChatAppBrandKVData_DataSize>
+    <Content>Content</Content>
+    <WeChatAppBrandKVData_DataState>Data Status</WeChatAppBrandKVData_DataState>
+    <WeChatAppBrandKVData_MD5>MD5</WeChatAppBrandKVData_MD5>
+    <WiFiInfo_Name>Name</WiFiInfo_Name>
+    <Password>Password</Password>
+    <WiFiInfo_Type>Connection</WiFiInfo_Type>
+    <WiFiInfo_Priority>Priority</WiFiInfo_Priority>
+    <WiFiInfo_DataState>Data Status</WiFiInfo_DataState>
+    <WiFiInfo_MD5>MD5</WiFiInfo_MD5>
+  </DataEntityLanguage>
 </LanguageResource>

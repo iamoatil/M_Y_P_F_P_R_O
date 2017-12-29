@@ -20,7 +20,7 @@ namespace X64Service
     /// </summary>
     public static class WeChatVioceCoreDll
     {
-        private const string _dllFile = @"Lib\vcdllX64\Mirror\audio_dec_krnl.dll";
+        private const string _dllFile = @"audio_dec_krnl.dll";
 
         /// <summary>
         /// 装载音频文件

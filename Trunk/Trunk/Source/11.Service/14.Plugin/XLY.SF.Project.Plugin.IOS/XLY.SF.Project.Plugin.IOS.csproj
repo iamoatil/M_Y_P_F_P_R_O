@@ -87,7 +87,13 @@
     <Compile Include="Call\IOSCallDataParser.cs" />
     <Compile Include="Contacts\Core\IOSContactsDataParseCoreV1_0.cs" />
     <Compile Include="Contacts\IOSContactsDataParser.cs" />
+    <Compile Include="DeviceProperty\IOSMirrorDevicePropertyDataParser.cs" />
     <Compile Include="DeviceProperty\IOSDevicePropertyDataParser.cs" />
+    <Compile Include="File\IOSWordDataParser.cs" />
+    <Compile Include="File\IOSVideoDataParser.cs" />
+    <Compile Include="File\IOSPictureDataParser.cs" />
+    <Compile Include="File\IOSAudioDataParser.cs" />
+    <Compile Include="InstalledApp\IOSMirrorInstalledAppDataParser.cs" />
     <Compile Include="InstalledApp\IOSInstalledAppDataParser.cs" />
     <Compile Include="Mms\Core\IOSMmsDataParseCoreV1_0.cs" />
     <Compile Include="Mms\IOSMmsDataParser.cs" />
@@ -148,6 +154,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /r /y $(TargetDir)$(TargetName).*  $(ProjectDir)..\..\..\31.Build\$(ConfigurationName)

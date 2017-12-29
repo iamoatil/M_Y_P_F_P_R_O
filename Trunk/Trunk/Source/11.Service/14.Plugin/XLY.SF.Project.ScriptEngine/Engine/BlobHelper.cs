@@ -12,7 +12,7 @@ using Microsoft.Win32.SafeHandles;
 * Create Date：2016/11/29 17:28:54
 * ==============================================================================*/
 
-namespace XLY.SF.Project.ScriptEngine.Engine
+namespace XLY.SF.Project.ScriptEngine
 {
     /// <summary>
     /// 脚本中对二进制数据的处理帮助类
@@ -324,7 +324,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
             }
             else
             {
-                throw new Exception("Invalid file handle" + handle);
+                throw new Exception("Invalid file handle {0}" + handle);
             }
         }
         #endregion
@@ -350,17 +350,36 @@ namespace XLY.SF.Project.ScriptEngine.Engine
                 return -1;
 
             int i, j;
-            for (i = offset; i < buf.Length - subBytes.Length + 1; i++)
+            if (typeof (T1) == typeof (T2))
             {
-                if (buf[i].CompareTo(subBytes[0]) == 0)
+                for (i = offset; i < buf.Length - subBytes.Length + 1; i++)
                 {
-                    for (j = 1; j < subBytes.Length; j++)
+                    if (buf[i].CompareTo(subBytes[0]) == 0)
                     {
-                        if (buf[i + j].CompareTo(subBytes[j])!=0)
-                            break;
+                        for (j = 1; j < subBytes.Length; j++)
+                        {
+                            if (buf[i + j].CompareTo(subBytes[j]) != 0)
+                                break;
+                        }
+                        if (j == subBytes.Length)
+                            return i;
                     }
-                    if (j == subBytes.Length)
-                        return i;
+                }
+            }
+            else
+            {
+                for (i = offset; i < buf.Length - subBytes.Length + 1; i++)
+                {
+                    if (buf[i].CompareTo(System.Convert.ChangeType(subBytes[0], typeof(T1))) == 0)
+                    {
+                        for (j = 1; j < subBytes.Length; j++)
+                        {
+                            if (buf[i + j].CompareTo(System.Convert.ChangeType(subBytes[j], typeof(T1))) != 0)
+                                break;
+                        }
+                        if (j == subBytes.Length)
+                            return i;
+                    }
                 }
             }
             return -1;

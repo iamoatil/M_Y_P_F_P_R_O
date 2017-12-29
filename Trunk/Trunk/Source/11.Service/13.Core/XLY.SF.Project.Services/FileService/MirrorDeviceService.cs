@@ -59,7 +59,7 @@ namespace XLY.SF.Project.Services
                 var result = FileServiceCoreDll.GetMirrorFilePartitions(ref rootTable, Device.Source.ToString());
                 if (result != 0)
                 {
-                    LoggerManagerSingle.Instance.Error("1/123获取镜像文件的分区信息失败并返回");
+                    LoggerManagerSingle.Instance.Error($"1/123获取镜像文件的分区信息失败并返回，错误码：{result}");
                     return;
                 }
                 if (rootTable.next == IntPtr.Zero)  //无法读取分区，需要进行深度分区扫描
@@ -82,7 +82,7 @@ namespace XLY.SF.Project.Services
 
                     if (result != 0)
                     {
-                        LoggerManagerSingle.Instance.Error("3/123获取镜像文件的分区信息成功; 无法读取分区,需要进行深度分区扫描; 深度查找分区失败并返回");
+                        LoggerManagerSingle.Instance.Error($"3/123获取镜像文件的分区信息成功; 无法读取分区,需要进行深度分区扫描; 深度查找分区失败并返回，错误码：{result}");
                         return;
                     }
 
@@ -123,7 +123,7 @@ namespace XLY.SF.Project.Services
                     IntPtr mount = RunPartition.Mount;
                     var nodelist = RunPartition.NodeLinkList;
                     int result = FileServiceCoreDll.DisposeLinkTableRoom(mount, ref nodelist);
-                    MirrorCoreDll.UnmountPartitionHandle(ref mount);
+                    FileServiceCoreDll.UnmountPartitionHandle(ref mount);
                     if (result == 0)
                     {
                         LoggerManagerSingle.Instance.Error(string.Format("释放目录文件节点链表空间(不会释放自己定义的顶层节点空间)(名称:{0},描述:{1},大小:{2},Mount:{3})成功，错误码：{4}，卸载分区", RunPartition.Name, RunPartition.Discription, RunPartition.Size, RunPartition.Mount, result));
@@ -166,14 +166,14 @@ namespace XLY.SF.Project.Services
                         IntPtr mount = fpart.Mount;
                         var nodelist = fpart.NodeLinkList;
                         FileServiceCoreDll.DisposeLinkTableRoom(mount, ref nodelist);
-                        MirrorCoreDll.UnmountPartitionHandle(ref mount);
+                        FileServiceCoreDll.UnmountPartitionHandle(ref mount);
                         fpart.Mount = IntPtr.Zero;
 
                         LoggerManagerSingle.Instance.Info(string.Format("卸载分区并释放节点链表空间(名称:{0},描述:{1},大小:{2},Mount:{3})", fpart.Name, fpart.Discription, fpart.Size, fpart.Mount));
                     }
                 }
                 // 释放设备打开句柄
-                MirrorCoreDll.CloseDevice(Device.Handle);
+                FileServiceCoreDll.CloseDevice(Device.Handle);
                 LoggerManagerSingle.Instance.Info(string.Format("关闭设备(名称:{0},大小:{1},Handle:{2})成功", Device.Name, Device.Size, Device.Handle));
             }
             catch (Exception ex)

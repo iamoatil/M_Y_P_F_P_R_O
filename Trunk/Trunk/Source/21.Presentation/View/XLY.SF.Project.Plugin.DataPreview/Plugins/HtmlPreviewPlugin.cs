@@ -21,6 +21,7 @@ namespace XLY.SF.Project.Plugin.DataPreview
     /// <summary>
     /// 网页文件预览视图
     /// </summary>
+    [PluginContainer(PluginType.SpfDataPreview)]
     public class HtmlPreviewPlugin : AbstractDataPreviewPlugin
     {
         public HtmlPreviewPlugin()

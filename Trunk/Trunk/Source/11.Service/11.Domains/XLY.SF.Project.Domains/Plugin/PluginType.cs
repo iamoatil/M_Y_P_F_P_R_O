@@ -81,6 +81,7 @@ namespace XLY.SF.Project.Domains
         JavaScript,
         Python36,
         Html,
+        Csharp,
     }
 
     /// <summary>

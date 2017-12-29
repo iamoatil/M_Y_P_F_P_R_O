@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using XLY.SF.Framework.Core.Base.ValidationBase;
 using XLY.SF.Framework.Core.Base.ViewModel;
+using XLY.SF.Project.Themes.CustromControl;
 
 namespace XLY.SF.WpfTest.HuZuoLin
 {
@@ -24,32 +25,42 @@ namespace XLY.SF.WpfTest.HuZuoLin
     /// </summary>
     public partial class UserControl1 : UserControl
     {
-        public FFFF DDDD { get; private set; }
+        public FFFF Time { get; set; }
 
         public UserControl1()
         {
             InitializeComponent();
-            DDDD = new FFFF();
-            DDDD.Name = null;
-            this.DataContext = this;
+            this.Loaded += UserControl1_Loaded;
+        }
+
+        private void UserControl1_Loaded(object sender, RoutedEventArgs e)
+        {
+            Time = new FFFF();
+            Time.WbSource = new Uri("http://www.baidu.com");
+            this.DataContext = Time;
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            Time.WbSource = new Uri("http://www.qq.com");
         }
     }
 
-    public class FFFF : ValidateBase
+    public class FFFF : NotifyPropertyBase
     {
-        private string _name;
 
-        [System.ComponentModel.DataAnnotations.StringLength(3,ErrorMessage ="错误提示")]
-        public string Name
+        private Uri _time;
+
+        public Uri WbSource
         {
             get
             {
-                return this._name;
+                return this._time;
             }
 
             set
             {
-                this._name = value;
+                this._time = value;
                 base.OnPropertyChanged();
             }
         }

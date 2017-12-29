@@ -40,8 +40,6 @@ namespace XLY.SF.Project.DataDisplayView
                 preview.DataSource.LoadViewModel();
                 _preVM = preview.DataSource;
                 preView.Content = preview;
-
-                MsgAggregation.Instance.RegisterGeneralMsg<object>(this, MessageKeys.PreviewKey, RefreshPreview);
             }
         }
 
@@ -56,16 +54,10 @@ namespace XLY.SF.Project.DataDisplayView
             }
             set
             {
-                //value.SetViewContainer(this);
                 base.DataSource = value;
                 (value as ViewModel.MainDisplayViewModel).FilterVM = filterCtrl.DataContext as ViewModel.DataFilterViewModel;
+                (value as ViewModel.MainDisplayViewModel).PreviewVM = _preVM;
             }
-        }
-
-        private void RefreshPreview(object data)
-        {
-            if(data is Framework.Core.Base.MessageBase.GeneralArgs<object> g)
-                _preVM?.ReceiveParameters(g.Parameters);
         }
     }
 }

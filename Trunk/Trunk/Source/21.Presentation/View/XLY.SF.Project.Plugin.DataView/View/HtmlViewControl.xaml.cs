@@ -29,6 +29,7 @@ namespace XLY.SF.Project.Plugin.DataView
             this.Url = url;     //@"C:\Users\fhjun\Desktop\htmp\323\index.html"
             this.DataSource = source;
             SaveDataSource();
+            _operator.OnSelectedDataChanged -= OnSelectedDataChanged;
             _operator.OnSelectedDataChanged += OnSelectedDataChanged;
 
             web1.Navigate(new Uri(this.Url, UriKind.RelativeOrAbsolute));
@@ -66,7 +67,7 @@ namespace XLY.SF.Project.Plugin.DataView
             {
                 sw.Write("var __data = [");
                 int r = 0;
-                foreach (var c in DataSource.Items.View)
+                foreach (var c in DataSource.Items.GetView(0, -1))
                 {
                     if (r != 0)
                         sw.Write(",");

@@ -22,15 +22,6 @@ using XLY.SF.Framework.BaseUtility;
 
 namespace XLY.SF.Project.Domains
 {
-    //[SQLiteFunction(Name = "RegExp", FuncType = FunctionType.Scalar, Arguments = 2)]
-    //public class MyRegExp : SQLiteFunction
-    //{
-    //    public override object Invoke(object[] args)
-    //    {
-    //        return Regex.IsMatch(Convert.ToString(args[0]), Convert.ToString(args[1]));
-    //    }
-    //}
-
     /// <summary>
     /// Sqlite数据库
     /// </summary>
@@ -82,19 +73,13 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         public const string KeyColumnName = "XLYKey";
 
-
         public const string MD5ColumnName = "MD5";
-        public const string BookmarkColumnName = "BookMarkId";
 
         /// <summary>
         /// Json数据列名
         /// 用户保存C#实体类对象的Json序列化字符串
         /// </summary>
         public const string JsonColumnName = "XLYJson";
-        /// <summary>
-        /// 书签数据库别名
-        /// </summary>
-        public const string BookmarkAliasName = "bmk";
 
         /// <summary>
         /// 数据库文件路径
@@ -102,18 +87,9 @@ namespace XLY.SF.Project.Domains
         public string DbFilePath { get; set; }
 
         /// <summary>
-        /// 书签数据库文件路径
-        /// </summary>
-        public string DbBmkFilePath => DbFilePath.Insert(DbFilePath.LastIndexOf('.'), "_bmk");
-
-        /// <summary>
         /// 数据库连接字符串
         /// </summary>
         public string DbConnectionStr { get { return string.Format("Data Source='{0}'", DbFilePath); } }
-        /// <summary>
-        /// 书签数据库连接字符串
-        /// </summary>
-        public string DbBookmarkConnectionStr { get { return string.Format("Data Source='{0}'", DbBmkFilePath); } }
 
         /// <summary>
         /// 数据库事务
@@ -170,7 +146,6 @@ namespace XLY.SF.Project.Domains
         {
             DbFilePath = dbfile;
             TableNameCache = new Dictionary<string, string>();
-
             if (!File.Exists(DbFilePath))
             {
                 var basePath = new FileInfo(DbFilePath).DirectoryName;
@@ -237,10 +212,8 @@ namespace XLY.SF.Project.Domains
 
                         ExecuteNonQueryWithTransaction(sb.ToString());
 
-                        ExecuteNonQueryBookmark($"CREATE TABLE IF NOT EXISTS {tableName}({MD5ColumnName} CHAR(64) NOT NULL, {BookmarkColumnName} INTEGER, PRIMARY KEY (MD5));");
-
                         //创建索引，会降低插入数据的效率
-                        //ExecuteNonQueryWithTran(string.Format("CREATE INDEX {0}_key_index on {0}({1}); ", tableName, s_KeyColumnName));
+                        ExecuteNonQueryWithTransaction(string.Format("CREATE INDEX IF NOT EXISTS {0}_key_index on {0}({1}); ", tableName, KeyColumnName));
                     }
                 }
             }
@@ -277,10 +250,8 @@ namespace XLY.SF.Project.Domains
 
             ExecuteNonQueryWithTransaction(sb.ToString());
 
-            ExecuteNonQueryBookmark($"CREATE TABLE IF NOT EXISTS {tableName}({MD5ColumnName} CHAR(64) NOT NULL, {BookmarkColumnName} INTEGER, PRIMARY KEY (MD5));");
-
             //创建索引，会降低插入数据的效率
-            //ExecuteNonQueryWithTran(string.Format("CREATE INDEX {0}_key_index on {0}({1}); ", tableName, s_KeyColumnName));
+            ExecuteNonQueryWithTransaction(string.Format("CREATE INDEX {0}_key_index on {0}({1}); ", tableName, KeyColumnName));
 
             return tableName;
         }
@@ -306,7 +277,7 @@ namespace XLY.SF.Project.Domains
                 if (dis.Visibility != EnumDisplayVisibility.ShowInUI)
                 {
                     sb.AppendFormat(",@{0}", dis.PropertyName);
-                    if(dis.Owner.PropertyType == typeof(DateTime) || dis.Owner.PropertyType == typeof(DateTime?))
+                    if (dis.Owner.PropertyType == typeof(DateTime) || dis.Owner.PropertyType == typeof(DateTime?))
                     {
                         var dt = dis.GetValue(obj);
                         parameters.Add(new SQLiteParameter(string.Format("@{0}", dis.PropertyName), System.Data.DbType.String) { Value = dt == null ? "" : ((DateTime)dt).ToString("yyyy-MM-dd HH:mm:ss") });
@@ -325,8 +296,8 @@ namespace XLY.SF.Project.Domains
             ExecuteNonQueryWithTransaction(sb.ToString(), parameters.ToArray());
 
             //添加属性监听事件，在修改其属性时自动更新数据库
-            obj.OnPropertyValueChangedEvent -= Update;     
-            obj.OnPropertyValueChangedEvent += Update;     
+            obj.OnPropertyValueChangedEvent -= Update;
+            obj.OnPropertyValueChangedEvent += Update;
         }
 
         public void Add(JObject obj, string key, string tableName, IEnumerable<string> colunms)
@@ -357,14 +328,7 @@ namespace XLY.SF.Project.Domains
         {
             if (obj is AbstractDataItem item)
             {
-                if(propertyName != BookmarkColumnName)
-                {
-                    Update(item);       
-                }
-                else
-                {
-                    UpdateBookmark(item);
-                }
+                Update(item);
             }
         }
 
@@ -378,12 +342,12 @@ namespace XLY.SF.Project.Domains
         {
             string oldMd5 = obj.MD5;        //使用旧的MD5值作为主键来更新数据
             obj.Recalculate();      //计算新值，比如新的MD5
-            if(oldMd5 == obj.MD5)
+            if (oldMd5 == obj.MD5)
             {
                 return;
             }
             Type type = obj.GetType();
-            
+
             var tableName = TableNameCache[type.FullName];
             List<SQLiteParameter> parameters = new List<SQLiteParameter>();
 
@@ -400,22 +364,9 @@ namespace XLY.SF.Project.Domains
             }
             sb.AppendFormat("{0} = @{0}", JsonColumnName);
             parameters.Add(new SQLiteParameter($"@{JsonColumnName}", System.Data.DbType.String) { Value = Serializer.JsonSerilize(obj) });
-
-            //sb.AppendFormat(" where {0} = @{0}", MD5ColumnName);
-            //parameters.Add(new SQLiteParameter($"@{MD5ColumnName}", System.Data.DbType.String) { Value = oldMd5 });
             sb.AppendFormat(" where {0} = '{1}' ", MD5ColumnName, oldMd5);
-            
-            ExecuteNonQueryWithTransaction(sb.ToString(), parameters.ToArray());
-        }
 
-        /// <summary>
-        /// 更新数据的书签，并保存到数据库中
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        public void UpdateBookmark<T>(T obj) where T : AbstractDataItem
-        {
-            ExecuteNonQueryBookmark($"REPLACE INTO {TableNameCache[obj.GetType().FullName]} ({BookmarkColumnName},{MD5ColumnName}) values ({obj.BookMarkId}, '{obj.MD5}');");
+            ExecuteNonQueryWithTransaction(sb.ToString(), parameters.ToArray());
         }
 
         /// <summary>
@@ -423,31 +374,14 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="view"></param>
-        public void GetDataItemsBookmark<T>(IEnumerable<T> view) where T : AbstractDataItem
+        public void OnReadView<T>(IEnumerable<T> view, string key) where T : AbstractDataItem
         {
             if (view == null || view.Count() == 0)
             {
                 return;
             }
-            StringBuilder sb = new StringBuilder(2048);     //数据每个分页约50行数据
-            sb.Append($"select * from {TableNameCache[view.First().GetType().FullName]} where {MD5ColumnName} in (");
-            foreach (var item in view)
+            foreach (var item in view)  //添加属性监听事件，在修改其属性时自动更新数据库
             {
-                sb.Append($"'{item.MD5}', ");
-            }
-            sb.Remove(sb.Length - 2, 2);
-            sb.Append(");");
-            var dt = ExecuteReaderBookmark(sb.ToString());
-            Dictionary<string, int> dicBmk = new Dictionary<string, int>();
-            foreach (DataRow row in dt.Rows)
-            {
-                dicBmk[row[MD5ColumnName].ToString()] = row[BookmarkColumnName].ToSafeString().ToSafeInt(-1);
-            }
-            foreach (var item in view)
-            {
-                item.BookMarkId = dicBmk.ContainsKey(item.MD5) ? dicBmk[item.MD5] : -1;
-
-                //添加属性监听事件，在修改其属性时自动更新数据库
                 item.OnPropertyValueChangedEvent -= Update;
                 item.OnPropertyValueChangedEvent += Update;
             }
@@ -516,42 +450,28 @@ namespace XLY.SF.Project.Domains
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        private void ExecuteNonQueryBookmark(string sql, params SQLiteParameter[] parameters)
+        private object ExecuteScalar(string sql, params SQLiteParameter[] parameters)
         {
-            using(SQLiteConnection con  = new SQLiteConnection(DbBookmarkConnectionStr))
+            using (var com = new SQLiteCommand(DbTransaction.Connection))
             {
-                con.Open();
-                using (var com = new SQLiteCommand(con))
+                com.CommandText = sql;
+                if (parameters.IsValid())
                 {
-                    com.CommandText = sql;
-                    if (parameters.IsValid())
-                    {
-                        com.Parameters.AddRange(parameters);
-                    }
-                    com.ExecuteNonQuery();
+                    com.Parameters.AddRange(parameters);
                 }
+                return com.ExecuteScalar();
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        private DataTable ExecuteReaderBookmark(string sql, params SQLiteParameter[] parameters)
+        /// <summary>
+        /// 删除指定表中的所有数据
+        /// </summary>
+        public void DeleteAll(string tableName)
         {
-            using (SQLiteConnection con = new SQLiteConnection(DbBookmarkConnectionStr))
+            using (var com = new SQLiteCommand(DbTransaction.Connection))
             {
-                con.Open();
-                using (var com = new SQLiteCommand(con))
-                {
-                    com.CommandText = sql;
-                    if (parameters.IsValid())
-                    {
-                        com.Parameters.AddRange(parameters);
-                    }
-                    var reader = com.ExecuteReader();
-                    DataTable dt = new DataTable();
-                    dt.Load(reader);
-                    reader.Close();
-                    return dt;
-                }
+                com.CommandText = $"delete from {tableName};";
+                com.ExecuteNonQuery();
             }
         }
     }

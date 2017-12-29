@@ -114,7 +114,7 @@ namespace XLY.SF.Shell.NavigationManager
         public void CloseOpenedWindow(Guid viewModelID)
         {
             if (_curOpenWindows.ContainsKey(viewModelID))
-                _curOpenWindows[viewModelID].Close(); 
+                _curOpenWindows[viewModelID].Close();
         }
 
         #endregion
@@ -137,12 +137,13 @@ namespace XLY.SF.Shell.NavigationManager
                 Binding s = new Binding("Title") { Source = view };
                 newWindow.SetBinding(Window.TitleProperty, s);
                 newWindow.ShowMaxsize = newWindow.ShowMinsize = view.NeedMaxsizeAndMinsize;
+                newWindow.ResizeMode = view.CanResize ? ResizeMode.CanResizeWithGrip : ResizeMode.NoResize;
                 if (view.Height > 0 && view.Width > 0)
                 {
                     //TODO
                     //此处由于阴影问题，所以需要给实际展示内容增加80像素
-                    newWindow.Width = view.Width + 40 * 2;
-                    newWindow.Height = view.Height + 40 * 2;
+                    newWindow.Width = view.Width + 20;
+                    newWindow.Height = view.Height + 20;
                 }
                 else
                     newWindow.SizeToContent = SizeToContent.WidthAndHeight;

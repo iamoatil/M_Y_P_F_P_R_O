@@ -30,7 +30,11 @@ namespace XLY.SF.Project.Devices
         private readonly Dictionary<string, Dictionary<string, string>> DevicesProperties;
         private readonly Dictionary<uint, string> ErrorMsgDic;
 
-        [Obsolete("请使用IOSDeviceManager.Instance获取实例！")]
+        /// <summary>
+        /// IOS设备管理服务
+        /// IOSDeviceManager没有使用单例模式
+        /// 因为CopyUserData和StopCopyUserData使用了成员属性。多个设备同时调用的话会出问题。
+        /// </summary>
         public IOSDeviceManager()
         {
             DevicesProperties = new Dictionary<string, Dictionary<string, string>>();
@@ -44,14 +48,6 @@ namespace XLY.SF.Project.Devices
                 { 323, LanguageManager.Current[Languagekeys.ErrorMessageLanguage_ErrMsg_NotExistAccessFile] },
                 { 301, LanguageManager.Current[Languagekeys.ErrorMessageLanguage_ErrMsg_ReadFileFail] }
             };
-        }
-
-        /// <summary>
-        /// IOS设备管理服务实例，全局唯一单例
-        /// </summary>
-        public static IOSDeviceManager Instance
-        {
-            get { return SingleWrapperHelper<IOSDeviceManager>.Instance; }
         }
 
         /// <summary>
@@ -79,7 +75,7 @@ namespace XLY.SF.Project.Devices
         /// <param name="targetPath"></param>
         /// <param name="asyn"></param>
         /// <returns></returns>
-        public string CopyFile(Device device, string source, string targetPath, IAsyncTaskProgress asyn)
+        public string CopyFile(Device device, string source, string targetPath, DefaultAsyncTaskProgress asyn)
         {
             return CopyUserData(device, targetPath, asyn);
         }
@@ -95,39 +91,6 @@ namespace XLY.SF.Project.Devices
         }
 
         /// <summary>
-        /// 采用备份方式拷贝用户数据 支持IOS8.3及其以上系统
-        /// </summary>
-        /// <param name="device">设备</param>
-        /// <param name="targetPath">目标路径</param>
-        /// <param name="asyn"></param>
-        /// <returns></returns>
-        public string CopyUserData(Device device, string targetPath, IAsyncTaskProgress asyn)
-        {
-            //1.初始化相关参数
-            InitCopyUserData(device, 100, asyn);
-
-            //2.文件拷贝
-            var res = IOSDeviceCoreDll.CopyUserData(targetPath, device.ID, _CopyUserDataCallback);
-
-            if (0 != res)
-            {
-                IsCopying = false;
-            }
-            else
-            {
-                while (IsCopying)
-                {
-                    Thread.Sleep(500);
-                }
-            }
-
-            //3.清理
-            ClearCopyUserData();
-
-            return Path.Combine(targetPath, device.ID);
-        }
-
-        /// <summary>
         /// 采用备份方式拷贝用户数据 支持加密备份 支持IOS8.3及其以上系统
         /// </summary>
         /// <param name="device">设备</param>
@@ -135,7 +98,7 @@ namespace XLY.SF.Project.Devices
         /// <param name="asyn"></param>
         /// <param name="InputPassword">回调方法，如果有密码则调用，在方法内返回密码</param>
         /// <returns></returns>
-        public string CopyUserData(Device device, string targetPath, IAsyncTaskProgress asyn, Func<string> InputPassword)
+        public string CopyUserData(Device device, string targetPath, DefaultAsyncTaskProgress asyn, Func<string> InputPassword = null)
         {
             //1.初始化相关参数
             InitCopyUserData(device, 100, asyn);
@@ -176,7 +139,7 @@ namespace XLY.SF.Project.Devices
             return Path.Combine(targetPath, device.ID);
         }
 
-        private void InitCopyUserData(Device device, double totalProgress, IAsyncTaskProgress asyn)
+        private void InitCopyUserData(Device device, double totalProgress, DefaultAsyncTaskProgress asyn)
         {
             _CopyUserDataCallback = CopyUserDataCallback;
 
@@ -184,21 +147,6 @@ namespace XLY.SF.Project.Devices
             IsCopying = true;
             IsStop = false;
             Asyn = asyn;
-
-            // 内置应用包虚拟进度条额外参数(第一步）
-            _OneAllProgress = 0;
-            _OneStepLastProgress = 0;
-            // 内置应用包虚拟进度条额外参数(第二步）
-            _TwoAllProgress = 0;
-            _TwoCumulativeProgress = 0;
-            // 内置应用包虚拟进度条额外参数(第三步）
-            _ThreeSetpLastProgress = 0;
-            _ThreeAllProgress = 0;
-            _ThreeCumulativeProgress = 0;
-
-            _OneAllProgress = 0.2 * totalProgress;
-            _TwoAllProgress = 0.6 * totalProgress;
-            _ThreeAllProgress = 0.2 * totalProgress;
         }
 
         private void ClearCopyUserData()
@@ -211,90 +159,59 @@ namespace XLY.SF.Project.Devices
         private string CurrentDeviceName;
         private bool IsCopying;
         private bool IsStop;
-        private IAsyncTaskProgress Asyn;
-        private double _OneAllProgress;
-        private double _OneStepLastProgress;
-        private double _TwoAllProgress;
-        private double _TwoCumulativeProgress;
-        private double _ThreeSetpLastProgress;
-        private double _ThreeAllProgress;
-        private double _ThreeCumulativeProgress;
+        private DefaultAsyncTaskProgress Asyn;
 
         private int CopyUserDataCallback(string uniqueDeviceID, byte step, float status, ref UInt32 isStopCopy)
         {
             if (IsStop)
             {//停止文件拷贝
                 isStopCopy = 1;
+                return 0;
             }
             else
             {
                 isStopCopy = 0;
             }
 
+            string copyed = string.Empty;
+            double progress = 0;
             string msg = string.Empty;
-            double actualProgress = 0;
 
             switch (step)
             {
                 case 1:// 拷贝前初始化 status为进度 0-100
                     msg = string.Format(LanguageManager.Current[Languagekeys.DeviceLanguage_IOSInitProgress], status);
-                    double reportAProgress = status / 100.0 - _OneStepLastProgress;
-                    _OneStepLastProgress = status / 100.0;
-                    actualProgress = reportAProgress * _OneAllProgress;
-
+                    progress = 0.3 * status * 0.01;
                     break;
-                case 2:// 数据拷贝 status为已经拷贝数据大小，单位为Byte
+                case 2:// 数据拷贝 status为已经拷贝数据大小，单位为 KB
+                    copyed = (status * 1024).ToSafeString();
                     msg = string.Format(LanguageManager.Current[Languagekeys.DeviceLanguage_IOSCopyProgress], (status / 1024.0).ToString("F2"));
-                    double singleProgress = _TwoAllProgress / 20.0;
-                    if (_TwoCumulativeProgress + singleProgress > _TwoAllProgress)
-                    {
-                        singleProgress = _TwoAllProgress - _TwoCumulativeProgress;
-                    }
-                    _TwoCumulativeProgress += singleProgress;
-                    actualProgress = singleProgress;
-
+                    progress = 0.6;
                     break;
                 case 3:// 拷贝结束，进行后期合并
-                    if (_TwoCumulativeProgress < _TwoAllProgress)
-                    {
-                        //Asyn?.Advance(_TwoAllProgress - _TwoCumulativeProgress, LanguageManager.Current[Languagekeys.DeviceLanguage_IOSCopyDataOver]);
-                        _TwoCumulativeProgress = _TwoAllProgress;
-                    }
-
-                    double reportBProgress = status - _ThreeSetpLastProgress;
-                    _ThreeSetpLastProgress = status;
-                    _ThreeCumulativeProgress += reportBProgress * _ThreeAllProgress;
-                    actualProgress = reportBProgress * _ThreeAllProgress;
-
                     if (1 == status)
                     {
                         IsCopying = false;
-                        if (_ThreeCumulativeProgress < _ThreeAllProgress)
-                        {
-                            actualProgress = _ThreeAllProgress - _ThreeCumulativeProgress;
-                        }
                         msg = LanguageManager.Current[Languagekeys.DeviceLanguage_IOSExtractLocalOver];
+                        progress = 0.99;
                     }
                     else
                     {
                         msg = string.Format(LanguageManager.Current[Languagekeys.DeviceLanguage_IOSLastStepProgress], (status * 300).ToString("F2"));
+                        progress = 0.9 + status / 3;
                     }
-
                     break;
                 default:// 拷贝失败或者用户终止
-                    msg = step == 4 ? LanguageManager.Current[Languagekeys.DeviceLanguage_IOSCopyError] : LanguageManager.Current[Languagekeys.DeviceLanguage_IOSUserExit];
-                    //Asyn.IsSuccess = false;
                     IsCopying = false;
-                    actualProgress = 0;
+
+                    msg = step == 4 ? LanguageManager.Current[Languagekeys.DeviceLanguage_IOSCopyError] : LanguageManager.Current[Languagekeys.DeviceLanguage_IOSUserExit];
 
                     LoggerManagerSingle.Instance.Warn(string.Format(LanguageManager.Current[Languagekeys.DeviceLanguage_IOSDeviceCopyError], uniqueDeviceID, step, msg));
-
                     break;
             }
 
-            //Asyn?.Advance(actualProgress, string.Format(LanguageManager.Current[Languagekeys.DeviceLanguage_IOSExtractLocalAppsReport], CurrentDeviceName, msg));
+            Asyn?.OnProgress(copyed, progress, msg);
 
-            //返回0则继续拷贝
             return 0;
         }
 

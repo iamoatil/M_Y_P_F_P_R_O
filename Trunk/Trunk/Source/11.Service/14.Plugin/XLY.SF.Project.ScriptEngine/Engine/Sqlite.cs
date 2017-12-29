@@ -1,21 +1,22 @@
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Dynamic;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using XLY.SF.Framework.BaseUtility;
-using XLY.SF.Project.Persistable.Primitive;
+using System.Runtime.InteropServices;
 
-namespace XLY.SF.Project.ScriptEngine.Engine
+namespace XLY.SF.Project.ScriptEngine
 {
     /// <summary>
     /// Sqlite数据库操作
     /// </summary>
     public class Sqlite
     {
-
+        /// <summary>
+        /// 特征库文件的基本路径，为脚本文件的目录
+        /// </summary>
+        public string CharatorBasePath { get; set; }
         /// <summary>
         /// 数据分析恢复：指定源数据文件、特征库，及表名称，表名称多个以逗号','隔开。
         /// 恢复成功返回新的db路径
@@ -23,7 +24,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// </summary>
         public string DataRecovery(string sourcedb, string charatorPath, string tableNames, bool isScanDebris)
         {
-            return SqliteRecoveryHelper.DataRecovery(sourcedb, charatorPath, tableNames, isScanDebris);
+            return SqliteRecoveryHelper.DataRecovery(sourcedb, System.IO.Path.Combine(CharatorBasePath, charatorPath), tableNames, isScanDebris);
         }
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// </summary>
         public string DataRecovery(string sourcedb, string charatorPath, string tableNames)
         {
-            return SqliteRecoveryHelper.DataRecovery(sourcedb, charatorPath, tableNames);
+            return SqliteRecoveryHelper.DataRecovery(sourcedb, System.IO.Path.Combine(CharatorBasePath, charatorPath), tableNames);
         }
 
 
@@ -51,7 +52,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
             }
             catch (Exception ex)
             {
-                var str = string.Format("SQL查询失败", file, ex.Message);
+                var str = string.Format("execute sql errors: {0}, {1}", file, ex.AllMessage());
                 Console.WriteLine(str);
                 return string.Empty;
             }
@@ -63,9 +64,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         }
 
         #region BigFind
-
         private List<dynamic> list = new List<dynamic>();
-
         /// <summary>
         /// 执行sql，获取动态类型数据集合
         /// </summary>
@@ -73,28 +72,26 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         {
             try
             {
-                list = this._Find(file, sql).ToList();
+                list = this._Find(file, sql);
                 this.Encode(list, string.Empty, string.Empty);
             }
             catch (Exception ex)
             {
-                var str = string.Format("SQL查询失败", file, ex.Message);
+                var str = string.Format("execute sql error: {0}, {1}", file, ex.AllMessage());
                 Console.WriteLine(str);
+                //LogHelper.Error(str, ex);
             }
         }
-
         public string BigFind()
         {
             List<dynamic> items = new List<dynamic>();
-            if (list.Any())
+            if (list.Count != 0)
             {
                 items = list.Take(10000).ToList();
-
                 if (list.Count() >= 10000)
                     list.RemoveRange(0, 10000);
                 else
                     list.RemoveRange(0, list.Count());
-
                 var result = from u in items
                              select new
                              {
@@ -122,7 +119,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
             {
                 if (!System.IO.File.Exists(file))
                 {
-                    Console.WriteLine(string.Format("文件不存在", file));
+                    Console.WriteLine(string.Format("File {0} is not exist", file));
                     return null;
                 }
                 SqliteContext context = new SqliteContext(file);
@@ -132,7 +129,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
             }
             catch (Exception ex)
             {
-                Console.WriteLine(string.Format("SQL查询失败", file, ex.Message));
+                Console.WriteLine(string.Format("execute sql errors: {0}, {1}", file, ex.AllMessage()));
                 throw;
             }
         }
@@ -152,8 +149,9 @@ namespace XLY.SF.Project.ScriptEngine.Engine
             }
             catch (Exception ex)
             {
-                var str = string.Format("SQL查询失败", file, ex.Message);
+                var str = string.Format("execute sql errors: {0}, {1}", file, ex.AllMessage());
                 Console.WriteLine(str);
+                //LogHelper.Error(str, ex);
                 return string.Empty;
             }
         }
@@ -163,24 +161,24 @@ namespace XLY.SF.Project.ScriptEngine.Engine
             return this.FindByName(file, name, string.Empty, string.Empty);
         }
 
-        private IEnumerable<dynamic> _Find(string file, string sql)
+        private List<dynamic> _Find(string file, string sql)
         {
             try
             {
                 if (!System.IO.File.Exists(file))
                 {
-                    Console.WriteLine(string.Format("文件不存在", file));
+                    Console.WriteLine(string.Format("File {0} is not Found", file));
                     return null;
                 }
-                using(SqliteContext context = new SqliteContext(file))
+                using (SqliteContext context = new SqliteContext(file))
                 {
-                    var res = context.Find(sql);
+                    var res = context.Find(new SQLiteString(sql));
                     return res;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(string.Format("SQL查询失败", file, ex.Message));
+                Console.WriteLine(string.Format("execute sql errors: {0}, {1}", file, ex.AllMessage()));
                 throw;
             }
         }
@@ -189,26 +187,26 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// 对byte数据进行转码 。
         /// columns为列名，多个逗号隔开；encodestr为编码格式，如UTF-8，Unicode，GBK
         /// </summary>
-        private void Encode(IEnumerable<dynamic> items, string columns, string encodestr)
+        private void Encode(List<dynamic> items, string columns, string encodestr)
         {
-            if (String.IsNullOrEmpty(columns) || String.IsNullOrEmpty(encodestr)) return;
-            if (items==null) return;
+            if (columns.IsInvalid() || encodestr.IsInvalid()) return;
+            if (items.IsInvalid()) return;
             var cs = columns.Replace("，", ",").Split(',');
             var encode = System.Text.Encoding.GetEncoding(encodestr);
             foreach (var item in items)
             {
                 try
                 {
-                    DynamicEx obj = (DynamicEx)item;
+                    DynamicX obj = (DynamicX)item;
                     foreach (var c in cs)
                     {
                         var value = obj.Get(c) as byte[];
-                        obj.Set(c, encode.GetString(value).Replace("\0", ""));
+                        obj.Set(c, value.GetString(encode).Replace("\0", ""));
                     }
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("转码异常" + e.Message);
+                    Console.WriteLine("tranvse encoding error: " + e.AllMessage());
                 }
 
             }
@@ -229,7 +227,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
             }
             catch (Exception ex)
             {
-                Console.WriteLine(string.Format("SQL查询失败", file, ex.Message));
+                Console.WriteLine(string.Format("execute sql errors: {0}, {1}", file, ex.AllMessage()));
                 throw;
             }
         }
@@ -244,7 +242,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// <returns></returns>
         public string FindByRegex(string file, string sql, string[] colNames, string[] regex)
         {
-            if (colNames!=null || regex!=null)
+            if (!colNames.IsValid() || !regex.IsValid())
             {
                 return Find(file, sql);
             }
@@ -255,11 +253,11 @@ namespace XLY.SF.Project.ScriptEngine.Engine
                 {
                     throw new Exception("the length of columns is not equal the length of regex");
                 }
-                
+
                 //var list = this._Find(file, sql);
                 if (!System.IO.File.Exists(file))
                 {
-                    Console.WriteLine(string.Format("文件不存在", file));
+                    Console.WriteLine(string.Format("File {0} is not Found", file));
                     return null;
                 }
                 SqliteContext context = new SqliteContext(file);
@@ -273,41 +271,39 @@ namespace XLY.SF.Project.ScriptEngine.Engine
 
                 for (int i = dt.Rows.Count - 1; i >= 0; i--)
                 {
-                    if (dicRegexes.Any(r => !r.Value.IsMatch(dt.Rows[i][r.Key].ToString())))        //如果某列值不满足正则匹配，则删除该行数据
+                    if (dicRegexes.Any(r => !r.Value.IsMatch(dt.Rows[i][r.Key].ToSafeString())))        //如果某列值不满足正则匹配，则删除该行数据
                     {
                         dt.Rows.RemoveAt(i);
                     }
                 }
 
-                var list = ToDynamicCollection(dt);
+                var list = dt.ToDynamicCollection();
                 this.Encode(list, string.Empty, string.Empty);
                 return JsonConvert.SerializeObject(list);
             }
             catch (Exception ex)
             {
-                var str = string.Format("SQL查询失败", file, ex.Message);
+                var str = string.Format("execute sql errors: {0}, {1}", file, ex.AllMessage());
                 Console.WriteLine(str);
+                //LogHelper.Error(str, ex);
                 return string.Empty;
             }
         }
-        public List<dynamic> ToDynamicCollection(DataTable dt)
+
+        /// <summary>
+        /// 解密支付宝数据
+        /// </summary>
+        /// <param name="ChatMsgDBFile"></param>
+        /// <param name="ShareXmlFile"></param>
+        /// <param name="Dencrypt_File"></param>
+        /// <returns></returns>
+        public string DencryptChatMsg(string ChatMsgDBFile, string ShareXmlFile, string Dencrypt_File)
         {
-            if (dt == null || dt.Rows.Count <= 0 || dt.Columns.Count <= 0)
-            {
-                return new List<dynamic>();
-            }
-            var items = new List<dynamic>();
-            foreach (DataRow row in dt.Rows)
-            {
-                dynamic dyn = new ExpandoObject();
-                foreach (DataColumn column in dt.Columns)
-                {
-                    var dic = (IDictionary<string, object>)dyn;
-                    dic[column.ColumnName] = row[column];
-                }
-                items.Add(dyn);
-            }
-            return items;
+            return dencrypt_chatMsg(ChatMsgDBFile, ShareXmlFile, Dencrypt_File).ToString();
         }
+
+        [DllImport("AliPay_Android.dll", EntryPoint = "dencrypt_chatMsg")]
+        public static extern int dencrypt_chatMsg(string ChatMsgDBFile, string ShareXmlFile, string Dencrypt_File);
+
     }
 }

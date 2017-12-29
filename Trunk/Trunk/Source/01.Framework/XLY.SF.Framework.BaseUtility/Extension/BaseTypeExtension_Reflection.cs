@@ -164,11 +164,11 @@ namespace XLY.SF.Framework.BaseUtility
         /// <summary>
         /// 创建指定类型Type的实例，若创建出错返回null
         /// </summary>
-        public static object CreateInstance(this Type @this)
+        public static object CreateInstance(this Type @this, params object[] args)
         {
             try
             {
-                var obj = Activator.CreateInstance(@this);
+                var obj = Activator.CreateInstance(@this, args);
                 return obj;
             }
             catch
@@ -297,6 +297,21 @@ namespace XLY.SF.Framework.BaseUtility
         public static object ChangeType<T>(this object obj)
         {
             return obj.ChangeType(typeof(T));
+        }
+        #endregion
+
+        #region 获取任意类型的泛型类型
+        /// <summary>
+        /// 获取任意类型的泛型类型，比如，比如List&lt;AAA&gt;
+        /// 主要用于动态的类型
+        /// </summary>
+        /// <param name="baseType">基本类型，比如List&lt;int&gt;</param>
+        /// <param name="genericType">泛型类型，比如AAA</param>
+        /// <returns>返回得到的泛型类，List&lt;AAA&gt;</returns>
+        public static Type GetGenericTypeX(this Type baseType, Type genericType)
+        {
+            Type gt = baseType.GetGenericTypeDefinition();
+            return gt.MakeGenericType(genericType);
         }
         #endregion
     }

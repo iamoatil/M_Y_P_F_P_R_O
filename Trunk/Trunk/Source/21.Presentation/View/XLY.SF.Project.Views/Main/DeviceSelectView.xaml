@@ -37,47 +37,49 @@
         </Style>
         </ResourceDictionary>
     </core:UcViewBase.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="318"/>
-            <RowDefinition Height="178"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_NoDevices.png" Grid.Row="1" Margin="0" HorizontalAlignment="Center" Width="531" Height="243" Visibility="{Binding HasDevice, Converter={StaticResource booleanToCollapseConverter}, ConverterParameter=true}"></Image>
-        <ctrl:DeviceSelectControl Grid.Row="1" Margin="0" ItemsSource="{Binding Devices}" SelectedValue="{Binding SelectDevice}" ItemWidth="190" HorizontalAlignment="Center" Visibility="{Binding HasDevice, Converter={StaticResource booleanToVisibilityConverter}}"></ctrl:DeviceSelectControl>
-        <!--<TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="16" Foreground="#FFFFFF">请选择（上方）想要取证的设备 或者 （下方）想要导入本地文件/文件夹</TextBlock>-->
-        <StackPanel Orientation="Vertical" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock FontSize="16" Foreground="#FFFFFF" HorizontalAlignment="Center">请选择 想要取证的设备</TextBlock>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 20 0 20">
-                <Line Stroke="#9ba5b9" X1="0" X2="24" VerticalAlignment="Center" StrokeThickness="1"/>
-                <TextBlock FontFamily="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/#Oswald" FontSize="16" Foreground="#9ba5b9" Margin="10 0 10 0">OR</TextBlock>
-                <Line Stroke="#9ba5b9" X1="0" X2="24"  VerticalAlignment="Center" StrokeThickness="1"/>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Grid>
+        <Grid Width="845" Height="556">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                    <RowDefinition Height="318"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_NoDevices.png" Grid.Row="1" Margin="0" HorizontalAlignment="Center" Width="531" Height="243" Visibility="{Binding HasDevice, Converter={StaticResource booleanToCollapseConverter}, ConverterParameter=true}"></Image>
+                <ctrl:DeviceSelectControl Grid.Row="1" Margin="0" ItemsSource="{Binding Devices}" SelectedValue="{Binding SelectDevice}" ItemWidth="190" HorizontalAlignment="Center" Visibility="{Binding HasDevice, Converter={StaticResource booleanToVisibilityConverter}}"></ctrl:DeviceSelectControl>
+            <StackPanel Orientation="Vertical" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 30 0 35">
+                <TextBlock FontSize="14" Foreground="#FFFFFF" HorizontalAlignment="Center">请选择 想要取证的设备</TextBlock>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 10 0 10">
+                    <Line Stroke="#9ba5b9" X1="0" X2="10" VerticalAlignment="Center" StrokeThickness="1"/>
+                    <TextBlock FontFamily="{StaticResource OswaldLightFont}" FontSize="14" Foreground="#9ba5b9" Margin="10 0 10 0">OR</TextBlock>
+                    <Line Stroke="#9ba5b9" X1="0" X2="10"  VerticalAlignment="Center" StrokeThickness="1"/>
+                </StackPanel>
+                <TextBlock FontSize="14" Foreground="#FFFFFF" HorizontalAlignment="Center">想要导入的本地文件/文件夹</TextBlock>
             </StackPanel>
-            <TextBlock FontSize="16" Foreground="#FFFFFF" HorizontalAlignment="Center">想要导入的本地文件/文件夹</TextBlock>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center">
-            <Button Margin="10" Command="{Binding SelectFileCommond}" Style="{StaticResource btnChooseFileStyle}">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_File.png" Width="16" Height="16"  Margin="0 0 8 0"/>
-                    <TextBlock Text="文件解析"/>
-                </StackPanel>
-            </Button>
-            <Button Margin="10" Command="{Binding SelectFolderCommond}" Style="{StaticResource btnChooseFileStyle}">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_Folder.png" Width="16" Height="16" Margin="0 0 8 0"/>
-                    <TextBlock Text="文件夹解析"/>
-                </StackPanel>
-            </Button>
-        </StackPanel>
-
-        <Button Grid.Row="4"
+            <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center">
+                <Button Margin="0 0 20 0" Command="{Binding SelectFileCommond}" Style="{StaticResource btnChooseFileStyle}" Width="160" Height="70">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_File.png" Width="16" Height="16"  Margin="0 0 8 0"/>
+                        <TextBlock Text="文件解析"/>
+                    </StackPanel>
+                </Button>
+                    <Button Margin="20 0 0 0" Command="{Binding SelectFolderCommond}" Style="{StaticResource btnChooseFileStyle}" Width="160" Height="70">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceChoose_Folder.png" Width="16" Height="16" Margin="0 0 8 0"/>
+                        <TextBlock Text="文件夹解析"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            </Grid>
+        <Button 
                 HorizontalAlignment="Right"
-                VerticalAlignment="Center"
+                VerticalAlignment="Bottom"
                 Margin="0 0 40 40"
                 Style="{StaticResource tooltipStyle}"
                 Command="{Binding OpenGuideCommand}"
                 Cursor="Hand" />
     </Grid>
+    </ScrollViewer>
 </core:UcViewBase>

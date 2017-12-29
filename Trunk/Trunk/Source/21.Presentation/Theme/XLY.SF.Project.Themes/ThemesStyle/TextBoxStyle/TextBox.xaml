@@ -2,58 +2,99 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:XLY.SF.Project.Themes.CustromControl"
                     xmlns:ee="http://schemas.microsoft.com/expression/2010/effects"
-                    xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" 
+                    xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+                    xmlns:t="clr-namespace:XLY.SF.Project.Themes"
                     xmlns:convert="clr-namespace:XLY.SF.Project.Themes.Converter">
     <!--图片是否需要显示转换器-->
-    <convert:ImageContentToBoolConverter x:Key="imgContentToBool"/>
-    <BooleanToVisibilityConverter x:Key="bToV"/>
+    <convert:ImageContentToBoolConverter x:Key="imgContentToBool" />
+    <BooleanToVisibilityConverter x:Key="bToV" />
 
     <!--空模版-->
-    <ControlTemplate x:Key="tb_EmptyCt" TargetType="TextBox">
-        <Border Background="{TemplateBinding Background}" CornerRadius="{TemplateBinding Border.CornerRadius}">
-            <ScrollViewer x:Name="PART_ContentHost" VerticalContentAlignment="Center" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+    <ControlTemplate x:Key="tb_EmptyCt"
+                     TargetType="TextBox">
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{TemplateBinding Border.CornerRadius}">
+            <ScrollViewer x:Name="PART_ContentHost"
+                          VerticalContentAlignment="Center"
+                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
         </Border>
     </ControlTemplate>
 
     <!--#region 自定义控件-->
     <!--#region 【默认】输入框样式，带标题-->
-    <ControlTemplate x:Key="tb_DefaultCt" TargetType="{x:Type local:TextBoxEx}">
+    <ControlTemplate x:Key="tb_DefaultCt"
+                     TargetType="{x:Type local:TextBoxEx}">
         <Grid>
-            <Border x:Name="bg" CornerRadius="5" Background="{TemplateBinding Background}" BorderThickness="1" BorderBrush="{TemplateBinding BorderBrush}">
+            <Border x:Name="bg"
+                    CornerRadius="5"
+                    Background="{TemplateBinding Background}"
+                    BorderThickness="1"
+                    BorderBrush="{TemplateBinding BorderBrush}">
                 <Grid Margin="{TemplateBinding Padding}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"
+                                          SharedSizeGroup="Title" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
                     <!--Title-->
-                    <StackPanel Orientation="Horizontal" Margin="{Binding TitlePadding,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}">
-                        <TextBlock x:Name="tb_Title" VerticalAlignment="Center" 
-                           Foreground="{Binding TitleForeground,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"                            
-                           Text="{Binding Title,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"/>
-                        <TextBlock x:Name="tb_Colon" Text="：" VerticalAlignment="Center"
-                           Foreground="{Binding TitleForeground,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"/>
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Margin="{Binding TitlePadding,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}">
+                        <TextBlock x:Name="tb_Title"
+                                   VerticalAlignment="Center"
+                                   Foreground="{Binding TitleForeground,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
+                                   Text="{Binding Title,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"/>
+                        <TextBlock x:Name="tb_Colon"
+                                   Text="："
+                                   VerticalAlignment="Center"
+                                   Foreground="{Binding TitleForeground,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}" />
                     </StackPanel>
                     <!--水印-->
-                    <TextBlock x:Name="tb_Watermark" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="Gray" Opacity="0.5" Text="{Binding Watermark,RelativeSource={RelativeSource AncestorType=local:TextBoxEx}}"/>
-                    <ScrollViewer Grid.Column="1" x:Name="PART_ContentHost" Foreground="{TemplateBinding Foreground}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                    <Button Grid.Column="2" Focusable="False" Template="{DynamicResource btn_EmptyCT}" Background="Transparent" x:Name="btn_Icon">
-                        <Image x:Name="img_Icon" Width="{Binding IconWidth,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}" 
+                    <TextBlock x:Name="tb_Watermark"
+                               Grid.Column="1"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Foreground="Gray"
+                               Opacity="0.5"
+                               Text="{Binding Watermark,RelativeSource={RelativeSource AncestorType=local:TextBoxEx}}" />
+                    <ScrollViewer Grid.Column="1"
+                                  x:Name="PART_ContentHost"
+                                  Foreground="{TemplateBinding Foreground}"
+                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Center" />
+                    <Button Grid.Column="2"
+                            Focusable="False"
+                            Template="{DynamicResource btn_EmptyCT}"
+                            Background="Transparent"
+                            x:Name="btn_Icon">
+                        <Image x:Name="img_Icon"
+                               Width="{Binding IconWidth,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
                                Height="{Binding IconHeight,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
                                Source="{Binding Icon,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
-                               Visibility="{Binding Icon,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx},Converter={StaticResource imgContentToBool}}" Margin="10 0 10 0"/>
+                               Visibility="{Binding Icon,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx},Converter={StaticResource imgContentToBool}}"
+                               Margin="10 0 10 0" />
                     </Button>
                 </Grid>
             </Border>
         </Grid>
         <ControlTemplate.Triggers>
-            <Trigger Property="Title" Value="">
-                <Setter Property="Visibility" Value="Collapsed" TargetName="tb_Colon"/>
+            <Trigger Property="Title"
+                     Value="">
+                <Setter Property="Visibility"
+                        Value="Collapsed"
+                        TargetName="tb_Colon" />
             </Trigger>
-            <Trigger Property="IsFocused" Value="true">
-                <Setter Property="Effect" TargetName="img_Icon">
+            <Trigger Property="IsFocused"
+                     Value="true">
+                <Setter Property="Effect"
+                        TargetName="img_Icon">
                     <Setter.Value>
-                        <ee:ColorToneEffect DarkColor="White" LightColor="White"/>
+                        <ee:ColorToneEffect DarkColor="White"
+                                            LightColor="White" />
                     </Setter.Value>
                 </Setter>
             </Trigger>
@@ -63,118 +104,203 @@
     <ControlTemplate x:Key="tb_ErrorCt">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
-            <ed:Callout AnchorPoint="0.25,1.5" MinHeight="30" Panel.ZIndex="1" CalloutStyle="Rectangle" Width="160" StrokeThickness="0" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="0 0 0 8">
+            <ed:Callout AnchorPoint="0.25,1.5"
+                        MinHeight="30"
+                        Panel.ZIndex="1"
+                        CalloutStyle="Rectangle"
+                        Width="160"
+                        StrokeThickness="0"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Left"
+                        Margin="0 0 0 8">
                 <ed:Callout.Fill>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#FF2D3C63" Offset="1"/>
-                        <GradientStop Color="#FF232848" Offset="0"/>
+                    <LinearGradientBrush EndPoint="0.5,1"
+                                         StartPoint="0.5,0">
+                        <GradientStop Color="#FF2D3C63"
+                                      Offset="1" />
+                        <GradientStop Color="#FF232848"
+                                      Offset="0" />
                     </LinearGradientBrush>
                 </ed:Callout.Fill>
                 <ed:Callout.Effect>
-                    <DropShadowEffect Color="Black" BlurRadius="25" Opacity="0.6" Direction="273" ShadowDepth="13"/>
+                    <DropShadowEffect Color="Black"
+                                      BlurRadius="25"
+                                      Opacity="0.6"
+                                      Direction="273"
+                                      ShadowDepth="13" />
                 </ed:Callout.Effect>
-                <TextBlock Text="{Binding AdornedElement.(Validation.Errors)[0].ErrorContent,ElementName=tb}" Foreground="White" FontSize="14" TextWrapping="Wrap" TextAlignment="Center"/>
+                <TextBlock Text="{Binding AdornedElement.(Validation.Errors)[0].ErrorContent,ElementName=tb}"
+                           Foreground="White"
+                           FontSize="14"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center" />
             </ed:Callout>
-            <Border Grid.Row="1" BorderThickness="1" BorderBrush="#ff4b64" CornerRadius="6">
-                <AdornedElementPlaceholder x:Name="tb"/>
+            <Border Grid.Row="1"
+                    BorderThickness="1"
+                    BorderBrush="#ff4b64"
+                    CornerRadius="6">
+                <AdornedElementPlaceholder x:Name="tb" />
             </Border>
         </Grid>
     </ControlTemplate>
 
     <!--设备信息录入界面使用-->
-    <ControlTemplate x:Key="tb_DefaultCtEnabled" TargetType="{x:Type local:TextBoxEx}">
+    <ControlTemplate x:Key="tb_DefaultCtEnabled"
+                     TargetType="{x:Type local:TextBoxEx}">
         <Grid>
-            <Border x:Name="bg" CornerRadius="5" Background="{TemplateBinding Background}">
+            <Border x:Name="bg"
+                    CornerRadius="5"
+                    Background="{TemplateBinding Background}">
                 <Grid Margin="{TemplateBinding Padding}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBlock x:Name="tb_Title" VerticalAlignment="Center" 
-                           Foreground="{Binding TitleForeground,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}" 
-                           Margin="{Binding TitlePadding,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
-                           Text="{Binding Title,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}" />
-                    <TextBlock x:Name="tb_Watermark" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="Gray" Opacity="0.5" Text="{Binding Watermark,RelativeSource={RelativeSource AncestorType=local:TextBoxEx}}"/>
-                    <ScrollViewer Grid.Column="1" x:Name="PART_ContentHost" Foreground="{TemplateBinding Foreground}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
-                    <Image x:Name="img_Icon" Grid.Column="2" Width="{Binding IconWidth,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}" 
-                       Height="{Binding IconHeight,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
-                       Source="{Binding Icon,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
-                       Visibility="{Binding Icon,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx},Converter={StaticResource imgContentToBool}}" Margin="10 0 10 0"/>
+                    <TextBlock x:Name="tb_Title"
+                               VerticalAlignment="Center"
+                               Foreground="{Binding TitleForeground,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
+                               Margin="{Binding TitlePadding,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
+                               Text="{Binding Title,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}" />
+                    <TextBlock x:Name="tb_Watermark"
+                               Grid.Column="1"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Foreground="Gray"
+                               Opacity="0.5"
+                               Text="{Binding Watermark,RelativeSource={RelativeSource AncestorType=local:TextBoxEx}}" />
+                    <ScrollViewer Grid.Column="1"
+                                  x:Name="PART_ContentHost"
+                                  Foreground="{TemplateBinding Foreground}"
+                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Center" />
+                    <Image x:Name="img_Icon"
+                           Grid.Column="2"
+                           Width="{Binding IconWidth,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
+                           Height="{Binding IconHeight,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
+                           Source="{Binding Icon,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx}}"
+                           Visibility="{Binding Icon,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:TextBoxEx},Converter={StaticResource imgContentToBool}}"
+                           Margin="10 0 10 0" />
                 </Grid>
             </Border>
-            <Border x:Name="br" BorderThickness="2" CornerRadius="4" BorderBrush="#4b5a78" Visibility="Collapsed"/>
+            <Border x:Name="br"
+                    BorderThickness="2"
+                    CornerRadius="4"
+                    BorderBrush="#4b5a78"
+                    Visibility="Collapsed" />
         </Grid>
         <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="br" Property="Visibility" Value="Visible"/>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter TargetName="br"
+                        Property="Visibility"
+                        Value="Visible" />
             </Trigger>
-            <Trigger Property="IsFocused" Value="true">
-                <Setter Property="Background" Value="#37415f" TargetName="bg"/>
-                <Setter Property="Effect" TargetName="img_Icon">
+            <Trigger Property="IsFocused"
+                     Value="true">
+                <Setter Property="Background"
+                        Value="#37415f"
+                        TargetName="bg" />
+                <Setter Property="Effect"
+                        TargetName="img_Icon">
                     <Setter.Value>
-                        <ee:ColorToneEffect DarkColor="White" LightColor="White"/>
+                        <ee:ColorToneEffect DarkColor="White"
+                                            LightColor="White" />
                     </Setter.Value>
                 </Setter>
             </Trigger>
-            <Trigger Property="IsEnabled" Value="false">
-                <Setter Property="Foreground" Value="#9ba5b9"/>
-                <Setter Property="Background" Value="#33414b69" TargetName="bg"/>
+            <Trigger Property="IsEnabled"
+                     Value="false">
+                <Setter Property="Foreground"
+                        Value="#9ba5b9" />
+                <Setter Property="Background"
+                        Value="#33414b69"
+                        TargetName="bg" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <!--#endregion-->
-    
+
     <!--#endregion-->
-
-
-
-
-
-
 
     <!--控件模版-->
 
-
-
-
-
-
-
     <!--样式-->
-    <Style x:Key="LoginPasswordBoxStyle" TargetType="{x:Type PasswordBox}">
-        <Setter Property="PasswordChar" Value="●"/>
-        <Setter Property="FontSize" Value="18"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Style x:Key="LoginPasswordBoxStyle"
+           TargetType="{x:Type PasswordBox}">
+        <Setter Property="PasswordChar"
+                Value="●" />
+        <Setter Property="FontSize"
+                Value="18" />
+        <Setter Property="Foreground"
+                Value="White" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type PasswordBox}">
-                    <Border x:Name="Bd" BorderBrush="#FF414B69"  BorderThickness="1" CornerRadius="4"  Background="#FF414B69"  SnapsToDevicePixels="true">
-                        <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
-                            <TextBlock Text="密  码" FontSize="14" Foreground="#9ba5b9" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                            <ScrollViewer x:Name="PART_ContentHost" Margin="10,0,0,0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" Height="30" VerticalAlignment="Center"  Width="180" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                            <Image Width="16" Height="16" Margin="10" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/LoginPassWord.png" x:Name="img_Icon">
+                    <Border x:Name="Bd"
+                            BorderBrush="#FF414B69"
+                            BorderThickness="1"
+                            CornerRadius="4"
+                            Background="#FF414B69"
+                            SnapsToDevicePixels="true">
+                        <StackPanel VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                            <TextBlock Text="密  码"
+                                       FontSize="14"
+                                       Foreground="#9ba5b9"
+                                       Margin="10,0,0,0"
+                                       VerticalAlignment="Center" />
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Margin="10,0,0,0"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          Height="30"
+                                          VerticalAlignment="Center"
+                                          Width="180"
+                                          HorizontalAlignment="Center"
+                                          HorizontalContentAlignment="Center"
+                                          VerticalContentAlignment="Center" />
+                            <Image Width="16"
+                                   Height="16"
+                                   Margin="10"
+                                   Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/LoginPassWord.png"
+                                   x:Name="img_Icon">
                             </Image>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
-                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        <Trigger Property="IsEnabled"
+                                 Value="false">
+                            <Setter Property="Background"
+                                    TargetName="Bd"
+                                    Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
                         </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bd" Property="BorderThickness" Value="1"/>
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="#4b5a78"/>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="Bd"
+                                    Property="BorderThickness"
+                                    Value="1" />
+                            <Setter TargetName="Bd"
+                                    Property="BorderBrush"
+                                    Value="#4b5a78" />
                         </Trigger>
-                        <Trigger Property="IsFocused" Value="true">
-                            <Setter Property="Background" Value="#37415f" TargetName="Bd"/>
-                            <Setter Property="Effect" TargetName="img_Icon">
+                        <Trigger Property="IsFocused"
+                                 Value="true">
+                            <Setter Property="Background"
+                                    Value="#37415f"
+                                    TargetName="Bd" />
+                            <Setter Property="Effect"
+                                    TargetName="img_Icon">
                                 <Setter.Value>
-                                    <ee:ColorToneEffect DarkColor="White" LightColor="White"/>
+                                    <ee:ColorToneEffect DarkColor="White"
+                                                        LightColor="White" />
                                 </Setter.Value>
                             </Setter>
                         </Trigger>

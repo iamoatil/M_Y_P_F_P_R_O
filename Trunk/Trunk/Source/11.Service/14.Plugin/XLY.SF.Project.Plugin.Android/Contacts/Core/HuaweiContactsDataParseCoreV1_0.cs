@@ -45,7 +45,7 @@ namespace XLY.SF.Project.Plugin.Android
                 return;
             }
 
-            SqliteContext mainContext = null;
+            SqliteContext mainContext = new SqliteContext(MainDbPath);
 
             try
             {

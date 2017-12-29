@@ -259,6 +259,8 @@ namespace XLY.SF.Project.Plugin.Android
             //最近联系列表
             BuildRecentTree(accountTree);
 
+            accountTree.Text = CurQQAccount.FullName;
+
             rootNode.TreeNodes.Add(accountTree);
             rootNode.Items.Add(CurQQAccount);
         }
@@ -323,6 +325,7 @@ namespace XLY.SF.Project.Plugin.Android
             var friendMsgRootSet = new TreeNode()
             {
                 Text = LanguageHelper.GetString(Languagekeys.PluginQQ_FriendMsg),
+                Type = typeof(DefaultMessageList),
             };
             accountTree.TreeNodes.Add(friendMsgRootSet);
 
@@ -462,6 +465,7 @@ namespace XLY.SF.Project.Plugin.Android
 
                      string troopuin = DynamicConvert.ToSafeString(troopDy.troopuin);
                      QQFriendShow friendShow;
+                     List<QQFriendShow> tempList = new List<QQFriendShow>();
                      foreach (var member in allTroopMemberInfo.Where(m => m.troopuin == troopuin))
                      {
                          friendShow = new QQFriendShow()
@@ -471,8 +475,16 @@ namespace XLY.SF.Project.Plugin.Android
                              Alias = Decrypt(DynamicConvert.ToSafeString(member.troopnick)),
                              DataState = DynamicConvert.ToEnumByValue(member.XLY_DataType, EnumDataState.Normal)
                          };
+
+                         if (tempList.Any(f => f.QQNumber == friendShow.QQNumber))
+                         {
+                             continue;
+                         }
+
+                         tempList.Add(friendShow);
                          memberTree.Items.Add(friendShow);
                      }
+                     tempList.Clear();
                  }
              });
         }
@@ -487,6 +499,7 @@ namespace XLY.SF.Project.Plugin.Android
             var troopMsgRootSet = new TreeNode()
             {
                 Text = LanguageHelper.GetString(Languagekeys.PluginQQ_TroopMsg),
+                Type = typeof(DefaultMessageList),
             };
             accountTree.TreeNodes.Add(troopMsgRootSet);
 
@@ -603,6 +616,7 @@ namespace XLY.SF.Project.Plugin.Android
 
                     string uin = DynamicConvert.ToSafeString(discussDy.uin);
                     QQFriendShow friendShow;
+                    List<QQFriendShow> tempList = new List<QQFriendShow>();
                     foreach (var member in allDiscussionMemberInfo.Where(d => d.discussionUin == uin))
                     {
                         friendShow = new QQFriendShow()
@@ -612,8 +626,16 @@ namespace XLY.SF.Project.Plugin.Android
                             Remark = Decrypt(DynamicConvert.ToSafeString(member.inteRemark)),
                             DataState = DynamicConvert.ToEnumByValue(member.XLY_DataType, EnumDataState.Normal)
                         };
+
+                        if (tempList.Any(f => f.QQNumber == friendShow.QQNumber))
+                        {
+                            continue;
+                        }
+
+                        tempList.Add(friendShow);
                         memberTree.Items.Add(friendShow);
                     }
+                    tempList.Clear();
                 }
             });
         }
@@ -628,6 +650,7 @@ namespace XLY.SF.Project.Plugin.Android
             var discussMsgRootSet = new TreeNode()
             {
                 Text = LanguageHelper.GetString(Languagekeys.PluginQQ_DiscussMsg),
+                Type = typeof(DefaultMessageList),
             };
             accountTree.TreeNodes.Add(discussMsgRootSet);
 
@@ -775,7 +798,8 @@ namespace XLY.SF.Project.Plugin.Android
                         	f.gender,
                         	f.signature,
                         	f.richTime,
-                        	f.richBuffer AS irichBuffer
+                        	f.richBuffer AS irichBuffer,
+                            f.XLY_DataType,
                         FROM
                         	Friends f";
 
@@ -791,6 +815,11 @@ namespace XLY.SF.Project.Plugin.Android
                         friendDy = r.ToDynamic();
 
                         string friendQQNumber = Decrypt(DynamicConvert.ToSafeString(friendDy.uin));
+
+                        if (AllFrineds.Any(f => f.QQNumber == friendQQNumber))
+                        {
+                            continue;
+                        }
 
                         if (friendQQNumber == CurQQNumber)
                         {//帐号信息
@@ -820,7 +849,7 @@ namespace XLY.SF.Project.Plugin.Android
                             switch (friendQQNumber)
                             {
                                 case "1344242394":
-                                    friendShow.Nick =LanguageHelper.GetString(Languagekeys.PluginQQ_QQRedPack);
+                                    friendShow.Nick = LanguageHelper.GetString(Languagekeys.PluginQQ_QQRedPack);
                                     break;
                                 case "2010741172":
                                     friendShow.Nick = LanguageHelper.GetString(Languagekeys.PluginQQ_QQEmail);
@@ -1036,7 +1065,7 @@ namespace XLY.SF.Project.Plugin.Android
         {
             var tableName = LsFriendMsgTables.FirstOrDefault(s => s.Contains(CryptographyHelper.MD5FromStringUpper(friend.QQNumber)));
 
-            if(tableName.IsInvalid())
+            if (tableName.IsInvalid())
             {
                 return;
             }
@@ -1257,6 +1286,7 @@ namespace XLY.SF.Project.Plugin.Android
         private readonly static Regex RegexMediaFile = new Regex("(?<=[$`Z%VOLd\\*])[\\s\\S]+(?=)", RegexOptions.Compiled);
         private readonly static Regex RegexVideo = new Regex(@"Tencent/MobileQQ/shortvideo/\S+.mp4", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private readonly static Regex RegexImageMd5 = new Regex(@" ([0-9A-Z]{32})", RegexOptions.Compiled);
+        private readonly static char[] _InvalidChars = System.IO.Path.GetInvalidFileNameChars();
 
         /// <summary>
         /// 解析消息类型和消息内容
@@ -1265,130 +1295,141 @@ namespace XLY.SF.Project.Plugin.Android
         /// <param name="friendDyMsg"></param>
         private void GetMessageContent(ref MessageCore friendMsg, dynamic friendDyMsg)
         {
-            friendMsg.Type = GetEnumColumnType(DynamicConvert.ToSafeString(friendDyMsg.msgtype));
-
-            var sourcePath = string.Empty;
-
-            switch (friendMsg.Type)
+            try
             {
-                case EnumColumnType.Image:
-                    friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Image);
+                friendMsg.Type = GetEnumColumnType(DynamicConvert.ToSafeString(friendDyMsg.msgtype));
 
-                    #region 图片处理
+                var sourcePath = string.Empty;
 
-                    sourcePath = RegexMediaFile.Match(friendMsg.Content).Value;
-                    var image = sourcePath.Split('/').Last();
-                    sourcePath = Path.Combine(MediaFileRootPath, "photo", image);
+                switch (friendMsg.Type)
+                {
+                    case EnumColumnType.Image:
+                        friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Image);
 
-                    if (sourcePath.IsInvalid() || !File.Exists(sourcePath))
-                    {
-                        var md5 = RegexImageMd5.Match(friendMsg.Content).Groups[1].Value;
-                        sourcePath = GetImageFromMd5(md5);
-                    }
+                        #region 图片处理
 
-                    if (sourcePath.IsValid() && File.Exists(sourcePath))
-                    {
-                        friendMsg.Content = sourcePath;
-                    }
+                        sourcePath = RegexMediaFile.Match(friendMsg.Content).Value;
+                        var image = sourcePath.Split('/').Last();
 
-                    #endregion
+                        if (image.IndexOfAny(_InvalidChars) == -1)
+                        {
+                            sourcePath = Path.Combine(MediaFileRootPath, "photo", image);
+                        }
 
-                    break;
-                case EnumColumnType.Audio:
-                    friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Audio);
+                        if (sourcePath.IsInvalid() || !File.Exists(sourcePath))
+                        {
+                            var md5 = RegexImageMd5.Match(friendMsg.Content).Groups[1].Value;
+                            sourcePath = GetImageFromMd5(md5);
+                        }
 
-                    #region 语音处理
-
-                    var resultAudio = Regex.Match(friendMsg.Content, "(?<=ptt/).*?(amr|slk)");
-                    if (!resultAudio.Success)
-                    {
-                        return;
-                    }
-
-                    var audioFileName = resultAudio.Value;
-                    sourcePath = Path.Combine(MediaFileRootPath, CurQQNumber, "ptt", audioFileName);
-                    if (!File.Exists(sourcePath) && !audioFileName.EndsWith(".slk"))
-                    {
-                        sourcePath = Path.Combine(MediaFileRootPath, CurQQNumber, "ptt",
-                                      string.Format("{0}.slk", audioFileName.TrimEnd(FileHelper.GetExtension(audioFileName))));
-                    }
-
-                    if (File.Exists(sourcePath))
-                    {
-                        friendMsg.Content = AudioDecodeHelper.Decode(sourcePath);
-                    }
-
-                    #endregion
-
-                    break;
-                case EnumColumnType.Video:
-                    friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Video);
-
-                    #region 视频处理
-
-                    var videoFile = RegexVideo.Match(friendMsg.Content).Value.TrimStart("/");
-                    if (videoFile.IsValid())
-                    {
-                        sourcePath = Path.Combine(MediaFileRootPath, videoFile.Replace("Tencent", "tencent").Replace('/', '\\'));
-                        if (File.Exists(sourcePath))
+                        if (sourcePath.IsValid() && File.Exists(sourcePath))
                         {
                             friendMsg.Content = sourcePath;
                         }
-                    }
 
-                    #endregion
+                        #endregion
 
-                    break;
-                case EnumColumnType.File:
-                    friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_File);
+                        break;
+                    case EnumColumnType.Audio:
+                        friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Audio);
 
-                    #region 文件处理
+                        #region 语音处理
 
-                    var fileMangerInfo = LsFileManager.FirstOrDefault(c => c.uniseq == friendDyMsg.uniseq);
-                    if (fileMangerInfo != null)
-                    {
-                        sourcePath = Decrypt(fileMangerInfo.strFilePath);
-                        if (sourcePath.IsInvalid())
+                        var resultAudio = Regex.Match(friendMsg.Content, "(?<=ptt/).*?(amr|slk)");
+                        if (!resultAudio.Success)
                         {
-                            sourcePath = Decrypt(fileMangerInfo.strThumbPath);
+                            return;
                         }
-                        if (sourcePath.IsValid())
+
+                        var audioFileName = resultAudio.Value;
+                        sourcePath = Path.Combine(MediaFileRootPath, CurQQNumber, "ptt", audioFileName);
+                        if (!File.Exists(sourcePath) && !audioFileName.EndsWith(".slk"))
                         {
-                            var res = sourcePath.Split(new string[] { "/0/" }, StringSplitOptions.RemoveEmptyEntries);
-                            if (res.IsValid() && res.Length >= 2)
+                            sourcePath = Path.Combine(MediaFileRootPath, CurQQNumber, "ptt",
+                                          string.Format("{0}.slk", audioFileName.TrimEnd(FileHelper.GetExtension(audioFileName))));
+                        }
+
+                        if (File.Exists(sourcePath))
+                        {
+                            friendMsg.Content = AudioDecodeHelper.Decode(sourcePath);
+                        }
+
+                        #endregion
+
+                        break;
+                    case EnumColumnType.Video:
+                        friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Video);
+
+                        #region 视频处理
+
+                        var videoFile = RegexVideo.Match(friendMsg.Content).Value.TrimStart("/");
+                        if (videoFile.IsValid())
+                        {
+                            sourcePath = Path.Combine(MediaFileRootPath, videoFile.Replace("Tencent", "tencent").Replace('/', '\\'));
+                            if (File.Exists(sourcePath))
                             {
-                                sourcePath = Path.Combine(MediaFileRootPath, res[1].Replace("Tencent", "tencent").Replace('/', '\\'));
-                                if (File.Exists(sourcePath))
-                                {
-                                    friendMsg.Content = sourcePath;
-                                }
+                                friendMsg.Content = sourcePath;
                             }
                         }
 
-                        switch (DynamicConvert.ToSafeInt(fileMangerInfo.nFileType))
+                        #endregion
+
+                        break;
+                    case EnumColumnType.File:
+                        friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_File);
+
+                        #region 文件处理
+
+                        var fileMangerInfo = LsFileManager.FirstOrDefault(c => c.uniseq == friendDyMsg.uniseq);
+                        if (fileMangerInfo != null)
                         {
-                            case 0:
-                                friendMsg.Type = EnumColumnType.Image;
-                                friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Image);
-                                break;
-                            case 1:
-                                friendMsg.Type = EnumColumnType.Audio;
-                                friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Audio);
-                                break;
-                            case 2:
-                                friendMsg.Type = EnumColumnType.Video;
-                                friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Video);
-                                break;
+                            sourcePath = Decrypt(fileMangerInfo.strFilePath);
+                            if (sourcePath.IsInvalid())
+                            {
+                                sourcePath = Decrypt(fileMangerInfo.strThumbPath);
+                            }
+                            if (sourcePath.IsValid())
+                            {
+                                var res = sourcePath.Split(new string[] { "/0/" }, StringSplitOptions.RemoveEmptyEntries);
+                                if (res.IsValid() && res.Length >= 2)
+                                {
+                                    sourcePath = Path.Combine(MediaFileRootPath, res[1].Replace("Tencent", "tencent").Replace('/', '\\'));
+                                    if (File.Exists(sourcePath))
+                                    {
+                                        friendMsg.Content = sourcePath;
+                                    }
+                                }
+                            }
+
+                            switch (DynamicConvert.ToSafeInt(fileMangerInfo.nFileType))
+                            {
+                                case 0:
+                                    friendMsg.Type = EnumColumnType.Image;
+                                    friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Image);
+                                    break;
+                                case 1:
+                                    friendMsg.Type = EnumColumnType.Audio;
+                                    friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Audio);
+                                    break;
+                                case 2:
+                                    friendMsg.Type = EnumColumnType.Video;
+                                    friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_Video);
+                                    break;
+                            }
                         }
-                    }
 
-                    #endregion
+                        #endregion
 
-                    break;
-                case EnumColumnType.String:
-                    friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_String);
+                        break;
+                    case EnumColumnType.String:
+                        friendMsg.MessageType = LanguageHelper.GetString(Languagekeys.PluginQQ_String);
 
-                    break;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Framework.Log4NetService.LoggerManagerSingle.Instance.Error(ex, "解析QQ消息内容出错！");
             }
         }
 

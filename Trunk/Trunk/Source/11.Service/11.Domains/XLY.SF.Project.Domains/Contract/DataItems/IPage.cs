@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections;
 
 /* ==============================================================================
 * Assembly   ：	XLY.SF.Project.Domains.IPage
@@ -20,30 +15,18 @@ namespace XLY.SF.Project.Domains
     public interface IPage
     {
         /// <summary>
-        /// 分页大小
-        /// </summary>
-        int PageSize { get; set; }
-        /// <summary>
-        /// 当前数据集的起始位置
-        /// </summary>
-        int Cursor { get; set; }
-        /// <summary>
         /// 数据总数
         /// </summary>
-        int Total { get; }
+        int Count { get; }
+
         /// <summary>
-        /// 读取下一页数据
+        /// 删除数据总数
         /// </summary>
-        /// <returns></returns>
-        bool NextPage();
+        int DeleteCount { get; }
+
         /// <summary>
-        /// 读取上一页数据
+        /// 获取当前页码的数据集，如果pageSize&lt;=0，则获取之后的全部数据
         /// </summary>
-        /// <returns></returns>
-        bool PrePage();
-        /// <summary>
-        /// 获取当前的数据集
-        /// </summary>
-        IEnumerable View { get; }
+        IEnumerable GetView(int cursor = 0, int pageSize = -1);
     }
 }

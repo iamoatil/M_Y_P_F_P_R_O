@@ -41,7 +41,7 @@ namespace XLY.SF.Project.Plugin.Adapter
 
                 foreach (var dir in dirs)
                 {
-                    var files = System.IO.Directory.GetFiles(dir, "XLY.SF.Project.Plugin.*.dll", System.IO.SearchOption.AllDirectories);
+                    var files = System.IO.Directory.GetFiles(dir, "XLY.SF.Project.*.dll", System.IO.SearchOption.AllDirectories);
                     foreach (var dllFile in files)
                     {
                         if (existList.Contains(System.IO.Path.GetFileName(dllFile)))
@@ -49,10 +49,17 @@ namespace XLY.SF.Project.Plugin.Adapter
                             continue;
                         }
                         existList.Add(System.IO.Path.GetFileName(dllFile));
-                        var ass = Assembly.LoadFile(dllFile);
-                        foreach (var cla in ass.GetTypes().Where(t => t.GetCustomAttribute<PluginContainerAttribute>() != null && !t.IsAbstract && !t.IsInterface))
+                        try
                         {
-                            Plugins[cla.GetCustomAttribute<PluginContainerAttribute>().PluginType] = cla;
+                            var ass = Assembly.LoadFile(dllFile);
+                            foreach (var cla in ass.GetTypes().Where(t => t.GetCustomAttribute<PluginContainerAttribute>() != null && !t.IsAbstract && !t.IsInterface))
+                            {
+                                Plugins[cla.GetCustomAttribute<PluginContainerAttribute>().PluginType] = cla;
+                            }
+                        }
+                        catch (Exception)
+                        {
+
                         }
                     }
                 }
@@ -61,9 +68,10 @@ namespace XLY.SF.Project.Plugin.Adapter
 
         public T GetPlugin<T>(PluginType type)
         {
-            if(!Plugins.ContainsKey(type))
+            if (!Plugins.ContainsKey(type))
             {
-                throw new Exception("未匹配到合适的插件!");
+                //throw new Exception("未匹配到合适的插件!");
+                return default(T);
             }
             return (T)Activator.CreateInstance(Plugins[type]);
         }

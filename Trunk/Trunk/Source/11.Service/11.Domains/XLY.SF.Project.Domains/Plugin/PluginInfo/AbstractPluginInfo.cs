@@ -27,36 +27,43 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         [XmlAttribute("guid")]
         public virtual string Guid { get; set; }
+
         /// <summary>
         /// 插件类型，比如“应用解析插件”
         /// </summary>
         [XmlAttribute("type")]
         public virtual PluginType PluginType { get; set; }
+
         /// <summary>
         /// 插件名称
         /// </summary>
         [XmlElement("name")]
         public virtual string Name { get; set; }
+
         /// <summary>
         /// 插件中配置的版本信息
         /// </summary>
         [XmlElement("version")]
         public virtual string VersionStr { get; set; }
+
         /// <summary>
         /// 插件版本,代表该插件支持的APP最低版本
         /// </summary>
         [XmlIgnore]
         public virtual Version Version => this.VersionStr.ToSafeVersion();
+
         /// <summary>
         /// 插件描述信息
         /// </summary>
         [XmlElement("description")]
         public virtual string Description { get; set; }
+
         /// <summary>
         /// 图标位置，
         /// </summary>
         [XmlElement("icon")]
         public virtual string Icon { get; set; }
+
         /// <summary>
         /// 插件分组信息
         /// </summary>

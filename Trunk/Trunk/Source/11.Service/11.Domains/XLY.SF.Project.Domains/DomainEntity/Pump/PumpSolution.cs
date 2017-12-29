@@ -24,6 +24,10 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 备份提取。
         /// </summary>
-        BackExtraction = 0x0104
+        BackExtraction = 0x0104,
+        /// <summary>
+        /// 降级提取。使用此标志将忽略其它标志。
+        /// </summary>
+        Downgrading = 0x0108,
     }
 }

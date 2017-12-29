@@ -99,17 +99,12 @@ namespace XLY.SF.Project.MirrorView
 
         public void Close()
         {
-            Process[] pros=Process.GetProcessesByName(Path.GetFileNameWithoutExtension(_backgroundAppPath));
-            foreach (var item in pros)
+            if(_curProcess != null)
             {
-                try
+                if(!_curProcess.HasExited)
                 {
-                    item.Kill();
+                    _curProcess.Kill();
                 }
-                catch (Exception)
-                {
-                    
-                }                
             }
         }
     }

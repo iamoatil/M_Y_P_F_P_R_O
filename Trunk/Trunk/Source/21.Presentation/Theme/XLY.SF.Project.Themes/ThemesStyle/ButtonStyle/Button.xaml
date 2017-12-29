@@ -22,26 +22,23 @@
     <!--#region 控件模版-->
     <!--首页按钮-->
     <ControlTemplate x:Key="btn_HomePageCT" TargetType="{x:Type Button}">
-        <Grid x:Name="gd">
-            <Grid.Background>
-                <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/HomePageBtn_Normal.png"/>
-            </Grid.Background>
+        <Border x:Name="br" CornerRadius="12" Background="#23b9be">
+            <Border.Effect>
+                <DropShadowEffect Color="#23b9be" Opacity="0.1" ShadowDepth="6" BlurRadius="8" Direction="300"/>
+            </Border.Effect>
             <ContentPresenter HorizontalAlignment="Left" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
-        </Grid>
+        </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" TargetName="gd">
+                <Setter Property="Background" TargetName="br" Value="#28c8cd"/>
+                <Setter Property="Effect" TargetName="br">
                     <Setter.Value>
-                        <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/HomePageBtn_Hover.png"/>
+                        <DropShadowEffect Color="#23b9be" Opacity="0.2" ShadowDepth="3" BlurRadius="10" Direction="300"/>
                     </Setter.Value>
                 </Setter>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" TargetName="gd">
-                    <Setter.Value>
-                        <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/HomePageBtn_Click.png"/>
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="Background" TargetName="br" Value="#1e9ba0"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -186,8 +183,8 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <!--设备选择-->
-    <Style x:Key="btn_DeviceSelect"
+
+    <Style x:Key="ImageButtonBaseStyle"
            TargetType="{x:Type Button}">
         <Setter Property="Background"
                 Value="#29b9be" />
@@ -209,25 +206,55 @@
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="{TemplateBinding Border.CornerRadius}">
                         <StackPanel Orientation="Horizontal">
-                            <Image Margin="15,0,0,0" x:Name="img" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceList_SelectPressed.png" Width="16" Height="18"></Image>
+                            <Image Margin="6,0,0,0"
+                                   x:Name="img"
+                                   Source="{TemplateBinding Image.Source}"
+                                   Width="18"
+                                   Height="18"></Image>
                             <ContentPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          Margin="10,3,20,3"/>
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              Margin="10,3,10,3" />
                         </StackPanel>
 
                     </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" Value="#28cbcd"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="true">
-                            <Setter Property="Source" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceList_Select.png" TargetName="img"></Setter>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+    <!--设备选择-->
+    <Style x:Key="btn_PageReturn"
+           TargetType="{x:Type Button}"
+           BasedOn="{StaticResource ImageButtonBaseStyle}">
+        <Setter Property="Background"
+                Value="#c8cdd7" />
+        <Setter Property="Image.Source"
+                Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/DevHomePageIcon.png" />
+        <Style.Triggers>
+            <Trigger Property="IsPressed"
+                     Value="True">
+                <Setter Property="Background"
+                        Value="#414b69" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
+    <Style x:Key="btn_DeviceSelect"
+           TargetType="{x:Type Button}"
+           BasedOn="{StaticResource ImageButtonBaseStyle}">
+        <Setter Property="Image.Source"
+                Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceList_SelectPressed.png" />
+        <Style.Triggers>
+            <Trigger Property="IsPressed"
+                     Value="true">
+                <Setter Property="Image.Source"
+                        Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/DeviceList_Select.png" />
+            </Trigger>
+            <Trigger Property="IsMouseOver"
+                     Value="true">
+                <Setter Property="Background"
+                        Value="#28cbcd" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
     <!--首页导出按钮-->
     <Style x:Key="btn_TransparentBg" TargetType="Button">

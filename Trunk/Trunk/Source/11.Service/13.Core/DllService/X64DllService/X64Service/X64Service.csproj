@@ -53,6 +53,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="hasp_net_windows, Version=7.1.1.42581, Culture=neutral, PublicKeyToken=56120be447701319, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Lib\Donetdll\hasp_net_windows.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -71,11 +75,16 @@
     <Compile Include="SecretCoreDll.cs" />
     <Compile Include="SqliteCoreDll.cs" />
     <Compile Include="USBMonitorCoreDll.cs" />
+    <Compile Include="WechatBackupCoreDll.cs" />
     <Compile Include="WeChatMomentCoreDll.cs" />
     <Compile Include="WeChatVioceCoreDll.cs" />
     <Compile Include="WXDeCryptedCoreDll.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\01.Framework\XLY.SF.Framework.BaseUtility\XLY.SF.Framework.BaseUtility.csproj">
+      <Project>{E58B3BAA-0F89-4E6D-B34E-4607DFA8F805}</Project>
+      <Name>XLY.SF.Framework.BaseUtility</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\01.Framework\XLY.SF.Framework.Log4NetService\XLY.SF.Framework.Log4NetService.csproj">
       <Project>{6e3193b7-7316-415a-b529-0f743d5f267b}</Project>
       <Name>XLY.SF.Framework.Log4NetService</Name>

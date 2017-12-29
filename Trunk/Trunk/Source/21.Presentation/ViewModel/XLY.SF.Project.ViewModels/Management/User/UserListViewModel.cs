@@ -11,6 +11,7 @@ using XLY.SF.Project.Models.Logical;
 using XLY.SF.Project.ViewDomain.MefKeys;
 using System.Linq;
 using XLY.SF.Framework.Core.Base.CoreInterface;
+using ProjectExtend.Context;
 
 namespace XLY.SF.Project.ViewModels.Management.User
 {
@@ -20,11 +21,7 @@ namespace XLY.SF.Project.ViewModels.Management.User
     {
         #region Fields
 
-        private readonly ProxyRelayCommandBase _addProxyCommand;
-
         private readonly ProxyRelayCommandBase _removeProxyCommand;
-
-        private readonly ProxyRelayCommandBase _updateProxyCommand;
 
         private readonly ProxyRelayCommandBase _searchProxyCommand;
 
@@ -36,24 +33,24 @@ namespace XLY.SF.Project.ViewModels.Management.User
 
         public UserListViewModel()
         {
-            _addProxyCommand = new ProxyRelayCommand(Add, base.ModelName);
+            AddCommand = new GalaSoft.MvvmLight.Command.RelayCommand(Add);
             _removeProxyCommand = new ProxyRelayCommand<UserInfoModel>(Remove, base.ModelName);
-            _updateProxyCommand = new ProxyRelayCommand<UserInfoModel>(Update, base.ModelName);
+            UpdateCommand = new GalaSoft.MvvmLight.Command.RelayCommand<UserInfoModel>(Update);
             _searchProxyCommand = new ProxyRelayCommand<String>(Search, base.ModelName);
             SelectAllCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<Boolean>(SelectAll, (b) => Users != null && Users.Count != 0);
             SelectCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<Boolean>(Select);
-            _removeBatchCommand = new ProxyRelayCommand(RemoveBatch, base.ModelName);
+            _removeBatchCommand = new ProxyRelayCommand(RemoveBatch, base.ModelName, () => Users.Any(x => x.IsChecked));
         }
 
         #endregion
 
         #region Properties
 
-        public ICommand AddCommand => _addProxyCommand.ViewExecuteCmd;
+        public ICommand AddCommand { get; }
 
         public ICommand RemoveCommand => _removeProxyCommand.ViewExecuteCmd;
 
-        public ICommand UpdateCommand => _updateProxyCommand.ViewExecuteCmd;
+        public ICommand UpdateCommand { get; }
 
         public ICommand SearchCommand => _searchProxyCommand.ViewExecuteCmd;
 
@@ -140,6 +137,20 @@ namespace XLY.SF.Project.ViewModels.Management.User
             return "取消删除用户";
         }
 
+        private String Remove(UserInfoModel item)
+        {
+            if (MessageBox.ShowDialogWarningMsg("是否确定删除？"))
+            {
+                if (DbService.Remove(item.Entity))
+                {
+                    Users.Remove(item);
+                    return "删除用户成功";
+                }
+                return "删除用户失败";
+            }
+            return "取消删除用户";
+        }
+
         private void SelectAll(Boolean isSelectAll)
         {
             IsSelectAll = isSelectAll;
@@ -165,43 +176,22 @@ namespace XLY.SF.Project.ViewModels.Management.User
             }
         }
 
-        private String Add()
+        private void Add()
         {
-            Object result = PopupService.ShowDialogWindow(ExportKeys.SettingsUserInfoView, new UserInfoModel());
-            if (result == null) return "取消添加用户";
+            Object result = PopupService.ShowDialogWindow(ExportKeys.SettingsUserInfoView);
+            if (result == null) return;
             UserInfoModel item = (UserInfoModel)result;
-            item.LoginPassword = item.Password;
-            if (DbService.Add(item.Entity))
-            {
-                Users.Add(item);
-                return "添加用户成功";
-            }
-            return "添加用户失败";
+            Users.Add(item);
         }
 
-        private String Remove(UserInfoModel item)
+        private void Update(UserInfoModel item)
         {
-            if (MessageBox.ShowDialogWarningMsg("是否确定删除？"))
-            {
-                if (DbService.Remove(item.Entity))
-                {
-                    Users.Remove(item);
-                    return "删除用户成功";
-                }
-                return "删除用户失败";
-            }
-            return "取消删除用户";
-        }
-
-        private String Update(UserInfoModel item)
-        {
-            Object result = PopupService.ShowDialogWindow(ExportKeys.SettingsUserInfoView, item);
-            if (result == null) return "取消更新用户";
-            if (DbService.Update(item.Entity))
-            {
-                return "更新用户失败";
-            }
-            return "更新用户失败";
+            UserInfoModel clone = (UserInfoModel)item.Clone();
+            Object result = PopupService.ShowDialogWindow(ExportKeys.SettingsUserInfoView, clone);
+            if (result == null) return;
+            Int32 index = Users.IndexOf(item);
+            Users[index] = clone;
+            SystemContext.Instance.CurUserInfo = clone;
         }
 
         private String Search(String condition)

@@ -33,7 +33,7 @@ namespace XLY.SF.Project.Plugin.DataView
                 PluginType = PluginType.SpfDataView,
                 Icon = "pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_view_conversion.png"
             };
-            p.ViewType.Add(new DataViewSupportItem() { PluginId = "*", TypeName = "MessageCore" });
+            p.ViewType.Add(new DataViewSupportItem() { PluginId = "*", TypeName = "IConversion", Inherit = true });
             PluginInfo = p;
         }
 
@@ -41,6 +41,7 @@ namespace XLY.SF.Project.Plugin.DataView
         {
             ConversionControl ctrl = new ConversionControl();
             ctrl.DataContext = arg;
+            ctrl.OnSelectedDataChanged -= OnSelectedDataChanged;
             ctrl.OnSelectedDataChanged += OnSelectedDataChanged;
             return ctrl;
         }

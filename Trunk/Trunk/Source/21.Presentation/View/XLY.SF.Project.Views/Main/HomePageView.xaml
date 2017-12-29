@@ -9,7 +9,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
 		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
              xmlns:control ="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
-             mc:Ignorable="d" Height="1020">
+             mc:Ignorable="d">
     <core:UcViewBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -191,16 +191,16 @@
     <Grid>
         <DockPanel LastChildFill="True">
             <!--最新案例-->
-            <Grid DockPanel.Dock="Left" Width="400">
+            <Grid DockPanel.Dock="Left" Width="320">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <StackPanel HorizontalAlignment="Center" Orientation="Vertical" Margin="27 50 30 40">
-                    <Button Width="340" Height="82" Template="{StaticResource btn_HomePageCT}"
+                <StackPanel HorizontalAlignment="Center" Orientation="Vertical" Margin="20 30 20 70">
+                    <Button Width="270" Height="60" Template="{StaticResource btn_HomePageCT}"
                             Content="{Binding XPath=ViewLanguage/View_HomePageCreateCase,Source={x:Static ex:SystemContext.LanguageProvider}}" 
-                            Margin="0 0 0 20" Padding="50 0 0 12" FontSize="20" FontWeight="Bold" Foreground="White" Command="{Binding CreateCaseCommand.ViewExecuteCmd}"></Button>
-                    <control:MenuButton Width="340" Height="82" Padding="50 0 0 12" FontSize="20" FontWeight="Bold" Foreground="White"
+                            Margin="0 0 0 20" Padding="30 0 0 2" FontSize="20" FontWeight="Bold" Foreground="White" Command="{Binding CreateCaseCommand.ViewExecuteCmd}"></Button>
+                    <control:MenuButton Width="270" Height="60" Padding="30 0 0 0" FontSize="20" FontWeight="Bold" Foreground="White"
                                         BtnTest="{Binding XPath=ViewLanguage/View_HomePageOpen,Source={x:Static ex:SystemContext.LanguageProvider}}"
                                         ClickCommand="{Binding OpenLocalCaseCommand.ViewExecuteCmd}">
                         <ComboBoxItem x:Name="cbi_OpenAllCase">
@@ -218,7 +218,7 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Label Margin="41 0 0 0">
+                    <Label Margin="41 0 0 0" HorizontalAlignment="Left">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/CaseIcon.png" Width="24" Height="20"/>
                             <TextBlock Foreground="{StaticResource iconBrush}"
@@ -229,7 +229,7 @@
                         </StackPanel>
                     </Label>
                     <!--最近打开案例列表-->
-                    <ItemsControl Grid.Row="1" Margin="27 14 30 0" ItemsSource="{Binding RecentCaseItems}">
+                    <ItemsControl Grid.Row="1" Margin="16 14 16 10" ItemsSource="{Binding RecentCaseItems}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel VerticalAlignment="Top" HorizontalAlignment="Stretch"></StackPanel>
@@ -237,7 +237,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Margin="0 0 0 6" Height="30" Width="320">
+                                <Border Margin="0 0 0 6" Height="30" Width="280">
                                     <Button FontSize="14" Foreground="White" Background="Transparent" Cursor="Hand" BorderThickness="0" 
                                             Command="{Binding DataContext.OpenCaseCommand.ViewExecuteCmd,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
                                             CommandParameter="{Binding }">
@@ -262,7 +262,7 @@
                                         <Grid VerticalAlignment="Center">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition/>
-                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition Width="10"/>
                                                 <ColumnDefinition Width="auto"/>
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Text="{Binding Name}" HorizontalAlignment="Left"></TextBlock>
@@ -370,89 +370,91 @@
                             </Grid>
                         </Grid>
                         <!--右侧小图-->
-                        <StackPanel Grid.Column="2">
-                            <Grid Height="192" Margin="7 0 7 0">
-                                <!--阴影-->
-                                <Rectangle Fill="Black">
-                                    <Rectangle.Effect>
-                                        <DropShadowEffect ShadowDepth="10" BlurRadius="10" Direction="-90" Opacity="0.4"/>
-                                    </Rectangle.Effect>
-                                </Rectangle>
-                                <Grid x:Name="gd_SubView1" ClipToBounds="True">
-                                    <Image x:Name="img_SubView1" Source="{Binding Sub1FunDepict}" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
-                                        <Image.RenderTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform/>
-                                                <SkewTransform/>
-                                                <RotateTransform/>
-                                                <TranslateTransform/>
-                                            </TransformGroup>
-                                        </Image.RenderTransform>
-                                    </Image>
-                                    <Border VerticalAlignment="Bottom" Height="70" Background="#4c000000">
-                                        <StackPanel Margin="10">
-                                            <TextBlock Text="入门指引" FontSize="14" FontWeight="Bold"/>
-                                            <Rectangle Width="12" Height="2" Fill="White" HorizontalAlignment="Left" Margin="0 5 0 7"/>
-                                            <TextBlock Text="测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测" Foreground="#d7d7d7"/>
-                                        </StackPanel>
-                                    </Border>
+                        <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
+                            <StackPanel>
+                                <Grid Height="192" Margin="7 0 7 0">
+                                    <!--阴影-->
+                                    <Rectangle Fill="Black">
+                                        <Rectangle.Effect>
+                                            <DropShadowEffect ShadowDepth="10" BlurRadius="10" Direction="-90" Opacity="0.4"/>
+                                        </Rectangle.Effect>
+                                    </Rectangle>
+                                    <Grid x:Name="gd_SubView1" ClipToBounds="True">
+                                        <Image x:Name="img_SubView1" Source="{Binding Sub1FunDepict}" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
+                                            <Image.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Image.RenderTransform>
+                                        </Image>
+                                        <Border VerticalAlignment="Bottom" Height="70" Background="#4c000000">
+                                            <StackPanel Margin="10">
+                                                <TextBlock Text="入门指引" FontSize="14" FontWeight="Bold"/>
+                                                <Rectangle Width="12" Height="2" Fill="White" HorizontalAlignment="Left" Margin="0 5 0 7"/>
+                                                <TextBlock Text="测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测" Foreground="#d7d7d7"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                            <Grid Height="192" Margin="7 12 7 12">
-                                <!--阴影-->
-                                <Rectangle Fill="Black">
-                                    <Rectangle.Effect>
-                                        <DropShadowEffect ShadowDepth="10" BlurRadius="10" Direction="-90" Opacity="0.4"/>
-                                    </Rectangle.Effect>
-                                </Rectangle>
-                                <Grid x:Name="gd_SubView2" ClipToBounds="True">
-                                    <Image x:Name="img_SubView2" Source="{Binding Sub2FunDepict}" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
-                                        <Image.RenderTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform/>
-                                                <SkewTransform/>
-                                                <RotateTransform/>
-                                                <TranslateTransform/>
-                                            </TransformGroup>
-                                        </Image.RenderTransform>
-                                    </Image>
-                                    <Border VerticalAlignment="Bottom" Height="70" Background="#4c000000">
-                                        <StackPanel Margin="10">
-                                            <TextBlock Text="信任进阶" FontSize="14" FontWeight="Bold"/>
-                                            <Rectangle Width="12" Height="2" Fill="White" HorizontalAlignment="Left" Margin="0 5 0 7"/>
-                                            <TextBlock Text="测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测" Foreground="#d7d7d7"/>
-                                        </StackPanel>
-                                    </Border>
+                                <Grid Height="192" Margin="7 12 7 12">
+                                    <!--阴影-->
+                                    <Rectangle Fill="Black">
+                                        <Rectangle.Effect>
+                                            <DropShadowEffect ShadowDepth="10" BlurRadius="10" Direction="-90" Opacity="0.4"/>
+                                        </Rectangle.Effect>
+                                    </Rectangle>
+                                    <Grid x:Name="gd_SubView2" ClipToBounds="True">
+                                        <Image x:Name="img_SubView2" Source="{Binding Sub2FunDepict}" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
+                                            <Image.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Image.RenderTransform>
+                                        </Image>
+                                        <Border VerticalAlignment="Bottom" Height="70" Background="#4c000000">
+                                            <StackPanel Margin="10">
+                                                <TextBlock Text="信任进阶" FontSize="14" FontWeight="Bold"/>
+                                                <Rectangle Width="12" Height="2" Fill="White" HorizontalAlignment="Left" Margin="0 5 0 7"/>
+                                                <TextBlock Text="测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测" Foreground="#d7d7d7"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                            <Grid Height="192" Margin="7 0 7 0">
-                                <!--阴影-->
-                                <Rectangle Fill="Black">
-                                    <Rectangle.Effect>
-                                        <DropShadowEffect ShadowDepth="10" BlurRadius="10" Direction="-90" Opacity="0.4"/>
-                                    </Rectangle.Effect>
-                                </Rectangle>
-                                <Grid x:Name="gd_SubView3" ClipToBounds="True">
-                                    <Image x:Name="img_SubView3" Source="{Binding Sub3FunDepict}" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
-                                        <Image.RenderTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform/>
-                                                <SkewTransform/>
-                                                <RotateTransform/>
-                                                <TranslateTransform/>
-                                            </TransformGroup>
-                                        </Image.RenderTransform>
-                                    </Image>
-                                    <Border VerticalAlignment="Bottom" Height="70" Background="#4c000000" Margin="7 0 7 0">
-                                        <StackPanel Margin="10">
-                                            <TextBlock Text="方案选择" FontSize="14" FontWeight="Bold"/>
-                                            <Rectangle Width="12" Height="2" Fill="White" HorizontalAlignment="Left" Margin="0 5 0 7"/>
-                                            <TextBlock Text="测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测" Foreground="#d7d7d7"/>
-                                        </StackPanel>
-                                    </Border>
+                                <Grid Height="192" Margin="7 0 7 0">
+                                    <!--阴影-->
+                                    <Rectangle Fill="Black">
+                                        <Rectangle.Effect>
+                                            <DropShadowEffect ShadowDepth="10" BlurRadius="10" Direction="-90" Opacity="0.4"/>
+                                        </Rectangle.Effect>
+                                    </Rectangle>
+                                    <Grid x:Name="gd_SubView3" ClipToBounds="True">
+                                        <Image x:Name="img_SubView3" Source="{Binding Sub3FunDepict}" RenderTransformOrigin="0.5,0.5" Cursor="Hand">
+                                            <Image.RenderTransform>
+                                                <TransformGroup>
+                                                    <ScaleTransform/>
+                                                    <SkewTransform/>
+                                                    <RotateTransform/>
+                                                    <TranslateTransform/>
+                                                </TransformGroup>
+                                            </Image.RenderTransform>
+                                        </Image>
+                                        <Border VerticalAlignment="Bottom" Height="70" Background="#4c000000" Margin="7 0 7 0">
+                                            <StackPanel Margin="10">
+                                                <TextBlock Text="方案选择" FontSize="14" FontWeight="Bold"/>
+                                                <Rectangle Width="12" Height="2" Fill="White" HorizontalAlignment="Left" Margin="0 5 0 7"/>
+                                                <TextBlock Text="测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测试文字测" Foreground="#d7d7d7"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                        </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
                     </Grid>
                 </Grid>
                 <!--QA-->

@@ -102,10 +102,10 @@ namespace XLY.SF.Project.Plugin.Android
                 resultFile = Path.Combine(fi.DirectoryName, string.Format("Decrypt_{0}", fi.Name));
 
                 //创建数据库存储数据
-                var saveDbPath = sqliteFile + ".data.db";
-                FileHelper.DeleteFileSafe(saveDbPath);
+                deleteDataDbFile = sqliteFile + ".data.db";
+                FileHelper.DeleteFileSafe(deleteDataDbFile);
 
-                var saveDb = new SqliteContext(saveDbPath);
+                var saveDb = new SqliteContext(deleteDataDbFile);
                 saveDb.ExecuteNonQuery("CREATE TABLE WxbakMsgdata (\"type\"  TEXT,\"isSend\"  TEXT, \"utctime\"  TEXT, \"wxid\"  TEXT,\"pmsg\"  BLOB);");
                 saveDb.ExecuteNonQuery("CREATE INDEX wxidIndex ON WxbakMsgdata(wxid);");
 

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Core.Base.MefIoc;
@@ -23,7 +25,7 @@ namespace XLY.SF.Project.Plugin.Adapter
         /// <summary>
         /// 插件列表
         /// </summary>
-        public Dictionary<AbstractPluginInfo, IPlugin> Plugins { get; set; }
+        public List<IPlugin> Plugins { get; set; }
 
         #region 初始化控制器
 
@@ -39,8 +41,8 @@ namespace XLY.SF.Project.Plugin.Adapter
                 PluginContainerAdapter.Instance.Initialization(asyn, pluginPaths);
 
                 _Isloaded = true;
-                Plugins = new Dictionary<AbstractPluginInfo, IPlugin>();
-                var pluginLoaders = new List<IPluginLoader>() { new JavascriptPluginLoader(), new NetPluginLoader(), new ZipPluginLoader() };
+                Plugins = new List<IPlugin>();
+                var pluginLoaders = new List<IPluginLoader>() { new NetPluginLoader(), new ZipPluginLoader() };
 
                 foreach (var loader in pluginLoaders)
                 {
@@ -50,16 +52,20 @@ namespace XLY.SF.Project.Plugin.Adapter
                     {
                         if (null != pl.PluginInfo)
                         {
-                            Plugins.Add(pl.PluginInfo as AbstractPluginInfo, pl);
+                            Plugins.Add(pl);
                         }
                     }
                 }
+
+                //加载特征匹配服务
+                PluginFeatureMathchService.LoadService();
             }
         }
 
         #endregion
 
         #region 公开方法
+
         /// <summary>
         /// 通过插件类型和状态获取当前所有的插件
         /// </summary>
@@ -69,9 +75,35 @@ namespace XLY.SF.Project.Plugin.Adapter
         /// <returns>满足条件的所有插件</returns>
         public Dictionary<T, IPlugin> GetPluginsByType<T>(PluginType type = PluginType.SpfDataParse, PluginState state = PluginState.Normal) where T : AbstractPluginInfo
         {
-            var plugin = state == PluginState.None ? Plugins.Where(p => p.Key.PluginType == type && p.Key is T) :
-                Plugins.Where(p => p.Key.PluginType == type && p.Key is T && state.HasFlag(p.Key.State));
-            return plugin.ToDictionary(x => (T)x.Key, x => x.Value);
+            var plugin = state == PluginState.None ?
+                                  Plugins.Where(p => p.PluginInfo.PluginType == type && p.PluginInfo is T) :
+                                  Plugins.Where(p => p.PluginInfo.PluginType == type && p.PluginInfo is T && state.HasFlag(p.PluginInfo.State));
+
+            return plugin.ToDictionary(x => (T)x.PluginInfo, x => x);
+        }
+
+        /// <summary>
+        /// 获取数据解析插件
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="type"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        public IEnumerable<AbstractDataParsePlugin> GetDataParserPluginsByType<T>(PluginType type = PluginType.SpfDataParse, PluginState state = PluginState.Normal) where T : AbstractPluginInfo
+        {
+            var plugin = state == PluginState.None ?
+                      Plugins.Where(p => p.PluginInfo.PluginType == type && p.PluginInfo is T).Select(p => p as AbstractDataParsePlugin) :
+                      Plugins.Where(p => p.PluginInfo.PluginType == type && p.PluginInfo is T && state.HasFlag(p.PluginInfo.State)).Select(p => p as AbstractDataParsePlugin);
+
+            //这儿要做深拷贝
+            return plugin.Select(p =>
+            {
+                var ptype = p.GetType();
+                var np = ptype.Assembly.CreateInstance(ptype.FullName) as AbstractDataParsePlugin;
+                np.PluginInfo = DeepCopyWithBinarySerialize(p.PluginInfo);
+
+                return np;
+            });
         }
 
         /// <summary>
@@ -84,8 +116,9 @@ namespace XLY.SF.Project.Plugin.Adapter
             List<ExtractItem> extracts = new List<ExtractItem>();
 
             //插件过滤 根据提取方式和操作系统
+            //本地提取时，不根据设备操作系统类型匹配，因为此时不知道本地文件的来源
             var filtetResult = GetPluginsByType<DataParsePluginInfo>(PluginType.SpfDataParse).Keys.Where(p => p.Pump.HasFlag(source.Type) &&
-                                                            p.DeviceOSType.HasFlag(source.OSType)).ToList();
+                                                        (source.Type == EnumPump.LocalData || p.DeviceOSType.HasFlag(source.OSType))).ToList();
 
             //排序
             filtetResult.Sort((l, r) =>
@@ -109,10 +142,11 @@ namespace XLY.SF.Project.Plugin.Adapter
 
                     return 0;
                 });
-            
+
             foreach (var plug in filtetResult)
             {
-                if (!extracts.Any(e => e.AppName == plug.AppName && e.Name == plug.Name && e.GroupName == plug.Group))
+                //if (!extracts.Any(e => e.AppName == plug.AppName && e.Name == plug.Name && e.GroupName == plug.Group))
+                if (!extracts.Any(e => e.Name == plug.Name && e.GroupName == plug.Group))
                 {
                     ExtractItem item = new ExtractItem();
                     item.Name = plug.Name;
@@ -125,6 +159,11 @@ namespace XLY.SF.Project.Plugin.Adapter
             }
 
             return extracts;
+        }
+
+        public List<ExtractItem> GetExtractItems(DataParsePluginInfo plugin)
+        {
+            return new List<ExtractItem>() { new ExtractItem() { Name = plugin.Name, AppName = plugin.AppName } };
         }
 
         /// <summary>
@@ -235,25 +274,25 @@ namespace XLY.SF.Project.Plugin.Adapter
             return null;
         }
 
-
         /// <summary>
         /// 匹配插件（根据数据泵，即设备类型、设备操作系统类型、数据提取类型匹配插件）
         /// </summary>
         /// <param name="source">数据泵</param>
         /// <param name="extractItems">选择的提取项</param>
         /// <returns></returns>
-        public Dictionary<ExtractItem, List<DataParsePluginInfo>> MatchPluginByPump(Pump source, IEnumerable<ExtractItem> extractItems)
+        public Dictionary<ExtractItem, List<AbstractDataParsePlugin>> MatchPluginByPump(Pump source, IEnumerable<ExtractItem> extractItems)
         {
-            var result = new Dictionary<ExtractItem, List<DataParsePluginInfo>>();
+            var result = new Dictionary<ExtractItem, List<AbstractDataParsePlugin>>();
 
             //插件过滤 根据提取方式和操作系统
-            var filtetResult = GetPluginsByType<DataParsePluginInfo>(PluginType.SpfDataParse).Keys.Where(p => p.Pump.HasFlag(source.Type) &&
-                                                            p.DeviceOSType.HasFlag(source.OSType));
+            //本地提取时，不根据设备操作系统类型匹配，因为此时不知道本地文件的来源
+            var filtetResult = GetDataParserPluginsByType<DataParsePluginInfo>(PluginType.SpfDataParse).Where(p => p.DataParsePluginInfo.Pump.HasFlag(source.Type) &&
+                                                            (source.Type == EnumPump.LocalData || p.DataParsePluginInfo.DeviceOSType.HasFlag(source.OSType)));
 
             //插件匹配
             foreach (var extract in extractItems)
             {
-                result.Add(extract, filtetResult.Where(p => p.Name == extract.Name && p.Group == extract.GroupName).ToList());
+                result.Add(extract, filtetResult.Where(p => p.PluginInfo.Name == extract.Name && p.PluginInfo.Group == extract.GroupName).ToList());
             }
 
             return result;
@@ -266,7 +305,7 @@ namespace XLY.SF.Project.Plugin.Adapter
         /// <param name="appSourePath">APP本地数据根目录</param>
         /// <param name="appVersion">APP版本信息</param>
         /// <returns></returns>
-        public DataParsePluginInfo MatchPluginByApp(IEnumerable<DataParsePluginInfo> pluginList, Pump pump, string appSourePath, Version appVersion)
+        public AbstractDataParsePlugin MatchPluginByApp(IEnumerable<AbstractDataParsePlugin> pluginList, Pump pump, string appSourePath, Version appVersion)
         {
             return PluginFeatureMathchService.FeatureMathch(pluginList, pump, appSourePath, appVersion);
         }
@@ -276,18 +315,21 @@ namespace XLY.SF.Project.Plugin.Adapter
         /// </summary>
         /// <param name="plugin">要执行的插件</param>
         /// <param name="asyn">异步通知</param>
-        /// <param name="callback">插件执行完回调</param>
-        public void ExecutePlugin(DataParsePluginInfo plugin, IAsyncTaskProgress asyn, Action<IDataSource> callback)
+        /// <returns>插件执行结果。</returns>
+        public IDataSource ExecutePlugin(AbstractDataParsePlugin pl, IAsyncTaskProgress asyn)
         {
-            var pl = Plugins[plugin] as AbstractDataParsePlugin;
+            IDataSource ds = null;
             if (null != pl)
             {
                 pl.StartTime = DateTime.Now;
-                IDataSource ds = null;
 
                 try
                 {
                     ds = pl.Execute(null, asyn) as IDataSource;
+                }
+                catch (Exception ex)
+                {
+                    LoggerManagerSingle.Instance.Error(ex, $"执行插件{pl.PluginInfo.Name}出错！");
                 }
                 finally
                 {
@@ -296,43 +338,32 @@ namespace XLY.SF.Project.Plugin.Adapter
 
                 if (ds != null)
                 {
-                    ds.PluginInfo = plugin;
+                    ds.PluginInfo = pl.DataParsePluginInfo;
                 }
                 pl.EndTime = DateTime.Now;
-                callback?.Invoke(ds);
             }
-        }
-
-        /// <summary>
-        /// 批量执行插件集
-        /// </summary>
-        /// <param name="plugins">要执行的插件列表</param>
-        /// <param name="asyn">异步通知</param>
-        /// <param name="callback">插件执行完回调</param>
-        public void ExecutePluginList(List<DataParsePluginInfo> plugins, IAsyncTaskProgress asyn, Action<IDataSource> callback)
-        {
-            if (plugins != null)
-            {
-                return;
-            }
-
-            var pls = plugins.ToList();
-
-            try
-            {
-                foreach (var p in pls)
-                {
-                    ExecutePlugin(p, asyn, callback);
-                }
-            }
-            catch (OperationCanceledException oe)
-            {
-                LoggerManagerSingle.Instance.Warn("Exit analysis task:" + oe.Message);
-                return;
-            }
+            return ds;
         }
 
         #endregion
+
+        // 利用二进制序列化和反序列实现
+        private static T DeepCopyWithBinarySerialize<T>(T obj)
+        {
+            object retval;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                // 序列化成流
+                bf.Serialize(ms, obj);
+                ms.Seek(0, SeekOrigin.Begin);
+                // 反序列化成对象
+                retval = bf.Deserialize(ms);
+                ms.Close();
+            }
+
+            return (T)retval;
+        }
 
     }
 }

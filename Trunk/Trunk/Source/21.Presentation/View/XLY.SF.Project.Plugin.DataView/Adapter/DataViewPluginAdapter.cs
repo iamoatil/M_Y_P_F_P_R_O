@@ -47,18 +47,27 @@ namespace XLY.SF.Project.Plugin.DataView
             {
                 return new List<AbstractDataViewPlugin>();
             }
+
+            config = config ?? DataViewConfigure.Default;
+
             string typeName = (type is Type) ? ((Type)type).Name : type.ToSafeString();
             var views = (typeName == DataViewConfigure.XLY_LAYOUT_KEY ? 
                 Plugins.Where(p =>
                ((DataViewPluginInfo)p.PluginInfo).ViewType.Any(v => (v.PluginId.Equals(pluginId) || v.PluginId == "*") && (v.TypeName.Equals(typeName))))
-               .OrderByDescending(iv => iv.PluginInfo.OrderIndex)
+               //.OrderByDescending(iv => iv.PluginInfo.OrderIndex)
                :
                Plugins.Where(p =>
                ((DataViewPluginInfo)p.PluginInfo).ViewType.Any(v => (v.PluginId.Equals(pluginId) || v.PluginId == "*") && (v.TypeName.Equals(typeName) || v.TypeName == "*")))
-               .OrderByDescending(iv => iv.PluginInfo.OrderIndex))
+               //.OrderByDescending(iv => iv.PluginInfo.OrderIndex)
+               )
                .ToList();
 
-            if(views.Count > 1 && (config == null || !config.IsDefaultGridViewVisibleWhenMultiviews))  //当存在多个视图时，是否隐藏默认的表格视图
+            if(type is Type t)      //如果插件支持继承匹配
+            {
+                views.AddRange(Plugins.Where(p => ((DataViewPluginInfo)p.PluginInfo).ViewType.Any(v => v.Inherit && IsAssignFromClass(t, v.TypeName))));
+            }
+            
+            if (views.Count > 1 && !config.IsDefaultGridViewVisibleWhenMultiviews)  //当存在多个视图时，是否隐藏默认的表格视图
             {
                 for (int i = views.Count - 1; i >= 0; i--)
                 {
@@ -69,7 +78,19 @@ namespace XLY.SF.Project.Plugin.DataView
                 }
             }
 
-            return views;
+            //移除重复插件并排序
+            return views.DistinctX(v => v.PluginInfo.Guid).OrderByDescending(iv => iv.PluginInfo.OrderIndex);
+        }
+
+        private bool IsAssignFromClass(Type t, string parentName)
+        {
+            if (t == null)
+                return false;
+            if (t.Name.Equals(parentName))
+            {
+                return true;
+            }
+            return IsAssignFromClass(t.BaseType, parentName) || t.GetInterfaces().Any(i=>IsAssignFromClass(i, parentName));
         }
     }
 }

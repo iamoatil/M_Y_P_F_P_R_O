@@ -19,7 +19,7 @@ namespace XLY.SF.Project.Domains
     /// 单行数据的基类
     /// </summary>
     [Serializable]
-    public abstract class AbstractDataItem : NotifyPropertyBase, IDataState, IAOPPropertyChangedMonitor, ICheckedItem
+    public abstract class AbstractDataItem : NotifyPropertyBase, IDataState, IAOPPropertyChangedMonitor, ICheckedItem, IDecoration
     {
         protected AbstractDataItem()
         {
@@ -29,7 +29,7 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 数据状态，正常还是删除
         /// </summary>
-        [Display(ColumnIndex = -1)]
+        [Display(ColumnIndex = -1, Width =60)]
         public EnumDataState DataState { get; set; } = EnumDataState.Normal;
 
         private string _md5 = null;
@@ -37,7 +37,7 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 单行数据的MD5值
         /// </summary>
-        [Display(ColumnIndex = 99)]
+        [Display(ColumnIndex = 99, Width = 300)]
         public string MD5
         {
             get
@@ -51,19 +51,19 @@ namespace XLY.SF.Project.Domains
             set { _md5 = value; }
         }
 
-        private int _bookMarkId = -1;
-        /// <summary>
-        /// 加入书签的编号，小于0则未加入书签
-        /// </summary>
-        public int BookMarkId
-        {
-            get => _bookMarkId;
-            set
-            {
-                _bookMarkId = value;
-                OnPropertyChanged();
-            }
-        }
+        //private int _bookMarkId = -1;
+        ///// <summary>
+        ///// 加入书签的编号，小于0则未加入书签
+        ///// </summary>
+        //public int BookMarkId
+        //{
+        //    get => _bookMarkId;
+        //    set
+        //    {
+        //        _bookMarkId = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
         private int _sensitiveId = -1;
         /// <summary>
@@ -78,11 +78,22 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 当前数据是否被勾选
         /// </summary>
-        public bool? IsChecked { get => _isChecked; set => this.SetCheckedState(value, () => { this._isChecked = value; OnPropertyChanged(); }); }
-        public ICheckedItem Parent { get => null; }
+        public new bool? IsChecked { get => _isChecked; set => this.SetCheckedState(value, () => { this._isChecked = value; OnPropertyChanged(); }); }
+        public ICheckedItem Parent { get; set; }
         public IEnumerable<ICheckedItem> GetChildren()
         {
             return null;
+        }
+        private string _sourcePath = null;
+        public string SourcePath { get => _sourcePath ?? Parent?.SourcePath; set => _sourcePath = value; }
+        public object GetMetaData(DecorationProperty dp)
+        {
+            return SourcePath;
+        }
+
+        public string GetKey(DecorationProperty dp)
+        {
+            return MD5;
         }
         #endregion
 
@@ -90,6 +101,45 @@ namespace XLY.SF.Project.Domains
         /// 属性改变时的事件
         /// </summary>
         public event Action<object, string, object> OnPropertyValueChangedEvent;
+        #endregion
+
+        #region 重载相等判断
+        public override int GetHashCode()
+        {
+            return string.IsNullOrEmpty(MD5) ? base.GetHashCode() : MD5.GetHashCode();
+        }
+
+        public static bool operator ==(AbstractDataItem a, AbstractDataItem b)
+        {
+            if (object.Equals(a, null) || object.Equals(b, null))
+            {
+                return object.Equals(a, b);
+            }
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(AbstractDataItem a, AbstractDataItem b)
+        {
+            if (object.Equals(a, null) || object.Equals(b, null))
+            {
+                return !object.Equals(a, b);
+            }
+            return !a.Equals(b);
+        }
+
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            if (obj is AbstractDataItem b)
+            {
+                return this.MD5.Equals(b.MD5);
+            }
+            return base.Equals(obj);
+        }
         #endregion
 
         #region MD5

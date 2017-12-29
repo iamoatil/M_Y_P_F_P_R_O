@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -61,11 +62,18 @@ namespace XLY.SF.Project.Plugin.DataView.View.Controls
         private void BookmarkAll_Click(object sender, RoutedEventArgs e)
         {
             CheckBox cb = sender as CheckBox;
-            int newBmk = (bool)cb.IsChecked ? 0 : -1;
-            foreach (var item in _arg.Items.View)
+            int newBmk = cb.IsChecked == true ? 0 : -1;
+            loadingPanel.Visibility = Visibility.Visible;
+            IDataItems di = _arg.Items;
+            Task.Factory.StartNew(() =>
             {
-                (item as AbstractDataItem).BookMarkId = newBmk;
-            }
+                //di.UpdateRange("BookMarkId", newBmk);
+                //foreach (AbstractDataItem i in dg.ItemsSource)
+                //{
+                //    i.BookMarkId = newBmk;
+                //}
+                this.Dispatcher.Invoke(() => loadingPanel.Visibility = Visibility.Collapsed);
+            });
         }
 
         /// <summary>
@@ -75,11 +83,20 @@ namespace XLY.SF.Project.Plugin.DataView.View.Controls
         /// <param name="e"></param>
         private void CheckAll_Click(object sender, RoutedEventArgs e)
         {
-            CheckBox cb = sender as CheckBox;
-            foreach (var item in _arg.Items.View)
-            {
-                (item as AbstractDataItem).IsChecked = cb.IsChecked;
-            }
+            //CheckBox cb = sender as CheckBox;
+            //loadingPanel.Visibility = Visibility.Visible;
+            //IDataItems di = _arg.Items;
+            //var ischecked = cb.IsChecked;
+            //int state = cb.IsChecked == null ? -1 : cb.IsChecked == true ? 1 : 0;
+            //Task.Factory.StartNew(() =>
+            //{
+            //    di.UpdateRange("IsChecked", state);
+            //    foreach (AbstractDataItem i in dg.ItemsSource)
+            //    {
+            //        i.IsChecked = ischecked;
+            //    }
+            //    this.Dispatcher.Invoke(() => loadingPanel.Visibility = Visibility.Collapsed);
+            //});
         }
 
         /// <summary>
@@ -98,12 +115,15 @@ namespace XLY.SF.Project.Plugin.DataView.View.Controls
             {
                 return;
             }
-            //添加勾选列
-            DataGridTemplateColumn chkCol = this.FindResource("checkboxColumnTemplate") as DataGridTemplateColumn;
-            chkCol.Width = 43;
-            dg.Columns.Add(chkCol);
+            ////添加勾选列
+            //DataGridTemplateColumn chkCol = this.FindResource("checkboxColumnTemplate") as DataGridTemplateColumn;
+            //chkCol.Width = 43;
+            //chkCol.MinWidth = 43;
+            //dg.Columns.Add(chkCol);
             //添加书签列
             DataGridTemplateColumn bmkCol = this.FindResource("bookmarkColumnTemplate") as DataGridTemplateColumn;
+            bmkCol.Width = 85;
+            bmkCol.MinWidth = 85;
             dg.Columns.Add(bmkCol);
 
             if (type is Type t)
@@ -113,27 +133,30 @@ namespace XLY.SF.Project.Plugin.DataView.View.Controls
                     if (attr.Visibility == EnumDisplayVisibility.ShowInDatabase)        //该属性不需要显示在界面上
                         continue;
 
-                    if(attr.Owner.Name == "DataState")      //如果是状态列，则单独处理
+                    var ww = attr.Width <= 0 ? new DataGridLength(50, DataGridLengthUnitType.Auto) : new DataGridLength(attr.Width, DataGridLengthUnitType.Pixel);
+                    var minw = attr.Width <= 0 ? 50 : attr.Width;
+                    var maxw = 400;
+                    if (attr.Owner.Name == "DataState")      //如果是状态列，则单独处理
                     {
-                        DataGridTemplateColumn stateCol = new DataGridTemplateColumn() { Header = attr.Text, Width = attr.Width, MinWidth = 100 };
+                        DataGridTemplateColumn stateCol = new DataGridTemplateColumn() { Header = attr.Text, Width = ww, MinWidth = minw, MaxWidth = maxw };
                         stateCol.CellTemplate = XamlResouceReader.ToDataTemplate<DataTemplate>("ThemesStyle.DataGridStyle.DataGridDataStateColumnTemplate.xaml", c => c.Replace(PROPERTY_NAME, attr.Owner.Name));
                         dg.Columns.Add(stateCol);
                     }
                     else if (attr.ColumnType == EnumColumnType.URL) //超链接列
                     {
-                        DataGridTemplateColumn col = new DataGridTemplateColumn() { Header = attr.Text, Width = attr.Width, MinWidth = 100 };
+                        DataGridTemplateColumn col = new DataGridTemplateColumn() { Header = attr.Text, Width = ww, MinWidth = minw, MaxWidth = maxw };
                         col.CellTemplate = XamlResouceReader.ToDataTemplate<DataTemplate>("ThemesStyle.DataGridStyle.DataGridUrlColumnTemplate.xaml", c => c.Replace(PROPERTY_NAME, attr.Owner.Name));
                         dg.Columns.Add(col);
                     }
                     else if (attr.ColumnType == EnumColumnType.Image)  //图片列
                     {
-                        DataGridTemplateColumn col = new DataGridTemplateColumn() { Header = attr.Text, Width = attr.Width, MinWidth = 100 };
+                        DataGridTemplateColumn col = new DataGridTemplateColumn() { Header = attr.Text, Width = ww, MinWidth = minw, MaxWidth = maxw };
                         col.CellTemplate = XamlResouceReader.ToDataTemplate<DataTemplate>("ThemesStyle.DataGridStyle.DataGridImageColumnTemplate.xaml", c => c.Replace(PROPERTY_NAME, attr.Owner.Name));
                         dg.Columns.Add(col);
                     }
                     else
                     {
-                        DataGridBoundColumn col = new DataGridTextColumn() { Header = attr.Text, Binding = new Binding(attr.Owner.Name), Width = attr.Width, MinWidth = 100 };
+                        DataGridBoundColumn col = new DataGridTextColumn() { Header = attr.Text, Binding = new Binding(attr.Owner.Name), Width = ww, MinWidth = minw, MaxWidth = maxw };
                         dg.Columns.Add(col);
                     }
                 }

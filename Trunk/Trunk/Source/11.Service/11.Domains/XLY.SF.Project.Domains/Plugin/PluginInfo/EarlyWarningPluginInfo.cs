@@ -4,6 +4,7 @@
 * Create Date：2017/12/2 10:21:20
 * ==============================================================================*/
 
+using System;
 using System.Collections.Generic;
 using XLY.SF.Project.Plugin.Language;
 
@@ -12,6 +13,7 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// 预警的插件信息
     /// </summary>
+    [Serializable]
     public class EarlyWarningPluginInfo : AbstractZipPluginInfo
     {
 
@@ -21,6 +23,7 @@ namespace XLY.SF.Project.Domains
         }
     }
 
+    [Serializable]
     public class UrlEarlyWarningPluginInfo : EarlyWarningPluginInfo
     {
         private string _groupName;
@@ -33,6 +36,7 @@ namespace XLY.SF.Project.Domains
         {
             TreeDataSource ds = dataSource as TreeDataSource;
             if (ds != null
+                && ds.PluginInfo != null
                 && ds.PluginInfo.Group == _groupName)
             {
                 return true;
@@ -41,19 +45,13 @@ namespace XLY.SF.Project.Domains
         }
     }
 
-    public class Md5EarlyWarningPluginInfo : DataParsePluginInfo
+    [Serializable]
+    public class Md5EarlyWarningPluginInfo : EarlyWarningPluginInfo
     {
-        /// <summary>
-        /// 源目录
-        /// </summary>
-        public readonly List<string> SourceDirs = new List<string>(); 
         
-        /// <summary>
-        /// 目标目录
-        /// </summary>
-        public string TargetDir { get; set; }
     }
 
+    [Serializable]
     public class AppEarlyWarningPluginInfo : EarlyWarningPluginInfo
     {
         private string _name;
@@ -66,6 +64,7 @@ namespace XLY.SF.Project.Domains
         {
             SimpleDataSource ds = dataSource as SimpleDataSource;
             if (ds != null
+                && ds.PluginInfo != null
                 && ds.PluginInfo.Name == _name)
             {
                 return true;
@@ -74,6 +73,7 @@ namespace XLY.SF.Project.Domains
         }
     }
 
+    [Serializable]
     public class PhoneEarlyWarningPluginInfo : EarlyWarningPluginInfo
     {
         private List<string> _names;
@@ -92,6 +92,7 @@ namespace XLY.SF.Project.Domains
         {
             AbstractDataSource ds = dataSource as AbstractDataSource;
             if (ds != null
+                && ds.PluginInfo != null
                 && _names.Contains(ds.PluginInfo.Name))
             {
                 return true;
@@ -100,6 +101,7 @@ namespace XLY.SF.Project.Domains
         }
     }
 
+    [Serializable]
     public class KeyWordEarlyWarningPluginInfo : EarlyWarningPluginInfo
     {
 

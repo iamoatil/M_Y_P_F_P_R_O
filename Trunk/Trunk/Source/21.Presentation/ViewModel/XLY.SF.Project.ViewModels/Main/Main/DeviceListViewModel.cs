@@ -94,15 +94,18 @@ namespace XLY.SF.Project.ViewModels.Main
             {
                 if (_selectedItem != value)
                 {
+
                     _selectedItem = value;
                     OnPropertyChanged();
                     if (value == null)
                     {
                         NavigationForMainWindow(ExportKeys.DeviceSelectView, value);
+                        SystemContext.Instance.DeviceExtraction = null;
                     }
                     else
                     {
                         NavigationForMainWindow(ExportKeys.DeviceMainView, value);
+                        SystemContext.Instance.DeviceExtraction = value.Target;
                     }
                 }
             }
@@ -132,7 +135,12 @@ namespace XLY.SF.Project.ViewModels.Main
             Case @case = e.NewValue;
             if (@case != null)
             {
-                var items = @case.DeviceExtractions.Select(x => new DeviceExtractionAdorner(x)).ToArray();
+                var items = @case.DeviceExtractions.Select(x =>
+                {
+                    var item = new DeviceExtractionAdorner(x);
+                    item.Target.Deleted += (a, b) => Close(item);
+                    return item;
+                }).ToArray();
                 Items = new ObservableCollection<DeviceExtractionAdorner>(items);
             }
             else
@@ -151,6 +159,7 @@ namespace XLY.SF.Project.ViewModels.Main
             DeviceExtractionAdorner found = Items.SingleOrDefault(x => x.Device.ID == de.Device.ID);
             if (found == null)
             {
+                de.Target.Deleted += (a, b) => Close(de);
                 Items.Add(de);
                 SelectedItem = de;
             }
@@ -179,7 +188,7 @@ namespace XLY.SF.Project.ViewModels.Main
             //由于窗体导航在Shell里面，DeviceExtractionAdorner在ViewModel里面
             //所以此处创建object数组，Shell解析时，固定用此格式
             //
-            NavigationForNewWindow(ExportKeys.DeviceMainView, new object[] { de.Device.ID, de }, true);
+            NavigationForNewWindow(ExportKeys.DeviceMainView, new object[] { de.Id, de }, true);
         }
 
         /// <summary>
@@ -199,7 +208,7 @@ namespace XLY.SF.Project.ViewModels.Main
         private void Close(DeviceExtractionAdorner de)
         {
             Items.Remove(de);
-            PreCacheToken args = new PreCacheToken(de.Device.ID, ExportKeys.DeviceMainView);
+            PreCacheToken args = new PreCacheToken(de.Id, ExportKeys.DeviceMainView);
             MessageAggregation.SendGeneralMsg<PreCacheToken>(new GeneralArgs<PreCacheToken>(GeneralKeys.DeleteCacheView) { Parameters = args });
         }
 
@@ -246,12 +255,8 @@ namespace XLY.SF.Project.ViewModels.Main
         {
             if (MessageBox.ShowDialogWarningMsg(SystemContext.LanguageManager[Languagekeys.SourceSelection_DeletePrompt]))
             {
-                var log = $"确认删除设备[{de.Name}]";
-
-                Close(de);
                 de.Delete();
-
-                return log;
+                return $"确认删除设备[{de.Name}]";
             }
             return $"取消删除设备[{de.Name}]";
         }

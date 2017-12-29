@@ -21,6 +21,8 @@ namespace XLY.SF.Framework.BaseUtility
     {
         private TypeBuilder _typeBuilder = null;
         private AssemblyBuilder _assemblyBuilder = null;
+        private AssemblyName _demoName = null;
+        private ModuleBuilder _mb = null;
         private const MethodAttributes PROPERTY_ATTRIBUTE = MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig | MethodAttributes.Virtual | MethodAttributes.NewSlot | MethodAttributes.Final;
 
         /// <summary>
@@ -47,10 +49,32 @@ namespace XLY.SF.Framework.BaseUtility
         /// <param name="interfaces">继承的接口</param>
         public void CreateType(string type, string assembly = null, Type parent = null, Type[] interfaces = null)
         {
-            AssemblyName demoName = new AssemblyName(assembly ?? DefaultAssemblyName);
-            _assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(demoName, AssemblyBuilderAccess.RunAndSave);
-            ModuleBuilder mb = _assemblyBuilder.DefineDynamicModule(demoName.Name, demoName.Name + ".dll");
-            _typeBuilder = mb.DefineType(type, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable, parent, interfaces);
+            if(_demoName == null)
+            {
+                _demoName = new AssemblyName(assembly ?? DefaultAssemblyName);
+                _assemblyBuilder = AppDomain.CurrentDomain.DefineDynamicAssembly(_demoName, AssemblyBuilderAccess.RunAndSave);
+                _mb = _assemblyBuilder.DefineDynamicModule(_demoName.Name, _demoName.Name + ".dll");
+            }
+            _typeBuilder = _mb.DefineType(type, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.Serializable, parent, interfaces);
+        }
+
+        /// <summary>
+        /// 为当前类型添加特性
+        /// </summary>
+        /// <param name="property"></param>
+        /// <param name="attributeType"></param>
+        /// <param name="ctorParams"></param>
+        /// <param name="ctorValues"></param>
+        /// <param name="namedProperties"></param>
+        /// <param name="propertyValues"></param>
+        public void SetTypeAttribute(Type attributeType, Type[] ctorParams = null, object[] ctorValues = null, PropertyInfo[] namedProperties = null, object[] propertyValues = null)
+        {
+            ConstructorInfo classCtorInfo = attributeType.GetConstructor(ctorParams ?? Type.EmptyTypes);
+            if (classCtorInfo != null)
+            {
+                CustomAttributeBuilder attributeBuilder = new CustomAttributeBuilder(classCtorInfo, ctorValues ?? new object[0], namedProperties ?? new PropertyInfo[0], propertyValues ?? new object[0]);
+                _typeBuilder.SetCustomAttribute(attributeBuilder);
+            }
         }
 
         /// <summary>
@@ -111,6 +135,15 @@ namespace XLY.SF.Framework.BaseUtility
             //_assemblyBuilder.Save(_assemblyBuilder.GetName().Name + ".dll");
             DicEmitType[ThisType.Name] = ThisType;
             return ThisType;
+        }
+
+        /// <summary>
+        /// 将创建的类型保存为dll文件
+        /// </summary>
+        /// <param name="dllPath"></param>
+        public void SaveAsDll(string dllPath = null)
+        {
+            _assemblyBuilder.Save(dllPath ?? _assemblyBuilder.GetName().Name + ".dll");
         }
 
         /// <summary>

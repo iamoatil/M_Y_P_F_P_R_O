@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Security.Cryptography;
 using System.Text;
+using XLY.SF.Project.BaseUtility.Helper;
 
 /* ==============================================================================
 * Description：MirrorFile  
@@ -12,7 +12,7 @@ using System.Text;
 
 namespace XLY.SF.Project.DataMirrorApp
 {
-    class MirrorFile:IDisposable
+    class MirrorFile : IDisposable
     {
         /// <summary>
         /// 镜像文件的路径
@@ -40,13 +40,15 @@ namespace XLY.SF.Project.DataMirrorApp
         /// <summary>
         /// 已经写入文件的大小
         /// </summary>
-        public int WritedSize { get; private set; }
+        public long WritedSize { get; private set; }
 
         public MirrorFile(string filePath)
         {
             _path = filePath;
             _mirrorSuffix = Path.GetExtension(filePath);
-            _fileStream = new FileStream(filePath,FileMode.Append);
+            _fileStream = new FileStream(filePath, FileMode.Append);
+            FileInfo fileInfo = new FileInfo(filePath);
+            WritedSize = fileInfo.Length;
         }
 
         /// <summary>
@@ -64,6 +66,7 @@ namespace XLY.SF.Project.DataMirrorApp
             WritedSize += bytes.Length;
             if (_curWriteIndex > M10)
             {
+                //Log4Net.Log.Debug($"WritedSize:{WritedSize}  _curWriteIndex:{_curWriteIndex}  _buffer:{_buffer.Length}");
                 _fileStream.Write(_buffer, 0, _curWriteIndex);
                 _fileStream.Flush();
                 _curWriteIndex = 0;
@@ -75,14 +78,15 @@ namespace XLY.SF.Project.DataMirrorApp
         /// </summary>
         public void Close()
         {
-            if(_fileStream != null)
+            if (_fileStream != null)
             {
+                //Log4Net.Log.Debug($"******** Close WritedSize:{WritedSize}  _curWriteIndex:{_curWriteIndex}  _buffer:{_buffer.Length}");
                 _fileStream.Write(_buffer, 0, _curWriteIndex);
                 _curWriteIndex = 0;
                 _fileStream.Flush();
                 _fileStream.Close();
                 _fileStream = null;
-            }            
+            }
         }
 
         /// <summary>
@@ -90,21 +94,10 @@ namespace XLY.SF.Project.DataMirrorApp
         /// </summary>
         public void CreateMD5File()
         {
-            StringBuilder sb = new StringBuilder();
-            MD5 md5 = new MD5CryptoServiceProvider();
-           
-            using (FileStream file = new FileStream(_path, FileMode.Open))
-            {
-                var retVal = md5.ComputeHash(file);
+            string md5String = FileHelper.MD5FromFileUpper(_path);
 
-                for (int i = 0; i < retVal.Length; i++)
-                {
-                    sb.Append(retVal[i].ToString("x2"));
-                }
-            }
-            string md5String=sb.ToString();
-            //生成MD5文件
-            var md5File = _path.Substring(0, _path.Length - _mirrorSuffix.Length - 1) + ".md5.txt";
+            var md5File = _path + ".md5";
+
             File.WriteAllText(md5File, md5String, Encoding.UTF8);
         }
 
@@ -136,6 +129,6 @@ namespace XLY.SF.Project.DataMirrorApp
             //TODO:释放非托管资源，设置对象为null
             _disposed = true;
         }
-    #endregion
+        #endregion
     }
 }

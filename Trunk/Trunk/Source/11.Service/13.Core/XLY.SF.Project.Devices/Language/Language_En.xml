@@ -1,3 +1,41 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<LanguageResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<LanguageResource>
+  <DeviceLanguage>
+    <DeviceType_IOS>iOS</DeviceType_IOS>
+    <DeviceUseableValidation_InUse> </DeviceUseableValidation_InUse>
+    <DeviceUseableValidation_Offline> </DeviceUseableValidation_Offline>
+    <DeviceUseableValidation_IsInvalid> </DeviceUseableValidation_IsInvalid>
+    <Device_PopUp>Eject</Device_PopUp>
+    <Device_Move>Remove</Device_Move>
+    <Device_Delete>Delete</Device_Delete>
+    <Device_Close>Close</Device_Close>
+    <Partition_all>All Memory Chips</Partition_all>
+    <Partition_data>Database</Partition_data>
+    <Partition_system>System</Partition_system>
+    <Partition_sdcard>Internal Storage</Partition_sdcard>
+    <Partition_cache>Cache </Partition_cache>
+    <Partition_IsInvalid>No image source available</Partition_IsInvalid>
+    <IOSExtractLocalApps>Acquiring app data from device {0}</IOSExtractLocalApps>
+    <IOSExtractNotLocalApps>Acquiring {1} app data from  device {0}…</IOSExtractNotLocalApps>
+    <IOSExtractNotLocalAppsOver> {0} APP data acquisition completed </IOSExtractNotLocalAppsOver>
+    <IOSInitProgress>Initialization progress is at {0}%</IOSInitProgress>
+    <IOSCopyProgress> {0}MB copied</IOSCopyProgress>
+    <IOSCopyDataOver> </IOSCopyDataOver>
+    <IOSExtractLocalOver>App data acquisition completed</IOSExtractLocalOver>
+    <IOSLastStepProgress> </IOSLastStepProgress>
+    <IOSCopyError>Error occurred while copying</IOSCopyError>
+    <IOSUserExit>Exit</IOSUserExit>
+    <IOSExtractLocalAppsReport> </IOSExtractLocalAppsReport>
+    <IOSExtractNotLocalAppProgress> </IOSExtractNotLocalAppProgress>
+    <IOSDeviceCopyError> </IOSDeviceCopyError>
+  </DeviceLanguage>
+  <ErrorMessageLanguage>
+    <ErrMsg_NotFindTable>Table not found</ErrMsg_NotFindTable>
+    <ErrMsg_NotDeviceConnect>No device connected</ErrMsg_NotDeviceConnect>
+    <ErrMsg_WriteFileFail>Failed to write</ErrMsg_WriteFileFail>
+    <ErrMsg_PhoneAccessFail>Failed to access device!</ErrMsg_PhoneAccessFail>
+    <ErrMsg_NotExistAccessFile>Files to be accessed do not exist</ErrMsg_NotExistAccessFile>
+    <ErrMsg_ReadFileFail>Read Failure</ErrMsg_ReadFileFail>
+    <ErrMsg_IOSDllErrorID> </ErrMsg_IOSDllErrorID>
+  </ErrorMessageLanguage>
 </LanguageResource>

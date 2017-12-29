@@ -1,32 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Devices.DeviceManager.Mtp;
 using XLY.SF.Project.Domains;
 
-namespace XLY.SF.Project.DataPump.Misc
+namespace XLY.SF.Project.DataPump
 {
     /// <summary>
     /// MTP数据泵。
     /// </summary>
-    public class MtpDataPump : ControllableDataPumpBase
+    public class MtpDataPump : DataPumpBase
     {
         #region Fields
 
         private static readonly DateTime InvalidDateTime = new DateTime(1970, 1, 1, 0, 0, 0);
+
+        private MTPDevice MtpDevice;
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// 初始化类型 XLY.SF.Project.DataPump.Misc.MtpDataPump 实例。
+        /// 初始化类型 XLY.SF.Project.DataPump.MtpDataPump 实例。
         /// </summary>
         /// <param name="metadata">与此数据泵关联的元数据信息。</param>
         public MtpDataPump(Pump metadata)
@@ -40,39 +39,55 @@ namespace XLY.SF.Project.DataPump.Misc
 
         #region Protected
 
+        protected override bool InitializeCore()
+        {
+            GetMTPDevice();
+
+            return MtpDevice != null;
+        }
+
         /// <summary>
         /// 使用特定的执行上下文执行服务。
         /// </summary>
         /// <param name="context">执行上下文。</param>
-        protected override void ExecuteCore(DataPumpControllableExecutionContext context)
+        protected override void ExecuteCore(DataPumpExecutionContext context)
         {
             SourceFileItem source = context.Source;
             if (source.ItemType != SourceFileItemType.FileExtension)
-            {
-                throw new InvalidOperationException("Only support FileExtension");
+            {//MTP提取只支持文件类型提取
+                return;
             }
-            MTPDevice mtpDevice = GetMTPDevice();
-            if (mtpDevice == null) return;
+
+            if (MtpDevice == null)
+            {
+                return;
+            }
+
             //2.解析文件类型和文件后缀名列表
             var filetype = Regex.Match(source.Config, @"^\$(\S+),").Groups[1].Value;
             var extensions = source.Config.Substring(filetype.Length).Split(';').Select(ex => string.Format(".{0}", ex));
+
+            source.Local = Path.Combine(PumpDescriptor.SourceStorePath, filetype);
+
             //3.获取文件列表
-            var fileNodes = mtpDevice.GetFiles(extensions);
+            var fileNodes = MtpDevice.GetFiles(extensions);
+
             //4.拷贝文件
             String sourcePath;
             String destPath;
             foreach (var fileNode in fileNodes)
             {
                 sourcePath = fileNode.GetFullPath();
-                destPath = Path.Combine(Metadata.SourceStorePath, filetype, sourcePath);
+                destPath = Path.Combine(PumpDescriptor.SourceStorePath, filetype, sourcePath);
                 FileHelper.CreateDirectory(destPath);
-                if (MtpDeviceManager.Instance.CopyFileFromDevice(mtpDevice, fileNode, destPath))
+
+                if (MtpDeviceManager.Instance.CopyFileFromDevice(MtpDevice, fileNode, destPath))
                 {
                     var copyfile = new FileInfo(Path.Combine(destPath, fileNode.Name));
                     if (copyfile.Exists)
                     {
                         //修改文件的 创建时间、最后修改时间、最后访问时间
-                        MtpDeviceManager.Instance.GetDate(mtpDevice, fileNode);
+                        MtpDeviceManager.Instance.GetDate(MtpDevice, fileNode);
 
                         File.SetCreationTime(copyfile.FullName, CovertMTPDateTime(fileNode.DateCreated));
                         File.SetLastWriteTime(copyfile.FullName, CovertMTPDateTime(fileNode.DateModified));
@@ -86,16 +101,19 @@ namespace XLY.SF.Project.DataPump.Misc
 
         #region Private
 
-        private MTPDevice GetMTPDevice()
+        private void GetMTPDevice()
         {
-            Device device = Metadata.Source as Device;
-            if (device == null) return null;
-            MTPDevice mtpDevice = MtpDeviceManager.Instance.GetMTPDevice(device);
-            if (mtpDevice != null)
+            Device device = PumpDescriptor.Source as Device;
+            if (device == null)
             {
-                mtpDevice.RootFileNode = MtpDeviceManager.Instance.GetRootFileNode(mtpDevice, null);
+                return;
             }
-            return mtpDevice;
+
+            MtpDevice = MtpDeviceManager.Instance.GetMTPDevice(device);
+            if (MtpDevice != null)
+            {
+                MtpDevice.RootFileNode = MtpDeviceManager.Instance.GetRootFileNode(MtpDevice, null);
+            }
         }
 
         private static DateTime CovertMTPDateTime(String mtpDateTime)

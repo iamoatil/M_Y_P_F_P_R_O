@@ -9,9 +9,7 @@
                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                  xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
                  Title="{Binding XPath=ViewLanguage/Management/User/ListTitle,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                 mc:Ignorable="d"
-                 Width="960"
-                 Height="560">
+                 mc:Ignorable="d">
     <core:UcViewBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -23,6 +21,8 @@
         </ResourceDictionary>
     </core:UcViewBase.Resources>
     <Grid  x:Name="Root"
+           Width="960"
+           Height="560"
            Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -54,6 +54,7 @@
         <DataGrid x:Name="dataGrids"
                   Grid.Row="2"
                   AutoGenerateColumns="False"
+                  HorizontalScrollBarVisibility="Disabled"
                   ItemsSource="{Binding Users}">
             <DataGrid.Columns>
                 <DataGridTemplateColumn>

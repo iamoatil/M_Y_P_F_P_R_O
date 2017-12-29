@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <LanguageResource>
-  <ViewLanguage Prompt="界面显示语言">    
+  <ViewLanguage Prompt="界面显示语言">
     <!--登录、加载-->
     <View_Loading>系统加载中，请稍等</View_Loading>
     <View_Login>登录</View_Login>
@@ -9,6 +9,8 @@
     <View_Login_Password>密  码</View_Login_Password>
     <View_Login_Company>四川效率源信息安全股份有限公司</View_Login_Company>
     <View_Login_Version>版本 1.0</View_Login_Version>
+    <View_Login_SpfPhone>S P F 智 能 手 机</View_Login_SpfPhone>
+    <View_Login_ProductName>数据恢复取证系统</View_Login_ProductName>
 
     <!--主页-->
     <View_MainWinTitle>SPF9139智能手机数据恢复取证系统</View_MainWinTitle>
@@ -33,7 +35,7 @@
     <View_MainWin_MenuLogout>注销</View_MainWin_MenuLogout>
 
     <!--首页-->
-    <View_HomePageOpen>打开</View_HomePageOpen>
+    <View_HomePageOpen>打开案例</View_HomePageOpen>
     <View_HomePageOpenAllCase>所有案例</View_HomePageOpenAllCase>
     <View_HomePageOpenLocalCase>本地案例</View_HomePageOpenLocalCase>
     <View_HomePageCreateCase>新建案例</View_HomePageCreateCase>
@@ -44,7 +46,7 @@
 
     <!--案例-->
     <View_CaseName>案例名称</View_CaseName>
-    <View_CaseAuthor>创建人</View_CaseAuthor>
+    <View_CaseAuthor>创  建 人</View_CaseAuthor>
     <View_CaseCreateTime>创建时间</View_CaseCreateTime>
     <View_UpdateRecentError>更新失败</View_UpdateRecentError>
     <View_CaseListViewTitle>案例管理</View_CaseListViewTitle>
@@ -65,7 +67,9 @@
     <View_CaseListSearch>搜索</View_CaseListSearch>
     <View_CaseOpen>打开</View_CaseOpen>
     <View_CaseListIndex>序号</View_CaseListIndex>
-    
+    <View_CaseUpdatePrompt>更新案例失败</View_CaseUpdatePrompt>
+    <View_DefaultCaseName>默认案例</View_DefaultCaseName>
+
     <!--设备提取主页-->
     <View_DevHomePage_MenuExtract>提取主页</View_DevHomePage_MenuExtract>
     <View_DevHomePage_MenuResult>提取结果</View_DevHomePage_MenuResult>
@@ -94,6 +98,7 @@
     <View_DevHomePage_Edit>编辑</View_DevHomePage_Edit>
     <View_DevHomePage_ClickESCCancel>单击ESC取消</View_DevHomePage_ClickESCCancel>
     <View_DevHomePage_UnConnect>未连接</View_DevHomePage_UnConnect>
+    <View_DevHomePage_Connect>已连接</View_DevHomePage_Connect>
     <View_DevHomePage_FileName>文件名</View_DevHomePage_FileName>
     <View_DevHomePage_FileType>文件类型</View_DevHomePage_FileType>
     <View_DevHomePage_FilePath>文件路径</View_DevHomePage_FilePath>
@@ -102,6 +107,11 @@
     <View_DevHomePage_Port>端   口</View_DevHomePage_Port>
     <View_DevHomePage_IOSRoot>越狱</View_DevHomePage_IOSRoot>
     <View_DevHomePage_UnIOSRoot>未越狱</View_DevHomePage_UnIOSRoot>
+    <View_DevHomePage_DdentityCard>身份证</View_DevHomePage_DdentityCard>
+    <View_DevHomePage_CertificateOfOfficers>军官证</View_DevHomePage_CertificateOfOfficers>
+    <View_DevHomePage_Passport>护照</View_DevHomePage_Passport>
+    <View_DevHomePage_StudentCard>学生证</View_DevHomePage_StudentCard>
+    <View_DevHomePage_TemporaryResidentialPermit>暂住证</View_DevHomePage_TemporaryResidentialPermit>
 
     <!--选择文件、文件夹、保存-->
     <View_SelectControl_Format>格式</View_SelectControl_Format>
@@ -110,18 +120,35 @@
     <View_SelectControl_SaveTitle>保存文件</View_SelectControl_SaveTitle>
     <View_SelectControl_FolderName>文件夹名</View_SelectControl_FolderName>
     <View_SelectControl_SelectFolderTitle>选择文件夹</View_SelectControl_SelectFolderTitle>
-    
+
     <!--取证日志-->
     <View_Logs_ObtainEvidenceLogView_Title>取证日志</View_Logs_ObtainEvidenceLogView_Title>
     <View_Logs_ObtainEvidenceLogView_Operator>操作人员</View_Logs_ObtainEvidenceLogView_Operator>
     <View_Logs_ObtainEvidenceLogView_OpContent>操作内容</View_Logs_ObtainEvidenceLogView_OpContent>
     <View_Logs_ObtainEvidenceLogView_OpTime>操作时间</View_Logs_ObtainEvidenceLogView_OpTime>
     <View_Logs_ObtainEvidenceLogView_Screenshot>截图</View_Logs_ObtainEvidenceLogView_Screenshot>
-    
+
     <!--数据导出-->
     <Export>
       <ExportData>数据导出</ExportData>
     </Export>
+    
+    <Extraction>
+      <Title>自动提取</Title>
+      <TotalProgress>总进度</TotalProgress>
+      <Start>开始提取</Start>
+      <Stop>停止提取</Stop>
+      <State>
+        <Idle>未提取</Idle>
+        <Waiting>等待提取</Waiting>
+        <Starting>准备提取</Starting>
+        <Runing>正在提取</Runing>
+        <IsCancellationRequest>正在取消</IsCancellationRequest>
+        <Cancelled>取消解析</Cancelled>
+        <Completed>提取完成</Completed>
+        <Failed>提取出错</Failed>
+      </State>
+    </Extraction>
 
     <!--管理-->
     <Management>
@@ -137,10 +164,15 @@
         <Id>证件号</Id>
         <Add>添加</Add>
         <RemoveBatch>批量删除</RemoveBatch>
+        <OldPassword>原始密码</OldPassword>
         <InputPassword>输入密码</InputPassword>
         <ConfirmPassword>确认密码</ConfirmPassword>
+        <SetPassword>设置密码</SetPassword>
+        <ModifyPasswordErrorPrompt>输入密码与原始密码不一致</ModifyPasswordErrorPrompt>
         <Cancel>取消</Cancel>
         <Confirm>确认</Confirm>
+        <AddErrorPrompt>添加用户失败</AddErrorPrompt>
+        <UpdateErrorPrompt>更新用户失败</UpdateErrorPrompt>
       </User>
       <Settings>
         <Title>系统设置</Title>
@@ -163,8 +195,49 @@
       </Settings>
       <Plugin>
         <Title>插件管理</Title>
-
       </Plugin>
+      <Guide>
+        <Upgrade>升级说明</Upgrade>
+        <IOS>
+          <Title>iOS连接向导</Title>
+          <Step1>解除屏幕锁</Step1>
+          <Step2>点击“信任”</Step2>
+        </IOS>
+        <Android4_0>
+          <Title>Android 4.0</Title>
+          <Step1>进入“应用程序列表”</Step1>
+          <Step2>点击“设置”</Step2>
+          <Step3>点击“应用程序”</Step3>
+          <Step4>点击“开发”</Step4>
+          <Step5>勾选“USB”调试</Step5>
+          <Step6>点击“确认”</Step6>
+        </Android4_0>
+        <Android4_1>
+          <Title>Android 4.1-4.2</Title>
+          <Step1>打开“应用列表”</Step1>
+          <Step2>点击“设置”</Step2>
+          <Step3>点击“开发者选项”</Step3>
+          <Step4>打开右上角开发者选项开关，然后点击“确定”</Step4>
+          <Step5>勾选“USB调试”</Step5>
+          <Step6>点击“确定”</Step6>
+        </Android4_1>
+        <Android5_0>
+          <Title>Android 5.0-5.5</Title>
+          <Step1>点击“设置”</Step1>
+          <Step2>点击“开发者选项”</Step2>
+          <Step3>勾选“USB调试”</Step3>
+          <Step4>点击“确定”</Step4>
+        </Android5_0>
+        <Developer>
+          <Title>开发者选项</Title>
+          <Step1>点击“设置”</Step1>
+          <Step2>点击“关于手机”</Step2>
+          <Step3>连续点击“版本号”6-7下。</Step3>
+          <Step4>回到设置页面，点击“开发者选项”</Step4>
+          <Step5>打开USB调试模式</Step5>
+          <Step6>点击“确定”</Step6>
+        </Developer>
+      </Guide>
     </Management>
 
 
@@ -173,27 +246,27 @@
 
 
 
-    
+
     <!--公共字库-->
     <View_Common_HaveNot>未</View_Common_HaveNot>
     <View_Common_Save>保存</View_Common_Save>
     <View_Common_Cancel>取消</View_Common_Cancel>
-    
-    
-    
-    
+
+
+
+
     <!--推荐方案-->
     <View_StrategyRecommend_AutoExtraction>自动提取</View_StrategyRecommend_AutoExtraction>
-    
-    
-    
+
+
+
 
     <!--消息提示-->
     <View_MessageBox_Error>很抱歉</View_MessageBox_Error>
     <View_MessageBox_Success>成功</View_MessageBox_Success>
     <View_MessageBox_Warning>警告</View_MessageBox_Warning>
-  
-</ViewLanguage>
+
+  </ViewLanguage>
 
   <MessageLanguage Prompt="提示信息语言资源">
     <Notes_ZhunBeiKaiShi>准备开始备份, 请注意点亮屏幕进入手机主界面, 注意手机弹出的操作请求提示, 并确定(允许)请求的操作！</Notes_ZhunBeiKaiShi>
@@ -243,12 +316,57 @@
     <ErrMsg_ReadFileFail>读取失败</ErrMsg_ReadFileFail>
     <ErrMsg_IOSDllErrorID>IOS设备读取底层读取发生错误, 错误码</ErrMsg_IOSDllErrorID>
   </ErrorMessageLanguage>
+  
 
+  <AboutUsLanguage Prompt="关于我们语言资源">
+    <AboutUs_Name>SPF智能手机数据恢复取证系统</AboutUs_Name>
+    <AboutUs_Version>当前版本：6.3.11</AboutUs_Version>
+    <AboutUs_SecretTime>有效期至：</AboutUs_SecretTime>
+    <AboutUs_SecretLogout>授权注销</AboutUs_SecretLogout>
+    <AboutUs_ContactInformation>联系方式</AboutUs_ContactInformation>
+    <AboutUs_BusinessConsulting>商务咨询：028-85211099</AboutUs_BusinessConsulting>
+    <AboutUs_Postcode>邮编：610000</AboutUs_Postcode>
+    <AboutUs_CustomerServiceAll>客服电话：400-631-1393</AboutUs_CustomerServiceAll>
+    <AboutUs_EmailAddress>电子邮箱：sales@xlysoft.net</AboutUs_EmailAddress>
+    <AboutUs_TechnicalConsulting>技术咨询：028-84087500</AboutUs_TechnicalConsulting>
+    <AboutUs_15982165287>                 15982165287</AboutUs_15982165287>
+    <AboutUs_OfficialWebsite>中文官网：www.xlysoft.net</AboutUs_OfficialWebsite>
+    <AboutUs_Address>地址</AboutUs_Address>
+    <AboutUs_HeadQuartersAddress>总      部：四川省内江市经开区松山南路253号</AboutUs_HeadQuartersAddress>
+    <AboutUs_RdCenter>研发中心：四川省成都市天府大道1700号新世纪环球中心E3区7楼2-1-715</AboutUs_RdCenter>
+    <AboutUs_CompanyName>公司名称：四川效率源信息安全技术股份有限公司</AboutUs_CompanyName>
+    <AboutUs_WeChat>效率源科技官方微信</AboutUs_WeChat>
+    <AboutUs_Copyright>Copyright@2017 XLY All rights reserved</AboutUs_Copyright>
+    <AboutUs_Permanent>永久</AboutUs_Permanent>
+    <AboutUs_cancellatioOfAuthorization>确认注销软授权？</AboutUs_cancellatioOfAuthorization>
+  </AboutUsLanguage>
+
+  <ExportReportLanguage Prompt="导出报表语言资源">
+    <ExportReport_ExportContent>导出内容</ExportReport_ExportContent>
+    <ExportReport_DeviceSelection>设备选择：</ExportReport_DeviceSelection>
+    <ExportReport_AllEquipment>所有设备</ExportReport_AllEquipment>
+    <ExportReport_DataContent>数据内容：</ExportReport_DataContent>
+    <ExportReport_DataState>数据状态：</ExportReport_DataState>
+    <ExportReport_DeleteData>删除数据</ExportReport_DeleteData>
+    <ExportReport_NotDeleteData>未删除数据</ExportReport_NotDeleteData>
+    <ExportReport_ExportFormat>导出格式</ExportReport_ExportFormat>
+    <ExportReport_AllData>全部数据</ExportReport_AllData>
+    <ExportReport_CheckData>勾选数据</ExportReport_CheckData>
+    <ExportReport_TagData>标记数据</ExportReport_TagData>
+    <ExportReport_StorePath>存放路径：</ExportReport_StorePath>
+    <ExportReport_FormatSelection>格式选择：</ExportReport_FormatSelection>
+    <ExportReport_Unit>单位：</ExportReport_Unit>
+    <ExportReport_BeganExport>开始导出</ExportReport_BeganExport>
+  </ExportReportLanguage>
+  <DeviceEditLanguage Prompt="SPF手机支持型号选择资源">
+    <DeviceEdit_SearchContent>请输入关输入搜索品牌或型号</DeviceEdit_SearchContent>
+    <DeviceEdit_BrandChoice>品牌选择</DeviceEdit_BrandChoice>
+  </DeviceEditLanguage>
 
   <DescAttributeLanguage Prompt="特性语言">
     <Test></Test>
   </DescAttributeLanguage>
-  
+
 </LanguageResource>
 
 

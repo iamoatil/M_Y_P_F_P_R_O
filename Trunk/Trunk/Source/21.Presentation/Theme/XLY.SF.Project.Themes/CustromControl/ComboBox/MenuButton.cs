@@ -61,7 +61,8 @@ namespace XLY.SF.Project.Themes.CustromControl
             SelectionChanged += MenuButton_SelectionChanged;
             _btnOpen = this.Template.FindName("btn_Open", this) as Button;
             _poMenu = this.Template.FindName("PART_Popup", this) as Popup;
-            _btnOpen.Click += _btnOpen_Click;
+            if (_btnOpen != null)
+                _btnOpen.Click += _btnOpen_Click;
         }
 
         private void _btnOpen_Click(object sender, RoutedEventArgs e)

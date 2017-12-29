@@ -44,7 +44,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
             _searchCommandProxy = new ProxyRelayCommand(Search, base.ModelName);
             SelectAllCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<Boolean>(SelectAll, (b) => Items != null && Items.Count != 0);
             SelectCommand = new GalaSoft.MvvmLight.CommandWpf.RelayCommand<Boolean>(Select);
-            _removeBatchCommandProxy = new ProxyRelayCommand(RemoveBatch, base.ModelName);
+            _removeBatchCommandProxy = new ProxyRelayCommand(RemoveBatch, base.ModelName, () => Items != null && Items.Any(x => x.IsChecked));
         }
 
         #endregion
@@ -151,7 +151,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
             //PageCount = result.PageCount;
             var result = DbService.Records.ToModels<RecentCase, RecentCaseEntityModel>().ToArray();
             Int32 index = 1;
-            var items = result.OrderByDescending(x=>x.Timestamp).Select(x => new CaseItem(x, index++)).ToArray();
+            var items = result.OrderByDescending(x => x.Timestamp).Select(x => new CaseItem(x, index++)).ToArray();
             Items = new ObservableCollection<CaseItem>(items);
         }
 

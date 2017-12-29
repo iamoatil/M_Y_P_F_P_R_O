@@ -24,12 +24,12 @@ namespace XLY.SF.Project.DataFilter.Providers
             SQLiteFunction.RegisterFunction(typeof(RegexMatchFunction));
         }
 
-        public SQLiteFilterDataProvider(String file,String tableName, String password = "")
-            :base(new SQLiteConnectionStringBuilder()
+        public SQLiteFilterDataProvider(String file, String tableName, String password = "")
+            : base(new SQLiteConnectionStringBuilder()
             {
-                DataSource =file?? throw new ArgumentNullException("file"),
+                DataSource = file ?? throw new ArgumentNullException("file"),
                 Password = password
-            }.ConnectionString,tableName)
+            }.ConnectionString, tableName)
         {
         }
 
@@ -81,13 +81,47 @@ namespace XLY.SF.Project.DataFilter.Providers
         /// <returns>集合的大小。</returns>
         public override Int32 GetCount(Expression expression)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+            lock (_Catch)
             {
-                connection.Flags = SQLiteConnectionFlags.UseConnectionPool;
-                connection.Open();
+                var connection = GetSQLiteConnection(ConnectionString);
+
                 SQLiteCommand command = connection.CreateCommand();
                 command.CommandText = SQLExpressionConverter.GetCountSql(expression, TableName);
                 return (Int32)(Int64)command.ExecuteScalar();
+            }
+        }
+
+        private static Dictionary<string, SQLiteConnection> _Catch = new Dictionary<string, SQLiteConnection>();
+
+        private static SQLiteConnection GetSQLiteConnection(string connectionString)
+        {
+            SQLiteConnection connection = null;
+
+            if (!_Catch.TryGetValue(connectionString, out connection))
+            {
+                connection = new SQLiteConnection(connectionString);
+                connection.Flags = SQLiteConnectionFlags.UseConnectionPool;
+                connection.Open();
+
+                _Catch.Add(connectionString, connection);
+            }
+
+            return connection;
+        }
+
+        public static void ClearSQLiteConnectionCatch(string dbPath)
+        {
+            lock (_Catch)
+            {
+                SQLiteConnection connection = null;
+
+                var conStr = _Catch.Keys.FirstOrDefault(s => s.Contains(dbPath));
+                if (!String.IsNullOrEmpty(conStr) && _Catch.TryGetValue(conStr, out connection))
+                {
+                    connection?.Close();
+
+                    _Catch.Remove(conStr);
+                }
             }
         }
 

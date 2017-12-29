@@ -72,7 +72,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
                 if (assembly == null) throw new DllNotFoundException(strs[1]);
                 Type type = assembly.GetType(strs[0]);
                 if (type == null) throw new MissingMemberException(strs[0]);
-                if (type.GetInterface("ITaskActivator") == null)
+                if (type.GetInterface("ITaskExecutor") == null)
                 {
                     throw new TypeLoadException("This type is not a valid entry point");
                 }

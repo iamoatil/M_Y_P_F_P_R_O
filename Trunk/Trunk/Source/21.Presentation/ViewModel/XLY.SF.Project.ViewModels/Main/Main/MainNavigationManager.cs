@@ -82,7 +82,7 @@ namespace XLY.SF.Project.ViewModels.Main
         private void DeleteCacheViewCallback(GeneralArgs<PreCacheToken> obj)
         {
             if (obj.Parameters != null)
-                SystemContext.Instance.CurCacheViews.RemoveAllViewCache(obj.Parameters);
+                SystemContext.Instance.CurCacheViews.RemoveAllViewCacheById(obj.Parameters);
         }
 
         //主界面导航回调
@@ -115,12 +115,16 @@ namespace XLY.SF.Project.ViewModels.Main
                     EditCaseNavigationHelper.ResetCurCaseStatus();
                 }
 
+                //由于首页需要隐藏设备列表和案例，所以除首页之外的界面全部都需要打开
+                if (args.MsgToken != ExportKeys.HomePageView)
+                    IsShowCurCaseNameRow = true;
+
                 if (args.MsgToken == ExportKeys.DeviceMainView)
                 {
                     var devTmp = args.Parameter as DeviceExtractionAdorner;
                     if (devTmp != null && devTmp.Device != null)
                     {
-                        PreCacheToken delToken = new PreCacheToken(devTmp.Device.ID, ExportKeys.DeviceMainView);
+                        PreCacheToken delToken = new PreCacheToken(devTmp.Id, ExportKeys.DeviceMainView);
                         if (!SystemContext.Instance.CurCacheViews.TryGetFirstView(delToken, out targetView))
                         {
                             targetView = NavigationViewCreater.CreateView(args.MsgToken, args.Parameter);

@@ -40,10 +40,9 @@ namespace XLY.SF.Project.Domains
         {
             get
             {
-                if(_filterViewInstance == null)
+                if (_filterViewInstance == null)
                 {
                     _filterViewInstance = new DataAggregationFilterView<T>(this, Key);
-                    _filterViewInstance.OnAssociatedBookmark += _filterView_OnAssociatedBookmark;
                 }
                 return _filterViewInstance;
             }
@@ -63,7 +62,7 @@ namespace XLY.SF.Project.Domains
             {
                 if (_providerInstance == null)
                 {
-                    _providerInstance = new MultiSQLiteFilterDataProvider(DbFilePath, DbTableName) {  AttachedDatabase = DbBmkFilePath, AttachedDatabaseAliasName = SqliteDbFile.BookmarkAliasName };
+                    _providerInstance = new MultiSQLiteFilterDataProvider(DbFilePath, DbTableName) { AttachedDatabase = DecorationExtesion.BookmarkItemProperty.GetDbFilePath(new System.IO.FileInfo(DbFilePath).Directory.Parent.FullName) };
                 }
                 return _providerInstance;
             }
@@ -82,7 +81,7 @@ namespace XLY.SF.Project.Domains
             Key = key ?? Guid.NewGuid().ToString();
 
             DbFilePath = dbFilePath;
-            if(tableName != null)
+            if (tableName != null)
             {
                 DbTableName = tableName;
             }
@@ -100,6 +99,7 @@ namespace XLY.SF.Project.Domains
         #endregion
 
         #region Properties
+        public ICheckedItem Parent { get; set; }
 
         /// <summary>
         /// 数据唯一标示
@@ -107,14 +107,15 @@ namespace XLY.SF.Project.Domains
         public string Key { get; set; }
 
         public string DbTableName { get; set; }
-      
+
         public void ResetTableName()
         {
             DbInstance.SetTableName(typeof(T).FullName, DbTableName);
         }
 
         public string DbFilePath { get; set; }
-        public string DbBmkFilePath => DbFilePath.Insert(DbFilePath.LastIndexOf('.'), "_bmk");
+
+        public string DbBmkFilePath => System.IO.Path.Combine( new System.IO.FileInfo(DbFilePath).Directory.Parent.FullName,BookmarkDecorationProperty.DPDBName);
 
         public IFilterDataProvider Provider => _provider;
 
@@ -123,11 +124,41 @@ namespace XLY.SF.Project.Domains
             get { return SqliteDbFile.GetSqliteDbFile(DbFilePath); }
         }
 
-        public IEnumerable<T> View => _filterView.View ?? _empty;
+        #endregion
 
-        IEnumerable IDataItems.View => View;
+        #region IPage
 
+        /// <summary>
+        /// 数据总数
+        /// </summary>
         public Int32 Count => _filterView.Count;
+
+        /// <summary>
+        /// 删除数据总数
+        /// </summary>
+        public Int32 DeleteCount => 0;
+
+        /// <summary>
+        /// 获取当前的数据集
+        /// </summary>
+        public IEnumerable GetView(int cursor = 0, int pageSize = -1)
+        {
+            var view = _filterView.GetView(cursor, pageSize) as IEnumerable<T>;
+            if (view != null)
+            {
+                foreach (var item in view)
+                {
+                    item.Parent = Parent;
+                }
+                DbInstance.OnReadView(view, Key);
+            }
+            return view;
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return _empty.GetEnumerator();
+        }
 
         #endregion
 
@@ -153,56 +184,29 @@ namespace XLY.SF.Project.Domains
 
         public void Add(object obj)
         {
-            this.Add(obj as T);
+            Add(obj as T);
         }
 
         public void AddRange(IEnumerable<object> list)
         {
             foreach (var obj in list)
             {
-                this.Add(obj as T);
+                Add(obj as T);
             }
         }
-
+        
         public void Filter(params FilterArgs[] args)
         {
             _filterView.Reset();
             _filterView.Args = args;
             _filterView.Initialize();
-            _filterView.NextPage();
+            //_filterView.NextPage();
             OnPropertyChanged("View");
             OnPropertyChanged("Count");
         }
 
-        public IEnumerable<T> ViewAll
-        {
-            get
-            {
-                if (_filterView.View == null)
-                    yield break;
-                _filterView.ResetCursor();
-                while(_filterView.NextPage())
-                {
-                    foreach (var item in View)
-                    {
-                        yield return item;
-                    }
-                }
-                yield break;
-            }
-        }
-
         #endregion
 
-        #region Private
-        /// <summary>
-        /// 关联数据的书签状态
-        /// </summary>
-        private void _filterView_OnAssociatedBookmark()
-        {
-            DbInstance.GetDataItemsBookmark(View);
-        }
-        #endregion
         #endregion
     }
 }

@@ -12,7 +12,7 @@ namespace XLY.SF.Project.MirrorView
     /// <summary>
     /// 命令字符串集合
     /// </summary>
-    class CmdString
+    public class CmdString
     {
         private string _cmdString;
         public CmdString(string cmd)

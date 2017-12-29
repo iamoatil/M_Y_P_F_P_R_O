@@ -24,9 +24,9 @@ namespace XLY.SF.Shell.CommWindow
         #region Properties
 
         /// <summary>
-        /// 窗体关闭结果
+        /// 是否需要反馈
         /// </summary>
-        public bool DialogResultEx { get; private set; }
+        public bool HasFeedback { get; private set; }
 
         /// <summary>
         /// 消息窗状态
@@ -35,6 +35,9 @@ namespace XLY.SF.Shell.CommWindow
         {
             get; private set;
         }
+
+        public string ConfirmText { get; private set; }
+        public string CancelText { get; private set; }
 
         #endregion
 
@@ -51,11 +54,14 @@ namespace XLY.SF.Shell.CommWindow
         /// 设置消息框
         /// </summary>
         /// <param name="content">内容</param>
-        public void SetMsgBox(string content, MessageBoxType msgType)
+        public void SetMsgBox(string content, MessageBoxType msgType, string confirmText, string cancelText)
         {
             this.MsgContent = content;
             MsgType = msgType;
-            var a = ProjectExtend.Context.SystemContext.LanguageProvider;
+            ConfirmText = confirmText;
+            CancelText = cancelText;
+            //var a = ProjectExtend.Context.SystemContext.LanguageProvider;
+            HasFeedback = !string.IsNullOrWhiteSpace(cancelText);
         }
 
         #endregion
@@ -74,8 +80,8 @@ namespace XLY.SF.Shell.CommWindow
 
         private void btn_Ok_Click(object sender, RoutedEventArgs e)
         {
-            if (MsgType == MessageBoxType.Warning)
-               this.DialogResult = true;
+            if (HasFeedback)
+                this.DialogResult = true;
             else
                 this.Close();
         }

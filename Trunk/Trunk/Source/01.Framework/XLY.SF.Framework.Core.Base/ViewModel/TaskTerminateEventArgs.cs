@@ -29,7 +29,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         /// 初始化类型 AsyncTaskTerminateEventArgs 实例。
         /// </summary>
         /// <param name="taskId">任务标识。</param>
-        /// <param name="isCompleted">是否完成。如果为false，表示在未完成的情况下停止任务。</param>
+        /// <param name="isCompleted">是否完成。如果为false，表示在取消任务。</param>
         /// <param name="message">消息。</param>
         public TaskTerminateEventArgs(String taskId, Boolean isCompleted, String message)
             : base(taskId, message)
@@ -40,7 +40,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
             }
             else
             {
-                IsStopped = true;
+                IsCancelled = true;
             }
         }
 
@@ -56,9 +56,9 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         public Boolean IsCompleted { get; private set; }
 
         /// <summary>
-        /// 是否停止。
+        /// 是否取消。
         /// </summary>
-        public Boolean IsStopped { get; private set; }
+        public Boolean IsCancelled { get; private set; }
 
         /// <summary>
         /// 异常信息。

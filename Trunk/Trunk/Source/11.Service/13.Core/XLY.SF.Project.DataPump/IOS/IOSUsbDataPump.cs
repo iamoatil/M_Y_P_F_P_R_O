@@ -8,7 +8,7 @@ using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Devices;
 using XLY.SF.Project.Domains;
 
-namespace XLY.SF.Project.DataPump.IOS
+namespace XLY.SF.Project.DataPump
 {
     /// <summary>
     /// IOS USB数据泵。
@@ -24,7 +24,7 @@ namespace XLY.SF.Project.DataPump.IOS
         #region Constructors
 
         /// <summary>
-        /// 初始化类型 XLY.SF.Project.DataPump.IOS.IOSUsbDataPump 实例。
+        /// 初始化类型 XLY.SF.Project.DataPump.IOSUsbDataPump 实例。
         /// </summary>
         /// <param name="metadata">与此数据泵关联的元数据信息。</param>
         public IOSUsbDataPump(Pump metadata)
@@ -39,9 +39,9 @@ namespace XLY.SF.Project.DataPump.IOS
 
         #region Protected
 
-        protected override Boolean InitAtFirstTime()
+        protected override Boolean InitAtFirstTime(DataPumpExecutionContext context)
         {
-            Pump metadata = Metadata;
+            Pump metadata = PumpDescriptor;
             Device device = metadata.Source as Device;
             if (device == null) return false;
             IOSDeviceManager dm = device.DeviceManager as IOSDeviceManager;
@@ -55,7 +55,7 @@ namespace XLY.SF.Project.DataPump.IOS
             return true;
         }
 
-        protected override void OverrideExecute(DataPumpControllableExecutionContext context)
+        protected override void OverrideExecute(DataPumpExecutionContext context)
         {
             if (context.Source.ItemType == SourceFileItemType.NormalPath)
             {

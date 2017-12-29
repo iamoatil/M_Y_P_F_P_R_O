@@ -115,15 +115,17 @@ namespace XLY.SF.Project.CaseManagement
         /// 创建新的案例。
         /// </summary>
         /// <param name="caseInfo">案例信息。</param>
+        /// <param name="directory">案例目录的父级路径。</param>
         /// <param name="projectFileNameWithoutExtension">不包含扩展名的项目文件名称。</param>
         /// <returns>新的案例。</returns>
-        public static Case New(CaseInfo caseInfo,String projectFileNameWithoutExtension = null)
+        public static Case New(CaseInfo caseInfo, String directory, String projectFileNameWithoutExtension = null)
         {
-            if(caseInfo == null) throw new ArgumentNullException("caseInfo");
+            if (caseInfo == null) throw new ArgumentNullException("caseInfo");
             CPConfiguration configuration = CPConfiguration.Create(caseInfo);
             if (configuration == null) return null;
-            String directory = InnerHelper.GetValidDirectory(System.IO.Path.Combine(caseInfo.Path, caseInfo.Name));
-            String file = System.IO.Path.Combine(directory, $"{projectFileNameWithoutExtension ?? DefaultProjectFile}.cp");
+            String path = InnerHelper.GetValidDirectory(System.IO.Path.Combine(directory, caseInfo.Name));
+            caseInfo.Path = path;
+            String file = System.IO.Path.Combine(path, $"{projectFileNameWithoutExtension ?? DefaultProjectFile}.cp");
             if (!configuration.Save(file)) return null;
             RestrictedCaseInfo rci = configuration.GetCaseInfo(System.IO.Path.GetDirectoryName(file));
             return new Case(rci, configuration, file);
@@ -170,32 +172,14 @@ namespace XLY.SF.Project.CaseManagement
         /// <summary>
         /// 添加设备提取。
         /// </summary>
+        /// <param name="directory">保存目录的相对或绝对路径。</param>
         /// <param name="type">设备类型。</param>
         /// <param name="fileNameWithoutExtension">配置文件名（不含扩展名）。</param>
-        /// <param name="directory">保存目录的路径。如果为null表示在案例所在目录创建。</param>
         /// <returns></returns>
-        public DeviceExtraction CreateDeviceExtraction(String name, String type, String fileNameWithoutExtension = null, String directory = null)
+        public DeviceExtraction CreateDeviceExtraction(String directory, String type, String fileNameWithoutExtension = null)
         {
             ThrowExceptionIfNotExisted();
-            String directoryName = name;
-            DeviceExtraction de = null;
-            //在当前案例所在目录创建设备目录
-            if (String.IsNullOrWhiteSpace(directory))
-            {
-                //使用相对路径记录设备目录
-                de = DeviceExtraction.Create(type, directoryName, fileNameWithoutExtension, this);
-            }//不在当前案例所在目录创建，并且没有提供绝对路径的情况下抛异常
-            else if (!System.IO.Path.IsPathRooted(directory))
-            {
-                throw new ArgumentException("The directory must be absolute path.");
-            }//不在当前案例所在目录创建，提供了绝对路径，表示在指定的路径下创建目录
-            else
-            {
-                directory = System.IO.Path.Combine(directory, directoryName);
-                //使用绝对路径记录设备目录
-                de = DeviceExtraction.Create(type, directory, fileNameWithoutExtension, this);
-            }
-
+            DeviceExtraction de = DeviceExtraction.Create(directory, type, fileNameWithoutExtension, this);
             if (de != null)
             {
                 Configuration.AddReference(de.Reference);

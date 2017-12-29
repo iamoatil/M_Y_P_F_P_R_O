@@ -10,14 +10,8 @@ namespace XLY.SF.Project.DataPump
     /// <summary>
     /// 在执行时只执行一次初始化操作的数据泵。
     /// </summary>
-    public abstract class InitAtExecutionDataPump : ControllableDataPumpBase
+    public abstract class InitAtExecutionDataPump : DataPumpBase
     {
-        #region Fields
-
-        private Boolean _isInited;
-
-        #endregion
-
         #region Constructors
 
         /// <summary>
@@ -32,6 +26,15 @@ namespace XLY.SF.Project.DataPump
 
         #endregion
 
+        #region Properties
+
+        /// <summary>
+        /// 是否已经在第一次执行时初始化过。
+        /// </summary>
+        public Boolean IsInitedAtFirstTime { get; private set; }
+
+        #endregion
+
         #region Methods
 
         #region Protected
@@ -40,13 +43,13 @@ namespace XLY.SF.Project.DataPump
         /// 使用特定的执行上下文执行服务，并在第一次执行时初始化相关数据。
         /// </summary>
         /// <param name="context">执行上下文。</param>
-        protected sealed override void ExecuteCore(DataPumpControllableExecutionContext context)
+        protected sealed override void ExecuteCore(DataPumpExecutionContext context)
         {
-            if (!_isInited)
+            if (!IsInitedAtFirstTime)
             {
-                _isInited = InitAtFirstTime();
+                IsInitedAtFirstTime = InitAtFirstTime(context);
             }
-            if (_isInited)
+            if (IsInitedAtFirstTime)
             {
                 OverrideExecute(context);
             }
@@ -56,13 +59,14 @@ namespace XLY.SF.Project.DataPump
         /// 使用特定的执行上下文执行服务。
         /// </summary>
         /// <param name="context">执行上下文。</param>
-        protected abstract void OverrideExecute(DataPumpControllableExecutionContext context);
+        protected abstract void OverrideExecute(DataPumpExecutionContext context);
 
         /// <summary>
         /// 第一次执行时的初始化操作。
         /// </summary>
+        /// <param name="context">执行上下文。</param>
         /// <returns>成功返回true；否则返回false。</returns>
-        protected abstract Boolean InitAtFirstTime();
+        protected abstract Boolean InitAtFirstTime(DataPumpExecutionContext context);
 
         #endregion
 

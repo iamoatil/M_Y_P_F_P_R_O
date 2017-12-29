@@ -20,7 +20,7 @@ namespace XLY.SF.Project.MirrorView
         {
             _targetDir = targetDir;
             SourceBlockPath = blockPath;
-            _targetMirrorFile=_targetDir + SourceBlockPath.TrimStart('/').Replace("/", "_") + "_" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + ".bin";
+            _targetMirrorFile = System.IO.Path.Combine(_targetDir, SourceBlockPath.TrimStart('/').Replace("/", "_") + "_" + DateTime.Now.ToString("yyyy-MM-dd-hh-mm-ss") + ".bin");
         }
 
         private string _targetDir;
@@ -60,7 +60,7 @@ namespace XLY.SF.Project.MirrorView
                 _name = value;
                 OnPropertyChanged();
             }
-        }      
+        }
 
         /// <summary>
         /// 磁盘分区
@@ -84,9 +84,9 @@ namespace XLY.SF.Project.MirrorView
         }
 
         /// <summary>
-        /// 选择的分区的总共大小
+        /// 选择的分区大小
         /// </summary>
-        public long SelectedTotalSize
+        public long SelectedSize
         {
             get
             {
@@ -96,73 +96,81 @@ namespace XLY.SF.Project.MirrorView
                     if (item.IsChecked)
                     {
                         totalSize += item.Size;
+                        break;
                     }
                 }
                 return totalSize;
             }
         }
+    }
+
+    /// <summary>
+    /// 分区界面元素
+    /// </summary>
+    public class PartitionElement : NotifyPropertyBase
+    {
+        public PartitionElement(Partition partition)
+        {
+            if (null != partition.Block)
+            {
+                Path = partition.Block.ToString().Replace("\\", @"/");//此处把windows的反斜杠替换成linux的斜杠，否则，镜像时出现size全为0的回调数据
+                                                                      //此处不能把Path转换成全部大写，否则出现镜像时返回的字节数组长度一直为0情况。
+            }
+
+            Name = partition.Text;
+            Size = partition.Size;
+        }
+
+        private string _Name;
 
         /// <summary>
-        /// 设置所有选择的分区的Check状态
+        /// 分区名字
         /// </summary>
-        public void SetAllCheckState(bool isCheck)
+        public string Name
         {
-            if (Items == null)
+            get => _Name;
+            set
             {
-                return;
-            }
-            foreach (var item in Items)
-            {
-                item.IsChecked = isCheck;
+                _Name = value;
+                OnPropertyChanged();
             }
         }
 
         /// <summary>
-        /// 分区界面元素
+        /// 分区的路径
         /// </summary>
-        public class PartitionElement : NotifyPropertyBase
+        public string Path { get; private set; }
+
+        /// <summary>
+        /// 是否选中
+        /// </summary>
+        public new bool IsChecked
         {
-            public PartitionElement(Partition partition)
+            get { return _isChecked; }
+            set
             {
-                Path = partition.Block.ToString().Replace("\\", @"/");//此处把windows的反斜杠替换成linux的斜杠，否则，镜像时出现size全为0的回调数据
-                                                                      //此处不能把Path转换成全部大写，否则出现镜像时返回的字节数组长度一直为0情况。
-                PathWithUpperStyle = Path.ToUpper();
-                Size = partition.Size;
-                ClickCommand = new RelayCommand(new Action(() => { IsChecked = !IsChecked; }));
+                _isChecked = value;
+                OnPropertyChanged();
             }
+        }
 
-            /// <summary>
-            /// 分区的路径
-            /// </summary>
-            public string Path { get; private set; }
+        private bool _isChecked = false;
 
-            /// <summary>
-            /// 是否选中
-            /// </summary>
-            public bool IsChecked
+        const int G1 = 1024 * 1024 * 1024;
+        const int M1 = 1024 * 1024;
+
+        /// <summary>
+        /// 分区的大小
+        /// </summary>
+        public long Size
+        {
+            get { return _size; }
+            set
             {
-                get { return _isChecked; }
-                set
+                _size = value;
+                //把size转换成G或M单位
+                if (_size != 0)
                 {
-                    _isChecked = value;
-                    OnPropertyChanged();
-                }
-            }
-
-            private bool _isChecked = false;
-
-            /// <summary>
-            /// 分区的大小
-            /// </summary>
-            public long Size
-            {
-                get { return _size; }
-                set
-                {
-                    _size = value;
-                    //把size转换成G或M单位
-                    const int G1 = 1024 * 1024 * 1024;
-                    const int M1 = 1024 * 1024;
                     if (_size > G1)
                     {
                         SizeInfo = Math.Round((double)_size / G1, 2).ToString() + "G";
@@ -171,34 +179,30 @@ namespace XLY.SF.Project.MirrorView
                     {
                         SizeInfo = Math.Round((double)_size / M1, 2).ToString() + "M";
                     }
-                    OnPropertyChanged();
                 }
-            }
-            private long _size;
-
-            /// <summary>
-            /// 分区
-            /// </summary>
-            public string SizeInfo
-            {
-                get { return _sizeInfo; }
-                set
+                else
                 {
-                    _sizeInfo = value;
-                    OnPropertyChanged();
+                    SizeInfo = string.Empty;
                 }
+                OnPropertyChanged();
             }
-            private string _sizeInfo;
-
-            /// <summary>
-            /// 大写的路径信息
-            /// </summary>
-            public string PathWithUpperStyle { get; private set; }
-
-            /// <summary>
-            /// 点击命令
-            /// </summary>
-            public ICommand ClickCommand { get; private set; }
         }
+
+        private long _size;
+
+        /// <summary>
+        /// 分区
+        /// </summary>
+        public string SizeInfo
+        {
+            get { return _sizeInfo; }
+            set
+            {
+                _sizeInfo = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _sizeInfo;
     }
+
 }

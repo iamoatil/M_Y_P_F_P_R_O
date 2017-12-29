@@ -131,8 +131,10 @@
                             <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock x:Name="tb_Name" Text="{Binding XPath=ViewLanguage/View_DevHomePage_FileName, Source={x:Static ex:SystemContext.LanguageProvider},StringFormat={}{0}：}" FontSize="14" Foreground="#9ba5b9" VerticalAlignment="Center" HorizontalAlignment="Right"/>
-                        <control:TextBoxEx Grid.Column="1" Height="30" Margin="5 0 10 0" Text="{Binding CurSelectedItemInFolder.Name,Mode=TwoWay}"/>
-                        <Button x:Name="btn_Name" Grid.Column="2" Content="{Binding XPath=ViewLanguage/Management/User/Confirm, Source={x:Static ex:SystemContext.LanguageProvider}}" Width="80" Height="30" Command="{Binding SelectedCompleteCommand}"/>
+                        <control:TextBoxEx x:Name="tb_Input" Grid.Column="1" Height="30" Margin="5 0 10 0" Text="{Binding CurInput}"/>
+                        <Button x:Name="btn_Name" Grid.Column="2" Content="{Binding XPath=ViewLanguage/Management/User/Confirm, Source={x:Static ex:SystemContext.LanguageProvider}}" Width="80" Height="30" 
+                                Command="{Binding SelectedCompleteCommand}"
+                                CommandParameter="{Binding Text,ElementName=tb_Input}"/>
                     </Grid>
 
                     <Grid Grid.Row="2" Margin="10 0 20 12" Width="650" HorizontalAlignment="Right">

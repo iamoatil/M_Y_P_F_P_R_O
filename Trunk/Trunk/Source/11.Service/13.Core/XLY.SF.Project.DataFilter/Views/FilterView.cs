@@ -42,7 +42,7 @@ namespace XLY.SF.Project.DataFilter.Views
         /// <summary>
         /// 过滤后的视图。
         /// </summary>
-        public IEnumerable<T> View { get; private set; }
+        public IEnumerable<T> View { get; set; }
 
         /// <summary>
         /// 视图的大小。
@@ -70,9 +70,9 @@ namespace XLY.SF.Project.DataFilter.Views
         /// <summary>
         /// 使用特定的表达式过滤数据。
         /// </summary>
-        protected virtual void Filter()
+        protected virtual IEnumerable<T> Filter()
         {
-            View = Source.Provider.Query<T>(Expression);
+            return Source.Provider.Query<T>(Expression);
         }
 
         #endregion

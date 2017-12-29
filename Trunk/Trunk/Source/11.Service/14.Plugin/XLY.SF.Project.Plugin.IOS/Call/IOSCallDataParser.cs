@@ -27,7 +27,7 @@ namespace XLY.SF.Project.Plugin.IOS
             pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_Call);
             pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_BasicInfo);
             pluginInfo.DeviceOSType = EnumOSType.IOS;
-            pluginInfo.VersionStr = "0.0";
+            pluginInfo.VersionStr = "1.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
             pluginInfo.GroupIndex = 0;
             pluginInfo.OrderIndex = 3;

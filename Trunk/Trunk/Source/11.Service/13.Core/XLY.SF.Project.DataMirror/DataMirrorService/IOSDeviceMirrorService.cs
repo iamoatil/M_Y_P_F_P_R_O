@@ -1,25 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-using XLY.SF.Project.Domains;
+﻿using System.IO;
 using System.IO.Compression;
-using XLY.SF.Project.Devices;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.BaseUtility.Helper;
+using XLY.SF.Project.Devices;
+using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.DataMirror
 {
-    internal class IOSDeviceMirrorService : AbstractMirrorService
+    /// <summary>
+    /// IOS手机镜像服务
+    /// </summary>
+    public class IOSDeviceMirrorService : AbstractMirrorService
     {
         private IOSDeviceManager DeviceManager { get; set; }
 
-        public override void Execute(Mirror mirror, IAsyncTaskProgress asyn)
+        /// <summary>
+        /// 是否用户停止镜像
+        /// </summary>
+        private bool IsUserStop { get; set; }
+
+        public override void Execute(Mirror mirror, DefaultAsyncTaskProgress asyn)
         {
             var device = mirror.Source as Device;
 
+            IsUserStop = false;
             DeviceManager = device.DeviceManager as IOSDeviceManager;
 
             //数据缓存路径
@@ -29,26 +33,27 @@ namespace XLY.SF.Project.DataMirror
             //数据备份
             var resPath = DeviceManager.CopyUserData(device, tempSavePath, asyn);
 
-            if (!FileHelper.IsValidDictory(resPath))
-            {//数据拷贝失败！
+            if (!IsUserStop)
+            {//镜像结束
+                if (FileHelper.IsValidDictory(resPath))
+                {
+                    asyn?.OnProgress(string.Empty, 0.99, "数据拷贝完成, 准备后期合并处理……");
 
-            }
+                    var name = $"{System.Guid.NewGuid().ToString()}.zip";
 
-            //打包
-            mirror.Local = FileHelper.ConnectPath(mirror.Target, mirror.TargetFile);
-            ZipFile.CreateFromDirectory(resPath, mirror.Local);
+                    Framework.BaseUtility.WinRARCSharp.RAR(resPath, mirror.Target, name);
 
-            if (!FileHelper.IsValid(mirror.Local))
-            {//打包失败！
-
+                    File.Move(Path.Combine(mirror.Target, name), mirror.Local);
+                }
             }
 
             //删除缓存文件
             FileHelper.DeleteDirectorySafe(tempSavePath);
         }
 
-        public override void Stop(IAsyncTaskProgress asyn)
+        public override void Stop()
         {
+            IsUserStop = true;
             DeviceManager?.StopCopyUserData();
             DeviceManager = null;
         }

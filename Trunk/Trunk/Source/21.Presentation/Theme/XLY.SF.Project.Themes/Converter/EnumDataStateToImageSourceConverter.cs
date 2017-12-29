@@ -33,7 +33,7 @@ namespace XLY.SF.Project.Themes
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || value.ToString() == "Normal" || value.ToString() == "None")
+            if (value == null || value.ToString() == "Normal")
             {
                 if(_normalImage == null)
                 {

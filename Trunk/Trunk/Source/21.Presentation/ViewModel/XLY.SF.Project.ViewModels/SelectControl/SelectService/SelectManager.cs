@@ -11,7 +11,7 @@ using XLY.SF.Project.ViewDomain.Model.SelectControlElement;
 
 namespace XLY.SF.Project.ViewModels.SelectControl.SelectService
 {
-    public class SelectManager: NotifyPropertyBase
+    public class SelectManager : NotifyPropertyBase
     {
         #region Properties
 
@@ -20,11 +20,11 @@ namespace XLY.SF.Project.ViewModels.SelectControl.SelectService
         /// </summary>
         private SelectControlType _curStatus;
 
-        /// <summary>
-        /// 文件过滤
-        /// </summary>
-        private string _fileFilter;
-        
+        ///// <summary>
+        ///// 文件过滤
+        ///// </summary>
+        //private string _fileFilter;
+
         #region 当前路径【文件夹层级】
 
         private FolderElement _curFolderLevel;
@@ -60,32 +60,32 @@ namespace XLY.SF.Project.ViewModels.SelectControl.SelectService
             _curStatus = status;
         }
 
-        /// <summary>
-        /// 创建文件选择管理器
-        /// </summary>
-        /// <param name="status"></param>
-        /// <param name="filter"></param>
-        public SelectManager(SelectControlType status, string filter)
-            : this(status)
-        {
-            _fileFilter = filter;
-        }
+        ///// <summary>
+        ///// 创建文件选择管理器
+        ///// </summary>
+        ///// <param name="status"></param>
+        ///// <param name="filter"></param>
+        //public SelectManager(SelectControlType status, string filter)
+        //    : this(status)
+        //{
+        //    _fileFilter = filter;
+        //}
 
         /// <summary>
         /// 进入文件夹
         /// </summary>
         /// <param name="inFolder"></param>
-        public List<FolderElement> InFolderAndUpdateLevel(FolderElement inFolder)
+        public List<FolderElement> InFolderAndUpdateLevel(FolderElement inFolder, string filter = "*.*")
         {
             List<FolderElement> result = new List<FolderElement>();
             if (inFolder != null && inFolder.IsFolder)
             {
                 //刷新当前目录
-                inFolder.LoadSubFolderAndFiles(_fileFilter, _curStatus == SelectControlType.SelectFile);
+                inFolder.LoadSubFolderAndFiles(filter, _curStatus == SelectControlType.SelectFile);
                 //刷新子目录
                 foreach (var item in inFolder.SubFolders)
                 {
-                    item.LoadSubFolderAndFiles(_fileFilter, _curStatus == SelectControlType.SelectFile);
+                    item.LoadSubFolderAndFiles(filter, _curStatus == SelectControlType.SelectFile);
                 }
                 result = GetFolderItems(inFolder);
                 //记录层级
@@ -98,27 +98,28 @@ namespace XLY.SF.Project.ViewModels.SelectControl.SelectService
         /// 初始化文件夹
         /// </summary>
         /// <returns></returns>
-        public List<FolderElement> InitFolders()
+        public List<FolderElement> InitFolders(string filter = "*.*")
         {
             List<FolderElement> result = new List<FolderElement>();
             //桌面
             result.Add(new FolderElement(new System.IO.DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.Desktop))));
-            result.Last().LoadSubFolderAndFiles(_fileFilter, _curStatus == SelectControlType.SelectFile);
+            result.Last().LoadSubFolderAndFiles(filter, _curStatus == SelectControlType.SelectFile);
             if (SystemContext.LanguageManager.Type == Framework.Language.LanguageType.Cn)
                 result.Last().Name = "桌面";
             //我的文档
             result.Add(new FolderElement(new System.IO.DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))));
-            result.Last().LoadSubFolderAndFiles(_fileFilter, _curStatus == SelectControlType.SelectFile);
+            result.Last().LoadSubFolderAndFiles(filter, _curStatus == SelectControlType.SelectFile);
             if (SystemContext.LanguageManager.Type == Framework.Language.LanguageType.Cn)
                 result.Last().Name = "我的文档";
 
-            foreach (var item in Environment.GetLogicalDrives())
+            foreach (var item in DriveInfo.GetDrives())
             {
-                DirectoryInfo dirTmp = new System.IO.DirectoryInfo(item);
+                DirectoryInfo dirTmp = new System.IO.DirectoryInfo(item.Name);
                 if (dirTmp.Exists)
                 {
                     FolderElement tmpEmt = new FolderElement(dirTmp);
-                    tmpEmt.LoadSubFolderAndFiles(_fileFilter, _curStatus == SelectControlType.SelectFile);
+                    tmpEmt.LoadSubFolderAndFiles(filter, _curStatus == SelectControlType.SelectFile);
+                    tmpEmt.Name = string.Format("{0}（{1}）", string.IsNullOrWhiteSpace(item.VolumeLabel) ? "本地磁盘" : item.VolumeLabel, item.Name);
                     result.Add(tmpEmt);
                 }
             }

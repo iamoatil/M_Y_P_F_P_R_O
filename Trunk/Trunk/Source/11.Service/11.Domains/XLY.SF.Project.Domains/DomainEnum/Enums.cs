@@ -260,4 +260,12 @@ namespace XLY.SF.Project.Domains
         ShowInUI = 2,
     }
     #endregion
+    #region EnumExportState (导出报表，删除数据和未删除数据)
+    public enum EnumExportState
+    {
+        All=0,
+        Delete = 1,
+        NotDelete=2
+    }
+    #endregion
 }

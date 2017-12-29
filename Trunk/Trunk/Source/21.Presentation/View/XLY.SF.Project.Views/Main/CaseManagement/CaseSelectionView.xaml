@@ -7,8 +7,8 @@
                  xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                  xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-                 mc:Ignorable="d" 
-                 Title="{Binding XPath=DeviceLanguage/Device_Move,Source={x:Static ex:SystemContext.LanguageProvider}}">
+                 mc:Ignorable="d"
+                 Title="{Binding XPath=SourceSelection/Move,Source={x:Static ex:SystemContext.LanguageProvider}}">
     <core:UcViewBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -32,22 +32,36 @@
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="1"
-                   Text="{Binding XPath=DeviceLanguage/Device_Move_Description,Source={x:Static ex:SystemContext.LanguageProvider}}" />
+                   Text="{Binding XPath=SourceSelection/MoveDescription,Source={x:Static ex:SystemContext.LanguageProvider}}" />
         <ListBox Grid.Row="3"
                  ItemsSource="{Binding Cases}"
-                 SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
-                 DisplayMemberPath="Name" />
+                 SelectedItem="{Binding SelectedItem,Mode=TwoWay}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock VerticalAlignment="Center"
+                               TextTrimming="CharacterEllipsis">
+                        <TextBlock.Text>
+                            <MultiBinding xml:space="preserve" 
+                                          StringFormat="{}{0} ({1})">
+                                <Binding Path="Name" />
+                                <Binding Path="Path" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <StackPanel Grid.Row="5"
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
             <Button Width="100"
                     Height="30"
-                    Content="{Binding XPath=DeviceLanguage/Device_Confirm,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                    Content="{Binding XPath=SourceSelection/Confirm,Source={x:Static ex:SystemContext.LanguageProvider}}"
                     Command="{Binding ConfirmCommand}" />
             <Button Width="100"
                     Height="30"
                     Margin="20,0,0,0"
-                    Content="{Binding XPath=DeviceLanguage/Device_Cancel,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                    Content="{Binding XPath=SourceSelection/Cancel,Source={x:Static ex:SystemContext.LanguageProvider}}"
                     Command="{Binding CancelCommand}" />
         </StackPanel>
     </Grid>

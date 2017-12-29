@@ -55,23 +55,6 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         public override string ID { get; set; }
 
-        #region ChipInfo -- 芯片信息
-
-        private ChipDeviceInfo _ChipInfo;
-        /// <summary>
-        /// 芯片信息
-        /// </summary>
-        public ChipDeviceInfo ChipInfo
-        {
-            get { return _ChipInfo; }
-            set
-            {
-                _ChipInfo = value;
-                OnPropertyChanged();
-            }
-        }
-        #endregion
-
         #region BMac -- 蓝牙Mac
 
         /// <summary>

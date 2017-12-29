@@ -14,7 +14,9 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         {
             CaseInfo = caseInfo;
             Index = index;
-            DeviceCount = Case.Open(caseInfo.CaseProjectFile).DeviceExtractions.Count() ;
+            Case @case = Case.Open(caseInfo.CaseProjectFile);
+            if (@case == null) return;
+            DeviceCount = @case.DeviceExtractions.Count() ;
         }
 
         #endregion

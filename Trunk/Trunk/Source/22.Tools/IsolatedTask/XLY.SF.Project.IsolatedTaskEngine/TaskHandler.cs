@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.IO.Pipes;
-using System.Text;
 using System.Threading.Tasks;
 using XLY.SF.Project.IsolatedTaskEngine.Common;
 
@@ -10,7 +9,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
     /// <summary>
     /// 任务处理器。
     /// </summary>
-    internal class TaskHandler : IDisposable
+    internal class TaskHandler
     {
         #region Event
 
@@ -25,9 +24,9 @@ namespace XLY.SF.Project.IsolatedTaskEngine
 
         private Boolean _isRuning;
 
-        private readonly TaskActivator _activator;
+        private readonly ITaskExecutor _executor;
 
-        private readonly StreamString _ss;
+        private readonly MessageTransceiver _ss;
 
         private readonly NamedPipeServerStream _pipe;
 
@@ -39,13 +38,12 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         {
             Owner = owner;
             NamedPipeServerStream pipe = new NamedPipeServerStream(owner.Setup.TransceiverName, PipeDirection.InOut, owner.Setup.MaxParallelTask, PipeTransmissionMode.Message, PipeOptions.Asynchronous);
-            _ss = new StreamString(pipe);
+            _ss = new MessageTransceiver(pipe);
             _pipe = pipe;
-            TaskActivator activator = (TaskActivator)Activator.CreateInstance(owner.Setup.EntryType);
-            activator.Logger = TaskEngine.Logger;
-            activator.RequestSendMessageCallback = (m) => Send(m);
-            activator.RequestTerminateTask = () => _pipe.Disconnect();
-            _activator = activator;
+            ITaskExecutor executor = (ITaskExecutor)Activator.CreateInstance(owner.Setup.EntryType);
+            if (executor.Logger == null) executor.Logger = TaskEngine.Logger;
+            executor.RequestSendMessage = (m) => Send(m);
+            _executor = executor;
         }
 
         #endregion
@@ -58,23 +56,14 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         public Boolean IsLaunched => _isRuning;
 
         /// <summary>
-        /// 是否已被清理。
-        /// </summary>
-        public Boolean IsDisposed
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
         /// 拥有者。
         /// </summary>
         public TaskManager Owner { get; }
 
         /// <summary>
-        /// 任务唯一标识。
+        /// 任务处理器的唯一标识。
         /// </summary>
-        public Guid Token => _activator.ActivatorToken;
+        public Guid HandlerId => _executor.ExecurtorId;
 
         #endregion
 
@@ -87,17 +76,13 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         /// </summary>
         public void Launch()
         {
-            if (_isRuning || IsDisposed) return;
             try
             {
                 _pipe.WaitForConnection();
-                if (_activator.Launch())
+                if (_executor.Launch())
                 {
                     _isRuning = true;
-                    Task.Factory.StartNew(Receive, TaskCreationOptions.LongRunning | TaskCreationOptions.AttachedToParent).ContinueWith(t =>
-                    {
-                        Release();
-                    }, TaskContinuationOptions.AttachedToParent);
+                    _ss.ReceiveAsync(ReceiveCallback);
                     TaskEngine.Logger.Info("Task handler launched");
                 }
                 else
@@ -116,97 +101,57 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         }
 
         /// <summary>
-        /// 清理资源。
-        /// </summary>
-        public void Dispose()
-        {
-            Release();
-        }
-
-        /// <summary>
-        /// 关闭任务。
+        /// 关闭处理器并清理资源。
         /// </summary>
         public void Close()
         {
-            Dispose();
+            //关闭执行器
+            _executor.Close();
         }
 
         #endregion
 
         #region Private
 
+        /// <summary>
+        /// 将执行器的消息转发给客户端。
+        /// </summary>
+        /// <param name="message">消息。</param>
         private void Send(Message message)
         {
-            String str = message.SerializeObject();
-            _ss.WriteString(str);
+            _ss.Send(message);
         }
 
-        private void Receive()
+        /// <summary>
+        /// 接收消息并将消息交由执行器处理器。
+        /// </summary>
+        private void ReceiveCallback(Message? m)
         {
-            Message message = Message.Invalid;
-            String str = null;
-            Boolean? result = null;
-            while (_isRuning)
+            if (!m.HasValue)
             {
-                str = _ss.ReadString();
-                result = HandleMessage(str,out message);
-                if (!result.HasValue) break;
-                if (result.Value)
+                _isRuning = false;
+                TaskEngine.Logger.Info($"Task handler terminated:{HandlerId}");
+                //断开连接
+                _pipe.Disconnect();
+                //关闭管道
+                _pipe.Close();
+                _executor.Close();
+                Terminate?.Invoke(this, EventArgs.Empty);
+                TaskEngine.Logger.Info($"Terminate:{HandlerId}");
+            }
+            else
+            {
+                if (m.Value != Message.Invalid)
                 {
-                    _activator.OnReceive(message);
+                    TaskEngine.Logger.Debug($"Received message:[Code]{m.Value.Code},[Token]{m.Value.Token}");
+                    _executor.Receive(m.Value);
+                    _ss.ReceiveAsync(ReceiveCallback);
                 }
                 else
                 {
-                    OnTaskEngineError(new InvalidDataException($"Unrecognizable message:[Task]{Token}"));
+                    TaskEngine.Logger.Error($"Unrecognizable message:[Task]{HandlerId}");
                 }
             }
-            _isRuning = false;
-            TaskEngine.Logger.Info($"Task handler terminated:{_activator.ActivatorToken}");
-        }
-
-        /// <summary>
-        /// 处理消息。
-        /// </summary>
-        /// <param name="str">接收到的字符串。</param>
-        /// <param name="message">将接收到的字符串转换为Message类型实例。</param>
-        /// <returns>如果为true，表示收到正确格式的消息；如果为false，表示消息无法被识别；如果为null，表示连接断开。</returns>
-        private Boolean? HandleMessage(String str, out Message message)
-        {
-            //读取到null，表示客户端断开连接
-            if (str == null)
-            {
-                TaskEngine.Logger.Info($"Disconnect:[Task]{Token}");
-                message = Message.Invalid;
-                return null;
-            }
-            message = Message.ToMessage(str);
-            //读取到无效的消息，表示数据格式不正确
-            if (message == Message.Invalid)
-            {
-                TaskEngine.Logger.Debug($"Unrecognizable message:[Task]{Token}");
-                return false;
-            }
-
-            TaskEngine.Logger.Debug($"Received message:[Code]{message.Code},[Token]{message.Token}");
-            return true;
-        }
-
-        /// <summary>
-        /// 释放资源，断开连接以及关闭管道。
-        /// </summary>
-        private void Release()
-        {
-            if (IsDisposed) return;
-            IsDisposed = true;
-            _activator.Dispose();
-            //断开连接
-            if (_pipe.IsConnected)
-            {
-                _pipe.Disconnect();
-            }
-            //关闭管道
-            _pipe.Close();
-            Terminate?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -215,7 +160,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine
         /// <param name="ex">异常信息。</param>
         private void OnTaskEngineError(Exception ex)
         {
-            TaskEngine.Logger.Error($"Task engine Error:{Token}", ex);
+            TaskEngine.Logger.Error($"Task engine Error:{HandlerId}", ex);
             Message message = Message.CreateSystemMessage((Int32)SystemMessageCode.TaskEngineErrorEvent, new TaskEnginErrorEventArgs(ex));
         }
 

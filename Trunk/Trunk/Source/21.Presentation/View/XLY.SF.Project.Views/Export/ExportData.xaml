@@ -3,10 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
-        xmlns:ctrl="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
         xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                 xmlns:ctrl="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+                 xmlns:ee="http://schemas.microsoft.com/expression/2010/effects"
+                  xmlns:theme="clr-namespace:XLY.SF.Project.Themes;assembly=XLY.SF.Project.Themes"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:convert="clr-namespace:XLY.SF.Project.Views.Converters"
         mc:Ignorable="d"
@@ -18,384 +20,201 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
             <!--此处以下添加自己的引用-->
             <convert:SelectToForgroundConverter x:Key="SelectToForgroundConverter" />
-
-            <Style x:Key="CheckBoxStyle1" TargetType="{x:Type CheckBox}">
-                <Setter Property="Foreground" Value="#9ba5b9"></Setter>
-                <Setter  Property="IsEnabled" Value="False"></Setter>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type CheckBox}">
-                            <Grid>
-                                <Path x:Name="path" Data="M0,0 L410,0 410,1.6796312 419.41223,18.477705 410,35.565588 410,36.000002 409.76071,36.000002 409.47766,36.513895 409.4758,36.000002 0,36.000002 z" Fill="#2e3f5e"  Stretch="Fill"/>
-                                <ContentPresenter  HorizontalAlignment="Center" RecognizesAccessKey="True"  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
-                            </Grid>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="Foreground" Value="White"></Setter>
-                                    <Setter Property="FontWeight" Value="Bold"></Setter>
-                                    <Setter Property="Fill" Value="#404e6c"  TargetName="path"></Setter>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Style x:Key="CheckBoxStyle2" TargetType="{x:Type CheckBox}">
-                <Setter Property="Foreground" Value="#9ba5b9"></Setter>
-                <Setter  Property="IsEnabled" Value="False"></Setter>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type CheckBox}">
-                            <Grid>
-                                <Path x:Name="path" Data="M0.036110416,0 L410,0 410,35.999995 0,35.999995 0,35.934996 10.000003,17.934996 z" Fill="#2e3f5e" Stretch="Fill"/>
-                                <ContentPresenter HorizontalAlignment="Center" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
-                            </Grid>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="Foreground" Value="White"></Setter>
-                                    <Setter Property="FontWeight" Value="Bold"></Setter>
-                                    <Setter Property="Fill" Value="#404e6c"  TargetName="path"></Setter>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
             <Style  TargetType="{x:Type TextBlock}">
                 <Setter Property="FontSize" Value="14"></Setter>
-                <Setter Property="FontWeight" Value="Bold"></Setter>
                 <Setter Property="Foreground" Value="White"></Setter>
-                <Setter Property="Margin" Value="0,15,0,0"></Setter>
             </Style>
         </ResourceDictionary>
-
     </core:UcViewBase.Resources>
     <Grid Width="880" Height="550">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="38"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <!--快速和高级导航-->
-        <CheckBox x:Name="check" Style="{StaticResource ExportGradeCheckBox}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="30,0,0,0" Command="{Binding FastSeniorCommand}" CommandParameter="{Binding Path=IsChecked,RelativeSource={RelativeSource Mode=Self}}">
-            <i:Interaction.Triggers>
-                <ei:DataTrigger Binding="{Binding ElementName=check,Path=IsChecked}" Value="True">
-                    <ei:ChangePropertyAction TargetObject="{Binding ElementName=quick}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
-                    <ei:ChangePropertyAction TargetObject="{Binding ElementName=senior}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
-                </ei:DataTrigger>
-                <ei:DataTrigger Binding="{Binding ElementName=check,Path=IsChecked}" Value="False">
-                    <ei:ChangePropertyAction TargetObject="{Binding ElementName=quick}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
-                    <ei:ChangePropertyAction TargetObject="{Binding ElementName=senior}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
-                </ei:DataTrigger>
-            </i:Interaction.Triggers>
-        </CheckBox>
-        <!--快速导出-->
-        <Grid x:Name="quick" Grid.Row="1" >
+        <Grid Margin="30,0,30,30" x:Name="InfoGrid" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="125"></RowDefinition>
+                <RowDefinition Height="120"/>
+                <RowDefinition />
             </Grid.RowDefinitions>
-            <Grid Margin="30,0">
-                <CheckBox x:Name="FastBtn"  Width="200" Height="90" Style="{StaticResource ReportCheckBoxStyle}" Command="{Binding FastCommand}" IsChecked="{Binding FastChecked,Mode=TwoWay}">
-                    <i:Interaction.Triggers>
-                        <ei:DataTrigger Binding="{Binding ElementName=FastBtn,Path=IsChecked}" Value="True">
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=prompt}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=time}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
-                        </ei:DataTrigger>
-                        <ei:DataTrigger Binding="{Binding ElementName=FastBtn,Path=IsChecked}" Value="True">
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=prompt}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=time}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
-                        </ei:DataTrigger>
-                    </i:Interaction.Triggers>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="3*"/>
+                </Grid.RowDefinitions>
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                    <TextBlock Text="{Binding XPath=ExportReportLanguage/ExportReport_ExportContent,Source={x:Static ex:SystemContext.LanguageProvider}}"  FontWeight="Bold"  Margin="0,7,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding XPath=ExportReportLanguage/ExportReport_DeviceSelection,Source={x:Static ex:SystemContext.LanguageProvider}}"  Margin="46,7,0,0" VerticalAlignment="Center" />
+                    <ctrl:PopupControl Text="{Binding XPath=ExportReportLanguage/ExportReport_AllEquipment,Source={x:Static ex:SystemContext.LanguageProvider}}" Margin="40,0" Width="200">
+                        <Popup Width="200" MaxHeight="400" PopupAnimation="Slide" StaysOpen="False" VerticalOffset="6" HorizontalOffset="-10">
+                            <Border Background="#485374" >
+                                <TreeView BorderThickness="0" theme:AttachHelper.IsShowSelectedGripper="False" Padding="-30,0"  theme:AttachHelper.IsShowCheckBox="True" theme:AttachHelper.IsHideUnCheckedNode="False" theme:AttachHelper.IsHideChildren="False"  Background="#0FFFFFFF" ItemsSource="{Binding DevicesItems}" >
+                                    <TreeView.ItemTemplate >
+                                        <HierarchicalDataTemplate ItemsSource="{Binding TreeNodes}" >
+                                            <TextBlock Text="{Binding Name}" />
+                                        </HierarchicalDataTemplate>
+                                    </TreeView.ItemTemplate>
+                                </TreeView>
+                                <Border.Effect>
+                                    <DropShadowEffect Color="#CC374164" BlurRadius="18" ShadowDepth="5" Direction="270"/>
+                                </Border.Effect>
+                            </Border>
+                        </Popup>
+                    </ctrl:PopupControl>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Grid.Row="1">
+                    <TextBlock Text="{Binding XPath=ExportReportLanguage/ExportReport_DataContent,Source={x:Static ex:SystemContext.LanguageProvider}}"  Margin="102,0,0,0" />
+                    <RadioButton Template="{StaticResource ExportDataCheckBox}" IsChecked="{Binding AllDataChecked}" Content="{Binding XPath=ExportReportLanguage/ExportReport_AllData,Source={x:Static ex:SystemContext.LanguageProvider}}" Foreground="White"  Margin="41,0" Padding="5,0,0,0"></RadioButton>
+                    <RadioButton Template="{StaticResource ExportDataCheckBox}" IsChecked="{Binding CheckDataChecked}"  Content="{Binding XPath=ExportReportLanguage/ExportReport_CheckData,Source={x:Static ex:SystemContext.LanguageProvider}}" Foreground="White" Padding="5,0,0,0"></RadioButton>
+                    <RadioButton Template="{StaticResource ExportDataCheckBox}" IsChecked="{Binding MarkingDataChecked}"  Content="{Binding XPath=ExportReportLanguage/ExportReport_TagData,Source={x:Static ex:SystemContext.LanguageProvider}}" Foreground="White" Margin="40,0" Padding="5,0,0,0"></RadioButton>
+                </StackPanel>
+                <StackPanel  Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="2">
+
+                    <TextBlock Text="{Binding XPath=ExportReportLanguage/ExportReport_DataState,Source={x:Static ex:SystemContext.LanguageProvider}}" Margin="102,0,0,0" />
+                    <CheckBox Margin="40,0"  Content="{Binding XPath=ExportReportLanguage/ExportReport_DeleteData,Source={x:Static ex:SystemContext.LanguageProvider}}" Width="70" IsChecked="{Binding DeleteDataChecked,Mode=TwoWay}" Foreground="White" />
+                    <CheckBox  Content="{Binding XPath=ExportReportLanguage/ExportReport_NotDeleteData,Source={x:Static ex:SystemContext.LanguageProvider}}"  IsChecked="{Binding NotDeleteDataChecked,Mode=TwoWay}" Foreground="White" />
+                </StackPanel>
+            </Grid>
+            <TextBlock Text="{Binding XPath=ExportReportLanguage/ExportReport_ExportFormat,Source={x:Static ex:SystemContext.LanguageProvider}}" Grid.Row="1" Margin="0,30" FontWeight="Bold"></TextBlock>
+            <Grid x:Name="senior" Grid.Row="1" Margin="100,0,0,0">
+                <Grid  x:Name="selectPath">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="108" />
+
+                        <ColumnDefinition Width="85"/>
+                        <ColumnDefinition Width="420"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30" />
+                        <RowDefinition Height="50" />
+                        <RowDefinition Height="70" />
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="14"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Image x:Name="ReportImg"  Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/ExportStatement.png" HorizontalAlignment="Left" Width="50"  Height="57" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Top" />
+                    <CheckBox x:Name="ReportCheck" Template="{StaticResource ExportCheckBox}" IsChecked="{Binding ReportCheck,Mode=TwoWay}" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Top" Margin="32,40">
+                        <i:Interaction.Triggers>
+                            <ei:DataTrigger Binding="{Binding ElementName=ReportCheck,Path=IsChecked}" Value="True">
+                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=ReportPath}" PropertyName="IsEnabled" Value="True"></ei:ChangePropertyAction>
+                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=ReportType}" PropertyName="IsEnabled" Value="True"></ei:ChangePropertyAction>
+                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=ReportImg}" PropertyName="Effect" Value="{x:Null}"></ei:ChangePropertyAction>
+                            </ei:DataTrigger>
+                            <ei:DataTrigger Binding="{Binding ElementName=ReportCheck,Path=IsChecked}" Value="False">
+                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=ReportPath}" PropertyName="IsEnabled" Value="False"></ei:ChangePropertyAction>
+                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=ReportType}" PropertyName="IsEnabled" Value="False"></ei:ChangePropertyAction>
+                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=ReportImg}" PropertyName="Effect">
+                                    <ei:ChangePropertyAction.Value>
+                                        <ee:ColorToneEffect DarkColor="#FF8D8D8D" LightColor="#FF8D8D8D"  >
+                                        </ee:ColorToneEffect>
+                                    </ei:ChangePropertyAction.Value>
+                                </ei:ChangePropertyAction>
+                            </ei:DataTrigger>
+                        </i:Interaction.Triggers>
+                    </CheckBox>
+                    <TextBlock Text="报表" Grid.Row="2" Margin="10,15"></TextBlock>
+                    <Image x:Name="BcpImg" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/ExportBcp.png" Width="50"  Height="57" Grid.Row="3" Grid.RowSpan="3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,20,0,0" />
+                    <CheckBox  x:Name="BcpCheck" Template="{StaticResource ExportCheckBox}" IsChecked="{Binding UploadCheck,Mode=TwoWay}" Grid.Row="3" Grid.RowSpan="2" VerticalAlignment="Top" Margin="32,60,0,0">
+                        <i:Interaction.Triggers>
+                            <ei:DataTrigger Binding="{Binding ElementName=BcpCheck,Path=IsChecked}" Value="True">
+                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=BcpPath}" PropertyName="IsEnabled" Value="True"></ei:ChangePropertyAction>
+                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=unit}" PropertyName="IsEnabled" Value="True"></ei:ChangePropertyAction>
+                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=BcpType}" PropertyName="IsEnabled" Value="True"></ei:ChangePropertyAction>
+                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=BcpImg}" PropertyName="Effect" Value="{x:Null}"></ei:ChangePropertyAction>
+                            </ei:DataTrigger>
+                            <ei:DataTrigger Binding="{Binding ElementName=BcpCheck,Path=IsChecked}" Value="False">
+                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=BcpPath}" PropertyName="IsEnabled" Value="False"></ei:ChangePropertyAction>
+                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=unit}" PropertyName="IsEnabled" Value="False"></ei:ChangePropertyAction>
+                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=BcpType}" PropertyName="IsEnabled" Value="False"></ei:ChangePropertyAction>
+                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=BcpImg}" PropertyName="Effect">
+                                    <ei:ChangePropertyAction.Value>
+                                        <ee:ColorToneEffect DarkColor="#FF8D8D8D" LightColor="#FF8D8D8D"  >
+                                        </ee:ColorToneEffect>
+                                    </ei:ChangePropertyAction.Value>
+                                </ei:ChangePropertyAction>
+                            </ei:DataTrigger>
+                        </i:Interaction.Triggers>
+                    </CheckBox>
+                    <TextBlock Text="数据包" Grid.Row="4" Margin="10,33,0,0"></TextBlock>
+                    <TextBlock Text="{Binding XPath=ExportReportLanguage/ExportReport_StorePath,Source={x:Static ex:SystemContext.LanguageProvider}}"  Grid.Row="1" Grid.Column="1"  Margin="0"/>
+                    <TextBlock Text="{Binding XPath=ExportReportLanguage/ExportReport_FormatSelection,Source={x:Static ex:SystemContext.LanguageProvider}}" Grid.Row="2" Grid.Column="1" Margin="0"></TextBlock>
+                    <TextBlock Text="{Binding XPath=ExportReportLanguage/ExportReport_StorePath,Source={x:Static ex:SystemContext.LanguageProvider}}" Grid.Row="3" Grid.Column="1" Margin="0"></TextBlock>
+                    <TextBlock Text="{Binding XPath=ExportReportLanguage/ExportReport_Unit,Source={x:Static ex:SystemContext.LanguageProvider}}" Grid.Row="4" Grid.Column="1" Margin="0"></TextBlock>
+                    <TextBlock Text="{Binding XPath=ExportReportLanguage/ExportReport_FormatSelection,Source={x:Static ex:SystemContext.LanguageProvider}}" Grid.Row="5" Grid.Column="1" Margin="0"></TextBlock>
+
+
+                    <ctrl:TextBoxEx x:Name="ReportPath" Grid.Column="2" Grid.Row="1" Height="30" VerticalAlignment="Top"
+                                    
+                         
+                               Text="{Binding ReportPath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                               Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/CaseCreation_Path.png" IconWidth="18" IconHeight="18"
+                               Command="{Binding ReportFormsPathCommand}" 
+                               ToolTip="{Binding ReportPath,Mode=OneWay}"/>
+
+                    <ctrl:ComboBoxEx x:Name="ReportType"   Grid.Column="2" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left"  Width="170" FontSize="14" Height="30" TitlePadding="10 0 0 0" ItemsSource="{Binding ReportType}" SelectedValue="{Binding SelectReportType}"></ctrl:ComboBoxEx>
+
+                    <ctrl:TextBoxEx  x:Name="BcpPath" Grid.Column="2" Grid.Row="3" Height="30" VerticalAlignment="Top"
+                             
+                               Text="{Binding BcpPath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                               Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/CaseCreation_Path.png" IconWidth="18" IconHeight="18"
+                               Command="{Binding BcpPathCommand}" 
+                               ToolTip="{Binding BcpPath,Mode=OneWay}"/>
+
+                    <ctrl:ComboBoxEx x:Name="unit"  Grid.Column="2" Grid.Row="4" VerticalAlignment="Top" HorizontalAlignment="Left"  Width="170" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding WorkUnits}"  DisplayMemberPath="Unit"  SelectedItem="{Binding SelctedWorkUnits}"></ctrl:ComboBoxEx>
+
+                    <ctrl:ComboBoxEx  x:Name="BcpType" Grid.Column="2" Grid.Row="5" VerticalAlignment="Top" HorizontalAlignment="Left"  Width="170" FontSize="14" Height="30" TitlePadding="10 0 0 0" ItemsSource="{Binding UploadType}"  SelectedValue="{Binding SelectUploadType}"></ctrl:ComboBoxEx>
+
+
+                    <Button Width="100"  Grid.Row="7" Height="40" Content="{Binding XPath=ExportReportLanguage/ExportReport_BeganExport,Source={x:Static ex:SystemContext.LanguageProvider}}"   Grid.Column="2" HorizontalAlignment="Left" Margin="50,0" Command="{Binding StartCommand}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=InfoGrid}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
+                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=ProgressGrid}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
                     
-                </CheckBox>
-                <!--<Button x:Name="FastStart"  Content="开始导出" 
-                 Width="200" Height="90" Command="{Binding FastStartCommand}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=FastStart}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=StopStart}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=prompt}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=time}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </Button>
-                <Button x:Name="StopStart"  Content="停止导出"  Visibility="Hidden"
-                 Width="200" Height="90" Command="{Binding FastStartCommand}" Template="{StaticResource RedButtonCt}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=FastStart}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=StopStart}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=prompt}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=time}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </Button>-->
-                <TextBlock x:Name="prompt" Visibility="Hidden" Text="默认导出选中设备全部数据" FontSize="14" Foreground="#6e7891" HorizontalAlignment="Center" Margin="0,250,0,0"></TextBlock>
-                <StackPanel x:Name="time" Visibility="Hidden" Orientation="Horizontal" Height="40" VerticalAlignment="Bottom" Margin="0,0,0,30" HorizontalAlignment="Right">
-                    <TextBlock Text="正在导出："  FontFamily="{StaticResource OswaldLightFont}"  VerticalAlignment="Bottom"
+                </Grid>
+            </Grid>
+        </Grid>
+        <Rectangle Fill="#455370" Height="1" Margin="0,130,0,0" VerticalAlignment="Top"></Rectangle>
+         <Grid  Margin="30,0,30,30" x:Name="ProgressGrid" Visibility="Hidden">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="120"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <StackPanel HorizontalAlignment="Center">
+                <TextBlock Text="正在导出"  Margin="0,40,0,15" HorizontalAlignment="Center" FontSize="16" FontWeight="Bold"></TextBlock>
+                <ctrl:LoadingControl />
+            </StackPanel>
+            <StackPanel Grid.Row="1" HorizontalAlignment="Center">
+                <ProgressBar  Height="14"   Margin="0,150,0,10"    Minimum="0"  Width="800"
+                                             Maximum="100"
+                                             Value="{Binding Progress}"></ProgressBar>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="正在导出："  FontFamily="{StaticResource OswaldLightFont}"  
                            FontSize="14"></TextBlock>
-                    <TextBlock Text="{Binding TotalElapsed,StringFormat={}{0:hh}:{0:mm}:{0:ss}}" 
+                <TextBlock Text="{Binding TotalElapsed,StringFormat={}{0:hh}:{0:mm}:{0:ss}}" 
                            HorizontalAlignment="Right"
                            VerticalAlignment="Bottom"
                            FontFamily="{StaticResource OswaldLightFont}"
                            FontSize="14"
                            />
                 </StackPanel>
-                <ProgressBar  Height="14" VerticalAlignment="Bottom"      Minimum="0"
-                                             Maximum="100"
-                                             Value="{Binding Progress}"></ProgressBar>
-            </Grid>
-            <Grid Grid.Row="1" Margin="30,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="28"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="11"></RowDefinition>
-                    <RowDefinition Height="30"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="670"></ColumnDefinition>
-                    <ColumnDefinition Width="1"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Rectangle Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" Fill="#3c4664"></Rectangle>
-                <StackPanel Orientation="Horizontal"  Grid.Row="1">
-                    <CheckBox x:Name="reportCheck" Content="报表" Width="70" IsChecked="{Binding FastReportCheck,Mode=TwoWay}"  Foreground="{Binding IsChecked,RelativeSource={RelativeSource Self},Converter={StaticResource SelectToForgroundConverter}}">
-                        <i:Interaction.Triggers>
-                            <ei:DataTrigger Binding="{Binding ElementName=reportCheck,Path=IsChecked}" Value="True">
-                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=reportType}" PropertyName="IsEnabled" Value="True"></ei:ChangePropertyAction>
-                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=reportPath}" PropertyName="IsEnabled" Value="True"></ei:ChangePropertyAction>
-                            </ei:DataTrigger>
-                            <ei:DataTrigger Binding="{Binding ElementName=reportCheck,Path=IsChecked}" Value="False">
-                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=reportType}" PropertyName="IsEnabled" Value="False"></ei:ChangePropertyAction>
-                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=reportPath}" PropertyName="IsEnabled" Value="False"></ei:ChangePropertyAction>
-                            </ei:DataTrigger>
-                        </i:Interaction.Triggers>
-                    </CheckBox>
-                    <ctrl:ComboBoxEx  x:Name="reportType"   Width="110" FontSize="14"  TitlePadding="10 0 0 0"  ItemsSource="{Binding ReportType}" SelectedValue="{Binding SelectReportType}"></ctrl:ComboBoxEx>
-                    <Grid  Width="460" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="211*"/>
-                            <ColumnDefinition Width="20*"/>
-                        </Grid.ColumnDefinitions>
-                        <ctrl:TextBoxEx x:Name="reportPath"  Grid.ColumnSpan="2"
-                               Title="{Binding XPath=ViewLanguage/View_StorePath,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                               Text="{Binding FastReportPath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                               Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/CaseCreation_Path.png" IconWidth="18" IconHeight="18"
-                               Command="{Binding FastReportFormsPathCommand}" 
-                               ToolTip="{Binding FastReportPath,Mode=OneWay}"/>
-                       
-                    </Grid>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Row="3">
-                    <CheckBox x:Name="uploadCheck"  Content="上传包" Width="70" IsChecked="{Binding FastUploadCheck,Mode=TwoWay}" Foreground="{Binding IsChecked,RelativeSource={RelativeSource Self},Converter={StaticResource SelectToForgroundConverter}}">
-                        <i:Interaction.Triggers>
-                            <ei:DataTrigger Binding="{Binding ElementName=uploadCheck,Path=IsChecked}" Value="True">
-                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=uploadType}" PropertyName="IsEnabled" Value="True"></ei:ChangePropertyAction>
-                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=uploadPath}" PropertyName="IsEnabled" Value="True"></ei:ChangePropertyAction>
-                            </ei:DataTrigger>
-                            <ei:DataTrigger Binding="{Binding ElementName=uploadCheck,Path=IsChecked}" Value="False">
-                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=uploadType}" PropertyName="IsEnabled" Value="False"></ei:ChangePropertyAction>
-                                <ei:ChangePropertyAction TargetObject="{Binding ElementName=uploadPath}" PropertyName="IsEnabled" Value="False"></ei:ChangePropertyAction>
-                            </ei:DataTrigger>
-                        </i:Interaction.Triggers>
-                    </CheckBox>
-                    <ctrl:ComboBoxEx x:Name="uploadType"  IsEnabled="False"  Width="110"  FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding UploadType}"  SelectedValue="{Binding SelectUploadType}"></ctrl:ComboBoxEx>
-                    <Grid  Width="460" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="211*"/>
-                            <ColumnDefinition Width="20*"/>
-                        </Grid.ColumnDefinitions>
-                        <ctrl:TextBoxEx  x:Name="uploadPath" IsEnabled="False"  Grid.ColumnSpan="2"
-                               Title="{Binding XPath=ViewLanguage/View_StorePath,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                               Text="{Binding FastBcpPath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                               Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/CaseCreation_Path.png" IconWidth="18" IconHeight="18"
-                               Command="{Binding FastBcpPathCommand}" 
-                               ToolTip="{Binding FastBcpPath,Mode=OneWay}"/>
-                    </Grid>
-                </StackPanel>
-                <ctrl:ComboBoxEx  Grid.Column="2" Grid.Row="1" Foreground="White" HorizontalAlignment="Right"  Width="130" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding DevicesItems}" DisplayMemberPath="Name" SelectedItem="{Binding SelectDevice}"></ctrl:ComboBoxEx>
-                <!--<ctrl:ComboBoxEx HasColon="False" Grid.Column="2" Grid.Row="3" Foreground="White" HorizontalAlignment="Right" Width="130" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>-->
-                <ctrl:ComboBoxEx  Grid.Column="2" Grid.Row="3" Foreground="White" HorizontalAlignment="Right" Width="130" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding WorkUnits}"  DisplayMemberPath="Unit"  SelectedItem="{Binding SelctedWorkUnits}"></ctrl:ComboBoxEx>
-            </Grid>
+                <Button x:Name="FastStart"  Content="停止导出" 
+                 Width="200" Height="90" Command="{Binding FastStartCommand}" Template="{StaticResource RedButtonCt}" Margin="0,60">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=InfoGrid}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
+                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=ProgressGrid}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </StackPanel>
         </Grid>
         <!--高级导出-->
-        <Grid x:Name="senior" Grid.Row="1" Margin="30,0,30,30"  Visibility="Hidden">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="56"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal"  VerticalAlignment="Bottom">
-                <CheckBox 
-                    x:Name="FirstStep" IsChecked="True" Content="1、选择数据"   Height="36"  Width="415"   Style="{DynamicResource CheckBoxStyle1}"  FontSize="14"/>
-                <CheckBox x:Name="LastStep" IsChecked="False" Content="2、导出设置"  Height="36"  Width="415" Margin="-7,0,0,0" Style="{DynamicResource CheckBoxStyle2}"    FontSize="14" />
-            </StackPanel>
-            
-            <Grid Grid.Row="1" x:Name="selectData" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="45"></RowDefinition>
-                    <RowDefinition Height="280"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="180"></ColumnDefinition>
-                    <ColumnDefinition Width="10"></ColumnDefinition>
-                    <ColumnDefinition Width="180"></ColumnDefinition>
-                    <ColumnDefinition Width="10"></ColumnDefinition>
-                    <ColumnDefinition Width="250"></ColumnDefinition>
-                    <ColumnDefinition Width="10"></ColumnDefinition>
-                    <ColumnDefinition Width="180"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="设备选择"   ></TextBlock>
-                <TextBlock Text="应用选择"  Grid.Column="2" ></TextBlock>
-                <TextBlock Text="节点选择"  Grid.Column="4" ></TextBlock>
-                <TextBlock Text="内容选择"  Grid.Column="6" ></TextBlock>
-
-                <Border BorderBrush="#3C4664" Grid.Row="1"  >
-                    <DockPanel >
-                        <Border DockPanel.Dock="Bottom" Height="30" Background="#3c4664">
-                            <CheckBox Height="30"  Content="全选" Margin="16,0,0,0"></CheckBox>
-                        </Border>
-                        <ctrl:TreeViewExport ItemsSource="{Binding DeviceList}" Background="Transparent">
-                            <ctrl:TreeViewExport.ItemContainerStyle>
-                                <Style TargetType="ctrl:TreeViewItemExport" BasedOn="{StaticResource dcTreeViewItem}">
-                                    <Setter Property="IsFirstStyle" Value="{Binding IsItemStyle}"></Setter>
-                                    <Setter Property="IsChecked" Value="{Binding IsChecked}"></Setter>
-                                </Style>
-                            </ctrl:TreeViewExport.ItemContainerStyle>
-                            <ctrl:TreeViewExport.ItemTemplate >
-                                <HierarchicalDataTemplate  ItemsSource="{Binding Path=TreeNodes}">
-                                    <TextBlock Text="{Binding Name}"  />
-                                </HierarchicalDataTemplate>
-                            </ctrl:TreeViewExport.ItemTemplate>
-                        </ctrl:TreeViewExport>
-                    </DockPanel>
-                </Border>
-
-                <Border Grid.Row="1" BorderBrush="#3C4664" Grid.Column="2">
-                    <DockPanel >
-                        <Border DockPanel.Dock="Bottom" Height="30" Background="#3c4664">
-                            <CheckBox Height="30"  Content="全选" Margin="16,0,0,0"></CheckBox>
-                        </Border>
-                        <ctrl:TreeViewExport  ItemsSource="{Binding DataList}" Background="Transparent">
-                            <ctrl:TreeViewExport.ItemContainerStyle>
-                                <Style TargetType="ctrl:TreeViewItemExport" BasedOn="{StaticResource dcTreeViewItem}">
-                                    <Setter Property="IsFirstStyle" Value="{Binding IsItemStyle}"></Setter>
-                                </Style>
-                            </ctrl:TreeViewExport.ItemContainerStyle>
-                            <ctrl:TreeViewExport.ItemTemplate >
-                                <HierarchicalDataTemplate  ItemsSource="{Binding Path=TreeNodes}">
-                                    <TextBlock Text="{Binding Text}"  />
-                                </HierarchicalDataTemplate>
-                            </ctrl:TreeViewExport.ItemTemplate>
-                        </ctrl:TreeViewExport>
-                    </DockPanel>
-                </Border>
-                <Border Grid.Row="1" BorderBrush="#3C4664" Grid.Column="4" >
-                    <DockPanel >
-                        <Border DockPanel.Dock="Bottom" Height="30" Background="#3c4664">
-                            <CheckBox Height="30"  Content="全选" Margin="16,0,0,0"></CheckBox>
-                        </Border>
-                        <ctrl:TreeViewExport x:Name="tvPropertiesss" Background="Transparent">
-                            <ctrl:TreeViewExport.ItemContainerStyle>
-                                <Style TargetType="ctrl:TreeViewItemExport" BasedOn="{StaticResource dcTreeViewItem}">
-                                    <Setter Property="IsFirstStyle" Value="{Binding IsItemStyle}"></Setter>
-                                    <Setter Property="IsChecked" Value="{Binding IsChecked}"></Setter>
-                                </Style>
-                            </ctrl:TreeViewExport.ItemContainerStyle>
-                            <ctrl:TreeViewExport.ItemTemplate >
-                                <HierarchicalDataTemplate  ItemsSource="{Binding Path=Children}">
-                                    <TextBlock Text="{Binding Name}"  />
-                                </HierarchicalDataTemplate>
-                            </ctrl:TreeViewExport.ItemTemplate>
-                        </ctrl:TreeViewExport>
-                    </DockPanel>
-                </Border>
-                <Border Grid.Row="1" BorderBrush="#3C4664" Grid.Column="6" >
-                    <DockPanel >
-                        <Border DockPanel.Dock="Bottom" Height="30" Background="#3c4664">
-                            <CheckBox Height="30"  Content="全选" Margin="16,0,0,0"></CheckBox>
-                        </Border>
-                        <ctrl:TreeViewExport x:Name="tvPropertiessss" Background="Transparent">
-                            <ctrl:TreeViewExport.ItemContainerStyle>
-                                <Style TargetType="ctrl:TreeViewItemExport" BasedOn="{StaticResource dcTreeViewItem}">
-                                    <Setter Property="IsFirstStyle" Value="{Binding IsItemStyle}"></Setter>
-                                </Style>
-                            </ctrl:TreeViewExport.ItemContainerStyle>
-                            <ctrl:TreeViewExport.ItemTemplate >
-                                <HierarchicalDataTemplate  ItemsSource="{Binding Path=Children}">
-                                    <TextBlock Text="{Binding Name}"  />
-                                </HierarchicalDataTemplate>
-                            </ctrl:TreeViewExport.ItemTemplate>
-                        </ctrl:TreeViewExport>
-                    </DockPanel>
-                </Border>
-                <Button Width="100" Height="30" Content="下一步" Grid.Column="6" Grid.Row="2" HorizontalAlignment="Right">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=selectData}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=selectPath}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=LastStep}" PropertyName="IsChecked" Value="True"></ei:ChangePropertyAction>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </Button>
-            </Grid>
-            <Grid Grid.Row="1" x:Name="selectPath" Visibility="Hidden">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="108" />
-                    <ColumnDefinition Width="85"/>
-                    <ColumnDefinition Width="526"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="54" />
-                    <RowDefinition Height="50" />
-                    <RowDefinition Height="70" />
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="80"/>
-                    <RowDefinition Height="14"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-                <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/ExportStatement.png" HorizontalAlignment="Left" Width="50"  Height="57" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Top"></Image>
-                <CheckBox Template="{StaticResource ExportCheckBox}" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Top" Margin="32,40"></CheckBox>
-                <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/ExportBcp.png" Width="50"  Height="57" Grid.Row="3" Grid.RowSpan="3" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,20,0,0"></Image>
-                <CheckBox Template="{StaticResource ExportCheckBox}" Grid.Row="3" Grid.RowSpan="2" VerticalAlignment="Top" Margin="32,60,0,0"></CheckBox>
-                <TextBlock Text="存放路径："  Grid.Row="1" Grid.Column="1"  Margin="0"/>
-                <TextBlock Text="格式选择：" Grid.Row="2" Grid.Column="1" Margin="0"></TextBlock>
-                <TextBlock Text="存放路径：" Grid.Row="3" Grid.Column="1" Margin="0"></TextBlock>
-                <TextBlock Text="单位：" Grid.Row="4" Grid.Column="1" Margin="0"></TextBlock>
-                <TextBlock Text="格式路径：" Grid.Row="5" Grid.Column="1" Margin="0"></TextBlock>
-
-                <ctrl:TextBoxEx Title="存放路径" TitlePadding="20,0,0,0"  Grid.Column="2" Grid.Row="1" Height="30" VerticalAlignment="Top" Text="{Binding TargetPosition.DirPath}" />
-                <Button Content=". . ." FontWeight="Bold" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,15,3" VerticalAlignment="Top" Background="Transparent" Foreground="Wheat" Command="{Binding TargetPosition.SetTargetPathCommand}" />
-
-                <ctrl:ComboBoxEx   Grid.Column="2" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Left"  Width="170" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
-
-                <ctrl:TextBoxEx Title="存放路径" TitlePadding="20,0,0,0"  Grid.Column="2" Grid.Row="3" Height="30" VerticalAlignment="Top" Text="{Binding TargetPosition.DirPath}" />
-                <Button Content=". . ." FontWeight="Bold" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Right" Margin="0,0,15,3" VerticalAlignment="Top" Background="Transparent" Foreground="Wheat" Command="{Binding TargetPosition.SetTargetPathCommand}" />
-
-                <ctrl:ComboBoxEx  Grid.Column="2" Grid.Row="4" VerticalAlignment="Top" HorizontalAlignment="Left"  Width="170" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
-
-                <ctrl:ComboBoxEx  Grid.Column="2" Grid.Row="5" VerticalAlignment="Top" HorizontalAlignment="Left"  Width="170" FontSize="14" Height="30" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
-                <ProgressBar   Grid.Row="6" Grid.ColumnSpan="4"></ProgressBar>
-
-                <Button Width="100"  Grid.Row="7" Height="30" Content="上一步"  >
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=selectData}" PropertyName="Visibility" Value="Visible"></ei:ChangePropertyAction>
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=selectPath}" PropertyName="Visibility" Value="Hidden"></ei:ChangePropertyAction>
-                            <ei:ChangePropertyAction TargetObject="{Binding ElementName=LastStep}" PropertyName="IsChecked" Value="False"></ei:ChangePropertyAction>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </Button>
-                <Button  Grid.Row="7"  Grid.Column="3" Height="30" Content="保存并退出" Margin="0,0,10,0"/>
-            </Grid>
-        </Grid>
+        
     </Grid>
 </core:UcViewBase>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 
@@ -14,6 +15,7 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// 应用数据自定义预览视图插件配置信息
     /// </summary>
+    [Serializable]
     public class DataPreviewPluginInfo : AbstractZipPluginInfo
     {
         /// <summary>
@@ -30,6 +32,7 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// 该数据视图对应的类型列表
     /// </summary>
+    [Serializable]
     public class DataPreviewSupportItem
     {
         /// <summary>

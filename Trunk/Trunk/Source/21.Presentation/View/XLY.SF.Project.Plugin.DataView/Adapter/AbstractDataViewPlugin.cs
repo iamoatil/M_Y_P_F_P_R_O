@@ -62,6 +62,7 @@ namespace XLY.SF.Project.Plugin.DataView
         /// <returns></returns>
         public FrameworkElement ToControl(DataViewPluginArgument arg)
         {
+            SelectedDataChanged -= arg.OnSelectedItemChanged;
             SelectedDataChanged += arg.OnSelectedItemChanged;
             TabItem ti = new TabItem();
             if(!string.IsNullOrWhiteSpace(PluginInfo.Icon))      //设置了图标
@@ -140,7 +141,12 @@ namespace XLY.SF.Project.Plugin.DataView
         /// <summary>
         /// 当存在多视图时，是否隐藏默认的表格视图，默认为隐藏
         /// </summary>
-        public bool IsDefaultGridViewVisibleWhenMultiviews { get; set; } = false;
+        public bool IsDefaultGridViewVisibleWhenMultiviews { get; set; } = true;
+
+        /// <summary>
+        /// 默认参数
+        /// </summary>
+        public static DataViewConfigure Default => Framework.BaseUtility.SingleWrapperHelper<DataViewConfigure>.Instance;
     }
 
     /// <summary>

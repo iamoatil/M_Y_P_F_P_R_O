@@ -53,15 +53,19 @@
   <ItemGroup>
     <Compile Include="TaskEnginErrorEventArgs.cs" />
     <Compile Include="JsonHelper.cs" />
-    <Compile Include="StreamString.cs" />
+    <Compile Include="MessageTransceiver.cs" />
     <Compile Include="SystemMessageCode.cs" />
-    <Compile Include="TaskActivator.cs" />
+    <Compile Include="TaskExecutor.cs" />
     <Compile Include="Message.cs" />
-    <Compile Include="ITaskActivator.cs" />
+    <Compile Include="ITaskExecutor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TaskOverEventArgs.cs" />
+    <Compile Include="TaskTerminateEventArgs.cs" />
     <Compile Include="TaskProxy.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -22,23 +22,17 @@
             <local:SelectionToBrushConverter x:Key="SelectionToBrushConverter" />
 
             <DataTemplate x:Key="InspectionGroupTemplate">
-                <ItemsControl DisplayMemberPath="Name"
-                              Background="Transparent"
-                              ItemsSource="{Binding Items}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <CheckBox Content="{Binding Name}"
-                                      Foreground="{Binding IsSelect,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource SelectionToBrushConverter}}"
-                                      Margin="20,20,0,0"
-                                      FontSize="16"
-                                      IsChecked="{Binding IsSelect,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
-                            </CheckBox>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <CheckBox Content="{Binding Category}"
+                          Foreground="{Binding IsSelect,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource SelectionToBrushConverter}}"
+                          FontSize="16"
+                          Margin="5"
+                          Width="100"
+                          ToolTip="{Binding Category}"
+                          IsChecked="{Binding IsSelect,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                </CheckBox>
             </DataTemplate>
 
-            <Style x:Key="BlockStyle"
+            <!--<Style x:Key="BlockStyle"
                    TargetType="{x:Type TabItem}">
                 <Setter Property="Width"
                         Value="108" />
@@ -89,7 +83,7 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
-            </Style>
+            </Style>-->
         </ResourceDictionary>
     </core:UcViewBase.Resources>
     <GroupBox Header="{Binding XPath=ViewLanguage/Management/Settings/Inspection,Source={x:Static ex:SystemContext.LanguageProvider}}">
@@ -107,18 +101,19 @@
                       IsChecked="{Binding EnableInspection,Mode=TwoWay}" />
             <TextBlock Grid.Row="2"
                        Text="{Binding XPath=ViewLanguage/Management/Settings/InspectionDescription,Source={x:Static ex:SystemContext.LanguageProvider}}" />
-            <Border BorderBrush="#2E3856"
-                    BorderThickness="1"
-                    Grid.Row="4">
-                <TabControl Height="200"
-                            Padding="0"
-                            TabStripPlacement="Left"
-                            BorderThickness="0"
-                            Background="Transparent"
-                            DisplayMemberPath="Category"
-                            ItemContainerStyle="{StaticResource BlockStyle}"
-                            ItemsSource="{Binding Inspections}" />
-            </Border>
+            <ItemsControl Height="200"
+                          Grid.Row="4"
+                          BorderBrush="#2E3856"
+                          BorderThickness="1"
+                          Background="Transparent"
+                          ItemTemplate="{StaticResource InspectionGroupTemplate}"
+                          ItemsSource="{Binding Inspections}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
         </Grid>
     </GroupBox>
 </core:UcViewBase>

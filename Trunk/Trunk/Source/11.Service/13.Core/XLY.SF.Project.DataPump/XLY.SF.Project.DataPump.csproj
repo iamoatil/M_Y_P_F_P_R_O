@@ -70,17 +70,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Android\AndroidDowngradingDataPump.cs" />
     <Compile Include="Android\AndroidMirrorDataPump.cs" />
     <Compile Include="Android\AndroidUsbUnrootDataPump.cs" />
     <Compile Include="Android\AndroidUsbDataPump.cs" />
     <Compile Include="Android\AndroidVivoBackupDataPump.cs" />
     <Compile Include="BlackBerry\BlackBerryMirrorDataPump.cs" />
     <Compile Include="BlackBerry\BlackBerryUsbDataPump.cs" />
-    <Compile Include="ControllableDataPumpBase.cs" />
     <Compile Include="DataPumpBase.cs" />
-    <Compile Include="DataPumpControllableExecutionContext.cs" />
     <Compile Include="DataPumpExecutionContext.cs" />
-    <Compile Include="DataPumpControler.cs" />
     <Compile Include="DataPumpExtensions.cs" />
     <Compile Include="InitAtExecutionDataPump.cs" />
     <Compile Include="IProcessStrategy.cs" />

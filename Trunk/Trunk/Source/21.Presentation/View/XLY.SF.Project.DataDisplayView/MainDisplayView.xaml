@@ -8,6 +8,7 @@
              xmlns:local="clr-namespace:XLY.SF.Project.DataDisplayView"
                  xmlns:ctrl="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
                  xmlns:theme="clr-namespace:XLY.SF.Project.Themes;assembly=XLY.SF.Project.Themes"
+                 xmlns:DO ="clr-namespace:XLY.SF.Project.Domains;assembly=XLY.SF.Project.Domains"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <core:UcViewBase.Resources>
@@ -16,6 +17,11 @@
                 <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <theme:BooleanToCollapseConverter x:Key="boolToCollapseConverter"/>
+
+            <!--支持动态数据装饰属性的绑定-->
+            <ControlTemplate x:Key="dynamicCheckCT" TargetType="ContentControl">
+                <CheckBox x:Name="cb" IsChecked="{theme:DecorationBinding DP={x:Static DO:DecorationExtesion.CheckTreeProperty}}" Grid.Column="1" Margin="0 0 10 0" VerticalAlignment="Center"/>
+            </ControlTemplate>
         </ResourceDictionary>
     </core:UcViewBase.Resources>
     <Grid>
@@ -27,7 +33,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="720*" MinHeight="70"/>
-                <RowDefinition Height="82*" MinHeight="50"/>
+                <RowDefinition Height="182*" MinHeight="60"/>
             </Grid.RowDefinitions>
 
             <!--数据过滤-->
@@ -68,10 +74,17 @@
                 </ctrl:ExpanderControl.HeaderTemplate>
                 <ctrl:ExpanderControl.ContentTemplate>
                     <DataTemplate>
-                        <TreeView BorderThickness="0" theme:AttachHelper.IsShowSelectedGripper="True"  theme:AttachHelper.IsShowCheckBox="True" theme:AttachHelper.IsHideUnCheckedNode="True" theme:AttachHelper.IsHideChildren="False" Background="Transparent" ItemsSource="{Binding TreeNodes}">
+                        <TreeView BorderThickness="0" theme:AttachHelper.IsShowSelectedGripper="True"  theme:AttachHelper.IsShowCheckBox="True" theme:AttachHelper.IsHideUnCheckedNode="True" theme:AttachHelper.IsHideChildren="False" Background="Transparent" ItemsSource="{Binding TreeNodes}"
+                                  theme:AttachHelper.SelectedTreeNode="{Binding DataContext.SelectedTreeNode, Mode=TwoWay, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ctrl:ExpanderControl}}}" theme:AttachHelper.IsIgnoreTopNode="True"
+                                  theme:AttachHelper.TreeItemDefaultExpandDepth ="0" ItemContainerStyle="{StaticResource dynamicStateTreeViewItem}">
                             <TreeView.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding TreeNodes}">
-                                    <TextBlock Text="{Binding Text}"/>
+                                    <TextBlock>
+                                        <Run Text="{Binding Text}"/>
+                                        <Run Text="("/>
+                                        <Run Text="{Binding Total}"/>
+                                        <Run Text=")"/>
+                                    </TextBlock>
                                 </HierarchicalDataTemplate>
                             </TreeView.ItemTemplate>
                             <i:Interaction.Triggers>
@@ -114,11 +127,19 @@
         </Grid>
         <Grid>
             <!--数据列表为空时显示-->
-            <Border Visibility="{Binding HasDataList, Converter={StaticResource boolToCollapseConverter}, ConverterParameter=True}">
+            <Border Visibility="{Binding HasDataList2, Converter={StaticResource boolToCollapseConverter}, ConverterParameter=True}">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <TextBlock FontSize="30" Text="{local:Lang Key=TipNoData}" Foreground="#9ba5b9" HorizontalAlignment="Center"></TextBlock>
                 </StackPanel>
             </Border>
+
+            <!--正在加载数据-->
+            <Grid Grid.ColumnSpan="2" Grid.RowSpan="3" Background="#0AFFFFFF" Visibility="{Binding IsLoadingData, Converter={StaticResource boolToCollapseConverter}, ConverterParameter=False}">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                    <Button Style="{StaticResource loadingControlStyle}" Width="38" Height="58" HorizontalAlignment="Center"/>
+                    <TextBlock FontSize="18" Text="{Binding CurrentOperation}" Foreground="#9ba5b9" HorizontalAlignment="Center"></TextBlock>
+                </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 

@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Text;
-using XLY.SF.Framework.BaseUtility;
+using System.Utility.Helper;
 
-namespace XLY.SF.Project.ScriptEngine.Engine
+namespace XLY.SF.Project.ScriptEngine
 {
     /// <summary>
     /// PList（BPList）文件读取
@@ -17,7 +17,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// <returns>返回Josn字符串</returns>
         public string ReadToJsonString(string plistFilePath)
         {
-            return MacPlistHelper.ReadPlistToJson(plistFilePath);
+            return PListHelper.ReadToJsonString(plistFilePath);
         }
 
         /// <summary>
@@ -31,6 +31,16 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         }
 
         /// <summary>
+        /// 新接口读取归档类型Plist到Json字符串
+        /// </summary>
+        /// <param name="plistFilePath"></param>
+        /// <returns></returns>
+        public string ReadArchiverPlistToJsonString(string plistFilePath)
+        {
+            return JsonConvert.SerializeObject(MacPlistHelper.ReadArchiverPlist(plistFilePath));
+        }
+
+        /// <summary>
         /// 把Json二级制字符串转换位Json字符串。
         /// </summary>
         /// <param name="jsonString">二进制字符串。</param>
@@ -38,7 +48,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         public string ConvertBufferToJson(string jsonString)
         {
             byte[] buffer = System.Convert.FromBase64String(jsonString);
-            return JsonConvert.SerializeObject(MacPlistHelper.ReadPlist(buffer));
+            return PListHelper.ConvertToJsonString(buffer, buffer.Length);
         }
 
         /// <summary>
@@ -51,5 +61,17 @@ namespace XLY.SF.Project.ScriptEngine.Engine
             byte[] buffer = System.Convert.FromBase64String(jsonString);
             return JsonConvert.SerializeObject(MacPlistHelper.ReadPlist(buffer));
         }
+
+        /// <summary>
+        /// 新接口读取归档类型Plist二进制字符串到Json字符串
+        /// </summary>
+        /// <param name="plistFilePath"></param>
+        /// <returns></returns>
+        public string ConvertArchiverPlistBufferToJson(string jsonString)
+        {
+            byte[] buffer = System.Convert.FromBase64String(jsonString);
+            return JsonConvert.SerializeObject(MacPlistHelper.ReadArchiverPlist(buffer));
+        }
+
     }
 }

@@ -25,12 +25,10 @@ namespace XLY.SF.Project.ViewModels.Main
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class HomePageViewModel : ViewModelBase
     {
-        private IPopupWindowService _winService;
-
         #region Constructors
 
         [ImportingConstructor]
-        public HomePageViewModel(IRecordContext<RecentCase> dbService, IPopupWindowService service)
+        public HomePageViewModel(IRecordContext<RecentCase> dbService, IPopupWindowService service, IMessageBox msgService)
         {
             MainFunDepict = Path.Combine(Environment.CurrentDirectory, "CacheData\\FunctionDepict\\首页-样图_03.png");
             Sub1FunDepict = Path.Combine(Environment.CurrentDirectory, "CacheData\\FunctionDepict\\首页-样图_05.png");
@@ -39,6 +37,7 @@ namespace XLY.SF.Project.ViewModels.Main
 
             _dbService = dbService;
             _winService = service;
+            _msgBoxService = msgService;
 
             CreateCaseCommand = new ProxyRelayCommand(ExecuteCreateCaseCommand, base.ModelName);
             OpenAllCaseCommand = new ProxyRelayCommand(ExecuteOpenAllCaseCommand, base.ModelName);
@@ -82,6 +81,16 @@ namespace XLY.SF.Project.ViewModels.Main
         /// </summary>
         private IRecordContext<RecentCase> _dbService;
 
+        /// <summary>
+        /// 消息框服务
+        /// </summary>
+        private IMessageBox _msgBoxService;
+
+        /// <summary>
+        /// 弹窗服务
+        /// </summary>
+        private IPopupWindowService _winService;
+
         #endregion
 
         /// <summary>
@@ -124,15 +133,23 @@ namespace XLY.SF.Project.ViewModels.Main
         private string ExecuteOpenCaseCommand(RecentCaseEntityModel arg)
         {
             var @case = Case.Open(arg.CaseProjectFile);
-            SystemContext.Instance.CurrentCase = @case;
-            base.NavigationForMainWindow(ExportKeys.DeviceSelectView);
-            return string.Format("打开案例{0}成功", @case.Name);
+            if (@case != null)
+            {
+                SystemContext.Instance.CurrentCase = @case;
+                base.NavigationForMainWindow(ExportKeys.DeviceSelectView);
+                return string.Format("打开案例{0}成功", @case.Name);
+            }
+            else
+            {
+                _msgBoxService.ShowDialogErrorMsg("打开的案例不存在或已经删除");
+                return string.Empty;
+            }
         }
 
         private string ExecuteCreateCaseCommand()
         {
             //展开创建案例界面
-            EditCaseNavigationHelper.SetEditCaseViewStatus(true);
+            EditCaseNavigationHelper.SetEditCaseViewStatus(true, false);
 
             return "打开新建案例";
         }
@@ -150,11 +167,16 @@ namespace XLY.SF.Project.ViewModels.Main
             if (!string.IsNullOrWhiteSpace(fileFullPath))
             {
                 var @case = Case.Open(fileFullPath);
-                SystemContext.Instance.CurrentCase = @case;
-                base.NavigationForMainWindow(ExportKeys.DeviceSelectView);
-                return string.Format("打开本地案例{0}成功", @case.Name);
+                if (@case != null)
+                {
+                    SystemContext.Instance.CurrentCase = @case;
+                    base.NavigationForMainWindow(ExportKeys.DeviceSelectView);
+                    return string.Format("打开本地案例{0}成功", @case.Name);
+                }
+                else
+                    _msgBoxService.ShowDialogErrorMsg("打开的案例不存在或已经删除");
             }
-            return "";
+            return string.Empty;
         }
 
         #endregion

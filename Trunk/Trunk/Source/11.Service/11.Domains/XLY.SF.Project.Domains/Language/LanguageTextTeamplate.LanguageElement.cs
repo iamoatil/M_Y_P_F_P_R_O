@@ -381,7 +381,127 @@ internal class Languagekeys
 		public const string OtherLanguage_MessageStatus_UnRead = "LanguageResource/OtherLanguage/MessageStatus_UnRead";
 				
         /// <summary>
-        /// DataState
+        /// 无
+        /// </summary>
+		public const string EnumEntityLanguage_None = "LanguageResource/EnumEntityLanguage/None";
+				
+        /// <summary>
+        /// Android
+        /// </summary>
+		public const string EnumEntityLanguage_Android = "LanguageResource/EnumEntityLanguage/Android";
+				
+        /// <summary>
+        /// IOS
+        /// </summary>
+		public const string EnumEntityLanguage_IOS = "LanguageResource/EnumEntityLanguage/IOS";
+				
+        /// <summary>
+        /// WindowsPhone
+        /// </summary>
+		public const string EnumEntityLanguage_WindowsPhone = "LanguageResource/EnumEntityLanguage/WindowsPhone";
+				
+        /// <summary>
+        /// SD卡
+        /// </summary>
+		public const string EnumEntityLanguage_SDCard = "LanguageResource/EnumEntityLanguage/SDCard";
+				
+        /// <summary>
+        /// SIM卡
+        /// </summary>
+		public const string EnumEntityLanguage_SIMCard = "LanguageResource/EnumEntityLanguage/SIMCard";
+				
+        /// <summary>
+        /// 镜像
+        /// </summary>
+		public const string EnumEntityLanguage_Mirror = "LanguageResource/EnumEntityLanguage/Mirror";
+				
+        /// <summary>
+        /// HTC未开启USB调试模式
+        /// </summary>
+		public const string EnumEntityLanguage_HtcNoUsbMode = "LanguageResource/EnumEntityLanguage/HtcNoUsbMode";
+				
+        /// <summary>
+        /// 黑莓
+        /// </summary>
+		public const string EnumEntityLanguage_BlackBerry = "LanguageResource/EnumEntityLanguage/BlackBerry";
+				
+        /// <summary>
+        /// 塞班(Nokia)
+        /// </summary>
+		public const string EnumEntityLanguage_Symbian = "LanguageResource/EnumEntityLanguage/Symbian";
+				
+        /// <summary>
+        /// 联发科(MTK)
+        /// </summary>
+		public const string EnumEntityLanguage_MTK = "LanguageResource/EnumEntityLanguage/MTK";
+				
+        /// <summary>
+        /// 晨星(MStar)
+        /// </summary>
+		public const string EnumEntityLanguage_MStar = "LanguageResource/EnumEntityLanguage/MStar";
+				
+        /// <summary>
+        /// 展讯
+        /// </summary>
+		public const string EnumEntityLanguage_Spreadtrum = "LanguageResource/EnumEntityLanguage/Spreadtrum";
+				
+        /// <summary>
+        /// Windows Mobile
+        /// </summary>
+		public const string EnumEntityLanguage_WindowsMobile = "LanguageResource/EnumEntityLanguage/WindowsMobile";
+				
+        /// <summary>
+        /// Palm webOS
+        /// </summary>
+		public const string EnumEntityLanguage_WebOS = "LanguageResource/EnumEntityLanguage/WebOS";
+				
+        /// <summary>
+        /// BADA
+        /// </summary>
+		public const string EnumEntityLanguage_Bada = "LanguageResource/EnumEntityLanguage/Bada";
+				
+        /// <summary>
+        /// Brew系统(BREW)
+        /// </summary>
+		public const string EnumEntityLanguage_Brew = "LanguageResource/EnumEntityLanguage/Brew";
+				
+        /// <summary>
+        /// 英飞凌(Infineon)
+        /// </summary>
+		public const string EnumEntityLanguage_Infineon = "LanguageResource/EnumEntityLanguage/Infineon";
+				
+        /// <summary>
+        /// 互芯(CoolSand)
+        /// </summary>
+		public const string EnumEntityLanguage_CoolSand = "LanguageResource/EnumEntityLanguage/CoolSand";
+				
+        /// <summary>
+        /// 亚德诺(ADI)
+        /// </summary>
+		public const string EnumEntityLanguage_ADI = "LanguageResource/EnumEntityLanguage/ADI";
+				
+        /// <summary>
+        /// Sky
+        /// </summary>
+		public const string EnumEntityLanguage_Sky = "LanguageResource/EnumEntityLanguage/Sky";
+				
+        /// <summary>
+        /// 单数据库文件
+        /// </summary>
+		public const string EnumEntityLanguage_SingleDatabaseFile = "LanguageResource/EnumEntityLanguage/SingleDatabaseFile";
+				
+        /// <summary>
+        /// ADB备份文件
+        /// </summary>
+		public const string EnumEntityLanguage_AdbBackupFile = "LanguageResource/EnumEntityLanguage/AdbBackupFile";
+				
+        /// <summary>
+        /// YunOS
+        /// </summary>
+		public const string EnumEntityLanguage_YunOS = "LanguageResource/EnumEntityLanguage/YunOS";
+				
+        /// <summary>
+        /// 状态
         /// </summary>
 		public const string DataEntityLanguage_AbstractDataItem_DataState = "LanguageResource/DataEntityLanguage/AbstractDataItem_DataState";
 				
@@ -746,27 +866,27 @@ internal class Languagekeys
 		public const string DataEntityLanguage_Memo_MD5 = "LanguageResource/DataEntityLanguage/Memo_MD5";
 				
         /// <summary>
-        /// SenderName
+        /// 发送者
         /// </summary>
 		public const string DataEntityLanguage_MessageCore_SenderName = "LanguageResource/DataEntityLanguage/MessageCore_SenderName";
 				
         /// <summary>
-        /// Receiver
+        /// 接收者
         /// </summary>
 		public const string DataEntityLanguage_MessageCore_Receiver = "LanguageResource/DataEntityLanguage/MessageCore_Receiver";
 				
         /// <summary>
-        /// Content
+        /// 内容
         /// </summary>
 		public const string DataEntityLanguage_MessageCore_Content = "LanguageResource/DataEntityLanguage/MessageCore_Content";
 				
         /// <summary>
-        /// MessageType
+        /// 消息类型
         /// </summary>
 		public const string DataEntityLanguage_MessageCore_MessageType = "LanguageResource/DataEntityLanguage/MessageCore_MessageType";
 				
         /// <summary>
-        /// Date
+        /// 日期
         /// </summary>
 		public const string DataEntityLanguage_MessageCore_Date = "LanguageResource/DataEntityLanguage/MessageCore_Date";
 				
@@ -781,12 +901,12 @@ internal class Languagekeys
 		public const string DataEntityLanguage_MessageCore_Type = "LanguageResource/DataEntityLanguage/MessageCore_Type";
 				
         /// <summary>
-        /// SendState
+        /// 发送状态
         /// </summary>
 		public const string DataEntityLanguage_MessageCore_SendState = "LanguageResource/DataEntityLanguage/MessageCore_SendState";
 				
         /// <summary>
-        /// DataState
+        /// 状态
         /// </summary>
 		public const string DataEntityLanguage_MessageCore_DataState = "LanguageResource/DataEntityLanguage/MessageCore_DataState";
 				

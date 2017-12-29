@@ -134,7 +134,7 @@ namespace XLY.SF.Framework.BaseUtility
             BinaryFormatter serializer = new BinaryFormatter();
 
             //创建文件流
-            using (FileStream fs = new FileStream(fileName, FileMode.Open))
+            using (FileStream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read,FileShare.Read))
             {
                 //开始反序列化对象-
                 return serializer.Deserialize(fs) as T;

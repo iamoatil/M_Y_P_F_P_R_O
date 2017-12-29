@@ -14,7 +14,7 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <summary>
         /// 任务结束事件的消息码。
         /// </summary>
-        TaskOverEvent = -1,
+        TaskTerminateEvent = -1,
         /// <summary>
         /// 任务引擎错误事件的消息码。
         /// </summary>

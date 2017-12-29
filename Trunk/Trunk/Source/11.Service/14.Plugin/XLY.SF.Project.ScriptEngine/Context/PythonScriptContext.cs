@@ -5,9 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Scripting.Hosting;
-using XLY.SF.Project.Domains;
 using Python.Runtime;
-using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using System.ComponentModel.Composition;
 
@@ -22,12 +20,10 @@ namespace XLY.SF.Project.ScriptEngine.Context
     /// <summary>
     /// 执行Python脚本
     /// </summary>
-    [ExportMetadata("PluginLanguage", PluginLanguage.Python36)]
-    [Export("ScriptContext", typeof(IScriptContext))]
     public class PythonScriptContext : IScriptContext
     {
         /// <summary>
-        /// 
+        /// 执行Python脚本
         /// </summary>
         /// <param name="script"></param>
         /// <param name="asyn"></param>
@@ -39,7 +35,7 @@ namespace XLY.SF.Project.ScriptEngine.Context
         {
             try
             {
-                if (!FileHelper.IsValid(script))
+                if (!BaseUtility.IsValid(script))
                 {
                     throw new Exception("Python File '" + script + "' is not exist!");
                 }

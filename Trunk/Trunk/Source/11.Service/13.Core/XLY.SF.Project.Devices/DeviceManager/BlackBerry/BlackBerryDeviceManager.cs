@@ -96,7 +96,7 @@ namespace XLY.SF.Project.Devices
         /// <param name="targetPath">Windows目标路径。</param>
         /// <param name="asyn">异步通知</param>
         /// <returns>返回Windows路径。</returns>
-        public string CopyFile(Device device, string source, string targetPath, IAsyncTaskProgress asyn)
+        public string CopyFile(Device device, string source, string targetPath, DefaultAsyncTaskProgress asyn)
         {
             int blackberryHadnle = 0;
 

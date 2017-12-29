@@ -64,136 +64,114 @@ namespace ProjectExtend.Context
         #endregion
 
         #region 存储路径
-        
-        #region 默认文件夹名
 
+        #region SavePath
+
+        private String _savePath;
         /// <summary>
-        /// 默认文件夹名
+        /// 系统资源的保存路径。
         /// </summary>
-        public string SaveDefaultFolderName
+        public String SavePath
         {
             get
             {
-                return Settings.GetValue(DefaultPathKey);
+                if (String.IsNullOrWhiteSpace(_savePath))
+                {
+                    String path = Settings.GetValue(DefaultPathKey);
+                    if (String.IsNullOrWhiteSpace(path))
+                    {
+                        path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Environment.GetFolderPath(Environment.SpecialFolder.Windows)), "SPF");
+                    }
+                    CreateDirectory(path);
+                    _savePath = path;
+                }
+                return _savePath;
             }
-
-            private set
+            set
             {
-                Settings.SetValue(DefaultPathKey, value);
-                base.OnPropertyChanged();
+                if (_savePath != value)
+                {
+                    _savePath = null;
+                    Settings.SetValue(DefaultPathKey, value);
+                    OnPropertyChanged();
+                    OnPropertyChanged("CasePath");
+                    OnPropertyChanged("OperationImagePath");
+                    OnPropertyChanged("CachePath");
+                }
             }
         }
 
         #endregion
 
-        #region 当前存储路径以及案例路径
-        
-        private string _sysSaveFullPath;
-        /// <summary>
-        /// 当前存储路径
-        /// </summary>
-        public string SysSaveFullPath
-        {
-            get
-            {
-                return _sysSaveFullPath;
-            }
-            private set
-            {
-                _sysSaveFullPath = value;
-                base.OnPropertyChanged();
-
-            }
-        }
-        
-        private string _caseSaveFullPath;
         /// <summary>
         /// 案例存储路径
         /// </summary>
-        public string CaseSaveFullPath
+        public String CasePath
         {
             get
             {
-                return _caseSaveFullPath;
-            }
-            private set
-            {
-                _caseSaveFullPath = value;
-                base.OnPropertyChanged();
+                String path = System.IO.Path.Combine(SavePath, "Cases");
+                CreateDirectory(path);
+                return path;
             }
         }
 
-        #endregion
-
-        #region 操作日志【图片】
-
-        private string _operationImageFolder;
         /// <summary>
-        /// 操作日志图片存储文件夹名称
+        /// 保存操作截图的路径
         /// </summary>
-        public string OperationImageFolderName
+        public String OperationImagePath
         {
             get
             {
-                return this._operationImageFolder;
-            }
-
-            private set
-            {
-                this._operationImageFolder = value;
-                base.OnPropertyChanged();
+                String path = System.IO.Path.Combine(SavePath, "OperationImages", SysStartDateTime.Date.ToString("yyyyMMdd"));
+                CreateDirectory(path);
+                return path;
             }
         }
 
         /// <summary>
-        /// 当前保存操作截图的绝对路径
+        /// 缓存路径
         /// </summary>
-        public string CurOperationImageFolder
-        {
-            get;
-            private set;
-        }
-
-        #endregion
-
-        #region 系统展示内容缓存路径
-
-        private string _sysSPFCacheFolderName;
-        /// <summary>
-        /// 系统展示内容缓存文件夹名
-        /// </summary>
-        public string SPFCacheFolderName
+        public String CachePath
         {
             get
             {
-                return this._sysSPFCacheFolderName;
-            }
-
-            private set
-            {
-                this._sysSPFCacheFolderName = value;
-                base.OnPropertyChanged();
+                String path = System.IO.Path.Combine(SavePath, "Caches");
+                CreateDirectory(path);
+                return path;
             }
         }
-
-        /// <summary>
-        /// 系统展示内容缓存全路径
-        /// </summary>
-        public string SPFCacheFullPath
-        {
-            get;private set;
-        }
-
-        #endregion
 
         #endregion
 
         #region 当前登录用户信息
 
+        #region CurUserInfo
+
+        private UserInfoModel _user;
         /// <summary>
-        /// 当前登录用户【此值无法被修改，只能通过设置改变】
+        /// 当前登录用户。
         /// </summary>
-        public UserInfoModel CurUserInfo { get; private set; }
+        public UserInfoModel CurUserInfo
+        {
+            get => _user;
+            set
+            {
+                if (value != null)
+                {
+                    value.LoginTime = DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+                    _dbService.Update(value.Entity);
+                    _user = value.ToReadOnly();
+                }
+                else
+                {
+                    _user = null;
+                }
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
 
         #endregion
 
@@ -229,6 +207,21 @@ namespace ProjectExtend.Context
                     OnPropertyChanged();
                     CaseChanged?.Invoke(this, new PropertyChangedEventArgs<Case>(oldValue, value));
                 }
+            }
+        }
+
+        #endregion
+
+        #region 设备
+
+        private DeviceExtraction _deviceExtraction;
+        public DeviceExtraction DeviceExtraction
+        {
+            get => _deviceExtraction;
+            set
+            {
+                _deviceExtraction = value;
+                OnPropertyChanged();
             }
         }
 
@@ -293,20 +286,6 @@ namespace ProjectExtend.Context
         #endregion
 
         #region private
-
-        #region 用户信息
-
-        /// <summary>
-        /// 防止修改登录信息
-        /// </summary>
-        private INotifyPropertyChanged _curUserInfoPropChanged;
-
-        /// <summary>
-        /// 本地副本
-        /// </summary>
-        private UserInfoModel _curUserInfoClone { get; set; }
-
-        #endregion
 
         #region 推荐方案【目前先全部缓存在内存】
 

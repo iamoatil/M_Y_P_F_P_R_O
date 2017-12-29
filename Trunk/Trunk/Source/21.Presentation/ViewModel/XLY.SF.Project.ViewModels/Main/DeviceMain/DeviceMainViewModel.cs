@@ -8,16 +8,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using XLY.SF.Framework.BaseUtility;
+using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Core.Base.MefIoc;
+using XLY.SF.Framework.Core.Base.MessageAggregation;
 using XLY.SF.Framework.Core.Base.MessageBase;
 using XLY.SF.Framework.Core.Base.MessageBase.Navigation;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Framework.Language;
+using XLY.SF.Project.CaseManagement;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Models;
 using XLY.SF.Project.Models.Entities;
 using XLY.SF.Project.ProxyService;
 using XLY.SF.Project.ViewDomain.MefKeys;
+using XLY.SF.Project.ViewDomain.Model.PresentationNavigationElement;
 using XLY.SF.Project.ViewDomain.VModel.DevHomePage;
 using XLY.SF.Project.ViewModels.Main.CaseManagement;
 using XLY.SF.Project.ViewModels.Main.DeviceMain.Navigation;
@@ -50,6 +54,11 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
             /// 智能预警
             /// </summary>
             AutoWarning,
+
+            /// <summary>
+            /// 智能预警进度
+            /// </summary>
+            AutoWarningProgress
         }
 
         #endregion
@@ -122,6 +131,15 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
         #endregion
 
+        #region Service
+
+        /// <summary>
+        /// 消息框服务
+        /// </summary>
+        private IMessageBox _msgService;
+
+        #endregion
+
         #endregion
 
         #region Commands
@@ -148,14 +166,26 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
         #endregion
 
-        public DeviceMainViewModel()
+        [ImportingConstructor]
+        public DeviceMainViewModel(IMessageBox msgService)
         {
-            base.MessageAggregation.RegisterGeneralMsg<bool>(this, GeneralKeys.ExtractTaskCompleteMsg, TaskCompleteCallback);
+            _msgService = msgService;
+
+            base.MessageAggregation.RegisterGeneralMsg<String>(this, GeneralKeys.ExtractTaskCompleteMsg, TaskCompleteCallback);
             ExtractionResultCommand = new ProxyRelayCommand(ExeucteExtractionResultCommand, base.ModelName);
             FileViewCommand = new ProxyRelayCommand(ExecuteFileViewCommand, base.ModelName);
-            EarlyWarningCommand = new ProxyRelayCommand(EarlyWarningViewCommand, base.ModelName);
+            EarlyWarningCommand = new ProxyRelayCommand(()=>ExecuteEarlyWarningViewCommand(false), base.ModelName);
             DeviceHomePageCommand = new ProxyRelayCommand(ExecuteDeviceHomePageCommand, base.ModelName);
             ProxyFactory.DeviceMonitor.OnDeviceConnected += DeviceMonitor_OnDeviceConnected;
+            //注册停止提取消息
+            base.MessageAggregation.RegisterGeneralMsg<String>(this, ExportKeys.StopExtractMsg, ReleaseExtractCallback);
+        }
+
+        private void ReleaseExtractCallback(GeneralArgs<string> obj)
+        {
+            PreCacheToken token = new PreCacheToken(obj.Parameters, "");
+            SystemContext.Instance.CurCacheViews.RemoveAllViewCacheById(token);
+            obj.Callback?.Invoke(obj.Parameters);
         }
 
         protected override void InitLoad(object parameters)
@@ -167,7 +197,7 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
                     throw new NullReferenceException(string.Format("当前设备为NULL"));
                 CreateDeviceByType(_curDevice);
                 //根据设备ID创建导航器
-                DevNavigationManager = new SubViewCacheManager(_curDevice.Device.ID);
+                DevNavigationManager = new SubViewCacheManager(_curDevice.Id);
 
 
                 //首次加载使用设备首页
@@ -184,22 +214,14 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
             return string.Empty;
         }
 
-        private string EarlyWarningViewCommand()
+        private string ExecuteEarlyWarningViewCommand(Boolean isAuto)
         {
-            var tmp = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
-            //var settings = IocManagerSingle.Instance.GetPart<IRecordContext<Inspection>>();
-            //var inspection = new
-            //{
-            //    Config = settings.Records.ToList().ConvertAll(i => new { ID = i.ID, CategoryCn = i.CategoryCn, CategoryEn = i.CategoryEn }),
-            //    DevicePath = tmp.Target.Path
-            //};
-
-            //var devicePath = Serializer.JsonSerializerIO(inspection);
-            var inspection = "Inspection;" + tmp.Target.Path;
-            SwitchSubView(DevMainSubViewType.AutoWarning, inspection);
+            var tmp = (DeviceExtractionAdorner)CurDevModel.DeviceExtractionAdorner;
+            SwitchSubView(DevMainSubViewType.AutoWarningProgress, 
+                new Tuple<String, string,IDevice>(tmp.Target.Path, tmp.Id, CurDevModel.IDevSource),
+                isAuto);
             return string.Empty;
         }
-
 
         private string ExecuteDeviceHomePageCommand()
         {
@@ -222,9 +244,11 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
 
         private void DeviceMonitor_OnDeviceConnected(IDevice dev, bool isOnline)
         {
-            if (CurDevModel?.IDevSource.ID == dev.ID)
+            if (CurDevModel?.IDevSource.ID == dev.ID && !(dev is UsbDevice))
             {
                 CurDevModel.OnlineStatus = isOnline;
+                if (!isOnline)
+                    _msgService.ShowWarningMsg($"【{dev.Name}】设备已断开");
             }
         }
 
@@ -326,19 +350,14 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
         #endregion
 
         #region 任务完成回调
-
+        
         //自动提取完成
-        private void TaskCompleteCallback(GeneralArgs<bool> args)
+        private void TaskCompleteCallback(GeneralArgs<String> args)
         {
             //跳转
-            var tmp = CurDevModel.DeviceExtractionAdorner as DeviceExtractionAdorner;
-            var a = DevNavigationManager.GetOrCreateView(ExportKeys.DataDisplayView, tmp.Target.Path);
-            a.DataSource.ReceiveParameters(tmp.Target.Path);
-            //SubView = a;
-
-            var b = DevNavigationManager.GetOrCreateView(ExportKeys.AutoWarningView, tmp.Target.Path);
-            b.DataSource.ReceiveParameters("Inspection;" + tmp.Target.Path);
-
+            var tmp = (DeviceExtractionAdorner)CurDevModel.DeviceExtractionAdorner;
+            if (tmp.Id != args.Parameters) return;
+            ExecuteEarlyWarningViewCommand(true);
             SwitchSubView(DevMainSubViewType.ExtractResult, tmp.Target.Path);
         }
 
@@ -369,9 +388,14 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain
                 case DevMainSubViewType.AutoWarning:
                     exportKey = ExportKeys.AutoWarningView;
                     break;
+                case DevMainSubViewType.AutoWarningProgress:
+                    exportKey = ExportKeys.AutoWarningProgressView;
+                    break;
+
             }
             CurSubViewType = subType;
             var viewTmp = DevNavigationManager.GetOrCreateView(exportKey, initParams);
+            viewTmp.DataSource.LoadViewModel(initParams);
             if (@params != null)
                 viewTmp.DataSource.ReceiveParameters(@params);
             SubView = viewTmp;

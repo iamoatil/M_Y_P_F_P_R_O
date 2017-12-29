@@ -12,15 +12,25 @@ namespace XLY.SF.Project.DataPump
     /// </summary>
     public abstract class DataPumpBase
     {
+        #region Fields
+
+        /// <summary>
+        /// 缓存
+        /// </summary>
+        private readonly Dictionary<String, String> _caches;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
         /// 初始化类型 XLY.SF.Project.DataPump.DataPumpServiceBase 实例。
         /// </summary>
-        /// <param name="metadata">与此数据泵关联的元数据信息。</param>
-        protected DataPumpBase(Pump metadata)
+        /// <param name="pumpDescriptor">与此数据泵关联的元数据信息。</param>
+        protected DataPumpBase(Pump pumpDescriptor)
         {
-            Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
+            PumpDescriptor = pumpDescriptor ?? throw new ArgumentNullException(nameof(pumpDescriptor));
+            _caches = new Dictionary<String, String>();
         }
 
         #endregion
@@ -30,7 +40,12 @@ namespace XLY.SF.Project.DataPump
         /// <summary>
         /// 与此数据泵关联的元数据信息。
         /// </summary>
-        public Pump Metadata { get; }
+        public Pump PumpDescriptor { get; }
+
+        /// <summary>
+        /// 设备 可能为NULL
+        /// </summary>
+        public Device Phone { get; set; }
 
         /// <summary>
         /// 是否已经初始化。
@@ -55,11 +70,11 @@ namespace XLY.SF.Project.DataPump
         /// 创建执行数据泵时所需的上下文对象。
         /// </summary>
         /// <param name="source">数据源。</param>
+        /// <param name="extractionItems">提取项列表。</param>
         /// <returns>执行上下文。</returns>
-        public virtual DataPumpExecutionContext CreateContext(SourceFileItem source)
+        public virtual DataPumpExecutionContext CreateContext(SourceFileItem source, params ExtractItem[] extractionItems)
         {
-            if (!IsInit) throw new InvalidOperationException("Data pump need initialize");
-            return new DataPumpExecutionContext(Metadata, source) { Owner = this };
+            return new DataPumpExecutionContext(PumpDescriptor, source, extractionItems) { Owner = this };
         }
 
         /// <summary>
@@ -70,14 +85,25 @@ namespace XLY.SF.Project.DataPump
         {
             if (!IsInit) throw new InvalidOperationException("Data pump need initialize");
             if (context.Owner != this) throw new InvalidOperationException("Unrecognize context");
-            if (context.IsInit)
+            if (context.Reporter != null && context.Reporter.IsRuning) return;
+            if (_caches.Keys.Contains(context.Source.Config))
             {
-                ExecuteCore(context);
+                //优先从缓存查找，避免同一路径多次提取
+                context.Source.Local = _caches[context.Source.Config];
             }
-            else if (InitExecutionContext(context))
+            else
             {
-                context.IsInit = true;
-                ExecuteCore(context);
+                if (context.IsInit)
+                {
+                    ExecuteCore(context);
+                }
+                else if (InitExecutionContext(context))
+                {
+                    context.IsInit = true;
+                    ExecuteCore(context);
+                    //缓存路径信息
+                    _caches.Add(context.Source.Config, context.Source.Local);
+                }
             }
         }
 

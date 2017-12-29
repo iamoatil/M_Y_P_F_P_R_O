@@ -21,7 +21,7 @@ namespace XLY.SF.Project.Plugin.Android
             pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_Contacts);
             pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_BasicInfo);
             pluginInfo.DeviceOSType = EnumOSType.Android;
-            pluginInfo.VersionStr = "0.0";
+            pluginInfo.VersionStr = "1.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
             pluginInfo.GroupIndex = 0;
             pluginInfo.OrderIndex = 2;
@@ -55,7 +55,7 @@ namespace XLY.SF.Project.Plugin.Android
                     if (FileHelper.IsValid(contacts2dbFile))
                     {
                         var paser = new AndroidContactsDataParseCoreV1_0(contacts2dbFile);
-                        items.AddRange(paser.BuildData());
+                        items.AddRange(paser.BuildData().Where(c => c.Number.IsValid()));
                     }
                 }
 
@@ -66,7 +66,7 @@ namespace XLY.SF.Project.Plugin.Android
                     BuildData(contact_info, ref items);
                 }
 
-                ds.Items.AddRange(items);
+                ds.Items.AddRange(items.Where(c => c.Number.IsValid()));
             }
             catch (System.Exception ex)
             {
@@ -91,17 +91,22 @@ namespace XLY.SF.Project.Plugin.Android
             {
                 var name = string.Empty;
                 var number = string.Empty;
+                JArray jNumbers = null;
 
                 foreach (JObject jContact in JArray.Parse(FileHelper.FileToUTF8String(contact_info)))
                 {
                     name = jContact["name"].ToSafeString();
-                    foreach (JObject jNumber in jContact["number"] as JArray)
+                    jNumbers = jContact["number"] as JArray;
+                    if (null != jNumbers)
                     {
-                        number = jNumber["number"].ToSafeString();
-
-                        if (!items.Any(i => i.Name == name && i.Number == number))
+                        foreach (JObject jNumber in jNumbers)
                         {
-                            items.Add(new Contact() { DataState = EnumDataState.Normal, Name = name, Number = number });
+                            number = jNumber["number"].ToSafeString();
+
+                            if (!items.Any(i => i.Name == name && i.Number == number))
+                            {
+                                items.Add(new Contact() { DataState = EnumDataState.Normal, Name = name, Number = number });
+                            }
                         }
                     }
                 }

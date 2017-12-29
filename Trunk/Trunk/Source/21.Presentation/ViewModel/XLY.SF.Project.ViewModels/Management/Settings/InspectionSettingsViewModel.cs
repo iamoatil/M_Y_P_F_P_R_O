@@ -31,7 +31,7 @@ namespace XLY.SF.Project.ViewModels.Management.Settings
         public InspectionSettingsViewModel(ISettings dbService)
         {
             _dbService = dbService;
-            Inspections = LoadData((IRecordContext<Inspection>)dbService);
+            Inspections = ((IRecordContext<Inspection>)dbService).Records.ToArray().Select(x => new InspectionModel(x, dbService));
         }
 
         #endregion
@@ -73,21 +73,7 @@ namespace XLY.SF.Project.ViewModels.Management.Settings
                     }
                 }
             }
-
-            public String Name
-            {
-                get
-                {
-                    switch (SystemContext.LanguageManager.Type)
-                    {
-                        case LanguageType.En:
-                            return _inspection.NameEn;
-                        default:
-                            return _inspection.NameCn;
-                    }
-                }
-            }
-
+        
             public Boolean IsSelect
             {
                 get => _inspection.SelectedToken > 0;
@@ -97,78 +83,20 @@ namespace XLY.SF.Project.ViewModels.Management.Settings
                     if (_dbService.Update(_inspection))
                     {
                         OnPropertyChanged();
-                        //通知父节点子节点的选中属性改变
-                        Parent.IsSelect = null;
                     }
                 }
             }
 
-            internal InspectionGroup Parent { get; set; }
-
-            #endregion
-        }
-
-        public class InspectionGroup : NotifyPropertyBase
-        {
-            #region Fields
-
-            private readonly MsgAggregation _messageAggregation;
-
-            #endregion
-
-            #region Constructors
-
-            public InspectionGroup(String category, IEnumerable<InspectionModel> items,MsgAggregation messageAggregation)
-            {
-                _messageAggregation = messageAggregation;
-                Category = category;
-                Items = items ?? new InspectionModel[0];
-                foreach (var item in Items)
-                {
-                    item.Parent = this;
-                }
-            }
-
-            #endregion
-
-            #region Properties
-
-            public IEnumerable<InspectionModel> Items { get; }
-
-            public String Category { get; }
-
-            public Boolean? IsSelect
+            /// <summary>
+            /// 此选项所处的分类路径
+            /// </summary>
+            public string Path
             {
                 get
                 {
-                    if (Items.All(x => x.IsSelect))
-                    {
-                        return true;
-                    }
-                    else if (Items.All(x => !x.IsSelect))
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-                set
-                {
-                    //通过界面改变改属性的值时，不可能为null
-                    if (value.HasValue)
-                    {
-                        foreach (var item in Items)
-                        {
-                            item.IsSelect = value.Value;
-                        }
-                    }
-                    OnPropertyChanged();
-                    _messageAggregation.SendGeneralMsg(new GeneralArgs(GeneralKeys.SettingsChangedMsg));
+                    return _inspection.ConfigFile;
                 }
             }
-
             #endregion
         }
 
@@ -195,28 +123,11 @@ namespace XLY.SF.Project.ViewModels.Management.Settings
             }
         }
 
-        public InspectionGroup[] Inspections { get; }
+        public IEnumerable<InspectionModel> Inspections { get; }
 
         #endregion
 
         #region Methods
-
-        #region Private
-
-        private InspectionGroup[] LoadData(IRecordContext<Inspection> inspectionService)
-        {
-            IEnumerable<InspectionModel> models = inspectionService.Records.ToArray().Select(x => new InspectionModel(x, inspectionService));
-            var temp = models.GroupBy(x => x.Category).ToDictionary(x => x.Key, y => y.ToArray());
-            InspectionGroup[] groups = new InspectionGroup[temp.Count];
-            Int32 i = 0;
-            foreach (String category in temp.Keys)
-            {
-                groups[i++] = new InspectionGroup(category, temp[category], MessageAggregation);
-            }
-            return groups;
-        }
-
-        #endregion
 
         #endregion
     }

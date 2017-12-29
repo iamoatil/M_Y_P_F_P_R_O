@@ -99,5 +99,9 @@ namespace XLY.SF.Project.Plugin.DataReport
         /// 是否导出资源文件
         /// </summary>
         public bool IsExportSourceFile { get; set; } = false;
+        /// <summary>
+        /// 需要导出报表的状态
+        /// </summary>
+        public EnumExportState ExportState { get; set; }
     }
 }

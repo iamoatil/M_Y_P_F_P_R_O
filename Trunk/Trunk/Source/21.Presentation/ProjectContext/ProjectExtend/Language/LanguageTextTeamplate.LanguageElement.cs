@@ -46,6 +46,16 @@ public class Languagekeys
 		public const string ViewLanguage_View_Login_Version = "LanguageResource/ViewLanguage/View_Login_Version";
 				
         /// <summary>
+        /// S P F 智 能 手 机
+        /// </summary>
+		public const string ViewLanguage_View_Login_SpfPhone = "LanguageResource/ViewLanguage/View_Login_SpfPhone";
+				
+        /// <summary>
+        /// 数据恢复取证系统
+        /// </summary>
+		public const string ViewLanguage_View_Login_ProductName = "LanguageResource/ViewLanguage/View_Login_ProductName";
+				
+        /// <summary>
         /// SPF9139智能手机数据恢复取证系统
         /// </summary>
 		public const string ViewLanguage_View_MainWinTitle = "LanguageResource/ViewLanguage/View_MainWinTitle";
@@ -106,7 +116,7 @@ public class Languagekeys
 		public const string ViewLanguage_View_MainWin_MenuPluginManagement = "LanguageResource/ViewLanguage/View_MainWin_MenuPluginManagement";
 				
         /// <summary>
-        /// 系统日志
+        /// 取证日志
         /// </summary>
 		public const string ViewLanguage_View_MainWin_MenuSysLog = "LanguageResource/ViewLanguage/View_MainWin_MenuSysLog";
 				
@@ -141,7 +151,7 @@ public class Languagekeys
 		public const string ViewLanguage_View_MainWin_MenuLogout = "LanguageResource/ViewLanguage/View_MainWin_MenuLogout";
 				
         /// <summary>
-        /// 打开
+        /// 打开案例
         /// </summary>
 		public const string ViewLanguage_View_HomePageOpen = "LanguageResource/ViewLanguage/View_HomePageOpen";
 				
@@ -186,7 +196,7 @@ public class Languagekeys
 		public const string ViewLanguage_View_CaseName = "LanguageResource/ViewLanguage/View_CaseName";
 				
         /// <summary>
-        /// 创建人
+        /// 创  建 人
         /// </summary>
 		public const string ViewLanguage_View_CaseAuthor = "LanguageResource/ViewLanguage/View_CaseAuthor";
 				
@@ -289,6 +299,16 @@ public class Languagekeys
         /// 序号
         /// </summary>
 		public const string ViewLanguage_View_CaseListIndex = "LanguageResource/ViewLanguage/View_CaseListIndex";
+				
+        /// <summary>
+        /// 更新案例失败
+        /// </summary>
+		public const string ViewLanguage_View_CaseUpdatePrompt = "LanguageResource/ViewLanguage/View_CaseUpdatePrompt";
+				
+        /// <summary>
+        /// 默认案例
+        /// </summary>
+		public const string ViewLanguage_View_DefaultCaseName = "LanguageResource/ViewLanguage/View_DefaultCaseName";
 				
         /// <summary>
         /// 提取主页
@@ -426,6 +446,11 @@ public class Languagekeys
 		public const string ViewLanguage_View_DevHomePage_UnConnect = "LanguageResource/ViewLanguage/View_DevHomePage_UnConnect";
 				
         /// <summary>
+        /// 已连接
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_Connect = "LanguageResource/ViewLanguage/View_DevHomePage_Connect";
+				
+        /// <summary>
         /// 文件名
         /// </summary>
 		public const string ViewLanguage_View_DevHomePage_FileName = "LanguageResource/ViewLanguage/View_DevHomePage_FileName";
@@ -466,6 +491,31 @@ public class Languagekeys
 		public const string ViewLanguage_View_DevHomePage_UnIOSRoot = "LanguageResource/ViewLanguage/View_DevHomePage_UnIOSRoot";
 				
         /// <summary>
+        /// 身份证
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_DdentityCard = "LanguageResource/ViewLanguage/View_DevHomePage_DdentityCard";
+				
+        /// <summary>
+        /// 军官证
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_CertificateOfOfficers = "LanguageResource/ViewLanguage/View_DevHomePage_CertificateOfOfficers";
+				
+        /// <summary>
+        /// 护照
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_Passport = "LanguageResource/ViewLanguage/View_DevHomePage_Passport";
+				
+        /// <summary>
+        /// 学生证
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_StudentCard = "LanguageResource/ViewLanguage/View_DevHomePage_StudentCard";
+				
+        /// <summary>
+        /// 暂住证
+        /// </summary>
+		public const string ViewLanguage_View_DevHomePage_TemporaryResidentialPermit = "LanguageResource/ViewLanguage/View_DevHomePage_TemporaryResidentialPermit";
+				
+        /// <summary>
         /// 格式
         /// </summary>
 		public const string ViewLanguage_View_SelectControl_Format = "LanguageResource/ViewLanguage/View_SelectControl_Format";
@@ -496,9 +546,99 @@ public class Languagekeys
 		public const string ViewLanguage_View_SelectControl_SelectFolderTitle = "LanguageResource/ViewLanguage/View_SelectControl_SelectFolderTitle";
 				
         /// <summary>
+        /// 取证日志
+        /// </summary>
+		public const string ViewLanguage_View_Logs_ObtainEvidenceLogView_Title = "LanguageResource/ViewLanguage/View_Logs_ObtainEvidenceLogView_Title";
+				
+        /// <summary>
+        /// 操作人员
+        /// </summary>
+		public const string ViewLanguage_View_Logs_ObtainEvidenceLogView_Operator = "LanguageResource/ViewLanguage/View_Logs_ObtainEvidenceLogView_Operator";
+				
+        /// <summary>
+        /// 操作内容
+        /// </summary>
+		public const string ViewLanguage_View_Logs_ObtainEvidenceLogView_OpContent = "LanguageResource/ViewLanguage/View_Logs_ObtainEvidenceLogView_OpContent";
+				
+        /// <summary>
+        /// 操作时间
+        /// </summary>
+		public const string ViewLanguage_View_Logs_ObtainEvidenceLogView_OpTime = "LanguageResource/ViewLanguage/View_Logs_ObtainEvidenceLogView_OpTime";
+				
+        /// <summary>
+        /// 截图
+        /// </summary>
+		public const string ViewLanguage_View_Logs_ObtainEvidenceLogView_Screenshot = "LanguageResource/ViewLanguage/View_Logs_ObtainEvidenceLogView_Screenshot";
+				
+        /// <summary>
         /// 数据导出
         /// </summary>
 		public const string ViewLanguage_Export_ExportData = "LanguageResource/ViewLanguage/Export/ExportData";
+				
+        /// <summary>
+        /// 自动提取
+        /// </summary>
+		public const string ViewLanguage_Extraction_Title = "LanguageResource/ViewLanguage/Extraction/Title";
+				
+        /// <summary>
+        /// 总进度
+        /// </summary>
+		public const string ViewLanguage_Extraction_TotalProgress = "LanguageResource/ViewLanguage/Extraction/TotalProgress";
+				
+        /// <summary>
+        /// 开始提取
+        /// </summary>
+		public const string ViewLanguage_Extraction_Start = "LanguageResource/ViewLanguage/Extraction/Start";
+				
+        /// <summary>
+        /// 停止提取
+        /// </summary>
+		public const string ViewLanguage_Extraction_Stop = "LanguageResource/ViewLanguage/Extraction/Stop";
+				
+        /// <summary>
+        /// 启用智能预警
+        /// </summary>
+		public const string ViewLanguage_Extraction_Alarm = "LanguageResource/ViewLanguage/Extraction/Alarm";
+				
+        /// <summary>
+        /// 未提取
+        /// </summary>
+		public const string ViewLanguage_Extraction_State_Idle = "LanguageResource/ViewLanguage/Extraction/State/Idle";
+				
+        /// <summary>
+        /// 等待提取
+        /// </summary>
+		public const string ViewLanguage_Extraction_State_Waiting = "LanguageResource/ViewLanguage/Extraction/State/Waiting";
+				
+        /// <summary>
+        /// 准备提取
+        /// </summary>
+		public const string ViewLanguage_Extraction_State_Starting = "LanguageResource/ViewLanguage/Extraction/State/Starting";
+				
+        /// <summary>
+        /// 正在提取
+        /// </summary>
+		public const string ViewLanguage_Extraction_State_Runing = "LanguageResource/ViewLanguage/Extraction/State/Runing";
+				
+        /// <summary>
+        /// 正在取消
+        /// </summary>
+		public const string ViewLanguage_Extraction_State_IsCancellationRequest = "LanguageResource/ViewLanguage/Extraction/State/IsCancellationRequest";
+				
+        /// <summary>
+        /// 取消解析
+        /// </summary>
+		public const string ViewLanguage_Extraction_State_Cancelled = "LanguageResource/ViewLanguage/Extraction/State/Cancelled";
+				
+        /// <summary>
+        /// 提取完成
+        /// </summary>
+		public const string ViewLanguage_Extraction_State_Completed = "LanguageResource/ViewLanguage/Extraction/State/Completed";
+				
+        /// <summary>
+        /// 提取出错
+        /// </summary>
+		public const string ViewLanguage_Extraction_State_Failed = "LanguageResource/ViewLanguage/Extraction/State/Failed";
 				
         /// <summary>
         /// 用户管理
@@ -521,7 +661,7 @@ public class Languagekeys
 		public const string ViewLanguage_Management_User_Number = "LanguageResource/ViewLanguage/Management/User/Number";
 				
         /// <summary>
-        /// 用户名
+        /// 账号
         /// </summary>
 		public const string ViewLanguage_Management_User_Account = "LanguageResource/ViewLanguage/Management/User/Account";
 				
@@ -556,6 +696,11 @@ public class Languagekeys
 		public const string ViewLanguage_Management_User_RemoveBatch = "LanguageResource/ViewLanguage/Management/User/RemoveBatch";
 				
         /// <summary>
+        /// 原始密码
+        /// </summary>
+		public const string ViewLanguage_Management_User_OldPassword = "LanguageResource/ViewLanguage/Management/User/OldPassword";
+				
+        /// <summary>
         /// 输入密码
         /// </summary>
 		public const string ViewLanguage_Management_User_InputPassword = "LanguageResource/ViewLanguage/Management/User/InputPassword";
@@ -566,6 +711,16 @@ public class Languagekeys
 		public const string ViewLanguage_Management_User_ConfirmPassword = "LanguageResource/ViewLanguage/Management/User/ConfirmPassword";
 				
         /// <summary>
+        /// 设置密码
+        /// </summary>
+		public const string ViewLanguage_Management_User_SetPassword = "LanguageResource/ViewLanguage/Management/User/SetPassword";
+				
+        /// <summary>
+        /// 输入密码与原始密码不一致
+        /// </summary>
+		public const string ViewLanguage_Management_User_ModifyPasswordErrorPrompt = "LanguageResource/ViewLanguage/Management/User/ModifyPasswordErrorPrompt";
+				
+        /// <summary>
         /// 取消
         /// </summary>
 		public const string ViewLanguage_Management_User_Cancel = "LanguageResource/ViewLanguage/Management/User/Cancel";
@@ -574,6 +729,16 @@ public class Languagekeys
         /// 确认
         /// </summary>
 		public const string ViewLanguage_Management_User_Confirm = "LanguageResource/ViewLanguage/Management/User/Confirm";
+				
+        /// <summary>
+        /// 添加用户失败
+        /// </summary>
+		public const string ViewLanguage_Management_User_AddErrorPrompt = "LanguageResource/ViewLanguage/Management/User/AddErrorPrompt";
+				
+        /// <summary>
+        /// 更新用户失败
+        /// </summary>
+		public const string ViewLanguage_Management_User_UpdateErrorPrompt = "LanguageResource/ViewLanguage/Management/User/UpdateErrorPrompt";
 				
         /// <summary>
         /// 系统设置
@@ -666,9 +831,154 @@ public class Languagekeys
 		public const string ViewLanguage_Management_Plugin_Title = "LanguageResource/ViewLanguage/Management/Plugin/Title";
 				
         /// <summary>
-        /// 
+        /// 升级说明
         /// </summary>
-		public const string ViewLanguage_View_Operation1 = "LanguageResource/ViewLanguage/View_Operation1";
+		public const string ViewLanguage_Management_Guide_Upgrade = "LanguageResource/ViewLanguage/Management/Guide/Upgrade";
+				
+        /// <summary>
+        /// iOS连接向导
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_IOS_Title = "LanguageResource/ViewLanguage/Management/Guide/IOS/Title";
+				
+        /// <summary>
+        /// 解除屏幕锁
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_IOS_Step1 = "LanguageResource/ViewLanguage/Management/Guide/IOS/Step1";
+				
+        /// <summary>
+        /// 点击“信任”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_IOS_Step2 = "LanguageResource/ViewLanguage/Management/Guide/IOS/Step2";
+				
+        /// <summary>
+        /// Android 4.0
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android4_0_Title = "LanguageResource/ViewLanguage/Management/Guide/Android4_0/Title";
+				
+        /// <summary>
+        /// 进入“应用程序列表”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android4_0_Step1 = "LanguageResource/ViewLanguage/Management/Guide/Android4_0/Step1";
+				
+        /// <summary>
+        /// 点击“设置”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android4_0_Step2 = "LanguageResource/ViewLanguage/Management/Guide/Android4_0/Step2";
+				
+        /// <summary>
+        /// 点击“应用程序”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android4_0_Step3 = "LanguageResource/ViewLanguage/Management/Guide/Android4_0/Step3";
+				
+        /// <summary>
+        /// 点击“开发”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android4_0_Step4 = "LanguageResource/ViewLanguage/Management/Guide/Android4_0/Step4";
+				
+        /// <summary>
+        /// 勾选“USB”调试
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android4_0_Step5 = "LanguageResource/ViewLanguage/Management/Guide/Android4_0/Step5";
+				
+        /// <summary>
+        /// 点击“确认”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android4_0_Step6 = "LanguageResource/ViewLanguage/Management/Guide/Android4_0/Step6";
+				
+        /// <summary>
+        /// Android 4.1-4.2
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android4_1_Title = "LanguageResource/ViewLanguage/Management/Guide/Android4_1/Title";
+				
+        /// <summary>
+        /// 打开“应用列表”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android4_1_Step1 = "LanguageResource/ViewLanguage/Management/Guide/Android4_1/Step1";
+				
+        /// <summary>
+        /// 点击“设置”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android4_1_Step2 = "LanguageResource/ViewLanguage/Management/Guide/Android4_1/Step2";
+				
+        /// <summary>
+        /// 点击“开发者选项”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android4_1_Step3 = "LanguageResource/ViewLanguage/Management/Guide/Android4_1/Step3";
+				
+        /// <summary>
+        /// 打开右上角开发者选项开关，然后点击“确定”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android4_1_Step4 = "LanguageResource/ViewLanguage/Management/Guide/Android4_1/Step4";
+				
+        /// <summary>
+        /// 勾选“USB调试”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android4_1_Step5 = "LanguageResource/ViewLanguage/Management/Guide/Android4_1/Step5";
+				
+        /// <summary>
+        /// 点击“确定”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android4_1_Step6 = "LanguageResource/ViewLanguage/Management/Guide/Android4_1/Step6";
+				
+        /// <summary>
+        /// Android 5.0-5.5
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android5_0_Title = "LanguageResource/ViewLanguage/Management/Guide/Android5_0/Title";
+				
+        /// <summary>
+        /// 点击“设置”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android5_0_Step1 = "LanguageResource/ViewLanguage/Management/Guide/Android5_0/Step1";
+				
+        /// <summary>
+        /// 点击“开发者选项”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android5_0_Step2 = "LanguageResource/ViewLanguage/Management/Guide/Android5_0/Step2";
+				
+        /// <summary>
+        /// 勾选“USB调试”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android5_0_Step3 = "LanguageResource/ViewLanguage/Management/Guide/Android5_0/Step3";
+				
+        /// <summary>
+        /// 点击“确定”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Android5_0_Step4 = "LanguageResource/ViewLanguage/Management/Guide/Android5_0/Step4";
+				
+        /// <summary>
+        /// 开发者选项
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Developer_Title = "LanguageResource/ViewLanguage/Management/Guide/Developer/Title";
+				
+        /// <summary>
+        /// 点击“设置”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Developer_Step1 = "LanguageResource/ViewLanguage/Management/Guide/Developer/Step1";
+				
+        /// <summary>
+        /// 点击“关于手机”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Developer_Step2 = "LanguageResource/ViewLanguage/Management/Guide/Developer/Step2";
+				
+        /// <summary>
+        /// 连续点击“版本号”6-7下。
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Developer_Step3 = "LanguageResource/ViewLanguage/Management/Guide/Developer/Step3";
+				
+        /// <summary>
+        /// 回到设置页面，点击“开发者选项”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Developer_Step4 = "LanguageResource/ViewLanguage/Management/Guide/Developer/Step4";
+				
+        /// <summary>
+        /// 打开USB调试模式
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Developer_Step5 = "LanguageResource/ViewLanguage/Management/Guide/Developer/Step5";
+				
+        /// <summary>
+        /// 点击“确定”
+        /// </summary>
+		public const string ViewLanguage_Management_Guide_Developer_Step6 = "LanguageResource/ViewLanguage/Management/Guide/Developer/Step6";
 				
         /// <summary>
         /// 未
@@ -904,6 +1214,191 @@ public class Languagekeys
         /// IOS设备读取底层读取发生错误, 错误码
         /// </summary>
 		public const string ErrorMessageLanguage_ErrMsg_IOSDllErrorID = "LanguageResource/ErrorMessageLanguage/ErrMsg_IOSDllErrorID";
+				
+        /// <summary>
+        /// SPF智能手机数据恢复取证系统
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_Name = "LanguageResource/AboutUsLanguage/AboutUs_Name";
+				
+        /// <summary>
+        /// 当前版本：6.3.11
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_Version = "LanguageResource/AboutUsLanguage/AboutUs_Version";
+				
+        /// <summary>
+        /// 有效期至：
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_SecretTime = "LanguageResource/AboutUsLanguage/AboutUs_SecretTime";
+				
+        /// <summary>
+        /// 授权注销
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_SecretLogout = "LanguageResource/AboutUsLanguage/AboutUs_SecretLogout";
+				
+        /// <summary>
+        /// 联系方式
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_ContactInformation = "LanguageResource/AboutUsLanguage/AboutUs_ContactInformation";
+				
+        /// <summary>
+        /// 商务咨询：028-85211099
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_BusinessConsulting = "LanguageResource/AboutUsLanguage/AboutUs_BusinessConsulting";
+				
+        /// <summary>
+        /// 邮编：610000
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_Postcode = "LanguageResource/AboutUsLanguage/AboutUs_Postcode";
+				
+        /// <summary>
+        /// 客服电话：400-631-1393
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_CustomerServiceAll = "LanguageResource/AboutUsLanguage/AboutUs_CustomerServiceAll";
+				
+        /// <summary>
+        /// 电子邮箱：sales@xlysoft.net
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_EmailAddress = "LanguageResource/AboutUsLanguage/AboutUs_EmailAddress";
+				
+        /// <summary>
+        /// 技术咨询：028-84087500
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_TechnicalConsulting = "LanguageResource/AboutUsLanguage/AboutUs_TechnicalConsulting";
+				
+        /// <summary>
+        ///                  15982165287
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_15982165287 = "LanguageResource/AboutUsLanguage/AboutUs_15982165287";
+				
+        /// <summary>
+        /// 中文官网：www.xlysoft.net
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_OfficialWebsite = "LanguageResource/AboutUsLanguage/AboutUs_OfficialWebsite";
+				
+        /// <summary>
+        /// 地址
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_Address = "LanguageResource/AboutUsLanguage/AboutUs_Address";
+				
+        /// <summary>
+        /// 总      部：四川省内江市经开区松山南路253号
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_HeadQuartersAddress = "LanguageResource/AboutUsLanguage/AboutUs_HeadQuartersAddress";
+				
+        /// <summary>
+        /// 研发中心：四川省成都市天府大道1700号新世纪环球中心E3区7楼2-1-715
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_RdCenter = "LanguageResource/AboutUsLanguage/AboutUs_RdCenter";
+				
+        /// <summary>
+        /// 公司名称：四川效率源信息安全技术股份有限公司
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_CompanyName = "LanguageResource/AboutUsLanguage/AboutUs_CompanyName";
+				
+        /// <summary>
+        /// 效率源科技官方微信
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_WeChat = "LanguageResource/AboutUsLanguage/AboutUs_WeChat";
+				
+        /// <summary>
+        /// Copyright@2017 XLY All rights reserved
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_Copyright = "LanguageResource/AboutUsLanguage/AboutUs_Copyright";
+				
+        /// <summary>
+        /// 永久
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_Permanent = "LanguageResource/AboutUsLanguage/AboutUs_Permanent";
+				
+        /// <summary>
+        /// 确认注销软授权？
+        /// </summary>
+		public const string AboutUsLanguage_AboutUs_cancellatioOfAuthorization = "LanguageResource/AboutUsLanguage/AboutUs_cancellatioOfAuthorization";
+				
+        /// <summary>
+        /// 导出内容
+        /// </summary>
+		public const string ExportReportLanguage_ExportReport_ExportContent = "LanguageResource/ExportReportLanguage/ExportReport_ExportContent";
+				
+        /// <summary>
+        /// 设备选择：
+        /// </summary>
+		public const string ExportReportLanguage_ExportReport_DeviceSelection = "LanguageResource/ExportReportLanguage/ExportReport_DeviceSelection";
+				
+        /// <summary>
+        /// 所有设备
+        /// </summary>
+		public const string ExportReportLanguage_ExportReport_AllEquipment = "LanguageResource/ExportReportLanguage/ExportReport_AllEquipment";
+				
+        /// <summary>
+        /// 数据内容：
+        /// </summary>
+		public const string ExportReportLanguage_ExportReport_DataContent = "LanguageResource/ExportReportLanguage/ExportReport_DataContent";
+				
+        /// <summary>
+        /// 数据状态：
+        /// </summary>
+		public const string ExportReportLanguage_ExportReport_DataState = "LanguageResource/ExportReportLanguage/ExportReport_DataState";
+				
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+		public const string ExportReportLanguage_ExportReport_DeleteData = "LanguageResource/ExportReportLanguage/ExportReport_DeleteData";
+				
+        /// <summary>
+        /// 未删除数据
+        /// </summary>
+		public const string ExportReportLanguage_ExportReport_NotDeleteData = "LanguageResource/ExportReportLanguage/ExportReport_NotDeleteData";
+				
+        /// <summary>
+        /// 导出格式
+        /// </summary>
+		public const string ExportReportLanguage_ExportReport_ExportFormat = "LanguageResource/ExportReportLanguage/ExportReport_ExportFormat";
+				
+        /// <summary>
+        /// 全部数据
+        /// </summary>
+		public const string ExportReportLanguage_ExportReport_AllData = "LanguageResource/ExportReportLanguage/ExportReport_AllData";
+				
+        /// <summary>
+        /// 勾选数据
+        /// </summary>
+		public const string ExportReportLanguage_ExportReport_CheckData = "LanguageResource/ExportReportLanguage/ExportReport_CheckData";
+				
+        /// <summary>
+        /// 标记数据
+        /// </summary>
+		public const string ExportReportLanguage_ExportReport_TagData = "LanguageResource/ExportReportLanguage/ExportReport_TagData";
+				
+        /// <summary>
+        /// 存放路径：
+        /// </summary>
+		public const string ExportReportLanguage_ExportReport_StorePath = "LanguageResource/ExportReportLanguage/ExportReport_StorePath";
+				
+        /// <summary>
+        /// 格式选择：
+        /// </summary>
+		public const string ExportReportLanguage_ExportReport_FormatSelection = "LanguageResource/ExportReportLanguage/ExportReport_FormatSelection";
+				
+        /// <summary>
+        /// 单位：
+        /// </summary>
+		public const string ExportReportLanguage_ExportReport_Unit = "LanguageResource/ExportReportLanguage/ExportReport_Unit";
+				
+        /// <summary>
+        /// 开始导出
+        /// </summary>
+		public const string ExportReportLanguage_ExportReport_BeganExport = "LanguageResource/ExportReportLanguage/ExportReport_BeganExport";
+				
+        /// <summary>
+        /// 请输入关输入搜索品牌或型号
+        /// </summary>
+		public const string DeviceEditLanguage_DeviceEdit_SearchContent = "LanguageResource/DeviceEditLanguage/DeviceEdit_SearchContent";
+				
+        /// <summary>
+        /// 品牌选择
+        /// </summary>
+		public const string DeviceEditLanguage_DeviceEdit_BrandChoice = "LanguageResource/DeviceEditLanguage/DeviceEdit_BrandChoice";
 				
         /// <summary>
         /// 

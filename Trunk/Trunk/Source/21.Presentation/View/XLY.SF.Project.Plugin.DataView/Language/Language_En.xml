@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <LanguageResource>
   <GridView>GridView</GridView>
   <ContactView>ContactView</ContactView>
@@ -12,6 +12,5 @@
   <PhoneBack>Back</PhoneBack>
   <WeChat>WeChat</WeChat>
   <DengLu>Login</DengLu>
+  <OperatingTip>Ongoing operation, Please wait...</OperatingTip>
 </LanguageResource>
-
-

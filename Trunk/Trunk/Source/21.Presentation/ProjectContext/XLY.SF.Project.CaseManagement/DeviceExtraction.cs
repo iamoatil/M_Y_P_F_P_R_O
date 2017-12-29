@@ -258,7 +258,7 @@ namespace XLY.SF.Project.CaseManagement
         /// <param name="fileNameWithoutExtension">配置文件名称（不含扩展名）。</param>
         /// <param name="owner">创建该设备的案例。</param>
         /// <returns>DeviceExtraction 类型实例。</returns>
-        internal static DeviceExtraction Create(String type, String directory, String fileNameWithoutExtension, Case owner)
+        internal static DeviceExtraction Create(String directory, String type, String fileNameWithoutExtension, Case owner)
         {
             DPConfiguration configuration = DPConfiguration.Create(type);
             if (configuration == null) return null;
@@ -312,15 +312,14 @@ namespace XLY.SF.Project.CaseManagement
 
         private void Delete(Boolean isEvent)
         {
-            if (!Existed) return;
             Case.UnregisterPath(Token, Path);
-            if (!isEvent)
-            {
-                Directory.Delete(Path, true);
-            }
-            if (Owner.Configuration.RemoveReference(Reference))
+            if (Owner.Existed && Owner.Configuration.RemoveReference(Reference))
             {
                 Owner.Configuration.Save(Owner.ProjectFile);
+            }
+            if (!isEvent && Existed)
+            {
+                Directory.Delete(Path, true);
             }
             Deleted?.Invoke(this, EventArgs.Empty);
         }

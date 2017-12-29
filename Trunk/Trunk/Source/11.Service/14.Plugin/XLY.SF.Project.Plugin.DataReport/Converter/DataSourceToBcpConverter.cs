@@ -335,7 +335,7 @@ namespace XLY.SF.Project.Plugin.DataReport
                                 dt.Columns.Add(a.Text);
                             }
 
-                            foreach (var i in n.Items.View)
+                            foreach (var i in n.Items.GetView(0,-1))
                             {
                                 DataRow dr = dt.NewRow();
                                 foreach (var a in atts)
@@ -458,7 +458,7 @@ namespace XLY.SF.Project.Plugin.DataReport
                     dt.Columns.Add(a.Text);
                 }
 
-                foreach (var data in dataList.View)
+                foreach (var data in dataList.GetView(0, -1))
                 {
                     DataRow dr = dt.NewRow();
                     foreach (var a in atts)

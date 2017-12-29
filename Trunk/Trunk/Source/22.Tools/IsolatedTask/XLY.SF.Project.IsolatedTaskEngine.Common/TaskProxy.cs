@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,37 +17,37 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
     {
         #region Events
 
-        public event EventHandler Disconnect;
+        public event EventHandler Disconnected;
 
         #region TaskOver
 
         /// <summary>
         /// 任务结束事件。
         /// </summary>
-        public event EventHandler<TaskOverEventArgs> TaskOver;
+        public event EventHandler<TaskTerminateEventArgs> TaskTerminated;
 
         /// <summary>
         /// 触发任务结束事件。
         /// </summary>
         /// <param name="args">事件参数。</param>
-        private void OnTaskOver(TaskOverEventArgs args)
+        private void OnTaskTerminate(TaskTerminateEventArgs args)
         {
-            TaskOver?.Invoke(this, args);
+            TaskTerminated?.Invoke(this, args);
         }
 
         #endregion
 
         #region MessageArrived
 
-        public event EventHandler<Message> MessageArrived;
+        public event EventHandler<Message> Received;
 
         /// <summary>
         /// 收到消息事件。
         /// </summary>
         /// <param name="message">消息。</param>
-        private void OnMessageArrived(Message message)
+        private void OnReceived(Message message)
         {
-            MessageArrived?.Invoke(this, message);
+            Received?.Invoke(this, message);
         }
 
         #endregion
@@ -71,13 +74,15 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
 
         #region Fields
 
-        private readonly NamedPipeClientStream _pipe;
+        private NamedPipeClientStream _pipe;
 
-        private readonly StreamString _ss;
+        private MessageTransceiver _ss;
 
         private Boolean _requestStop;
 
-        private Boolean _isInit;
+        private readonly String _name;
+
+        private readonly String _serverName;
 
         #endregion
 
@@ -87,13 +92,11 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// 初始化类型 TaskProxy 实例。
         /// </summary>
         /// <param name="name">消息收发器名称。该名称必须与服务进程的消息收发器名称一致。</param>
-        /// <param name="timeout">超时时间。如果小于或等于0,则具有无限超时值的等待服务进程响应。</param>
         /// <param name="serverName">要连接的远程计算机的名称。默认为本地计算机。</param>
         public TaskProxy(String name, String serverName = ".")
         {
-            NamedPipeClientStream pipe = new NamedPipeClientStream(serverName, name, PipeDirection.InOut, PipeOptions.Asynchronous);
-            _ss = new StreamString(pipe);
-            _pipe = pipe;
+            _name = name ?? throw new ArgumentNullException(nameof(name));
+            _serverName = serverName ?? throw new ArgumentNullException(nameof(serverName));
         }
 
         #endregion
@@ -101,9 +104,15 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         #region Properties
 
         /// <summary>
-        /// 代理是否已经关闭。
+        /// 代理是否已经连接。
         /// </summary>
-        public Boolean IsTerminated => _requestStop;
+        public Boolean IsConnected
+        {
+            [MethodImpl(MethodImplOptions.Synchronized)]
+            get;
+            [MethodImpl(MethodImplOptions.Synchronized)]
+            private set;
+        }
 
         #endregion
 
@@ -112,24 +121,28 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         #region Public
 
         /// <summary>
-        /// 初始化代理。
+        /// 连接。
         /// </summary>
         /// <param name="timeout">在连接超时之前等待响应的毫秒数。</param>
         /// <returns>成功返回true；否则返回false。</returns>
-        public Boolean Init(Int32 timeout = -1)
+        public void Connect(Int32 timeout = 2000)
         {
-            if(IsTerminated) throw new InvalidOperationException("The proxy is terminated");
-            if (_isInit) return true;
+            if (IsConnected) return;
+            NamedPipeClientStream pipe = null;
             try
             {
-                _pipe.Connect(timeout);
-                _isInit = true;
-                Task.Factory.StartNew(Receive, TaskCreationOptions.LongRunning);
-                return true;
+                _requestStop = false;
+                pipe = new NamedPipeClientStream(_serverName, _name, PipeDirection.InOut, PipeOptions.Asynchronous,System.Security.Principal.TokenImpersonationLevel.None);
+                pipe.Connect(timeout);
+                pipe.ReadMode = PipeTransmissionMode.Message;
+                IsConnected = true;
+                _pipe = pipe;
+                _ss = new MessageTransceiver(pipe);
+                _ss.ReceiveAsync(ReceiveCallback);
             }
             catch (TimeoutException)
             {
-                return false;
+                pipe.Dispose();
             }
         }
 
@@ -139,48 +152,46 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <param name="message">消息。</param>
         public void Send(Message message)
         {
-            if (!_isInit) throw new InvalidOperationException("The proxy need initialization");
-            if (IsTerminated) throw new InvalidOperationException("The proxy is terminated");
-            _ss.WriteString(message.SerializeObject());
+            if (!IsConnected) throw new InvalidOperationException("The proxy need connection");
+            _ss.Send(message);
         }
 
         /// <summary>
-        /// 终止代理。
+        /// 断开代理。
         /// </summary>
-        public void Terminate()
+        public void Disconnect()
         {
-            if (_isInit)
-            {
-                _requestStop = true;
-                if (_pipe.IsConnected)
-                {
-                    _pipe.Close();
-                }
-            }
+            if (!IsConnected) return;
+            _requestStop = true;
+            _pipe.Close();
         }
 
         #endregion
 
         #region Private
 
-        private void Receive()
+        private void HandleDisconnection()
         {
-            Message message = Message.Invalid;
-            String str = null;
-            Boolean? result = null;
-            while (!_requestStop)
+            _requestStop = false;
+            _pipe = null;
+            IsConnected = false;
+            Disconnected?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void ReceiveCallback(Message? m)
+        {
+            if (_requestStop) return;
+            if (!m.HasValue)
             {
-                str = _ss.ReadString();
-                result = HandleMessage(str, out message);
-                if (!result.HasValue)
+                HandleDisconnection();
+            }
+            else
+            {
+                if (m.Value != Message.Invalid)
                 {
-                    Disconnect?.Invoke(this, EventArgs.Empty);
-                    break;
+                    DispatchMessage(m.Value);
                 }
-                if (result.Value)
-                {
-                    DispatchMessage(message);
-                }
+                _ss.ReceiveAsync(ReceiveCallback);
             }
         }
 
@@ -192,22 +203,21 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         {
             switch (message.Code)
             {
-                case (Int32)SystemMessageCode.TaskOverEvent:
+                case (Int32)SystemMessageCode.TaskTerminateEvent:
                     {
-                        Terminate();
-                        TaskOverEventArgs args = message.GetContent<TaskOverEventArgs>();
-                        OnTaskOver(args);
+                        TaskTerminateEventArgs args = message.GetContent<TaskTerminateEventArgs>();
+                        OnTaskTerminate(args);
                     }
                     break;
                 case (Int32)SystemMessageCode.TaskEngineErrorEvent:
                     {
-                        Terminate();
+                        Disconnect();
                         TaskEnginErrorEventArgs args = message.GetContent<TaskEnginErrorEventArgs>();
                         OnTaskEngineError(args);
                     }
                     break;
                 default:
-                    OnMessageArrived(message);
+                    OnReceived(message);
                     break;
             }
         }

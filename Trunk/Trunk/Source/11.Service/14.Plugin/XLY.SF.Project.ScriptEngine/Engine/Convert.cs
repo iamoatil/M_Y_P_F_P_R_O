@@ -1,18 +1,12 @@
 using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Xml;
-using XLY.SF.Framework.BaseUtility.BaseUtilityEnum;
-using XLY.SF.Framework.BaseUtility;
 
-
-namespace XLY.SF.Project.ScriptEngine.Engine
+namespace XLY.SF.Project.ScriptEngine
 {
     /// <summary>
     /// 数据转换
@@ -24,7 +18,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// </summary>
         public string ToLong(object value)
         {
-            return System.Convert.ToInt64(value.ToString()).ToString();
+            return value.ToSafeString().ToSafeInt64().ToString();
         }
 
         /// <summary>
@@ -32,7 +26,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// </summary>
         public string ToInt(object value)
         {
-            return System.Convert.ToInt64(value.ToString()).ToString();
+            return value.ToSafeString().ToSafeInt().ToString();
         }
 
         /// <summary>
@@ -40,7 +34,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// </summary>
         public string ToDouble(object value)
         {
-            return System.Convert.ToDouble(value.ToString()).ToString();
+            return value.ToSafeString().ToSafeDouble().ToString();
         }
 
         /// <summary>
@@ -48,7 +42,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// </summary>
         public string ToString(object value)
         {
-            return value.ToString();
+            return value.ToSafeString();
         }
 
         /// <summary>
@@ -59,7 +53,31 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         public string ToDataState(object value)
         {
             var e = DynamicConvert.ToEnumByValue(value, EnumDataState.Normal);
-            return e.ToString();
+            return e.ToSafeString();
+        }
+
+        public enum EnumDataState
+        {
+
+            /// <summary>
+            /// 未知
+            /// </summary>
+            None = 0,
+
+            /// <summary>
+            /// 正常
+            /// </summary>
+            Normal = 2,
+
+            /// <summary>
+            /// 已删除
+            /// </summary>
+            Deleted = 1,
+
+            /// <summary>
+            /// 碎片
+            /// </summary>
+            Fragment = 4,
         }
 
         /// <summary>
@@ -70,11 +88,12 @@ namespace XLY.SF.Project.ScriptEngine.Engine
             try
             {
                 XmlDocument n = new XmlDocument();
-                n.LoadXml(value.ToString());
+                n.LoadXml(value.ToSafeString());
                 return Newtonsoft.Json.JsonConvert.SerializeXmlNode(n);
             }
-            catch 
+            catch (Exception ex)
             {
+                Console.WriteLine("xml to json occour errors: " + ex.AllMessage());
                 return string.Empty;
             }
         }
@@ -92,7 +111,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
             {
                 sourcecode = sourcecode.ToUpper();
                 Encoding tc = Encoding.GetEncoding(targetcode);
-                var str = value.ToString();
+                var str = value.ToSafeString();
                 switch (sourcecode)
                 {
                     case "QUOTED-PRINTABLE":
@@ -101,30 +120,19 @@ namespace XLY.SF.Project.ScriptEngine.Engine
                         return this.BASE64Encode(str, tc);
                     default:
                         Encoding sc = Encoding.GetEncoding(sourcecode);
-
-                        var bytes = System.Text.Encoding.Convert(sc, tc, sc.GetBytes(str));
-                        return sc.GetString(bytes);
+                        return str.Encode(sc, tc);
                 }
             }
             catch
             {
-                return value.ToString();
+                return value.ToSafeString();
             }
         }
 
         private string BASE64Encode(string value, Encoding target)
         {
             var data = System.Convert.FromBase64String(value);
-            return GetString(data,target);
-        }
-
-        public string GetString( byte[] bytes, System.Text.Encoding encode)
-        {
-            if (bytes == null || bytes.Count() <= 0)
-            {
-                return string.Empty;
-            }
-            return encode.GetString(bytes);
+            return data.GetString(target);
         }
 
         private string QuotedPrintableEncode(string value, Encoding target)// QP编码
@@ -160,7 +168,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// </summary>
         public string UrlDecode(object value)
         {
-            return UrlDecode(value.ToString());
+            return value.ToSafeString().UrlDecode();
         }
 
         /// <summary>
@@ -168,65 +176,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// </summary>
         public string UrlEncode(object value)
         {
-            return UrlEncode(value.ToString());
-        }
-
-        /// <summary>
-        /// Url地址字符编码
-        /// </summary>
-        public string UrlEncode(string source, EnumEncodingType encodingType = EnumEncodingType.UTF_8)
-        {
-            if (!string.IsNullOrEmpty(source))
-            {
-                var chs = Encoding.GetEncoding(GetDescription(encodingType));
-                return System.Web.HttpUtility.UrlEncode(source, chs);
-            }
-            return string.Empty;
-        }
-        private static ConcurrentDictionary<Enum, string> _CacheDescriptions = new ConcurrentDictionary<Enum, string>();
-        public  string GetDescription(Enum @this)
-        {
-            return _CacheDescriptions.GetOrAdd(@this, (key) =>
-            {
-                var type = key.GetType();
-                var field = type.GetField(key.ToString());
-                //如果field为null则应该是组合位域值，
-                return field == null ? GetDescriptions(key) : GetDescription(field);
-            });
-        }
-        /// <summary>
-        /// 获取位域枚举的描述，多个按分隔符组合
-        /// </summary>
-        public  string GetDescriptions(Enum @this, string separator = ",")
-        {
-            var names = @this.ToString().Split(',');
-            string[] res = new string[names.Length];
-            var type = @this.GetType();
-            for (int i = 0; i < names.Length; i++)
-            {
-                var field = type.GetField(names[i].Trim());
-                if (field == null) continue;
-                res[i] = GetDescription(field);
-            }
-            return string.Join(separator, res);
-        }
-
-        private static string GetDescription(FieldInfo field)
-        {
-            var att = System.Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute), false);
-            return att == null ? string.Empty : ((DescriptionAttribute)att).Description;
-        }
-        /// <summary>
-        /// Url 地址字符解码
-        /// </summary>
-        public string UrlDecode(string source, EnumEncodingType encodingType = EnumEncodingType.UTF_8)
-        {
-            if (!string.IsNullOrEmpty(source))
-            {
-                var chs = Encoding.GetEncoding(GetDescription(encodingType));
-                return System.Web.HttpUtility.UrlDecode(source, chs);
-            }
-            return string.Empty;
+            return value.ToSafeString().UrlEncode();
         }
 
         #endregion
@@ -236,47 +186,20 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// </summary>
         public string LinuxToDateTime(object value)
         {
-            var dt =DateTime.Parse(value.ToString());
-            return dt != null ? ToDateTimeString(dt) : string.Empty;
+            var dt = DynamicConvert.ToSafeDateTime(value);
+            return dt.IsValid() ? dt.ToDateTimeString() : string.Empty;
         }
-        public string ToDateTimeString(DateTime? value)
-        {
-            if (value!=null)
-            {
-                return ToDateTimeString(value.Value);
-            }
-            return string.Empty;
-        }
-        public string ToDateTimeString(DateTime value)
-        {
-            if (value==null)
-            {
-                return string.Empty;
-            }
-            if (value.Year == 1970 && value.Month == 1 && value.Day == 1 && value.Hour == 0 && value.Minute == 0 && value.Second == 0)
-            {
-                return string.Empty;
-            }
-            if (value.Hour == 0 && value.Minute == 0 && value.Second == 0)
-            {
-                return ToDateString(value);
-            }
-            return value.ToString("yyyy-MM-dd HH:mm:ss");
-        }
-        public  string ToDateString(DateTime value)
-        {
-            return IsValid(value) ? value.ToString("yyyy-MM-dd") : string.Empty;
-        }
+
         public string ToSinaDateTime(object value)
         {
             if (value != null)
             {
-                string time = value.ToString();
+                string time = value.ToSafeString();
                 if (time.Length >= 30)
                 {
                     string newt = time.Substring(8, 2) + " " + time.Substring(4, 3) + " " + time.Substring(26, 4) + " " + time.Substring(11, 8);
                     var dt = DateTime.Parse(newt);
-                    return IsValid(dt) ? dt.ToString("yyyy-MM-dd hh:mm:ss") : "";
+                    return dt.IsValid() ? dt.ToString("yyyy-MM-dd hh:mm:ss") : "";
                 }
             }
             return "";
@@ -287,35 +210,8 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// </summary>
         public string GoogleChromeToDateTime(object value)
         {
-            var dt = ToSafeDateTimeForGoogleChrome(value);
-            return IsValid(dt.Value) ? ToDateTimeString(dt) : string.Empty;
-        }
-        public DateTime? ToSafeDateTimeForGoogleChrome(object value, int startYear = 1601)
-        {
-            var len = System.Convert.ToInt64(value.ToString());
-
-            if (len <= 0)
-            {
-                return null;
-            }
-
-            //如果是17位为毫秒 10000
-            //如果是14为秒，10000000
-            //DateTime.Now.Ticks 是指从DateTime.MinValue之后过了多少时间，10000000为一秒
-            int strlen = len.ToString().Length;
-
-            DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(startYear, 1, 1));
-
-            try
-            {
-                TimeSpan toNow = strlen == 17 ? TimeSpan.FromMilliseconds(len / 1000) : TimeSpan.FromSeconds(len);
-                var dt = dtStart.Add(toNow);
-                return dt;
-            }
-            catch
-            {
-                return null;
-            }
+            var dt = DynamicConvert.ToSafeDateTimeForGoogleChrome(value);
+            return dt.IsValid() ? dt.ToDateTimeString() : string.Empty;
         }
 
         /// <summary>
@@ -323,15 +219,15 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// </summary>
         public string ToDateTime(object value, string format)
         {
-            return DateTime.Parse(value.ToString()).ToString(format);
+            return value.ToSafeString().ToDateTime(format).ToDateTimeString();
         }
-        public bool IsValid(DateTime value)
+
+        /// <summary>
+        /// 转换字符串为时间格式
+        /// </summary>
+        public string ToDateTime(object value, string format, string culture)
         {
-            if (DateTime.MinValue == value || DateTime.MaxValue == value)
-            {
-                return false;
-            }
-            return true;
+            return value.ToSafeString().ToDateTime(format, culture).ToDateTimeString();
         }
 
         /// <summary>
@@ -354,67 +250,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// <returns>返回字符串Md5值</returns>
         public string CalculateMd5(object content)
         {
-            return MD5Encrypt(content.ToString());
+            return System.Utility.Helper.Cryptography.MD5Encrypt(content.ToSafeString());
         }
-        public string MD5Encrypt(string value)
-        {
-            if (string.IsNullOrEmpty(value))
-            {
-                return string.Empty;
-            }
-            byte[] source = Encoding.Unicode.GetBytes(value);
-            var result = MD5(source, false);
-            return result;
-        }
-        private static string MD5(byte[] buffer, bool isXLY)
-        {
-            //Type objType = o.GetType();
-            System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-            byte[] retVal;
-            if (isXLY)
-            {
-                buffer = AddByte(buffer);
-            }
-            retVal = md5.ComputeHash(buffer);
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < retVal.Length; i++)
-            {
-                sb.Append(retVal[i].ToString("x2"));
-            }
-            return sb.ToString();
-        }
-        private static readonly byte[] baseByte = { 88, 76, 89 };
-        private static byte[] AddByte(byte[] buffer)
-        {
-            List<byte> result = new List<byte>();
-            result.AddRange(baseByte);
-            result.AddRange(buffer);
-            result.AddRange(baseByte);
-            return result.ToArray();
-        }
-    }
-
-    public enum EnumDataState
-    {
-
-        /// <summary>
-        /// 未知
-        /// </summary>
-        None = 0,
-
-        /// <summary>
-        /// 正常
-        /// </summary>
-        Normal = 2,
-
-        /// <summary>
-        /// 已删除
-        /// </summary>
-        Deleted = 1,
-
-        /// <summary>
-        /// 碎片
-        /// </summary>
-        Fragment = 4,
     }
 }

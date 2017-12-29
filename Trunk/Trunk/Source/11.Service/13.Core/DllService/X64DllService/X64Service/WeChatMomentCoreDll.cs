@@ -57,6 +57,7 @@ namespace X64Service
     /// <summary>
     /// 朋友圈主内容
     /// </summary>
+    [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct WXIN_MOMENT_ENTRY
     {
         /// <summary>
@@ -76,6 +77,7 @@ namespace X64Service
     /// <summary>
     /// 朋友圈主内容链表
     /// </summary>
+    [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct LINK_WXIN_MOMENT_INFO
     {
         public WXIN_MOMENT_ENTRY wme;
@@ -85,6 +87,7 @@ namespace X64Service
     /// <summary>
     /// 朋友圈评论主内容
     /// </summary>
+    [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct WXIN_COMMENT_ENTRY
     {
         /// <summary>
@@ -109,11 +112,11 @@ namespace X64Service
     /// <summary>
     /// 朋友圈评论链表
     /// </summary>
+    [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct LINK_WXIN_COMMENT_INFO
     {
         public WXIN_COMMENT_ENTRY wce;
         public IntPtr next;
-
     }
 
     /// <summary>

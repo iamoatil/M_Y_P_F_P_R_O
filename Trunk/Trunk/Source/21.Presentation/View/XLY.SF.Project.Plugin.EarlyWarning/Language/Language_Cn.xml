@@ -1,23 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <LanguageResource>
-  <ClearTip>清空搜索条件</ClearTip>
-  <Search>搜索</Search>
-  <AllApps>所有应用</AllApps>
-  <KeyWordWatermark>请输入关键词</KeyWordWatermark>
-  <TipNoData>未提取到任何数据</TipNoData>
-  <TipNoData2>请尝试其他方案</TipNoData2>
-  <Searching>正在查询数据...</Searching>
-  <BookmarkAll>所有标记</BookmarkAll>
-  <BookmarkNone>未标记</BookmarkNone>
-  <BookmarkYes>已标记</BookmarkYes>
-  <DataStateAll>所有状态</DataStateAll>
-  <DataStateNormal>正常数据</DataStateNormal>
-  <DataStateDelete>删除数据</DataStateDelete>
-  <Keyword>关键词</Keyword>
-  <ZhengZe>正则</ZhengZe>
-  <DeleteNotice>是否删除数据'{0}'?</DeleteNotice>
-  <DeleteNoticeTitle>系统提示</DeleteNoticeTitle>
-  <DeletingData>正在删除数据...</DeletingData>
+  <EarlyWarning>
+    <StopAutoEarlyWarning>停止智能预警</StopAutoEarlyWarning>
+  </EarlyWarning>
 </LanguageResource>
 
 

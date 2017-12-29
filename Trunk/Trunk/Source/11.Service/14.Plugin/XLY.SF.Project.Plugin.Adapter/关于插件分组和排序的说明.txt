@@ -2,7 +2,7 @@
 
 
 
-该说明只指针数据提取插件，即 DataParsePluginInfo
+该说明只针对数据提取插件，即 DataParsePluginInfo
 
 包含4个属性，分别为:
 Name    提取项名字，例如：联系人、短信、QQ、微信

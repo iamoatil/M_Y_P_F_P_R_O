@@ -35,15 +35,11 @@ namespace XLY.SF.Project.DataPreview
         {
             get
             {
-                return base.DataContext as ViewModelBase;
+                return base.DataSource as ViewModelBase;
             }
             set
             {
-                //value.SetViewContainer(this);
-                if(this.DataContext != value)
-                {
-                    base.DataContext = value;
-                }                
+                base.DataSource = value;
             }
         }
     }

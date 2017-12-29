@@ -191,14 +191,13 @@ namespace XLY.SF.Project.CaseManagement
         private void Delete(Boolean isEvent)
         {
             Case.UnregisterPath(Token, Path);
-            if (!isEvent)
-            {
-                if (!Existed) return;
-                Directory.Delete(Path, true);
-            }
-            if (Owner.Configuration.RemoveExtract(this, Owner))
+            if (Owner.Existed && Owner.Configuration.RemoveExtract(this, Owner))
             {
                 Owner.Configuration.Save(Owner.ConfigurationFile);
+            }
+            if (!isEvent && Existed)
+            {
+                Directory.Delete(Path, true);
             }
             Deleted?.Invoke(this, EventArgs.Empty);
         }

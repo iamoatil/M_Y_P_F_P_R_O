@@ -54,28 +54,36 @@ namespace XLY.SF.Framework.Core.Base.MessageBase.Navigation
         public void RemoveViewCache(TToken token)
         {
             if (_curCacheItems.ContainsKey(token))
+            {
+                _curCacheItems[token].View.DataSource.ViewClosedCallback();
                 _curCacheItems.Remove(token);
+            }
         }
 
         /// <summary>
         /// 删除当前ID的所有缓存界面
         /// </summary>
         /// <param name="token"></param>
-        public void RemoveAllViewCache(TToken token)
+        public void RemoveAllViewCacheById(TToken token)
         {
             var delItems = _curCacheItems.Keys.Where(t => t.ID == token.ID).ToArray();
 
             foreach (var item in delItems)
             {
+                _curCacheItems[item].View.DataSource.ViewClosedCallback();
                 _curCacheItems.Remove(item);
             }
         }
 
         /// <summary>
-        /// 清除所有缓存
+        /// 清除所有缓存，并停止所有正在提取的操作
         /// </summary>
         public void Clear()
         {
+            foreach (var item in _curCacheItems)
+            {
+                item.Value.View.DataSource.ViewClosedCallback();
+            }            
             _curCacheItems.Clear();
         }
 

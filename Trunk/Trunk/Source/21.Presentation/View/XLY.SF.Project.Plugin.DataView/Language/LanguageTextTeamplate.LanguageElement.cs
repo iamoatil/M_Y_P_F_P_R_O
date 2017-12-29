@@ -69,6 +69,11 @@ namespace XLY.SF.Project.Plugin.DataView
         /// 登录
         /// </summary>
 		public static readonly Languagekeys DengLu = "LanguageResource/DengLu";
+				
+        /// <summary>
+        /// 正在执行操作,请稍后...
+        /// </summary>
+		public static readonly Languagekeys OperatingTip = "LanguageResource/OperatingTip";
 		
 		public string Key { get; set; }
 

@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<LanguageResource>
-  <Extraction>
-    <TotalProgress>Total Progress</TotalProgress>
-    <Start>Start Extract</Start>
-    <Stop>Stop Extract</Stop>
-    <Alarm>Enable Alarm</Alarm>
-  </Extraction>
-</LanguageResource>

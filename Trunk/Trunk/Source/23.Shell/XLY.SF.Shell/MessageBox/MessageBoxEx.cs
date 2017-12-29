@@ -10,6 +10,7 @@ using XLY.SF.Framework.Core.Base;
 using XLY.SF.Framework.Language;
 using XLY.SF.Shell.CommWindow;
 using ProjectExtend.Context;
+using System.Threading;
 
 
 /*************************************************
@@ -31,11 +32,11 @@ namespace XLY.SF.Shell.MessageBox
         /// <param name="msgType">消息类型</param>
         /// <param name="msg">消息内容</param>
         /// <returns></returns>
-        private MessageBoxWin CreateMsgWindow(MessageBoxType msgType, string msg)
+        private MessageBoxWin CreateMsgWindow(MessageBoxType msgType, string msg, string confirmText, string cancelText)
         {
             MessageBoxWin winResult = new MessageBoxWin();
-            winResult.SetMsgBox(msg, msgType);
-            if (Application.Current.MainWindow.GetType() == typeof(Shell)&&
+            winResult.SetMsgBox(msg, msgType, confirmText, cancelText);
+            if (Application.Current.MainWindow.GetType() == typeof(Shell) &&
                 Application.Current.MainWindow.IsVisible)
                 winResult.Owner = Application.Current.MainWindow;
             return winResult;
@@ -47,30 +48,42 @@ namespace XLY.SF.Shell.MessageBox
         /// 显示警告消息
         /// </summary>
         /// <param name="warningText">内容</param>
-        public void ShowWarningMsg(string warningText)
+        public void ShowWarningMsg(string warningText, string confirmText)
         {
-            var msgWin = CreateMsgWindow( MessageBoxType.Warning, warningText);
-            msgWin.Show();
+            Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, new Action(() =>
+            {
+                var msgWin = CreateMsgWindow(MessageBoxType.Warning, warningText,
+                    string.IsNullOrWhiteSpace(confirmText) ? ProjectExtend.Context.SystemContext.LanguageManager[Languagekeys.SourceSelection_Confirm] : confirmText, null);
+                msgWin.Show();
+            }));
         }
 
         /// <summary>
         /// 显示错误消息
         /// </summary>
         /// <param name="errorText">内容</param>
-        public void ShowErrorMsg(string errorText)
+        public void ShowErrorMsg(string errorText, string confirmText)
         {
-            var msgWin = CreateMsgWindow( MessageBoxType.Error, errorText);
-            msgWin.Show();
+            Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, new Action(() =>
+            {
+                var msgWin = CreateMsgWindow(MessageBoxType.Error, errorText,
+                    string.IsNullOrWhiteSpace(confirmText) ? ProjectExtend.Context.SystemContext.LanguageManager[Languagekeys.SourceSelection_Confirm] : confirmText, null);
+                msgWin.Show();
+            }));
         }
 
         /// <summary>
         /// 显示成功消息
         /// </summary>
         /// <param name="successText">消息内容</param>
-        public void ShowSuccessMsg(string successText)
+        public void ShowSuccessMsg(string successText, string confirmText)
         {
-            var msgWin = CreateMsgWindow(MessageBoxType.Success, successText);
-            msgWin.Show();
+            Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, new Action(() =>
+            {
+                var msgWin = CreateMsgWindow(MessageBoxType.Success, successText,
+                    string.IsNullOrWhiteSpace(confirmText) ? ProjectExtend.Context.SystemContext.LanguageManager[Languagekeys.SourceSelection_Confirm] : confirmText, null);
+                msgWin.Show();
+            }));
         }
 
         #endregion
@@ -80,30 +93,49 @@ namespace XLY.SF.Shell.MessageBox
         /// <summary>
         /// 显示错误消息（模式对话框）
         /// </summary>
-        public bool ShowDialogErrorMsg(string errorText)
+        public bool ShowDialogErrorMsg(string errorText, string confirmText, string cancelText)
         {
-            var msgWin = CreateMsgWindow( MessageBoxType.Error,errorText);
-            return ShowDialogMsg(msgWin);
+            var result = Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, new Func<bool>(() =>
+            {
+                var msgWin = CreateMsgWindow(MessageBoxType.Error, errorText,
+                    string.IsNullOrWhiteSpace(confirmText) ? ProjectExtend.Context.SystemContext.LanguageManager[Languagekeys.SourceSelection_Confirm] : confirmText,
+                    string.IsNullOrWhiteSpace(cancelText) ? ProjectExtend.Context.SystemContext.LanguageManager[Languagekeys.SourceSelection_Cancel] : cancelText);
+                return ShowDialogMsg(msgWin);
+            }));
+            return (bool)result;
         }
 
         /// <summary>
         /// 显示成功消息【模式对话框】
         /// </summary>
         /// <param name="successText">消息内容</param>
-        public bool ShowDialogSuccessMsg(string successText)
+        public bool ShowDialogSuccessMsg(string successText, string confirmText, string cancelText)
         {
-            var msgWin = CreateMsgWindow(MessageBoxType.Success, successText);
-            return ShowDialogMsg(msgWin);
+            var result = Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, new Func<bool>(() =>
+            {
+
+                var msgWin = CreateMsgWindow(MessageBoxType.Success, successText,
+                    string.IsNullOrWhiteSpace(confirmText) ? ProjectExtend.Context.SystemContext.LanguageManager[Languagekeys.SourceSelection_Confirm] : confirmText,
+                    string.IsNullOrWhiteSpace(cancelText)? ProjectExtend.Context.SystemContext.LanguageManager[Languagekeys.SourceSelection_Cancel] : cancelText);
+                return ShowDialogMsg(msgWin);
+            }));
+            return (bool)result;
         }
 
         /// <summary>
         /// 显示警告消息（模式对话框）
         /// </summary>
         /// <param name="warningText">消息内容</param>
-        public bool ShowDialogWarningMsg(string warningText)
+        public bool ShowDialogWarningMsg(string warningText, string confirmText, string cancelText)
         {
-            var msgWin = CreateMsgWindow(MessageBoxType.Warning, warningText);
-            return ShowDialogMsg(msgWin);
+            var result = Application.Current.Dispatcher.Invoke(System.Windows.Threading.DispatcherPriority.Normal, new Func<bool>(() =>
+             {
+                 var msgWin = CreateMsgWindow(MessageBoxType.Warning, warningText,
+                    string.IsNullOrWhiteSpace(confirmText) ? ProjectExtend.Context.SystemContext.LanguageManager[Languagekeys.SourceSelection_Confirm] : confirmText,
+                    string.IsNullOrWhiteSpace(cancelText) ? ProjectExtend.Context.SystemContext.LanguageManager[Languagekeys.SourceSelection_Cancel] : cancelText);
+                 return ShowDialogMsg(msgWin);
+             }));
+            return (bool)result;
         }
 
         #endregion

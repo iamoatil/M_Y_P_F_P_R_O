@@ -16,6 +16,7 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// 数据报表导出插件信息
     /// </summary>
+    [Serializable]
     public class DataReportPluginInfo: AbstractZipPluginInfo
     {
         /// <summary>

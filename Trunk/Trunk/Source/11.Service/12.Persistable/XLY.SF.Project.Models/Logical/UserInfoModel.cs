@@ -9,7 +9,7 @@ using XLY.SF.Project.Models.Logical;
 
 namespace XLY.SF.Project.Models.Logical
 {
-    public class UserInfoModel :  LogicalModelBase<UserInfo>
+    public class UserInfoModel :  LogicalModelBase<UserInfo>,ICloneable
     {
         #region Constructors
 
@@ -84,20 +84,21 @@ namespace XLY.SF.Project.Models.Logical
 
         #region LoginPassword
 
-        private String _loginPassword=string.Empty;
         [Required]
         public virtual String LoginPassword
         {
-            get => _loginPassword;
+            get => Entity.LoginPassword;
             set
             {
-                _loginPassword = value;
-                MD5CryptoServiceProvider md5Psd = new MD5CryptoServiceProvider();
-                String newPsd = BitConverter.ToString(md5Psd.ComputeHash(Encoding.ASCII.GetBytes(this.LoginPassword)));
-                Entity.LoginPassword = newPsd;
+                Entity.LoginPassword = EncryptPassword(value);
                 OnPropertyChanged();
             }
         }
+
+        /// <summary>
+        /// 更新时是否包含密码。
+        /// </summary>
+        public Boolean IncludePassword { get; set; }
 
         #endregion
 
@@ -120,6 +121,21 @@ namespace XLY.SF.Project.Models.Logical
             set
             {
                 _isChecked = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region Password
+
+        private String _oldPassword = String.Empty;
+        public String OldPassword
+        {
+            get => _oldPassword;
+            set
+            {
+                _oldPassword = (value ?? String.Empty).Trim();
                 OnPropertyChanged();
             }
         }
@@ -162,6 +178,14 @@ namespace XLY.SF.Project.Models.Logical
 
         #region Public
 
+        public static String EncryptPassword(String value)
+        {
+            using (MD5CryptoServiceProvider md5Psd = new MD5CryptoServiceProvider())
+            {
+                return BitConverter.ToString(md5Psd.ComputeHash(Encoding.ASCII.GetBytes(value)));
+            }
+        }
+
         /// <summary>
         /// 获取用户信息只读实例。
         /// </summary>
@@ -169,6 +193,26 @@ namespace XLY.SF.Project.Models.Logical
         public UserInfoReadOnlyModel ToReadOnly()
         {
             return new UserInfoReadOnlyModel(Entity);
+        }
+
+        public Object Clone()
+        {
+            UserInfo ui = new UserInfo();
+            ui.UserID = UserID;
+            ui.UserName = UserName;
+            ui.WorkUnit = WorkUnit;
+            ui.IdNumber = IdNumber;
+            ui.PhoneNumber = PhoneNumber;
+            ui.LoginUserName = LoginUserName;
+            ui.LoginTime = LoginTime;
+            ui.LoginPassword = LoginPassword;
+
+            UserInfoModel newOne = new UserInfoModel(ui);
+            newOne.IsChecked = IsChecked;
+            newOne.IncludePassword = IncludePassword;
+            newOne.Password = Password;
+            newOne.ConfirmPassword = ConfirmPassword;
+            return newOne;
         }
 
         #endregion

@@ -10,7 +10,7 @@ using System.Text;
 * Create Date：2016/12/20 15:47:39
 * ==============================================================================*/
 
-namespace XLY.SF.Project.ScriptEngine.Engine
+namespace XLY.SF.Project.ScriptEngine
 {
     /// <summary>
     /// 脚本中添加对位(bit)的操作

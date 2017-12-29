@@ -1,24 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace XLY.SF.Project.DataPump.PumpHelper
+namespace XLY.SF.Framework.BaseUtility
 {
     /// <summary>
     /// winRAR辅助类
     /// 提供文件夹压缩和文件解压方法
     /// </summary>
-    public class WinRARCSharp
+    public static class WinRARCSharp
     {
         /// <summary>
         /// WinRAR.exe 的完整路径
         /// </summary>
-        public static string rarexe = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"toolkit\WinRAR\WinRAR.exe");
+        private static readonly string rarexe = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"lib\WinRAR\WinRAR.exe");
 
         [DllImport("user32.dll", EntryPoint = "ShowWindow", SetLastError = true)]
         private static extern int ShowWindow(IntPtr hWnd, uint nCmdShow);
@@ -30,7 +26,7 @@ namespace XLY.SF.Project.DataPump.PumpHelper
         /// <param name="rarPath">压缩后的 .rar 的存放目录（绝对路径）</param>
         /// <param name="rarName">压缩文件的名称（包括后缀）</param>
         /// <returns>true 或 false。压缩成功返回 true，反之，false。</returns>
-        public bool RAR(string path, string rarPath, string rarName)
+        public static bool RAR(string path, string rarPath, string rarName)
         {
             bool flag = false;
             string cmd;          //WinRAR 命令参数
@@ -60,10 +56,15 @@ namespace XLY.SF.Project.DataPump.PumpHelper
                 process.StartInfo = startinfo;
                 process.Start();
 
-                while (process.MainWindowHandle == IntPtr.Zero && !process.HasExited)
-                {//这儿必须等待，不然主界面还没Show出来MainWindowHandle是空的
+                try
+                {
+                    while (process.MainWindowHandle == IntPtr.Zero && !process.HasExited)
+                    {//这儿必须等待，不然主界面还没Show出来MainWindowHandle是空的
+                        System.Threading.Thread.Sleep(1);
+                    }
+                    ShowWindow(process.MainWindowHandle, 0);//隐藏窗口
                 }
-                ShowWindow(process.MainWindowHandle, 0);//隐藏窗口
+                catch { }
 
                 process.WaitForExit(); //无限期等待进程 winrar.exe 退出
                 if (process.HasExited)
@@ -81,12 +82,13 @@ namespace XLY.SF.Project.DataPump.PumpHelper
 
         /// <summary>
         /// 利用 WinRAR 进行解压缩
+        /// 支持长路径
         /// </summary>
         /// <param name="path">文件解压路径（绝对）</param>
         /// <param name="rarPath">将要解压缩的 .rar 文件的存放目录（绝对路径）</param>
         /// <param name="rarName">将要解压缩的 .rar 文件名（包括后缀）</param>
         /// <returns>true 或 false。解压缩成功返回 true，反之，false。</returns>
-        public bool UnRAR(string path, string rarPath, string rarName)
+        public static bool UnRAR(string path, string rarPath, string rarName)
         {
             bool flag = false;
             string cmd;
@@ -110,11 +112,15 @@ namespace XLY.SF.Project.DataPump.PumpHelper
                 process.StartInfo = startinfo;
                 process.Start();
 
-                // 20170116 by luochao，此处会抛出异常：“进程已退出，因此无法获得所请求的信息。”
-                //while (process.MainWindowHandle == IntPtr.Zero && !process.HasExited)
-                //{//这儿必须等待，不然主界面还没Show出来MainWindowHandle是空的
-                //}
-                ShowWindow(process.MainWindowHandle, 0);//隐藏窗口
+                try
+                {
+                    while (process.MainWindowHandle == IntPtr.Zero && !process.HasExited)
+                    {//这儿必须等待，不然主界面还没Show出来MainWindowHandle是空的
+                        System.Threading.Thread.Sleep(1);
+                    }
+                    ShowWindow(process.MainWindowHandle, 0);//隐藏窗口
+                }
+                catch { }
 
                 process.WaitForExit();
                 if (process.HasExited)

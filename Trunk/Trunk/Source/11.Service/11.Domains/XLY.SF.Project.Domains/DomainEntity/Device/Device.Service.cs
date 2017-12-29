@@ -68,6 +68,7 @@ namespace XLY.SF.Project.Domains
         #endregion
 
         #region CopyFile
+
         /// <summary>
         /// 拷贝指定文件
         /// </summary>
@@ -75,30 +76,35 @@ namespace XLY.SF.Project.Domains
         /// <param name="targetPath">目标拷贝路径</param>
         /// <param name="asyn"></param>
         /// <returns></returns>
-        public string CopyFile(string source, string targetPath, SingleTaskReporterBase asyn)
+        public string CopyFile(string source, string targetPath, DefaultAsyncTaskProgress asyn)
         {
-            return DeviceManager.CopyFile(this, source, targetPath, asyn);
+            return DeviceManager?.CopyFile(this, source, targetPath, asyn);
         }
+
         #endregion
 
         #region ReadFile
+
         /// <summary>
         /// 读取手机指定文件目录的内容
         /// </summary>
         public string ReadFile(string file)
         {
-            return DeviceManager.ReadFile(this, file);
+            return DeviceManager?.ReadFile(this, file);
         }
+
         #endregion
 
         #region GetPartitons
+
         /// <summary>
         /// 获取设备分区结构列表
         /// </summary>
         public List<Partition> GetPartitons()
         {
-            return DeviceManager.GetPartitons(this);
+            return DeviceManager?.GetPartitons(this);
         }
+
         #endregion
 
         /// <summary>
@@ -106,7 +112,7 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         public void ClearScreenLock()
         {
-            DeviceManager.ClearScreenLock(this);
+            DeviceManager?.ClearScreenLock(this);
         }
 
         /// <summary>
@@ -114,7 +120,7 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         public void RecoveryScreenLock()
         {
-            DeviceManager.RecoveryScreenLock(this);
+            DeviceManager?.RecoveryScreenLock(this);
         }
 
         /// <summary>
@@ -122,7 +128,7 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         public Dictionary<string, string> GetProperties()
         {
-            return DeviceManager.GetProperties(this);
+            return DeviceManager?.GetProperties(this);
         }
 
         /// <summary>
@@ -130,7 +136,7 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         public List<AppEntity> FindInstalledApp()
         {
-            return DeviceManager.FindInstalledApp(this);
+            return DeviceManager?.FindInstalledApp(this);
         }
 
         /// <summary>
@@ -138,7 +144,7 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         public List<AppEntity> FindUnInstalledApp()
         {
-            return DeviceManager.FindUnInstalledApp(this);
+            return DeviceManager?.FindUnInstalledApp(this);
         }
 
         /// <summary>

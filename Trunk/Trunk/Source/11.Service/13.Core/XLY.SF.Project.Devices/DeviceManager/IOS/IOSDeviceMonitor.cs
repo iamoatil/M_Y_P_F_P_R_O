@@ -49,8 +49,8 @@ namespace XLY.SF.Project.Devices
 
             if (connetctStatus == 1)
             {//新加入设备
-                IOSDeviceManager iosDeviceManager = IOSDeviceManager.Instance;
-                device.DeviceManager = IOSDeviceManager.Instance;
+                IOSDeviceManager iosDeviceManager = new IOSDeviceManager();
+                device.DeviceManager = iosDeviceManager;
 
                 Dictionary<string, string> properties = iosDeviceManager.GetProperties(device);
                 device.Name = properties.ContainsKey("DeviceName") ? properties["DeviceName"] : "";

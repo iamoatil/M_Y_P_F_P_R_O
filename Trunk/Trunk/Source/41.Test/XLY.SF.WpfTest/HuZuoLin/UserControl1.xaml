@@ -5,8 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:XLY.SF.WpfTest.HuZuoLin"
              xmlns:control="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Width="525" Height="600" Background="Black">
+             mc:Ignorable="d" Background="Black">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -23,6 +22,9 @@
         
     </UserControl.Resources>
     <Grid>
-        <control:TextBoxEx Title="" Width="300" Height="30"/>
+        <StackPanel>
+            <control:WebBrowserUc x:Name="web" Width="800" Height="800" Source="{Binding WbSource}"/>
+            <Button VerticalAlignment="Bottom" Width="150" Height="30" Click="button_Click"></Button>
+        </StackPanel>
     </Grid>
 </UserControl>

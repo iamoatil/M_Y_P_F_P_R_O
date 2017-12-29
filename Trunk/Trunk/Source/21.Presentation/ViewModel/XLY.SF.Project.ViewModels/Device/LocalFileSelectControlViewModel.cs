@@ -37,25 +37,11 @@ namespace XLY.SF.Project.ViewModels.Device
             CancelCommond = new RelayCommand(DoCancelCommond);
             SelectFileDlgCommond = new RelayCommand(DoSelectFileDlgCommond);
 
-            _dicOSType = Enum.GetValues(typeof(EnumOSType)).Cast<EnumOSType>().ToDictionary(o => o.GetDescriptionX(), o => o);
+            LocalFileDeviceTypeData localFileDeviceTypeData = new LocalFileDeviceTypeData();
+            _dicOSType = localFileDeviceTypeData.DicOSType;
+            _dicFlshType = localFileDeviceTypeData.DicFlshType;
             PlatformCollection.AddRange(_dicOSType.Keys);
             SelectedPlatform = EnumOSType.Android.GetDescriptionX();
-
-            _dicFlshType = new Dictionary<EnumOSType, Tuple<FlshType, DevType>>()
-            {
-                {EnumOSType.MTK, new Tuple<FlshType, DevType>(FlshType.FT_MTK, DevType.DT_11)},
-                {EnumOSType.Spreadtrum, new Tuple<FlshType, DevType>(FlshType.FT_Spreadtrum, DevType.DT_11)},
-                {EnumOSType.Symbian, new Tuple<FlshType, DevType>(FlshType.FT_Symbian, DevType.DT_11)},
-                //{EnumOSType.WindowsPhone, new Tuple<FlshType, DevType>(FlshType.FT_WindowsPhone, DevType.DT_11)},
-                {EnumOSType.MStar, new Tuple<FlshType, DevType>(FlshType.FT_MStar, DevType.DT_11)},
-                {EnumOSType.WebOS, new Tuple<FlshType, DevType>(FlshType.FT_WebOS, DevType.DT_11)},
-                {EnumOSType.WindowsMobile, new Tuple<FlshType, DevType>(FlshType.FT_WindowsMobile, DevType.DT_11)},
-                {EnumOSType.Bada, new Tuple<FlshType, DevType>(FlshType.FT_Bada, DevType.DT_11)},
-                {EnumOSType.ADI, new Tuple<FlshType, DevType>(FlshType.FT_ADI, DevType.DT_11)},
-                {EnumOSType.Infineon, new Tuple<FlshType, DevType>(FlshType.FT_Infineon, DevType.DT_11)},
-                {EnumOSType.CoolSand, new Tuple<FlshType, DevType>(FlshType.FT_CoolSand, DevType.DT_11)},
-                {EnumOSType.Sky, new Tuple<FlshType, DevType>(FlshType.FT_Sky, DevType.DT_11)}
-            };
         }
 
         #region 属性
@@ -136,7 +122,7 @@ namespace XLY.SF.Project.ViewModels.Device
         /// </summary>
         private void DoOKCommond()
         {
-            if (!File.Exists(SelectedFileName))
+            if (SelectedFileName == null || !File.Exists(SelectedFileName))
             {
                 MessageBox.ShowDialogErrorMsg("请先选择文件!");
                 return;

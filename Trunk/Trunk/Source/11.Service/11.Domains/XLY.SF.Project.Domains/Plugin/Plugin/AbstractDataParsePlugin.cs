@@ -21,9 +21,24 @@ namespace XLY.SF.Project.Domains
     /// C#数据解析插件虚基类
     /// </summary>
     [Plugin]
-    public abstract class AbstractDataParsePlugin:IPlugin
+    public abstract class AbstractDataParsePlugin : IPlugin
     {
         public abstract IPluginInfo PluginInfo { get; set; }
+
+        private DataParsePluginInfo _DataParsePluginInfo;
+
+        public DataParsePluginInfo DataParsePluginInfo
+        {
+            get
+            {
+                if (null == _DataParsePluginInfo)
+                {
+                    _DataParsePluginInfo = PluginInfo as DataParsePluginInfo;
+                }
+
+                return _DataParsePluginInfo;
+            }
+        }
 
         /// <summary>
         /// 插件执行的起始时间

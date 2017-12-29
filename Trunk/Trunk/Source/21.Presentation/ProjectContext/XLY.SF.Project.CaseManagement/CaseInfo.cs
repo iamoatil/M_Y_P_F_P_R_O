@@ -62,7 +62,11 @@ namespace XLY.SF.Project.CaseManagement
         /// <summary>
         /// 路径。
         /// </summary>
-        public virtual String Path { get; set; }
+        public virtual String Path
+        {
+            get;
+            internal set;
+        }
 
         #endregion
 

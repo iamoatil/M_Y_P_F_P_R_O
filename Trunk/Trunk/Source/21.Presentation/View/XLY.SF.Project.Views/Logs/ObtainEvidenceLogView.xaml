@@ -8,6 +8,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
 		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
              xmlns:be="clr-namespace:XLY.SF.Project.Themes.Behavior;assembly=XLY.SF.Project.Themes"
+             xmlns:control="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
              xmlns:local="clr-namespace:XLY.SF.Project.Views.Logs"
              mc:Ignorable="d" Title="{Binding XPath=ViewLanguage/View_Logs_ObtainEvidenceLogView_Title,Source={x:Static ex:SystemContext.LanguageProvider}}">
     <core:UcViewBase.Resources>
@@ -35,9 +36,9 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <DatePicker/>
+            <control:DateTimePicker Width="230"/>
             <Rectangle Grid.Column="1" Width="15" Height="3" Fill="#FF9CA6B7" Margin="3 0 3 0"/>
-            <DatePicker Grid.Column="2"/>
+            <control:DateTimePicker Width="230" Grid.Column="2"/>
             <Button Grid.Column="4" Width="100" Height="30" Style="{StaticResource btn_LoginClose}" Content="{Binding XPath=ViewLanguage/View_MainWin_DataExport,Source={x:Static ex:SystemContext.LanguageProvider}}"/>
         </Grid>
         <!--数据展示-->

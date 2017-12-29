@@ -186,7 +186,18 @@ namespace XLY.SF.Project.IsolatedTaskEngine.Common
         /// <returns>将JSON字符串转换为Message</returns>
         public static Message ToMessage(String json)
         {
-            return json.DeserializeObject<Message>(Message.Invalid);
+            try
+            {
+                return json.DeserializeObject<Message>(Message.Invalid);
+            }
+            catch (JsonException)
+            {
+                return Message.Invalid;
+            }
+            catch (FormatException)
+            {
+                return Message.Invalid;
+            }
         }
 
         /// <summary>

@@ -108,9 +108,12 @@ namespace XLY.SF.Project.Devices
         [MethodImpl(MethodImplOptions.Synchronized)]
         private void OnDeviceDisconnected(IDevice device)
         {
-            CurConnectDeves.Remove(device);
-            DeviceDisconnected?.Invoke(device);
+            var ddd = CurConnectDeves.Find(d => d.ID == device.ID);
+            if (null != ddd)
+            {
+                CurConnectDeves.Remove(ddd);
+                DeviceDisconnected?.Invoke(ddd);
+            }
         }
-
     }
 }

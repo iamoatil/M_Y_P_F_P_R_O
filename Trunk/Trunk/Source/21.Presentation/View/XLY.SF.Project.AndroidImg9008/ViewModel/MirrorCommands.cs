@@ -1,0 +1,120 @@
+﻿/* ==============================================================================
+* Description：MirrorCommands  
+* Author     ：litao
+* Create Date：2017/11/16 20:02:32
+* ==============================================================================*/
+
+using System;
+
+namespace XLY.SF.Project.AndroidImg9008
+{
+
+    /// <summary>
+    /// 命令字符串集合
+    /// </summary>
+    public class CmdString
+    {
+        private string _cmdString;
+        public CmdString(string cmd)
+        {
+            _cmdString = cmd;
+
+            HasChild = false;
+            CmdHeaderLength = -1;
+            int index = cmd.IndexOf('|');
+            if (index > 1)
+            {
+                HasChild = true;
+                CmdHeaderLength = index;
+            }
+        }
+        
+        /// <summary>
+        /// 是否有孩子命令
+        /// </summary>
+        public bool HasChild { get; private set; }
+
+        /// <summary>
+        ///命令中头部字符串的长度。eg：“Start”的长度
+        /// </summary>
+        public int CmdHeaderLength
+        {
+            get;private set;
+        }
+
+        /// <summary>
+        /// 命令中头部区域的长度。eg：“Start|”的长度
+        /// </summary>
+        public int CmdHeaderAreaLength
+        {
+            get { return CmdHeaderLength + 1; }
+        }
+
+        public override string ToString()
+        {
+            return _cmdString;
+        }
+
+        /// <summary>
+        ///命令字符串是否相匹配
+        /// </summary>
+        internal bool Match(CmdString cmd)
+        {
+            if (_cmdString.Equals(cmd._cmdString, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 命令是不是cmd类型
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
+        internal bool IsType(CmdString cmd)
+        {
+            if (_cmdString.StartsWith(cmd._cmdString, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 获取子命令
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
+        internal CmdString GetChildCmd()
+        {
+            string str=_cmdString.Substring(CmdHeaderAreaLength);
+            return new CmdString(str);
+        }
+    }
+
+   /// <summary>
+   /// 命令字符串集合
+   /// </summary>
+    class CmdStrings
+    {
+        //此段定义Background反馈上来的状态。
+        //主要有3类，FinishState，Progress，Exception 。
+        //统一使用SendSate发送状态
+        public static readonly CmdString FinishState = new CmdString("FinishState");
+        public static readonly CmdString Progress = new CmdString("Progress");
+        public static readonly CmdString Exception = new CmdString("Exception");
+
+        // 此段定义操作命令
+        public static readonly CmdString StartMirror = new CmdString("StartMirror");
+        public static readonly CmdString StopMirror = new CmdString("StopMirror");
+        public static readonly CmdString ContinueMirror = new CmdString("ContinueMirror");
+        public static readonly CmdString PauseMirror = new CmdString("PauseMirror");
+
+        //临时状态
+        public static readonly CmdString AllFinishState = new CmdString("AllFinishState");
+        public static readonly CmdString UnknowException = new CmdString("Exception|UnknowException");
+        public static readonly CmdString NoSelectedPartition = new CmdString("NoSelectedPartition");
+
+    }
+}

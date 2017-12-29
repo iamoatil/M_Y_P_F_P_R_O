@@ -1,8 +1,8 @@
 ﻿using System;
-using XLY.SF.Project.DataPump.Android;
+using XLY.SF.Project.DataPump;
 using XLY.SF.Project.Domains;
 
-namespace XLY.SF.Project.DataPump.Misc
+namespace XLY.SF.Project.DataPump
 {
     /// <summary>
     /// SD卡数据泵。
@@ -12,7 +12,7 @@ namespace XLY.SF.Project.DataPump.Misc
         #region Constructors
 
         /// <summary>
-        /// 初始化类型 XLY.SF.Project.DataPump.Misc.SdCardDataPump 实例。
+        /// 初始化类型 XLY.SF.Project.DataPump.SdCardDataPump 实例。
         /// </summary>
         /// <param name="metadata">与此数据泵关联的元数据信息。</param>
         public SdCardDataPump(Pump metadata)
@@ -34,8 +34,8 @@ namespace XLY.SF.Project.DataPump.Misc
         {
             IFileSystemDevice device = new SDCardDevice
             {
-                Source = Metadata,
-                ScanModel = (Byte)Metadata.ScanModel
+                Source = PumpDescriptor,
+                ScanModel = (Byte)PumpDescriptor.ScanModel
             };
             return device;
         }

@@ -69,18 +69,20 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
             <!--时间范围-->
-            <DatePicker Margin="10 15 2 15" Width="150" SelectedDate="{Binding StartTime}"></DatePicker>
+            <!--<DatePicker x:Name="startDate" Margin="10 15 2 15" Width="150" SelectedDate="{Binding StartTime}" DisplayDateEnd="{Binding SelectedDate,ElementName=endDate}"></DatePicker>-->
+            <ctrl:DateTimePicker x:Name="startDate" Margin="10 15 2 15" Width="150" SelectDateTime="{Binding StartTime}"/>
             <TextBlock Margin="2 15" Text="-" FontSize="20" Foreground="#9BA6B7" FontWeight="ExtraBold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <DatePicker Margin="2 15" Width="150" SelectedDate="{Binding EndTime}"></DatePicker>
-            
+            <!--<DatePicker x:Name="endDate" Margin="2 15" Width="150" SelectedDate="{Binding EndTime}" DisplayDateStart="{Binding SelectedDate,ElementName=startDate}"></DatePicker>-->
+            <ctrl:DateTimePicker x:Name="endDate" Margin="2 15" Width="150" SelectDateTime="{Binding EndTime}"/>
+
             <!--数据状态-->
             <ctrl:ComboBoxEx Margin="2 15" Width="100" FontSize="14" TitlePadding="10 0 0 0"  ItemsSource="{Binding DataStateSource}" SelectedValuePath="Key" DisplayMemberPath="Value" SelectedValue="{Binding DataState}"></ctrl:ComboBoxEx>
             
             <!--应用筛选-->
-            <ctrl:PopupControl Margin="2 15" Width="100" FontSize="14" Text="{local:Lang Key=AllApps}">
+            <ctrl:PopupControl Margin="2 15" Width="100" FontSize="14" Text="{Binding DataListText}">
                 <Popup Width="200" MaxHeight="400" PopupAnimation="Slide" StaysOpen="False" VerticalOffset="6" HorizontalOffset="-10">
                     <Border Background="#485374" >
-                        <TreeView BorderThickness="0" theme:AttachHelper.IsShowSelectedGripper="False"  theme:AttachHelper.IsShowCheckBox="True" theme:AttachHelper.IsHideUnCheckedNode="False" theme:AttachHelper.IsHideChildren="False"  Background="#0FFFFFFF" ItemsSource="{Binding DataListSource}">
+                        <TreeView BorderThickness="0" theme:AttachHelper.IsShowSelectedGripper="False"  theme:AttachHelper.IsShowCheckBox="True" theme:AttachHelper.IsHideUnCheckedNode="False" theme:AttachHelper.IsHideChildren="False"  Background="#0FFFFFFF" ItemsSource="{Binding BindDataListSource}" ItemContainerStyle="{StaticResource dataListTreeViewItem}"  theme:AttachHelper.TreeItemDefaultExpandDepth ="0">
                             <TreeView.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding TreeNodes}">
                                     <TextBlock Text="{Binding Text}"/>

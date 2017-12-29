@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace XLY.SF.Project.ScriptEngine.Engine
+namespace XLY.SF.Project.ScriptEngine
 {
     /// <summary>
     /// 调试
@@ -52,7 +52,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// </summary>
         public void WriteNewLine()
         {
-            Console.WriteLine();
+            Console.Write(Environment.NewLine);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// </summary>
         public void WriteDateTime()
         {
-            Console.Write(DateTime.Now.ToString());
+            Console.Write(DateTime.Now.ToDateTimeString());
         }
 
         /// <summary>
@@ -68,8 +68,8 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// </summary>
         public string RandomInt(object start, object end)
         {
-            var a = Int32.Parse(start.ToString());
-            var b = Int32.Parse(end.ToString());
+            var a = start.ToSafeString().ToSafeInt();
+            var b = end.ToSafeString().ToSafeInt();
             Random ran = new Random();
             return ran.Next(a, b).ToString();
         }

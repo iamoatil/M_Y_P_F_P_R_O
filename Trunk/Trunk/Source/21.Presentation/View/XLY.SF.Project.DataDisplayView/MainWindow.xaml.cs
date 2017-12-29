@@ -42,7 +42,9 @@ namespace XLY.SF.Project.DataDisplayView
             //    DevicePath = @"E:\XLY\SPFData\默认案例_20171130[034313]\R7007_20171130[034315]"
             //};
             //devicePath = Serializer.JsonSerializerIO(inspection);
-            devicePath = @"Inspection;E:\XLY\SPFData\默认案例_20171130[034313]\R7007_20171130[034315]";
+            //devicePath = @"Inspection;E:\XLY\SPFData\默认案例_20171205[100047]\R7007_20171205[013850]";
+            //devicePath = @"E:\XLY\SPFData\默认案例_20171205[100047]\R7007_20171205[013850]";
+            devicePath = @"C:\SPF\默认案例171227052308\R7";
             //var obj = Serializer.JsonDeserializeIO<ViewModel.InspectionConfig>(devicePath);
 
             //加载插件列表

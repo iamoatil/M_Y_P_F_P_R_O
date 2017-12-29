@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -101,7 +102,7 @@ namespace XLY.SF.Project.Domains
         {
             if (!_isLocked) return false;
             Expression = CreateExpression(true, Args);
-            base.Filter();
+            View = base.Filter();
             if (_cursor >= Count)
                 return false;
             _cursor += PageSize;
@@ -118,7 +119,7 @@ namespace XLY.SF.Project.Domains
             if (Count == 0) return false;
             _cursor -= PageSize;
             Expression = CreateExpression(true, Args);
-            base.Filter();
+            View = base.Filter();
             if (_cursor <= 0)
                 return false;
             return true;
@@ -142,11 +143,39 @@ namespace XLY.SF.Project.Domains
             _cursor = 0;
         }
 
+        /// <summary>
+        /// 获取任意页的数据
+        /// </summary>
+        /// <param name="cursor"></param>
+        /// <param name="pageSize">如果小于0则为获取所有数据</param>
+        /// <returns></returns>
+        public virtual IEnumerable GetView(int cursor = 0, int pageSize = -1)
+        {
+            if(pageSize <= 0)
+            {
+                pageSize = Count;
+            }
+            Expression = CreatePageExpression(true, cursor, pageSize, Args);
+            return base.Filter();
+        }
         #endregion
 
         #region Private
 
         private Expression CreateExpression(Boolean paging, params FilterArgs[] args)
+        {
+            return CreatePageExpression(paging, _cursor, PageSize, args);
+        }
+
+        /// <summary>
+        /// 创建可分页的查询语句
+        /// </summary>
+        /// <param name="paging"></param>
+        /// <param name="cursor"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        private Expression CreatePageExpression(bool paging, int cursor, int pageSize, params FilterArgs[] args)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendFormat("a.XLYKey = '{0}' ", Key);
@@ -154,18 +183,18 @@ namespace XLY.SF.Project.Domains
             {
                 if (paging)
                 {
-                    sb.AppendFormat("LIMIT {0} OFFSET {1} ", PageSize, _cursor);
+                    sb.AppendFormat("LIMIT {0} OFFSET {1} ", pageSize, cursor);
                 }
                 return Expression.Constant(sb.ToString());
             }
             bool isAttach = false;
-            bool isUnion = false;
+            bool isJoin = false;
             foreach (var arg in args)
             {
                 switch (arg)
                 {
                     case FilterByStringContainsArgs keywordArg:
-                        sb.AppendFormat("AND a.XLYJson LIKE '%{0}%' ", keywordArg.PatternText.Replace("'","''"));
+                        sb.AppendFormat("AND a.XLYJson LIKE '%{0}%' ", keywordArg.PatternText.Replace("'", "''"));
                         break;
                     case FilterByRegexArgs regexArg:
                         String temp = regexArg.Regex.ToString();
@@ -175,18 +204,28 @@ namespace XLY.SF.Project.Domains
                         SetDateTimeRangeSql(dateRangeArg.StartTime, dateRangeArg.EndTime, sb);
                         break;
                     case FilterByBookmarkArgs bookMarkArg:
-                        if(bookMarkArg.BookmarkId < 0)
+                        if (bookMarkArg.BookmarkId < 0)
                         {
-                            isUnion = true;
+                            isJoin = false;
+                            sb.AppendFormat($"AND a.[MD5] not in (select key from {MultiSQLiteFilterDataProvider.AttachedDatabaseAliasName}.{BookmarkDecorationProperty.DPTableName}) ");
                         }
                         else
                         {
-                            sb.AppendFormat("AND b.BookMarkId = {0} ", bookMarkArg.BookmarkId);
+                            isJoin = true;
+                            //sb.AppendFormat("AND b.BookMarkId = {0} ", bookMarkArg.BookmarkId);
+                            sb.Append($"AND a.[MD5] = b.key and b.state = {bookMarkArg.BookmarkId} ");
                         }
                         isAttach = true;
                         break;
                     case FilterByEnumStateArgs stateArg:
-                        sb.AppendFormat("AND a.DataState = '{0}' ", stateArg.State.ToString());
+                        if(stateArg.State == EnumDataState.Normal)
+                        {
+                            sb.AppendFormat("AND a.DataState = 'Normal' ");
+                        }
+                        else
+                        {
+                            sb.AppendFormat("AND a.DataState != 'Normal' ");
+                        }
                         break;
                     case FilterBySensitiveArgs senstiveArg:
                         sb.AppendFormat("AND a.SensitiveId = {0} ", senstiveArg.SensitiveId);
@@ -196,7 +235,7 @@ namespace XLY.SF.Project.Domains
                 }
             }
 
-            if (isUnion)
+            if (isJoin)
             {
                 sb.Insert(0, "#");
             }
@@ -207,9 +246,8 @@ namespace XLY.SF.Project.Domains
 
             if (paging)
             {
-                sb.AppendFormat("LIMIT {0} OFFSET {1} ", PageSize, _cursor);
+                sb.AppendFormat("LIMIT {0} OFFSET {1} ", pageSize, cursor);
             }
-           
             return Expression.Constant(sb.ToString());
         }
 
@@ -291,28 +329,10 @@ namespace XLY.SF.Project.Domains
             : base(source, key)
         { }
 
-        public override bool NextPage()
+        public override IEnumerable GetView(int cursor = 0, int pageSize = -1)
         {
-            var rt = base.NextPage();
-            AssociatedBookmark();
+            var rt = base.GetView(cursor, pageSize);
             return rt;
-        }
-
-        public override bool PreviousPage()
-        {
-            var rt = base.PreviousPage();
-            AssociatedBookmark();
-            return rt;
-        }
-
-        public event Action OnAssociatedBookmark;
-
-        /// <summary>
-        /// 关联书签
-        /// </summary>
-        private void AssociatedBookmark()
-        {
-            OnAssociatedBookmark?.Invoke();
         }
     }
 }

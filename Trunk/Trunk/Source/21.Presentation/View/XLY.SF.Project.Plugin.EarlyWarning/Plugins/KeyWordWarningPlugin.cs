@@ -31,7 +31,6 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             EarlyWarningPluginArgument ewArg = (EarlyWarningPluginArgument)arg;
             DeviceDataSource ds = ewArg.DeviceDataSource;
-            DbFromConfigData configDbManager = ewArg.ConfigDbManager;
 
             AbstractDataSource dataSource = ds.DataSource as AbstractDataSource;
 
@@ -40,7 +39,7 @@ namespace XLY.SF.Project.EarlyWarningView
             {
                 return null;
             }
-            KeyWordColumnUpdate(dataSource.Items, configDbManager);
+            KeyWordColumnUpdate(dataSource.Items.DbTableName);
             return null;
         }
     }

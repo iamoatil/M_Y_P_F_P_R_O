@@ -27,7 +27,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <StackPanel Orientation="Horizontal" Margin="0 0 0 0" Background="Transparent" Height="40" VerticalAlignment="Top">
+            <StackPanel Orientation="Horizontal" Margin="0 0 0 0" Background="#28375a" Height="40" VerticalAlignment="Top">
                 <control:TextBoxEx Width="700" Margin="15 0 0 0" Text="{Binding SelectManager.CurFolderLevel.FullPath}" x:Name="tb_Path"
                                    Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/TextBoxOpenIcon.png"
                                    IconWidth="7" IconHeight="12" Height="34"
@@ -93,7 +93,13 @@
                         </ListBox>
                         <!--文件视图-->
                         <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto">
-                            <ItemsControl ItemsSource="{Binding FolderFileItems}">
+                            <ItemsControl x:Name="ic_FileItems" ItemsSource="{Binding FolderFileItems,NotifyOnSourceUpdated=True}">
+                                <ItemsControl.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#2d3c5f" Offset="0"/>
+                                        <GradientStop Color="#232d4b" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </ItemsControl.Background>
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
@@ -112,16 +118,6 @@
                                                 <be:ResetFileOrFolderNameBehavior FullPath="{Binding FullPath}" IsFolder="{Binding IsFolder}"/>
                                             </i:Interaction.Behaviors>
                                         </control:CreateNewFolderRadioButton>
-                                        <!--<RadioButton x:Name="gd" GroupName="xlyFileSelectGroup" Background="Transparent" Width="106" Height="150" Margin="10"
-                                        Command="{Binding DataContext.SelectedItemCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
-                                        CommandParameter="{Binding }">
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="MouseDoubleClick" SourceObject="{Binding ElementName=gd}">
-                                                    <i:InvokeCommandAction Command="{Binding DataContext.InSelectedItemCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}" 
-                                                                   CommandParameter="{Binding }"/>
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                        </RadioButton>-->
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -136,12 +132,19 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock x:Name="tb_Name" Text="{Binding XPath=ViewLanguage/View_SelectControl_FolderName, Source={x:Static ex:SystemContext.LanguageProvider},StringFormat={}{0}：}" FontSize="14" Foreground="#9ba5b9" VerticalAlignment="Center" HorizontalAlignment="Right"/>
 
-                        <control:TextBoxEx Grid.Column="1" Height="30" Margin="5 0 10 0" Text="{Binding CurSelectedItemInFolder.Name,Mode=TwoWay}"/>
-                        <Button x:Name="btn_Name" Margin="0 0 10 0" Grid.Column="2" Content="{Binding XPath=ViewLanguage/View_SelectControl_SelectFolderTitle, Source={x:Static ex:SystemContext.LanguageProvider}}" Width="80" Height="30" Command="{Binding SelectedCompleteCommand}"/>
+                        <control:TextBoxEx x:Name="tb_Input" Grid.Column="1" Height="30" Margin="5 0 10 0" Text="{Binding CurInput,Mode=TwoWay}"/>
+                        <Button x:Name="btn_Name" Margin="0 0 10 0" Grid.Column="2" Content="{Binding XPath=ViewLanguage/View_SelectControl_SelectFolderTitle, Source={x:Static ex:SystemContext.LanguageProvider}}" Width="80" Height="30"
+                                Command="{Binding SelectedCompleteCommand}"
+                                CommandParameter="{Binding Text,ElementName=tb_Input}"/>
                         <Button Grid.Column="3" Width="80" Height="30" Content="{Binding XPath=ViewLanguage/Management/User/Cancel, Source={x:Static ex:SystemContext.LanguageProvider}}" Command="{Binding CancelSelectCommand}"/>
                     </Grid>
                 </Grid>
             </Border>
         </Grid>
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="SourceUpdated" SourceObject="{Binding ElementName= ic_FileItems}">
+                <ei:ChangePropertyAction PropertyName="Text" Value="{x:Null}" TargetObject="{Binding ElementName= tb_Input}"/>
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
     </Border>
 </core:UcViewBase>

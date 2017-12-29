@@ -109,6 +109,16 @@ namespace XLY.SF.Project.DataDisplayView
         /// 请在设置中勾选"默认打开智能检视"
         /// </summary>
 		public static readonly Languagekeys NotOpenInspectionTip2 = "LanguageResource/NotOpenInspectionTip2";
+				
+        /// <summary>
+        /// 删除失败，请手动删除数据后再加载数据!
+        /// </summary>
+		public static readonly Languagekeys DeleteDataError = "LanguageResource/DeleteDataError";
+				
+        /// <summary>
+        /// 正在加载数据...
+        /// </summary>
+		public static readonly Languagekeys dingData = "LanguageResource/LoadingData";
 		
 		public string Key { get; set; }
 

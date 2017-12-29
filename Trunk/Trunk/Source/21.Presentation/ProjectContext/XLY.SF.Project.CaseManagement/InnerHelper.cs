@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.Schema;
 
@@ -69,7 +67,23 @@ namespace XLY.SF.Project.CaseManagement
             String parentDirectory = Path.GetDirectoryName(directory);
             String directoryName = Path.GetFileName(directory);
             String fullPath = directory;
-            var items = Directory.EnumerateDirectories(parentDirectory, $"{directoryName}*");
+            IEnumerable<String> items = null;
+            try
+            {
+                items = Directory.EnumerateDirectories(parentDirectory, $"{directoryName}*");
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                throw ex;
+            }
+            catch (ArgumentException ex)
+            {
+                throw ex;
+            }
+            catch (IOException ex)
+            {
+                throw ex;
+            }
             Int32 i = 1;
             while (true)
             {
@@ -77,7 +91,7 @@ namespace XLY.SF.Project.CaseManagement
                 {
                     break;
                 }
-                fullPath = Path.Combine(parentDirectory, $"{directoryName}{i++}");
+                fullPath = Path.Combine(parentDirectory, $"{directoryName}_{i++}");
             }
             return fullPath;
         }

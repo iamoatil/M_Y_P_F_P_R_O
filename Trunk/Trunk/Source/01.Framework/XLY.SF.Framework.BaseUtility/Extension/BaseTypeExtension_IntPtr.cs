@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -99,6 +100,7 @@ namespace XLY.SF.Framework.BaseUtility
         /// </summary>
         /// <param name="ptr"></param>
         /// <returns></returns>
+        [HandleProcessCorruptedStateExceptions]
         private static byte[] PtrtoByteArray(this IntPtr ptr)
         {
             if (ptr == IntPtr.Zero)
@@ -106,20 +108,28 @@ namespace XLY.SF.Framework.BaseUtility
                 return new byte[0];
             }
             var bytes = new List<byte>();
-            unsafe
+            try
             {
-                int length = 0;
-                byte* p = (byte*)ptr;
-                while (*p != 0 && length < 10000000)
+                unsafe
                 {
-                    bytes.Add(*p);
-                    length++;
-                    p++;
+                    int length = 0;
+                    byte* p = (byte*)ptr;
+                    while (*p != 0 && length < 10000000)
+                    {
+                        bytes.Add(*p);
+                        length++;
+                        p++;
+                    }
                 }
+            }
+            catch (AccessViolationException avex)
+            {
+                Log4NetService.LoggerManagerSingle.Instance.Error(avex, $"用unsafe代码获取内存数据出错！ 指针：{ptr.ToString("X")}");
             }
             return bytes.ToArray();
         }
 
+        [HandleProcessCorruptedStateExceptions]
         public static byte[] PtrToBytes(this IntPtr ptr, uint dataLength)
         {
             if (ptr == IntPtr.Zero)
@@ -127,16 +137,23 @@ namespace XLY.SF.Framework.BaseUtility
                 return new byte[0];
             }
             var bytes = new List<byte>();
-            unsafe
+            try
             {
-                int length = 0;
-                byte* p = (byte*)ptr;
-                while (length < dataLength)
+                unsafe
                 {
-                    bytes.Add(*p);
-                    length++;
-                    p++;
+                    int length = 0;
+                    byte* p = (byte*)ptr;
+                    while (length < dataLength)
+                    {
+                        bytes.Add(*p);
+                        length++;
+                        p++;
+                    }
                 }
+            }
+            catch (AccessViolationException avex)
+            {
+                Log4NetService.LoggerManagerSingle.Instance.Error(avex, $"用unsafe代码获取内存数据出错！ 指针：{ptr.ToString("X")}");
             }
             return bytes.ToArray();
         }

@@ -172,11 +172,19 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
 
         #region 设备提取首页
 
+        public const string StopExtractMsg = "ExportKey_StopExtract";
+
         /// <summary>
         /// 设备首页
         /// </summary>
         public const string DeviceHomePageView = "ExportKey_DeviceHomePageView";
         public const string DeviceHomePageViewModel = "ExportKey_DeviceHomePageViewModel";
+
+        /// <summary>
+        /// 修改设备型号
+        /// </summary>
+        public const string DeviceEditView = "ExportKey_DeviceEditView";
+        public const string DeviceEditViewModel = "ExportKey_DeviceEditViewModel";
 
         /// <summary>
         /// 设备主页
@@ -208,9 +216,29 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         public const string AutoWarningView = "ExportKey_AutoWarningView";
 
         /// <summary>
-        /// 智能预警页面
+        /// 智能预警页面ViewModel
         /// </summary>
         public const string AutoWarningViewModel = "ExportKey_AutoWarningViewModel";
+
+        /// <summary>
+        /// 智能预警进度页面
+        /// </summary>
+        public const string AutoWarningProgressView = "ExportKey_AutoWarningProgressView";
+
+        /// <summary>
+        /// 智能预警进度页面ViewModel
+        /// </summary>
+        public const string AutoWarningProgressViewModel = "ExportKey_AutoWarningProgressViewModel";
+
+        /// <summary>
+        /// 拍照页面
+        /// </summary>
+        public const string TakePhotoView = "ExportKey_TakePhotoView";
+
+        /// <summary>
+        ///拍照页面ViewModel
+        /// </summary>
+        public const string TakePhotoViewModel = "ExportKey_TakePhotoViewModel";
 
         #endregion
 
@@ -302,12 +330,20 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
 
         #endregion
 
+        #region 关于我们
+        public const String AboutUsView = "ExportKey_AboutUsView";
+        public const String AboutUsViewModel = "ExportKey_AboutUsViewModel";
         #endregion
 
-        #region
+        #endregion
 
+        #region 制作镜像
         public const string MirrorView= "ExportKey_MirrorView";
+        #endregion
 
+        #region 制作9008镜像
+        public const string Mirror9008View = "ExportKey_Mirror9008View";
+        public const string Mirror9008ViewModel = "ExportKey_Mirror9008ViewModel";
         #endregion
 
         #endregion

@@ -8,8 +8,9 @@
              xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
 		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+             xmlns:ee="http://schemas.microsoft.com/expression/2010/effects"
              xmlns:control="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
-             mc:Ignorable="d" NeedMaxsizeAndMinsize="True">
+             mc:Ignorable="d" NeedMaxsizeAndMinsize="True" CanResize="True">
     <core:UcViewBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -47,8 +48,9 @@
                                           Visibility="{Binding CurDevModel.HasRoot,Converter={StaticResource bToV}}"
                                           Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageIsRootIcon.png" Margin="0 0 2 0"/>
 
-                    <control:IconCheckBox Background="#263454" Height="24" Width="84" IsEnabled="False" IsChecked="{Binding CurDevModel.OnlineStatus}"
+                    <control:IconCheckBox x:Name="cb_Connect" Background="#263454" Height="24" Width="84" IsEnabled="False" IsChecked="{Binding CurDevModel.OnlineStatus}"
                                           Content="{Binding XPath=ViewLanguage/View_DevHomePage_UnConnect, Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                          Visibility="{Binding CurDevModel.HasRoot,Converter={StaticResource bToV}}"
                                           Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/icons/DevHomePageConnectIcon.png"/>
                 </StackPanel>
             </Grid>
@@ -75,13 +77,17 @@
                 <DropShadowEffect Color="#181D3A" Opacity="0.4" Direction="0" BlurRadius="30" ShadowDepth="4" RenderingBias="Quality"/>
             </StackPanel.Effect>
         </StackPanel>
-
+        
         <ContentControl Grid.Column="1" Content="{Binding SubView}"/>
 
         <i:Interaction.Triggers>
             <ei:DataTrigger Binding="{Binding CurDevModel.IsAndroid}" Value="False">
                 <ei:ChangePropertyAction PropertyName="Content" TargetObject="{Binding ElementName=cb_Root}" 
                                          Value="{Binding XPath=ViewLanguage/View_DevHomePage_IOSRoot, Source={x:Static ex:SystemContext.LanguageProvider}}"/>
+            </ei:DataTrigger>
+            <ei:DataTrigger Binding="{Binding CurDevModel.OnlineStatus}" Value="True">
+                <ei:ChangePropertyAction PropertyName="Content" TargetObject="{Binding ElementName=cb_Connect}" 
+                                         Value="{Binding XPath=ViewLanguage/View_DevHomePage_Connect, Source={x:Static ex:SystemContext.LanguageProvider}}"/>
             </ei:DataTrigger>
             <ei:DataTrigger Binding="{Binding CurSubViewType}" Value="DevHomePage">
                 <ei:ChangePropertyAction PropertyName="IsChecked" Value="True" TargetName="m_HomePage"/>

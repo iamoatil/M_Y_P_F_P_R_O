@@ -236,7 +236,7 @@ namespace XLY.SF.Project.Plugin.Android
                         Title = item.title,
                         Url = item.url,
                         CreatedTime = result,
-                        DataState = DynamicConvert.ToEnumByValue(item.XLY_DataType, EnumDataState.None)
+                        DataState = DynamicConvert.ToEnumByValue(item.XLY_DataType, EnumDataState.Normal)
                     };
                     items.Add(obj);
                 }
@@ -282,7 +282,7 @@ namespace XLY.SF.Project.Plugin.Android
                                 IconPath = item.icon_path,
                                 IconUrl = item.icon_url,
                                 AddTime = DynamicConvert.ToSafeDateTime(item.add_time),
-                                DataState = DynamicConvert.ToEnumByValue(item.XLY_DataType, EnumDataState.None)
+                                DataState = DynamicConvert.ToEnumByValue(item.XLY_DataType, EnumDataState.Normal)
                             };
 
                             items.Add(obj);
@@ -335,7 +335,7 @@ namespace XLY.SF.Project.Plugin.Android
                                     IconPath = string.Empty,
                                     IconUrl = f_data.site_logo_url,
                                     AddTime = DynamicConvert.ToSafeDateTime(item.add_time),
-                                    DataState = DynamicConvert.ToEnumByValue(item.XLY_DataType, EnumDataState.None)
+                                    DataState = DynamicConvert.ToEnumByValue(item.XLY_DataType, EnumDataState.Normal)
                                 };
 
                                 items.Add(obj);
@@ -485,7 +485,7 @@ namespace XLY.SF.Project.Plugin.Android
                             Source = item.source,
                             Visits = System.Convert.ToString(item.visited_count),
                             VisitTime = DynamicConvert.ToSafeDateTime(item.visited_time),
-                            DataState = DynamicConvert.ToEnumByValue(item.XLY_DataType, EnumDataState.None)
+                            DataState = DynamicConvert.ToEnumByValue(item.XLY_DataType, EnumDataState.Normal)
                         };
 
                         items.Add(obj);
@@ -535,7 +535,7 @@ namespace XLY.SF.Project.Plugin.Android
                             ReadStatus = item.read_status,
                             Url = item.url,
                             UpTime = DynamicConvert.ToSafeDateTime(item.up_time),
-                            DataState = DynamicConvert.ToEnumByValue(item.XLY_DataType, EnumDataState.None)
+                            DataState = DynamicConvert.ToEnumByValue(item.XLY_DataType, EnumDataState.Normal)
                         };
 
                         items.Add(obj);
@@ -589,7 +589,7 @@ namespace XLY.SF.Project.Plugin.Android
                                 Type = item.type,
                                 Size = item.size,
                                 LastModified = DynamicConvert.ToSafeDateTime(item.last_modified),
-                                DataState = DynamicConvert.ToEnumByValue(item.XLY_DataType, EnumDataState.None)
+                                DataState = DynamicConvert.ToEnumByValue(item.XLY_DataType, EnumDataState.Normal)
                             };
 
                             items.Add(obj);
@@ -626,7 +626,7 @@ namespace XLY.SF.Project.Plugin.Android
                                 Path = item.path,
                                 Size = item.size,
                                 LastModified = DynamicConvert.ToSafeDateTime(item.last_modified),
-                                DataState = DynamicConvert.ToEnumByValue(item.XLY_DataType, EnumDataState.None)
+                                DataState = DynamicConvert.ToEnumByValue(item.XLY_DataType, EnumDataState.Normal)
                             };
 
                             items.Add(obj);
@@ -891,7 +891,7 @@ namespace XLY.SF.Project.Plugin.Android
                                 Catalog_Table_Name = item.catalog_table_name,
                                 Expire_Time = item.expire_time,
                                 Update_Time = DynamicConvert.ToSafeDateTime(item.update_time),
-                                DataState = DynamicConvert.ToEnumByValue(item.XLY_DataType, EnumDataState.None)
+                                DataState = DynamicConvert.ToEnumByValue(item.XLY_DataType, EnumDataState.Normal)
                             };
 
                             var list_dynamic_summery = _sqlite2.Find(new SQLiteString(string.Format("select f.id,f.chapter_name,update_time from {0} f order by f.id", obj.Catalog_Table_Name)));

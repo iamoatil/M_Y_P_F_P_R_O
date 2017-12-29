@@ -48,7 +48,7 @@ namespace XLY.SF.Project.Services
         /// <param name="device">设备</param>
         /// <param name="iAsync">异步消息</param>
         /// <returns></returns>
-        FNodeX GetFileSystem(IFileSystemDevice device, SingleTaskReporterBase iAsync);
+        FNodeX GetFileSystem(IFileSystemDevice device, TaskReporterBase iAsync);
 
         /// <summary>
         /// 获取用户数据分区文件列表
@@ -72,14 +72,6 @@ namespace XLY.SF.Project.Services
         /// <param name="path"></param>
         /// <param name="isCover"></param>
         void ExportFile(List<FNodeX> fNodeXs, string path, bool isMedia = false, bool isCover = false);
-
-        /// <summary>
-        /// APP应用文件导出
-        /// </summary>
-        /// <param name="matchPath"></param>
-        /// <param name="path"></param>
-        /// <param name="isCover"></param>
-        void ExportAppFile(IEnumerable<string> matchPath, string path, bool isCover = false);
 
         /// <summary>
         /// APP应用文件导出

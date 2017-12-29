@@ -90,6 +90,9 @@
 
     </core:UcViewBase.Resources>
     <Grid Width="360" Height="480" >
+        <Grid.InputBindings>
+            <KeyBinding Key="Enter"  Command="{Binding LoginCommand.ViewExecuteCmd}"></KeyBinding>
+        </Grid.InputBindings>
         <Border BorderBrush="Black" BorderThickness="0" CornerRadius="10" >
             <Border.Background>
                 <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
@@ -108,61 +111,10 @@
                     <RowDefinition Height="auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/LoginIcon.png" Grid.Row="1" Width="88" Height="70"></Image>
-                <TextBlock Margin="0,18,0,0"  Grid.Row="2" Text="S P F 智 能 手 机"  FontSize="14" Foreground="White" HorizontalAlignment="Center"/>
-                <TextBlock Margin="0,8,0,0"  Grid.Row="3" Text="数据恢复取证系统"  FontSize="15" Foreground="White" HorizontalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Margin="0,18,0,0"  Grid.Row="2" Text="{Binding XPath=ViewLanguage/View_Login_SpfPhone,Source={x:Static ex:SystemContext.LanguageProvider}}"  FontSize="14"  Foreground="White" HorizontalAlignment="Center"/>
+                <TextBlock Margin="0,8,0,0"  Grid.Row="3" Text="{Binding XPath=ViewLanguage/View_Login_ProductName,Source={x:Static ex:SystemContext.LanguageProvider}}"  FontSize="15" Foreground="White" HorizontalAlignment="Center" FontWeight="Bold"/>
 
                 <control:LoadingControl Grid.Row="4" Visibility="{Binding IsLoadingVisibility}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
-                <!--<StackPanel Orientation="Horizontal" Grid.Row="4"  Margin="44,0,44,0" HorizontalAlignment="Center" Visibility="Collapsed">
-                    <StackPanel.Triggers>
-                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                            <BeginStoryboard Storyboard="{StaticResource StoryLeftToRight}" />
-                        </EventTrigger>
-                    </StackPanel.Triggers>
-                    <Rectangle
-                    Name="e1"
-                    Width="6"
-                    Height="6"
-                    Margin="2,0,0,0"
-                    HorizontalAlignment="Left"
-                    Fill="White" />
-                    <Rectangle
-                    Name="e2"
-                    Width="6"
-                    Height="6"
-                    Margin="2,0,0,0"
-                    HorizontalAlignment="Left"
-                    Fill="#D2D5D7" />
-                    <Rectangle
-                    Name="e3"
-                    Width="6"
-                    Height="6"
-                    Margin="2,0,0,0"
-                    HorizontalAlignment="Left"
-                    Fill="#A4AAB3" />
-                    <Rectangle
-                    Name="e4"
-                    Width="6"
-                    Height="6"
-                    Margin="2,0,0,0"
-                    HorizontalAlignment="Left"
-                    Fill="#787E8D" />
-                    <Rectangle
-                    Name="e5"
-                    Width="6"
-                    Height="6"
-                    Margin="2,0,0,0"
-                    HorizontalAlignment="Left"
-                    Fill="#4B5368" />
-                    <Rectangle
-                    Name="e6"
-                    Width="6"
-                    Height="6"
-                    Margin="2,0,0,0"
-                    HorizontalAlignment="Left"
-                    Fill="#363E55" />
-                </StackPanel>-->
-                
                 <Grid Grid.Row="4"  Margin="44,34,44,0" Visibility="{Binding IsLoadVisibility}">
                     <Grid.RowDefinitions >
                         <RowDefinition Height="50"></RowDefinition>
@@ -179,7 +131,7 @@
                                     Title="{Binding XPath=ViewLanguage/View_Login_UserName,Source={x:Static ex:SystemContext.LanguageProvider}}" Text="{Binding CurLoginUser.LoginUserName}" Grid.ColumnSpan="2"  IsEditable="True" ItemsSource="{Binding AllUser,Mode=OneWay}" SelectedIndex="0" DisplayMemberPath="LoginUserName" Background="#FF414B69" FontSize="14" />
                     <PasswordBox Grid.Row="2" Grid.ColumnSpan="2" Style="{StaticResource LoginPasswordBoxStyle}">
                         <i:Interaction.Behaviors>
-                            <behavior:PasswordBoxBehavior PasswordString="{Binding CurLoginUser.LoginPassword,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                            <behavior:PasswordBoxBehavior PasswordString="{Binding CurLoginUser.Password,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                         </i:Interaction.Behaviors>
                     </PasswordBox>
                     <Button Grid.Row="4"

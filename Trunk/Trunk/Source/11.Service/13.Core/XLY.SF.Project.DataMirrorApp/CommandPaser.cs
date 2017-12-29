@@ -36,7 +36,7 @@ namespace XLY.SF.Project.DataMirrorApp
                 {
                     break;
                 }
-
+                //Log4Net.Log.Debug($"operateCmd:{arg}");
                 Console.WriteLine("收到arg:" + arg);
                 string operateStr = ParseArgs(arg);
                 CmdString operate = new CmdString(operateStr);
@@ -112,6 +112,7 @@ namespace XLY.SF.Project.DataMirrorApp
             else if (operateCmd.Match(CmdStrings.StopMirror)
                 || operateCmd.Match(CmdStrings.PauseMirror))
             {
+                _mirror.Close();
                 _thread.Abort();
                 _isStop = true;
             }

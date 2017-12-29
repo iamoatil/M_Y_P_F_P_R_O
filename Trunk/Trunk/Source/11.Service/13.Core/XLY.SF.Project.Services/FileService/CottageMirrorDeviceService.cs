@@ -137,7 +137,7 @@ namespace XLY.SF.Project.Services
                     IntPtr mount = fpart.Mount;
                     var nodelist = fpart.NodeLinkList;
                     FileServiceCoreDll.DisposeLinkTableRoom(mount, ref nodelist);
-                    MirrorCoreDll.UnmountPartitionHandle(ref mount);
+                    FileServiceCoreDll.UnmountPartitionHandle(ref mount);
                     fpart.Mount = IntPtr.Zero;
                 }
             }
@@ -146,7 +146,7 @@ namespace XLY.SF.Project.Services
             FileServiceCoreDll.UnmountDeviceHandle(ref handle);
             //LogHelper.Info(string.Format(LanguageHelper.Get("LANGKEY_XieZaiSheBeiJuBingMingChengDaX_04949"), Device.Name, Device.Size, Device.Handle_Flsh));
             // 释放设备句柄
-            MirrorCoreDll.CloseDevice(this.Device.Handle);
+            FileServiceCoreDll.CloseDevice(Device.Handle);
             //LogHelper.Info(string.Format(LanguageHelper.Get("LANGKEY_ShiFangSheBeiJuBingMingChengDa_04950"), Device.Name, Device.Size, Device.Handle));
         }
 

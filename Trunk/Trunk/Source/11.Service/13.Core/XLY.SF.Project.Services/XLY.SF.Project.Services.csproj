@@ -71,6 +71,7 @@
     <Compile Include="Common\AudioDecodeHelper.cs" />
     <Compile Include="Common\DataParseHelper.cs" />
     <Compile Include="Common\DecryptHelper.cs" />
+    <Compile Include="Common\FileDataParser.cs" />
     <Compile Include="Common\FragmentHelper.cs" />
     <Compile Include="FileBrowsingService\FileBrowingNode.cs" />
     <Compile Include="FileBrowsingService\FileBrowsingServiceFactory.cs" />
@@ -141,6 +142,10 @@
       <Project>{cc75b75f-fded-448f-8ac4-ac5e1e520cc7}</Project>
       <Name>X64Service</Name>
     </ProjectReference>
+    <ProjectReference Include="..\XLY.SF.Project.DataFilter\XLY.SF.Project.DataFilter.csproj">
+      <Project>{22661B55-AD41-4232-8EE7-485CAE0F4F3D}</Project>
+      <Name>XLY.SF.Project.DataFilter</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XLY.SF.Project.Devices\XLY.SF.Project.Devices.csproj">
       <Project>{9EB7A2CF-AE03-47EE-B850-88A0FCCDD0BD}</Project>
       <Name>XLY.SF.Project.Devices</Name>
@@ -150,10 +155,21 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\PluginFeatureMathchConfig_Android.xml" />
-    <Content Include="Config\PluginFeatureMathchConfig_Android_en.xml" />
-    <Content Include="Config\PluginFeatureMathchConfig_IOS.xml" />
-    <Content Include="Config\PluginFeatureMathchConfig_IOS_en.xml" />
+    <None Include="Config\PluginFeatureMathchConfig_Android.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Config\PluginFeatureMathchConfig_Android_en.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Config\PluginFeatureMathchConfig_IOS.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Config\PluginFeatureMathchConfig_IOS_en.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Content Include="Config\PhoneModelConfig.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Language\LanguageTextTeamplate.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>LanguageTextTeamplate.LanguageElement.cs</LastGenOutput>

@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,6 +15,7 @@ using System.Xml.Linq;
 using X64Service;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.MefIoc;
+using XLY.SF.Framework.Language;
 using XLY.SF.Project.Domains;
 using XLY.SF.Project.Plugin.Adapter;
 using XLY.SF.Project.Plugin.DataReport;
@@ -575,19 +578,19 @@ namespace XLY.SF.UnitTest
             items.Filter();
             Stopwatch t = new Stopwatch();
             t.Start();
-            using (StreamWriter sw = new StreamWriter(@"C:\Users\fhjun\Desktop\123.js", false, Encoding.UTF8))
-            {
-                sw.Write("var __data = [");
-                int r = 0;
-                foreach (var c in items.View)
-                {
-                    if (r != 0)
-                        sw.Write(",");
-                    sw.Write(Serializer.JsonSerilize(c));
-                    r++;
-                }
-                sw.Write("];");
-            }
+            //using (StreamWriter sw = new StreamWriter(@"C:\Users\fhjun\Desktop\123.js", false, Encoding.UTF8))
+            //{
+            //    sw.Write("var __data = [");
+            //    int r = 0;
+            //    foreach (var c in items.View)
+            //    {
+            //        if (r != 0)
+            //            sw.Write(",");
+            //        sw.Write(Serializer.JsonSerilize(c));
+            //        r++;
+            //    }
+            //    sw.Write("];");
+            //}
             Log($"执行时间：{t.ElapsedMilliseconds}ms");//6.5s--100000数据
         }
         #endregion
@@ -635,8 +638,8 @@ namespace XLY.SF.UnitTest
             items.Commit();
             items.Filter();
 
-            mm.BookMarkId = 3;
-            mm.BookMarkId = -1;
+            //mm.BookMarkId = 3;
+            //mm.BookMarkId = -1;
         }
         #endregion
 
@@ -731,15 +734,15 @@ namespace XLY.SF.UnitTest
 
             ds.Filter<dynamic>();
             List<string> ls = new List<string>();
-            foreach (SMS item in ds.Items.View)
-            {
-                ls.Add(item.Content);
-            }
+            //foreach (SMS item in ds.Items.View)
+            //{
+            //    ls.Add(item.Content);
+            //}
             List<string> ls2 = new List<string>();
-            foreach (SMS item in (ds.Items as DataItems<SMS>).ViewAll)
-            {
-                ls2.Add(item.Content);
-            }
+            //foreach (SMS item in (ds.Items as DataItems<SMS>).ViewAll)
+            //{
+            //    ls2.Add(item.Content);
+            //}
             Assert.AreEqual(ls2.Count, 200);
             Assert.AreEqual(ls.Count, 200);
         }
@@ -791,17 +794,326 @@ namespace XLY.SF.UnitTest
         public void TestJavaScriptConfig()
         {
             Log("-----------开始测试导出js插件的配置文件----------------");
-            PluginAdapter.Instance.Initialization(null, @"C:\Projects\SFProject-new\Trunk\Trunk\Source\21-Build\Script\");
-            foreach (var item in PluginAdapter.Instance.Plugins.Keys)
+            PluginAdapter.Instance.Initialization(null);
+            //var whatsapp = PluginAdapter.Instance.Plugins.FirstOrDefault(p => p.Key.Name == "Whatsapp" && p.Key.VersionStr == "2.16.381").Value;
+            //if(whatsapp != null)
+            //{
+            //    var pi = whatsapp.PluginInfo as DataParsePluginInfo;
+            //    foreach (var item in pi.SourcePath)
+            //    {
+            //        item.Local = @"C:\Users\fhjun\Desktop\whatsapp测试数据及插件相关\" + item.Config.Replace("#F","").Replace("/data/data/","") ;
+            //        item.Local = item.Local.Replace("/", "\\").Replace("\\", "\\\\");
+            //    }
+            //    var res = whatsapp.Execute(null, null);
+            //}
+
+            //var iosWifi = PluginAdapter.Instance.Plugins.FirstOrDefault(p => p.Key.Name == "WIFI" && p.Key.VersionStr == "7.1").Value;
+            //if (iosWifi != null)
+            //{
+            //    var pi = iosWifi.PluginInfo as DataParsePluginInfo;
+            //    foreach (var item in pi.SourcePath)
+            //    {
+            //        item.Local = @"D:\XLYSFTasks\backup\任务-2016-07-04-11-39-26-IOS\source\IosData\2016-07-04-11-43-25\5847256a65fe184761e781be6bf0cc96738e6af6".Replace("\\","\\\\");
+            //    }
+            //    var res = iosWifi.Execute(null, null);
+            //}
+
+            var ios_wifi = File.ReadAllText(@"C:\Users\fhjun\Desktop\simplesource_ios_wifi.js");
+            var android_whatsapp = File.ReadAllText(@"C:\Users\fhjun\Desktop\treesource_whatsapp.js");
+
+            #region 测试SimpleSource
+
+            //SimpleDataSource ds = new SimpleDataSource();
+            //ds.Key = Guid.NewGuid();
+            //ds.Type = "WifiMsg";
+            //ds.IsChecked = false;
+            //ds.PluginInfo = PluginAdapter.Instance.Plugins.FirstOrDefault(p => p.Key.Name == "WIFI" && p.Key.VersionStr == "7.1").Value.PluginInfo;
+            //ds.Items = new DataItems<ScriptDataItem>(DeskPath("ios_wifi.db"));
+            //var mJObj = JArray.Parse(ios_wifi);
+            //foreach (var item in mJObj)
+            //{
+            //    ScriptDataItem i = new ScriptDataItem();
+            //    JObject jo = (JObject)item;
+            //    foreach (var j in jo.Properties())    //读取所有的json属性
+            //    {
+            //        i.Properties[j.Name] = j.Value.ToObject<string>();
+            //    }
+            //    ds.Items.Add(i);
+            //}
+
+            //var ss=  JsonConvert.DeserializeObject(ios_wifi, typeof(List<IOS_WIFI>));
+            //EmitCreator emit = new EmitCreator();
+            //emit.CreateType("IOS_WIFI", EmitCreator.DefaultAssemblyName, typeof(ScriptDataItem));
+            //string[] colimns = new string[] { "SSID_STR", "lastAutoJoined", "lastJoined", "BSSID", };
+            //foreach (var item in colimns)
+            //{
+            //    var property = emit.CreateProperty(item, typeof(string));
+            //    emit.SetPropertyAttribute(property, typeof(DisplayAttribute), null, null);
+            //}
+            //Type t = emit.Save();
+            //Type ct2 = typeof(List<int>).GetGenericTypeX(t);
+            //var ss2 = JsonConvert.DeserializeObject(ios_wifi, ct2);
+            //ds.BuildParent();
+            #endregion
+
+            #region 测试TreeSource
+            TreeDataSource ds2 = new TreeDataSource();
+            ds2.Key = Guid.NewGuid();
+            //ds2.Type = "";
+            ds2.IsChecked = false;
+            //ds2.PluginInfo = PluginAdapter.Instance.Plugins.FirstOrDefault(p => p.PluginInfo.Name == "Whatsapp" && p.PluginInfo.Version.ToString() == "2.16.381").PluginInfo;
+            //var pi = ds2.PluginInfo as DataParsePluginInfo;
+            //foreach (var dv in pi.DataView)
+            //{
+            //    EmitCreator emit = new EmitCreator();
+            //    emit.CreateType(dv.Type, EmitCreator.DefaultAssemblyName, typeof(AbstractDataItem), null);
+
+            //    if (dv.Items != null)
+            //    {
+            //        foreach (var item in dv.Items)
+            //        {
+            //            if (item.Code == "DataState")
+            //                continue;
+            //            var property = emit.CreateProperty(item.Code, typeof(string));
+            //            emit.SetPropertyAttribute(property, typeof(DisplayAttribute), null, null);
+            //        }
+            //    }
+            //    dv.DynamicType = emit.Save();
+            //}
+            //ds2.TreeNodes = new List<TreeNode>();
+            //JsonToTreeNodes(ds2.PluginInfo as DataParsePluginInfo, ds2.TreeNodes, JArray.Parse(android_whatsapp));
+            //ds2.BuildParent();
+            #endregion
+        }
+        #endregion
+
+        void JsonToTreeNodes(DataParsePluginInfo plugin, List<TreeNode> tree, JArray jarray)
+        {
+            if (jarray == null)
+                return;
+            foreach (JObject jo in jarray)
             {
-                if(item.PluginType == PluginType.SpfDataParse && item is DataParsePluginInfo it)
+                TreeNode node = new TreeNode()
                 {
-                    it.Guid = Guid.NewGuid().ToSafeString();
-                    Serializer.SerializeToXML(it, DeskPath($"xml\\{it.DeviceOSType}_{it.Name}_V{it.VersionStr}.config"));
+                    Text = TryGetJObjectProperty(jo, "Text", ""),
+                    DataState = TryGetJObjectProperty(jo, "DataState", "Normal").ToEnum<EnumDataState>(),
+                    TreeNodes = new List<TreeNode>()
+                };
+                string typeStr = TryGetJObjectProperty(jo, "Type", "");
+                if(!string.IsNullOrWhiteSpace(typeStr))
+                {
+                    node.Type = plugin.DataView.FirstOrDefault(v => v.Type == typeStr)?.DynamicType;
+                    Type ditype = typeof(DataItems<AbstractDataItem>).GetGenericTypeX(node.Type as Type);
+                    node.Items = ditype.CreateInstance(DeskPath("android_whatsapp.db"), true, null, null) as IDataItems;
+                    if (jo.TryGetValue("Items", out JToken itemsObj))
+                    {
+                        foreach (var io in itemsObj as JArray)
+                        {
+                            var iiii = io.ToObject(node.Type as Type);
+                            if(iiii != null)
+                                node.Items.Add(iiii);
+                        }
+                    }
                 }
+                tree.Add(node);
+
+                JsonToTreeNodes(plugin, node.TreeNodes, jo.Property("TreeNodes").Value as JArray);
+            }
+        }
+
+        T TryGetJObjectProperty<T>(JObject jo, string propertyName, T defaultValue)
+        {
+            if(jo.TryGetValue(propertyName, out JToken value))
+            {
+                return value.ToObject<T>();
+            }
+            return defaultValue;
+        }
+
+        object TryGetJObjectProperty(JObject jo, string propertyName, Type type, object defaultValue)
+        {
+            if (jo.TryGetValue(propertyName, out JToken value))
+            {
+                return value.ToObject(type);
+            }
+            return defaultValue;
+        }
+
+        //class IOS_WIFI
+        //{
+        //    public string SSID_STR { get; set; }
+        //    public DateTime? lastAutoJoined { get; set; }
+        //    public DateTime? lastJoined { get; set; }
+        //    public string BSSID { get; set; }
+        //}
+
+        public class ScriptDataItemJsonConverter : JsonConverter
+        {
+            public override bool CanConvert(Type objectType)
+            {
+                return objectType.IsAssignableFrom(typeof(IDataItems));
+            }
+
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            {
+                Dictionary<string, object> dicProp = new Dictionary<string, object>();
+
+                if (reader.TokenType == JsonToken.StartObject)       //如果是object对象
+                {
+                    JObject jo = JObject.Load(reader);
+                    foreach (var j in jo.Properties())    //读取所有的json属性
+                    {
+                        dicProp[j.Name] = j.Value.ToObject<string>();
+                    }
+                }
+                
+                return dicProp;
+            }
+
+            /// <summary>
+            /// 写入json，针对IDataItems对象，不写入数据列表，而是只写入数据库属性
+            /// </summary>
+            /// <param name="writer"></param>
+            /// <param name="value"></param>
+            /// <param name="serializer"></param>
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            {
+                if(value is Dictionary<string, object> properties)
+                {
+                    JObject jo = new JObject();
+                    foreach (var item in properties)
+                    {
+                        jo.AddFirst(new JProperty(item.Key, item.Value));
+                    }
+                    jo.WriteTo(writer);
+                }
+            }
+        }
+
+        #region 枚举多语言
+
+        /// <summary>
+        /// 枚举多语言
+        /// </summary>	
+        [TestMethod]
+        public void TestEnumDefineLanguage()
+        {
+            Log("-----------开始测试枚举多语言----------------");
+            LanguageManager.SwitchAll(LanguageType.Cn);
+            EnumOSType[] es = new EnumOSType[] { EnumOSType.None, EnumOSType.Android | EnumOSType.Bada, EnumOSType.IOS };
+            var str = es[1].GetDescriptionX();
+        }
+        #endregion
+
+        #region Emit速度
+
+        /// <summary>
+        /// Emit速度
+        /// </summary>	
+        [TestMethod]
+        public void TestEmitSpeed()
+        {
+            Log("-----------开始测试Emit速度----------------");
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
+            int typeCount = 1400;
+            int propertyCount = 5;
+            List<Type> listType = new List<Type>();
+            for (int i = 0; i < typeCount; i++)
+            {
+                EmitCreator emit = new EmitCreator();
+                emit.CreateType("DType" + i, EmitCreator.DefaultAssemblyName + (i / 3), typeof(ScriptDataItem), null);
+
+                for (int j = 0; j < propertyCount; j++)
+                {
+                    var property = emit.CreateProperty("Proper" + j, typeof(string));
+                    emit.SetPropertyAttribute(property, typeof(DisplayAttribute), null, null);
+                }
+                listType.Add(emit.Save());
+            }
+            timer.Stop();
+            var time = timer.ElapsedMilliseconds;
+            Console.WriteLine("Cost time {0} ms", time);        //4000ms
+        }
+        #endregion
+
+
+        #region Emit序列化
+
+        /// <summary>
+        /// Emit序列化
+        /// </summary>	
+        [TestMethod]
+        public void TestEmitSerialze()
+        {
+            Log("-----------开始测试Emit序列化----------------");
+            string file = DeskPath("emittest.ds");
+            string dllfile = EmitCreator.DefaultAssemblyName + ".dll";
+            if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dllfile)))
+            {
+                EmitCreator emit = new EmitCreator();
+                for (int i = 0; i < 3; i++)
+                {
+                    emit.CreateType($"{EmitCreator.DefaultAssemblyName}.P{i}.AAAA", EmitCreator.DefaultAssemblyName, typeof(ScriptDataItem), null);
+                    for (int j = 0; j < 5; j++)
+                    {
+                        var property = emit.CreateProperty("P" + j, typeof(string));
+                        emit.SetPropertyAttribute(property, typeof(DisplayAttribute), null, null);
+                    }
+                    Type t = emit.Save();
+                    if(i == 1)
+                    {
+                        dynamic a = Activator.CreateInstance(t);
+                        a.P0 = "11";
+                        a.P1 = "2";
+                        a.P2 = "33";
+                        a.P3 = "44";
+                        Serializer.SerializeToBinary(a, file);
+                    }
+                }
+                emit.SaveAsDll(dllfile);
+            }
+            else
+            {
+                //var a = Serializer.DeSerializeFromBinary<ScriptDataItem>(file);
+                //Assert.AreEqual(a, null);
+                //Type t = a.GetType();
+
+                Assembly asm = Assembly.LoadFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, dllfile));
+                Type t = asm.GetType($"{EmitCreator.DefaultAssemblyName}.P1.AAAA");
+                dynamic a = Activator.CreateInstance(t);
+                a.P0 = "11";
+                a.P1 = "2";
             }
         }
         #endregion
 
+        #region 测试数据装饰属性
+        [TestMethod]
+        public void TestDecorationProperty()
+        {
+            string db = DeskPath("data-test.db");
+            AA a = new AA() { Text = "A1", DbPath = db };
+            var r1 = a.GetValue(DecorationExtesion.CheckItemProperty);
+            a.SetValue(DecorationExtesion.CheckItemProperty, true);
+            var r2 = a.GetValue(DecorationExtesion.CheckItemProperty);
+        }
+
+        class AA : IDecoration
+        {
+            public string Text { get; set; }
+            public string DbPath { get; set; }
+            public List<AA> TreeNodes { get; set; }
+            public string GetKey(DecorationProperty dp)
+            {
+                return Text;
+            }
+
+            public object GetMetaData(DecorationProperty dp)
+            {
+                return DbPath;
+            }
+        }
+        #endregion
     }
 }

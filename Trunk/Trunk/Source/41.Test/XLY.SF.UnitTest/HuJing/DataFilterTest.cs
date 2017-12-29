@@ -55,11 +55,11 @@ namespace XLY.SF.UnitTest
             FilterByDateRangeArgs arg3 = new FilterByDateRangeArgs { StartTime = DateTime.Now, EndTime = DateTime.Now.AddDays(1) };
             FilterByEnumStateArgs arg4 = new FilterByEnumStateArgs { State = EnumDataState.Deleted };
             FilterByBookmarkArgs arg5 = new FilterByBookmarkArgs { BookmarkId = 10 };
-            var result = dataSource[1].Filter<AbstractDataItem>(arg1, arg2);
-            foreach (Call item in result.OfType<Call>())
-            {
-                Console.WriteLine($"{item.Name}--{item.Number}--{item.StartDate}--{item.DurationSecond}");
-            }
+            //var result = dataSource[1].Filter<AbstractDataItem>(arg1, arg2);
+            //foreach (Call item in result.OfType<Call>())
+            //{
+            //    Console.WriteLine($"{item.Name}--{item.Number}--{item.StartDate}--{item.DurationSecond}");
+            //}
         }
 
 

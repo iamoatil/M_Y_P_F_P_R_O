@@ -26,6 +26,7 @@
     <WIFI>WIFI信息</WIFI>
     <QQ>QQ</QQ>
     <Wechat>微信</Wechat>
+    <WechatBackup>微信电脑备份</WechatBackup>
     <EimQQ>企业QQ</EimQQ>
     <EntQQ>QQ国际版</EntQQ>
     <QQLite>QQ轻聊版</QQLite>
@@ -36,7 +37,10 @@
     <TencentMap>腾讯地图</TencentMap>
     <Twitter>Twitter</Twitter>
     <UCBrowse>UC浏览器</UCBrowse>
-
+    <Image>图片</Image>
+    <Audio>音频</Audio>
+    <Video>视频</Video>
+    <Word>文档</Word>
 
   </PluginName>
 
@@ -66,10 +70,37 @@
     <AndroidTencentMap>提取安卓设备腾讯地图信息</AndroidTencentMap>
     <AndroidTwitter>提取安卓设备Twitter信息</AndroidTwitter>
     <AndroidUCBrowse>提取安卓设备UC浏览器信息</AndroidUCBrowse>
-
+    <AndroidKupaiContacts>提取酷派手机备份联系人信息</AndroidKupaiContacts>
+    <AndroidKupaiCall>提取酷派手机备份通话记录信息</AndroidKupaiCall>
+    <AndroidKupaiSms>提取酷派手机备份短信信息</AndroidKupaiSms>
+    <AndroidVivoContacts>提取Vivo手机备份联系人信息</AndroidVivoContacts>
+    <AndroidVivoCall>提取Vivo手机备份通话记录信息</AndroidVivoCall>
+    <AndroidVivoSms>提取Vivo手机备份短信信息</AndroidVivoSms>
+    <AndroidOppoContacts>提取OPPO手机备份联系人信息</AndroidOppoContacts>
+    <AndroidOppoCall>提取OPPO手机备份通话记录信息</AndroidOppoCall>
+    <AndroidOppoSms>提取OPPO手机备份短信信息</AndroidOppoSms>
+    <AndroidHuaweiContacts>提取华为手机备份联系人信息</AndroidHuaweiContacts>
+    <AndroidHuaweiCall>提取华为手机备份通话记录信息</AndroidHuaweiCall>
+    <AndroidHuaweiSms>提取华为手机备份短信信息</AndroidHuaweiSms>
+    <AndroidXiaomiContacts>提取小米手机备份联系人信息</AndroidXiaomiContacts>
+    <AndroidXiaomiCall>提取小米手机备份通话记录信息</AndroidXiaomiCall>
+    <AndroidXiaomiSms>提取小米手机备份短信信息</AndroidXiaomiSms>
+    <AndroidZhongxingCall>提取中兴手机备份通话记录信息</AndroidZhongxingCall>
+    <AndroidMeizuCall>提取魅族手机备份通话记录信息</AndroidMeizuCall>
+    <AndroidSansungCall>提取三星手机通话记录信息</AndroidSansungCall>
+    <AndroidImage>提取安卓设备图片文件信息</AndroidImage>
+    <AndroidAudio>提取安卓设备音频文件信息</AndroidAudio>
+    <AndroidVideo>提取安卓设备视频文件信息</AndroidVideo>
+    <AndroidWord>提取安卓设备文档文件信息</AndroidWord>
+    <AndroidMirrorImage>提取安卓设备镜像图片文件信息</AndroidMirrorImage>
+    <AndroidMirrorAudio>提取安卓设备镜像音频文件信息</AndroidMirrorAudio>
+    <AndroidMirrorVideo>提取安卓设备镜像视频文件信息</AndroidMirrorVideo>
+    <AndroidMirrorWord>提取安卓设备镜像文档文件信息</AndroidMirrorWord>
 
     <IosDeviceProperty>提取IOS设备属性信息</IosDeviceProperty>
     <IosInstalledApp>提取IOS设备安装的应用列表</IosInstalledApp>
+    <IosMirrorDeviceProperty>提取IOS设备属性信息（镜像）</IosMirrorDeviceProperty>
+    <IosMirrorInstalledApp>提取IOS设备安装的应用列表（镜像）</IosMirrorInstalledApp>
     <IosContact>提取IOS设备联系人信息</IosContact>
     <IosCall>提取IOS设备安装的应用列表</IosCall>
     <IosSms>提取IOS设备短信信息</IosSms>
@@ -78,6 +109,17 @@
     <IosEimQQ>提取IOS设备企业QQ信息</IosEimQQ>
     <IosEntQQ>提取IOS设备企业QQ信息</IosEntQQ>
     <IosWechat>提取IOS设备微信信息</IosWechat>
+    <IosImage>提取IOS设备图片文件信息</IosImage>
+    <IosAudio>提取IOS设备音频文件信息</IosAudio>
+    <IosVideo>提取IOS设备视频文件信息</IosVideo>
+    <IosWord>提取IOS设备文档文件信息</IosWord>
+
+    <WechatBackup>提取微信电脑备份信息</WechatBackup>
+
+    <MTPImage>提取MTP设备图片文件信息</MTPImage>
+    <MTPAudio>提取MTP设备音频文件信息</MTPAudio>
+    <MTPVideo>提取MTP设备视频文件信息</MTPVideo>
+    <MTPWord>提取MTP设备文档文件信息</MTPWord>
 
   </PluginDescription>
 

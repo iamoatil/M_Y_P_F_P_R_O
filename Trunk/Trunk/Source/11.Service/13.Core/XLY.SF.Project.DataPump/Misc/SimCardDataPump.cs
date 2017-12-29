@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XLY.SF.Project.Domains;
 
-namespace XLY.SF.Project.DataPump.Misc
+namespace XLY.SF.Project.DataPump
 {
     /// <summary>
     /// SIM卡数据泵（这是一个打酱油的数据泵）。

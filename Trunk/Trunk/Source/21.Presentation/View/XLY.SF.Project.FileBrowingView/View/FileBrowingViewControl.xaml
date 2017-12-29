@@ -52,6 +52,15 @@
             </Style>
         </Grid.Resources>
 
+        <Button Template="{StaticResource btn_EmptyCT}" Visibility="{Binding CanFileBrowing,Converter={StaticResource BooleanToCollapseConverter},ConverterParameter=true}" Background="#2c3a5d"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Panel.ZIndex="200" Focusable="False">
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="35" ShadowDepth="0" Opacity="0.3"/>
+            </Button.Effect>
+            <TextBlock FontSize="45" Foreground="White" Text="{Binding XPath=FileBrowing/View_PreView_NoPre,Source={x:Static lang:LanguageHelper.LanguageProvider}}" 
+                               VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
+        </Button>
+
         <Button Template="{StaticResource btn_EmptyCT}" Visibility="{Binding IsLoading,Converter={StaticResource BooleanToVisibilityConverter}}" Background="Transparent"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Panel.ZIndex="199" Focusable="False">
             <Button.Effect>

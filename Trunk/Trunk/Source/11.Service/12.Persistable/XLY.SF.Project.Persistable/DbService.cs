@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Data.Common;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Linq.Expressions;
 using XLY.SF.Framework.Core.Base.CoreInterface;
@@ -134,56 +136,136 @@ namespace XLY.SF.Project.Persistable
         {
             if (record == null) return false;
             OperationLogs.Add(record);
-            return SaveChanges() == 1;
+            try
+            {
+                return SaveChanges() == 1;
+            }
+            catch (DbEntityValidationException)
+            {
+                return false;
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
         }
 
         public Boolean Add(UserInfo record)
         {
             if (record == null) return false;
             UserInfos.Add(record);
-            return SaveChanges() == 1;
+            try
+            {
+                return SaveChanges() == 1;
+            }
+            catch (DbEntityValidationException)
+            {
+                return false;
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
         }
 
         public Boolean Add(RecentCase record)
         {
             if (record == null) return false;
             RecentCases.Add(record);
-            return SaveChanges() == 1;
+            try
+            {
+                return SaveChanges() == 1;
+            }
+            catch (DbEntityValidationException)
+            {
+                return false;
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
         }
 
         public Boolean Add(ExtractionPlan record)
         {
             if (record == null) return false;
             ExtractionPlans.Add(record);
-            return SaveChanges() == 1;
+            try
+            {
+                return SaveChanges() == 1;
+            }
+            catch (DbEntityValidationException)
+            {
+                return false;
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
         }
 
         public void AddRange(params OperationLog[] records)
         {
             if (records.Length == 0) return;
             OperationLogs.AddRange(records);
-            SaveChanges();
+            try
+            {
+                SaveChanges();
+            }
+            catch (DbEntityValidationException)
+            {
+            }
+            catch (DbUpdateException)
+            {
+            }
         }
 
         public void AddRange(params UserInfo[] records)
         {
             if (records.Length == 0) return;
             UserInfos.AddRange(records);
-            SaveChanges();
+            try
+            {
+                SaveChanges();
+            }
+            catch (DbEntityValidationException)
+            {
+            }
+            catch (DbUpdateException)
+            {
+            }
         }
 
         public void AddRange(params RecentCase[] records)
         {
             if (records.Length == 0) return;
             RecentCases.AddRange(records);
-            SaveChanges();
+            try
+            {
+                SaveChanges();
+            }
+            catch (DbEntityValidationException)
+            {
+            }
+            catch (DbUpdateException)
+            {
+            }
         }
 
         public void AddRange(params ExtractionPlan[] records)
         {
             if (records.Length == 0) return;
             ExtractionPlans.AddRange(records);
-            SaveChanges();
+            try
+            {
+                SaveChanges();
+            }
+            catch (DbEntityValidationException)
+            {
+            }
+            catch (DbUpdateException)
+            {
+            }
         }
 
         public Boolean Remove(OperationLog record)
@@ -192,7 +274,18 @@ namespace XLY.SF.Project.Persistable
             var attached = OperationLogs.Attach(record);
             if (attached == null) return false;
             OperationLogs.Remove(attached);
-            return SaveChanges() == 1;
+            try
+            {
+                return SaveChanges() == 1;
+            }
+            catch (DbEntityValidationException)
+            {
+                return false;
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
         }
 
         public Boolean Remove(UserInfo record)
@@ -201,7 +294,18 @@ namespace XLY.SF.Project.Persistable
             var attached = UserInfos.Attach(record);
             if (attached == null) return false;
             UserInfos.Remove(attached);
-            return SaveChanges() == 1;
+            try
+            {
+                return SaveChanges() == 1;
+            }
+            catch (DbEntityValidationException)
+            {
+                return false;
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
         }
 
         public Boolean Remove(RecentCase record)
@@ -210,7 +314,18 @@ namespace XLY.SF.Project.Persistable
             var attached = RecentCases.Attach(record);
             if (attached == null) return false;
             RecentCases.Remove(attached);
-            return SaveChanges() == 1;
+            try
+            {
+                return SaveChanges() == 1;
+            }
+            catch (DbEntityValidationException)
+            {
+                return false;
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
         }
 
         public Boolean Remove(ExtractionPlan record)
@@ -219,71 +334,166 @@ namespace XLY.SF.Project.Persistable
             var attached = ExtractionPlans.Attach(record);
             if (attached == null) return false;
             ExtractionPlans.Remove(attached);
-            return SaveChanges() == 1;
+            try
+            {
+                return SaveChanges() == 1;
+            }
+            catch (DbEntityValidationException)
+            {
+                return false;
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
         }
 
         public void RemoveRange(params OperationLog[] records)
         {
             if (records.Length == 0) return;
             OperationLogs.RemoveRange(records);
-            SaveChanges();
+            try
+            {
+                SaveChanges();
+            }
+            catch (DbEntityValidationException)
+            {
+            }
+            catch (DbUpdateException)
+            {
+            }
         }
 
         public void RemoveRange(params UserInfo[] records)
         {
             if (records.Length == 0) return;
             UserInfos.RemoveRange(records);
-            SaveChanges();
+            try
+            {
+                SaveChanges();
+            }
+            catch (DbEntityValidationException)
+            {
+            }
+            catch (DbUpdateException)
+            {
+            }
         }
 
         public void RemoveRange(params RecentCase[] records)
         {
             if (records.Length == 0) return;
             RecentCases.RemoveRange(records);
-            SaveChanges();
+            try
+            {
+                SaveChanges();
+            }
+            catch (DbEntityValidationException)
+            {
+            }
+            catch (DbUpdateException)
+            {
+            }
         }
 
         public void RemoveRange(params ExtractionPlan[] records)
         {
             if (records.Length == 0) return;
             ExtractionPlans.RemoveRange(records);
-            SaveChanges();
+            try
+            {
+                SaveChanges();
+            }
+            catch (DbEntityValidationException)
+            {
+            }
+            catch (DbUpdateException)
+            {
+            }
         }
 
         public Boolean Update(OperationLog record)
         {
             if (record == null) return false;
-            var attached = OperationLogs.Attach(record);
-            if (attached == null) return false;
-            Entry(attached).State = EntityState.Modified;
-            return SaveChanges() == 1;
+            var found = OperationLogs.Local.FirstOrDefault(x => x.OperationID == record.OperationID);
+            if (found == null) return false;
+            var entry = Entry(found);
+            entry.CurrentValues.SetValues(record);
+            try
+            {
+                return SaveChanges() == 1;
+            }
+            catch (DbEntityValidationException)
+            {
+                return false;
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
         }
 
         public Boolean Update(UserInfo record)
         {
             if (record == null) return false;
-            var attached = UserInfos.Attach(record);
-            if (attached == null) return false;
-            Entry(attached).State = EntityState.Modified;
-            return SaveChanges() == 1;
+            var found = UserInfos.Local.FirstOrDefault(x=>x.UserID == record.UserID);
+            if (found == null) return false;
+            var entry = Entry(found);
+            entry.CurrentValues.SetValues(record);
+            try
+            {
+                return SaveChanges() == 1;
+            }
+            catch (DbEntityValidationException ex)
+            {
+                return false;
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
         }
 
         public Boolean Update(RecentCase record)
         {
             if (record == null) return false;
-            var attached = RecentCases.Attach(record);
-            if (attached == null) return false;
-            Entry(attached).State = EntityState.Modified;
-            return SaveChanges() == 1;
+            var found = RecentCases.Local.FirstOrDefault(x => x.ID == record.ID);
+            if (found == null) return false;
+            var entry = Entry(found);
+            entry.CurrentValues.SetValues(record);
+            try
+            {
+                return SaveChanges() == 1;
+            }
+            catch (DbEntityValidationException)
+            {
+                return false;
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
         }
 
         public Boolean Update(ExtractionPlan record)
         {
             if (record == null) return false;
-            var attached = ExtractionPlans.Attach(record);
-            if (attached == null) return false;
-            Entry(attached).State = EntityState.Modified;
-            return SaveChanges() == 1;
+            var found = ExtractionPlans.Local.FirstOrDefault(x => x.ID == record.ID);
+            if (found == null) return false;
+            var entry = Entry(found);
+            entry.CurrentValues.SetValues(record);
+            try
+            {
+                return SaveChanges() == 1;
+            }
+            catch (DbEntityValidationException)
+            {
+                return false;
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
         }
 
         #endregion

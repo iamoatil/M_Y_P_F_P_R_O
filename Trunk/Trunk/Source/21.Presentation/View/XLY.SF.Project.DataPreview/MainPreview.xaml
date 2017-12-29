@@ -17,12 +17,6 @@
         </ResourceDictionary>
     </core:UcViewBase.Resources>
     <Grid>
-        <ctrl:TabControlWithButton x:Name="tabPreview" Style="{StaticResource TabControlFlatWithButtonStyle1}" ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}" ItemContainerStyle="{StaticResource TabItemWithButtonStyle1}" CustomButtonAlignment="Right" Padding="2" IsHideHeaderWhenEmpty="False">
-            <!--<ctrl:TabControlWithButton.CustomButtonGroup>
-                <Button x:Name="btnExpanded" Style="{StaticResource btn_GrayIcon}" Width="30" Height="24">
-                    <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/grid_sort_asc.png" Width="13" Height="13"/>
-                </Button>
-            </ctrl:TabControlWithButton.CustomButtonGroup>-->
-        </ctrl:TabControlWithButton>
+        <ctrl:TabControlWithButton x:Name="tabPreview" Style="{StaticResource TabControlFlatWithButtonStyle1}" ItemsSource="{Binding LayoutViewItems}" SelectedItem="{Binding SelectedLayoutViewItem}" ItemContainerStyle="{StaticResource TabItemWithButtonStyle1}" CustomButtonAlignment="Right" Padding="2" IsHideHeaderWhenEmpty="False"></ctrl:TabControlWithButton>
     </Grid>
 </core:UcViewBase>

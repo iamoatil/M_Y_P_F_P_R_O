@@ -9,19 +9,14 @@
 		xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
 		xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         PreviewKeyDown="Window_PreviewKeyDown"
-        PreviewKeyUp="Window_PreviewKeyUp"
-        MouseMove="Window_MouseMove"
-        MouseLeftButtonDown="Window_MouseLeftButtonDown" 
-        MaxWidth="{Binding WinMaxWidth,Source={x:Static param:WindowHelper.Instance}}"
-        MaxHeight="{Binding WinMaxHeight,Source={x:Static param:WindowHelper.Instance}}"
-        MouseLeftButtonUp="Window_MouseLeftButtonUp" Loaded="Window_Loaded">
+        PreviewKeyUp="Window_PreviewKeyUp" Loaded="Window_Loaded">
     <themes:WindowEx.Resources>
         <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
     </themes:WindowEx.Resources>
     <themes:WindowEx.Style>
         <Style TargetType="{x:Type local:Shell}">
             <Setter Property="Template">
-                <Setter.Value>                    
+                <Setter.Value>
                     <ControlTemplate TargetType="themes:WindowEx">
                         <ControlTemplate.Resources>
                             <Storyboard x:Key="OnLoaded1">
@@ -75,17 +70,19 @@
                                 </DoubleAnimationUsingKeyFrames>
                             </Storyboard>
                         </ControlTemplate.Resources>
-                        <Border x:Name="br" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="Transparent" CornerRadius="10" Padding="40">
-                            <Border x:Name="br_Main" CornerRadius="10">
+                        <Grid>
+                            <Border x:Name="Shadow" BorderThickness="15" BorderBrush="Black" CornerRadius="2" Margin="10">
+                                <Border.Effect>
+                                    <DropShadowEffect ShadowDepth="0" BlurRadius="15"/>
+                                </Border.Effect>
+                            </Border>
+                            <Border x:Name="br_Main" CornerRadius="10" BorderThickness="10" BorderBrush="Transparent">
                                 <Border.Background>
                                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                         <GradientStop Color="#2d3c5f" Offset="0"/>
                                         <GradientStop Color="#232d4b" Offset="1"/>
                                     </LinearGradientBrush>
                                 </Border.Background>
-                                <Border.Effect>
-                                    <DropShadowEffect BlurRadius="35" ShadowDepth="0" Opacity="0.6"/>
-                                </Border.Effect>
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="auto"/>
@@ -146,7 +143,10 @@
                                             <Rectangle VerticalAlignment="Bottom" Height="10" Fill="#28375a" Grid.ColumnSpan="3"/>
                                         </Grid>
                                     </Border>
-                                    <ContentPresenter x:Name="cp_Content" Opacity="0" Grid.Row="1" Margin="0" RenderTransformOrigin="0.5,0.5">
+                                    <ContentPresenter x:Name="cp_Content" Opacity="0" Grid.Row="1" 
+                                                      MaxWidth="{Binding WinMaxWidth,Source={x:Static param:WindowHelper.Instance}}"
+                                                      MaxHeight="{Binding WinMaxHeight,Source={x:Static param:WindowHelper.Instance}}" 
+                                                      Margin="0" RenderTransformOrigin="0.5,0.5">
                                         <ContentPresenter.RenderTransform>
                                             <TransformGroup>
                                                 <ScaleTransform/>
@@ -156,15 +156,26 @@
                                             </TransformGroup>
                                         </ContentPresenter.RenderTransform>
                                     </ContentPresenter>
+                                    <ResizeGrip x:Name="resize" Visibility="Collapsed" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
                                 </Grid>
                             </Border>
-                        </Border>
+                        </Grid>
                         <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="ResizeMode" Value="CanResizeWithGrip"/>
+                                    <Condition Property="WindowState" Value="Normal"/>
+                                </MultiTrigger.Conditions>
+                                <MultiTrigger.Setters>
+                                    <Setter Property="Visibility" Value="Visible" TargetName="resize"/>
+                                </MultiTrigger.Setters>
+                            </MultiTrigger>
                             <Trigger Property="WindowState" Value="Maximized">
-                                <Setter Property="Padding" TargetName="br" Value="0"/>
-                                <Setter Property="CornerRadius" TargetName="br" Value="0"/>
                                 <Setter Property="CornerRadius" TargetName="br_Main" Value="0"/>
-                                <Setter Property="Effect" TargetName="br_Main" Value="{x:Null}"/>
+                                <Setter Property="BorderThickness" TargetName="br_Main" Value="0"/>
+                                <Setter Property="Effect" TargetName="Shadow" Value="{x:Null}"/>
+                                <Setter Property="CornerRadius" TargetName="Shadow" Value="0"/>
+                                <Setter Property="BorderThickness" TargetName="Shadow" Value="0"/>
                             </Trigger>
                             <DataTrigger Binding="{Binding Text,ElementName= tb_Title}" Value="">
                                 <Setter Property="Visibility" Value="Collapsed" TargetName="br1"/>

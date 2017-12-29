@@ -42,6 +42,7 @@ namespace XLY.SF.Project.Plugin.DataView
         {
             DefaultGridViewControl grid = new DefaultGridViewControl();
             grid.DataContext = arg; 
+            grid.OnSelectedDataChanged -= OnSelectedDataChanged;
             grid.OnSelectedDataChanged += OnSelectedDataChanged;
             return grid;
         }

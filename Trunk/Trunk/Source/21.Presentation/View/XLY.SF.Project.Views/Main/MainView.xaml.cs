@@ -104,7 +104,7 @@ namespace XLY.SF.Project.Views.Main
         /// <param name="args"></param>
         private void OpenSubViewCallback(SysCommonMsgArgs<SubViewMsgModel> args)
         {
-            gd_CaseName.Visibility = Visibility.Visible;
+            //gd_CaseName.Visibility = Visibility.Visible;
             ExecuteStoryboard(args.Parameters.IsExpandSubView, args.Parameters.NeedStoryboard);
         }
 
@@ -187,6 +187,11 @@ namespace XLY.SF.Project.Views.Main
         private void cb_Menu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             cb_Menu.SelectedIndex = -1;
+        }
+
+        private void ToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            _winContainer.WindowState = _winContainer.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
         }
     }
 }

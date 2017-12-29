@@ -7,6 +7,8 @@
                  xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
                  xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                  xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+                 xmlns:behavior="clr-namespace:XLY.SF.Project.Views.Behavior"
+                 xmlns:cv="clr-namespace:XLY.SF.Project.Views.Converters"
                  xmlns:pro="http://www.spfpro.com"
                  Title="{Binding XPath=ViewLanguage/Management/User/InfoTitle,Source={x:Static ex:SystemContext.LanguageProvider}}"
                  Width="420"
@@ -16,13 +18,59 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
             <!--此处以下添加自己的引用-->
-
+            <Style TargetType="{x:Type PasswordBox}">
+                <Setter Property="BorderBrush"
+                        Value="#414b69" />
+                <Setter Property="Foreground"
+                        Value="White" />
+                <Setter Property="FontSize"
+                        Value="14" />
+                <Setter Property="Background"
+                        Value="#414b69" />
+                <Setter Property="PasswordChar"
+                        Value="*" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type PasswordBox}">
+                            <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="5"
+                                    Background="{TemplateBinding Background}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"
+                                                          SharedSizeGroup="Title" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding Path=(pro:AttachHelper.Title),RelativeSource={RelativeSource TemplatedParent},StringFormat='{}{0}：'}"
+                                               Foreground="#9ba5b9"
+                                               Margin="10,0,10,0"
+                                               Grid.Column="0"
+                                               FontSize="{TemplateBinding FontSize}"
+                                               VerticalAlignment="Center" />
+                                    <ScrollViewer x:Name="PART_ContentHost"
+                                                  Grid.Column="1"
+                                                  Background="Transparent"
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Stretch"
+                                                  HorizontalContentAlignment="Center"
+                                                  VerticalContentAlignment="Center" />
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <cv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         </ResourceDictionary>
     </core:UcViewBase.Resources>
-    <StackPanel Margin="20,30,20,30">
-        <StackPanel DataContext="{Binding Item}">
+    <StackPanel x:Name="Root"
+                Margin="20,30,20,30">
+        <StackPanel DataContext="{Binding Item}"
+                    Grid.IsSharedSizeScope="True">
             <pro:TextBoxEx Title="{Binding XPath=ViewLanguage/Management/User/Name,Source={x:Static ex:SystemContext.LanguageProvider}}"
                            Text="{Binding UserName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                            Width="380"
@@ -48,16 +96,74 @@
                             Width="380"
                             Height="40"
                             Margin="0,0,0,10" />
-            <pro:TextBoxEx  Title="{Binding XPath=ViewLanguage/Management/User/InputPassword,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                            Text="{Binding Password,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                            Width="380"
-                            Height="40"
-                            Margin="0,0,0,10" />
-            <pro:TextBoxEx  Title="{Binding XPath=ViewLanguage/Management/User/ConfirmPassword,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                            Text="{Binding ConfirmPassword,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                            Width="380"
-                            Height="40"
-                            Margin="0,0,0,10" />
+            <Expander Header="{Binding XPath=ViewLanguage/Management/User/SetPassword,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                      Foreground="White"
+                      Padding="0,10,0,10"
+                      IsExpanded="{Binding DataContext.IncludePassword,Mode=TwoWay,ElementName=Root}">
+                <Expander.Style>
+                    <Style TargetType="{x:Type Expander}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Expander}">
+                                    <DockPanel>
+                                        <ToggleButton x:Name="HeaderSite"
+                                                      ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                                      ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}"
+                                                      Content="{TemplateBinding Header}"
+                                                      DockPanel.Dock="Top"
+                                                      HorizontalAlignment="Left"
+                                                      Foreground="{TemplateBinding Foreground}"
+                                                      Style="{StaticResource TriangleToggleButton}"
+                                                      IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                                      IsEnabled="{Binding DataContext.IsUpdate,Mode=TwoWay,ElementName=Root}" />
+                                        <ContentPresenter x:Name="ExpandSite"
+                                                          DockPanel.Dock="Bottom"
+                                                          Focusable="false"
+                                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                          Margin="{TemplateBinding Padding}"
+                                                          Visibility="Collapsed"
+                                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                    </DockPanel>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsExpanded"
+                                                 Value="True">
+                                            <Setter TargetName="ExpandSite"
+                                                    Property="Visibility"
+                                                    Value="Visible" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Expander.Style>
+                <StackPanel>
+                    <PasswordBox  pro:AttachHelper.Title="{Binding XPath=ViewLanguage/Management/User/OldPassword,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                  Width="380"
+                                  Height="40"
+                                  Margin="0,0,0,10"
+                                  Visibility="{Binding DataContext.IsUpdate,ElementName=Root,Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <i:Interaction.Behaviors>
+                            <behavior:PasswordBoxBehavior PasswordString="{Binding OldPassword,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        </i:Interaction.Behaviors>
+                    </PasswordBox>
+                    <PasswordBox  pro:AttachHelper.Title="{Binding XPath=ViewLanguage/Management/User/InputPassword,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                  Width="380"
+                                  Height="40"
+                                  Margin="0,0,0,10">
+                        <i:Interaction.Behaviors>
+                            <behavior:PasswordBoxBehavior PasswordString="{Binding Password,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        </i:Interaction.Behaviors>
+                    </PasswordBox>
+                    <PasswordBox  pro:AttachHelper.Title="{Binding XPath=ViewLanguage/Management/User/ConfirmPassword,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                                  Width="380"
+                                  Height="40">
+                        <i:Interaction.Behaviors>
+                            <behavior:PasswordBoxBehavior PasswordString="{Binding ConfirmPassword,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        </i:Interaction.Behaviors>
+                    </PasswordBox>
+                </StackPanel>
+            </Expander>
         </StackPanel>
         <StackPanel Orientation="Horizontal"
                     Margin="0,30,0,0"

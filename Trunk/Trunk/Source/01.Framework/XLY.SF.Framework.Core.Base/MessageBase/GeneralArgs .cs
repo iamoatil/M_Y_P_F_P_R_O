@@ -37,5 +37,7 @@ namespace XLY.SF.Framework.Core.Base.MessageBase
         }
 
         public TParam Parameters { get; set; }
+
+        public Action<Object> Callback { get; set; }
     }
 }

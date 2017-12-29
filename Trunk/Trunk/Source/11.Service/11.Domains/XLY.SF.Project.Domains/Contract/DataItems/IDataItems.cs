@@ -9,7 +9,7 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// 数据集接口
     /// </summary>
-    public interface IDataItems : IFilterable
+    public interface IDataItems : IFilterable, IPage, IEnumerable
     {
         string Key { get; set; }
 
@@ -19,9 +19,7 @@ namespace XLY.SF.Project.Domains
 
         string DbTableName { get; }
 
-        IEnumerable View { get; }
-
-        Int32 Count { get; }
+        ICheckedItem Parent { get; set; }
 
         void Add(object obj);
 
@@ -36,6 +34,5 @@ namespace XLY.SF.Project.Domains
 
     public interface IDataItems<out T> : IDataItems
     {
-        new IEnumerable<T> View { get; }
     }
 }

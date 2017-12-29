@@ -6,7 +6,11 @@
     <!--主界面菜单项-->
     <ControlTemplate x:Key="cb_MainMenuItem" TargetType="{x:Type ComboBoxItem}">
         <Border x:Name="Bd" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
-            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                              TextElement.FontSize="{TemplateBinding FontSize}"
+                              TextElement.Foreground="{TemplateBinding Foreground}"/>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsHighlighted" Value="true">
@@ -17,6 +21,11 @@
                 </Setter>
                 <Setter Property="Foreground" Value="#FF41AAEB"/>
                 <Setter Property="Background" Value="#21000000" TargetName="Bd"/>
+            </Trigger>
+            <Trigger Property="IsEnabled"
+                     Value="False">
+                <Setter Property="Foreground"
+                        Value="Gray" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <LanguageResource>
   <AudioView>Audio</AudioView>
   <BasicView>Basic</BasicView>
@@ -14,13 +14,11 @@
   <FileName>FileName</FileName>
   <FullPath>FullPath</FullPath>
   <FileSize>FileSize</FileSize>
-  <CreateTime>CreateTime</CreateTime>
-  <ModifyTime>LastModifyTime</ModifyTime>
-  <AccessTime>AccessTime</AccessTime>
+  <CreateTime>Created</CreateTime>
+  <ModifyTime>Modified</ModifyTime>
+  <AccessTime>Accessed</AccessTime>
   <Attributes>Attributes</Attributes>
-  <ZhiDu>Readonly</ZhiDu>
+  <ZhiDu>Read-only</ZhiDu>
   <Bytes>Bytes</Bytes>
   <Hex>Hex</Hex>
 </LanguageResource>
-
-

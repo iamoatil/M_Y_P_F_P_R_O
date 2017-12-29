@@ -142,7 +142,7 @@ namespace XLY.SF.Project.Services
                                                           RunPartition.PartType, RunPartition.DevType);
                 if (mount == IntPtr.Zero)
                 {
-                    LoggerManagerSingle.Instance.Error(string.Format("装载系统分区(名称:{0},描述:{1},大小:{2})失败!", RunPartition.Name, RunPartition.Discription, RunPartition.Size));
+                    LoggerManagerSingle.Instance.Error($"装载系统分区(名称:{RunPartition.Name},描述:{RunPartition.Discription},大小:{RunPartition.Size})失败");
                 }
             }
             catch (Exception)
@@ -195,7 +195,7 @@ namespace XLY.SF.Project.Services
                     break;
                 }
             }
-            LoggerManagerSingle.Instance.Info(string.Format("扫描文件系统结束, 得到文件/文件夹数:{0}", AllFileNodeX.Count));
+            LoggerManagerSingle.Instance.Info($"扫描文件系统结束, 得到文件/文件夹数:{AllFileNodeX.Count}");
             //Asyn?.Advance(1, LanguageManager.Current[Languagekeys.FileServiceLanguage_File_WenJianXiTongZuZhuangWanBi]);
             return fileTree;
         }
@@ -318,15 +318,14 @@ namespace XLY.SF.Project.Services
                 var result = FileServiceCoreDll.ScanFiles(partition.Mount, callBack, ref link, device.ScanModel, ref raw, 0);
                 if (result != 0)
                 {
-                    LoggerManagerSingle.Instance.Error(string.Format("获取文件系统(名称:{ 0},描述: { 1},大小: { 2})失败,错误码: { 3}", partition.Name, partition.Discription, partition.Size, result));
-
+                    LoggerManagerSingle.Instance.Error($"获取文件系统(名称:{partition.Name},描述: {partition.Discription},大小: {partition.Size})失败,错误码: {result}");
                     return null;
                 }
                 partition.NodeLinkList = link;
             }
             catch (Exception ex)
             {
-                LoggerManagerSingle.Instance.Error(string.Format("获取文件系统(名称:{0},描述:{1},大小:{2},Mount:{3})时底层dll出错", partition.Name, partition.Discription, partition.Size, partition.Mount), ex);
+                LoggerManagerSingle.Instance.Error($"获取文件系统(名称:{partition.Name},描述:{partition.Discription},大小:{partition.Size},Mount:{partition.Mount})时底层dll出错", ex);
                 return null;
             }
 

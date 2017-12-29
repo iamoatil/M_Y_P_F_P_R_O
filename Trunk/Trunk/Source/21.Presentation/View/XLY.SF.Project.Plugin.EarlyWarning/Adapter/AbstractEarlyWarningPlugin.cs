@@ -18,30 +18,58 @@ namespace XLY.SF.Project.EarlyWarningView
     [Plugin]
     internal abstract class AbstractEarlyWarningPlugin : IPlugin
     {
-        /// <summary>
-        /// 列更新器
-        /// </summary>
-        readonly ColumnUpdater _columnUpdater = new ColumnUpdater();
+        //列更新器
+        private DataDbColumnUpdater _dataDbColumnUpdater ;        
 
         public IPluginInfo PluginInfo { get; set; }
-        
-        public virtual void Dispose()
-        {
-            _columnUpdater.Dispose();
-        }
 
         public abstract object Execute(object arg, IAsyncTaskProgress progress);
 
-        protected void KeyWordColumnUpdate(IDataItems dataItems, DbFromConfigData configDbManager)
+        /// <summary>
+        /// 是否已经初始化
+        /// </summary>
+        public bool IsInitialized { get; private set; }
+
+        /// <summary>
+        /// 设置插件中的列更新器
+        /// </summary>
+        public void SetColumnUpdater(DataDbColumnUpdater dataDbColumnUpdater)
         {
-            _columnUpdater.Initialize(dataItems.DbFilePath, dataItems.DbTableName, configDbManager.DbPath, ConstDefinition.XLYJson);
-            _columnUpdater.KeyWordColumnUpdate();
+            IsInitialized = false;
+            _dataDbColumnUpdater = dataDbColumnUpdater;
+            IsInitialized = true;            
+        }
+        protected void KeyWordColumnUpdate(string tableName)
+        {
+            if(!IsInitialized)
+            {
+                return;
+            }
+            bool isSuc = _dataDbColumnUpdater.CheckTableAndColumn(tableName, ConstDefinition.XLYJson);
+            if (isSuc)
+            {
+                _dataDbColumnUpdater.AttachConfigDataBase();
+                _dataDbColumnUpdater.Update();
+            }
         }
 
-        protected void ColumnUpdate(IDataItems dataItems, DbFromConfigData configDbManager, string keyColumn)
+        protected void ColumnUpdate(string tableName, string keyColumn)
         {
-            _columnUpdater.Initialize(dataItems.DbFilePath, dataItems.DbTableName, configDbManager.DbPath, keyColumn);
-            _columnUpdater.Update();
+            if (!IsInitialized)
+            {
+                return;
+            }
+            bool isSuc=_dataDbColumnUpdater.CheckTableAndColumn(tableName, keyColumn);
+            if(isSuc)
+            {
+                _dataDbColumnUpdater.AttachConfigDataBase();
+                _dataDbColumnUpdater.Update();
+            }
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 
@@ -50,20 +78,14 @@ namespace XLY.SF.Project.EarlyWarningView
     /// </summary>
     internal class EarlyWarningPluginArgument
     {
-        public EarlyWarningPluginArgument(DeviceDataSource deviceDataSource, DbFromConfigData configDbManager)
+        public EarlyWarningPluginArgument(DeviceDataSource deviceDataSource)
         {
             DeviceDataSource = deviceDataSource;
-            ConfigDbManager = configDbManager;
         }        
 
         /// <summary>
         /// 数据源
         /// </summary>
         public DeviceDataSource DeviceDataSource { get; private set; }
-
-        /// <summary>
-        /// ConfigDataToDB
-        /// </summary>
-        public DbFromConfigData ConfigDbManager { get; private set; }
     }
 }

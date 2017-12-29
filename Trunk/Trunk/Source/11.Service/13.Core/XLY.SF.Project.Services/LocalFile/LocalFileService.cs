@@ -28,7 +28,7 @@ namespace XLY.SF.Project.Services
         public static EnumOSType GetOSType(string fileName)
         {
             byte[] bytes = FileHelper.ReadFileHead(fileName, 4);
-            if (bytes.SequenceEqual(new byte[] { 0, 0, 0, 0 }))
+            if (FileHelper.IsAndroidMirrorFile(fileName))
             {
                 return EnumOSType.Android;
             }
@@ -43,7 +43,7 @@ namespace XLY.SF.Project.Services
             else if (bytes.SequenceEqual(new byte[] { 80, 75, 3, 4 }))
             {
                 string strBytes = Encoding.Default.GetString(FileHelper.ReadFileHead(fileName, 200));
-                
+
                 if (strBytes.IndexOf(".bbb") != -1 && strBytes.IndexOf("Manifest.xml") != -1)       //黑莓自动备份：根据.bbb和Manifest.xml判定
                 {
                     return EnumOSType.BlackBerry;

@@ -28,15 +28,15 @@
         <DockPanel DockPanel.Dock="Top"
                    LastChildFill="False">
 
-            <DatePicker Width="150"
-                        Margin="10,0,0,0"
-                        SelectedDate="{Binding FilterArgs.Begin,Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}" />
+            <pro:DateTimePicker Width="150"
+                                Margin="10,0,0,0"
+                                SelectDateTime="{Binding FilterArgs.Begin,Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Text="-"
                        Foreground="Black"
                        VerticalAlignment="Center"
                        Margin="5,0,5,0" />
-            <DatePicker Width="150"
-                        SelectedDate="{Binding FilterArgs.End,Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}" />
+            <pro:DateTimePicker Width="150"
+                                SelectDateTime="{Binding FilterArgs.End,Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}" />
 
             <pro:TextBoxEx x:Name="condition"
                            Width="222"
@@ -107,9 +107,9 @@
                                                 IconHeight="14"
                                                 Width="18"
                                                 Height="18"
-                                        Command="{Binding DataContext.OpenCommand,ElementName=Root}"
-                                        CommandParameter="{Binding CaseInfo}"
-                                        VerticalAlignment="Center" />
+                                                Command="{Binding DataContext.OpenCommand,ElementName=Root}"
+                                                CommandParameter="{Binding CaseInfo}"
+                                                VerticalAlignment="Center" />
                                 <pro:IconButton Icon="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/TreeViewDeleteIcon.png"
                                                 IconWidth="14"
                                                 IconHeight="14"

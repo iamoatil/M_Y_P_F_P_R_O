@@ -5,8 +5,10 @@
 
     <!--日期分组转换器-->
     <local:DateTimeToDateStringConverter x:Key="dateTimeToDateConverter"/>
-    <!--图片资源转换器-->
-    <local:StringToImageConverter x:Key="stringToImageConverter"/>
+    <!--头像资源转换器，如果没有则设置为默认头像-->
+    <local:StringToImageConverter x:Key="stringToIconConverter" DefaultImage="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/default_icon.png"/>
+    <!--图片资源转换器，如果没有则提示不存在-->
+    <local:StringToImageConverter x:Key="stringToImageConverter" DefaultImage="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/ImageNotFound.png"/>
     <!--百分比宽度转换器-->
     <local:PercentWidthConverter x:Key="percentWidthConverter"/>
 
@@ -40,7 +42,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border CornerRadius="2" Background="{TemplateBinding Background}" Padding="4">
-                        <Image Source="{Binding SenderImage, Converter={StaticResource stringToImageConverter}}" Stretch="UniformToFill"/>
+                        <Image x:Name="img" Source="{Binding SenderImage, Converter={StaticResource stringToIconConverter}}" Stretch="UniformToFill"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -195,6 +197,17 @@
         <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True"/>
         <Setter Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="True"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource conversionListBoxItemStyle}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBox}">
+                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="1" SnapsToDevicePixels="true">
+                        <ScrollViewer Focusable="false" Padding="{TemplateBinding Padding}" local:AttachHelper.IsScrollPage="{Binding Path=(local:AttachHelper.IsScrollPage),RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}}">
+                            <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>    
     
 </ResourceDictionary>

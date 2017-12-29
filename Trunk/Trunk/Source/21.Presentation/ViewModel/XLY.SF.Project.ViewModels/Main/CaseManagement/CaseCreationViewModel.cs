@@ -18,6 +18,7 @@ using XLY.SF.Framework.Core.Base.MessageBase;
 namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 {
     [Export(ExportKeys.CaseCreationViewModel, typeof(ViewModelBase))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public class CaseCreationViewModel : ViewModelBase
     {
         #region Fields
@@ -75,6 +76,8 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         public ICommand SelectDirectoryCommand { get; }
 
+        #region CaseTypes
+
         private CaseType[] _caseTypes;
         public CaseType[] CaseTypes
         {
@@ -85,6 +88,8 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
                 OnPropertyChanged();
             }
         }
+
+        #endregion
 
         [Import(typeof(IMessageBox))]
         private IMessageBox MessageBox
@@ -103,6 +108,21 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         [Import(typeof(IPopupWindowService))]
         private IPopupWindowService PopupService { get; set; }
 
+        #region Directory
+
+        private String _directory = SystemContext.Instance.SavePath;
+        public String Directory
+        {
+            get => _directory;
+            private set
+            {
+                _directory = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Methods
@@ -111,8 +131,16 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         protected override void InitLoad(object parameters)
         {
-            SystemContext.Instance.CaseChanged += Instance_CaseChanged;
-            CaseInfo = NewCaseInfo();
+            Case c = parameters as Case;
+            if (c != null)
+            {
+                CaseInfo = c.CaseInfo;
+                Directory = System.IO.Path.GetDirectoryName(c.Path);
+            }
+            else
+            {
+                CaseInfo = NewCaseInfo();
+            }
             LoadCaseTypes(null);
             MessageAggregation.RegisterGeneralMsg(this, GeneralKeys.SettingsChangedMsg, LoadCaseTypes);
         }
@@ -127,22 +155,11 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         #region Private
 
-        private void Instance_CaseChanged(object sender, PropertyChangedEventArgs<Case> e)
-        {
-            if (e.NewValue == null)
-            {
-                CaseInfo = NewCaseInfo();
-            }
-            else
-            {
-                CaseInfo = e.NewValue.CaseInfo;
-            }
-        }
-
         private void SelectDirectory()
         {
             String directory = PopupService.SelectFolderDialog();
-            CaseInfo.Path = directory;
+            if (String.IsNullOrWhiteSpace(directory)) return;
+            Directory = directory;
             OnPropertyChanged("CaseInfo");
         }
 
@@ -173,18 +190,18 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         private String CreateCase()
         {
-            Case newCase = Case.New(CaseInfo);
+            Case newCase = Case.New(CaseInfo, Directory);
             if (newCase == null) return string.Empty;
             SystemContext.Instance.CurrentCase = newCase;
             RecentCaseEntityModel model = new RecentCaseEntityModel
             {
-                CaseID = CaseInfo.Id,
-                Name = CaseInfo.Name,
-                Timestamp = DateTime.Parse(CaseInfo.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")),
+                CaseID = newCase.CaseInfo.Id,
+                Name = newCase.CaseInfo.Name,
+                Timestamp = DateTime.Parse(newCase.CaseInfo.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")),
                 CaseProjectFile = newCase.ProjectFile,
                 Number = newCase.CaseInfo.Number,
-                Author = SystemContext.Instance.CurUserInfo.UserName,
-                Type = CaseInfo.Type,
+                Author = newCase.CaseInfo.Author,
+                Type = newCase.CaseInfo.Type,
                 LastOpenTime = DateTime.Now,
             };
             if (!DbService.Add(model))
@@ -196,7 +213,7 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
                 CaseInfo = newCase.CaseInfo;
 
                 //收起子页面
-                EditCaseNavigationHelper.SetEditCaseViewStatus(false);
+                EditCaseNavigationHelper.SetEditCaseViewStatus(false, true);
                 NavigationForMainWindow(ExportKeys.DeviceSelectView);
                 return $"创建案例{newCase.Name}成功";
             }
@@ -207,8 +224,11 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         {
             if (SystemContext.Instance.CurrentCase.Update())
             {
-                MessageBox.ShowDialogWarningMsg("修改成功");
                 return $"更新案例信息{SystemContext.Instance.CurrentCase.Name}成功";
+            }
+            else
+            {
+                MessageBox.ShowDialogErrorMsg(SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_CaseUpdatePrompt]);
             }
             return $"更新案例信息{SystemContext.Instance.CurrentCase.Name}失败";
         }
@@ -225,10 +245,9 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
         {
             return new CaseInfo()
             {
-                Name = "默认案例",
+                Name = $"{SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_DefaultCaseName]}{DateTime.Now.ToString("yyMMddhhmmss")}",
                 Number = DateTime.Now.ToString("yyyyMMddhhmmss"),
-                Author = SystemContext.Instance.CurUserInfo.UserName,
-                Path = SystemContext.Instance.CaseSaveFullPath,
+                Author = SystemContext.Instance.CurUserInfo.UserName
             };
         }
 

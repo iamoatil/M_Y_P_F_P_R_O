@@ -57,7 +57,7 @@ namespace XLY.SF.Shell
             //创建主窗体
             Current.MainWindow = new Shell()
             {
-                CanResize = false
+                ResizeMode = ResizeMode.CanResizeWithGrip
             };
             Current.MainWindow.WindowState = WindowState.Maximized;
             string a = string.Empty;
@@ -94,6 +94,14 @@ namespace XLY.SF.Shell
             }
             else
                 Application.Current.Shutdown();
+
+#if DEBUG
+            Process[] processes = Process.GetProcessesByName("XLY.SF.Project.DeviceExtractionService");
+            foreach (var item in processes)
+            {
+                item.Kill();
+            }
+#endif
         }
 
         #endregion

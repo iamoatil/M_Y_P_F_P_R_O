@@ -74,6 +74,29 @@ namespace XLY.SF.Project.ViewModels.SelectControl
             set
             {
                 this._curSelectedItemInFolder = value;
+                CurInput = value?.Name;
+                base.OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region 当前输入
+
+        private string _curInput;
+        /// <summary>
+        /// 当前输入
+        /// </summary>
+        public string CurInput
+        {
+            get
+            {
+                return this._curInput;
+            }
+
+            set
+            {
+                this._curInput = value;
                 base.OnPropertyChanged();
             }
         }
@@ -145,7 +168,7 @@ namespace XLY.SF.Project.ViewModels.SelectControl
             LoadFolderCommand = new RelayCommand<FolderElement>(ExecuteLoadFolderCommand);
             SelectedItemCommand = new RelayCommand<FolderElement>(ExecuteSelectedItemCommand);
             InSelectedItemCommand = new RelayCommand<FolderElement>(ExecuteInSelectedItemCommand);
-            SelectedCompleteCommand = new RelayCommand(ExecuteSelectedCompleteCommand);
+            SelectedCompleteCommand = new RelayCommand<string>(ExecuteSelectedCompleteCommand);
             CancelSelectCommand = new RelayCommand(ExecuteCancelSelectCommand);
             ResetFilterCommand = new RelayCommand<string>(ExecuteResetFilterCommand);
             InPathCommand = new RelayCommand<string>(ExecuteInPathCommand);
@@ -158,9 +181,8 @@ namespace XLY.SF.Project.ViewModels.SelectControl
 
         public override object GetResult()
         {
-            if (base.DialogResult && CurSelectedItemInFolder != null)
-                //return CurSelectedItemInFolder?.FullPath;
-                return Path.Combine(CurSelectedItemInFolder.Parent.FullPath, CurSelectedItemInFolder.Name);
+            if (base.DialogResult)
+                return Path.Combine(SelectManager.CurFolderLevel.FullPath, CurInput);
             else
                 return null;
         }
@@ -189,14 +211,18 @@ namespace XLY.SF.Project.ViewModels.SelectControl
                         });
                     }
                 }
-                SelectManager = new SelectManager(SelectControlType.SelectFile, FilterItems.First().FilterValue);
-                //_curFilter = FilterItems.First().FilterValue;
-                var initFolders = SelectManager.InitFolders();
+                SelectManager = new SelectManager(SelectControlType.SelectFile);
+                _curFilter = FilterItems.First().FilterValue;
+                var initFolders = SelectManager.InitFolders(_curFilter);
                 foreach (var item in initFolders)
                 {
                     Folders.Add(item);
                 }
             }
+
+            //进入系统默认路径            
+            FolderElement tmpFolder = new FolderElement(new DirectoryInfo(SystemContext.Instance.SavePath));
+            UpdateFolders(SelectManager.InFolderAndUpdateLevel(tmpFolder, _curFilter));
         }
 
         #region ExecuteCommand
@@ -217,7 +243,7 @@ namespace XLY.SF.Project.ViewModels.SelectControl
                 {
                     Directory.CreateDirectory(tmpName);
                     //新建成功后加入当前文件列表
-                    UpdateFolders(SelectManager.InFolderAndUpdateLevel(SelectManager.CurFolderLevel));
+                    UpdateFolders(SelectManager.InFolderAndUpdateLevel(SelectManager.CurFolderLevel, _curFilter));
                 }
                 catch (Exception ex)
                 {
@@ -231,7 +257,7 @@ namespace XLY.SF.Project.ViewModels.SelectControl
         {
             var parent = SelectManager.CurFolderLevel?.Parent;
             if (parent != null)
-                UpdateFolders(SelectManager.InFolderAndUpdateLevel(parent));
+                UpdateFolders(SelectManager.InFolderAndUpdateLevel(parent, _curFilter));
         }
 
         //进入输入的路径
@@ -240,7 +266,7 @@ namespace XLY.SF.Project.ViewModels.SelectControl
             if (Directory.Exists(obj))
             {
                 FolderElement tmpFolder = new FolderElement(new DirectoryInfo(obj));
-                UpdateFolders(SelectManager.InFolderAndUpdateLevel(tmpFolder));
+                UpdateFolders(SelectManager.InFolderAndUpdateLevel(tmpFolder, _curFilter));
             }
         }
 
@@ -249,7 +275,7 @@ namespace XLY.SF.Project.ViewModels.SelectControl
         {
             _curFilter = obj;
             //刷新当前显示的文件内容
-            UpdateFolders(SelectManager.InFolderAndUpdateLevel(SelectManager.CurFolderLevel));
+            UpdateFolders(SelectManager.InFolderAndUpdateLevel(SelectManager.CurFolderLevel, _curFilter));
         }
 
         //取消选择
@@ -259,34 +285,50 @@ namespace XLY.SF.Project.ViewModels.SelectControl
             CloseView();
         }
 
-        //完成选择【确定按钮】
-        private void ExecuteSelectedCompleteCommand()
+        //完成选择【确定按钮】，优先进入文件夹
+        private void ExecuteSelectedCompleteCommand(string inputName)
         {
-            if (CurSelectedItemInFolder != null)
+            if (CurSelectedItemInFolder != null&&!string.IsNullOrWhiteSpace(inputName))
             {
-                var inFolder = Path.Combine(CurSelectedItemInFolder.Parent.FullPath, CurSelectedItemInFolder.Name);
-                if (CurSelectedItemInFolder.IsFolder)
+                string curInputPath = Path.Combine(SelectManager.CurFolderLevel.FullPath, inputName);
+                if (Directory.Exists(curInputPath))
                 {
-                    if (Directory.Exists(inFolder))
-                    {
-                        FolderElement tmpFolder = new FolderElement(new DirectoryInfo(inFolder));
-                        //进入文件夹
-                        UpdateFolders(SelectManager.InFolderAndUpdateLevel(tmpFolder));
-                    }
+                    //进入文件夹
+                    FolderElement tmpFolder = new FolderElement(new DirectoryInfo(curInputPath));
+                    UpdateFolders(SelectManager.InFolderAndUpdateLevel(tmpFolder, _curFilter));
+                }
+                else if (File.Exists(curInputPath))
+                {
+                    base.DialogResult = true;
+                    CloseView();
                 }
                 else
-                {
-                    if (File.Exists(inFolder))
-                    {
-                        base.DialogResult = true;
-                        CloseView();
-                    }
-                    else
-                    {
-                        //不存在提示
-                        _msgService.ShowErrorMsg("打开路径不存在");
-                    }
-                }
+                    //不存在提示
+                    _msgService.ShowErrorMsg("打开路径不存在");
+
+                //var inFolder = Path.Combine(CurSelectedItemInFolder.Parent.FullPath, CurSelectedItemInFolder.Name);
+                //if (CurSelectedItemInFolder.IsFolder)
+                //{
+                //    if (Directory.Exists(inFolder))
+                //    {
+                //        FolderElement tmpFolder = new FolderElement(new DirectoryInfo(inFolder));
+                //        //进入文件夹
+                //        UpdateFolders(SelectManager.InFolderAndUpdateLevel(tmpFolder, _curFilter));
+                //    }
+                //}
+                //else
+                //{
+                //    if (File.Exists(inFolder))
+                //    {
+                //        base.DialogResult = true;
+                //        CloseView();
+                //    }
+                //    else
+                //    {
+                //        //不存在提示
+                //        _msgService.ShowErrorMsg("打开路径不存在");
+                //    }
+                //}
             }
         }
 
@@ -296,7 +338,7 @@ namespace XLY.SF.Project.ViewModels.SelectControl
             if (obj.IsFolder)
             {
                 //进入文件夹
-                UpdateFolders(SelectManager.InFolderAndUpdateLevel(obj));
+                UpdateFolders(SelectManager.InFolderAndUpdateLevel(obj, _curFilter));
             }
             else
             {
@@ -320,7 +362,8 @@ namespace XLY.SF.Project.ViewModels.SelectControl
 
         private void ExecuteLoadFolderCommand(FolderElement obj)
         {
-            UpdateFolders(SelectManager.InFolderAndUpdateLevel(obj));
+            UpdateFolders(SelectManager.InFolderAndUpdateLevel(obj, _curFilter));
+            CurSelectedItemInFolder = obj;
         }
 
         #endregion

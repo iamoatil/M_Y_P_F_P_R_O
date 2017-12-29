@@ -42,6 +42,8 @@ namespace XLY.SF.Project.BaseUtility.Helper
         {
             if (String.IsNullOrEmpty(file))
                 return false;
+            if (!IsValidPath(file))
+                return false;
             if (!File.Exists(file))
                 return false;
             FileInfo info = new FileInfo(file);
@@ -58,6 +60,8 @@ namespace XLY.SF.Project.BaseUtility.Helper
         public static bool IsExist(string file)
         {
             if (String.IsNullOrEmpty(file))
+                return false;
+            if (!IsValidPath(file))
                 return false;
             if (!File.Exists(file))
                 return false;
@@ -76,6 +80,10 @@ namespace XLY.SF.Project.BaseUtility.Helper
         public static bool IsValidDictory(string path)
         {
             if (String.IsNullOrEmpty(path))
+            {
+                return false;
+            }
+            else if (!IsValidPath(path))
             {
                 return false;
             }
@@ -713,11 +721,12 @@ namespace XLY.SF.Project.BaseUtility.Helper
 
         #region 过滤非法文件名
 
-        private static readonly char[] _InvalidChars = System.IO.Path.GetInvalidFileNameChars();
+        private static readonly char[] _InvalidFileNameChars = System.IO.Path.GetInvalidFileNameChars();
+        private static readonly char[] _InvalidPathChars = System.IO.Path.GetInvalidPathChars();
 
         public static string FilterInvalidFileName(string oriName)
         {
-            int index = oriName.IndexOfAny(_InvalidChars);
+            int index = oriName.IndexOfAny(_InvalidFileNameChars);
             while (index >= 0)
             {
                 char ch = oriName[index];
@@ -734,9 +743,20 @@ namespace XLY.SF.Project.BaseUtility.Helper
                     case '?': oriName = oriName.Replace(ch, '？'); break;
                     default: oriName = oriName.Replace(ch, ' '); break;
                 }
-                index = oriName.IndexOfAny(_InvalidChars);
+                index = oriName.IndexOfAny(_InvalidFileNameChars);
             }
             return oriName;
+        }
+
+        /// <summary>
+        /// 判断路径名是否可用
+        /// 如果包含非法字符，返回false
+        /// </summary>
+        /// <param name="pathName"></param>
+        /// <returns></returns>
+        public static bool IsValidPath(string pathName)
+        {
+            return pathName.IndexOfAny(_InvalidPathChars) < 0;
         }
 
         #endregion
@@ -943,11 +963,63 @@ namespace XLY.SF.Project.BaseUtility.Helper
                     }
                 }
             }
-            catch 
+            catch
             {
                 throw;
             }
         }
+        #endregion
+
+        #region 移动/重命名文件夹
+
+        /// <summary>
+        /// 移动文件夹
+        /// </summary>
+        /// <param name="sourcePath"></param>
+        /// <param name="destPath"></param>
+        public static void MoveDirectory(string sourcePath, string destPath)
+        {
+            if (!IsValidDictory(sourcePath))
+            {
+                return;
+            }
+
+            //如果 sourcePath 和 destPath 存在父子级关系，Directory.Move将报错
+            //例如 从C:\\111\222 移动到 C:\\111 不可以使用Directory.Move
+
+            var destFileName = string.Empty;
+            var files = Directory.GetFiles(sourcePath, "*.*", SearchOption.AllDirectories);
+            foreach (var filePath in files)
+            {
+                destFileName = filePath.Replace(sourcePath, destPath);
+
+                CreateFileDirectory(destFileName);
+
+                File.Move(filePath, destFileName);
+            }
+
+            //删除原文件夹
+            Directory.Delete(sourcePath, true);
+        }
+
+        /// <summary>
+        /// 重命名文件夹
+        /// 例如，要将C:\\111\222 文件夹 修改为  C:\\111\333
+        /// 则 parentPath为 C:\\111 source为222 dest为333
+        /// </summary>
+        /// <param name="parentPath"></param>
+        /// <param name="source"></param>
+        /// <param name="dest"></param>
+        public static void ReNameDirectory(string parentPath, string source, string dest)
+        {
+            var sourcePath = Path.Combine(parentPath, source);
+
+            if (IsValidDictory(sourcePath))
+            {
+                Directory.Move(sourcePath, Path.Combine(parentPath, dest));
+            }
+        }
+
         #endregion
 
         #region 获取新的名称，如果存在则在后面加(1)
@@ -1007,14 +1079,124 @@ namespace XLY.SF.Project.BaseUtility.Helper
             List<string> lst = new List<string>();
             if (string.IsNullOrWhiteSpace(paths))
                 return lst;
-            foreach (var p in paths.Split(new string[] { ";" },  StringSplitOptions.RemoveEmptyEntries))
+            foreach (var p in paths.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries))
             {
                 string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, p);
-                if(File.Exists(path) || Directory.Exists(path))
+                if (File.Exists(path) || Directory.Exists(path))
                     lst.Add(path);
             }
             return lst;
         }
         #endregion
+
+        #region 判断文件、文件夹类型
+
+        /// <summary>
+        /// 判断是否是iTuns备份，并返回iTuns备份根路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="itunsPath"></param>
+        /// <returns></returns>
+        public static bool IsItunsBackupPath(string path, ref string itunsPath)
+        {
+            string key = "Manifest.db";
+
+            var res = Directory.GetFiles(path, key, SearchOption.AllDirectories);
+            if (res.IsValid())
+            {
+                foreach (var resPath in res)
+                {
+                    if (!File.Exists(resPath.Replace(key, "Info.plist")))
+                    {
+                        continue;
+                    }
+                    if (!File.Exists(resPath.Replace(key, "Manifest.plist")))
+                    {
+                        continue;
+                    }
+                    if (!File.Exists(resPath.Replace(key, "Status.plist")))
+                    {
+                        continue;
+                    }
+                    itunsPath = resPath.TrimEnd(key);
+                    return true;
+                }
+            }
+
+            key = "Manifest.mbdb";
+            res = Directory.GetFiles(path, key, SearchOption.AllDirectories);
+            if (res.IsValid())
+            {
+                foreach (var resPath in res)
+                {
+                    if (!File.Exists(resPath.Replace(key, "Info.plist")))
+                    {
+                        continue;
+                    }
+                    if (!File.Exists(resPath.Replace(key, "Manifest.plist")))
+                    {
+                        continue;
+                    }
+                    if (!File.Exists(resPath.Replace(key, "Status.plist")))
+                    {
+                        continue;
+                    }
+                    itunsPath = resPath.TrimEnd(key);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 判断是否是酷派备份，并返回酷派备份根路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="kupaiPath"></param>
+        /// <returns></returns>
+        public static bool IsKuPaiBackupPath(string path, ref string kupaiPath)
+        {
+            string key = "recentcalls.zip";
+
+            var res = Directory.GetFiles(path, key, SearchOption.AllDirectories);
+            if (res.IsValid())
+            {
+                kupaiPath = new FileInfo(res[0]).DirectoryName;
+                return true;
+            }
+            kupaiPath = null;
+            return false;
+        }
+
+        private readonly static byte[] AndroidMirrorFileHead = { 0, 0, 0, 0 };
+        private readonly static byte[] IOSMirrorFileHead = { 80, 75, 3, 4 };
+
+        /// <summary>
+        /// 判断是否是安卓镜像文件
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static bool IsAndroidMirrorFile(string filePath)
+        {
+            byte[] bytes = ReadFileHead(filePath, 4);
+
+            return bytes.SequenceEqual(AndroidMirrorFileHead);
+        }
+
+        /// <summary>
+        /// 判断是否是IOS镜像文件
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static bool IsIOSMirrorFile(string filePath)
+        {
+            byte[] bytes = ReadFileHead(filePath, 4);
+
+            return bytes.SequenceEqual(IOSMirrorFileHead);
+        }
+
+        #endregion
+
     }
 }

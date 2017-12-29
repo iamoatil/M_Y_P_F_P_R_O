@@ -17,10 +17,10 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="454*"/>
-            <ColumnDefinition Width="568*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2.5*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="lsb1" ItemsSource="{Binding Items.View}" SelectionChanged="lsb1_SelectionChanged" Background="Transparent" ItemContainerStyle="{StaticResource accoutListItemStyle}" BorderThickness="0"></ListBox>
+        <ListBox x:Name="lsb1" ItemsSource="{Binding CurrentData.TreeNodes}" SelectionChanged="lsb1_SelectionChanged" Background="Transparent" ItemContainerStyle="{StaticResource accoutListItemStyle}" BorderThickness="0"></ListBox>
         <GridSplitter VerticalAlignment="Stretch" Width="2" Background="Transparent"/>
         <ctrl:TabControlWithButton x:Name="tbdetail" Grid.Column="1" Style="{StaticResource TabControlWithButtonStyle1}" ItemContainerStyle="{StaticResource TabItemWithGrayIconButtonStyle1}" CustomButtonAlignment="Right" IsHideHeaderWhenEmpty="True"></ctrl:TabControlWithButton>
     </Grid>

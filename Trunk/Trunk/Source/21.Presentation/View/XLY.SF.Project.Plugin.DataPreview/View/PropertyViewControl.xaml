@@ -9,6 +9,18 @@
     <UserControl.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="Foreground" Value="#9ba5b9"/>
+        </Style>
+        <Style x:Key="tbProperty" TargetType="TextBox">
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="MaxWidth" Value="600"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#9ba5b9"/>
         </Style>
     </UserControl.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">

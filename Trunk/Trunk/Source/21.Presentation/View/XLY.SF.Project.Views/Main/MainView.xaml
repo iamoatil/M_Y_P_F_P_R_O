@@ -204,14 +204,14 @@
                             <Button Grid.Column="6" Click="Button_Click" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_MinSize,Source={x:Static ex:SystemContext.LanguageProvider}}"
                         Style="{StaticResource btn_Minsize}"/>
                             <!--最大化和还原-->
-                            <ToggleButton Grid.Column="7" IsChecked="True" Margin="10 0 10 0" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_MinSize,Source={x:Static ex:SystemContext.LanguageProvider}}"
+                            <ToggleButton Grid.Column="7" IsChecked="True" Margin="10 0 10 0" Click="ToggleButton_Click" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_MinSize,Source={x:Static ex:SystemContext.LanguageProvider}}"
                         Style="{StaticResource tlbtn_MaxsizeAndNormal}"></ToggleButton>
                             <!--关闭-->
                             <Button Grid.Column="8" ToolTip="{Binding XPath=ViewLanguage/View_MainWin_Close,Source={x:Static ex:SystemContext.LanguageProvider}}" Command="{Binding ShutdownProgramCommand.ViewExecuteCmd}"
                         Style="{StaticResource btn_Close}"></Button>
                         </Grid>
                         <!--当前案例名-->
-                        <Grid Grid.Row="1" Margin="0 0 0 0" Height="56" Visibility="{Binding MainNavigation.IsShowCurCaseNameRow,Converter={StaticResource bTov},FallbackValue=Visible,Mode=TwoWay}" x:Name="gd_CaseName">
+                        <Grid Grid.Row="1" Margin="0 0 0 0" Height="56" Visibility="{Binding MainNavigation.IsShowCurCaseNameRow,Converter={StaticResource bTov},FallbackValue=Visible}" x:Name="gd_CaseName">
                             <Grid.Effect>
                                 <DropShadowEffect Color="#181d3a" ShadowDepth="10" Direction="270" BlurRadius="20" Opacity="0.08"/>
                             </Grid.Effect>
@@ -250,11 +250,11 @@
                                 <TextBlock Text="{Binding CurCaseName,FallbackValue=案例名称}" Margin="30 0 0 0" FontSize="18" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
                             </CheckBox>
                             <Button x:Name="btn_Export" IsEnabled="{Binding IsEnabled,ElementName=btn_Expand}" Grid.Column="1" Style="{StaticResource btn_TransparentBg}" Height="30" Width="90" 
-                        Content="{Binding XPath=ViewLanguage/View_MainWin_DataExport,Source={x:Static ex:SystemContext.LanguageProvider}}" Margin="10 0 10 0"
-                        Command="{Binding ExportCommand.ViewExecuteCmd}"/>
-                            <Button x:Name="btn_CloseCase" IsEnabled="{Binding IsEnabled,ElementName=btn_Expand}" Grid.Column="2" Style="{StaticResource btn_Close}" 
-                        ToolTip="{Binding XPath=ViewLanguage/View_MainWin_ToolTipCloseCase,Source={x:Static ex:SystemContext.LanguageProvider}}" 
-                        Command="{Binding CloseCaseCommand.ViewExecuteCmd}"/>
+                                    Content="{Binding XPath=ViewLanguage/View_MainWin_DataExport,Source={x:Static ex:SystemContext.LanguageProvider}}" Margin="10 0 10 0"
+                                    Command="{Binding ExportCommand.ViewExecuteCmd}"/>
+                            <Button x:Name="btn_CloseCase" Grid.Column="2" Style="{StaticResource btn_Close}" 
+                                    ToolTip="{Binding XPath=ViewLanguage/View_MainWin_ToolTipCloseCase,Source={x:Static ex:SystemContext.LanguageProvider}}" 
+                                    Command="{Binding CloseCaseCommand.ViewExecuteCmd}"/>
                         </Grid>
                     </StackPanel>
                     <!--设备列表占位符-->
@@ -355,6 +355,12 @@
             <i:EventTrigger EventName="Selected" SourceObject="{Binding ElementName=cbi_LogoutSys}">
                 <i:InvokeCommandAction Command="{Binding DataContext.LogoutSysCommand.ViewExecuteCmd,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=core:UcViewBase}}"/>
             </i:EventTrigger>
+            <ei:DataTrigger Binding="{Binding IsEnabled,ElementName=btn_Expand}" Value="true">
+                <ei:ChangePropertyAction PropertyName="Opacity" Value="1" TargetObject="{Binding ElementName=btn_Export}"/>
+            </ei:DataTrigger>
+            <ei:DataTrigger Binding="{Binding IsEnabled,ElementName=btn_Expand}" Value="false">
+                <ei:ChangePropertyAction PropertyName="Opacity" Value="0.8" TargetObject="{Binding ElementName=btn_Export}"/>
+            </ei:DataTrigger>
         </i:Interaction.Triggers>
     </Grid>
 </core:UcViewBase>

@@ -14,6 +14,7 @@ using System.IO;
 using XLY.SF.Framework.Language;
 using System.Windows.Input;
 using XLY.SF.Project.ViewModels.Tools;
+using XLY.SF.Project.Models.Logical;
 
 
 /*************************************************
@@ -196,6 +197,7 @@ namespace XLY.SF.Project.ViewModels.Main
             SysSettingCommand = new ProxyRelayCommand(ExecuteSysSettingCommand, base.ModelName);
             PluginManagementCommand = new ProxyRelayCommand(ExecutePluginManagementCommand, base.ModelName);
             SysLogCommand = new ProxyRelayCommand(ExecuteSysLogCommand, base.ModelName);
+            AboutCommand = new ProxyRelayCommand(ExecuteAboutUsCommand, base.ModelName);
         }
 
         private void Instance_CaseChanged(object sender, PropertyChangedEventArgs<Project.CaseManagement.Case> e)
@@ -244,6 +246,7 @@ namespace XLY.SF.Project.ViewModels.Main
         //案例管理
         private string ExecuteCaseManagementCommand()
         {
+            //base.NavigationForNewWindow(ExportKeys.PictureView, @"C:\Users\QXB\Desktop\Pro资源\其他\文件打开保存错误提示\Msg_Error.png");
             base.NavigationForNewWindow(ExportKeys.CaseListView);
             return "打开案例管理";
         }
@@ -251,7 +254,15 @@ namespace XLY.SF.Project.ViewModels.Main
         //用户管理
         private string ExecuteUserManagementCommand()
         {
-            base.NavigationForNewWindow(ExportKeys.SettingsUserListView);
+            //根据用户名判断是否为管理员
+            if (SystemContext.Instance.CurUserInfo.LoginUserName.Equals("admin", StringComparison.OrdinalIgnoreCase))
+            {
+                base.NavigationForNewWindow(ExportKeys.SettingsUserListView);
+            }
+            else
+            {
+                base.NavigationForNewWindow(ExportKeys.SettingsUserInfoView, new UserInfoModel(SystemContext.Instance.CurUserInfo.Entity));
+            }
             return "打开用户管理";
         }
 
@@ -266,7 +277,15 @@ namespace XLY.SF.Project.ViewModels.Main
         //打开案例编辑界面
         private void ExecuteOpenCaseEditCommand()
         {
-            EditCaseNavigationHelper.SetEditCaseViewStatus(!EditCaseNavigationHelper.CurEditViewOpenStatus);
+            EditCaseNavigationHelper.SetEditCaseViewStatus(!EditCaseNavigationHelper.CurEditViewOpenStatus, true);
+        }
+        /// <summary>
+        /// 关于我们
+        /// </summary>
+        private string ExecuteAboutUsCommand()
+        {
+            base.NavigationForNewWindow(ExportKeys.AboutUsView);
+            return "关于我们";
         }
 
         //主界面加载完成
@@ -294,10 +313,19 @@ namespace XLY.SF.Project.ViewModels.Main
         //关闭按钮
         private string ExecuteCloseCaseCommand()
         {
-            string tmpCaseName = SystemContext.Instance.CurrentCase?.Name;
-            SystemContext.Instance.CurrentCase = null;
-            base.NavigationForMainWindow(ExportKeys.HomePageView);
-            return string.Format("{0}{1}", SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_MainWin_ToolTipCloseCase], tmpCaseName);
+            //提示关闭
+            if (_messageBox.ShowDialogWarningMsg("是否关闭当前案例"))
+            {
+                string tmpCaseName = SystemContext.Instance.CurrentCase?.Name;
+                SystemContext.Instance.CurrentCase = null;
+                base.NavigationForMainWindow(ExportKeys.HomePageView);
+
+                //关闭所有正在提取的操作
+                SystemContext.Instance.CurCacheViews.Clear();
+
+                return string.Format("{0}{1}", SystemContext.LanguageManager[Languagekeys.ViewLanguage_View_MainWin_ToolTipCloseCase], tmpCaseName);
+            }
+            return string.Empty;
         }
 
         #endregion

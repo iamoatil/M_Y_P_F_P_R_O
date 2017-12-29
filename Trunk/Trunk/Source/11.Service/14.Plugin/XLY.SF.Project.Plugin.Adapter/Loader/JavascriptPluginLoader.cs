@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
+using System.IO.Compression;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -26,37 +27,12 @@ namespace XLY.SF.Project.Plugin.Adapter.Loader
         {
             List<IPlugin> pluginList = new List<IPlugin>();
 
-            string dir = LanguageManager.Current.Type == LanguageType.En ? FileHelper.GetPhysicalPath("\\Script\\en")
-                : FileHelper.GetPhysicalPath("\\Script\\cn");
+            List<FileInfo> pluginFiles = GetPluginFileList(new[] { JS_EXT, RELEASE_JS_EXT }, pluginPaths);
 
-            List<string> dirs = new List<string>();
-            dirs.Add(dir);
-            if(pluginPaths != null && pluginPaths.Length > 0)
-            {
-                foreach (var path in pluginPaths)
-                {
-                    string scp = Path.Combine(path, LanguageManager.Current.Type == LanguageType.En ? "en" : "cn");
-                    if(Directory.Exists(scp))
-                    {
-                        dirs.Add(scp);
-                    }
-                }
-            }
-            List<FileInfo> pluginFiles = new List<FileInfo>();
-            foreach (var d in dirs)
-            {
-                foreach (var f in FileHelper.GetFiles(d, new[] { JS_EXT, RELEASE_JS_EXT }))
-                {
-                    if(!pluginFiles.Exists(p=>p.Name == f.Name))
-                    {
-                        pluginFiles.Add(f);
-                    }
-                }
-            }
-            
             var res = System.Threading.Tasks.Parallel.ForEach(pluginFiles, (s) =>
             {
                 var plug = this.LoadFile(s.FullName);
+                (plug.PluginInfo as DataParsePluginInfo).FileFullPath = s.FullName;
                 lock (pluginList)
                 {
                     if (plug != null)
@@ -66,10 +42,66 @@ namespace XLY.SF.Project.Plugin.Adapter.Loader
                 }
                 System.Threading.Thread.Sleep(20);
             });
- 
+
             Plugins = pluginList;
+
+            //string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "cn");
+            //if (!Directory.Exists(dir))
+            //{
+            //    Directory.CreateDirectory(dir);
+            //}
+            //string buildDir = @"C:\Projects\SFProject-new\Trunk\Trunk\Source\21-Build";
+            //foreach (DataParsePluginInfo pi in pluginList.ConvertAll(p => p.PluginInfo))
+            //{
+            //    try
+            //    {
+            //        pi.Guid = Guid.NewGuid().ToString();
+            //        string d2 = Path.Combine(dir, Path.GetFileName(pi.FileFullPath));
+            //        if (!Directory.Exists(d2))
+            //        {
+            //            Directory.CreateDirectory(d2);
+            //        }
+            //        Serializer.SerializeToXML(pi, Path.Combine(d2, "plugin.config"));
+            //        File.Copy(pi.FileFullPath, Path.Combine(d2, "main.js"));
+            //        if (pi.Icon != null)
+            //        {
+            //            string iic = pi.Icon.TrimStart('/').TrimStart('\\').Replace("//", "/").Replace(@"\\", @"\");
+            //            string icon = Path.Combine(buildDir, iic);
+            //            if (File.Exists(icon))
+            //            {
+            //                var ii = Path.Combine(d2, iic);
+            //                if (!Directory.Exists(Path.GetDirectoryName(ii)))
+            //                {
+            //                    Directory.CreateDirectory(Path.GetDirectoryName(ii));
+            //                }
+            //                File.Copy(icon, ii);
+            //            }
+            //        }
+            //        string[] script = File.ReadAllLines(pi.FileFullPath, Encoding.UTF8);
+            //        foreach (var line in script)
+            //        {
+            //            if (line.Trim().StartsWith("//"))
+            //                continue;
+            //            int idnex = line.IndexOf(@"chalib\");
+            //            if (idnex > 0)
+            //            {
+            //                int ed = line.LastIndexOf("\\");
+            //                string chalib = line.Substring(idnex, ed - idnex).TrimStart('/').TrimStart('\\').Replace("//", "/").Replace(@"\\", @"\");
+            //                if (Directory.Exists(Path.Combine(buildDir, chalib)))
+            //                {
+            //                    FileHelper.CopyDirectory(Path.Combine(buildDir, chalib), Path.Combine(d2, chalib));
+            //                }
+            //            }
+            //        }
+            //        ZipFile.CreateFromDirectory(d2, Path.Combine(dir, Path.GetFileNameWithoutExtension(pi.FileFullPath) + ".zip"));
+            //    }
+            //    catch (Exception)
+            //    {
+
+            //    }
+            //}
         }
-        
+
         private IPlugin LoadFile(string file)
         {
             try
@@ -79,7 +111,7 @@ namespace XLY.SF.Project.Plugin.Adapter.Loader
             }
             catch
             {
-                
+
             }
             return null;
         }
@@ -129,6 +161,7 @@ namespace XLY.SF.Project.Plugin.Adapter.Loader
             this.ReadSourceNode(pluginInfo, root);
             this.ReadIncludeFile(pluginInfo, root);
             this.ReadDataNode(pluginInfo, root);
+            pluginInfo.AfterReadConfigure();
             plug.PluginInfo = pluginInfo;
             return plug;
         }
@@ -204,8 +237,9 @@ namespace XLY.SF.Project.Plugin.Adapter.Loader
             {
                 items.Add(v.InnerText);
             }
-            plugin.SourcePath = new SourceFileItems();
-            plugin.SourcePath.AddItems(items);
+            //plugin.SourcePath = new SourceFileItems();
+            //plugin.SourcePath.AddItems(items);
+            plugin.SourcePathStr = new List<string>(items);
         }
         #endregion
 

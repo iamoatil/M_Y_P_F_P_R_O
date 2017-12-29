@@ -22,36 +22,44 @@ namespace XLY.SF.Framework.Core.Base.CoreInterface
         /// 显示警告消息
         /// </summary>
         /// <param name="warningText">内容</param>
-        void ShowWarningMsg(string warningText);
+        /// <param name="confirmText">确认按钮显示文字</param>
+        void ShowWarningMsg(string warningText, string confirmText = null);
 
         /// <summary>
         /// 显示成功消息
         /// </summary>
         /// <param name="successText">内容</param>
-        /// <returns></returns>
-        void ShowSuccessMsg(string successText);
+        /// <param name="confirmText">确认按钮显示文字</param>
+        void ShowSuccessMsg(string successText, string confirmText = null);
 
         /// <summary>
         /// 显示错误消息
         /// </summary>
         /// <param name="errorText">消息内容</param>
-        void ShowErrorMsg(string errorText);
+        /// <param name="confirmText">确认按钮显示文字</param>
+        void ShowErrorMsg(string errorText, string confirmText = null);
 
         /// <summary>
         /// 显示错误消息（模式对话框）
         /// </summary>
-        bool ShowDialogErrorMsg(string errorText);
+        /// <param name="confirmText">确认按钮显示文字</param>
+        /// <param name="cancelText">取消按钮显示文字</param>
+        bool ShowDialogErrorMsg(string errorText, string confirmText = null, string cancelText = null);
 
         /// <summary>
         /// 显示成功消息【模式对话框】
         /// </summary>
         /// <param name="successText">消息内容</param>
-        bool ShowDialogSuccessMsg(string successText);
+        /// <param name="confirmText">确认按钮显示文字</param>
+        /// <param name="cancelText">取消按钮显示文字</param>
+        bool ShowDialogSuccessMsg(string successText, string confirmText = null, string cancelText = null);
 
         /// <summary>
         /// 显示警告消息（模式对话框）
         /// </summary>
         /// <param name="warningText">消息内容</param>
-        bool ShowDialogWarningMsg(string warningText);
+        /// <param name="confirmText">确认按钮显示文字</param>
+        /// <param name="cancelText">取消按钮显示文字</param>
+        bool ShowDialogWarningMsg(string warningText, string confirmText = null, string cancelText = null);
     }
 }

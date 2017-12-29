@@ -7,10 +7,7 @@
 *****************************************************************************/
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using X64Service;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.BaseUtility.Helper;
@@ -36,6 +33,7 @@ namespace XLY.SF.Project.Services
             }
 
             IntPtr mount = IntPtr.Zero;
+
             // 语音转码
             try
             {
@@ -79,5 +77,4 @@ namespace XLY.SF.Project.Services
         }
 
     }
-
 }

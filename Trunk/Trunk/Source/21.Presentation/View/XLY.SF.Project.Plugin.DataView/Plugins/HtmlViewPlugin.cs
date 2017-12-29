@@ -23,14 +23,14 @@ namespace XLY.SF.Project.Plugin.DataView
     /// <summary>
     /// Html数据视图插件，为通过脚本编辑器自定义的视图
     /// </summary>
-    [ExportMetadata("PluginType", PluginType.SpfDataView)]
-    [PartCreationPolicy(CreationPolicy.NonShared)]
+    [PluginContainer(PluginType.SpfDataView)]
     public class HtmlViewPlugin : AbstractDataViewPlugin
     {
         public override FrameworkElement GetControl(DataViewPluginArgument arg)
         {
             var plugin = PluginInfo as DataViewPluginInfo;
             HtmlViewControl ctrl = new HtmlViewControl(plugin.ScriptObject, arg);
+            ctrl.OnSelectedDataChanged -= OnSelectedDataChanged;
             ctrl.OnSelectedDataChanged += OnSelectedDataChanged;
             return ctrl;
         }

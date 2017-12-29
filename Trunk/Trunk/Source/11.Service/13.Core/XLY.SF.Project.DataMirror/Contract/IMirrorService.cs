@@ -11,26 +11,24 @@
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.Domains;
 
-
 namespace XLY.SF.Project.DataMirror
 {
     /// <summary>
     /// 镜像服务接口
     /// </summary>
-    internal interface IMirrorService
+    public interface IMirrorService
     {
         /// <summary>
         /// 执行镜像
         /// </summary>
         /// <param name="mirror">镜像源</param>
         /// <param name="asyn">异步通知</param>
-        void Execute(Mirror mirror, IAsyncTaskProgress asyn);
+        void Execute(Mirror mirror, DefaultAsyncTaskProgress asyn);
 
         /// <summary>
         /// 停止镜像
         /// </summary>
-        /// <param name="asyn">异步通知</param>
-        void Stop(IAsyncTaskProgress asyn);
+        void Stop();
 
         /// <summary>
         /// 是否可以暂停
@@ -40,14 +38,11 @@ namespace XLY.SF.Project.DataMirror
         /// <summary>
         /// 暂停
         /// </summary>
-        /// <param name="asyn">异步通知</param>
-        void Suspend(IAsyncTaskProgress asyn);
+        void Suspend();
 
         /// <summary>
         /// 继续
         /// </summary>
-        /// <param name="asyn">异步通知</param>
-        void Continue(IAsyncTaskProgress asyn);
-
+        void Continue();
     }
 }

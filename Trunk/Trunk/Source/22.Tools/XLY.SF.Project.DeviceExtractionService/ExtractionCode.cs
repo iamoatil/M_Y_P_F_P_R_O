@@ -12,20 +12,28 @@ namespace XLY.SF.Project.DeviceExtractionService
     public enum ExtractionCode
     {
         /// <summary>
+        /// 初始化。
+        /// </summary>
+        Init = 0,
+        /// <summary>
         /// 开始。
         /// </summary>
-        Start = 0,
+        Start = 1,
         /// <summary>
         /// 停止。
         /// </summary>
-        Stop = 1,
+        Stop = 2,
         /// <summary>
         /// 进度改变。
         /// </summary>
-        ProgressChanged = 2,
+        ProgressChanged = 3,
         /// <summary>
-        /// 任务结束。
+        /// 某一些项提取结束。
         /// </summary>
-        Terminate = 3,
+        ItemTerminate = 4,
+        /// <summary>
+        /// 任务状态改变。
+        /// </summary>
+        StateChanged = 5,
     }
 }

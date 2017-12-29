@@ -5,72 +5,19 @@ using X64Service;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.BaseUtility.Helper;
 
-namespace XLY.SF.Project.DataPump.Misc
+namespace XLY.SF.Project.DataPump
 {
     public class ItunsBackFileStategy : IProcessControllableStrategy
     {
+        private String _destPath;
+
         #region Methods
 
         #region Public
 
-        public static Boolean IsItunsBackFile(DataPumpControllableExecutionContext context, out String backFilePath)
+        public void InitExecution(string sourcePath, string destPath)
         {
-            String path = context.GetContextData<String>("sourcePath");
-            string key = "Manifest.mbdb";
-
-            var res = Directory.GetFiles(path, key, SearchOption.AllDirectories);
-            if (res.IsValid())
-            {
-                foreach (var resPath in res)
-                {
-                    if (!File.Exists(resPath.Replace(key, "Info.plist")))
-                    {
-                        continue;
-                    }
-                    if (!File.Exists(resPath.Replace(key, "Manifest.plist")))
-                    {
-                        continue;
-                    }
-                    if (!File.Exists(resPath.Replace(key, "Status.plist")))
-                    {
-                        continue;
-                    }
-                    backFilePath = new FileInfo(resPath).DirectoryName;
-                    return true;
-                }
-            }
-
-            key = "Manifest.db";
-            res = Directory.GetFiles(path, key, SearchOption.AllDirectories);
-            if (res.IsValid())
-            {
-                foreach (var resPath in res)
-                {
-                    if (!File.Exists(resPath.Replace(key, "Info.plist")))
-                    {
-                        continue;
-                    }
-                    if (!File.Exists(resPath.Replace(key, "Manifest.plist")))
-                    {
-                        continue;
-                    }
-                    if (!File.Exists(resPath.Replace(key, "Status.plist")))
-                    {
-                        continue;
-                    }
-                    backFilePath = new FileInfo(resPath).DirectoryName;
-                    return true;
-                }
-            }
-            backFilePath = null;
-            return false;
-        }
-
-        public void InitExecution(DataPumpControllableExecutionContext context)
-        {
-            String destPath = context.GetContextData<String>("destPath");
-            String sourcePath = context.GetContextData<String>("sourcePath");
-
+            _destPath = destPath;
             string target = Path.Combine(destPath, "data");
             var res = IOSDeviceCoreDll.AnalyzeItunesBackupDATAPWD(sourcePath, target, (f, t, a) =>
             {
@@ -78,7 +25,7 @@ namespace XLY.SF.Project.DataPump.Misc
                 return 0;
             }, (b) =>
             {
-                var password = context.GetContextData<String>("password") ?? String.Empty;
+                var password = string.Empty;
                 var pS = Marshal.StringToHGlobalAnsi(password);
                 Marshal.WriteIntPtr(b, pS);
                 return 0;
@@ -99,20 +46,27 @@ namespace XLY.SF.Project.DataPump.Misc
             }
         }
 
-        public void Process(DataPumpControllableExecutionContext context)
+        public void Process(DataPumpExecutionContext context)
         {
-            if (context.Source.ItemType == Domains.SourceFileItemType.NormalPath)
+            var si = context.Source;
+            if (si.ItemType == Domains.SourceFileItemType.NormalPath)
             {
-                String destPath = context.GetContextData<String>("destPath");
-
-                string path = context.Source.Config.TrimEnd("#F");
+                string path = si.Config.TrimEnd("#F");
                 if (path.StartsWith("/data/data/"))
                 {
-                    path = ("/data/" + path.TrimStart("/data/data/"));
+                    path = path.TrimStart("/data/data/");
+                }
+                else if (path.StartsWith("/data/"))
+                {
+                    path = path.TrimStart("/data/");
                 }
                 path = path.Replace("/", @"\");
 
-                context.Source.Local = FileHelper.ConnectPath(destPath, "data", path);
+                var local = Path.Combine(_destPath, "data", path.Replace('/', '\\').TrimStart('\\'));
+                if (FileHelper.IsValidDictory(local) || FileHelper.IsValid(local))
+                {
+                    si.Local = local;
+                }
             }
         }
 

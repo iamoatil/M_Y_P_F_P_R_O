@@ -19,7 +19,7 @@ using XLY.SF.Project.Domains;
 namespace XLY.SF.Project.Plugin.DataView
 {
     /// <summary>
-    /// ContactMessageViewPlugin
+    /// 账号-消息视图
     /// </summary>
     public class ContactMessageViewPlugin : AbstractDataViewPlugin
     {
@@ -30,9 +30,10 @@ namespace XLY.SF.Project.Plugin.DataView
                 Name = Languagekeys.MessageView,
                 ViewType = new List<DataViewSupportItem>(),
                 OrderIndex = 1,
-                PluginType = PluginType.SpfDataView
+                PluginType = PluginType.SpfDataView,
+                Icon = "pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/data_view_conversion.png"
             };
-            p.ViewType.Add(new DataViewSupportItem() { PluginId = "*", TypeName = "WeChatFriendShowX" });
+            p.ViewType.Add(new DataViewSupportItem() { PluginId = "*", TypeName = "IMessageList", Inherit = true });
             PluginInfo = p;
         }
 
@@ -40,6 +41,7 @@ namespace XLY.SF.Project.Plugin.DataView
         {
             ContactMessageUserControl ctrl = new ContactMessageUserControl();
             ctrl.DataContext = arg;
+            ctrl.OnSelectedDataChanged -= OnSelectedDataChanged;
             ctrl.OnSelectedDataChanged += OnSelectedDataChanged;
             return ctrl;
         }

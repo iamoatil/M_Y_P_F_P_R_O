@@ -44,10 +44,15 @@ namespace XLY.SF.Project.Devices
         {
             if (_serviceState)
                 return true;
-            int rt = USBMonitorCoreDll.Initialize(Encoding.Unicode.GetBytes(UsbExePath));
+
+            var bbbb = Encoding.Unicode.GetBytes(UsbExePath);
+
+            //LoggerManagerSingle.Instance.Debug(string.Join(" ", bbbb));
+
+            int rt = USBMonitorCoreDll.Initialize(bbbb);
             if (rt != 0)
             {
-                LoggerManagerSingle.Instance.Error($"初始化USB监听服务失败! 错误码：{rt}");
+                LoggerManagerSingle.Instance.Error($"初始化USB监听服务失败! 错误码：{rt} exe路径: {UsbExePath}");
                 return false;
             }
 

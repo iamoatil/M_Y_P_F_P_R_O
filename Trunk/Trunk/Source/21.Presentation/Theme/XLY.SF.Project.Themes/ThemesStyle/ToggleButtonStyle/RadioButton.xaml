@@ -47,7 +47,50 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
+<!--9008镜像选择步骤-->
+    <Style x:Key="MirrorRadioButtonStyle" TargetType="{x:Type local:MirrorRadioButton}">
+        <Setter Property="Foreground" Value="#9ba5b9"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:MirrorRadioButton}">
+                    <Border x:Name="border" CornerRadius="12"  BorderThickness="1" Background="#0FFFFFFF" >
+                        <Grid>
+                            <Grid.RowDefinitions >
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Image x:Name="img" Width="38" Height="38" Grid.RowSpan="2" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Mirror_Checked.png" HorizontalAlignment="Right" VerticalAlignment="Top" Visibility="Hidden"></Image>
+                            <TextBlock x:Name="num"  FontSize="14" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                            <TextBlock x:Name="method"  FontSize="16"  Grid.Row="1" Foreground="{TemplateBinding Foreground}"  HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter Property="Visibility" Value="Visible" TargetName="img"></Setter>
+                            <Setter Property="FontWeight" Value="Bold" TargetName="method"/>
+                            <Setter Property="Foreground" Value="White" />
+                            <Setter Property="BorderBrush" Value="#379be6" TargetName="border"/>
+                            <Setter Property="Background" Value="#14FFFFFF" TargetName="border"/>
+                        </Trigger>
+                        <Trigger Property="MethodNum" Value="1">
+                            <Setter Property="Text" Value="方法一" TargetName="num"/>
+                            <Setter Property="Text" Value="ADB命令" TargetName="method"/>
+                        </Trigger>
+                        <Trigger Property="MethodNum" Value="2">
+                            <Setter Property="Text" Value="方法二" TargetName="num"/>
+                            <Setter Property="Text" Value="常规方式" TargetName="method"/>
+                        </Trigger>
+                        <Trigger Property="MethodNum" Value="3">
+                            <Setter Property="Text" Value="方法三" TargetName="num"/>
+                            <Setter Property="Text" Value="工程线进入" TargetName="method"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!--设备首页，推荐方案按钮【带移入箭头效果】-->
     <ControlTemplate x:Key="rb_IconHasArrowCt" TargetType="local:IconRadioButton">
         <Border x:Name="br" CornerRadius="4" Background="{TemplateBinding Background}" BorderThickness="1" BorderBrush="{TemplateBinding Background}">
@@ -167,5 +210,23 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
     <!--#endregion-->
-
+    <!--导出报表，数据内容-->
+    <ControlTemplate x:Key="ExportDataCheckBox" TargetType="{x:Type RadioButton}">
+        
+        <Grid x:Name="gd" Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="14"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border x:Name="bg" Width="14" Height="14" CornerRadius="100" BorderBrush="#379be6" BorderThickness="2">
+                <Border x:Name="CheckBorder" Width="6" Height="6" CornerRadius="100"  />
+            </Border>
+            <ContentPresenter Grid.Column="1" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" Value="white" TargetName="CheckBorder"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
 </ResourceDictionary>

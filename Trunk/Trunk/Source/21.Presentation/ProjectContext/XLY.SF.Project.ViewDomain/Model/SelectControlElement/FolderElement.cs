@@ -56,7 +56,7 @@ namespace XLY.SF.Project.ViewDomain.Model.SelectControlElement
 
         private string _name;
         /// <summary>
-        /// 文件夹名
+        /// 显示名称
         /// </summary>
         public string Name
         {

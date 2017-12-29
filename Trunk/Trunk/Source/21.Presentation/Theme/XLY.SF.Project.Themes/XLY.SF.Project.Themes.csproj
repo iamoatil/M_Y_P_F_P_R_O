@@ -79,6 +79,8 @@
     <Compile Include="Behavior\DataGridBehavior.cs" />
     <Compile Include="Behavior\ResetFileOrFolderNameBehavior.cs" />
     <Compile Include="Behavior\ScrollPageBehavior.cs" />
+    <Compile Include="Binding\DecorationBinding.cs" />
+    <Compile Include="Binding\DecorationBindingItem.cs" />
     <Compile Include="Converter\AdditionConverter.cs" />
     <Compile Include="Converter\BookmarkToBooleanConverter.cs" />
     <Compile Include="Converter\DateTimeToDateStringConverter.cs" />
@@ -90,6 +92,9 @@
     <Compile Include="CustromControl\ComboBox\ComboBoxEx.cs" />
     <Compile Include="Converter\ImageContentToBoolConverter.cs" />
     <Compile Include="Converter\SubtractionConverter.cs" />
+    <Compile Include="CustromControl\DatePicker\DatePickerElement\DateTimeElement.cs" />
+    <Compile Include="CustromControl\DatePicker\DateTimePicker.cs" />
+    <Compile Include="CustromControl\DatePicker\DatePickerElement\DateTimePickerStatus.cs" />
     <Compile Include="CustromControl\ToggleButton\CreateNewFolderRadioButton.cs" />
     <Compile Include="CustromControl\DeviceSelectControl\DeviceSelectControl.cs" />
     <Compile Include="CustromControl\DeviceSelectControl\DeviceSelectItemControl.cs" />
@@ -105,10 +110,19 @@
     <Compile Include="CustromControl\ProgressBar\ProgressBarWithCorner.cs" />
     <Compile Include="CustromControl\ToggleButton\IconRadioButton.cs" />
     <Compile Include="CustromControl\TabControl\TabControlWithButton.cs" />
+    <Compile Include="CustromControl\ToggleButton\MirrorRadioButton.cs" />
     <Compile Include="CustromControl\TreeView\TreeViewEx.cs" />
-    <Compile Include="CustromControl\TreeView\TreeViewExport.cs" />
     <Compile Include="CustromControl\TreeView\TreeViewItemEx.cs" />
-    <Compile Include="CustromControl\TreeView\TreeViewItemExport.cs" />
+    <Compile Include="CustromControl\WebrowserEx\WebBrowserUc.xaml.cs">
+      <DependentUpon>WebBrowserUc.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustromControl\WebrowserEx\Element\Win32.cs" />
+    <Compile Include="CustromControl\WebrowserEx\WebBrowserOverlay.xaml.cs">
+      <DependentUpon>WebBrowserOverlay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustromControl\WebrowserEx\WindowFormUc.xaml.cs">
+      <DependentUpon>WindowFormUc.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CustromControl\Window\WindowEx.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -144,6 +158,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="CustromControl\WebrowserEx\WebBrowserUc.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustromControl\WebrowserEx\WebBrowserOverlay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustromControl\WebrowserEx\WindowFormUc.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ThemesStyle\ButtonStyle\Button.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -169,6 +195,10 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Page Include="ThemesStyle\DataGridStyle\DataGridStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ThemesStyle\DatePickerStyle\DatePicker.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -518,6 +548,78 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\ScrollBarArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\inspection-tip-back.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\PhoneIcons\360奇酷.png" />
+    <Resource Include="Resources\Images\PhoneIcons\COOLPAD.png" />
+    <Resource Include="Resources\Images\PhoneIcons\OPPO.png" />
+    <Resource Include="Resources\Images\PhoneIcons\TCL.png" />
+    <Resource Include="Resources\Images\PhoneIcons\VIVO.png" />
+    <Resource Include="Resources\Images\PhoneIcons\一加.png" />
+    <Resource Include="Resources\Images\PhoneIcons\三星.png" />
+    <Resource Include="Resources\Images\PhoneIcons\中兴.png" />
+    <Resource Include="Resources\Images\PhoneIcons\中国移动.png" />
+    <Resource Include="Resources\Images\PhoneIcons\乐视.png" />
+    <Resource Include="Resources\Images\PhoneIcons\努比亚.png" />
+    <Resource Include="Resources\Images\PhoneIcons\华为.png" />
+    <Resource Include="Resources\Images\PhoneIcons\小米.png" />
+    <Resource Include="Resources\Images\PhoneIcons\小辣椒.png" />
+    <Resource Include="Resources\Images\PhoneIcons\朵唯.png" />
+    <Resource Include="Resources\Images\PhoneIcons\红米.png" />
+    <Resource Include="Resources\Images\PhoneIcons\美图.png" />
+    <Resource Include="Resources\Images\PhoneIcons\联想.png" />
+    <Resource Include="Resources\Images\PhoneIcons\金立.png" />
+    <Resource Include="Resources\Images\PhoneIcons\长虹.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\PictureViewReset.png" />
+    <Resource Include="Resources\Images\PictureViewRotate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Guide\ios_step1.png" />
+    <Resource Include="Resources\Images\Guide\ios_step2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Guide\android4_step1.png" />
+    <Resource Include="Resources\Images\Guide\android4_step2.png" />
+    <Resource Include="Resources\Images\Guide\android4_step3.png" />
+    <Resource Include="Resources\Images\Guide\android4_step4.png" />
+    <Resource Include="Resources\Images\Guide\android4_step5.png" />
+    <Resource Include="Resources\Images\Guide\android4_step6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Guide\android4_1_step1.png" />
+    <Resource Include="Resources\Images\Guide\android4_1_step2.png" />
+    <Resource Include="Resources\Images\Guide\android4_1_step3.png" />
+    <Resource Include="Resources\Images\Guide\android4_1_step4.png" />
+    <Resource Include="Resources\Images\Guide\android4_1_step5.png" />
+    <Resource Include="Resources\Images\Guide\android4_1_step6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Guide\android5_0_step1.png" />
+    <Resource Include="Resources\Images\Guide\android5_0_step2.png" />
+    <Resource Include="Resources\Images\Guide\android5_0_step3.png" />
+    <Resource Include="Resources\Images\Guide\android5_0_step4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Guide\developer_step1.png" />
+    <Resource Include="Resources\Images\Guide\developer_step2.png" />
+    <Resource Include="Resources\Images\Guide\developer_step3.png" />
+    <Resource Include="Resources\Images\Guide\developer_step4.png" />
+    <Resource Include="Resources\Images\Guide\developer_step5.png" />
+    <Resource Include="Resources\Images\Guide\developer_step6.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Icons\QRCode.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\default_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\ImageNotFound.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

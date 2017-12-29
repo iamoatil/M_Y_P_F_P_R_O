@@ -1,5 +1,4 @@
 ﻿using System;
-using XLY.SF.Framework.BaseUtility;
 
 namespace XLY.SF.Project.Domains
 {
@@ -7,8 +6,14 @@ namespace XLY.SF.Project.Domains
     /// 信息核心对象。
     /// </summary>
     [Serializable]
-    public class MessageCore : AbstractDataItem
+    public class MessageCore : AbstractDataItem, IConversion
     {
+        public MessageCore()
+        {
+            DataState = EnumDataState.Normal;
+            Type = EnumColumnType.String;
+        }
+
         /// <summary>
         /// 发送者
         /// </summary>
@@ -39,14 +44,6 @@ namespace XLY.SF.Project.Domains
         [Display]
         public DateTime? Date { get; set; }
 
-        public MessageCore()
-        {
-            DataState = EnumDataState.Normal;
-            Type = EnumColumnType.String;
-        }
-
-        #region IConversion
-
         /// <summary>
         /// 用于会话模式的头像
         /// </summary>
@@ -64,8 +61,6 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         [Display]
         public EnumSendState SendState { get; set; }
-
-        #endregion
 
     }
 }

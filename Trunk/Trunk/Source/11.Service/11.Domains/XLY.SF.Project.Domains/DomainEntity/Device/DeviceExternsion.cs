@@ -37,16 +37,6 @@ namespace XLY.SF.Project.Domains
                 return null;
             try
             {
-                //object obj = Activator.CreateInstance(typeof(IDevice).Assembly.FullName, dicPropertys[XLY_TypeKey]);
-                //foreach (var item in dicPropertys)
-                //{
-                //    if(item.Key != XLY_TypeKey)
-                //    {
-                //        obj.Setter(item.Key, item.Value.ChangeType(obj.GetType().GetProperty(item.Key).PropertyType));
-                //    }
-                //}
-                //return obj as IDevice;
-
                 return Serializer.DeSerializeFromBinary<IDevice>(dicPropertys[XLY_BinKey].ToByteArray());
             }
             catch
@@ -63,15 +53,6 @@ namespace XLY.SF.Project.Domains
         public static Dictionary<string, string> Save(this IDevice device)
         {
             Dictionary<string, string> dicPropertys = new Dictionary<string, string>();
-            //dicPropertys[XLY_TypeKey] = device.GetType().FullName;
-            //foreach(var pi in device.GetType().GetProperties())
-            //{
-            //    var dp = pi.GetCustomAttribute(typeof(DPConfigAttribute));
-            //    if(dp != null)
-            //    {
-            //        dicPropertys[pi.Name] = pi.GetValue(device).ToSafeString();
-            //    }
-            //}
             dicPropertys[XLY_IdKey] = device.ID;
             dicPropertys[XLY_NameKey] = device.Name;
             dicPropertys[XLY_BinKey] = Serializer.SerializeToBinary(device).ToHex();
@@ -97,6 +78,7 @@ namespace XLY.SF.Project.Domains
                 if (extact != null)
                 {
                     dataList.Add(extact);
+                    extact.SourcePath = devicePath;
                 }
             }
             return dataList;
@@ -122,19 +104,26 @@ namespace XLY.SF.Project.Domains
                 try
                 {
                     IDataSource ds = Serializer.DeSerializeFromBinary<IDataSource>(bin);
+                    if (ds.PluginInfo == null)
+                        continue;
                     ds.SetCurrentPath(extactPath);     //修改数据中的当前任务路径，因为原始数据中存储的是绝对路径
                     if (ds != null)
                     {
                         ds.Filter<dynamic>();
-                        ls.Add(new DataExtactionItem()
+                        var de = new DataExtactionItem()
                         {
                             Text = ds.PluginInfo?.Name,
-                            Index = ds.PluginInfo == null ? 0 : ds.PluginInfo.OrderIndex,
+                            Index = ds.PluginInfo.OrderIndex,
                             Group = ds.PluginInfo?.Group,
-                            GroupIndex = ds.PluginInfo == null ? 0 : ds.PluginInfo.GroupIndex,
+                            GroupIndex = ds.PluginInfo.GroupIndex,
                             Data = ds,
+                            Total = ds.Total,
+                            DeleteTotal = ds.DeleteTotal,
                             TreeNodes = new ObservableCollection<DataExtactionItem>()
-                        });
+                        };
+                        ds.Parent = de;
+                        ds.BuildParent();
+                        ls.Add(de);
                     }
                 }
                 catch 
@@ -148,17 +137,71 @@ namespace XLY.SF.Project.Domains
             {
                 DataExtactionItem g = new DataExtactionItem() { Text = group.Key, TreeNodes = new ObservableCollection<DataExtactionItem>() };
                 g.TreeNodes.AddRange(group.ToList().OrderBy(p => p.Index));       //添加该分组的所有插件，并按照序号排序
+                g.Total = group.ToList().Sum(p => p.Total);
+                g.DeleteTotal = group.ToList().Sum(p => p.DeleteTotal);
                 extact.TreeNodes.Add(g);
+                extact.Total += g.Total;
+                extact.DeleteTotal += g.DeleteTotal;
             }
 
             return extact;
+        }
+
+        /// <summary>
+        /// 实现设备数据的拷贝
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static IEnumerable<DataExtactionItem> CopyDataExtactionItem(this IEnumerable<DataExtactionItem> source)
+        {
+            List<DataExtactionItem> lst = new List<DataExtactionItem>();
+            if (source == null)
+            {
+                return lst;
+            }
+            foreach (var item in source)
+            {
+                var c = new DataExtactionItem() { Text = item.Text, Group = item.Group, GroupIndex = item.GroupIndex, Index = item.Index, IsChecked = true, IsVisible = true, Data=null, TreeNodes = new ObservableCollection<DataExtactionItem>() };
+                lst.Add(c);
+                c.TreeNodes.AddRange(CopyDataExtactionItem(item.TreeNodes));
+                foreach (var tn in c.TreeNodes)
+                {
+                    tn.Parent = c;
+                }
+            }
+            
+            return lst;
+        }
+
+        public static DataExtactionItem FindExtactionItemFromTree(this IEnumerable<DataExtactionItem> source, DataExtactionItem item)
+        {
+            if (item == null)
+                return null;
+            List<DataExtactionItem> path = new List<DataExtactionItem>();       //从根节点到当前节点的路径
+            while(item != null)
+            {
+                path.Insert(0, item);
+                item = item.Parent as DataExtactionItem;
+            }
+            IEnumerable<DataExtactionItem> nodes = source;
+            DataExtactionItem result = null;
+            foreach (var node in path)
+            {
+                result = nodes.FirstOrDefault(t => t.Text == node.Text);
+                if(result == null)
+                {
+                    return null;
+                }
+                nodes = result.TreeNodes;
+            }
+            return result;
         }
     }
 
     /// <summary>
     /// 用于设备数据的读取
     /// </summary>
-    public class DataExtactionItem: NotifyPropertyBase, ICheckedItem
+    public class DataExtactionItem: NotifyPropertyBase, ICheckedItem, IDecoration
     {
         /// <summary>
         /// 应用名称
@@ -182,69 +225,74 @@ namespace XLY.SF.Project.Domains
         public object Data { get; set; }
 
         public bool IsHideChildren { get; set; }
-        public bool IsItemStyle { get; set; }
-        public int Total { get; set; }
 
-        private bool? _isChecked = true;
-        public bool? IsChecked
+        #region 数据总数
+        private int _Total = 0;
+
+        /// <summary>
+        /// 数据总数
+        /// </summary>	
+        public int Total
+        {
+            get { return _Total; }
+            set
+            {
+                _Total = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _DeleteTotal = 0;
+
+        /// <summary>
+        /// 删除数据总数
+        /// </summary>	
+        public int DeleteTotal
+        {
+            get { return _DeleteTotal; }
+            set
+            {
+                _DeleteTotal = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region 是否被勾选
+        private bool? _isChecked = false;
+        public new bool? IsChecked
         {
             get { return _isChecked; }
             set
             {
                 this.SetCheckedState(value, ()=> { this._isChecked = value; OnPropertyChanged(); });
-                //if (this.isChecked != value)
-                //{
-                //    this.isChecked = value;
-                //    OnPropertyChanged();
-                //    if (this.isChecked == true) // 如果节点被选中
-                //    {
-                //        if (this.TreeNodes != null)
-                //            foreach (var dt in this.TreeNodes)
-                //                dt.IsChecked = true;
-                //        if (this.Parent != null)
-                //        {
-                //            Boolean bExistUncheckedChildren = false;
-                //            foreach (var dt in this.Parent.TreeNodes)
-                //                if (dt.IsChecked != true)
-                //                {
-                //                    bExistUncheckedChildren = true;
-                //                    break;
-                //                }
-                //            if (bExistUncheckedChildren)
-                //                this.Parent.IsChecked = null;
-                //            else
-                //                this.Parent.IsChecked = true;
-                //        }
-                //    }
-                //    else if (this.isChecked == false)   // 如果节点未选中
-                //    {
-                //        if (this.TreeNodes != null)
-                //            foreach (var dt in this.TreeNodes)
-                //                dt.IsChecked = false;
-                //        if (this.Parent != null)
-                //        {
-                //            Boolean bExistCheckedChildren = false;
-                //            foreach (var dt in this.Parent.TreeNodes)
-                //                if (dt.IsChecked != false)
-                //                {
-                //                    bExistCheckedChildren = true;
-                //                    break;
-                //                }
-                //            if (bExistCheckedChildren)
-                //                this.Parent.IsChecked = null;
-                //            else
-                //                this.Parent.IsChecked = false;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        if (this.Parent != null)
-                //            this.Parent.IsChecked = null;
-                //    }
-                //}
+                if(_isChecked != null && Data is IDataSource ds)
+                {
+                    ds.Parent = this;
+                    ds.IsChecked = value;
+                }
+                CheckedChanged?.Invoke(this, null);
             }
         }
-        public bool IsSelected { get; set; }
+        #endregion
+
+        #region 是否可见
+        private bool? _IsVisible = true;
+
+        /// <summary>
+        /// 是否可见
+        /// </summary>	
+        public bool? IsVisible
+        {
+            get { return _IsVisible; }
+            set
+            {
+                this.SetTreeState(value, (item)=> item.IsVisible, (item,v)=> item.IsVisible = v, () => { this._IsVisible = value; OnPropertyChanged(); });
+                VisibleChanged?.Invoke(this, null);
+            }
+        }
+        #endregion
 
         /// <summary>
         /// 子节点列表
@@ -252,6 +300,9 @@ namespace XLY.SF.Project.Domains
         public ObservableCollection<DataExtactionItem> TreeNodes { get; set; }
 
         public ICheckedItem Parent { get; set; }
+
+        public event EventHandler VisibleChanged;
+        public event EventHandler CheckedChanged;
 
         public void BuildParent()
         {
@@ -267,8 +318,21 @@ namespace XLY.SF.Project.Domains
 
         public IEnumerable<ICheckedItem> GetChildren()
         {
-            return TreeNodes;
+            return Data == null ? TreeNodes : (Data as IDataSource)?.GetChildren();
         }
+
+        public object GetMetaData(DecorationProperty dp)
+        {
+            return SourcePath;
+        }
+
+        public string GetKey(DecorationProperty dp)
+        {
+            return $"DataExtactionItem_{Text}";
+        }
+
+        private string _sourcePath = null;
+        public string SourcePath { get => _sourcePath ?? Parent?.SourcePath; set => _sourcePath = value; }
     }
 
 }

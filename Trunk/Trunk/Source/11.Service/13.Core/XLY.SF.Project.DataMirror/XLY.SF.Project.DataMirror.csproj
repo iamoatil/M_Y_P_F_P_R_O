@@ -64,8 +64,6 @@
     <Compile Include="Contract\IMirrorService.cs" />
     <Compile Include="DataMirrorService\AndroidUSBAPIMirrorService.cs" />
     <Compile Include="DataMirrorService\IOSDeviceMirrorService.cs" />
-    <Compile Include="MirrorControler.cs" />
-    <Compile Include="MirrorServiceFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -93,9 +91,6 @@
       <Project>{9eb7a2cf-ae03-47ee-b850-88a0fccdd0bd}</Project>
       <Name>XLY.SF.Project.Devices</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

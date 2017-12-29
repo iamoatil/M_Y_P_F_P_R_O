@@ -44,7 +44,7 @@ namespace XLY.SF.Project.Plugin.Android
         /// 解析数据
         /// </summary>
         /// <param name="datasource"></param>
-        public void BuildData(CallDataSource datasource)
+        public void BuildData(SmsDataSource datasource)
         {
             if (!FileHelper.IsValid(MainDbPath))
             {
@@ -103,37 +103,40 @@ namespace XLY.SF.Project.Plugin.Android
                         datasource.Items.Add(smsTemp);
                     }
 
-                    var smsListA = context.Find(new SQLiteString("SELECT send_msg_status,msg_content,msg_date,address FROM table_broadcastchat_tb"));
-                    foreach (var smsData in smsListA)
+                    if (context.ExistTable("table_broadcastchat_tb"))
                     {
-                        SMS smsTemp = new SMS();
-                        smsTemp.Content = DynamicConvert.ToSafeString(smsData.msg_content);
-                        smsTemp.Number = DynamicConvert.ToSafeString(smsData.address);
-                        smsTemp.Number = smsTemp.Number.TrimStart("+86");
-                        smsTemp.ContactName = FindName(contactDb, smsTemp.Number);
-                        smsTemp.StartDate = new DateTime(1970, 1, 1).AddSeconds(DynamicConvert.ToSafeLong(smsData.msg_date) / 1000).AddHours(8);
-
-                        string type = DynamicConvert.ToSafeString(smsData.send_msg_status);
-                        switch (type)
+                        var smsListA = context.Find(new SQLiteString("SELECT send_msg_status,msg_content,msg_date,address FROM table_broadcastchat_tb"));
+                        foreach (var smsData in smsListA)
                         {
-                            case "2"://群发
-                            case "5"://群发
-                                smsTemp.SmsState = EnumSMSState.SendSMS;
-                                break;
-                            case "3"://发送
-                                smsTemp.SmsState = EnumSMSState.SendSMS;
-                                break;
-                            case "8"://草稿箱
-                                smsTemp.SmsState = EnumSMSState.DraftSMS;
-                                break;
-                            default:
-                                smsTemp.SmsState = EnumSMSState.None;
-                                break;
+                            SMS smsTemp = new SMS();
+                            smsTemp.Content = DynamicConvert.ToSafeString(smsData.msg_content);
+                            smsTemp.Number = DynamicConvert.ToSafeString(smsData.address);
+                            smsTemp.Number = smsTemp.Number.TrimStart("+86");
+                            smsTemp.ContactName = FindName(contactDb, smsTemp.Number);
+                            smsTemp.StartDate = new DateTime(1970, 1, 1).AddSeconds(DynamicConvert.ToSafeLong(smsData.msg_date) / 1000).AddHours(8);
+
+                            string type = DynamicConvert.ToSafeString(smsData.send_msg_status);
+                            switch (type)
+                            {
+                                case "2"://群发
+                                case "5"://群发
+                                    smsTemp.SmsState = EnumSMSState.SendSMS;
+                                    break;
+                                case "3"://发送
+                                    smsTemp.SmsState = EnumSMSState.SendSMS;
+                                    break;
+                                case "8"://草稿箱
+                                    smsTemp.SmsState = EnumSMSState.DraftSMS;
+                                    break;
+                                default:
+                                    smsTemp.SmsState = EnumSMSState.None;
+                                    break;
+                            }
+
+                            smsTemp.DataState = EnumDataState.Normal;
+
+                            datasource.Items.Add(smsTemp);
                         }
-
-                        smsTemp.DataState = EnumDataState.Normal;
-
-                        datasource.Items.Add(smsTemp);
                     }
                 }
             }

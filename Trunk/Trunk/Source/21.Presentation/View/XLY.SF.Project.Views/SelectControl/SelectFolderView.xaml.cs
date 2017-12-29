@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using XLY.SF.Framework.Core.Base.ViewModel;
+using XLY.SF.Project.Themes.CustromControl;
 using XLY.SF.Project.ViewDomain.MefKeys;
 
 namespace XLY.SF.Project.Views.SelectControl

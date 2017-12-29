@@ -137,6 +137,24 @@ namespace XLY.SF.Project.ViewModels.Main.CaseManagement
 
         #endregion
 
+        #region IsIdle
+
+        private Boolean _isIdle = true;
+        /// <summary>
+        /// 设备提取是否空闲。
+        /// </summary>
+        public Boolean IsIdle
+        {
+            get => _isIdle;
+            set
+            {
+                _isIdle = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Methods

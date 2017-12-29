@@ -29,7 +29,6 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             EarlyWarningPluginArgument ewArg = (EarlyWarningPluginArgument)arg;
             DeviceDataSource ds = ewArg.DeviceDataSource;
-            DbFromConfigData configDbManager = ewArg.ConfigDbManager;
 
             AbstractDataSource dataSource = ds.DataSource as AbstractDataSource;
 
@@ -38,8 +37,8 @@ namespace XLY.SF.Project.EarlyWarningView
             {
                 return null;
             }
-            string keyColumn = ConstDefinition.XLYJson ;
-            ColumnUpdate(dataSource.Items, configDbManager, keyColumn);
+            string keyColumn = "Number" ;
+            ColumnUpdate(dataSource.Items.DbTableName, keyColumn);
             return null;
         }
         

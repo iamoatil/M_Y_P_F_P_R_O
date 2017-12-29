@@ -31,7 +31,7 @@
                 </StackPanel>
                 <TextBlock x:Name="tb_Content" Margin="0 0 0 40" Width="200" Text="{Binding MsgContent}" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button x:Name="btn_Ok" Width="80" Height="30" Click="btn_Ok_Click" Foreground="White" Content="{Binding XPath=ViewLanguage/Management/User/Confirm,Source={x:Static ex:SystemContext.LanguageProvider}}">
+                    <Button x:Name="btn_Ok" Width="140" Height="30" Click="btn_Ok_Click" Foreground="White" Content="{Binding ConfirmText}">
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="BorderThickness" Value="0"/>
@@ -104,30 +104,41 @@
                             </Style>
                         </Button.Style>
                     </Button>
-                    <Button x:Name="btn_Cancel" Click="btn_Cancel_Click" Width="80" Foreground="White" Height="30" Content="{Binding XPath=ViewLanguage/Management/User/Cancel,Source={x:Static ex:SystemContext.LanguageProvider}}"/>
+                    <Button x:Name="btn_Cancel" Visibility="Collapsed" Margin="10 0 0 0" Click="btn_Cancel_Click" Width="80" Foreground="White" Height="30" Content="{Binding CancelText}"/>
                 </StackPanel>
 
 
                 <!--#region 触发器btn_LoginClose-->
                 <i:Interaction.Triggers>
+                    <ei:DataTrigger Binding="{Binding HasFeedback}" Value="True">
+                        <ei:ChangePropertyAction PropertyName="Width" TargetObject="{Binding ElementName= btn_Ok}" Value="80"/>
+                        <ei:ChangePropertyAction PropertyName="Visibility" TargetObject="{Binding ElementName= btn_Cancel}" Value="Visible"/>
+                        <ei:ChangePropertyAction PropertyName="Width" TargetObject="{Binding ElementName= btn_Cancel}" Value="80"/>
+                    </ei:DataTrigger>
+                    
                     <ei:DataTrigger Binding="{Binding MsgType}" Value="Error">
                         <ei:ChangePropertyAction PropertyName="Content" Value="{Binding XPath=ViewLanguage/View_MessageBox_Error, Source={x:Static ex:SystemContext.LanguageProvider}}" TargetObject="{Binding ElementName=tb_Title}"/>
-                        <ei:ChangePropertyAction PropertyName="Visibility" TargetObject="{Binding ElementName= btn_Ok}" Value="Visible"/>
-                        <ei:ChangePropertyAction PropertyName="Width" TargetObject="{Binding ElementName= btn_Ok}" Value="140"/>
-                        <ei:ChangePropertyAction PropertyName="Visibility" TargetObject="{Binding ElementName= btn_Cancel}" Value="Collapsed"/>
+                        <!--<ei:ChangePropertyAction PropertyName="Visibility" TargetObject="{Binding ElementName= btn_Cancel}" Value="Collapsed"/>-->
                         <ei:ChangePropertyAction PropertyName="Source" TargetObject="{Binding ElementName= img_Icon}" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/Msg_Error.png"/>
                     </ei:DataTrigger>
                     <ei:DataTrigger Binding="{Binding MsgType}" Value="Success">
                         <ei:ChangePropertyAction PropertyName="Content" Value="{Binding XPath=ViewLanguage/View_MessageBox_Success, Source={x:Static ex:SystemContext.LanguageProvider}}" TargetObject="{Binding ElementName=tb_Title}"/>
-                        <ei:ChangePropertyAction PropertyName="Visibility" TargetObject="{Binding ElementName= btn_Ok}" Value="Visible"/>
-                        <ei:ChangePropertyAction PropertyName="Width" TargetObject="{Binding ElementName= btn_Ok}" Value="140"/>
-                        <ei:ChangePropertyAction PropertyName="Visibility" TargetObject="{Binding ElementName= btn_Cancel}" Value="Collapsed"/>
+                        <!--<ei:ChangePropertyAction PropertyName="Visibility" TargetObject="{Binding ElementName= btn_Ok}" Value="Visible"/>
+                        <ei:ChangePropertyAction PropertyName="Width" TargetObject="{Binding ElementName= btn_Ok}" Value="140"/>-->
+                        <!--<ei:ChangePropertyAction PropertyName="Visibility" TargetObject="{Binding ElementName= btn_Cancel}" Value="Collapsed"/>-->
                         <ei:ChangePropertyAction PropertyName="Source" TargetObject="{Binding ElementName= img_Icon}" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/Msg_Success.png"/>
                     </ei:DataTrigger>
                     <ei:DataTrigger Binding="{Binding MsgType}" Value="Warning">
                         <ei:ChangePropertyAction PropertyName="Content" Value="{Binding XPath=ViewLanguage/View_MessageBox_Warning, Source={x:Static ex:SystemContext.LanguageProvider}}" TargetObject="{Binding ElementName=tb_Title}"/>
-                        <ei:ChangePropertyAction PropertyName="Visibility" TargetObject="{Binding ElementName= btn_Ok}" Value="Visible"/>
-                        <ei:ChangePropertyAction PropertyName="Width" TargetObject="{Binding ElementName= btn_Ok}" Value="90"/>
+                        <!--<ei:ChangePropertyAction PropertyName="Visibility" TargetObject="{Binding ElementName= btn_Ok}" Value="Visible"/>
+                        <ei:ChangePropertyAction PropertyName="Width" TargetObject="{Binding ElementName= btn_Ok}" Value="140"/>-->
+                        <!--<ei:ChangePropertyAction PropertyName="Visibility" TargetObject="{Binding ElementName= btn_Cancel}" Value="Collapsed"/>-->
+                        <ei:ChangePropertyAction PropertyName="Source" TargetObject="{Binding ElementName= img_Icon}" Value="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Icons/Msg_Warning.png"/>
+                    </ei:DataTrigger>
+                    <ei:DataTrigger Binding="{Binding MsgType}" Value="Feedback">
+                        <ei:ChangePropertyAction PropertyName="Content" Value="{Binding XPath=ViewLanguage/View_MessageBox_Warning, Source={x:Static ex:SystemContext.LanguageProvider}}" TargetObject="{Binding ElementName=tb_Title}"/>
+                        <!--<ei:ChangePropertyAction PropertyName="Visibility" TargetObject="{Binding ElementName= btn_Ok}" Value="Visible"/>
+                        <ei:ChangePropertyAction PropertyName="Width" TargetObject="{Binding ElementName= btn_Ok}" Value="90"/>-->
                         <ei:ChangePropertyAction PropertyName="Visibility" TargetObject="{Binding ElementName= btn_Cancel}" Value="Visible"/>
                         <ei:ChangePropertyAction PropertyName="Margin" TargetObject="{Binding ElementName= btn_Cancel}" Value="20 0 0 0"/>
                         <ei:ChangePropertyAction PropertyName="Width" TargetObject="{Binding ElementName= btn_Cancel}" Value="90"/>

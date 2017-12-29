@@ -12,31 +12,29 @@ using System;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.Domains;
 
-
 namespace XLY.SF.Project.DataMirror
 {
     /// <summary>
     /// 镜像服务抽象类
     /// </summary>
-    internal abstract class AbstractMirrorService:IMirrorService
+    public abstract class AbstractMirrorService : IMirrorService
     {
         /// <summary>
         /// 执行镜像
         /// </summary>
         /// <param name="mirror"></param>
         /// <param name="asyn"></param>
-        public abstract void Execute(Mirror mirror, IAsyncTaskProgress asyn);
+        public abstract void Execute(Mirror mirror, DefaultAsyncTaskProgress asyn);
 
         /// <summary>
         /// 停止
         /// </summary>
-        /// <param name="asyn"></param>
-        public abstract void Stop(IAsyncTaskProgress asyn);
+        public abstract void Stop();
 
         /// <summary>
         /// 是否可以暂停
         /// 默认不可暂停
-        /// 如果可以暂停，请重新Suspend和Continue方法
+        /// 如果可以暂停，请重写Suspend和Continue方法
         /// </summary>
         public virtual bool EnableSuspend
         {
@@ -49,8 +47,7 @@ namespace XLY.SF.Project.DataMirror
         /// <summary>
         /// 暂停
         /// </summary>
-        /// <param name="asyn"></param>
-        public virtual void Suspend(IAsyncTaskProgress asyn)
+        public virtual void Suspend()
         {
             throw new NotImplementedException();
         }
@@ -58,8 +55,7 @@ namespace XLY.SF.Project.DataMirror
         /// <summary>
         /// 继续
         /// </summary>
-        /// <param name="asyn"></param>
-        public virtual void Continue(IAsyncTaskProgress asyn)
+        public virtual void Continue()
         {
             throw new NotImplementedException();
         }

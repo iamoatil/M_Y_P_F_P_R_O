@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Project.Domains;
 
 /* ==============================================================================
@@ -51,21 +53,154 @@ namespace XLY.SF.Project.Domains
         [XmlAttribute("contract")]
         public string Contract { get; set; }
 
-        ///// <summary>
-        ///// 日期过滤器，只能指定一个字段名称
-        ///// </summary>
-        //[XmlAttribute("datefilter")]
-        //public string DateFilter { get; set; }
-
-
         [XmlElement("Item")]
         public List<DataItem> Items { get; set; }
 
         /// <summary>
+        /// 视图所属的插件
+        /// </summary>
+        [XmlIgnore]
+        public DataParsePluginInfo Plugin { get; set; }
+
+        private Type _dynamicType = null;
+        /// <summary>
         /// 使用emit动态生成的类型
         /// </summary>
         [XmlIgnore]
-        public Type DynamicType { get; set; }
+        public Type DynamicType
+        {
+            get
+            {
+                if(_dynamicType == null)
+                {
+                    _dynamicType = GetDynamicType(Plugin, this);
+                }
+                return _dynamicType;
+            }
+            set
+            {
+                _dynamicType = value;
+            }
+        }
+
+        private static Assembly _dynamicAsm = null;
+        private static Type GetDynamicType(DataParsePluginInfo plugin, DataView dv)
+        {
+            if(_dynamicAsm == null)
+            {
+                _dynamicAsm = Assembly.LoadFile(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, EmitCreator.DefaultAssemblyName + ".dll"));
+            }
+            return _dynamicAsm.GetType($"{EmitCreator.DefaultAssemblyName}.Ns{plugin.Guid.RemoveSpecialChar()}.{dv.Type}");
+        }
+
+        //private static List<string> _baseColumns = null;        //动态类型的基本列
+        //private Type CreateDynamicType(DataParsePluginInfo plugin, DataView dv)
+        //{
+        //    if (dv == null)
+        //    {
+        //        throw new Exception("加载脚本时出错！DataView为空");
+        //    }
+        //    if (string.IsNullOrWhiteSpace(dv.Type))
+        //    {
+        //        throw new Exception("加载脚本时出错！数据类型名称为空");
+        //    }
+
+        //    EmitCreator emit = new EmitCreator();
+        //    emit.CreateType(dv.Type, $"{EmitCreator.DefaultAssemblyName}.Ns{plugin.Guid.RemoveSpecialChar()}", typeof(ScriptDataItem), GetInterfacesTypes(dv.Contract));
+
+        //    if (_baseColumns == null)
+        //    {
+        //        _baseColumns = new List<System.Reflection.PropertyInfo>(typeof(ScriptDataItem).GetProperties()).ConvertAll(p => p.Name);
+        //    }
+
+        //    if (dv.Items != null)
+        //    {
+        //        foreach (var item in dv.Items)
+        //        {
+        //            if (_baseColumns.Contains(item.Code))       //如果基类中包含了该列，则不需要创建
+        //            {
+        //                continue;
+        //            }
+        //            var property = emit.CreateProperty(item.Code, GetColumnType(item.Type, item.Format));
+        //            emit.SetPropertyAttribute(property, typeof(DisplayAttribute), null, null);
+        //        }
+        //    }
+        //    return emit.Save();
+        //}
+
+        ///// <summary>
+        ///// 协议类型转换
+        ///// </summary>
+        ///// <param name="contract"></param>
+        ///// <returns></returns>
+        //private Type[] GetInterfacesTypes(string contract)
+        //{
+        //    return null;
+        //    //if (string.IsNullOrWhiteSpace(contract))
+        //    //{
+        //    //    return null;
+        //    //}
+        //    //List<Type> lst = new List<Type>();
+        //    //foreach (var c in contract.Split(','))
+        //    //{
+        //    //    Type t;
+        //    //    switch (c.ToLower().Trim())
+        //    //    {
+        //    //        case "conversion":
+        //    //            t = typeof(IConversion);
+        //    //            break;
+        //    //        //case "datastate":
+        //    //        //    t = typeof(IDataState);
+        //    //        //    break;
+        //    //        case "file":
+        //    //            t = typeof(IFile);
+        //    //            break;
+        //    //        case "mail":
+        //    //            t = typeof(IMail);
+        //    //            break;
+        //    //        case "map":
+        //    //            t = typeof(IMap);
+        //    //            break;
+        //    //        case "thumbnail":
+        //    //            t = typeof(IThumbnail);
+        //    //            break;
+        //    //        default:
+        //    //            t = null;
+        //    //            break;
+        //    //    }
+        //    //    if (t != null && !lst.Contains(t))
+        //    //    {
+        //    //        lst.Add(t);
+        //    //    }
+        //    //}
+        //    //return lst.ToArray();
+        //}
+
+        ///// <summary>
+        ///// 获取列类型
+        ///// </summary>
+        ///// <param name="type"></param>
+        ///// <param name="format"></param>
+        ///// <returns></returns>
+        //private Type GetColumnType(EnumColumnType type, string format)
+        //{
+        //    switch (type)
+        //    {
+        //        case EnumColumnType.DateTime:
+        //            return typeof(DateTime);
+        //        case EnumColumnType.Double:
+        //            return typeof(double);
+        //        case EnumColumnType.Enum:
+        //            return type.GetType().Assembly.GetType(string.Format("XLY.SF.Project.Domains.{0}", format));
+        //        case EnumColumnType.Int:
+        //            return typeof(int);
+        //        case EnumColumnType.List:
+        //            return typeof(List<string>);
+        //        default:
+        //            return typeof(string);
+
+        //    }
+        //}
     }
 
     #endregion

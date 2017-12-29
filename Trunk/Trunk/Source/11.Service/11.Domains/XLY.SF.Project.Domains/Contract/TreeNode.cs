@@ -18,17 +18,21 @@ namespace XLY.SF.Project.Domains
     /// </summary>
     [Serializable]
     [Newtonsoft.Json.JsonObject(Newtonsoft.Json.MemberSerialization.OptOut)]
-    public class TreeNode : NotifyPropertyBase, IDataState,ICheckedItem
+    public class TreeNode : NotifyPropertyBase, IDataState, ICheckedItem, IDecoration
     {
         public TreeNode()
         {
-            this.TreeNodes = new List<TreeNode>();
+            TreeNodes = new List<TreeNode>();
+            DataState = EnumDataState.Normal;
+            Key = Guid.NewGuid();
         }
 
         /// <summary>
         /// 数据状态
         /// </summary>
         public EnumDataState DataState { get; set; }
+
+        public Guid Key { get; set; }
 
         /// <summary>
         /// 树节点Id。
@@ -49,7 +53,7 @@ namespace XLY.SF.Project.Domains
         /// 父节点
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
-        public object Parent { get; internal set; }
+        public object Parent { get; set; }
 
         /// <summary>
         /// 数据集合
@@ -57,11 +61,11 @@ namespace XLY.SF.Project.Domains
         [Newtonsoft.Json.JsonConverter(typeof(DataItemJsonConverter))]
         public IDataItems Items { get; set; }
 
-        private object _type = null;
+        private Type _type = null;
         /// <summary>
         /// Items的数据类型，脚本中须配置
         /// </summary>
-        public object Type
+        public Type Type
         {
             get
             {
@@ -90,12 +94,16 @@ namespace XLY.SF.Project.Domains
         public bool IsHideChildren { get; set; }
 
         /// <summary>
-        /// 是否计算到总数上去，为false则表示节点下的数据不会被计入上层节点的总数
+        /// 统计总数时是否累计子节点
+        /// 默认为true
         /// </summary>
-        public bool IsIncludeInTotal { get; set; } = true;
+        public bool IsIncludeChildrenInTotal { get; set; } = true;
 
         private int _total = -1;
 
+        /// <summary>
+        /// 总数
+        /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         public int Total
         {
@@ -113,18 +121,85 @@ namespace XLY.SF.Project.Domains
             }
         }
 
+        private int _deletetotal = -1;
+
+        /// <summary>
+        /// 删除总数
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        public int DeleteTotal
+        {
+            get
+            {
+                if (_deletetotal == -1)
+                {
+                    Filter<dynamic>();
+                }
+                return _deletetotal;
+            }
+            protected set
+            {
+                _deletetotal = value;
+            }
+        }
+
         #region CheckState
 
         private bool? _isChecked = false;
         /// <summary>
         /// 当前数据是否被勾选
         /// </summary>
-        public bool? IsChecked { get => _isChecked; set => this.SetCheckedState(value, () => { this._isChecked = value; OnPropertyChanged(); }); }
+        public new bool? IsChecked
+        {
+            get => _isChecked;
+            set
+            {
+                this.SetCheckedState(value, () => { _isChecked = value; OnPropertyChanged(); });
+                //if(value != null)
+                //{
+                //    if (Items != null)
+                //    {
+                //        int state = value == null ? -1 : value == true ? 1 : 0;
+                //        Items.UpdateRange("IsChecked", state);
+                //    }
+                //}
+            }
+        }
 
-        ICheckedItem ICheckedItem.Parent => this.Parent as ICheckedItem;
+        #region 是否可见
+        private bool? _IsVisible = true;
+
+        /// <summary>
+        /// 是否可见
+        /// </summary>	
+        public bool? IsVisible
+        {
+            get { return _IsVisible; }
+            set
+            {
+                _IsVisible = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
+        private string _sourcePath = null;
+        public string SourcePath { get => _sourcePath ?? (Parent as ICheckedItem)?.SourcePath; set => _sourcePath = value; }
+
+        ICheckedItem ICheckedItem.Parent { get => (Parent as ICheckedItem); set => Parent = value; }
 
         public IEnumerable<ICheckedItem> GetChildren()
         {
+            //IEnumerable<ICheckedItem> ls = new List<ICheckedItem>();
+            //if (Items != null)
+            //{
+            //    ls = ls.Concat(Items.GetView() as IEnumerable<ICheckedItem>);
+            //}
+            //if (TreeNodes != null)
+            //{
+            //    ls = ls.Concat(TreeNodes);
+            //}
+            //return ls;
             return TreeNodes;
         }
         #endregion
@@ -140,9 +215,11 @@ namespace XLY.SF.Project.Domains
         public void BuildParent()
         {
             Commit();
-            if (this.TreeNodes.Any())
+            if (Items != null)
+                Items.Parent = this;
+            if (TreeNodes.Any())
             {
-                this.TreeNodes.ForEach((n) =>
+                TreeNodes.ForEach((n) =>
                 {
                     n.Commit();
                     n.Parent = this;
@@ -153,39 +230,53 @@ namespace XLY.SF.Project.Domains
 
         public override string ToString()
         {
-            return this.Text;
+            return Text;
         }
-       
+
         #region 数据查询
 
-        public IEnumerable<T> Filter<T>(params FilterArgs[] args)
+        public void Filter<T>(params FilterArgs[] args)
         {
-            IEnumerable<T> temp = null;
-            IEnumerable<T> result = new T[0];
             Int32 subNodeTotal = 0;
-            if (this.TreeNodes.Any())
+            Int32 subNodeDeleteTotal = 0;
+            if (TreeNodes.Any())
             {
                 foreach (var node in TreeNodes)
                 {
-                    temp = node.Filter<T>(args);
-                    if (temp == null) continue;
+                    node.Filter<T>(args);
                     subNodeTotal += node.Total;
-                    result = result.Union(temp);
+                    subNodeDeleteTotal += node.DeleteTotal;
                 }
             }
             if (Items != null)
             {
                 Items.Filter(args);
-                result = result.Union(Items.View as IEnumerable<T> ?? new T[0]);
-                _total = Items.Count + subNodeTotal;
+                if (IsIncludeChildrenInTotal)
+                {
+                    _total = Items.Count + subNodeTotal;
+                    _deletetotal = Items.DeleteCount + subNodeDeleteTotal;
+                }
+                else
+                {
+                    _total = Items.Count;
+                    _deletetotal = Items.DeleteCount;
+                }
             }
             else
             {
-                _total = subNodeTotal;
+                if (IsIncludeChildrenInTotal)
+                {
+                    _total = subNodeTotal;
+                    _deletetotal = subNodeDeleteTotal;
+                }
+                else
+                {
+                    _total = 0;
+                    _deletetotal = 0;
+                }
             }
-
-            return result;
         }
+
         #endregion
 
         /// <summary>
@@ -203,6 +294,16 @@ namespace XLY.SF.Project.Domains
             {
                 item.SetCurrentPath(path);
             }
+        }
+
+        public object GetMetaData(DecorationProperty dp)
+        {
+            return SourcePath;
+        }
+
+        public string GetKey(DecorationProperty dp)
+        {
+            return Key.ToString();
         }
     }
 }

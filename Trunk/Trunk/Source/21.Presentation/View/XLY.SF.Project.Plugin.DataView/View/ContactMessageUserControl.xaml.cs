@@ -44,26 +44,27 @@ namespace XLY.SF.Project.Plugin.DataView
         /// <param name="e"></param>
         private void lsb1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            DataViewPluginArgument arg = lsb1.DataContext as DataViewPluginArgument;
+            var lb = (ListBox)sender;
+            DataViewPluginArgument arg = lb.DataContext as DataViewPluginArgument;
             if (arg == null)
                 return;
-            WeChatFriendShow accout = lsb1.SelectedItem as WeChatFriendShow;
-            TreeNode nodes = arg.CurrentData as TreeNode;
-            if (accout == null || nodes == null)
+           
+            TreeNode accout = lb.SelectedItem as TreeNode;
+            if (accout == null)
             {
-                return ;
+                return;
             }
-            var selNode = nodes.TreeNodes.FirstOrDefault(t => t.Text == accout.Nick);   //获取选择的好友
-            var views = DataViewPluginAdapter.Instance.GetView(arg.DataSource.PluginInfo.Guid, selNode.Type, new DataViewConfigure() { IsDefaultGridViewVisibleWhenMultiviews = true });
+            var views = DataViewPluginAdapter.Instance.GetView(arg.DataSource.PluginInfo.Guid, accout.Type, new DataViewConfigure() { IsDefaultGridViewVisibleWhenMultiviews = true });
             tbdetail.Items.Clear();
             foreach (var v in views)    //生成消息列表显示视图列表
             {
+                v.SelectedDataChanged -= OnSelectedDataChanged;
                 v.SelectedDataChanged += OnSelectedDataChanged;
-                tbdetail.Items.Add(v.ToControl(new DataViewPluginArgument() { CurrentData = selNode, DataSource = arg.DataSource }));
+                tbdetail.Items.Add(v.ToControl(new DataViewPluginArgument() { CurrentData = accout, DataSource = arg.DataSource }));
             }
             tbdetail.SelectedIndex = tbdetail.HasItems ? 0 : -1;
 
-            OnSelectedDataChanged?.Invoke(lsb1.SelectedValue);
+            OnSelectedDataChanged?.Invoke(lb.SelectedValue);
         }
     }
 }

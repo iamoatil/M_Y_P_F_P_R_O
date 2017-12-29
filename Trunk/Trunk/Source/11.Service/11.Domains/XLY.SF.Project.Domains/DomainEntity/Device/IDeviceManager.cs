@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 
 namespace XLY.SF.Project.Domains
@@ -27,7 +26,7 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 拷贝指定文件
         /// </summary>
-        string CopyFile(Device device, string source, string targetPath, IAsyncTaskProgress asyn);
+        string CopyFile(Device device, string source, string targetPath, DefaultAsyncTaskProgress asyn);
 
         /// <summary>
         /// 获取设备分区结构列表

@@ -18,6 +18,7 @@ namespace XLY.SF.Project.DeviceExtractionService
     {
         static void Main(string[] args)
         {
+            //ExtractItemConfigurationReader.GetDowngradingItems();
             Mutex mutex = new Mutex(true, "DeviceExtractionService", out Boolean createdNew);
             if (createdNew)
             {

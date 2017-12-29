@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 using XLY.SF.Framework.BaseUtility;
 using XLY.SF.Framework.Core.Base.CoreInterface;
@@ -19,16 +20,26 @@ namespace XLY.SF.Project.Domains
     public abstract class AbstractZipPluginInfo : AbstractPluginInfo
     {
         /// <summary>
+        /// 脚本文件的源文件路径(即对应的zip文件路径)
+        /// </summary>
+        [XmlIgnore]
+        public virtual string ScriptSourceFilePath { get; set; }
+        /// <summary>
         /// 插件文件名，相对路径，表示解析器调用的主插件
         /// </summary>
         [XmlIgnore]
-        public virtual string ScriptFile { get; }
+        public virtual string ScriptFile { get; set; }
 
         /// <summary>
         /// 插件对象，如果是js插件，则表示插件的文本内容；如果是Python/Html插件，则表示为插件的路径；如果是C#插件，则为null
         /// </summary>
         [XmlIgnore]
         public virtual string ScriptObject { get; set; }
+        /// <summary>
+        /// 插件的语言，是js/python/html/C#
+        /// </summary>
+        [XmlIgnore]
+        public virtual PluginLanguage Language { get; set; }
 
         /// <summary>
         /// 插件解压后临时存放路径

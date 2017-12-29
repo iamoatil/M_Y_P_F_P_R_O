@@ -125,6 +125,7 @@ namespace XLY.SF.Project.Domains
 
         /// <summary>
         /// 微信帐号
+        /// 有的微信可能该值为空
         /// </summary>
         [Display]
         public string WeChatAccout { get; set; }
@@ -433,13 +434,9 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 登录时间
         /// </summary>
-
-        public DateTime? LoginTime { get; set; }
         [Display]
-        public string _LoginTime
-        {
-            get { return this.LoginTime.ToDateTimeString(); }
-        }
+        public DateTime? LoginTime { get; set; }
+
     }
 
     /// <summary>
@@ -448,11 +445,6 @@ namespace XLY.SF.Project.Domains
     [Serializable]
     public class WeChatSns : AbstractDataItem
     {
-        public WeChatSns()
-        {
-            MediaList = new List<string>();
-        }
-
         /// <summary>
         /// 微信ID（微信号）
         /// </summary>
@@ -486,7 +478,7 @@ namespace XLY.SF.Project.Domains
         /// 附件(图片、小视频)
         /// </summary>
         [Display]
-        public List<string> MediaList { get; set; }
+        public string MediaList { get; set; }
 
         /// <summary>
         /// 创建时间

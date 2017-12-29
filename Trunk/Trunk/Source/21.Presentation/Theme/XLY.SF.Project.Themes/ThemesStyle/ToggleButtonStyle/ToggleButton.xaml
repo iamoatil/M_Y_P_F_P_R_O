@@ -82,17 +82,38 @@
            TargetType="{x:Type ToggleButton}">
         <Setter Property="RenderTransformOrigin"
                 Value="0.5,0.5" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ToggleButton}">
-                    <Image x:Name="Img"
-                           Stretch="Fill"
-                           RenderTransformOrigin="0.5,0.5"
-                           Source="{StaticResource TriangleToggleButtonNormalImage}">
-                        <Image.RenderTransform>
-                            <RotateTransform />
-                        </Image.RenderTransform>
-                    </Image>
+                    <DockPanel LastChildFill="True">
+                        <Image x:Name="Img"
+                               DockPanel.Dock="Left"
+                               Stretch="Fill"
+                               Height="18"
+                               Width="18"
+                               RenderTransformOrigin="0.5,0.5"
+                               Source="{StaticResource TriangleToggleButtonNormalImage}">
+                            <Image.RenderTransform>
+                                <RotateTransform />
+                            </Image.RenderTransform>
+                        </Image>
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                          ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          TextElement.FontFamily="{TemplateBinding FontFamily}"
+                                          TextElement.FontSize="{TemplateBinding FontSize}"
+                                          TextElement.FontStretch="{TemplateBinding FontStretch}"
+                                          TextElement.FontStyle="{TemplateBinding FontStyle}"
+                                          TextElement.FontWeight="{TemplateBinding FontWeight}"
+                                          TextElement.Foreground="{TemplateBinding Foreground}"/>
+                    </DockPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver"
                                  Value="True">

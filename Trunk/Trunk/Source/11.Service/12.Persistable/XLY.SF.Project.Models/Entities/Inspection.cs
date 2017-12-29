@@ -15,17 +15,17 @@ namespace XLY.SF.Project.Models.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Int32 ID { get; set; }
 
-        [Required]
-        [MaxLength(50)]
-        public String NameCn { get; set; }
+        //[Required]
+        //[MaxLength(50)]
+        //public String NameCn { get; set; }
 
         [Required]
         [MaxLength(50)]
         public String CategoryCn { get; set; }
 
-        [Required]
-        [MaxLength(50)]
-        public String NameEn { get; set; }
+        //[Required]
+        //[MaxLength(50)]
+        //public String NameEn { get; set; }
 
         [Required]
         [MaxLength(50)]

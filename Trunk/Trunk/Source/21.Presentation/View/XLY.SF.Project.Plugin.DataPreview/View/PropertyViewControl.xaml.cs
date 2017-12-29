@@ -101,22 +101,27 @@ namespace XLY.SF.Project.Plugin.DataPreview.View
             }
 
             int row = 0;
+            Style tbStyle = this.FindResource("tbProperty") as Style;
             foreach (var p in dic)
             {
                 grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(0, GridUnitType.Auto) });
 
                 TextBlock tb = new TextBlock() { Text = p.Key + " :" };
-                tb.VerticalAlignment = VerticalAlignment.Center;
+                tb.VerticalAlignment = VerticalAlignment.Top;
                 tb.HorizontalAlignment = HorizontalAlignment.Right;
                 tb.TextWrapping = TextWrapping.Wrap;
                 tb.Margin = new Thickness(3);
                 grid.Children.Add(tb);
                 tb.SetValue(Grid.RowProperty, row);
 
-                TextBlock tb2 = new TextBlock() { Text = p.Value };
-                tb2.VerticalAlignment = VerticalAlignment.Center;
+                TextBox tb2 = new TextBox() { Text = p.Value };
+                tb2.VerticalAlignment = VerticalAlignment.Top;
                 tb2.HorizontalAlignment = HorizontalAlignment.Left;
                 tb2.Margin = new Thickness(3);
+                if(tbStyle != null)
+                {
+                    tb2.Style = tbStyle;
+                }
                 grid.Children.Add(tb2);
                 tb2.SetValue(Grid.RowProperty, row);
                 tb2.SetValue(Grid.ColumnProperty, 1);

@@ -4,23 +4,58 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using XLY.SF.Framework.BaseUtility;
+using XLY.SF.Project.BaseUtility.Helper;
 
-namespace XLY.SF.Project.DataPump.Misc
+namespace XLY.SF.Project.DataPump
 {
     public class AppDataStategy : IProcessControllableStrategy
     {
+        private String _destPath;
+
+        private String _sourcePath;
+
+        private List<string> _findApps = new List<string>();
+
         #region Methods
 
         #region Public
 
-        public void InitExecution(DataPumpControllableExecutionContext context)
+        public void InitExecution(string sourcePath, string destPath)
         {
-
+            _sourcePath = sourcePath;
+            _destPath = destPath;
         }
 
-        public void Process(DataPumpControllableExecutionContext context)
+        public void Process(DataPumpExecutionContext context)
         {
+            var appName = context.ExtractionItems.First().AppName;
 
+            if (!_findApps.Contains(appName))
+            {
+                FindAppData(appName, _sourcePath, _destPath);
+                _findApps.Add(appName);
+            }
+
+            var si = context.Source;
+            if (si.ItemType == Domains.SourceFileItemType.NormalPath)
+            {
+                string path = si.Config.TrimEnd("#F");
+                if (path.StartsWith("/data/data/"))
+                {
+                    path = path.TrimStart("/data/data/");
+                }
+                else if (path.StartsWith("/data/"))
+                {
+                    path = path.TrimStart("/data/");
+                }
+                path = path.Replace("/", @"\");
+
+                var local = Path.Combine(_destPath, "data", path.Replace('/', '\\').TrimStart('\\'));
+                if (FileHelper.IsValidDictory(local) || FileHelper.IsValid(local))
+                {
+                    si.Local = local;
+                }
+            }
         }
 
         #region 查找APP
@@ -49,6 +84,14 @@ namespace XLY.SF.Project.DataPump.Misc
                 {
                     res = FindAppDataForHuawei(app, source, dest);
                 }
+
+                if (app == "com.tencent.mm")
+                {//查找安卓微信分身
+                    if (FindAndroidWechat(source, dest))
+                    {
+                        res = true;
+                    }
+                }
             }
             catch
             {
@@ -63,7 +106,7 @@ namespace XLY.SF.Project.DataPump.Misc
         {
             if (source.EndsWith(app))
             {
-                AppDirCopy(app, source, dest);
+                AppDirMove(app, source, dest, true);
                 return true;
             }
 
@@ -72,7 +115,7 @@ namespace XLY.SF.Project.DataPump.Misc
 
             if (arr.IsValid())
             {//找到APP文件夹
-                AppDirCopy(app, arr[0], dest);
+                AppDirMove(app, arr[0], dest, true);
                 return true;
             }
             else
@@ -81,13 +124,16 @@ namespace XLY.SF.Project.DataPump.Misc
                 arr = Directory.GetFiles(source, String.Format("{0}.zip", app), SearchOption.AllDirectories);
                 if (arr.IsValid())
                 {
-                    ZipFile.ExtractToDirectory(arr[0], Path.Combine(dest, "temp"));
+                    SevenZipHelper.ExtractArchive(arr[0], Path.Combine(dest, "temp"));
 
                     arr = Directory.GetDirectories(Path.Combine(dest, "temp"), app, SearchOption.AllDirectories).Where((d) => d.EndsWith(app)).ToArray();
                     if (arr.IsValid())
                     {//找到APP文件夹
-                        AppDirCopy(app, arr[0], dest);
+                        AppDirMove(app, arr[0], dest);
                     }
+
+                    FileHelper.DeleteDirectorySafe(Path.Combine(dest, "temp"));
+
                     return true;
                 }
             }
@@ -103,13 +149,16 @@ namespace XLY.SF.Project.DataPump.Misc
             var arr = Directory.GetFiles(source, String.Format("{0}.tar", app), SearchOption.AllDirectories);
             if (arr.IsValid())
             {
-                ZipFile.ExtractToDirectory(arr[0], Path.Combine(dest, "temp"));
+                SevenZipHelper.ExtractArchive(arr[0], Path.Combine(dest, "temp"));
 
                 arr = Directory.GetDirectories(Path.Combine(dest, "temp"), app, SearchOption.AllDirectories).Where((d) => d.EndsWith(app)).ToArray();
                 if (arr.IsValid())
                 {//找到APP文件夹
-                    AppDirCopy(app, arr[0], dest);
+                    AppDirMove(app, arr[0], dest);
                 }
+
+                FileHelper.DeleteDirectorySafe(Path.Combine(dest, "temp"));
+
                 return true;
             }
 
@@ -150,7 +199,7 @@ namespace XLY.SF.Project.DataPump.Misc
             }
             else
             {
-                filepath = ListXiaoMiBak.FirstOrDefault((bak) => new FileInfo(bak).Name.ToLower().Contains(app.ToLower()));
+                filepath = ListXiaoMiBak.FirstOrDefault((bak) => new FileInfo(bak).Name.ToLower().Contains($"({app.ToLower()})"));
             }
 
             if (null == filepath)
@@ -223,12 +272,11 @@ namespace XLY.SF.Project.DataPump.Misc
                         ResolveBackupFileForXiaoMi5(tempfile, tempZipFile);
                     }
 
-                    ZipFile.ExtractToDirectory(tempZipFile, tempPath);
+                    SevenZipHelper.ExtractArchive(tempZipFile, tempPath);
                 }
                 else //小米2处理流程
                 {
-
-                    ZipFile.ExtractToDirectory(sourcefile, tempPath);
+                    SevenZipHelper.ExtractArchive(sourcefile, tempPath);
 
                     if (File.Exists(tarPath))
                     {
@@ -241,9 +289,8 @@ namespace XLY.SF.Project.DataPump.Misc
                             ResolveBackupFileForXiaoMi5(tarPath, tempZipFile);
                         }
 
-                        ZipFile.ExtractToDirectory(tempZipFile, tempPath);
+                        SevenZipHelper.ExtractArchive(tempZipFile, tempPath);
                     }
-
                 }
 
                 var arr = Directory.GetDirectories(tempPath, app, SearchOption.AllDirectories).Where((d) => d.EndsWith(app)).ToArray();
@@ -256,7 +303,7 @@ namespace XLY.SF.Project.DataPump.Misc
                     DirReName(appPath, "f", "files");
                     DirReName(appPath, "sp", "shared_prefs");
 
-                    AppDirCopy(app, appPath, destpath);
+                    AppDirMove(app, appPath, destpath);
 
                     res = true;
                 }
@@ -266,23 +313,25 @@ namespace XLY.SF.Project.DataPump.Misc
                     {
                         if (Directory.GetDirectories(tempPath, "com.android.contacts", SearchOption.AllDirectories).Count() != 0)
                         {
-                            AppDirCopy(app, Directory.GetDirectories(tempPath, "com.android.contacts", SearchOption.AllDirectories).ToArray()[0], destpath);
+                            AppDirMove(app, Directory.GetDirectories(tempPath, "com.android.contacts", SearchOption.AllDirectories).ToArray()[0], destpath);
                         }
                         else
                         {
-                            AppDirCopy(app, tempPath, destpath);
+                            AppDirMove(app, tempPath, destpath);
                         }
                         res = true;
                     }
                     else if ((app == "com.android.contacts") || (app == "com.android.mms"))
                     {
-                        AppDirCopy(app, tempPath, destpath);
+                        AppDirMove(app, tempPath, destpath);
                     }
                     else
                     {
                         res = false;
                     }
                 }
+
+                FileHelper.DeleteDirectorySafe(tempPath);
             }
             catch
             {
@@ -398,7 +447,7 @@ namespace XLY.SF.Project.DataPump.Misc
             {
                 string dbFile = string.Format("{0}.db", app);
 
-                var fls = Directory.GetFiles(source, dbFile, SearchOption.AllDirectories);
+                var fls = Directory.GetFiles(source, dbFile, SearchOption.AllDirectories).Where(f => f.EndsWith(dbFile));
                 if (fls.IsInvalid())
                 {
                     return false;
@@ -417,44 +466,45 @@ namespace XLY.SF.Project.DataPump.Misc
                     return true;
                 }
 
-                var context = new SqliteContext(fls.FirstOrDefault());
-
-                //获取文件列表
-                var file_info = context.Find(new SQLiteString("SELECT file_index,file_path FROM apk_file_info ORDER BY file_index"));
-
-                foreach (var file in file_info)
+                using (var context = new SqliteContext(fls.FirstOrDefault()))
                 {
-                    try
+                    //获取文件列表
+                    var file_info = context.Find(new SQLiteString("SELECT file_index,file_path FROM apk_file_info ORDER BY file_index"));
+
+                    foreach (var file in file_info)
                     {
-                        string file_index = DynamicConvert.ToSafeString(file.file_index);
-                        string file_path = DynamicConvert.ToSafeString(file.file_path);
-                        if (file_index == "-1")
-                        {//-1是文件夹,不管
-                            continue;
-                        }
-
-                        var targetFilePath = new FileInfo(Path.Combine(dest, "data", file_path.Substring(file_path.IndexOf(app))));
-                        if (!Directory.Exists(targetFilePath.DirectoryName))
+                        try
                         {
-                            Directory.CreateDirectory(targetFilePath.DirectoryName);
-                        }
+                            string file_index = DynamicConvert.ToSafeString(file.file_index);
+                            string file_path = DynamicConvert.ToSafeString(file.file_path);
+                            if (file_index == "-1")
+                            {//-1是文件夹,不管
+                                continue;
+                            }
 
-                        //恢复文件
-                        using (Stream fs = new FileStream(targetFilePath.FullName, FileMode.Create))
-                        {
-                            context.UsingSafeConnection(new SQLiteString(string.Format("SELECT file_data FROM apk_file_data WHERE file_index = '{0}' ORDER BY data_index", file_index)), dr =>
+                            var targetFilePath = new FileInfo(Path.Combine(dest, "data", file_path.Substring(file_path.IndexOf(app))));
+                            if (!Directory.Exists(targetFilePath.DirectoryName))
                             {
-                                while (dr.Read())
+                                Directory.CreateDirectory(targetFilePath.DirectoryName);
+                            }
+
+                            //恢复文件
+                            using (Stream fs = new FileStream(targetFilePath.FullName, FileMode.Create))
+                            {
+                                context.UsingSafeConnection(new SQLiteString(string.Format("SELECT file_data FROM apk_file_data WHERE file_index = '{0}' ORDER BY data_index", file_index)), dr =>
                                 {
-                                    var data = dr.ToDynamic();
-                                    var da = (byte[])data.file_data;
-                                    fs.Write(da, 0, da.Length);
-                                }
-                            });
+                                    while (dr.Read())
+                                    {
+                                        var data = dr.ToDynamic();
+                                        var da = (byte[])data.file_data;
+                                        fs.Write(da, 0, da.Length);
+                                    }
+                                });
+                            }
                         }
-                    }
-                    catch
-                    {
+                        catch
+                        {
+                        }
                     }
                 }
 
@@ -464,6 +514,22 @@ namespace XLY.SF.Project.DataPump.Misc
             {
                 return false;
             }
+        }
+
+        #endregion
+
+        #region 安卓微信分身
+
+        private bool FindAndroidWechat(string source, string dest)
+        {
+            var lsfinds = new DirectoryInfo(source).GetDirectories("MicroMsg", SearchOption.AllDirectories).Where(d => d.Name == "MicroMsg" && d.Parent.Name != "com.tencent.mm");
+
+            foreach (var cwh in lsfinds)
+            {
+                AppDirMove(cwh.Parent.Name, cwh.Parent.FullName, dest, true);
+            }
+
+            return lsfinds.Any();
         }
 
         #endregion
@@ -511,7 +577,7 @@ namespace XLY.SF.Project.DataPump.Misc
             }
         }
 
-        private void AppDirCopy(string app, string source, string dest)
+        private void AppDirMove(string app, string source, string dest, bool isCopy = false)
         {
             foreach (var file in new DirectoryInfo(source).GetFiles("*", SearchOption.AllDirectories))
             {
@@ -524,11 +590,23 @@ namespace XLY.SF.Project.DataPump.Misc
                         Directory.CreateDirectory(destPath);
                     }
 
-                    File.Copy(file.FullName, Path.Combine(destPath, file.Name), true);
+                    if (isCopy)
+                    {
+                        File.Copy(file.FullName, Path.Combine(destPath, file.Name), true);
+                    }
+                    else
+                    {
+                        File.Move(file.FullName, Path.Combine(destPath, file.Name));
+                    }
                 }
                 catch
                 {
                 }
+            }
+
+            if (!isCopy)
+            {
+                FileHelper.DeleteDirectorySafe(source);
             }
 
             switch (app)

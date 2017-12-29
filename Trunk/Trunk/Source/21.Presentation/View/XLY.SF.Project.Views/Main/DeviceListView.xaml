@@ -47,7 +47,7 @@
                                     <TextBlock Margin="20,3,0,3"
                                                Foreground="White"
                                                Text="{Binding Name}"
-                                               ToolTip="{Binding Name}"
+                                               ToolTip="{Binding Target.Path}"
                                                TextTrimming="CharacterEllipsis"
                                                TextWrapping="WrapWithOverflow"
                                                VerticalAlignment="Center"
@@ -72,8 +72,6 @@
                                                         Value="0" />
                                                 <Setter Property="Template"
                                                         Value="{StaticResource cb_MainMenuItem}" />
-                                            </Style>
-                                            <Style TargetType="TextBlock">
                                                 <Setter Property="FontSize"
                                                         Value="14" />
                                                 <Setter Property="Foreground"
@@ -84,18 +82,20 @@
                                             <TextBlock  Margin="24,0,0,0"
                                                         Text="{Binding XPath=SourceSelection/PopUp,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                         </ComboBoxItem>
-                                        <ComboBoxItem x:Name="device_Move">
+                                        <ComboBoxItem x:Name="device_Move"
+                                                      IsEnabled="{Binding IsIdle}">
                                             <TextBlock  Margin="24,0,0,0"
                                                         Text="{Binding XPath=SourceSelection/Move,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                         </ComboBoxItem>
-                                        <ComboBoxItem x:Name="device_Delete">
+                                        <ComboBoxItem x:Name="device_Delete"
+                                                      IsEnabled="{Binding IsIdle}">
                                             <TextBlock Margin="24,0,0,0"
                                                        Text="{Binding XPath=SourceSelection/Delete,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
                                         </ComboBoxItem>
-                                        <ComboBoxItem x:Name="device_Close">
+                                        <!--<ComboBoxItem x:Name="device_Close">
                                             <TextBlock Margin="24,0,0,0"
                                                        Text="{Binding XPath=SourceSelection/Close,Source={x:Static ex:SystemContext.LanguageProvider}}"></TextBlock>
-                                        </ComboBoxItem>
+                                        </ComboBoxItem>-->
                                         <!--界面触发器-->
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="PreviewMouseLeftButtonUp"
@@ -113,11 +113,11 @@
                                                 <i:InvokeCommandAction Command="{Binding DataContext.DeleteCommand,ElementName=Root}"
                                                                        CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}" />
                                             </i:EventTrigger>
-                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp"
+                                            <!--<i:EventTrigger EventName="PreviewMouseLeftButtonUp"
                                                             SourceObject="{Binding ElementName=device_Close}">
                                                 <i:InvokeCommandAction Command="{Binding DataContext.CloseCommand,ElementName=Root}"
                                                                        CommandParameter="{Binding DataContext,RelativeSource={RelativeSource TemplatedParent}}" />
-                                            </i:EventTrigger>
+                                            </i:EventTrigger>-->
                                         </i:Interaction.Triggers>
                                     </ComboBox>
                                 </Grid>

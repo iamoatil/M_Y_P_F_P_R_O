@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using System.Reflection;
 
 /*************************************************
  * 创建人：Bob
@@ -26,7 +22,7 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 无
         /// </summary>
-        [Description("LANGKEY_Wu_00321")]
+        [Description("None")]
         None = 1,
 
         /// <summary>
@@ -67,8 +63,8 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         ///HTC未开启USB调试模式
         /// </summary>
-        [Description("LANGKEY_WeiKaiQiUSBDiaoShiMoShi_00322")]
-        HtcBoUsbMode = 128,
+        [Description("HtcNoUsbMode")]
+        HtcNoUsbMode = 128,
 
         /// <summary>
         /// BlackBerry
@@ -157,13 +153,13 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 单个的db文件
         /// </summary>
-        [Description("single database file")]
+        [Description("SingleDatabaseFile")]
         DBFile = 4194304,
 
         /// <summary>
         /// Android命令备份出来的ab文件
         /// </summary>
-        [Description("adb backup file")]
+        [Description("AdbBackupFile")]
         ABFile = 8388608,
 
         /// <summary>
@@ -211,6 +207,7 @@ namespace XLY.SF.Project.Domains
         /// SIM卡
         /// </summary>
         SIM = 6,
+
         /// <summary>
         /// 本地文件/文件夹
         /// </summary>
@@ -399,44 +396,25 @@ namespace XLY.SF.Project.Domains
         Mirror = 2,
 
         /// <summary>
-        /// Wifi app提取
+        /// 本地文件夹提取
         /// </summary>
-        Wifi = 4,
-
-        /// <summary>
-        /// 蓝牙提取
-        /// </summary>
-        Bluetooth = 8,
-
-        /// <summary>
-        /// SdCard
-        /// </summary>
-        SDCard = 16,
-
-        /// <summary>
-        /// SIMCard
-        /// </summary>
-        SIMCard = 32,
-
-        /// <summary>
-        /// 手机芯片
-        /// </summary>
-        Chip = 64,
-
-        /// <summary>
-        /// 阵列
-        /// </summary>
-        Raid = 128,
+        LocalData = 4,
 
         /// <summary>
         /// MTP
         /// </summary>
-        MTP = 256,
+        MTP = 8,
 
         /// <summary>
-        /// 本地文件夹提取
+        /// SD卡
         /// </summary>
-        LocalData = 512,
+        SDCard = 16,
+
+        /// <summary>
+        /// SIM卡
+        /// </summary>
+        SIMCard = 32,
+
     }
 
     #endregion
@@ -582,4 +560,52 @@ namespace XLY.SF.Project.Domains
         DT_80 = 0x80    //效率源USB3.0设备
     }
     #endregion
+
+    #region EnumTypeExtension
+
+    public static class EnumTypeExtension
+    {
+        /// <summary>
+        /// GetDescriptionX,获取枚举的描述信息(Descripion),支持多语言配置
+        /// </summary>
+        public static string GetDescriptionX(this Enum value)
+        {
+            var type = value.GetType();
+            var field = type.GetField(value.ToString());
+            //如果field为null则应该是组合位域值，
+            if (field == null)
+            {
+                var names = value.ToString().Split(',');
+                string[] res = new string[names.Length];
+                for (int i = 0; i < names.Length; i++)
+                {
+                    var field2 = type.GetField(names[i].Trim());
+                    if (field2 == null) continue;
+                    res[i] = GetDescription(field2);
+                }
+                return string.Join(",", res);
+            }
+            else
+            {
+                return GetDescription(field);
+            }
+        }
+
+        private static string GetDescription(FieldInfo field)
+        {
+            var att = System.Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute), false);
+            if (att == null)
+            {
+                return field.Name;
+            }
+            else
+            {
+                string key = ((DescriptionAttribute)att).Description;
+                var lang = Framework.Language.LanguageManager.Current[$"LanguageResource/EnumEntityLanguage/{key}"];
+                return lang ?? field.Name;
+            }
+        }
+    }
+    #endregion
+
 }

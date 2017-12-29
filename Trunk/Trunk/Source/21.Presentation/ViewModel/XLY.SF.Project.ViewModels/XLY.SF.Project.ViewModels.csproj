@@ -68,6 +68,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -94,14 +95,19 @@
     <Compile Include="Main\CaseManagement\CaseListViewModel.cs" />
     <Compile Include="Main\CaseManagement\CaseSelectionViewModel.cs" />
     <Compile Include="Main\CaseManagement\DeviceWindowContentViewModel.cs" />
-    <Compile Include="Main\DeviceMain\DeviceExtractionViewModel.cs" />
+    <Compile Include="Main\DeviceMain\DeviceEditViewModel.cs" />
     <Compile Include="Main\DeviceMain\DeviceHomePageViewModel.cs" />
     <Compile Include="Main\DeviceMain\DeviceMainViewModel.cs" />
     <Compile Include="Main\DeviceMain\Navigation\SubViewCacheManager.cs" />
+    <Compile Include="Main\Extraction\ExtractionCode.cs" />
+    <Compile Include="Main\Extraction\ExtractionViewModel.cs" />
+    <Compile Include="Main\Extraction\ExtractItemAdorner.cs" />
     <Compile Include="Main\HomePage\HomePageViewModel.cs" />
     <Compile Include="Main\Main\DeviceListViewModel.cs" />
     <Compile Include="Main\Main\MainNavigationManager.cs" />
     <Compile Include="Main\Main\MainViewModel.cs" />
+    <Compile Include="Management\Giude\AboutUsViewModel.cs" />
+    <Compile Include="Management\GuideHomeViewModel.cs" />
     <Compile Include="Management\PluginListViewModel.cs" />
     <Compile Include="Management\Settings\BasicSettingsViewModel.cs" />
     <Compile Include="Management\Settings\CaseTypeSettingsViewModel.cs" />
@@ -146,9 +152,17 @@
       <Project>{A6CC8605-4108-43ED-987A-DBA25059805B}</Project>
       <Name>DllClient</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\11.Service\13.Core\DllService\X64DllService\X64Service\X64Service.csproj">
+      <Project>{cc75b75f-fded-448f-8ac4-ac5e1e520cc7}</Project>
+      <Name>X64Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\11.Service\13.Core\XLY.SF.Project.DataExtract\XLY.SF.Project.DataExtract.csproj">
       <Project>{4DB2D5F7-3A3F-4F95-9BF6-434F3D8298B3}</Project>
       <Name>XLY.SF.Project.DataExtract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\11.Service\13.Core\XLY.SF.Project.DataFilter\XLY.SF.Project.DataFilter.csproj">
+      <Project>{22661B55-AD41-4232-8EE7-485CAE0F4F3D}</Project>
+      <Name>XLY.SF.Project.DataFilter</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\11.Service\13.Core\XLY.SF.Project.DataMirror\XLY.SF.Project.DataMirror.csproj">
       <Project>{9E9B358E-6067-41B9-B986-E58E09210FC5}</Project>
@@ -161,6 +175,10 @@
     <ProjectReference Include="..\..\..\11.Service\14.Plugin\XLY.SF.Project.Plugin.DataReport\XLY.SF.Project.Plugin.DataReport.csproj">
       <Project>{cdb4f4f4-7131-4a29-828d-cc9f5a43536d}</Project>
       <Name>XLY.SF.Project.Plugin.DataReport</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\22.Tools\IsolatedTask\XLY.SF.Project.IsolatedTaskEngine.Common\XLY.SF.Project.IsolatedTaskEngine.Common.csproj">
+      <Project>{C31639C3-6E19-4681-8647-46BDD60BFEAB}</Project>
+      <Name>XLY.SF.Project.IsolatedTaskEngine.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ProjectContext\ProjectExtend\XLY.SF.Project.Extension.csproj">
       <Project>{E280C623-F0DD-47A8-AC87-80A0B5BBAFDB}</Project>
@@ -183,7 +201,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

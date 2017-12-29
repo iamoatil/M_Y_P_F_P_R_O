@@ -78,6 +78,9 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\23.Shell\XLY.SF.Shell\packages\System.ValueTuple.4.4.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -94,6 +97,7 @@
     <Compile Include="Contract\DataItemContract\IFile.cs" />
     <Compile Include="Contract\DataItemContract\IMail.cs" />
     <Compile Include="Contract\DataItemContract\IMap.cs" />
+    <Compile Include="Contract\DataItemContract\IMessageList.cs" />
     <Compile Include="Contract\DataItemContract\IMoney.cs" />
     <Compile Include="Contract\DataItemContract\IThumbnail.cs" />
     <Compile Include="Contract\DataItems\AggregationFilterView.cs" />
@@ -107,8 +111,16 @@
     <Compile Include="Contract\DataItems\MultiSQLiteFilterDataProvider.cs" />
     <Compile Include="Contract\DataItems\SqliteDbFile.cs" />
     <Compile Include="Contract\DataItems\SQLiteFtsTokenizer.cs" />
+    <Compile Include="Contract\Decoration\CacheData.cs" />
+    <Compile Include="Contract\Decoration\BookmarkDecorationProperty.cs" />
+    <Compile Include="Contract\Decoration\CheckDecorationProperty.cs" />
+    <Compile Include="Contract\Decoration\DecorationExtesion.cs" />
+    <Compile Include="Contract\Decoration\DecorationProperty.cs" />
+    <Compile Include="Contract\Decoration\SqliteCache.cs" />
+    <Compile Include="Contract\Decoration\TimeoutTimer.cs" />
     <Compile Include="Contract\Display\DisplayAttribute.cs" />
     <Compile Include="Contract\Display\DisplayAttributeHelper.cs" />
+    <Compile Include="Contract\FileTreeDataSource.cs" />
     <Compile Include="Contract\Filter\FilterArgs.cs" />
     <Compile Include="Contract\Filter\FilterEnum.cs" />
     <Compile Include="Contract\Filter\IFilterItem.cs" />
@@ -116,6 +128,7 @@
     <Compile Include="Contract\ITree.cs" />
     <Compile Include="Contract\DataItems\IAOPPropertyChangedMonitor.cs" />
     <Compile Include="Contract\MMSDataSource.cs" />
+    <Compile Include="Contract\ScriptDataItem.cs" />
     <Compile Include="Contract\SimpleDataSource.cs" />
     <Compile Include="Contract\SmsDataSource.cs" />
     <Compile Include="DomainEntity\Device\DeviceExternsion.cs" />
@@ -123,7 +136,6 @@
     <Compile Include="DomainEntity\Device\UsbDevice.cs" />
     <Compile Include="DomainEntity\Device\UsbDeviceInfo.cs" />
     <Compile Include="DomainEntity\Case\CaseInfo.cs" />
-    <Compile Include="DomainEntity\Chip\ChipDeviceInfo.cs" />
     <Compile Include="DomainEntity\Device\CellbriteDevice.cs" />
     <Compile Include="DomainEntity\Device\CottageDevice.cs" />
     <Compile Include="DomainEntity\Device\Device.cs" />
@@ -147,10 +159,8 @@
       <DependentUpon>IFileSystemDevice.cs</DependentUpon>
     </Compile>
     <Compile Include="DomainEntity\Device\SIMCardDevice.cs" />
-    <Compile Include="DomainEntity\Disk\BPartition.cs" />
-    <Compile Include="DomainEntity\Disk\Disk.cs" />
-    <Compile Include="DomainEntity\Disk\FTree.cs" />
     <Compile Include="DomainEntity\File\FileElement.cs" />
+    <Compile Include="DomainEntity\File\FileMd5.cs" />
     <Compile Include="DomainEntity\File\FileSystemPartition.cs" />
     <Compile Include="DomainEntity\File\FileX.cs" />
     <Compile Include="DomainEntity\File\FNodeX.cs" />
@@ -165,6 +175,7 @@
     <Compile Include="DomainEntity\Plugin\Call.cs" />
     <Compile Include="DomainEntity\Plugin\Contract.cs" />
     <Compile Include="DomainEntity\Plugin\EmailInfo.cs" />
+    <Compile Include="DomainEntity\Plugin\IConversion.cs" />
     <Compile Include="DomainEntity\Plugin\KeyValuePair.cs" />
     <Compile Include="DomainEntity\Plugin\Memo.cs" />
     <Compile Include="DomainEntity\Plugin\MessageCore.cs" />
@@ -182,8 +193,6 @@
       <DependentUpon>LanguageTextTeamplate.tt</DependentUpon>
     </Compile>
     <Compile Include="Plugin\IScriptContext.cs" />
-    <Compile Include="Plugin\Meta\IMetaPluginType.cs" />
-    <Compile Include="Plugin\Meta\IMetaScriptLanguage.cs" />
     <Compile Include="Plugin\PluginInfo\AbstractZipPluginInfo.cs" />
     <Compile Include="Plugin\PluginInfo\AbstractPluginInfo.cs" />
     <Compile Include="Plugin\PluginInfo\DataParsePluginInfo.cs" />
@@ -226,7 +235,6 @@
     <Compile Include="Plugin\PluginType.cs" />
     <Compile Include="Plugin\Plugin\AbstractDataParsePlugin.cs" />
     <Compile Include="Plugin\Plugin\DataJSScriptPlugin.cs" />
-    <Compile Include="Plugin\Plugin\DataScriptPlugin.cs" />
     <Compile Include="Plugin\Plugin\IPlugin.cs" />
     <Compile Include="Plugin\Plugin\PluginAttribute.cs" />
     <Compile Include="Plugin\Plugin\PluginContainerAttribute.cs" />
@@ -296,6 +304,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\..\23.Shell\XLY.SF.Shell\packages\System.Data.SQLite.Core.1.0.106.0\build\net45\System.Data.SQLite.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\23.Shell\XLY.SF.Shell\packages\System.Data.SQLite.Core.1.0.106.0\build\net45\System.Data.SQLite.Core.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>::使用AOP修改dll
+::if exist "AopInjection.exe"  start "" "AopInjection.exe"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

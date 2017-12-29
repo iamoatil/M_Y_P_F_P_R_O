@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using XLY.SF.Framework.Core.Base.ViewModel;
 using XLY.SF.Project.Domains.Contract;
 
@@ -17,7 +16,7 @@ namespace XLY.SF.Project.Domains
     /// </summary>
     [Serializable]
     [Newtonsoft.Json.JsonObject(Newtonsoft.Json.MemberSerialization.OptOut)]
-    public abstract class AbstractDataSource : NotifyPropertyBase, IDataSource
+    public abstract class AbstractDataSource : NotifyPropertyBase, IDataSource, IDecoration
     {
         /// <summary>
         /// 数据唯一标识
@@ -43,9 +42,9 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 当前列表数据的类型，如果是C#插件则为Items的Type，如果为脚本插件为自定义类型名称
         /// </summary>
-        public object Type { get; set; }
+        public Type Type { get; set; }
 
-        public IPluginInfo PluginInfo { get ; set ; }
+        public DataParsePluginInfo PluginInfo { get; set; }
 
         private int _total = -1;
 
@@ -65,24 +64,89 @@ namespace XLY.SF.Project.Domains
             }
         }
 
+        private int _deletetotal = -1;
+
+        public int DeleteTotal
+        {
+            get
+            {
+                if (_deletetotal == -1)
+                {
+                    Filter<dynamic>();
+                }
+                return _deletetotal;
+            }
+            protected set
+            {
+                _deletetotal = value;
+            }
+        }
+
         #region CheckState
 
         private bool? _isChecked = false;
         /// <summary>
         /// 当前数据是否被勾选
         /// </summary>
-        public bool? IsChecked { get => _isChecked; set => this.SetCheckedState(value, () => { this._isChecked = value; OnPropertyChanged(); }); }
-        public ICheckedItem Parent { get => null; }
-        public IEnumerable<ICheckedItem> GetChildren()
+        public new bool? IsChecked
+        {
+            get => _isChecked;
+            set
+            {
+                this.SetCheckedState(value, () => { this._isChecked = value; OnPropertyChanged(); });
+                //if(Items != null && value != null)
+                //{
+                //    int state = value == null ? -1 : value == true ? 1 : 0;
+                //    Items.UpdateRange("IsChecked", state);
+                //}
+                if (this is TreeDataSource tree && value != null)
+                {
+                    if (tree.TreeNodes != null)
+                    {
+                        foreach (var tn in tree.TreeNodes)
+                        {
+                            tn.IsChecked = value;
+                        }
+                    }
+                }
+            }
+        }
+
+        #region 是否可见
+        private bool? _IsVisible = true;
+
+        /// <summary>
+        /// 是否可见
+        /// </summary>	
+        public bool? IsVisible
+        {
+            get { return _IsVisible; }
+            set
+            {
+                this.SetTreeState(value, (item) => item.IsVisible, (item, v) => item.IsVisible = v, () => { this._IsVisible = value; OnPropertyChanged(); });
+            }
+        }
+        #endregion
+
+        private string _sourcePath = null;
+        public string SourcePath { get => _sourcePath ?? Parent?.SourcePath; set => _sourcePath = value; }
+        public ICheckedItem Parent { get; set; }
+        public virtual IEnumerable<ICheckedItem> GetChildren()
         {
             return null;
+            //return new ICheckedItem[0];
+            //if (Items == null)
+            //    return new ICheckedItem[0];
+            //return Items.GetView() as IEnumerable<ICheckedItem>;
         }
+
         #endregion
 
         public virtual void BuildParent()
         {
             if (null != Items)
             {
+                Items.Parent = this;
                 Items.Commit();
             }
         }
@@ -95,7 +159,7 @@ namespace XLY.SF.Project.Domains
         public virtual void SetCurrentPath(string path)
         {
             CurrentTaskPath = path;
-            if(Items != null)
+            if (Items != null)
             {
                 Items.DbFilePath = System.IO.Path.Combine(path, "data.db");
                 Items.ResetTableName();
@@ -105,17 +169,32 @@ namespace XLY.SF.Project.Domains
 
         #region 数据查询
 
-        public virtual IEnumerable<T> Filter<T>(params FilterArgs[] args)
+        public virtual void Filter<T>(params FilterArgs[] args)
         {
-            if(Items == null)
+            if (Items == null)
             {
                 _total = 0;
-                return new T[0];
+                _deletetotal = 0;
+                return;
             }
             Items.Filter(args);
-            IEnumerable<T> result = Items.View as IEnumerable<T> ?? new T[0];
             _total = Items.Count;
-            return result;
+            _deletetotal = Items.DeleteCount;
+
+            if (null != PluginInfo && !String.IsNullOrEmpty(PluginInfo.SaveDbPath))
+            {
+                DataFilter.Providers.SQLiteFilterDataProvider.ClearSQLiteConnectionCatch(PluginInfo.SaveDbPath);
+            }
+        }
+
+        public object GetMetaData(DecorationProperty dp)
+        {
+            return SourcePath;
+        }
+
+        public string GetKey(DecorationProperty dp)
+        {
+            return Key.ToString();
         }
 
         #endregion

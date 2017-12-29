@@ -318,6 +318,66 @@ namespace XLY.SF.Project.Devices
 
             }
         }
+
+        #endregion
+
+        #region 植入APP提取数据
+
+        /// <summary>
+        /// SPFSocket.apk文件路径
+        /// </summary>
+        private static readonly String ApkPath = FileHelper.GetPhysicalPath(@"Lib\adb\SPFSocket.apk");
+
+        /// <summary>
+        /// SPFSocket.apk 支持的命令
+        /// </summary>
+        private static readonly String[] Commands = new[]
+            {
+                "base_info","app_info","sms_info","contact_info","calllog_info",
+                //"browser_info","location_info","account_info"
+            };
+
+        /// <summary>
+        /// 植入APP提取数据
+        /// </summary>
+        /// <param name="device"></param>
+        /// <param name="APPCmdSavePath"></param>
+        /// <param name="autoUninstall"></param>
+        public void InstallPackageGetData(Device device, string APPCmdSavePath, bool autoUninstall = true)
+        {
+            FileHelper.CreateExitsDirectory(APPCmdSavePath);
+
+            if (FileHelper.IsValid(ApkPath))
+            {
+                if (InstallPackage(ApkPath, device))
+                {
+                    try
+                    {
+                        var lsContent = ExecuteSPFAppCommand(device, Commands);
+                        for (int pos = 0; pos < lsContent.Length; pos++)
+                        {
+                            File.WriteAllText(FileHelper.ConnectPath(APPCmdSavePath, $"{Commands[pos]}.bin"), lsContent[pos]);
+                        }
+                    }
+                    finally
+                    {//卸载APP
+                        if (autoUninstall)
+                        {
+                            UninstallPackage("com.xly.spfsocket", device);
+                        }
+                    }
+                }
+                else
+                {
+                    LoggerManagerSingle.Instance.Error(null, "APP植入失败！");
+                }
+            }
+            else
+            {
+                LoggerManagerSingle.Instance.Error(null, $"APP植入失败，文件{ApkPath}不存在！");
+            }
+        }
+
         #endregion
 
         #region 其他
@@ -1170,17 +1230,13 @@ namespace XLY.SF.Project.Devices
         /// account_info 帐号信息
         /// </summary>
         /// <param name="device">目标设备</param>
-        /// <param name="command">SPF socket命令</param>
+        /// <param name="commands">SPF socket命令</param>
         /// <param name="timeout">超时时间</param>
         /// <returns>返回命令执行结果</returns>
-        public string ExecuteSPFAppCommand(Device device, string command = "base_info", int timeout = ConstCodeHelper.DEFAULT_TIMEOUT)
+        public string[] ExecuteSPFAppCommand(Device device, string[] commands, int timeout = ConstCodeHelper.DEFAULT_TIMEOUT)
         {
-            // 服务启动提取失败：是否进行过重试
-            int doretry = 0;
-            DoRetry:
-
+            List<string> listStr = new List<string>();
             var port = _ForwardProt++;
-            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             try
             {
                 /**
@@ -1190,76 +1246,80 @@ namespace XLY.SF.Project.Devices
                  * 组件启动方式：优点是启动服务稳定，缺点是启动组件时屏幕会闪动一下，用户体验比较差
                  * 综合上述两种启动方式，在APP中提供两种启动方式，有限已服务启动，启动失败后再通过组件方式进行启动
                  */
-                // 服务启动 
-                // 20171208 songbing 暂不使用服务启动方式
-                //if (!AppServiceStart(device, port, 12345) || doretry == 1 || doretry == 2)
-                {
-                    // 组件启动
-                    AppAmStart(device, port, 12345);
-                }
+                //目前暂时使用组件启动方式
+                AppAmStart(device, port, 12345);
 
-                socket.Connect(IPAddress.Loopback, port);
-                socket.Blocking = true;
-                socket.ReceiveBufferSize = ConstCodeHelper.DEFAULT_COMMAND_BUFFER_SIZE;
-                socket.SendBufferSize = ConstCodeHelper.DEFAULT_COMMAND_BUFFER_SIZE;
-                socket.ReceiveTimeout = timeout;
-                socket.SendTimeout = timeout;
-                byte[] request = command.ToBytes(ConstCodeHelper.DEFAULT_ENCODING);
-                AdbSocketHelper.Write(socket, request);
-                var res = AdbSocketHelper.ReadResponse(socket);
-                if (!res.IsOkay)
+                foreach (var command in commands)
                 {
-                    // 服务启动提取数据失败后则转变为组件方式启动提取数据
-                    if (doretry == 0)
-                    {
-                        doretry = 1;
-                        goto DoRetry;
-                    }
-                    else
-                    {
-                        throw new Exception(string.Format("Device rejected command:{0}. Error:{1} ", command, res.Data));
-                    }
-                }
-                var sizebuf = new byte[16];
-                socket.Receive(sizebuf);
-                int length = Convert.ToInt32(sizebuf.GetString(), 16);
+                    string dataStr = string.Empty;
 
-                var databuf = new byte[length];
-                socket.ReceiveBufferSize = length;
-                AdbSocketHelper.Read(socket, databuf, length);
-                return databuf.GetString(Encoding.UTF8);
+                    Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                    try
+                    {
+                        socket.Connect(IPAddress.Loopback, port);
+                        socket.Blocking = true;
+                        socket.ReceiveBufferSize = ConstCodeHelper.DEFAULT_COMMAND_BUFFER_SIZE;
+                        socket.SendBufferSize = ConstCodeHelper.DEFAULT_COMMAND_BUFFER_SIZE;
+                        socket.ReceiveTimeout = timeout;
+                        socket.SendTimeout = timeout;
+                        byte[] request = command.ToBytes(ConstCodeHelper.DEFAULT_ENCODING);
+                        AdbSocketHelper.Write(socket, request);
+                        var res = AdbSocketHelper.ReadResponse(socket);
+                        if (!res.IsOkay)
+                        {
+                            LoggerManagerSingle.Instance.Error($"Device rejected command:{command}. Error:{res.Data}");
+                        }
+                        else
+                        {
+                            var sizebuf = new byte[16];
+                            socket.Receive(sizebuf);
+                            int length = Convert.ToInt32(sizebuf.GetString(), 16);
+
+                            var databuf = new byte[length];
+                            socket.ReceiveBufferSize = length;
+                            AdbSocketHelper.Read(socket, databuf, length);
+
+                            dataStr = databuf.GetString(Encoding.UTF8);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LoggerManagerSingle.Instance.Error(ex, $"Device rejected command:{command}.");
+                    }
+                    finally
+                    {
+                        DisposeSocket(socket);
+                    }
+                    listStr.Add(dataStr);
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                if (doretry <= 1)
-                {
-                    doretry = 2;
-                    goto DoRetry;
-                }
-                else
-                {
-                    return string.Empty;
-                }
+                LoggerManagerSingle.Instance.Error(ex, "Device rejected command Error");
             }
             finally
             {
-                DisposeSocket(socket);
-                //remove forward
                 try
                 {
-                    var sc2 = String.Format("host-serial:{0}:killforward-all", device.ID);
-                    ExecuteAdbSocketCommand(null, sc2);
+                    //remove forward
+                    ExecuteAdbSocketCommand(null, $"host-serial:{device.ID}:killforward-all");
                 }
-                catch { }
+                catch
+                { }
             }
+
+            return listStr.ToArray();
         }
 
         /// <summary>
         /// APP服务启动
         /// 目前APP支持两种启动方式，一种为服务命令，一种为直接启动组件
-        /// 服务启动方式：优点是用户不需要做任何操作，缺点是启动服务不稳定，针对部分手机启动受权限限制</summary>
-        /// 组件启动方式：优点是启动服务稳定，缺点是启动组件时屏幕会闪动一下，用户体验比较差<param name="device">设备对象</param>
-        /// 综合上述两种启动方式，在APP中提供两种启动方式，有限已服务启动，启动失败后再通过组件方式进行启动<param name="port">映射端口（第一个：“12580”是由你们自己定义的pc端口，第二个你们不用管，它是手机端的服务端口）</param>
+        /// 服务启动方式：优点是用户不需要做任何操作，缺点是启动服务不稳定，针对部分手机启动受权限限制
+        /// 组件启动方式：优点是启动服务稳定，缺点是启动组件时屏幕会闪动一下，用户体验比较差
+        /// 综合上述两种启动方式，在APP中提供两种启动方式，优先已服务启动，启动失败后再通过组件方式进行启动
+        /// </summary>
+        /// <param name="device">设备对象</param>
+        /// <param name="port">映射端口（第一个：“12580”是由你们自己定义的pc端口，第二个你们不用管，它是手机端的服务端口）</param>
         /// <param name="tcp">默认密码</param>
         /// <returns>是否成功，true成功，反之亦然</returns>
         private bool AppServiceStart(Device device, int port, int tcp = 12345)
@@ -1277,7 +1337,6 @@ namespace XLY.SF.Project.Devices
                 string sc2 = String.Format("host-serial:{0}:forward:tcp:{1};tcp:{2}", device.ID, port, tcp);
                 ExecuteAdbSocketCommand(null, sc2);
 
-                // 服务启动失败则使用组件启动
                 if (dreceiver.Lines.Contains("Error: Not found; no service started."))
                 {
                     return false;
@@ -1288,11 +1347,6 @@ namespace XLY.SF.Project.Devices
             {
                 LoggerManagerSingle.Instance.Error(ex, "SPF App服务启动失败");
 
-                // 组件启动
-                if (AppAmStart(device, port, 12345))
-                {
-                    return true;
-                }
                 return false;
             }
         }
@@ -1412,7 +1466,7 @@ namespace XLY.SF.Project.Devices
         /// <param name="targetPath">本地全文件路径</param>
         /// <param name="asyn">进度信息</param>
         /// <param name="persistRelativePath">是否保留相对路径</param>
-        public string CopyFile(Device device, string sourcePath, string targetPath, IAsyncTaskProgress asyn, bool persistRelativePath = true)
+        public string CopyFile(Device device, string sourcePath, string targetPath, DefaultAsyncTaskProgress asyn, bool persistRelativePath = true)
         {
             if (!sourcePath.IsValid() || !targetPath.IsValid())
             {
@@ -1459,7 +1513,7 @@ namespace XLY.SF.Project.Devices
         /// <param name="targetPath">目标文件路径</param>
         /// <param name="asyn">进度信息</param>
         /// <param name="persistRelativePath">是否保留相对路径</param>
-        private void CopyFolder(Device device, List<LSFile> files, string targetPath, IAsyncTaskProgress asyn, bool persistRelativePath = true)
+        private void CopyFolder(Device device, List<LSFile> files, string targetPath, DefaultAsyncTaskProgress asyn, bool persistRelativePath = true)
         {
             if (!files.IsValid())
             {
@@ -1505,7 +1559,7 @@ namespace XLY.SF.Project.Devices
         /// <param name="targetPath">目标路径</param>
         /// <param name="asyn">进度信息</param>
         /// <returns></returns>
-        public string CopySingleFile(Device device, LSFile file, string targetPath, IAsyncTaskProgress asyn, bool persistRelativePath = true)
+        public string CopySingleFile(Device device, LSFile file, string targetPath, DefaultAsyncTaskProgress asyn, bool persistRelativePath = true)
         {
             if (!file.HasPermission)
             {
@@ -1566,7 +1620,7 @@ namespace XLY.SF.Project.Devices
         /// <param name="targetPath">目标路径</param>
         /// <param name="asyn">进度信息</param>
         /// <returns></returns>
-        public string CopySingleFile(Device device, string sourceFile, string targetPath, IAsyncTaskProgress asyn, bool persistRelativePath = true)
+        public string CopySingleFile(Device device, string sourceFile, string targetPath, DefaultAsyncTaskProgress asyn, bool persistRelativePath = true)
         {
             string target = string.Empty;
             try

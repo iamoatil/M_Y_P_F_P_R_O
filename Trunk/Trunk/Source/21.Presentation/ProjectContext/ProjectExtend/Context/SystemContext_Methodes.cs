@@ -26,52 +26,15 @@ namespace ProjectExtend.Context
             SysStartDateTime = DateTime.Now;
             //加载系统DPI
             LoadCurrentScreenDPI();
-            //全局存储路径
-            SysSaveFullPath = CreatePath(SysSaveFullPath);
-            //如果全局路径创建失败则不再尝试其他路径创建直接返回，退程序
-            if (!string.IsNullOrWhiteSpace(SysSaveFullPath) && Path.IsPathRooted(SysSaveFullPath))
-            {
-                //案例存储路径
-                CaseSaveFullPath = CreatePath(CaseSaveFullPath);
-                //操作日志截图文件夹
-                OperationImageFolderName = _configService.GetSysConfigValueByKey("OperationImageFolderName");
-                CurOperationImageFolder = CreatePath(Path.Combine(SysSaveFullPath, OperationImageFolderName, SysStartDateTime.Date.ToString("yyyyMMdd")));
-                //展示内容缓存文件夹
-                SPFCacheFolderName = _configService.GetSysConfigValueByKey("SPFCacheFolderName");
-                SPFCacheFullPath = CreatePath(Path.Combine(SysSaveFullPath, SPFCacheFolderName));
-            }
-            return !string.IsNullOrWhiteSpace(SysSaveFullPath) &&
-                !string.IsNullOrWhiteSpace(CaseSaveFullPath) &&
-                !string.IsNullOrWhiteSpace(OperationImageFolderName) &&
-                !string.IsNullOrWhiteSpace(CurOperationImageFolder) &&
-                LoadConfig();
+            return LoadConfig();
         }
 
-        #endregion
-
-        #region 当前用户
-
-        /// <summary>
-        /// 设置成功登录的用户
-        /// </summary>
-        /// <param name="user"></param>
-        public void SetLoginSuccessUser(UserInfoModel user)
+        private void CreateDirectory(String directory)
         {
-            if (user != null)
+            if (!Directory.Exists(directory))
             {
-                _curUserInfoClone = user.ToReadOnly();
-                CurUserInfo = user.ToReadOnly();
-                //设置监听事件，防止外部修改
-                if (_curUserInfoPropChanged != null)
-                    _curUserInfoPropChanged.PropertyChanged -= _curUserInfoPropChanged_PropertyChanged;
-                _curUserInfoPropChanged = CurUserInfo as INotifyPropertyChanged;
-                _curUserInfoPropChanged.PropertyChanged += _curUserInfoPropChanged_PropertyChanged;
+                Directory.CreateDirectory(directory);
             }
-        }
-
-        private void _curUserInfoPropChanged_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            CurUserInfo = _curUserInfoClone.ToReadOnly();
         }
 
         #endregion
@@ -106,7 +69,7 @@ namespace ProjectExtend.Context
             {
                 var curWin = Window.GetWindow(control);
                 RenderTargetBitmap rtb = new RenderTargetBitmap((int)curWin.Width, (int)curWin.Height, this.DpiX, this.DpiY, PixelFormats.Pbgra32);
-                string imageFullPath = Path.Combine(CurOperationImageFolder, GetOperationImageSaveName());
+                string imageFullPath = Path.Combine(OperationImagePath, GetOperationImageSaveName());
                 using (FileStream fs = new FileStream(imageFullPath, FileMode.Create))
                 {
                     rtb.Render(curWin);

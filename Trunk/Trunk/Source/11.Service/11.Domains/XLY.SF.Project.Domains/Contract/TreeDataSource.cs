@@ -42,22 +42,25 @@ namespace XLY.SF.Project.Domains
             base.BuildParent();
         }
 
-        public override IEnumerable<T> Filter<T>(params FilterArgs[] args)
+        public override void Filter<T>(params FilterArgs[] args)
         {
-            IEnumerable<T> result = base.Filter<T>(args);
-            IEnumerable<T> temp = null;
+            base.Filter<T>(args);
             if (this.TreeNodes.Any())
             {
                 foreach (var node in TreeNodes)
                 {
-                    temp = node.Filter<T>(args);
-                    if (temp == null) continue;
+                    node.Filter<T>(args);
                     Total += node.Total;
-                    result = result.Union(temp);
+                    DeleteTotal += node.DeleteTotal;
                 }
             }
-            return result;
+
+            if (null != PluginInfo && !String.IsNullOrEmpty(PluginInfo.SaveDbPath))
+            {
+                DataFilter.Providers.SQLiteFilterDataProvider.ClearSQLiteConnectionCatch(PluginInfo.SaveDbPath);
+            }
         }
+
         public override void SetCurrentPath(string path)
         {
             base.SetCurrentPath(path);
@@ -70,6 +73,19 @@ namespace XLY.SF.Project.Domains
                 }
             }
         }
-       
+
+        public override IEnumerable<ICheckedItem> GetChildren()
+        {
+            return TreeNodes;
+            //if (TreeNodes != null)
+            //{
+            //    return base.GetChildren().Concat(TreeNodes);
+            //}
+            //else
+            //{
+            //    return base.GetChildren();
+            //}
+        }
+
     }
 }

@@ -27,42 +27,44 @@
                     <Grid x:Name="MainGrid" SnapsToDevicePixels="true" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition MinWidth="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" Width="69"/>
+                            <ColumnDefinition Width="69"/>
                         </Grid.ColumnDefinitions>
-                        <Button x:Name="btn_Open" Padding="{TemplateBinding Padding}">
+                        <Button x:Name="btn_Open" Padding="{TemplateBinding Padding}" BorderThickness="0">
                             <Button.Template>
                                 <ControlTemplate>
-                                    <Grid x:Name="gd">
-                                        <Grid.Background>
-                                            <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/HomePageMenuBtn1_normal.png" Stretch="Fill"/>
-                                        </Grid.Background>
-                                        <TextBlock Foreground="White" FontSize="{TemplateBinding FontSize}" FontWeight="{TemplateBinding FontWeight}" Text="{Binding BtnTest,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MenuButton}}" VerticalAlignment="Center" HorizontalAlignment="Left" 
+                                    <Border x:Name="gd" CornerRadius="12" Background="#379be6">
+                                        <Border.Effect>
+                                            <DropShadowEffect Color="#379be6" Opacity="0.1" ShadowDepth="6" BlurRadius="8" Direction="300"/>
+                                        </Border.Effect>
+                                        <Grid>
+                                            <TextBlock Foreground="White" FontSize="{TemplateBinding FontSize}" FontWeight="{TemplateBinding FontWeight}" Text="{Binding BtnTest,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:MenuButton}}" VerticalAlignment="Center" HorizontalAlignment="Left" 
                                                    Margin="{TemplateBinding Padding}"></TextBlock>
-                                    </Grid>
+                                            <Rectangle x:Name="btnRt" Width="20" HorizontalAlignment="Right" StrokeThickness="0" Fill="#379be6"/>
+                                        </Grid>
+                                    </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="true">
-                                            <Setter Property="Background" TargetName="gd">
+                                            <Setter Property="Background" TargetName="gd" Value="#3ca5f5"/>
+                                            <Setter Property="Fill" TargetName="btnRt" Value="#3ca5f5"/>
+                                            <Setter Property="Effect" TargetName="gd">
                                                 <Setter.Value>
-                                                    <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/HomePageMenuBtn1_hover.png"/>
+                                                    <DropShadowEffect Color="#379be6" Opacity="0.2" ShadowDepth="6" BlurRadius="8" Direction="300"/>
                                                 </Setter.Value>
                                             </Setter>
                                         </Trigger>
                                         <Trigger Property="ButtonBase.IsPressed" Value="true">
-                                            <Setter Property="Background" TargetName="gd">
-                                                <Setter.Value>
-                                                    <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/HomePageMenuBtn1_clik.png"/>
-                                                </Setter.Value>
-                                            </Setter>
+                                            <Setter Property="Background" TargetName="gd" Value="#2382cd"/>
+                                            <Setter Property="Fill" TargetName="btnRt" Value="#2382cd"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
                         <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
-                            <Border x:Name="DropDownBorder" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=MainGrid}" Margin="16">
+                            <Border x:Name="DropDownBorder" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=MainGrid}" Margin="0">
                                 <ScrollViewer x:Name="DropDownScrollViewer">
                                     <Grid RenderOptions.ClearTypeHint="Enabled" x:Name="br">
-                                        <Grid Margin="16 0 16 16">
+                                        <Grid Margin="5 0 5 5">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="12"/>
                                                 <RowDefinition Height="*"/>
@@ -85,28 +87,38 @@
                                 </ScrollViewer>
                             </Border>
                         </Popup>
-                        <ToggleButton x:Name="tb_Menu" Grid.Column="1" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
+                        <ToggleButton x:Name="tb_Menu" BorderThickness="0" Grid.Column="1" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}">
                             <ToggleButton.Template>
                                 <ControlTemplate TargetType="ToggleButton">
-                                    <Border x:Name="br">
-                                        <Border.Background>
-                                            <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/HomePageMenuBtn_normal.png" Stretch="Fill"/>
-                                        </Border.Background>
+                                    <Border x:Name="br" Background="#379be6" CornerRadius="12" BorderThickness="0">
+                                        <Grid>
+                                            <Rectangle x:Name="rt" Width="20" HorizontalAlignment="Left" StrokeThickness="0" Fill="#379be6"/>
+                                            <Rectangle Width="1" HorizontalAlignment="Left" StrokeThickness="0" Fill="#84c6f6"/>
+                                            <Path Fill="White" Width="17" Height="10" StrokeThickness="0" Data="M8.5000002,0 L17,10 L1.9503824E-08,10 z" Stretch="Fill">
+                                                <Path.LayoutTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform/>
+                                                        <SkewTransform/>
+                                                        <RotateTransform Angle="180"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </Path.LayoutTransform>
+                                            </Path>
+                                        </Grid>
                                     </Border>
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="true">
-                                            <Setter Property="Background" TargetName="br">
+                                            <Setter Property="Background" TargetName="br" Value="#3ca5f5"/>
+                                            <Setter Property="Fill" TargetName="rt" Value="#3ca5f5"/>
+                                            <Setter Property="Effect" TargetName="br">
                                                 <Setter.Value>
-                                                    <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/HomePageMenuBtn_hover.png" Stretch="Fill"/>
+                                                    <DropShadowEffect Color="#379be6" Opacity="0.2" ShadowDepth="6" BlurRadius="8" Direction="300"/>
                                                 </Setter.Value>
                                             </Setter>
                                         </Trigger>
-                                        <Trigger Property="IsChecked" Value="true">
-                                            <Setter Property="Background" TargetName="br">
-                                                <Setter.Value>
-                                                    <ImageBrush ImageSource="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/HomePageMenuBtn_clik.png" Stretch="Fill"/>
-                                                </Setter.Value>
-                                            </Setter>
+                                        <Trigger Property="ButtonBase.IsPressed" Value="true">
+                                            <Setter Property="Background" TargetName="br" Value="#2382cd"/>
+                                            <Setter Property="Fill" TargetName="rt" Value="#2382cd"/>
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
@@ -160,7 +172,7 @@
             <Border CornerRadius="5" x:Name="bg" Background="{TemplateBinding Background}" MinHeight="28">
                 <Grid x:Name="MainGrid" SnapsToDevicePixels="true" Margin="{TemplateBinding Padding}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto" SharedSizeGroup="Title" />
                         <ColumnDefinition Width="10*"/>
                         <ColumnDefinition Width="2*" MinWidth="30" MaxWidth="50"/>
                     </Grid.ColumnDefinitions>
@@ -253,7 +265,7 @@
                             </Border>
                         </Grid>
                     </Popup>
-                    <TextBox Grid.Column="1" x:Name="PART_EditableTextBox" Background="{Binding Background,ElementName=bg}" Foreground="White" Template="{DynamicResource tb_EmptyCt}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" VerticalContentAlignment="Center"/>
+                    <TextBox Grid.Column="1" x:Name="PART_EditableTextBox" BorderThickness="0" Background="{Binding Background,ElementName=bg}" Foreground="White" Template="{DynamicResource tb_EmptyCt}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" IsReadOnly="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" VerticalContentAlignment="Center"/>
                     <ToggleButton Grid.Column="2" Margin="5" IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" Template="{DynamicResource tb_CbDefaultCt}"/>
                 </Grid>
             </Border>

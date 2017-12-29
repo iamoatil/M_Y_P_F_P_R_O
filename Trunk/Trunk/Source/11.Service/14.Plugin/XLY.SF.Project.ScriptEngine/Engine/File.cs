@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Text;
-using System.Linq;
 
-namespace XLY.SF.Project.ScriptEngine.Engine
+namespace XLY.SF.Project.ScriptEngine
 {
     public class File
     {
@@ -16,13 +15,14 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         {
             try
             {
-                var content = System.IO.File.ReadAllText(filePath, Encoding.GetEncoding(encode));
+                var content = System.Utility.Helper.File.FileToString(filePath, Encoding.GetEncoding(encode));
                 return content.Replace('\0', ' ');
             }
             catch (Exception ex)
             {
-                var str = string.Format("Read file exception", filePath, ex.Message);
+                var str = string.Format("File read error! {0}, {1}", filePath, ex.AllMessage());
                 Console.WriteLine(str);
+                //LogHelper.Error(str, ex);
             }
             return string.Empty;
         }
@@ -48,8 +48,9 @@ namespace XLY.SF.Project.ScriptEngine.Engine
             }
             catch (Exception ex)
             {
-                var str = string.Format("Read file exception", filePath, ex.Message);
+                var str = string.Format("File read error! {0}, {1}", filePath, ex.AllMessage());
                 Console.WriteLine(str);
+                //LogHelper.Error(str, ex);
 
                 //如果直接加载失败，尝试过滤二进制字符后再加载
                 try
@@ -62,8 +63,9 @@ namespace XLY.SF.Project.ScriptEngine.Engine
                 }
                 catch (Exception ex2)
                 {
-                    str = string.Format("Read file exception", filePath, ex2.Message);
+                    str = string.Format("Xml File read error! {0}, {1}", filePath, ex2.AllMessage());
                     Console.WriteLine(str);
+                    //LogHelper.Error(str, ex2);
                 }
             }
             return string.Empty;
@@ -102,8 +104,9 @@ namespace XLY.SF.Project.ScriptEngine.Engine
             }
             catch (Exception ex)
             {
-                var str = string.Format("Get Files in folder exception", path, ex.Message);
+                var str = string.Format("Get Folder error: {0}, {1}", path, ex.AllMessage());
                 Console.WriteLine(str);
+                //LogHelper.Error(str, ex);
                 return string.Empty;
             }
         }
@@ -124,7 +127,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.AllMessage());
                 return false;
             }
         }
@@ -139,14 +142,15 @@ namespace XLY.SF.Project.ScriptEngine.Engine
                 var files = System.IO.Directory.GetFiles(path);
 
                 var fileNames = new List<string>();
-                ForEach(files,f => fileNames.Add(System.IO.Path.GetFileNameWithoutExtension(f)));
+                files.ForEach(f => fileNames.Add(System.IO.Path.GetFileNameWithoutExtension(f)));
 
                 return Newtonsoft.Json.JsonConvert.SerializeObject(fileNames);
             }
             catch (Exception ex)
             {
-                var str = string.Format("Get files in folder exception", path, ex.Message);
+                var str = string.Format("Get Folder error: {0}, {1}", path, ex.AllMessage());
                 Console.WriteLine(str);
+                //LogHelper.Error(str, ex);
                 return string.Empty;
             }
         }
@@ -162,33 +166,19 @@ namespace XLY.SF.Project.ScriptEngine.Engine
                 var files = System.IO.Directory.GetFiles(path);
 
                 var fileNames = new List<string>();
-                ForEach(files,f => fileNames.Add(System.IO.Path.GetFileName(f)));
+                files.ForEach(f => fileNames.Add(System.IO.Path.GetFileName(f)));
 
                 return Newtonsoft.Json.JsonConvert.SerializeObject(fileNames);
             }
             catch (Exception ex)
             {
-                var str = string.Format("Get files in folder exception", path, ex.Message);
+                var str = string.Format("Get Folder error: {0}, {1}", path, ex.AllMessage());
                 Console.WriteLine(str);
+                //LogHelper.Error(str, ex);
                 return string.Empty;
             }
         }
 
-        public void ForEach<T>(IEnumerable<T> souce, Action<T> action)
-        {
-            if (!IsValid(souce))
-            {
-                return;
-            }
-            foreach (var item in souce)
-            {
-                action(item);
-            }
-        }
-        public bool IsValid<T>(IEnumerable<T> source)
-        {
-            return source != null && source.Any();
-        }
         #endregion
 
         /// <summary>
@@ -203,8 +193,9 @@ namespace XLY.SF.Project.ScriptEngine.Engine
             }
             catch (Exception ex)
             {
-                var str = string.Format("Get files in folder exception", path, ex.Message);
+                var str = string.Format("Get Folder error: {0}, {1}", path, ex.AllMessage());
                 Console.WriteLine(str);
+                //LogHelper.Error(str, ex);
                 return string.Empty;
             }
         }
@@ -214,16 +205,16 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// </summary>
         public string GetPhysicalPath(string relativePath)
         {
-            return GetPhysicalPath(relativePath);
+            return System.Utility.Helper.File.GetPhysicalPath(relativePath);
         }
-        
+
         /// <summary>
         /// 获取指定文件或文件夹路径的名称
         /// 如 d:\File\aa或d:\File\aa.rar 返回aa,aa.rar
         /// </summary>
         public string GetFileName(string source)
         {
-            return GetFileName(source);
+            return System.Utility.Helper.File.GetFileName(source);
         }
 
         #region GetFilePath
@@ -233,7 +224,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         /// </summary>
         public string GetFilePath(string source)
         {
-            return GetFilePath(source);
+            return System.Utility.Helper.File.GetFilePath(source);
         }
         #endregion
     }

@@ -28,6 +28,7 @@
         <ResourceDictionary Source="ThemesStyle/HexViewerStyle/HexViewerStyle.xaml"/>
         <ResourceDictionary Source="ThemesStyle/LoadingStyle/Loading.xaml"/>
         <ResourceDictionary Source="ThemesStyle/Listbox/ListboxStyle.xaml"/>
+        <ResourceDictionary Source="ThemesStyle/DatePickerStyle/DatePicker.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <!--系统默认样式加载-->
@@ -67,7 +68,7 @@
         <Setter Property="Background" Value="#414b69"/>
         <Setter Property="TitleForeground" Value="#9ba5b9"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="FontSize" Value="14"/>
         <Setter Property="TitlePadding" Value="10 0 10 0"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>

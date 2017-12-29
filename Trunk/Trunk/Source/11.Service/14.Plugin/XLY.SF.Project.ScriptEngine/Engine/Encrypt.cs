@@ -10,7 +10,7 @@ using System.Text;
 * Create Date：2016/12/21 15:22:18
 * ==============================================================================*/
 
-namespace XLY.SF.Project.ScriptEngine.Engine
+namespace XLY.SF.Project.ScriptEngine
 {
     /// <summary>
     /// 处理文件加密
@@ -41,7 +41,7 @@ namespace XLY.SF.Project.ScriptEngine.Engine
         public string MD5(string data, string code)
         {
             System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-            byte[] retVal = Encoding.GetEncoding(code).GetBytes(data);
+            byte[] retVal = data.ToBytes(Encoding.GetEncoding(code));
             return MD5(retVal);
         }
 

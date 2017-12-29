@@ -6,6 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"             
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:local="clr-namespace:XLY.SF.Project.MirrorView"
             xmlns:control="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
             xmlns:themes="clr-namespace:XLY.SF.Project.Themes;assembly=XLY.SF.Project.Themes"
         x:Class="XLY.SF.Project.MirrorView.MirrorView"             
@@ -13,17 +14,21 @@
             d:DesignHeight="1500" d:DesignWidth="1500"    
             Foreground="White"
             UseLayoutRounding="True"
-            SnapsToDevicePixels="True">   
+            SnapsToDevicePixels="True">
     <viewmodel:UcViewBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <themes:BooleanToCollapseConverter x:Key="BoolVisibleConverter"/>
-            <themes:BoolReverseConverter x:Key="BoolReverse"/>           
+            <themes:BoolReverseConverter x:Key="BoolReverse"/>
         </ResourceDictionary>
     </viewmodel:UcViewBase.Resources>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="140"/>
+        </Grid.RowDefinitions>
         <Grid.Background>
             <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
                 <GradientStop Color="#2a385a" Offset="0"/>
@@ -31,145 +36,178 @@
                 <GradientStop Color="#191e37" Offset="1"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <TextBlock FontSize="262" Margin="0,220,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="MIRROR IMAGE"  Foreground="White" FontFamily="Impact" Opacity="0.02" Style="{x:Null}"/>
-        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="1"/>
-                <ColumnDefinition Width="692"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="390"/>
-                <RowDefinition Height="1"/>
-                <RowDefinition Height="126"/>
-                <RowDefinition Height="2"/>
-                <RowDefinition Height="26"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <Grid>
+            <TextBlock FontSize="262" Margin="0,220,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="MIRROR IMAGE"  Foreground="White" FontFamily="Impact" Opacity="0.02" Style="{x:Null}"/>
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="1"/>
+                    <ColumnDefinition Width="692"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="390"/>
+                    <RowDefinition Height="1"/>
+                    <RowDefinition Height="126"/>
+                    <RowDefinition Height="2"/>
+                    <RowDefinition Height="26"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <Border CornerRadius="4,0,0,0" >
-                <Border.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#303d5c"/>
-                        <GradientStop Color="#29304c" Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="1"  FontSize="30" Foreground="White" HorizontalAlignment="Center" FontFamily="{StaticResource OswaldBoldFont}"/>
-                    <TextBlock Text="选择分区"  Foreground="White" FontSize="14" Margin="0,14,0,0"/>
-                </StackPanel>
-            </Border>
-            <Border CornerRadius="0,4,0,0" Grid.Column="2">
-                <Border.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#303d5c"/>
-                        <GradientStop Color="#29304c" Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="18"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="20"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="1" Margin="0,0,33,0" HorizontalAlignment="Right" Orientation="Horizontal">
-                        <CheckBox HorizontalAlignment="Left" VerticalAlignment="Top"  Command="{Binding SelectAllCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self},Path= IsChecked}"
-                                  IsEnabled="{Binding SourcePosition.IsMirroring,Converter={StaticResource BoolReverse}}"/>
-                        <TextBlock Text="全选" Margin="5,-3,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                <Border CornerRadius="4,0,0,0" >
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#303d5c"/>
+                            <GradientStop Color="#29304c" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="1"  FontSize="30" Foreground="White" HorizontalAlignment="Center" FontFamily="{StaticResource OswaldBoldFont}"/>
+                        <TextBlock Text="选择分区"  Foreground="White" FontSize="14" Margin="0,14,0,0"/>
                     </StackPanel>
+                </Border>
+                <Border CornerRadius="0,4,0,0" Grid.Column="2">
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#303d5c"/>
+                            <GradientStop Color="#29304c" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="0"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="20"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <ScrollViewer Grid.Row="3" Margin="20,10,10,0" VerticalScrollBarVisibility="Auto" Background="Transparent" Foreground="White" IsEnabled="{Binding SourcePosition.IsMirroring,Converter={StaticResource BoolReverse}}">
+                            <ItemsControl ItemsSource="{Binding SourcePosition.CurrentSelectedDisk.Items}" >
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button x:Name="ButtonBorder" BorderBrush="#379bef" BorderThickness="1"
+                                            Command="{Binding DataContext.SelectPartitionCommand,RelativeSource={RelativeSource AncestorType={x:Type local:MirrorView}}}" 
+                                            CommandParameter="{Binding}">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="{x:Type Button}" >
+                                                    <Border Margin="10"  Width="140" Height="140"  CornerRadius="13" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                                        <ContentPresenter/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                            <Grid >
+                                                <Border x:Name="ButtonBackground"  CornerRadius="13" Opacity="0.06" Background="#a8b4d2"/>
+                                                <Image x:Name="Mirror_Checked" Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/Mirror_Checked.png" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                                <StackPanel>
+                                                    <Image Margin="0,20,0,14" HorizontalAlignment="Center" VerticalAlignment="Center" Source="/XLY.SF.Project.Themes;component/Resources/Images/Mirror_Partition.png" Stretch="None"/>
+                                                    <TextBlock Margin="20,0,20,0" Text="{Binding Name}" HorizontalAlignment="Center"  TextWrapping="WrapWithOverflow"  FontFamily="{StaticResource OswaldLightFont}" FontSize="14" FontWeight="Light"/>
+                                                    <TextBlock Text="{Binding SizeInfo}" HorizontalAlignment="Center"  FontFamily="{StaticResource OswaldLightFont}" FontSize="14" FontWeight="UltraLight" />
+                                                </StackPanel>
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="MouseEnter" >
+                                                        <ei:ChangePropertyAction PropertyName="Opacity" TargetName="ButtonBackground" Value="0.08"/>
+                                                    </i:EventTrigger>
+                                                    <i:EventTrigger EventName="MouseLeave" >
+                                                        <ei:ChangePropertyAction PropertyName="Opacity" TargetName="ButtonBackground" Value="0.06"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </Grid>
+                                        </Button>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsChecked}" Value="True">
+                                                <Setter TargetName="Mirror_Checked" Property="Visibility" Value="Visible" />
+                                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#379bef" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsChecked}" Value="False">
+                                                <Setter TargetName="Mirror_Checked" Property="Visibility" Value="Hidden" />
+                                                <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{x:Null}" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
 
-                    <ScrollViewer Grid.Row="3" Margin="20,10,10,0" VerticalScrollBarVisibility="Auto" Background="Transparent" Foreground="White" IsEnabled="{Binding SourcePosition.IsMirroring,Converter={StaticResource BoolReverse}}">
-                        <ItemsControl ItemsSource="{Binding SourcePosition.CurrentSelectedDisk.Items}" >
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Button x:Name="ButtonBorder" Command="{Binding ClickCommand}" BorderBrush="#379bef" BorderThickness="1" >
-                                        <Button.Template>
-                                            <ControlTemplate TargetType="{x:Type Button}" >
-                                                <Border Margin="10"  Width="140" Height="140"  CornerRadius="13" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                                                    <ContentPresenter/>
-                                                </Border>
-                                            </ControlTemplate>
-                                        </Button.Template>
-                                        <Grid >
-                                            <Border x:Name="ButtonBackground"  CornerRadius="13" Opacity="0.06" Background="#a8b4d2"/>
-                                            <Image x:Name="Mirror_Checked" Source="/XLY.SF.Project.Themes;component/Resources/Images/Mirror_Checked.png" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                                            <StackPanel>
-                                                <Image Margin="0,20,0,14" HorizontalAlignment="Center" VerticalAlignment="Center" Source="/XLY.SF.Project.Themes;component/Resources/Images/Mirror_Partition.png" Stretch="None"/>
-                                                <TextBlock Margin="20,0,20,0" Text="{Binding PathWithUpperStyle}" HorizontalAlignment="Center"  TextWrapping="WrapWithOverflow"  FontFamily="{StaticResource OswaldLightFont}" FontSize="14" FontWeight="Light"/>
-                                                <TextBlock Text="{Binding SizeInfo}" HorizontalAlignment="Center"  FontFamily="{StaticResource OswaldLightFont}" FontSize="14" FontWeight="UltraLight" />
-                                            </StackPanel>
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="MouseEnter" >
-                                                    <ei:ChangePropertyAction PropertyName="Opacity" TargetName="ButtonBackground" Value="0.08"/>
-                                                </i:EventTrigger>
-                                                <i:EventTrigger EventName="MouseLeave" >
-                                                    <ei:ChangePropertyAction PropertyName="Opacity" TargetName="ButtonBackground" Value="0.06"/>
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                        </Grid>
-                                    </Button>
-                                    <DataTemplate.Triggers>
-                                        <DataTrigger Binding="{Binding IsChecked}" Value="True">
-                                            <Setter TargetName="Mirror_Checked" Property="Visibility" Value="Visible" />
-                                            <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="#379bef" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsChecked}" Value="False">
-                                            <Setter TargetName="Mirror_Checked" Property="Visibility" Value="Hidden" />
-                                            <Setter TargetName="ButtonBorder" Property="BorderBrush" Value="{x:Null}" />
-                                        </DataTrigger>
-                                    </DataTemplate.Triggers>
-                                </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+                <Border CornerRadius="0,0,0,4" Grid.Row="2" Grid.Column="0">
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#242c48" />
+                            <GradientStop Color="#212844" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="2"  FontSize="30" Foreground="White" HorizontalAlignment="Center" FontFamily="{StaticResource OswaldBoldFont}"/>
+                        <TextBlock Text="选择存放路径"  Foreground="White" FontSize="14" Margin="0,14,0,0"/>
+                    </StackPanel>
+                </Border>
+                <Border CornerRadius="0,0,4,0" Grid.Row="2" Grid.Column="2" >
+                    <Border.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#242c48" />
+                            <GradientStop Color="#212844" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Grid Margin="32,44,0,0" Width="620" Height="40" HorizontalAlignment="Left" VerticalAlignment="Top" IsEnabled="{Binding SourcePosition.IsMirroring,Converter={StaticResource BoolReverse}}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="211*"/>
+                            <ColumnDefinition Width="20*"/>
+                        </Grid.ColumnDefinitions>
+                        <control:TextBoxEx Title="存放路径" TitlePadding="20,0,0,0"  Grid.ColumnSpan="2" Text="{Binding TargetPosition.DirPath}" />
+                        <Button Content=". . ." Grid.Column="1" Margin="0,0,0,5" Background="Transparent" Foreground="Wheat" Command="{Binding TargetPosition.SetTargetPathCommand}" VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
 
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </ScrollViewer>
+                <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3">
+                    <control:ProgressBarWithCorner LargeChange="0.1" Maximum="1" Value="{Binding ProgressPosition.Progress}" />
                 </Grid>
-            </Border>
-            <Border CornerRadius="0,0,0,4" Grid.Row="2" Grid.Column="0">
-                <Border.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#242c48" />
-                        <GradientStop Color="#212844" Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="2"  FontSize="30" Foreground="White" HorizontalAlignment="Center" FontFamily="{StaticResource OswaldBoldFont}"/>
-                    <TextBlock Text="选择存放路径"  Foreground="White" FontSize="14" Margin="0,14,0,0"/>
-                </StackPanel>
-            </Border>
-            <Border CornerRadius="0,0,4,0" Grid.Row="2" Grid.Column="2" >
-                <Border.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="#242c48" />
-                        <GradientStop Color="#212844" Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <Grid Margin="32,44,0,0" Width="620" Height="40" HorizontalAlignment="Left" VerticalAlignment="Top" IsEnabled="{Binding SourcePosition.IsMirroring,Converter={StaticResource BoolReverse}}">
+
+                <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" >
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="211*"/>
-                        <ColumnDefinition Width="20*"/>
+                        <ColumnDefinition Width="60"></ColumnDefinition>
+                        <ColumnDefinition Width="70"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
-                    <control:TextBoxEx Title="存放路径" TitlePadding="20,0,0,0"  Grid.ColumnSpan="2" Text="{Binding TargetPosition.DirPath}" />
-                    <Button Content=". . ." Grid.Column="1" Margin="0,0,0,5" Background="Transparent" Foreground="Wheat" Command="{Binding TargetPosition.SetTargetPathCommand}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="0" Text="{Binding ProgressPosition.UsedTimeStr}" FontFamily="{StaticResource OswaldLightFont}" FontSize="14" />
+                    <TextBlock Grid.Column="1" Text="{Binding ProgressPosition.Speed}" FontFamily="{StaticResource OswaldLightFont}" FontSize="14" Margin="5,0,0,0"/>
+                    <TextBlock Grid.Column="2" Text="{Binding ProgressPosition.FinishedSizeStr}" FontFamily="{StaticResource OswaldLightFont}" FontSize="14" Margin="5,0,0,0"/>
+                    <TextBlock Grid.Column="3" Text="{Binding ProgressPosition.Msg}" FontFamily="{StaticResource OswaldLightFont}" FontSize="14" Margin="20,0,0,0"/>
                 </Grid>
-            </Border>
 
-            <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3">
-                <control:ProgressBarWithCorner LargeChange="0.1" Maximum="{Binding ProgressPosition.TotalSize}" Value="{Binding ProgressPosition.FinishedSize}" />
+                <Button Content="开始镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,0,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding StartCommand}"/>
+                <Button Content="停止镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,0,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding StopCommand}" Visibility="{Binding SourcePosition.IsMirroring, Converter= {StaticResource BoolVisibleConverter}}" Template="{StaticResource RedButtonCt}"/>
+
+                <Button Content="继续镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,110,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding ContinueCommand}" Visibility="{Binding SourcePosition.CanContinue, Converter= {StaticResource BoolVisibleConverter}}"/>
+                <Button Content="暂停镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,110,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding PauseCommand}" Visibility="{Binding SourcePosition.CanPause, Converter= {StaticResource BoolVisibleConverter}}"/>
             </Grid>
-
-            <TextBlock Text="{Binding ProgressPosition.UsedTime}" Grid.Row="5" Grid.Column="0" Margin="0,20,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"  FontFamily="{StaticResource OswaldLightFont}" FontSize="14" />
-            <Button Content="开始镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,0,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding StartCommand}"/>
-            <Button Content="停止镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,0,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding StopCommand}" Visibility="{Binding SourcePosition.IsMirroring, Converter= {StaticResource BoolVisibleConverter}}" Template="{StaticResource RedButtonCt}"/>
-
-            <Button Content="继续镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,110,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding ContinueCommand}" Visibility="{Binding SourcePosition.CanContinue, Converter= {StaticResource BoolVisibleConverter}}"/>
-            <Button Content="暂停镜像" Grid.Row="5" Grid.Column="2" Margin="0,14,110,0"  Width="100" Height="30" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding PauseCommand}" Visibility="{Binding SourcePosition.CanPause, Converter= {StaticResource BoolVisibleConverter}}"/>
+        </Grid>
+        <Grid Grid.Row="1" >
+            <GridSplitter HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="1" Background="White" Foreground="White" Opacity="0.05" Margin="30,0,30,0"/>
+            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0" Orientation="Vertical" >
+                <Button Content="{Binding MirrorFile.FileName}" Command="{Binding MirrorFile.OpenFileDirCommand}" >
+                    <Button.Template>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*"/>
+                                    <RowDefinition Height="1"/>
+                                    <RowDefinition Height="1"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="{TemplateBinding Content}"/>
+                                <Border Grid.Row="2" Background="White" Opacity="0.5"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                <TextBlock Text="{Binding MirrorFile.Md5}"/>
+            </StackPanel>
+            <Button Content="解析镜像" Width="160" Height="60" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,30,0" FontSize="16" FontFamily="{StaticResource OswaldBoldFont}" Visibility="{Binding IsParseMirrorValidate,Converter={StaticResource BoolVisibleConverter}}" 
+                    Command="{Binding ParseMirrorCommand}" IsEnabled="{Binding MirrorFile.IsIntegrated}"/>
         </Grid>
     </Grid>
 </viewmodel:UcViewBase>

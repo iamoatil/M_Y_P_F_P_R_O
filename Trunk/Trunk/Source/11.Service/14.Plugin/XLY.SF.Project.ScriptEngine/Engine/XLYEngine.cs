@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace XLY.SF.Project.ScriptEngine.Engine
+namespace XLY.SF.Project.ScriptEngine
 {
     /// <summary>
     /// 效率源脚本引擎

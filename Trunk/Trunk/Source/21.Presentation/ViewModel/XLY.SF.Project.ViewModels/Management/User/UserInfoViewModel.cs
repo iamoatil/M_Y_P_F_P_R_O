@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using ProjectExtend.Context;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -6,7 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Core.Base.ViewModel;
+using XLY.SF.Framework.Language;
+using XLY.SF.Project.Models;
+using XLY.SF.Project.Models.Entities;
 using XLY.SF.Project.Models.Logical;
 using XLY.SF.Project.ViewDomain.MefKeys;
 
@@ -16,12 +21,20 @@ namespace XLY.SF.Project.ViewModels.Management.User
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class UserInfoViewModel : ViewModelBase
     {
+        #region Fields
+
+        private readonly ProxyRelayCommandBase _cancelProxyCommand;
+
+        private readonly ProxyRelayCommandBase _confirmCommand;
+
+        #endregion
+
         #region Constructors
 
         public UserInfoViewModel()
         {
-            CancelCommand = new RelayCommand(Cancel);
-            ConfirmCommand = new RelayCommand(Confirm, CanConfirm);
+            _cancelProxyCommand = new ProxyRelayCommand(Cancel, base.ModelName);
+            _confirmCommand = new ProxyRelayCommand(Confirm, base.ModelName, CanConfirm);
             Item = new UserInfoModel();
         }
 
@@ -29,9 +42,38 @@ namespace XLY.SF.Project.ViewModels.Management.User
 
         #region Properties
 
-        public ICommand CancelCommand { get; }
+        public ICommand CancelCommand => _cancelProxyCommand.ViewExecuteCmd;
 
-        public ICommand ConfirmCommand { get; }
+        public ICommand ConfirmCommand => _confirmCommand.ViewExecuteCmd;
+
+        #region IsUpdate
+
+        private Boolean _isUpdate;
+
+        public Boolean IsUpdate
+        {
+            get => _isUpdate;
+            private set
+            {
+                _isUpdate = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        [Import(typeof(IRecordContext<UserInfo>))]
+        private IRecordContext<UserInfo> DbService { get; set; }
+
+        public Boolean IncludePassword
+        {
+            get => Item.IncludePassword;
+            set
+            {
+                Item.IncludePassword = value;
+                OnPropertyChanged();
+            }
+        }
 
         #region UserInfoModel
 
@@ -48,6 +90,13 @@ namespace XLY.SF.Project.ViewModels.Management.User
 
         #endregion
 
+        [Import(typeof(IMessageBox))]
+        private IMessageBox MessageBox
+        {
+            get;
+            set;
+        }
+
         #endregion
 
         #region Methods
@@ -56,7 +105,17 @@ namespace XLY.SF.Project.ViewModels.Management.User
 
         protected override void InitLoad(Object parameters)
         {
-            Item = parameters as UserInfoModel;
+            UserInfoModel user = parameters as UserInfoModel;
+            Item = user ?? new UserInfoModel();
+            if (user == null)
+            {
+                IncludePassword = true;
+                IsUpdate = false;
+            }
+            else
+            {
+                IsUpdate = true;
+            }
         }
 
         public override Object GetResult()
@@ -78,19 +137,77 @@ namespace XLY.SF.Project.ViewModels.Management.User
             {
                 return false;
             }
-            if (Item.Password == String.Empty) return false;
-            return Item.Password == Item.ConfirmPassword;
+            if (IncludePassword)
+            {
+                if (Item.Password == String.Empty) return false;
+                Boolean b = false;
+                b = Item.Password == Item.ConfirmPassword;
+                if (IsUpdate)
+                {
+                    b = b && (Item.OldPassword != String.Empty);
+                }
+                return b;
+            }
+            return true;
         }
 
-        private void Cancel()
+        private String Cancel()
         {
             CloseView();
+            return IsUpdate ? "取消更新用户" : "取消添加用户";
         }
 
-        private void Confirm()
+        private String Confirm()
         {
-            DialogResult = true;
+            String log = null;
+            if (IsUpdate)
+            {
+                if (Update())
+                {
+                    DialogResult = true;
+                    log = "更新用户成功";
+                }
+                else
+                {
+                    MessageBox.ShowDialogErrorMsg(SystemContext.LanguageManager[Languagekeys.ViewLanguage_Management_User_UpdateErrorPrompt]);
+                    log = "更新用户失败";
+                }
+            }
+            else
+            {
+                if (Add())
+                {
+                    DialogResult = true;
+                    log = "添加用户成功";
+                }
+                else
+                {
+                    MessageBox.ShowSuccessMsg(SystemContext.LanguageManager[Languagekeys.ViewLanguage_Management_User_AddErrorPrompt]);
+                    log = "添加用户失败";
+                }
+            }
             CloseView();
+            return log;
+        }
+
+        private Boolean Add()
+        {
+            Item.LoginPassword = Item.Password;
+            return DbService.Add(Item.Entity);
+        }
+
+        private Boolean Update()
+        {
+            if (Item.IncludePassword)
+            {
+                if (Item.Entity.LoginPassword != UserInfoModel.EncryptPassword(Item.OldPassword))
+                {
+                    MessageBox.ShowDialogErrorMsg(SystemContext.LanguageManager[Languagekeys.ViewLanguage_Management_User_ModifyPasswordErrorPrompt]);
+                    return false;
+                }
+                Item.LoginPassword = Item.Password;
+            }
+            return DbService.Update(Item.Entity);
         }
 
         #endregion

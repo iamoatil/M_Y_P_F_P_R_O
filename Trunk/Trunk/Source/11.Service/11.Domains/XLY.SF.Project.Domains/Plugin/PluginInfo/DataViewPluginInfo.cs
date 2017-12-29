@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 
@@ -15,6 +16,7 @@ namespace XLY.SF.Project.Domains
     /// 应用数据自定义视图插件配置信息
     /// </summary>
     [XmlRoot("plugin")]
+    [Serializable]
     public class DataViewPluginInfo : AbstractZipPluginInfo
     {
         /// <summary>
@@ -33,6 +35,7 @@ namespace XLY.SF.Project.Domains
     /// <summary>
     /// 该数据视图对应的类型列表
     /// </summary>
+    [Serializable]
     public class DataViewSupportItem
     {
         /// <summary>
@@ -52,6 +55,13 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         [XmlAttribute]
         public string TypeName { get; set; }
+
+        /// <summary>
+        /// 是否支持继承匹配，默认为false;
+        /// true则表示当前类型或父类型符合条件也算匹配成功；此时对应的Type必须为C#的实际类型
+        /// </summary>
+        [XmlAttribute]
+        public bool Inherit { get; set; } = false;
 
         public override string ToString()
         {

@@ -6,6 +6,7 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:local="clr-namespace:XLY.SF.Project.Plugin.DataView"
              xmlns:theme="clr-namespace:XLY.SF.Project.Themes;assembly=XLY.SF.Project.Themes"
+             xmlns:DO ="clr-namespace:XLY.SF.Project.Domains;assembly=XLY.SF.Project.Domains"
              xmlns:ctrl="clr-namespace:XLY.SF.Project.Themes.CustromControl;assembly=XLY.SF.Project.Themes"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
@@ -15,6 +16,12 @@
                 <ResourceDictionary Source="Pack://application:,,,/XLY.SF.Project.Themes;Component/BaseThemes.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
+
+            <!--支持动态数据装饰属性的绑定-->
+            <ControlTemplate x:Key="dynamicCheckCT" TargetType="ContentControl">
+                <CheckBox x:Name="cb" IsChecked="{theme:DecorationBinding DP={x:Static DO:DecorationExtesion.CheckTreeProperty}}" Grid.Column="1" Margin="0 0 10 0" VerticalAlignment="Center"/>
+            </ControlTemplate>
+            
             <!--<Style TargetType="{x:Type TreeView}">
             <Setter Property="ItemTemplate">
                 <Setter.Value>
@@ -102,45 +109,21 @@
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="Auto" MaxWidth="400"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
         <!--左侧的树形菜单，TreeDataSource下可见-->
-        <!--<TreeView Grid.Column="0" ItemsSource="{Binding TreeNodes}" MinWidth="200" Visibility="{Binding IsTreeDataSource, Converter={StaticResource booleanToVisibilityConverter}}" >
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding TreeNodes}" >
-                    <TextBlock Text="{Binding Text}"/>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectedItemChanged">
-                    <i:InvokeCommandAction Command="{Binding SelecedNodeChanged}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeView}}, Path=SelectedValue}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </TreeView>-->
-        <!--<ctrl:TreeViewEx x:Name="treeDataList" Background="#05FFFFFF" BorderThickness="0" Grid.Column="0" ItemsSource="{Binding TreeNodes}" MinWidth="200" Width="236" Visibility="{Binding IsTreeDataSource, Converter={StaticResource booleanToVisibilityConverter}}">
-            <ctrl:TreeViewEx.ItemContainerStyle>
-                <Style TargetType="ctrl:TreeViewItemEx" BasedOn="{StaticResource stTreeViewItem}">
-                    <Setter Property="IsItemStyle" Value="{Binding IsItemStyle}"></Setter>
-                </Style>
-            </ctrl:TreeViewEx.ItemContainerStyle>
-            <ctrl:TreeViewEx.ItemTemplate >
-                <HierarchicalDataTemplate  ItemsSource="{Binding Path=TreeNodes}">
-                    <TextBlock Text="{Binding Text}"/>
-                </HierarchicalDataTemplate>
-            </ctrl:TreeViewEx.ItemTemplate>
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="SelectedItemChanged">
-                    <i:InvokeCommandAction Command="{Binding SelecedNodeChanged}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type ctrl:TreeViewEx}}, Path=SelectedValue}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </ctrl:TreeViewEx>-->
-        <TreeView BorderThickness="0" theme:AttachHelper.IsShowSelectedGripper="True"  theme:AttachHelper.IsShowCheckBox="True" theme:AttachHelper.IsHideUnCheckedNode="False" theme:AttachHelper.IsHideChildren="False" 
-                  Background="#05FFFFFF" Grid.Column="0" MinWidth="200" ItemsSource="{Binding TreeNodes}" Visibility="{Binding IsTreeDataSource, Converter={StaticResource booleanToVisibilityConverter}}">
+        <TreeView BorderThickness="0" theme:AttachHelper.IsShowSelectedGripper="True"  theme:AttachHelper.IsShowCheckBox="True" theme:AttachHelper.IsHideUnCheckedNode="True" theme:AttachHelper.IsHideChildren="False" theme:AttachHelper.TreeItemDefaultExpandDepth ="0"
+                  Background="#05FFFFFF" Grid.Column="0" MinWidth="200" ItemsSource="{Binding TreeNodes}" Visibility="{Binding IsTreeDataSource, Converter={StaticResource booleanToVisibilityConverter}}"  ItemContainerStyle="{StaticResource dynamicStateTreeViewItem}">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding TreeNodes}">
-                    <TextBlock Text="{Binding Text}"/>
+                    <TextBlock>
+                       <Run Text="{Binding Text}"/>
+                       <Run Text="("/>
+                       <Run Text="{Binding Total}"/>
+                       <Run Text=")"/>
+                    </TextBlock>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
             <i:Interaction.Triggers>

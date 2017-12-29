@@ -14,7 +14,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         #region Cosntructors
 
         /// <summary>
-        /// 初始化类型 AsyncTaskEventArgs 实例。
+        /// 初始化类型 TaskEventArgs 实例。
         /// </summary>
         /// <param name="taskId">任务标识。</param>
         public TaskEventArgs(String taskId)
@@ -23,7 +23,7 @@ namespace XLY.SF.Framework.Core.Base.ViewModel
         }
 
         /// <summary>
-        /// 初始化类型 AsyncTaskEventArgs 实例。
+        /// 初始化类型 TaskEventArgs 实例。
         /// </summary>
         /// <param name="taskId">任务标识。</param>
         /// <param name="message">事件消息。</param>

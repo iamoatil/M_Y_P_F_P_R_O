@@ -35,15 +35,18 @@ namespace XLY.SF.Project.MirrorView
                 this.Dispatcher.Invoke(new Action(() => DeviceMonitor_OnDeviceConnected(dev, isOnline)));
             };
             ProxyFactory.DeviceMonitor.OpenDeviceService();
-            
+
             //初始化MvvmLigth的DispatcherHelper
             DispatcherHelper.Initialize();
         }
 
         private void DeviceMonitor_OnDeviceConnected(IDevice dev, bool isOnline)
         {
-            _mirrorViewModel.SourcePosition.RefreshPartitions(dev);
-            _mirrorViewModel.Initialize(((Device)dev).ID);
+            if (dev is Device device)
+            {
+                _mirrorViewModel.SourcePosition.RefreshPartitions(device);
+                _mirrorViewModel.Initialize(dev.ID);
+            }
         }
     }
 }

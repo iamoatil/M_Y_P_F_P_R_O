@@ -1,3 +1,19 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<LanguageResource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<LanguageResource>
+  <FileServiceLanguage>
+    <File_ZuZhuangFenQuDeWenJianXiTongSh>Constructing file system directories for partition [{0}]</File_ZuZhuangFenQuDeWenJianXiTongSh>
+    <File_SaoMiaoWenJianXiTongJieShuDeDa> </File_SaoMiaoWenJianXiTongJieShuDeDa>
+    <File_WenJianXiTongZuZhuangWanBi>Reconstruction of filesystem comleted</File_WenJianXiTongZuZhuangWanBi>
+    <File_ZhuangZaiXiTongFenQuMingChengM> </File_ZhuangZaiXiTongFenQuMingChengM>
+    <File_JiaZaiXiTongFenQuLieBiao>Loading partition list…</File_JiaZaiXiTongFenQuLieBiao>
+    <File_HuoQuWenJianXiTongMingChengMia> </File_HuoQuWenJianXiTongMingChengMia>
+    <File_HuoQuRawWenJianLeiXingShiBai>Failed to read RAW file type!</File_HuoQuRawWenJianLeiXingShiBai>
+    <File_FenQu>Partition:</File_FenQu>
+    <File_TiQuWenJianShiDiCengKuFileServ1> </File_TiQuWenJianShiDiCengKuFileServ1>
+    <File_TiQuWenJianShiDiCengKuFileServ2>Error on FileServiceCoreDll.RecoveryFile while acquiring files! Error:[0}</File_TiQuWenJianShiDiCengKuFileServ2>
+    <File_TiQuWenJianShiDiCengKuFileServ3> </File_TiQuWenJianShiDiCengKuFileServ3>
+    <File_WenJianHuiFuChengGong>File[{0}] recovered successfully!]</File_WenJianHuiFuChengGong>
+    <File_KaiShiHuiFuYingYongWenJianLieB>Recovering App file list…</File_KaiShiHuiFuYingYongWenJianLieB>
+    <File_KaiShiHuiFuMeiTiWenJianShuJu>Start recovering media files…</File_KaiShiHuiFuMeiTiWenJianShuJu>
+  </FileServiceLanguage>
 </LanguageResource>

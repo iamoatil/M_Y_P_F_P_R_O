@@ -25,7 +25,7 @@ namespace XLY.SF.Project.Plugin.IOS
             pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_EimQQ);
             pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_SocialChat);
             pluginInfo.DeviceOSType = EnumOSType.IOS;
-            pluginInfo.VersionStr = "0.0";
+            pluginInfo.VersionStr = "1.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
             pluginInfo.GroupIndex = 1;
             pluginInfo.OrderIndex = 3;

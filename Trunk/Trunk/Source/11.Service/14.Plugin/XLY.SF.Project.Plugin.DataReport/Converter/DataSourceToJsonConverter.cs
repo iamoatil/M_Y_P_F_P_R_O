@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using XLY.SF.Framework.BaseUtility;
+using XLY.SF.Framework.Log4NetService;
+using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 
 /* ==============================================================================
@@ -41,19 +43,19 @@ namespace XLY.SF.Project.Plugin.DataReport
             TargetDirectory = arg.ReportPath;
             CreateDeviceInfo(arg.DeviceInfo, destPath);
             CreateCollectionInfo(arg.CollectionInfo, destPath);
-            CreateJson(arg.DataPool, destPath);
+            CreateJson(arg.DataPool, arg.ExportState, destPath);
         }
 
-        private void CreateJson(IList<IDataSource> dataPool, string destPath)
+        private void CreateJson(IList<IDataSource> dataPool, EnumExportState State, string destPath)
         {
             string treePath = Path.Combine(destPath, @"tree.js");
 
             List<JsonExportTree> tree = new List<JsonExportTree>();
-            var groups = dataPool.GroupBy(p => p.PluginInfo.Group);
+            var groups = dataPool.Where(p=>p.PluginInfo != null).GroupBy(p => p.PluginInfo.Group);
 
             foreach (var item in groups)
             {
-                JsonExportTree t = new JsonExportTree() { text = item.Key, location = "", icon = "",nodes=new List<JsonExportTree>() };
+                JsonExportTree t = new JsonExportTree() { text = item.Key, location = "", icon = "", nodes = new List<JsonExportTree>() };
                 foreach (var ds in item)
                 {
                     if (ds == null)
@@ -65,35 +67,16 @@ namespace XLY.SF.Project.Plugin.DataReport
 
                     if (ds is TreeDataSource td)
                     {
-                        CreateTreeNodeJson(td.TreeNodes, destPath, t2);
+                        CreateTreeNodeJson(td.TreeNodes, destPath, t2, State);
                     }
                     else if (ds is AbstractDataSource sd)
                     {
-                        CreateItemJson(sd.Items, destPath, t2);
+                        CreateItemJson(sd.Items, destPath, t2, State, (Type)sd.Type);
                     }
                     t.nodes.Add(t2);
                 }
                 tree.Add(t);
             }
-            //foreach (IDataSource ds in dataPool)
-            //{
-            //    if (ds == null)
-            //    {
-            //        continue;
-            //    }
-
-            //    JsonExportTree t = new JsonExportTree() { text = ds.PluginInfo.Name, location = "", icon = ds.PluginInfo.Icon ?? "", tags = new string[] { ds.Total.ToString() } };
-
-            //    if (ds is TreeDataSource td)
-            //    {
-            //        CreateTreeNodeJson(td.TreeNodes, destPath, t);
-            //    }
-            //    else if (ds is SimpleDataSource sd)
-            //    {
-            //        CreateItemJson(sd.Items, destPath, t);
-            //    }
-            //    tree.Add(t);
-            //}
             System.IO.File.WriteAllText(treePath, $"var __data = {Serializer.JsonFastSerilize(tree)};");
         }
 
@@ -119,7 +102,7 @@ namespace XLY.SF.Project.Plugin.DataReport
             System.IO.File.WriteAllText(path, $"var __collect = {Serializer.JsonFastSerilize(collectionInfo ?? new object())};");
         }
 
-        private void CreateTreeNodeJson(List<TreeNode> nodes, string path, JsonExportTree t)
+        private void CreateTreeNodeJson(List<TreeNode> nodes, string path, JsonExportTree t, EnumExportState State)
         {
             if (nodes == null)
             {
@@ -131,20 +114,14 @@ namespace XLY.SF.Project.Plugin.DataReport
             }
             foreach (TreeNode n in nodes)
             {
-                if (n.Text== "魅影(1752880324)")
-                {
-
-
-                    var aa = "";
-                }
                 JsonExportTree t0 = (new JsonExportTree() { text = n.Text, location = "", icon = t.icon, tags = new string[] { n.Total.ToString() } });
-                CreateItemJson(n.Items, path, t0, (Type)n.Type);
-                CreateTreeNodeJson(n.TreeNodes, path, t0);
+                CreateItemJson(n.Items, path, t0, State, (Type)n.Type);
+                CreateTreeNodeJson(n.TreeNodes, path, t0, State);
                 t.nodes.Add(t0);
             }
         }
 
-        private void CreateItemJson(IDataItems items, string dir, JsonExportTree t, Type itemType = null)
+        private void CreateItemJson(IDataItems items, string dir, JsonExportTree t, EnumExportState State, Type itemType)
         {
             if (items == null)
             {
@@ -157,32 +134,59 @@ namespace XLY.SF.Project.Plugin.DataReport
                 #region 生成数据json
                 sw.Write("var __data = [");
                 int r = 0;
+                int j = 0;
                 //items.Filter();
-                foreach (var c in items.View)
+                foreach (var c in items.GetView(0, -1))
                 {
-                            foreach (var columnVal in DisplayAttributeHelper.FindDisplayAttributes(itemType))
+                    j = 0;
+                    foreach (var columnVal in DisplayAttributeHelper.FindDisplayAttributes(itemType))
+                    {
+                        string val = string.Empty;
+                        var value = columnVal.GetValue(c);
+                        //对删除数据和正常数据做出筛选
+                        if (value is EnumDataState DataState)
+                        {
+                            if (State == EnumExportState.Delete && State != EnumExportState.All)
                             {
-                                string val = string.Empty;
-                                var value = columnVal.GetValue(c);
-
-                                if (value is IEnumerable<string>)
+                                //添加删除数据,所以把正常数据过滤掉
+                                if (DataState == EnumDataState.Normal)
                                 {
-                                    var array = (value as IEnumerable<string>).ToArray();
-                                    val = array.Count() == 0 ? string.Empty : array[0];
-                                }
-                                else
-                                {
-                                    val = value == null ? string.Empty : value.ToString();
-                                }
-                                if (val.Contains(CurrentTaskPath) || val.Contains("\\"))
-                                {
-                                    CoypFile(val);
+                                    j++;
+                                    continue;
                                 }
                             }
+                            else
+                            {
+                                //添加正常数据,所以把已经删除数据过滤掉
+                                if (DataState != EnumDataState.Normal)
+                                {
+                                    j++;
+                                    continue;
+                                }
+                            }
+                        }
+
+                        if (value is IEnumerable<string>)
+                        {
+                            var array = (value as IEnumerable<string>).ToArray();
+                            val = array.Count() == 0 ? string.Empty : array[0];
+                        }
+                        else
+                        {
+                            val = value == null ? string.Empty : value.ToString();
+                        }
+                        if (val.Contains(CurrentTaskPath) || val.Contains("\\"))
+                        {
+                            CoypFile(val);
+                        }
+                    }
+                    if (j == 0)
+                    {
                         if (r != 0)
-                        sw.Write(",");
-                    sw.Write(Serializer.JsonSerilize(c));
-                    r++;
+                            sw.Write(",");
+                        sw.Write(Serializer.JsonSerilize(c));
+                        r++;
+                    }
                 }
                 sw.Write("];");
                 #endregion
@@ -205,7 +209,7 @@ namespace XLY.SF.Project.Plugin.DataReport
                 {
                     if (c.Visibility != EnumDisplayVisibility.ShowInDatabase)
                         cols.Add(new JsonExportColumn() { field = c.PropertyName, title = c.Text });
-                  
+
                 }
                 sw.Write(Serializer.JsonFastSerilize(cols));
                 sw.Write(";");
@@ -221,7 +225,7 @@ namespace XLY.SF.Project.Plugin.DataReport
         {
             try
             {
-                if (!File.Exists(sourceFile))
+                if (!FileHelper.InputPathIsValid(sourceFile) ||  !File.Exists(sourceFile))
                 {
                     return;
                 }
@@ -241,7 +245,7 @@ namespace XLY.SF.Project.Plugin.DataReport
                 {
                     index = sourceFile.IndexOf("mtp");
                 }
-                if (-1 == index) return ;
+                if (-1 == index) return;
                 string typeDirectory = sourceFile.Substring(index, sourceFile.Length - index - fileName.Length);
                 string fileDirectory = Path.Combine(TargetDirectory, typeDirectory);
                 if (!Directory.Exists(fileDirectory))
@@ -252,14 +256,12 @@ namespace XLY.SF.Project.Plugin.DataReport
                 // 去除文件只读属性
                 var fileInfo = new FileInfo(sourceFile);
                 fileInfo.Attributes &= ~FileAttributes.ReadOnly;
-
                 File.Copy(sourceFile, filePath);
-                 
 
             }
             catch (Exception ex)
             {
-                
+                LoggerManagerSingle.Instance.Error(ex, "报表导出，拷贝文件出错");
             }
         }
     }

@@ -41,6 +41,7 @@ namespace XLY.SF.Project.Plugin.DataView
         {
             ContactDetailControl ctrl = new ContactDetailControl();
             ctrl.DataContext = arg;
+            ctrl.OnSelectedDataChanged -= OnSelectedDataChanged;
             ctrl.OnSelectedDataChanged += OnSelectedDataChanged;
             return ctrl;
         }

@@ -15,6 +15,7 @@ namespace XLY.SF.Project.Services
     public static class PluginFeatureMathchService
     {
         private static IList<IPluginFeatureMathch> Features { get; set; }
+
         /// <summary>
         /// 加载插件匹配特征库
         /// </summary>
@@ -124,44 +125,64 @@ namespace XLY.SF.Project.Services
             #endregion
 
         }
-        public static DataParsePluginInfo FeatureMathch(IEnumerable<DataParsePluginInfo> pluginList, Pump pump, string appSourePath, Version appVersion)
-        {        
+
+        public static AbstractDataParsePlugin FeatureMathch(IEnumerable<AbstractDataParsePlugin> pluginList, Pump pump, string appSourePath, Version appVersion)
+        {
             //只有一个插件的话直接返回
-            if (pluginList.Count()==1)
+            if (1 == pluginList.Count())
             {
-            return pluginList.FirstOrDefault();
+                return pluginList.FirstOrDefault();
             }
-            var appName = pluginList.First().AppName;  //因为传过来的appName都一样的，所以直接取第一个的就行了
+
+            var deault = pluginList.First();
+
+            //根据所有路径无效过滤掉部分插件
+            //注意 部分插件没有配置路径
+            pluginList = pluginList.Where(f => !(f.PluginInfo as DataParsePluginInfo).SourcePath.Any() || f.DataParsePluginInfo.SourcePath.Any(i => i.Local.IsValid()));
+
+            var countPlugin = pluginList.Count();
+
+            //没有插件
+            if (0 == countPlugin)
+            {
+                return deault;
+            }
+
+            //只有一个插件的话直接返回
+            if (1 == countPlugin)
+            {
+                return pluginList.FirstOrDefault();
+            }
+
             //从所有的特征库里面，取出匹配的特征库
-            var res = PluginFeatureMathchService.TryFeatureMathch(appSourePath, pump.OSType, appName).Where((f) => f.IsSuccessed);
+            //注意，本地提取时，无法区分是安卓还是IOS的数据，所有匹配的时候忽略操作系统
+            var res = TryFeatureMathch(appSourePath, pump.Type == EnumPump.LocalData ? EnumOSType.None : pump.OSType, pluginList.First().DataParsePluginInfo.Name).Where((f) => f.IsSuccessed);
             if (res.IsValid())
             {
                 //匹配成功，优先采用厂商插件
                 PluginFeatureMathchResult mp = res.FirstOrDefault(f => f.Manufacture.IsValid());
-                if (null != mp && pluginList.Any(p => p.Manufacture == mp.Manufacture))
+                if (null != mp && pluginList.Any(p => p.DataParsePluginInfo.DeviceOSType == mp.OSType && p.DataParsePluginInfo.Manufacture == mp.Manufacture))
                 {
-                    pluginList = pluginList.Where(p => p.Manufacture == mp.Manufacture).ToList();
+                    pluginList = pluginList.Where(p => p.DataParsePluginInfo.DeviceOSType == mp.OSType && p.DataParsePluginInfo.Manufacture == mp.Manufacture).ToList();
                 }
                 else
                 {
                     mp = res.FirstOrDefault(f => f.Manufacture.IsInvalid());
-                    pluginList = pluginList.Where(p => p.Manufacture.IsInvalid()).ToList();
+                    pluginList = pluginList.Where(p => p.DataParsePluginInfo.DeviceOSType == mp.OSType && p.DataParsePluginInfo.Manufacture.IsInvalid()).ToList();
                 }
                 return VersionSmartMathch(pluginList, new Version(mp.AppVersion));
             }
-            else {
-                //匹配失败，就根据版本号来匹配
-                return VersionSmartMathch(pluginList, appVersion);
-            }
-        }
 
+            //匹配失败，就根据版本号来匹配
+            return VersionSmartMathch(pluginList, appVersion);
+        }
 
         #region VersionSmartMathch
 
         /// <summary>
         /// 版本匹配（优先级：相等=>高版本=>低版本）
         /// </summary>
-        private static DataParsePluginInfo VersionSmartMathch(IEnumerable<DataParsePluginInfo> plugins, Version version)
+        private static AbstractDataParsePlugin VersionSmartMathch(IEnumerable<AbstractDataParsePlugin> plugins, Version version)
         {
             try
             {
@@ -170,65 +191,59 @@ namespace XLY.SF.Project.Services
                 {
                     return plugins.First();
                 }
+
+                if (null == version)
+                {
+                    return plugins.First();
+                }
+
                 // 相等
-                var p = plugins.Where(s => s.Version == version);
+                var p = plugins.Where(s => s.DataParsePluginInfo.Version == version);
                 if (p.IsValid())
                 {
                     return p.First();
                 }
 
                 // 低版本 最近一个
-                var less = plugins.Where(s => s.Version < version);
+                var less = plugins.Where(s => s.DataParsePluginInfo.Version < version);
                 if (less.IsValid())
                 {
-                    return less.OrderByDescending(s => s.Version).First();
+                    return less.OrderByDescending(s => s.DataParsePluginInfo.Version).First();
                 }
 
                 // 高版本 最近一个
-                var greater = plugins.Where(s => s.Version > version);
+                var greater = plugins.Where(s => s.DataParsePluginInfo.Version > version);
                 if (greater.IsValid())
                 {
-                    return greater.OrderBy(s => s.Version).First();
+                    return greater.OrderBy(s => s.DataParsePluginInfo.Version).First();
                 }
 
                 //return the latest version plugin
-                return plugins.OrderByDescending(s => s.Version).First();
+                return plugins.OrderByDescending(s => s.DataParsePluginInfo.Version).First();
             }
             catch (Exception e)
             {
-                LoggerManagerSingle.Instance.Error(e.Message,e);
+                LoggerManagerSingle.Instance.Error(e.Message, e);
             }
             return null;
         }
 
         #endregion
-        private static readonly PluginFeatureMathchResult Error = new PluginFeatureMathchResult() { IsSuccessed = false };
 
-        public static IList<PluginFeatureMathchResult> TryFeatureMathch(string path)
-        {
-            try
-            {
-                return Features.Select((f) => f.TryMathch(path) ?? Error).ToList();
-            }
-            catch (Exception ex)
-            {
-                LoggerManagerSingle.Instance.Error(string.Format("特征匹配错误，错误信息:{0}", ex));
-                return null;
-            }
-        }
+        private static readonly PluginFeatureMathchResult Error = new PluginFeatureMathchResult() { IsSuccessed = false };
 
         public static IList<PluginFeatureMathchResult> TryFeatureMathch(string path, EnumOSType ostype, string appName)
         {
             try
             {
-                return Features.Where(f => f.OSType == ostype && f.AppName == appName).Select((f) => f.TryMathch(path) ?? Error).ToList();
+                return Features.Where(f => (f.OSType == ostype || ostype == EnumOSType.None) && f.AppName == appName).Select((f) => f.TryMathch(path) ?? Error).ToList();
             }
             catch (Exception ex)
             {
 
-                LoggerManagerSingle.Instance.Error(string.Format("特征匹配错误，错误信息:{0}",ex));
+                LoggerManagerSingle.Instance.Error(string.Format("特征匹配错误，错误信息:{0}", ex));
                 return null;
             }
         }
-    } 
+    }
 }

@@ -118,6 +118,41 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         }
         #endregion
 
+        #region 绑定的数据列表，用于设置
+        private ObservableCollection<DataExtactionItem> _BindDataListSource = null;
+
+        /// <summary>
+        /// 绑定的数据列表，用于设置
+        /// </summary>	
+        public ObservableCollection<DataExtactionItem> BindDataListSource
+        {
+            get { return _BindDataListSource; }
+            set
+            {
+                _BindDataListSource = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
+
+        #region 应用筛选显示文本
+        private string _DataListText = "";
+
+        /// <summary>
+        /// 应用筛选显示文本
+        /// </summary>	
+        public string DataListText
+        {
+            get { return _DataListText; }
+            set
+            {
+                _DataListText = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
         #region 标记
         private int _BookmarkId = -2;
 
@@ -204,7 +239,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         #endregion
 
         #region 关键词还是正则列表
-        private Dictionary<int, string>  _KeywordTypeSource = null;
+        private Dictionary<int, string> _KeywordTypeSource = null;
 
         /// <summary>
         /// 关键词还是正则列表
@@ -291,6 +326,15 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
             DataState = EnumDataState.None;
             StartTime = null;
             EndTime = null;
+
+            if (BindDataListSource != null)
+            {
+                foreach (var item in BindDataListSource)
+                {
+                    item.IsChecked = true;
+                }
+            }
+            DataListText = Languagekeys.AllApps;
         }
         #endregion
 
@@ -304,10 +348,12 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         private void DoStartFilterCommond()
         {
             var args = GetFilterArgs();
-            Task.Factory.StartNew(() => 
+            Task.Factory.StartNew(() =>
             {
                 MessageAggregation.SendGeneralMsg(new GeneralArgs<bool>(MessageKeys.StartFilterKey) { Parameters = true });
                 Filter(DataListSource, args);
+                ResetTotal(DataListSource);
+                ResetTreeNodeVisible(DataListSource, args.Length > 0);
                 MessageAggregation.SendGeneralMsg(new GeneralArgs<bool>(MessageKeys.StartFilterKey) { Parameters = false });
             });
         }
@@ -323,14 +369,95 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                 return;
             foreach (var item in treeNodes)
             {
-                if(item.IsChecked != false)
+                //if (item.IsVisible == false)
+                //    continue;
+                var setitem = BindDataListSource.FindExtactionItemFromTree(item);
+                if (setitem != null && setitem.IsChecked == false)      //设置为隐藏，则不需要过滤
+                    continue;
+                if (item.Data != null && item.Data is IDataSource ds)
                 {
-                    if(item.Data != null && item.Data is IDataSource ds)
-                    {
-                        ds.Filter<dynamic>(args);
-                    }
-                    Filter(item.TreeNodes, args);
+                    ds.Filter<dynamic>(args);
                 }
+                Filter(item.TreeNodes, args);
+            }
+        }
+
+        /// <summary>
+        /// 查询后重新设置数据总数统计
+        /// </summary>
+        /// <param name="treeNodes"></param>
+        /// <returns></returns>
+        private int[] ResetTotal(ObservableCollection<DataExtactionItem> treeNodes)
+        {
+            int[] arr = new int[2] { 0, 0 };
+
+            if (treeNodes == null)
+                return arr;
+            int total = 0;
+            int deltotal = 0;
+            foreach (var item in treeNodes)
+            {
+                //if (item.IsVisible == false)
+                //{
+                //    continue;
+                //}
+                var setitem = BindDataListSource.FindExtactionItemFromTree(item);
+                if (setitem != null && setitem.IsChecked == false)      //设置为隐藏，则不需要过滤
+                    continue;
+                if (item.Data != null && item.Data is IDataSource ds)
+                {
+                    item.Total = ds.Total;
+                    item.DeleteTotal = ds.DeleteTotal;
+                }
+                else
+                {
+                    var aa = ResetTotal(item.TreeNodes);
+                    item.Total = aa[0];
+                    item.DeleteTotal = aa[1];
+                }
+                total += item.Total;
+                deltotal += item.DeleteTotal;
+            }
+            arr[0] = total;
+            arr[1] = deltotal;
+            return arr;
+        }
+
+        /// <summary>
+        /// 重置树节点的显示状态，如果在过滤并且数据量为0，则隐藏节点
+        /// </summary>
+        /// <param name="treeNodes"></param>
+        /// <param name="isHideEmptyNode"></param>
+        private void ResetTreeNodeVisible(ObservableCollection<DataExtactionItem> treeNodes, bool isHideEmptyNode)
+        {
+            if (treeNodes == null)
+                return;
+            foreach (var item in treeNodes)
+            {
+                //if (item.IsVisible == false)
+                //{
+                //    continue;
+                //}
+                var setitem = BindDataListSource.FindExtactionItemFromTree(item);
+                if (setitem != null && setitem.IsChecked == false)      //设置为隐藏，则不需要过滤
+                    continue;
+                if (isHideEmptyNode && item.Total == 0)
+                {
+                    item.IsVisible = false;
+                    continue;
+                }
+                
+                if (item.Data != null && item.Data is TreeDataSource ds)
+                {
+                    item.IsVisible = null;
+                    //ds.TreeNodes?.ForEach(tn => tn.TranverseTree(c=>((TreeNode)c).IsVisible = !isHideEmptyNode ||((TreeNode)c).Total > 0));
+                    ds.TranverseTree(c=>((TreeNode)c).IsVisible = !isHideEmptyNode ||((TreeNode)c).Total > 0);
+                }
+                else if (item.Data != null && item.Data is IDataSource)
+                {
+                    item.IsVisible = true;
+                }
+                ResetTreeNodeVisible(item.TreeNodes, isHideEmptyNode);
             }
         }
         #endregion
@@ -345,7 +472,51 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         public void SetDataListKey(ObservableCollection<DataExtactionItem> obj)
         {
             DataListSource = obj;
+            BindDataListSource = new ObservableCollection<DataExtactionItem>(DataListSource.CopyDataExtactionItem());
+            foreach (var item in BindDataListSource)
+            {
+                item.TranverseTree(node =>
+                {
+                    (node as DataExtactionItem).CheckedChanged -= DataExtactionItem_CheckedChanged;
+                    (node as DataExtactionItem).CheckedChanged += DataExtactionItem_CheckedChanged;
+                });
+            }
             DoClearCommond();
+        }
+
+        private void DataExtactionItem_CheckedChanged(object sender, EventArgs e)
+        {
+            List<DataExtactionItem> ls = new List<DataExtactionItem>();
+            bool isAllSelected = true;
+            foreach (var item in BindDataListSource)
+            {
+                item.TranverseTree(node =>
+                {
+                    if (node is DataExtactionItem n)
+                    {
+                        if (n.IsChecked != false)
+                        {
+                            //if (n.Data != null)
+                            //    ls.Add(n);
+                            var a = DataListSource.FindExtactionItemFromTree(n as DataExtactionItem);
+                            if (a != null && a.Data != null)  
+                            {
+                                ls.Add(n);
+                            }
+                        }
+                        else
+                        {
+                            isAllSelected = false;
+                        }
+                    }
+                });
+            }
+            var tn = DataListSource.FindExtactionItemFromTree(sender as DataExtactionItem);
+            if(tn != null)   //设置目标节点的可见性
+            {
+                tn.IsVisible = (sender as DataExtactionItem)?.IsChecked;
+            }
+            DataListText = !isAllSelected ? string.Join(",", ls.Select(l => l.Text)) : (string)Languagekeys.AllApps;
         }
 
         /// <summary>
@@ -353,7 +524,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
         /// </summary>
         public void OnDataLoadedCompleted()
         {
-            if(IsInspection)
+            if (IsInspection)
             {
                 SelectedInspectionItem = InspectionList.FirstOrDefault();
             }
@@ -365,7 +536,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
             InspectionList.Clear();
             if (IsInspection)
             {
-                InspectionList.AddRange(config.Select(i => new InspectionItem() { Id = i.ID, Name = LanguageHelper.LanguageManager.Type == Framework.Language.LanguageType.En ? i.CategoryEn : i.CategoryCn, Icon = null }));
+                InspectionList.AddRange(config.Select(i => new InspectionItem() { Id = i.ID, Name = LanguageHelper.LanguageManager.Type == Framework.Language.LanguageType.En ? i.CategoryEn : i.CategoryCn, Icon = null, Total = 0 }));
                 //SelectedInspectionItem = InspectionList.FirstOrDefault();
             }
         }
@@ -401,7 +572,7 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
                 list.Add(new FilterByEnumStateArgs() { State = DataState });
             }
 
-            if(IsInspection && SelectedInspectionItem != null)
+            if (IsInspection && SelectedInspectionItem != null)
             {
                 list.Add(new FilterBySensitiveArgs() { SensitiveId = SelectedInspectionItem.Id });
             }
@@ -413,11 +584,75 @@ namespace XLY.SF.Project.DataDisplayView.ViewModel
     /// <summary>
     /// 智能预警项
     /// </summary>
-    public class InspectionItem
+    public class InspectionItem:NotifyPropertyBase
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Icon { get; set; }
+        #region ID
+        private int _Id = -1;
+
+        /// <summary>
+        /// ID
+        /// </summary>	
+        public int Id
+        {
+            get { return _Id; }
+            set
+            {
+                _Id = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
+        #region Name
+        private string _Name = null;
+
+        /// <summary>
+        /// Name
+        /// </summary>	
+        public string Name
+        {
+            get { return _Name; }
+            set
+            {
+                _Name = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
+        #region Icon
+        private string _Icon = null;
+
+        /// <summary>
+        /// Icon
+        /// </summary>	
+        public string Icon
+        {
+            get { return _Icon; }
+            set
+            {
+                _Icon = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
+
+        #region Total
+        private int _Total = 0;
+
+        /// <summary>
+        /// Total
+        /// </summary>	
+        public int Total
+        {
+            get { return _Total; }
+            set
+            {
+                _Total = value;
+                OnPropertyChanged();
+            }
+        }
+        #endregion
 
     }
 

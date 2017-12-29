@@ -39,8 +39,7 @@ namespace XLY.SF.UnitTest
             ci.Number = "123";
             ci.Type = "1";
             ci.Author = "hj";
-            ci.Path = @"G:\XLY\SpfData";
-            Case @case = Case.New(ci);
+            Case @case = Case.New(ci, @"G:\XLY\SpfData");
             Console.ReadKey();
             Assert.IsNotNull(@case);
         }
@@ -77,8 +76,7 @@ namespace XLY.SF.UnitTest
             ci.Number = "123";
             ci.Type = "1";
             ci.Author = "hj";
-            ci.Path = @"G:\XLY\SpfData";
-            Case @case = Case.New(ci);
+            Case @case = Case.New(ci, @"G:\XLY\SpfData");
             DeviceExtraction de = @case.CreateDeviceExtraction("设备1", "andrion");
             Assert.IsNotNull(de);
             Assert.AreNotEqual(@case.DeviceExtractions.Count(), 0);
@@ -92,8 +90,7 @@ namespace XLY.SF.UnitTest
             ci.Number = "123";
             ci.Type = "1";
             ci.Author = "hj";
-            ci.Path = @"G:\XLY\SpfData";
-            Case @case = Case.New(ci);
+            Case @case = Case.New(ci, @"G:\XLY\SpfData");
             DeviceExtraction de = @case.CreateDeviceExtraction("设备1","andrion");
             Assert.IsNotNull(de);
             de["SN"] = "1234565";
@@ -108,8 +105,7 @@ namespace XLY.SF.UnitTest
             ci.Number = "123";
             ci.Type = "1";
             ci.Author = "hj";
-            ci.Path = @"G:\XLY\SpfData";
-            Case @case = Case.New(ci);
+            Case @case = Case.New(ci, @"G:\XLY\SpfData");
 
             //相对路径
             DeviceExtraction de = @case.CreateDeviceExtraction("设备1", "andrion相对路径");

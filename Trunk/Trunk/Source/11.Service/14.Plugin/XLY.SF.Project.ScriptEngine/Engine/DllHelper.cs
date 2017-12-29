@@ -13,7 +13,7 @@ using System.Text;
 * Create Date：2017/4/6 17:48:15
 * ==============================================================================*/
 
-namespace XLY.SF.Project.ScriptEngine.Engine
+namespace XLY.SF.Project.ScriptEngine
 {
     /// <summary>
     /// 脚本支持调用C++底层库接口

@@ -10,17 +10,17 @@ using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 
-namespace XLY.SF.Project.DataPump.Android
+namespace XLY.SF.Project.DataPump
 {
     /// <summary>
     /// Vivo数据泵。
     /// </summary>
-    public class AndroidVivoBackupDataPump : ControllableDataPumpBase
+    public class AndroidVivoBackupDataPump : DataPumpBase
     {
         #region Constructors
 
         /// <summary>
-        /// 初始化类型 XLY.SF.Project.DataPump.Android.IOSUsbDataPump 实例。
+        /// 初始化类型 XLY.SF.Project.DataPump.IOSUsbDataPump 实例。
         /// </summary>
         /// <param name="metadata">与此数据泵关联的元数据信息。</param>
         public AndroidVivoBackupDataPump(Pump metadata)
@@ -33,13 +33,13 @@ namespace XLY.SF.Project.DataPump.Android
 
         #region Methods
 
-        #region Public
+        #region protected
 
         /// <summary>
         /// 使用特定的执行上下文执行服务。
         /// </summary>
         /// <param name="context">执行上下文。</param>
-        protected override void ExecuteCore(DataPumpControllableExecutionContext context)
+        protected override void ExecuteCore(DataPumpExecutionContext context)
         {
             SourceFileItem source = context.Source;
             if (source.ItemType == SourceFileItemType.NormalPath)
@@ -54,24 +54,16 @@ namespace XLY.SF.Project.DataPump.Android
             }
         }
 
-        /// <summary>
-        /// 初始化当前的执行流程。
-        /// </summary>
-        /// <param name="context">执行上下文。</param>
-        /// <returns>成功返回true；否则返回false。</returns>
-        protected override Boolean InitExecutionContext(DataPumpControllableExecutionContext context)
+        protected override bool InitializeCore()
         {
-            return Init(context);
-        }
+            Device device = PumpDescriptor.Source as Device;
+            if (device == null)
+            {
+                return false;
+            }
 
-        #endregion
+            string targetDirectory = PumpDescriptor.SourceStorePath;
 
-        #region Private
-
-        private Boolean Init(DataPumpControllableExecutionContext context)
-        {
-            Device device = context.PumpDescriptor.Source as Device;
-            if (device == null) return false;
             var service = X86DLLClientSingle.Instance.VivoBackupAPIChannel;
             Int32 handle = service.VivoBackup_OpenDevice(device.ID);
             if (handle != 0)
@@ -87,26 +79,21 @@ namespace XLY.SF.Project.DataPump.Android
                     var response = service.VivoBackup_GetAppIDList(new VivoBackup_GetAppIDListRequest() { imgHandle = handle, listAppId = new string[] { } });
                     if (0 == response.VivoBackup_GetAppIDListResult && !response.listAppId.IsInvalid())
                     {
-                        var apps = context.ExtractItems?.Select(s => s.AppName).Intersect(response.listAppId);
-                        if (apps == null) return false;
-                        VivoBackupCallBackDelegate callback = (Int64 size, String fileName, ref Int32 stop) =>
-                        {
-                            //if (context.Reporter.State == AsyncProgressState.Stopping)
-                            //{
-                            //    stop = 1;
-                            //}
-                        };
-                        X86DLLClientSingle.Instance.ClientCallback._VivoBackupCallBack += callback;
+                        VivoBackupCallBackDelegate callback = (Int64 size, String fileName, ref Int32 stop) => { };
+                        //X86DLLClientSingle.Instance.ClientCallback._VivoBackupCallBack += callback;
+
                         try
                         {
-                            result = service.VivoBackup_BackupFiles(handle, context.TargetDirectory, apps.ToArray(), apps.Count());
+                            result = service.VivoBackup_BackupFiles(handle, targetDirectory, null, -1);
+
                             if (result == 0)
                             {
-                                String path = Path.Combine(context.TargetDirectory, device.ID);
+                                String path = Path.Combine(targetDirectory, device.ID);
                                 if (Directory.Exists(path))
                                 {
-                                    String dataPath = Path.Combine(context.TargetDirectory, "data");
-                                    if (!Directory.Exists(dataPath)) FileHelper.CreateDirectory(dataPath);
+                                    String dataPath = Path.Combine(targetDirectory, "data");
+                                    FileHelper.CreateDirectory(dataPath);
+
                                     foreach (DirectoryInfo dir in new DirectoryInfo(path).GetDirectories())
                                     {
                                         //第三方应用
@@ -130,18 +117,18 @@ namespace XLY.SF.Project.DataPump.Android
                         }
                         finally
                         {
-                            X86DLLClientSingle.Instance.ClientCallback._VivoBackupCallBack -= callback;
+                            //X86DLLClientSingle.Instance.ClientCallback._VivoBackupCallBack -= callback;
                         }
                     }
                 }
             }
             LoggerManagerSingle.Instance.Error("Vivo手机数据备份失败！");
-            //context.Reporter.Finish();
             return false;
         }
 
         #endregion
 
         #endregion
+
     }
 }

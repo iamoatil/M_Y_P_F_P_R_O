@@ -38,7 +38,7 @@ namespace XLY.SF.Project.Plugin.Android
         /// 解析数据
         /// </summary>
         /// <param name="datasource"></param>
-        public void BuildData(CallDataSource datasource)
+        public void BuildData(SmsDataSource datasource)
         {
             if (!FileHelper.IsValid(MainDbPath))
             {

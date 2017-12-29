@@ -27,21 +27,19 @@ namespace XLY.SF.Project.ViewModels.Export
     [Export(ExportKeys.ExportDataViewViewModel, typeof(ViewModelBase))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
 
-    public class ExportDataViewModel: ViewModelBase
+    public class ExportDataViewModel : ViewModelBase
     {
 
         //private readonly IRecordContext<WorkUnit> _dbService;
         [ImportingConstructor]
-        public ExportDataViewModel(IRecordContext<WorkUnit> dbService) {
-            FastReportFormsPathCommand = new RelayCommand(ExecuteFastReportFormsPathCommand);
-            FastBcpPathCommand = new RelayCommand(ExecuteFastBcpPathCommand);
-            SeniorReportFormsPathCommand = new RelayCommand(ExecuteSeniorReportFormsPathCommand);
-            SeniorBcpPathCommand = new RelayCommand(ExecuteSeniorBcpPathCommand);
+        public ExportDataViewModel(IRecordContext<WorkUnit> dbService)
+        {
+            ReportFormsPathCommand = new RelayCommand(ExecuteReportFormsPathCommand);
+            BcpPathCommand = new RelayCommand(ExecuteBcpPathCommand);
 
-            FastCommand = new RelayCommand(ExecuteFastCommand);
+            StartCommand = new RelayCommand(ExecuteStartCommand, ControlBtn);
+            StopCommand = new RelayCommand(ExecuteStopCommand);
 
-            FastSeniorCommand = new RelayCommand<bool>(ExecuteFastSeniorCommand);
-            ; 
             WorkUnit[] cts = dbService.Records.ToArray();
             WorkUnits = new ObservableCollection<WorkUnit>(cts);
             SelctedWorkUnits = WorkUnits.FirstOrDefault();
@@ -50,32 +48,25 @@ namespace XLY.SF.Project.ViewModels.Export
             _timer.Elapsed += _timer_Elapsed;
 
         }
-        private void ExecuteFastSeniorCommand(bool obj)
+        private bool ControlBtn()
         {
-            DataList = DeviceExternsion.LoadDeviceData(SelectDevice.Target.Path);
-            //if (obj)
-            //{
-            //    DeviceExportReport tmp = null;
-            //    //
-            //    foreach (var item in DevicesItems)
-            //    {
-            //        tmp = new DeviceExportReport();
-            //        tmp.Path=item.Target.Path;
-            //        tmp.Name = item.Name;
-            //        tmp.IsFirstStyle = true;
-            //        foreach (var ExtractItem in item.Target.ExtractItems)
-            //        {
-            //            tmp.TreeNodes.Add(new DeviceExportReport() { Name= ExtractItem .Mode});
-            //        }
-            //        //item.Target.ExtractItems
-            //    }
-            //}
-            //var tmp = obj  as Boolean;      
-            //var tmp = obj as System.Windows.Controls.CheckBox;
-            //if (tmp.Checked)
-            //{
-            //    DataList = DeviceExternsion.LoadDeviceData(SelectDevice.Target.Path);
-            //}
+            if (NotDeleteDataChecked == false && DeleteDataChecked == false)
+            {
+                return false;
+            }
+            if (UploadCheck == false && ReportCheck == false)
+            {
+                return false;
+            }
+            if (ReportCheck && ReportPath == "")
+            {
+                return false;
+            }
+            if (UploadCheck && BcpPath == "")
+            {
+                return false;
+            }
+            return true;
         }
         //protected override void InitLoad(object parameters)
         //{
@@ -84,21 +75,6 @@ namespace XLY.SF.Project.ViewModels.Export
         private readonly System.Timers.Timer _timer;
 
         private static readonly TimeSpan Interval = TimeSpan.FromSeconds(1);
-
-
-        private ObservableCollection<DeviceExportReport> _DeviceList;
-        /// <summary>
-        /// 高级导出——设备列表
-        /// </summary>	
-        public ObservableCollection<DeviceExportReport> DeviceList
-        {
-            get { return _DeviceList ?? new ObservableCollection<DeviceExportReport>(); }
-            set
-            {
-                _DeviceList = value;
-                OnPropertyChanged();
-            }
-        }
 
         private WorkUnit _SelctedWorkUnits;
         public WorkUnit SelctedWorkUnits
@@ -122,32 +98,23 @@ namespace XLY.SF.Project.ViewModels.Export
                 OnPropertyChanged();
             }
         }
-        private DeviceExtractionAdorner _SelectDevice;
-
-        public DeviceExtractionAdorner SelectDevice
-        {
-            get { return _SelectDevice; }
-            set {
-                //var dataList = DeviceExternsion.LoadDeviceData(devicePath);
-                _SelectDevice = value;
-                OnPropertyChanged();
-            }
-        }
-
-
         private ObservableCollection<DeviceExtractionAdorner> _DevicesItems;
         /// <summary>
         /// 当前案例所有设备
         /// </summary>
         public ObservableCollection<DeviceExtractionAdorner> DevicesItems
         {
-            get {
+            get
+            {
                 if (_DevicesItems == null)
                 {
                     _DevicesItems = new ObservableCollection<DeviceExtractionAdorner>(SystemContext.Instance.CurrentCase.DeviceExtractions.Select(x => new DeviceExtractionAdorner(x)).ToArray());
-                    SelectDevice= _DevicesItems.FirstOrDefault();
+                    foreach (var item in _DevicesItems)
+                    {
+                        item.IsChecked = true;
+                    }
                 }
-                return _DevicesItems;       
+                return _DevicesItems;
 
             }
             private set
@@ -160,8 +127,9 @@ namespace XLY.SF.Project.ViewModels.Export
 
         public string SelectReportType
         {
-            get { return _SelectReportType??"HTML"; }
-            set {
+            get { return _SelectReportType ?? "HTML"; }
+            set
+            {
                 _SelectReportType = value;
                 base.OnPropertyChanged();
             }
@@ -173,14 +141,16 @@ namespace XLY.SF.Project.ViewModels.Export
         /// </summary>
         public ObservableCollection<string> ReportType
         {
-            get {
+            get
+            {
                 if (_ReportType == null)
                 {
-                    _ReportType = new ObservableCollection<string> { "HTML","PDF"};
+                    _ReportType = new ObservableCollection<string> { "HTML", "PDF" };
                 }
                 return _ReportType;
             }
-            set {
+            set
+            {
                 _ReportType = value;
                 base.OnPropertyChanged();
             }
@@ -218,85 +188,140 @@ namespace XLY.SF.Project.ViewModels.Export
             }
         }
 
-        private string _FastReportPath="";
+        private string _ReportPath = "";
         /// <summary>
-        /// 快速报表路径
+        /// 报表路径
         /// </summary>
-        public string FastReportPath
+        public string ReportPath
         {
-            get { return _FastReportPath; }
-            set {
-                _FastReportPath = value;
+            get { return _ReportPath; }
+            set
+            {
+                _ReportPath = value;
                 base.OnPropertyChanged();
             }
         }
-        private string _FastBcpPath = "";
+        private string _BcpPath = "";
         /// <summary>
-        /// 快速bcp路径
+        /// bcp路径
         /// </summary>
-        public string FastBcpPath
+        public string BcpPath
         {
-            get { return _FastBcpPath; }
+            get { return _BcpPath; }
             set
             {
-                _FastBcpPath = value;
-                base.OnPropertyChanged();
-            }
-        }
-        private string _SeniorReportPath="";
-        /// <summary>
-        /// 高级报表路径
-        /// </summary>
-        public string SeniorReportPath
-        {
-            get { return _SeniorReportPath; }
-            set
-            {
-                _SeniorReportPath = value;
-                base.OnPropertyChanged();
-            }
-        }
-        private string _SeniorBcpPath="";
-        /// <summary>
-        /// 高级报表路径
-        /// </summary>
-        public string SeniorBcpPath
-        {
-            get { return _SeniorBcpPath; }
-            set
-            {
-                _SeniorBcpPath = value;
+                _BcpPath = value;
                 base.OnPropertyChanged();
             }
         }
 
-        private bool _FastReportCheck=true;
-        /// <summary>
-        /// 快速导出-报表选中
-        /// </summary>
-        public bool FastReportCheck
-        {
-            get { return _FastReportCheck; }
-            set {
-                _FastReportCheck = value;
-                base.OnPropertyChanged();
-            }
-        }
 
-        private bool _FastUploadCheck=false;
+        private bool _ReportCheck = true;
         /// <summary>
-        /// 快速导出-上传包选中
+        /// 报表选中
         /// </summary>
-        public bool FastUploadCheck
+        public bool ReportCheck
         {
-            get { return _FastUploadCheck; }
+            get { return _ReportCheck; }
             set
             {
-                _FastUploadCheck = value;
+                _ReportCheck = value;
                 base.OnPropertyChanged();
             }
         }
 
+        private bool _UploadCheck = true;
+        /// <summary>
+        /// 上传包选中
+        /// </summary>
+        public bool UploadCheck
+        {
+            get { return _UploadCheck; }
+            set
+            {
+                _UploadCheck = value;
+                base.OnPropertyChanged();
+            }
+        }
+        private bool _DeleteDataChecked = true;
+        /// <summary>
+        /// 删除数据
+        /// </summary>
+        public bool DeleteDataChecked
+        {
+            get { return _DeleteDataChecked; }
+            set
+            {
+                _DeleteDataChecked = value;
+                base.OnPropertyChanged();
+            }
+        }
+        private bool _NotDeleteDataChecked = true;
+        /// <summary>
+        /// 未删除数据
+        /// </summary>
+        public bool NotDeleteDataChecked
+        {
+            get { return _NotDeleteDataChecked; }
+            set
+            {
+                _NotDeleteDataChecked = value;
+                base.OnPropertyChanged();
+            }
+        }
+
+        private bool _AllDataChecked = true;
+        /// <summary>
+        /// 全部数据
+        /// </summary>
+        public bool AllDataChecked
+        {
+            get { return _AllDataChecked; }
+            set
+            {
+                _AllDataChecked = value;
+                base.OnPropertyChanged();
+            }
+        }
+        private bool _CheckDataChecked;
+        /// <summary>
+        /// 勾选数据
+        /// </summary>
+        public bool CheckDataChecked
+        {
+            get { return _CheckDataChecked; }
+            set
+            {
+                _CheckDataChecked = value;
+                base.OnPropertyChanged();
+            }
+        }
+        private bool _MarkingDataChecked;
+        /// <summary>
+        /// 标记数据
+        /// </summary>
+        public bool MarkingDataChecked
+        {
+            get { return _MarkingDataChecked; }
+            set
+            {
+                _MarkingDataChecked = value;
+                base.OnPropertyChanged();
+            }
+        }
+        private ObservableCollection<DataExtactionItem> _DeviceListSource = null;
+        /// <summary>
+        /// 设备列表
+        /// </summary>	
+        public ObservableCollection<DataExtactionItem> DeviceListSource
+        {
+            get { return _DeviceListSource; }
+            set
+            {
+                _DeviceListSource = value;
+                OnPropertyChanged();
+            }
+        }
         #region TotalElapsed
 
         private TimeSpan _totalElapsed = TimeSpan.Zero;
@@ -347,16 +372,6 @@ namespace XLY.SF.Project.ViewModels.Export
             }
         }
 
-        private bool _FastChecked;
-
-        public bool FastChecked
-        {
-            get { return _FastChecked; }
-            set {
-                _FastChecked = value;
-                OnPropertyChanged();
-            }
-        }
 
         [Import(typeof(IMessageBox))]
         private IMessageBox MessageBox
@@ -371,181 +386,175 @@ namespace XLY.SF.Project.ViewModels.Export
         /// 根据时间创建导出文件名,列入：任务-2017-11-30-17-54-41_0
         /// </summary>
         /// <returns></returns>
-        private string CreateExportPath() {
-            return "任务-"+DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
+        private string CreateExportPath(string name)
+        {
+            return name + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss");
         }
-        private void ExecuteFastReportFormsPathCommand()
+        private void ExecuteReportFormsPathCommand()
         {
             String directory = PopupService.SelectFolderDialog();
-            FastReportPath = directory!="" ? Path.Combine(directory, CreateExportPath()) : "";
+            ReportPath = directory != "" ? Path.Combine(directory, CreateExportPath("报表—")) : "";
         }
-        private void ExecuteFastBcpPathCommand()
+        private void ExecuteBcpPathCommand()
         {
             String directory = PopupService.SelectFolderDialog();
-            FastBcpPath = directory != "" ? Path.Combine(directory, CreateExportPath()) : ""; 
+            BcpPath = directory != "" ? Path.Combine(directory, CreateExportPath("数据包—")) : "";
         }
-        private void ExecuteSeniorReportFormsPathCommand()
+
+        private void GetExportData(IList<IDataSource> data, ObservableCollection<DataExtactionItem> treeNodes)
         {
-            String directory = PopupService.SelectFolderDialog();
-            SeniorReportPath = directory;
-        }
-        private void ExecuteSeniorBcpPathCommand()
-        {
-            String directory = PopupService.SelectFolderDialog();
-            SeniorBcpPath = directory;
-        }
-        private void GetExportData(IList<IDataSource> data, ObservableCollection<DataExtactionItem> treeNodes) {
             foreach (var item in treeNodes)
-            { 
-                if (item.TreeNodes.Count()>0)
+            {
+                if (item.TreeNodes.Count() > 0)
                 {
                     GetExportData(data, item.TreeNodes);
                 }
-                if (item.Data!=null)
+                if (item.Data != null)
                 {
                     data.Add((IDataSource)item.Data);
                 }
-       
             }
+        }
+
+        private void CreateItemJson(IDataItems items, Type itemType = null)
+        {
+            if (items == null)
+            {
+                return;
+            }
+            foreach (var c in items.GetView(0, -1))
+            {
+
+                foreach (var columnVal in DisplayAttributeHelper.FindDisplayAttributes(itemType))
+                {
+                    string val = string.Empty;
+                    var value = columnVal.GetValue(c);
+                }
+            }
+        }
+        private void ExecuteStopCommand()
+        {
+            _timer.Stop();
         }
         /// <summary>
         /// 快速导出
         /// </summary>
-        private void ExecuteFastCommand()
+        private void ExecuteStartCommand()
         {
-            if (FastChecked)
-            {
-                if (FastReportCheck == false && FastUploadCheck == false)
-                {
-                    MessageBox.ShowDialogWarningMsg("请勾选至少一项需要导出的数据！");
-                    FastChecked = false;
-                    return;
-                }
-                if (FastReportCheck && FastReportPath == "")
-                {
-                    MessageBox.ShowDialogWarningMsg("请选择报表导出的路径！");
-                    FastChecked = false;
-                    return;
-                }
-                if (FastUploadCheck && FastBcpPath == "")
-                {
-                    MessageBox.ShowDialogWarningMsg("请选择上传包导出的路径！");
-                    FastChecked = false;
-                    return;
-                }
-                _timer.Start();
-                TotalElapsed = TimeSpan.Zero;
-                Progress = 0;
-                Task.Factory.StartNew(() =>
-                {
-                    var pluginModules = PluginAdapter.Instance.GetPluginsByType<DataReportModulePluginInfo>(PluginType.SpfReportModule).ToList().ConvertAll(p => (AbstractDataReportModulePlugin)p.Value)
-                   .ConvertAll(m => m.PluginInfo as DataReportModulePluginInfo).OrderBy(m => m.OrderIndex);
-                    var reportPlugins = PluginAdapter.Instance.GetPluginsByType<DataReportPluginInfo>(PluginType.SpfReport).ToList().ConvertAll(p => (AbstractDataReportPlugin)p.Value);
-                    foreach (var p in reportPlugins)   //添加报表模板信息
-                    {
-                        if (p.PluginInfo is DataReportPluginInfo rp)
-                        {
-                            rp.Modules = pluginModules.Where(m => m != null && m.ReportId == rp.Guid).ToList();
-                        }
-                    }
-                    Progress = 20;
-                    //设备数据源
-                    IList<IDataSource> dataSource = new List<IDataSource>();
-                    ObservableCollection<DataExtactionItem> tmp = DeviceExternsion.LoadDeviceData(SelectDevice.Target.Path);
-                    foreach (var item in tmp)
-                    {
-                        GetExportData(dataSource, item.TreeNodes);
-                    }
+            EnumExportState state;
+            if (NotDeleteDataChecked && DeleteDataChecked)
+                state = EnumExportState.All;
+            else
+                state = DeleteDataChecked ? EnumExportState.Delete : EnumExportState.NotDelete;
 
-                    List<AbstractDataReportPlugin> items = new List<AbstractDataReportPlugin>();
-                    if (FastReportCheck)//选择html模版
+            _timer.Start();
+            TotalElapsed = TimeSpan.Zero;
+            Progress = 0;
+            Task.Factory.StartNew(() =>
+            {
+                var pluginModules = PluginAdapter.Instance.GetPluginsByType<DataReportModulePluginInfo>(PluginType.SpfReportModule).ToList().ConvertAll(p => (AbstractDataReportModulePlugin)p.Value)
+               .ConvertAll(m => m.PluginInfo as DataReportModulePluginInfo).OrderBy(m => m.OrderIndex);
+                var reportPlugins = PluginAdapter.Instance.GetPluginsByType<DataReportPluginInfo>(PluginType.SpfReport).ToList().ConvertAll(p => (AbstractDataReportPlugin)p.Value);
+                foreach (var p in reportPlugins)   //添加报表模板信息
+                {
+                    if (p.PluginInfo is DataReportPluginInfo rp)
                     {
-                        items.Add(reportPlugins.FirstOrDefault(pl => pl.PluginInfo.Name.Contains("Html")));
+                        rp.Modules = pluginModules.Where(m => m != null && m.ReportId == rp.Guid).ToList();
                     }
-                    if (FastUploadCheck)//选择bcp模版
+                }
+                Progress = 35;
+
+                List<AbstractDataReportPlugin> stencils = new List<AbstractDataReportPlugin>();
+                if (ReportCheck)//选择html模版
+                {
+                    stencils.Add(reportPlugins.FirstOrDefault(pl => pl.PluginInfo.Name.Contains("Html")));
+                }
+                if (UploadCheck)//选择bcp模版
+                {
+                    stencils.Add(reportPlugins.FirstOrDefault(pl => pl.PluginInfo.Name.Contains("BCP")));
+                }
+                //设备数据源
+                IList<IDataSource> dataSource = new List<IDataSource>();
+                IList<string> listPath = new List<string>();
+                foreach (DeviceExtractionAdorner device in DevicesItems.Where(p => p.IsChecked))
+                {
+                    dataSource.Clear();
+                    foreach (var Externsion in DeviceExternsion.LoadDeviceData(device.Target.Path))
                     {
-                        items.Add(reportPlugins.FirstOrDefault(pl => pl.PluginInfo.Name.Contains("BCP")));
+                        GetExportData(dataSource, Externsion.TreeNodes);
                     }
-                    Progress = 40;
-                    foreach (var item in items)
+                    foreach (var st in stencils)
                     {
-                        //执行导出操作
-                        var destPath = item.Execute(new DataReportPluginArgument()
+                        string path = st.PluginInfo.Name.Contains("Html") ? Path.Combine(ReportPath, device.Name + "报表") : Path.Combine(BcpPath, device.Name + "数据包");
+                        listPath.Add(path);
+                        var destPath = st.Execute(new DataReportPluginArgument()
                         {
-                            CurrentPath= SelectDevice.Target.Path,
+                            CurrentPath = device.Target.Path,
                             DataPool = dataSource,
                             ReportModuleName = "Html模板2(Bootstrap)",
-                            ReportPath = item.PluginInfo.Name.Contains("Html") ? FastReportPath : FastBcpPath,
+                            ReportPath = path,
+                            ExportState = state,
                             CollectionInfo = new ExportCollectionInfo()
                             {
-                                CaseCode = SelectDevice.Id,
-                                CaseName = SelectDevice.Name,
-                                CaseType = SelectDevice.Type,
-                                //CollectLocation = (SelectDevice.Device as Domains.Device).CollectionInfo.CollectLocation,
-                                //CollectLocationCode = (SelectDevice.Device as Domains.Device).CollectionInfo.CollectLocationCode,
-                                //CollectorCertificateCode = (SelectDevice.Device as Domains.Device).CollectionInfo.CollectorCertificateCode,
-                                //CollectorName = (SelectDevice.Device as Domains.Device).CollectionInfo.CollectorName,
-                                //CollectTime = (SelectDevice.Device as Domains.Device).CollectionInfo.CollectTime
+                                CaseCode = device.Id,
+                                CaseName = device.Name,
+                                CaseType = device.Type,
+                                //CollectLocation = device.Device.CollectionInfo.CollectLocation,
+                                //CollectLocationCode = device.Device.CollectionInfo.CollectLocationCode,
+                                //CollectorCertificateCode = device.Device.CollectionInfo.CollectorCertificateCode,
+                                //CollectorName = device.Device.CollectionInfo.CollectorName,
+                                //CollectTime = device.Device.CollectionInfo.CollectTime
 
                             },
                             DeviceInfo = new ExportDeviceInfo()
                             {
-                                BloothMac = (SelectDevice.Device as Domains.Device).BMac,
-                                IMEI = (SelectDevice.Device as Domains.Device).IMEI,
-                                Name = (SelectDevice.Device as Domains.Device).Name
+                                BloothMac = device.Device.DeviceType == EnumDeviceType.Phone ? (device.Device as Domains.Device).BMac : "",
+                                IMEI = device.Device.DeviceType == EnumDeviceType.Phone ? (device.Device as Domains.Device).IMEI : "",
+                                Name = device.Name
                             }
                         }, null);
-
                     }
-                    Progress = 100;
-                    _timer.Stop();
-                    foreach (var item in items)
-                    {
-                        SystemContext.Instance.AsyncOperation.Post(p => {
-                            MessageBox.ShowDialogSuccessMsg(string.Format("导出{0}成功，是否打开导出文件？", item.PluginInfo.Name.Contains("Html") ? "HTML" : "BCP"));
-                            System.Diagnostics.Process.Start(item.PluginInfo.Name.Contains("Html") ? FastReportPath : FastBcpPath);
-
-                        }, null);
-
-                    }
-                });
-            }
-            else
-            {
+                }
+                Progress = 100;
                 _timer.Stop();
-               
-            }
+                foreach (var item in stencils)
+                {
+                    SystemContext.Instance.AsyncOperation.Post(p =>
+                    {
+                        if (MessageBox.ShowDialogSuccessMsg("导出成功，是否打开导出文件？"))
+                        {
+                            foreach (var path in listPath)
+                            {
+                                System.Diagnostics.Process.Start(path);
+                            }
+                        }
+                        base.CloseView();
+                    }, null);
+                }
+            });
         }
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             TotalElapsed += Interval;
         }
         /// <summary>
-        /// 快速导出-选择报表路径
+        /// 选择报表路径
         /// </summary>
-        public ICommand FastReportFormsPathCommand { get; set; }
+        public ICommand ReportFormsPathCommand { get; set; }
         /// <summary>
         /// 快速导出-选择bcp路径
         /// </summary>
-        public ICommand FastBcpPathCommand { get; set; }
-        /// <summary>
-        /// 该户导出-选择报表路径
-        /// </summary>
-        public ICommand SeniorReportFormsPathCommand { get; set; }
-        /// <summary>
-        /// 快速导出-选择报表路径
-        /// </summary>
-        public ICommand SeniorBcpPathCommand { get; set; }
-
+        public ICommand BcpPathCommand { get; set; }
         /// <summary>
         /// 导出按钮
         /// </summary>
-        public ICommand FastCommand { get; set; }
+        public ICommand StartCommand { get; set; }
 
         /// <summary>
-        /// 快速高级切换
+        /// 停止按钮
         /// </summary>
-        public ICommand FastSeniorCommand { get; set; }
+        public ICommand StopCommand { get; set; }
+
     }
 
 }

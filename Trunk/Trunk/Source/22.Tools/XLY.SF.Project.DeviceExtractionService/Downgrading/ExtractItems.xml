@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ExtractItems>
+  <Category name="社交聊天">
+    <App name="QQ" appName="com.tencent.mobileqq" apkFilePath="qq5.0.0.apk"/>
+    <App name="微信" appName="com.tencent.mm" apkFilePath="weixin6.0.0.apk"/>
+  </Category>
+</ExtractItems>

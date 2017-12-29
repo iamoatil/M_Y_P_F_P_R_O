@@ -120,10 +120,14 @@ namespace XLY.SF.Project.DataPreview.ViewModel
                 {
                     arg = new DataPreviewPluginArgument() { CurrentData = parameters };//@"C:\Users\fhjun\Desktop\130914+岁月如歌.mp3"
                 }
-                else
+                else if(parameters.GetType().Name == typeof(DataPreviewPluginArgument).Name)
                 {
                     dynamic p = parameters;
                     arg = new DataPreviewPluginArgument() { CurrentData = p.CurrentData, PluginId = p.PluginId, Type = p.Type };//@"C:\Users\fhjun\Desktop\130914+岁月如歌.mp3"
+                }
+                else
+                {
+                    return;
                 }
                 foreach (var item in DataPreviewPluginAdapter.Instance.GetView(arg))
                 {

@@ -35,6 +35,12 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         /// 提取任务完成消息
         /// </summary>
         public const string ExtractTaskCompleteMsg = "GeneralKeys_TaskCompleteMsg";
+
+        /// <summary>
+        /// 提取设备状态改变消息。
+        /// </summary>
+        public const string ExtractDeviceStateMsg = "GeneralKeys_ExtractDeviceStateMsg";
+
         /// <summary>
         /// 删除缓存视图
         /// </summary>
@@ -43,7 +49,7 @@ namespace XLY.SF.Project.ViewDomain.MefKeys
         /// <summary>
         /// 设置变更消息。
         /// </summary>
-        public const string SettingsChangedMsg = "SettingsChangedMsg";
+        public const string SettingsChangedMsg = "SettingsChangedMsg";        
 
         #endregion
     }

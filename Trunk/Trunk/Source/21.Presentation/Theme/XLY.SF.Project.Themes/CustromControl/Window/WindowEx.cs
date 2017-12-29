@@ -68,7 +68,7 @@ namespace XLY.SF.Project.Themes
 
         public new bool AllowsTransparency { get => base.AllowsTransparency; }
 
-        public new ResizeMode ResizeMode { get => base.ResizeMode; }
+        //public new ResizeMode ResizeMode { get => base.ResizeMode; }
 
         #endregion
 

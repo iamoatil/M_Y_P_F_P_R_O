@@ -21,6 +21,7 @@ using System;
 using System.Text;
 using XLY.SF.Framework.Language;
 using XLY.SF.Project.Plugin.Adapter;
+using X64Service;
 
 
 /*************************************************
@@ -53,6 +54,11 @@ namespace XLY.SF.Project.ViewModels.Login
 
         protected override void InitLoad(object parameters)
         {
+#if !DEBUG
+            //检查授权
+            SecretCoreDll.CheckDogIfNullThenExitApplication("4100");
+#endif
+
             //执行加载
             ExecuteSysLoad(parameters.ToString());
         }
@@ -78,7 +84,7 @@ namespace XLY.SF.Project.ViewModels.Login
 
             //加载一次数据库
             _dbService.Records.FirstOrDefault();
-            AllUser =new ObservableCollection<UserInfo>(_dbService.Records.OrderByDescending(p=>p.LoginTime).Take(5)); //获取本地前5条用户记录
+            AllUser = new ObservableCollection<UserInfo>(_dbService.Records.OrderByDescending(p => p.LoginTime).Take(5)); //获取本地前5条用户记录
 
             AssemblyHelper.Instance.Load();
 
@@ -87,7 +93,7 @@ namespace XLY.SF.Project.ViewModels.Login
 
         private async void ExecuteSysLoad(string solutionContentFromXml)
         {
-           
+
             var opertionResult = await Task<bool>.Factory.StartNew(ConcreateLoadOfTask, solutionContentFromXml);
 
             if (!opertionResult)
@@ -123,7 +129,9 @@ namespace XLY.SF.Project.ViewModels.Login
         public ObservableCollection<UserInfo> AllUser
         {
             get { return _AllUser; }
-            set { _AllUser = value;
+            set
+            {
+                _AllUser = value;
                 base.OnPropertyChanged();
             }
         }
@@ -138,14 +146,16 @@ namespace XLY.SF.Project.ViewModels.Login
         /// </summary>
         public UserInfoModel CurLoginUser
         {
-            get {
+            get
+            {
                 if (_curLoginUser == null)
                 {
                     _curLoginUser = new UserInfoModel();
                 }
                 return _curLoginUser;
             }
-            set {
+            set
+            {
                 _curLoginUser = value;
                 base.OnPropertyChanged();
             }
@@ -178,13 +188,14 @@ namespace XLY.SF.Project.ViewModels.Login
         public Visibility IsLoadingVisibility
         {
             get { return _IsLoadingVisibility; }
-            set {
+            set
+            {
                 _IsLoadingVisibility = value;
                 base.OnPropertyChanged();
             }
         }
 
-        private Visibility _IsLoadVisibility= Visibility.Collapsed;
+        private Visibility _IsLoadVisibility = Visibility.Collapsed;
         /// <summary>
         /// 登录是否显示
         /// </summary>
@@ -211,8 +222,8 @@ namespace XLY.SF.Project.ViewModels.Login
             string operationLog = string.Empty;
 
             MD5CryptoServiceProvider md5Psd = new MD5CryptoServiceProvider();
-            String newPsd = BitConverter.ToString(md5Psd.ComputeHash(Encoding.ASCII.GetBytes(CurLoginUser.LoginPassword)));
-            var loginUser = _dbService.Records.FirstOrDefault((t) => t.LoginUserName == CurLoginUser.LoginUserName && t.LoginPassword== newPsd).ToModel<UserInfo, UserInfoModel>();
+            String newPsd = BitConverter.ToString(md5Psd.ComputeHash(Encoding.ASCII.GetBytes(CurLoginUser.Password)));
+            var loginUser = _dbService.Records.FirstOrDefault((t) => t.LoginUserName == CurLoginUser.LoginUserName && t.LoginPassword == newPsd).ToModel<UserInfo, UserInfoModel>();
             if (loginUser == default(UserInfoModel))
             {
                 //登录失败
@@ -220,7 +231,8 @@ namespace XLY.SF.Project.ViewModels.Login
             }
             else
             {
-                SystemContext.Instance.SetLoginSuccessUser(loginUser);
+
+                SystemContext.Instance.CurUserInfo = loginUser;
 
                 //关闭界面
                 //由于此处导航是持续导航（第一个界面完成后，直接进入下个界面，无导航消息发送）

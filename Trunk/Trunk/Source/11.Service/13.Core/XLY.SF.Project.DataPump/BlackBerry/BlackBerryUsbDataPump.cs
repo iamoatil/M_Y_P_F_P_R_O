@@ -12,7 +12,7 @@ namespace XLY.SF.Project.DataPump.BlackBerry
     /// <summary>
     /// 黑莓USB数据泵。
     /// </summary>
-    public class BlackBerryUsbDataPump : ControllableDataPumpBase
+    public class BlackBerryUsbDataPump : DataPumpBase
     {
         #region Fields
 
@@ -41,7 +41,7 @@ namespace XLY.SF.Project.DataPump.BlackBerry
         /// 使用特定的执行上下文执行服务。
         /// </summary>
         /// <param name="context">执行上下文。</param>
-        protected override void ExecuteCore(DataPumpControllableExecutionContext context)
+        protected override void ExecuteCore(DataPumpExecutionContext context)
         {
             String destDirectory = context.Source.Local;
             //BlackBerryDeviceManager deviceManager = BlackBerryDeviceManager.Instance;
@@ -55,8 +55,8 @@ namespace XLY.SF.Project.DataPump.BlackBerry
         /// <returns>成功返回true；否则返回false。</returns>
         protected override Boolean InitializeCore()
         {
-            if (!(Metadata.Source is Device)) return false;
-            String destDirectory = FileHelper.ConnectPath(Metadata.SourceStorePath, $"BlackBerry_{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}");
+            if (!(PumpDescriptor.Source is Device)) return false;
+            String destDirectory = FileHelper.ConnectPath(PumpDescriptor.SourceStorePath, $"BlackBerry_{DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")}");
             if (Directory.Exists(destDirectory))
             {
                 Directory.Delete(destDirectory, true);
@@ -71,7 +71,7 @@ namespace XLY.SF.Project.DataPump.BlackBerry
         /// </summary>
         /// <param name="context">执行上下文。</param>
         /// <returns>成功返回true；否则返回false。</returns>
-        protected override Boolean InitExecutionContext(DataPumpControllableExecutionContext context)
+        protected override Boolean InitExecutionContext(DataPumpExecutionContext context)
         {
             if (context.Source == null) return false;
             context.Source.Local = _destDirectory;

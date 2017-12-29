@@ -37,10 +37,6 @@ namespace ProjectExtend.Context
         /// 数据库服务
         /// </summary>
         private ILogicalDataContext _dbService;
-        /// <summary>
-        /// 已使用过的盘符
-        /// </summary>
-        private List<string> _usedPathRoot;
 
         #endregion
 
@@ -60,16 +56,9 @@ namespace ProjectExtend.Context
 
         private SystemContext()
         {
-            _usedPathRoot = new List<string>();
             _configService = IocManagerSingle.Instance.GetPart<ISystemConfigService>(CoreExportKeys.SysConfigHelper);
             _dbService = IocManagerSingle.Instance.GetPart<ILogicalDataContext>();
             CurCacheViews = new XLY.SF.Framework.Core.Base.MessageBase.Navigation.NavigationCacheManager<XLY.SF.Project.ViewDomain.Model.PresentationNavigationElement.PreCacheToken>();
-
-            //获取默认文件夹
-            if (String.IsNullOrWhiteSpace(SaveDefaultFolderName))
-            {
-                SaveDefaultFolderName = @"XLY\SpfData";
-            }
         }
 
         /// <summary>
@@ -87,7 +76,7 @@ namespace ProjectExtend.Context
             }
         }
 
-        public static ISettings Settings { get; }
+        private static ISettings Settings { get; }
 
         #endregion
     }

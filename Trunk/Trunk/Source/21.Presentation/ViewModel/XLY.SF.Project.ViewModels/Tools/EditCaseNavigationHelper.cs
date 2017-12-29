@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjectExtend.Context;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,8 +37,9 @@ namespace XLY.SF.Project.ViewModels.Tools
         /// 设置子界面状态
         /// </summary>
         /// <param name="isExpanded">是否展开创建案例界面</param>
+        /// <param name="needCaseInfo">是否需要传递案例信息</param>
         /// <param name="needCollapsedNavigation">是否需要折叠导航，true：折叠案例编辑界面时自动返回最后一个非案例编辑界面</param>
-        public static void SetEditCaseViewStatus(bool isExpanded, bool needCollapsedNavigation = true)
+        public static void SetEditCaseViewStatus(bool isExpanded, bool needCaseInfo, bool needCollapsedNavigation = true)
         {
             //便于以后扩展用
             SubViewMsgModel curStatus = new SubViewMsgModel(isExpanded);
@@ -49,7 +51,8 @@ namespace XLY.SF.Project.ViewModels.Tools
             if (isExpanded)
             {
                 //展开案例编辑界面
-                NormalNavigationArgs args = NormalNavigationArgs.CreateMainViewNavigationArgs(ExportKeys.CaseCreationView, null);
+                var @params = needCaseInfo ? SystemContext.Instance.CurrentCase : null;
+                NormalNavigationArgs args = NormalNavigationArgs.CreateMainViewNavigationArgs(ExportKeys.CaseCreationView, @params);
                 MsgAggregation.Instance.SendNavigationMsgForMainView(args);
             }
             else if (needCollapsedNavigation)

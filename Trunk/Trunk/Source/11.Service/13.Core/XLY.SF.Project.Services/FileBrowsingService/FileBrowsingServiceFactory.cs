@@ -23,9 +23,6 @@ namespace XLY.SF.Project.Services
     /// </summary>
     public static class FileBrowsingServiceFactory
     {
-        private readonly static byte[] AndroidMirrorFileHead = { 0, 0, 0, 0 };
-        private readonly static byte[] IOSMirrorFileHead = { 80, 75, 3, 4 };
-
         /// <summary>
         /// 获取文件浏览服务
         /// </summary>
@@ -35,7 +32,7 @@ namespace XLY.SF.Project.Services
         {
             if (null == source)
             {
-                throw new ArgumentNullException(nameof(source));
+                return null;
             }
 
             if (source is Device)
@@ -56,13 +53,11 @@ namespace XLY.SF.Project.Services
                 var path = source.ToString();
                 if (FileHelper.IsValid(path))
                 {//文件
-                    byte[] bytes = FileHelper.ReadFileHead(path, 4);
-
-                    if (bytes.SequenceEqual(AndroidMirrorFileHead))
+                    if (FileHelper.IsAndroidMirrorFile(path))
                     {//安卓镜像
                         return new AndroidMirrorFileBrowsingService(path);
                     }
-                    else if (bytes.SequenceEqual(IOSMirrorFileHead))
+                    else if (FileHelper.IsIOSMirrorFile(path))
                     {//IOS镜像
                         return new IOSMirrorFileBrowsingService(path);
                     }
@@ -70,7 +65,7 @@ namespace XLY.SF.Project.Services
                 else if (FileHelper.IsValidDictory(path))
                 {//文件夹
                     string itunsPath = string.Empty;
-                    if (IsItunsBackFiles(path, ref itunsPath))
+                    if (FileHelper.IsItunsBackupPath(path, ref itunsPath))
                     {//iTuns备份
                         return new ItunesBackupFileBrowsingService(itunsPath);
                     }
@@ -78,66 +73,7 @@ namespace XLY.SF.Project.Services
                 }
             }
 
-            throw new NotImplementedException();
+            return null;
         }
-
-        /// <summary>
-        /// 判断是否是iTuns备份，并返回iTuns备份根路径
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="itunsPath"></param>
-        /// <returns></returns>
-        private static bool IsItunsBackFiles(string path, ref string itunsPath)
-        {
-            string key = "Manifest.db";
-
-            var res = Directory.GetFiles(path, key, SearchOption.AllDirectories);
-            if (res.IsValid())
-            {
-                foreach (var resPath in res)
-                {
-                    if (!File.Exists(resPath.Replace(key, "Info.plist")))
-                    {
-                        continue;
-                    }
-                    if (!File.Exists(resPath.Replace(key, "Manifest.plist")))
-                    {
-                        continue;
-                    }
-                    if (!File.Exists(resPath.Replace(key, "Status.plist")))
-                    {
-                        continue;
-                    }
-                    itunsPath = resPath.TrimEnd(key);
-                    return true;
-                }
-            }
-
-            key = "Manifest.mbdb";
-            res = Directory.GetFiles(path, key, SearchOption.AllDirectories);
-            if (res.IsValid())
-            {
-                foreach (var resPath in res)
-                {
-                    if (!File.Exists(resPath.Replace(key, "Info.plist")))
-                    {
-                        continue;
-                    }
-                    if (!File.Exists(resPath.Replace(key, "Manifest.plist")))
-                    {
-                        continue;
-                    }
-                    if (!File.Exists(resPath.Replace(key, "Status.plist")))
-                    {
-                        continue;
-                    }
-                    itunsPath = resPath.TrimEnd(key);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
     }
 }

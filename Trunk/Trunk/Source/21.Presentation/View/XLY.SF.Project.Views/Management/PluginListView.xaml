@@ -8,11 +8,11 @@
                  xmlns:core="clr-namespace:XLY.SF.Framework.Core.Base.ViewModel;assembly=XLY.SF.Framework.Core.Base"
                  xmlns:pro="http://www.spfpro.com"
                  Title="{Binding XPath=ViewLanguage/Management/Plugin/Title,Source={x:Static ex:SystemContext.LanguageProvider}}"
-                 mc:Ignorable="d"
-                 Width="960"
-                 Height="560">
+                 mc:Ignorable="d">
     <Grid x:Name="Root"
-          Margin="20">
+          Margin="20"
+          Width="960"
+          Height="560">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="10" />
@@ -32,6 +32,7 @@
                     DockPanel.Dock="Left" />
         </DockPanel>
         <DataGrid Grid.Row="2"
+                  HorizontalScrollBarVisibility="Disabled"
                   ItemsSource="{Binding Plugins}"
                   AutoGenerateColumns="False">
             <DataGrid.Columns>

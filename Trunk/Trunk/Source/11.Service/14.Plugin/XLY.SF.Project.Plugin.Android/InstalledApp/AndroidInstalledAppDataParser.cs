@@ -24,7 +24,7 @@ namespace XLY.SF.Project.Plugin.Android
             pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_InstalledApp);
             pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_BasicInfo);
             pluginInfo.DeviceOSType = EnumOSType.Android;
-            pluginInfo.VersionStr = "0.0";
+            pluginInfo.VersionStr = "1.0";
             pluginInfo.Pump = EnumPump.USB;
             pluginInfo.GroupIndex = 0;
             pluginInfo.OrderIndex = 1;

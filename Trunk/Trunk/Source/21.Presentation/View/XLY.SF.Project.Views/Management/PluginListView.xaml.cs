@@ -27,7 +27,7 @@ namespace XLY.SF.Project.Views.Management
     {
         public PluginListView()
         {
-            InitializeComponent();
+            InitializeComponent(); 
         }
 
         [Import(ExportKeys.SettingsPluginListViewViewModel, typeof(ViewModelBase))]

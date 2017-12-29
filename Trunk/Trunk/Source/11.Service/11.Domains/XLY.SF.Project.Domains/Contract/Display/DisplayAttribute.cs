@@ -59,12 +59,14 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         public EnumColumnType ColumnType { get; set; }
 
+        private string _text = null;
         /// <summary>
         /// 列标题，支持多语言显示
         /// </summary>
         public String Text
         {
-            get { return LanguageManager.Current[$"LanguageResource/DataEntityLanguage/{Key}"] ?? Owner.Name; }
+            get { return _text ?? LanguageManager.Current[$"LanguageResource/DataEntityLanguage/{Key}"] ?? Owner.Name; }
+            set { _text = value; }
         }
 
         /// <summary>

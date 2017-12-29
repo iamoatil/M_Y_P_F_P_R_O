@@ -84,7 +84,7 @@ namespace XLY.SF.Project.ViewModels.Management
 
         protected override void InitLoad(object parameters)
         {
-            _caches = PluginAdapter.Instance.Plugins.Keys.Where(x=>x.PluginType == PluginType.SpfDataParse);
+            _caches = PluginAdapter.Instance.Plugins.Where(x => x.PluginInfo.PluginType == PluginType.SpfDataParse).Select(f => f.PluginInfo as AbstractPluginInfo);
             Plugins = _caches.ToArray();
         }
 
@@ -101,7 +101,7 @@ namespace XLY.SF.Project.ViewModels.Management
             }
             else
             {
-                Plugins = _caches.Cast<DataParsePluginInfo>().Where(x => x.Name.Contains(keyword,StringComparison.OrdinalIgnoreCase)
+                Plugins = _caches.Cast<DataParsePluginInfo>().Where(x => x.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase)
                 || x.Group.Contains(keyword, StringComparison.OrdinalIgnoreCase)
                 || keyword.IsSet(x.DeviceOSType)
                 || keyword.IsSet(x.Pump)

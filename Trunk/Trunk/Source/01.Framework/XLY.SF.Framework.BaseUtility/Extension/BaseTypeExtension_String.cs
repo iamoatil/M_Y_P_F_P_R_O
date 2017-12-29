@@ -442,5 +442,25 @@ namespace XLY.SF.Framework.BaseUtility
             return str;
         }
         #endregion
+
+        #region 移除字符串中的特殊字符，只保留数字和字母
+        /// <summary>
+        /// 移除字符串中的特殊字符，只保留数字和字母
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string RemoveSpecialChar(this string str)
+        {
+            var charString = str.ToArray().ToList();
+            for (int i = charString.Count -1; i >= 0; i--)
+            {
+                if(!char.IsLetterOrDigit(charString[i]))
+                {
+                    charString.RemoveAt(i);
+                }
+            }
+            return new string(charString.ToArray());
+        }
+        #endregion
     }
 }

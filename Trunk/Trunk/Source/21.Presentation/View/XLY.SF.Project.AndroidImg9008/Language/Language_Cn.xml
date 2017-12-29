@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LanguageResource>
+  <LANGKEY_9008_ZhengZaiShuJuJingXiangQingNaiX_05178>正在数据镜像，请耐心等待...</LANGKEY_9008_ZhengZaiShuJuJingXiangQingNaiX_05178>
+  <LANGKEY_9008_QingQueRenShouJiKaiJi_05178>进入失败！请确认打开手机USB模式已经打开，或者驱动已经正常安装。如依然无法进入请尝试其他方式。</LANGKEY_9008_QingQueRenShouJiKaiJi_05178>
+  <LANGKEY_9008_ZhiLingCuoWuCuoWuXinXi_05178>指令进入错误，错误信息：{0}</LANGKEY_9008_ZhiLingCuoWuCuoWuXinXi_05178>
+  <LANGKEY_9008_ChengGongJinRu9008Mode_05178>9008模式进入成功，请进行下一步操作。</LANGKEY_9008_ChengGongJinRu9008Mode_05178>
+  <LANGKEY_9008_InitException_05178>初始化异常，【需手动重启手机再试】</LANGKEY_9008_InitException_05178>
+  <LANGKEY_9008_ShuJuJingXiangYiChang_05178>数据镜像异常</LANGKEY_9008_ShuJuJingXiangYiChang_05178>
+  <LANGKEY_ChaKanJingXiangMuBiaoShiChuCuo_05202>查看镜像目标时出错</LANGKEY_ChaKanJingXiangMuBiaoShiChuCuo_05202>
+  <LANGKEY_ShengChengXiaoYanMaYiChang_05201>生成校验码异常</LANGKEY_ShengChengXiaoYanMaYiChang_05201>
+  <LANGKEY_9008_SheBeiShuJuJingXiangFailCode_05178>设备镜像数据操作失败。错误码:{0}</LANGKEY_9008_SheBeiShuJuJingXiangFailCode_05178>
+  <LANGKEY_9008_Message1>高通9008镜像工具</LANGKEY_9008_Message1>
+  <LANGKEY_9008_Message2>1.手机型号选择</LANGKEY_9008_Message2>
+  <LANGKEY_9008_Message3>2.进入9008模式</LANGKEY_9008_Message3>
+  <LANGKEY_9008_Message4>3.数据镜像</LANGKEY_9008_Message4>
+  <LANGKEY_9008_Message5>方法一：ADB命令</LANGKEY_9008_Message5>
+  <LANGKEY_9008_Message6>需打开USB调试模式，成功率较低</LANGKEY_9008_Message6>
+  <!--<LANGKEY_9008_Message7>成功率较低</LANGKEY_9008_Message7>-->
+  <LANGKEY_9008_Message8>方法二：常规方式</LANGKEY_9008_Message8>
+  <LANGKEY_9008_Message9>推荐方案</LANGKEY_9008_Message9>
+  <LANGKEY_9008_Message10>方法三：工程线进入</LANGKEY_9008_Message10>
+  <LANGKEY_9008_Message11>需使用工程线</LANGKEY_9008_Message11>
+  <LANGKEY_9008_Message12>设备检测</LANGKEY_9008_Message12>
+  <LANGKEY_9008_Message13>驱动安装</LANGKEY_9008_Message13>
+  <LANGKEY_9008_Message14>端口选择</LANGKEY_9008_Message14>
+  <LANGKEY_9008_Message15>镜像存储位置</LANGKEY_9008_Message15>
+  <LANGKEY_9008_Message16>选择路径</LANGKEY_9008_Message16>
+  <LANGKEY_9008_Message17>镜像进度</LANGKEY_9008_Message17>
+  <LANGKEY_9008_Message18>注：目前仅支持列表内手机型号</LANGKEY_9008_Message18>
+  <LANGKEY_9008_Message19>检测到设备</LANGKEY_9008_Message19>
+  <LANGKEY_9008_Message20>未检测到设备</LANGKEY_9008_Message20>
+  <LANGKEY_9008_Message21>1.手机通过工程线连接电脑，按下关机键的同时按下工程线上的专用按钮，可直接进入9008模式。</LANGKEY_9008_Message21>
+  <LANGKEY_9008_Message22>2.点击“设备检测”按钮查看是否进入成功，如失败请重复上诉流程，并确认驱动正确安装，或尝试其他方式进入。如成功请进行下一步操作。</LANGKEY_9008_Message22>
+  <LANGKEY_9008_Message23>1.保持USB连接</LANGKEY_9008_Message23>
+  <LANGKEY_9008_Message24>2.按住关机键直至出现“关机/重启”界面</LANGKEY_9008_Message24>
+  <LANGKEY_9008_Message25>（现在不要关机）</LANGKEY_9008_Message25>
+  <LANGKEY_9008_Message26>3.同时长按音量键+与音量键-</LANGKEY_9008_Message26>
+  <LANGKEY_9008_Message27>4.点击“关机”，同时不要松开音量键，直至黑屏</LANGKEY_9008_Message27>
+  <LANGKEY_9008_Message28>5.点击“设备检测”按钮查看是否进入成功，如失败请重复上诉流程，并确认驱动正确安装，或尝试其他方式进入。如成功请进行下一步操作。</LANGKEY_9008_Message28>
+  <LANGKEY_9008_Message29>检测手机是否成功进入9008模式</LANGKEY_9008_Message29>
+  <LANGKEY_9008_Message30>未安装驱动时，手动安装手机9008模式驱动</LANGKEY_9008_Message30>
+  <LANGKEY_9008_Message31>已选择：</LANGKEY_9008_Message31>
+</LanguageResource>
+
+

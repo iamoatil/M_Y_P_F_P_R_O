@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Framework.Core.Base.ViewModel;
@@ -60,7 +61,7 @@ namespace XLY.SF.Project.Services
         /// <param name="device"></param>
         /// <param name="iAsync"></param>
         /// <returns></returns>
-        public FNodeX GetFileSystem(IFileSystemDevice device, SingleTaskReporterBase iAsync)
+        public FNodeX GetFileSystem(IFileSystemDevice device, TaskReporterBase iAsync)
         {
             IAsync = iAsync;
             CreateFileServiceAbstractX(device, iAsync);
@@ -72,7 +73,7 @@ namespace XLY.SF.Project.Services
             return _systemTree;
         }
 
-        private void CreateFileServiceAbstractX(IFileSystemDevice device, SingleTaskReporterBase iAsync)
+        private void CreateFileServiceAbstractX(IFileSystemDevice device, TaskReporterBase iAsync)
         {
             if (device is MirrorDevice)
             {
@@ -119,38 +120,6 @@ namespace XLY.SF.Project.Services
         /// </summary>
         /// <param name="matchPath"></param>
         /// <param name="isCover"></param>
-        public void ExportAppFile(IEnumerable<string> matchPath, string path, bool isCover = false)
-        {
-            var files = GetUserPartitionFiles;
-            if (_systemTree == null)
-            {
-                return;
-            }
-
-            //IAsync?.Advance(1, LanguageManager.Current[Languagekeys.FileServiceLanguage_File_KaiShiHuiFuYingYongWenJianLieB]);
-
-            string pattern = "com.tencen(.+).mm";
-            Regex regex = new Regex(pattern, RegexOptions.IgnoreCase);
-
-            foreach (var mPath in matchPath)
-            {
-                var source = new List<FNodeX>();
-                if (regex.IsMatch(mPath))
-                    source = files.FindAll(o => regex.IsMatch(o.FullPath) && !o.IsDelete);//匹配（第三方）微信
-                else
-                    source = files.FindAll(o => o.FullPath.StartsWith(mPath, StringComparison.OrdinalIgnoreCase) && !o.IsDelete);
-                foreach (var f in source)
-                {
-                    fileServiceX.ExportFileX(f, path);
-                }
-            }
-        }
-
-        /// <summary>
-        /// APP应用列表导出
-        /// </summary>
-        /// <param name="matchPath"></param>
-        /// <param name="isCover"></param>
         public void ExportAppFile(string matchPath, string path, bool isCover = false)
         {
             var files = GetUserPartitionFiles;
@@ -159,14 +128,29 @@ namespace XLY.SF.Project.Services
                 return;
             }
 
-            //IAsync?.Advance(1, LanguageManager.Current[Languagekeys.FileServiceLanguage_File_KaiShiHuiFuYingYongWenJianLieB]);
-
             var source = files.FindAll(o => o.FullPath.StartsWith(matchPath, StringComparison.OrdinalIgnoreCase) && !o.IsDelete);
             foreach (var f in source)
             {
                 fileServiceX.ExportFileX(f, path);
             }
+
+            if (matchPath == @"\data\com.tencent.mm\MicroMsg\")
+            {//查找微信分身
+                var rootPaths = files.Where(n => s_MicroMsgRegex.IsMatch(n.FullPath) && !n.FullPath.StartsWith(matchPath, StringComparison.OrdinalIgnoreCase)).
+                                      Select(f => f.FullPath.Substring(0, f.FullPath.IndexOf(@"\MicroMsg\"))).Distinct().ToList();
+
+                foreach (var root in rootPaths)
+                {
+                    source = files.FindAll(o => o.FullPath.StartsWith(root, StringComparison.OrdinalIgnoreCase) && !o.IsDelete);
+                    foreach (var f in source)
+                    {
+                        fileServiceX.ExportFileX(f, path);
+                    }
+                }
+            }
         }
+
+        private static readonly Regex s_MicroMsgRegex = new Regex(@"\\MicroMsg\\[0-9a-f]+\\EnMicroMsg.db");
 
         #endregion
 
@@ -203,7 +187,6 @@ namespace XLY.SF.Project.Services
             var sourceFiles = GetKeyFNodeX;
             var key = item.Key;
             var suffix = item.Value.Split(separateChar);
-            //IAsync?.Advance(1, LanguageManager.Current[Languagekeys.FileServiceLanguage_File_KaiShiHuiFuMeiTiWenJianShuJu]);
             foreach (var suf in suffix)
             {
                 if (sourceFiles.ContainsKey(suf))
@@ -226,7 +209,7 @@ namespace XLY.SF.Project.Services
         /// <returns></returns>
         public void ExportFile(FNodeX file, string path, bool isCover = false)
         {
-            fileServiceX.ExportFileX(file, path, isCover);
+            fileServiceX.ExportFileX(file, path, isCover: isCover);
         }
 
         /// <summary>
@@ -239,11 +222,7 @@ namespace XLY.SF.Project.Services
         {
             foreach (var file in fNodeXs)
             {
-                //if (file.FullPath.IndexOf("DCIM") != -1)
-                //{
-
-                //}
-                fileServiceX.ExportFileX(file, path, isCover, isMedia);
+                fileServiceX.ExportFileX(file, path, true, isCover, isMedia);
             }
         }
 

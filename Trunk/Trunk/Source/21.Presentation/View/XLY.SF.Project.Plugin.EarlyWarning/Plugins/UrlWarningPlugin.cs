@@ -27,7 +27,6 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             EarlyWarningPluginArgument ewArg = (EarlyWarningPluginArgument)arg;
             DeviceDataSource ds = ewArg.DeviceDataSource;
-            DbFromConfigData configDbManager = ewArg.ConfigDbManager;
 
             TreeDataSource treeDataSource = ds.DataSource as TreeDataSource;
             if (treeDataSource == null
@@ -38,8 +37,9 @@ namespace XLY.SF.Project.EarlyWarningView
             string keyColumn = "Url";
             foreach (TreeNode treeNode in treeDataSource.TreeNodes)
             {
-                ColumnUpdate(treeNode.Items, configDbManager, keyColumn);               
+                ColumnUpdate(treeNode.Items.DbTableName,  keyColumn);               
             }
+            Dispose();
             return null;
         }       
     }

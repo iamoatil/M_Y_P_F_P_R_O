@@ -35,7 +35,7 @@ namespace XLY.SF.Project.Domains
 
             if (isDir)
             {
-                Name = System.IO.Path.GetDirectoryName(path);
+                Name = new System.IO.DirectoryInfo(path).Name;
             }
             else
             {
@@ -70,5 +70,38 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         public DevType CottageDevType { get; set; }
 
+    }
+
+    /// <summary>
+    /// LocalFileDevice的类型数据
+    /// </summary>
+    public class LocalFileDeviceTypeData
+    {
+        public LocalFileDeviceTypeData()
+        {
+            var validOS = Enum.GetValues(typeof(EnumOSType)).Cast<EnumOSType>().ToList();
+            validOS.Remove(EnumOSType.HtcNoUsbMode);
+            validOS.Remove(EnumOSType.Mirror);
+            DicOSType = validOS.ToDictionary(o => o.GetDescriptionX(), o => o);
+
+            DicFlshType = new Dictionary<EnumOSType, Tuple<FlshType, DevType>>()
+            {
+                {EnumOSType.MTK, new Tuple<FlshType, DevType>(FlshType.FT_MTK, DevType.DT_11)},
+                {EnumOSType.Spreadtrum, new Tuple<FlshType, DevType>(FlshType.FT_Spreadtrum, DevType.DT_11)},
+                {EnumOSType.Symbian, new Tuple<FlshType, DevType>(FlshType.FT_Symbian, DevType.DT_11)},
+                //{EnumOSType.WindowsPhone, new Tuple<FlshType, DevType>(FlshType.FT_WindowsPhone, DevType.DT_11)},
+                {EnumOSType.MStar, new Tuple<FlshType, DevType>(FlshType.FT_MStar, DevType.DT_11)},
+                {EnumOSType.WebOS, new Tuple<FlshType, DevType>(FlshType.FT_WebOS, DevType.DT_11)},
+                {EnumOSType.WindowsMobile, new Tuple<FlshType, DevType>(FlshType.FT_WindowsMobile, DevType.DT_11)},
+                {EnumOSType.Bada, new Tuple<FlshType, DevType>(FlshType.FT_Bada, DevType.DT_11)},
+                {EnumOSType.ADI, new Tuple<FlshType, DevType>(FlshType.FT_ADI, DevType.DT_11)},
+                {EnumOSType.Infineon, new Tuple<FlshType, DevType>(FlshType.FT_Infineon, DevType.DT_11)},
+                {EnumOSType.CoolSand, new Tuple<FlshType, DevType>(FlshType.FT_CoolSand, DevType.DT_11)},
+                {EnumOSType.Sky, new Tuple<FlshType, DevType>(FlshType.FT_Sky, DevType.DT_11)}
+            };
+        }
+
+        public readonly Dictionary<string, EnumOSType> DicOSType;
+        public readonly Dictionary<EnumOSType, Tuple<FlshType, DevType>> DicFlshType;
     }
 }

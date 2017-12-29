@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 /* ==============================================================================
 * Assembly   ：	XLY.SF.Project.Domains.IPluginInfo
@@ -22,22 +18,32 @@ namespace XLY.SF.Project.Domains
         /// 插件ID
         /// </summary>
         string Guid { get; set; }
+
+        /// <summary>
+        /// 插件类型
+        /// </summary>
+        PluginType PluginType { get; set; }
+
         /// <summary>
         /// 插件名称
         /// </summary>
         string Name { get; set; }
+
         /// <summary>
         /// 插件版本,代表该插件支持的APP最低版本
         /// </summary>
         Version Version { get;  }
+
         /// <summary>
         /// 插件描述信息
         /// </summary>
         string Description { get; set; }
+
         /// <summary>
         /// 图标位置，
         /// </summary>
         string Icon { get; set; }
+
         /// <summary>
         /// 插件分组信息
         /// </summary>
@@ -52,5 +58,10 @@ namespace XLY.SF.Project.Domains
         /// 插件排序
         /// </summary>
         int OrderIndex { get; set; }
+
+        /// <summary>
+        /// 插件状态
+        /// </summary>
+        PluginState State { get; set; }
     }
 }

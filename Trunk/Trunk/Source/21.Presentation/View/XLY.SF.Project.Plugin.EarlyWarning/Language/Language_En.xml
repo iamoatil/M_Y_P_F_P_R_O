@@ -1,23 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <LanguageResource>
-  <ClearTip>Clear Search Conditions</ClearTip>
-  <Search>Search</Search>
-  <AllApps>All Apps</AllApps>
-  <KeyWordWatermark>Please Input Keywords</KeyWordWatermark>
-  <TipNoData>No data was extracted</TipNoData>
-  <TipNoData2>Please try other options</TipNoData2>
-  <Searching>Searching</Searching>
-  <BookmarkAll>All Marked</BookmarkAll>
-  <BookmarkNone>No Marked</BookmarkNone>
-  <BookmarkYes>Marked</BookmarkYes>
-  <DataStateAll>All States</DataStateAll>
-  <DataStateNormal>Normal Data</DataStateNormal>
-  <DataStateDelete>Delete Data</DataStateDelete>
-  <Keyword>Keyword</Keyword>
-  <ZhengZe>Regex</ZhengZe>
-  <DeleteNotice>Do you want to delete data '{0}'?</DeleteNotice>
-  <DeleteNoticeTitle>System</DeleteNoticeTitle>
-  <DeletingData>Delete data now...</DeletingData>
+  <EarlyWarning>
+    <StopAutoEarlyWarning>Disable Alarm</StopAutoEarlyWarning>
+  </EarlyWarning>
 </LanguageResource>
-
-

@@ -66,9 +66,12 @@
     <Compile Include="HuJing\DataFilterTest.cs" />
     <Compile Include="Fhjun\Fhjun_Test.cs" />
     <Compile Include="HuJing\IsolatedTaskTest.cs" />
-    <Compile Include="LiTao\EarlyWarning\ConfigDataToDBTest.cs" />
-    <Compile Include="LiTao\EarlyWarning\Md5FileTest.cs" />
-    <Compile Include="LiTao\EarlyWarning\PluginAdapterTest.cs" />
+    <Compile Include="LiTao\Android9008\Mirror9008_Test.cs" />
+    <Compile Include="LiTao\EarlyWarning\ConfigDataToDB_Test.cs" />
+    <Compile Include="LiTao\EarlyWarning\FileMd5DbWriter_Test.cs" />
+    <Compile Include="LiTao\EarlyWarning\FileDownloader_Test.cs" />
+    <Compile Include="LiTao\EarlyWarning\PluginAdapter_Test.cs" />
+    <Compile Include="LiTao\EarlyWarning\SqliteDataBaseFile_Test.cs" />
     <Compile Include="LiTao\EarlyWarning\UiTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SongBing\songbing_test.cs" />
@@ -82,6 +85,10 @@
       <Project>{28682FE4-EC72-42A3-BB2C-27D19F55E14F}</Project>
       <Name>XLY.SF.Framework.Core.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\01.Framework\XLY.SF.Framework.Language\XLY.SF.Framework.Language.csproj">
+      <Project>{95C796FD-57F1-4D2E-927F-4E34EA75E319}</Project>
+      <Name>XLY.SF.Framework.Language</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\11.Service\12.Persistable\XLY.SF.Project.Models\XLY.SF.Project.Models.csproj">
       <Project>{85971D45-4FAF-4DBD-AD3E-D73E79262011}</Project>
       <Name>XLY.SF.Project.Models</Name>
@@ -93,6 +100,10 @@
     <ProjectReference Include="..\..\11.Service\13.Core\DllService\X64DllService\X64Service\X64Service.csproj">
       <Project>{CC75B75F-FDED-448F-8AC4-AC5E1E520CC7}</Project>
       <Name>X64Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\11.Service\13.Core\XLY.SF.Project.DataMirrorApp\XLY.SF.Project.MirrorBackgroundApp.csproj">
+      <Project>{c238ab12-8943-4ccd-b701-472f97fe5665}</Project>
+      <Name>XLY.SF.Project.MirrorBackgroundApp</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\11.Service\13.Core\XLY.SF.Project.Services\XLY.SF.Project.Services.csproj">
       <Project>{D13C3F48-EA76-4AF7-9519-BAE2E64ABD3F}</Project>
@@ -176,10 +187,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\23.Shell\XLY.SF.Shell\packages\MSTest.TestFramework.1.1.18\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\..\Lib\Json\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.106.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\31.Build\Debug\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />

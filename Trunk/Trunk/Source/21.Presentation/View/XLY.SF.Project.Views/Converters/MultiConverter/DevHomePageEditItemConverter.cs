@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using XLY.SF.Project.ViewDomain.VModel.DevHomePage;
 
-namespace XLY.SF.Project.Views.Converters.MultiConverter
+namespace XLY.SF.Project.Views.Converters
 {
     /// <summary>
     /// 设备首页编辑项转换器
@@ -16,9 +16,10 @@ namespace XLY.SF.Project.Views.Converters.MultiConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            DevHomePageEditItemModel editResult = new DevHomePageEditItemModel();
+            DevHomePageEditItemModel editResult = null;
             if (values != null && values.Length == 11)
             {
+                editResult = new DevHomePageEditItemModel();
                 bool isSave;
                 if (!bool.TryParse(values[10].ToString(), out isSave) || !isSave)
                 {
@@ -28,7 +29,7 @@ namespace XLY.SF.Project.Views.Converters.MultiConverter
                 {
                     editResult.No = values[0].ToString();
                     editResult.Holder = values[1].ToString();
-                    editResult.CredentialsType = values[2].ToString();
+                    editResult.CredentialsType = values[2]?.ToString();
                     editResult.HolderCredentialsNo = values[3].ToString();
                     editResult.CensorshipPerson = values[4].ToString();
                     editResult.UnitName = values[5].ToString();

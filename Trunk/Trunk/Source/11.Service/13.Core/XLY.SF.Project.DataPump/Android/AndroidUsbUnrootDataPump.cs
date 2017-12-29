@@ -4,28 +4,20 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XLY.SF.Framework.BaseUtility;
+using XLY.SF.Framework.Log4NetService;
 using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Devices;
 using XLY.SF.Project.Domains;
 
-namespace XLY.SF.Project.DataPump.Android
+namespace XLY.SF.Project.DataPump
 {
     /// <summary>
     /// Android 未ROOT数据泵。
     /// </summary>
-    public class AndroidUsbUnrootDataPump : ControllableDataPumpBase
+    public class AndroidUsbUnrootDataPump : DataPumpBase
     {
         #region Fields
-
-        /// <summary>
-        /// SPFSocket.apk文件路径
-        /// </summary>
-        private static readonly String ApkPath;
-
-        /// <summary>
-        /// SPFSocket.apk 支持的命令
-        /// </summary>
-        public static readonly String[] Commands;
 
         /// <summary>
         /// SPFSocket 命令结果保存路径
@@ -42,20 +34,14 @@ namespace XLY.SF.Project.DataPump.Android
         #region Constructors
 
         /// <summary>
-        /// 初始化类型 XLY.SF.Project.DataPump.Android.AndroidUsbUnrootDataPump 。
+        /// 初始化类型 XLY.SF.Project.DataPump.AndroidUsbUnrootDataPump 。
         /// </summary>
         static AndroidUsbUnrootDataPump()
         {
-            Commands = new[]
-            {
-                "base_info","app_info","browser_info","sms_info",
-                "contact_info","calllog_info","location_info","account_info"
-            };
-            ApkPath = FileHelper.GetPhysicalPath(@"Lib\adb\SPFSocket.apk");
         }
 
         /// <summary>
-        /// 初始化类型 XLY.SF.Project.DataPump.Android.AndroidUsbUnrootDataPump 实例。
+        /// 初始化类型 XLY.SF.Project.DataPump.AndroidUsbUnrootDataPump 实例。
         /// </summary>
         /// <param name="metadata">与此数据泵关联的元数据信息。</param>
         public AndroidUsbUnrootDataPump(Pump metadata)
@@ -73,17 +59,29 @@ namespace XLY.SF.Project.DataPump.Android
         /// 使用特定的执行上下文执行服务。
         /// </summary>
         /// <param name="context">执行上下文。</param>
-        protected override void ExecuteCore(DataPumpControllableExecutionContext context)
+        protected override void ExecuteCore(DataPumpExecutionContext context)
         {
             var sfi = context.Source;
             switch (sfi.ItemType)
             {
                 case SourceFileItemType.AndroidCmdPath:
-                    sfi.Local = Path.Combine(APPCmdSavePath, $"{sfi.APPCmd}.bin");
+                    var cmdFile = Path.Combine(APPCmdSavePath, $"{sfi.APPCmd}.bin");
+                    if (FileHelper.IsValid(cmdFile))
+                    {
+                        sfi.Local = cmdFile;
+                    }
                     break;
                 case SourceFileItemType.AndroidSDCardPath:
+                    Device device = context.PumpDescriptor.Source as Device;
+                    String path = FileHelper.ConnectLinuxPath(device.SDCardPath, context.Source.SDCardConfig);
+                    context.Source.Local = device.CopyFile(path, context.TargetDirectory, null);
                     break;
                 case SourceFileItemType.NormalPath:
+                    var dp = Path.Combine(BackupSavePath, context.Source.Config.TrimEnd("#F").Replace('/', '\\').TrimStart("\\"));
+                    if (FileHelper.IsValidDictory(dp) || FileHelper.IsExist(dp))
+                    {
+                        context.Source.Local = dp;
+                    }
                     break;
             }
         }
@@ -94,30 +92,59 @@ namespace XLY.SF.Project.DataPump.Android
         /// <returns>成功返回true；否则返回false。</returns>
         protected override Boolean InitializeCore()
         {
-            if (Metadata.Source is Device device)
+            if (PumpDescriptor.Source is Device device)
             {
                 //1.植入APP
-                APPCmdSavePath = FileHelper.ConnectPath(Metadata.SourceStorePath, "CmdData");
-                FileHelper.CreateExitsDirectory(APPCmdSavePath);
-
-                if (FileHelper.IsValid(ApkPath) && AndroidHelper.Instance.InstallPackage(ApkPath, device))
-                {
-                    String content = String.Empty;
-                    foreach (String command in Commands)
-                    {
-                        content = AndroidHelper.Instance.ExecuteSPFAppCommand(device, command);
-                        File.WriteAllText(FileHelper.ConnectPath(APPCmdSavePath, $"{command}.bin"), content);
-                    }
-                }
+                APPCmdSavePath = FileHelper.ConnectPath(PumpDescriptor.SourceStorePath, "CmdData");
+                AndroidHelper.Instance.InstallPackageGetData(device, APPCmdSavePath);
 
                 //2.ADB备份
-                BackupSavePath = FileHelper.ConnectPath(Metadata.SourceStorePath, "Backup");
+                BackupSavePath = FileHelper.ConnectPath(PumpDescriptor.SourceStorePath, "Backup");
                 FileHelper.CreateExitsDirectory(BackupSavePath);
 
-                //var rarFile = AndroidHelper.Instance.BackupAndResolve(device, FileHelper.ConnectPath(BackupSavePath, $"{device.SerialNumber}.rar"));
+                var rarFile = AndroidHelper.Instance.BackupAndResolve(device, FileHelper.ConnectPath(BackupSavePath, $"{device.SerialNumber}.rar"));
+
+                ResolveAndroidBackupFile(rarFile);
             }
             return true;
         }
+
+        private void ResolveAndroidBackupFile(string rarFilePath)
+        {
+            try
+            {
+                if (!FileHelper.IsValid(rarFilePath))
+                {
+                    return;
+                }
+
+                //1.解压
+                SevenZipHelper.ExtractArchive(rarFilePath, Path.Combine(BackupSavePath, "data"));
+                FileHelper.DeleteFileSafe(rarFilePath);
+
+                //2.获取apps文件夹
+                var appsPath = Path.Combine(BackupSavePath, "data\\apps");
+                if (!FileHelper.IsValidDictory(appsPath))
+                {
+                    return;
+                }
+                FileHelper.ReNameDirectory(Path.Combine(BackupSavePath, "data"), "apps", "data");
+
+                //3.处理应用文件夹
+                foreach (var appDir in Directory.GetDirectories(Path.Combine(BackupSavePath, "data\\data")))
+                {
+                    FileHelper.ReNameDirectory(appDir, "db", "databases");
+                    FileHelper.ReNameDirectory(appDir, "f", "files");
+                    FileHelper.ReNameDirectory(appDir, "sp", "shared_prefs");
+                    FileHelper.MoveDirectory(Path.Combine(appDir, "r"), appDir);
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerManagerSingle.Instance.Error(ex, "处理安卓手机adb备份失败！");
+            }
+        }
+
 
         #endregion
 

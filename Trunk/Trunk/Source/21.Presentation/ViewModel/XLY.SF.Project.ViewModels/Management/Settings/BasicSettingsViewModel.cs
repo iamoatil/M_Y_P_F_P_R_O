@@ -55,10 +55,10 @@ namespace XLY.SF.Project.ViewModels.Management.Settings
 
         public String Path
         {
-            get => GetValue(SystemContext.DefaultPathKey);
+            get => SystemContext.Instance.SavePath;
             private set
             {
-                SetValue(SystemContext.DefaultPathKey, value);
+                SystemContext.Instance.SavePath = value;
                 MessageAggregation.SendGeneralMsg(new GeneralArgs(GeneralKeys.SettingsChangedMsg));
                 OnPropertyChanged();
             }

@@ -106,6 +106,11 @@ public class Languagekeys
 		public const string PluginName_Wechat = "LanguageResource/PluginName/Wechat";
 				
         /// <summary>
+        /// 微信电脑备份
+        /// </summary>
+		public const string PluginName_WechatBackup = "LanguageResource/PluginName/WechatBackup";
+				
+        /// <summary>
         /// 企业QQ
         /// </summary>
 		public const string PluginName_EimQQ = "LanguageResource/PluginName/EimQQ";
@@ -154,6 +159,26 @@ public class Languagekeys
         /// UC浏览器
         /// </summary>
 		public const string PluginName_UCBrowse = "LanguageResource/PluginName/UCBrowse";
+				
+        /// <summary>
+        /// 图片
+        /// </summary>
+		public const string PluginName_Image = "LanguageResource/PluginName/Image";
+				
+        /// <summary>
+        /// 音频
+        /// </summary>
+		public const string PluginName_Audio = "LanguageResource/PluginName/Audio";
+				
+        /// <summary>
+        /// 视频
+        /// </summary>
+		public const string PluginName_Video = "LanguageResource/PluginName/Video";
+				
+        /// <summary>
+        /// 文档
+        /// </summary>
+		public const string PluginName_Word = "LanguageResource/PluginName/Word";
 				
         /// <summary>
         /// 提取安卓设备属性信息
@@ -271,6 +296,136 @@ public class Languagekeys
 		public const string PluginDescription_AndroidUCBrowse = "LanguageResource/PluginDescription/AndroidUCBrowse";
 				
         /// <summary>
+        /// 提取酷派手机备份联系人信息
+        /// </summary>
+		public const string PluginDescription_AndroidKupaiContacts = "LanguageResource/PluginDescription/AndroidKupaiContacts";
+				
+        /// <summary>
+        /// 提取酷派手机备份通话记录信息
+        /// </summary>
+		public const string PluginDescription_AndroidKupaiCall = "LanguageResource/PluginDescription/AndroidKupaiCall";
+				
+        /// <summary>
+        /// 提取酷派手机备份短信信息
+        /// </summary>
+		public const string PluginDescription_AndroidKupaiSms = "LanguageResource/PluginDescription/AndroidKupaiSms";
+				
+        /// <summary>
+        /// 提取Vivo手机备份联系人信息
+        /// </summary>
+		public const string PluginDescription_AndroidVivoContacts = "LanguageResource/PluginDescription/AndroidVivoContacts";
+				
+        /// <summary>
+        /// 提取Vivo手机备份通话记录信息
+        /// </summary>
+		public const string PluginDescription_AndroidVivoCall = "LanguageResource/PluginDescription/AndroidVivoCall";
+				
+        /// <summary>
+        /// 提取Vivo手机备份短信信息
+        /// </summary>
+		public const string PluginDescription_AndroidVivoSms = "LanguageResource/PluginDescription/AndroidVivoSms";
+				
+        /// <summary>
+        /// 提取OPPO手机备份联系人信息
+        /// </summary>
+		public const string PluginDescription_AndroidOppoContacts = "LanguageResource/PluginDescription/AndroidOppoContacts";
+				
+        /// <summary>
+        /// 提取OPPO手机备份通话记录信息
+        /// </summary>
+		public const string PluginDescription_AndroidOppoCall = "LanguageResource/PluginDescription/AndroidOppoCall";
+				
+        /// <summary>
+        /// 提取OPPO手机备份短信信息
+        /// </summary>
+		public const string PluginDescription_AndroidOppoSms = "LanguageResource/PluginDescription/AndroidOppoSms";
+				
+        /// <summary>
+        /// 提取华为手机备份联系人信息
+        /// </summary>
+		public const string PluginDescription_AndroidHuaweiContacts = "LanguageResource/PluginDescription/AndroidHuaweiContacts";
+				
+        /// <summary>
+        /// 提取华为手机备份通话记录信息
+        /// </summary>
+		public const string PluginDescription_AndroidHuaweiCall = "LanguageResource/PluginDescription/AndroidHuaweiCall";
+				
+        /// <summary>
+        /// 提取华为手机备份短信信息
+        /// </summary>
+		public const string PluginDescription_AndroidHuaweiSms = "LanguageResource/PluginDescription/AndroidHuaweiSms";
+				
+        /// <summary>
+        /// 提取小米手机备份联系人信息
+        /// </summary>
+		public const string PluginDescription_AndroidXiaomiContacts = "LanguageResource/PluginDescription/AndroidXiaomiContacts";
+				
+        /// <summary>
+        /// 提取小米手机备份通话记录信息
+        /// </summary>
+		public const string PluginDescription_AndroidXiaomiCall = "LanguageResource/PluginDescription/AndroidXiaomiCall";
+				
+        /// <summary>
+        /// 提取小米手机备份短信信息
+        /// </summary>
+		public const string PluginDescription_AndroidXiaomiSms = "LanguageResource/PluginDescription/AndroidXiaomiSms";
+				
+        /// <summary>
+        /// 提取中兴手机备份通话记录信息
+        /// </summary>
+		public const string PluginDescription_AndroidZhongxingCall = "LanguageResource/PluginDescription/AndroidZhongxingCall";
+				
+        /// <summary>
+        /// 提取魅族手机备份通话记录信息
+        /// </summary>
+		public const string PluginDescription_AndroidMeizuCall = "LanguageResource/PluginDescription/AndroidMeizuCall";
+				
+        /// <summary>
+        /// 提取三星手机通话记录信息
+        /// </summary>
+		public const string PluginDescription_AndroidSansungCall = "LanguageResource/PluginDescription/AndroidSansungCall";
+				
+        /// <summary>
+        /// 提取安卓设备图片文件信息
+        /// </summary>
+		public const string PluginDescription_AndroidImage = "LanguageResource/PluginDescription/AndroidImage";
+				
+        /// <summary>
+        /// 提取安卓设备音频文件信息
+        /// </summary>
+		public const string PluginDescription_AndroidAudio = "LanguageResource/PluginDescription/AndroidAudio";
+				
+        /// <summary>
+        /// 提取安卓设备视频文件信息
+        /// </summary>
+		public const string PluginDescription_AndroidVideo = "LanguageResource/PluginDescription/AndroidVideo";
+				
+        /// <summary>
+        /// 提取安卓设备文档文件信息
+        /// </summary>
+		public const string PluginDescription_AndroidWord = "LanguageResource/PluginDescription/AndroidWord";
+				
+        /// <summary>
+        /// 提取安卓设备镜像图片文件信息
+        /// </summary>
+		public const string PluginDescription_AndroidMirrorImage = "LanguageResource/PluginDescription/AndroidMirrorImage";
+				
+        /// <summary>
+        /// 提取安卓设备镜像音频文件信息
+        /// </summary>
+		public const string PluginDescription_AndroidMirrorAudio = "LanguageResource/PluginDescription/AndroidMirrorAudio";
+				
+        /// <summary>
+        /// 提取安卓设备镜像视频文件信息
+        /// </summary>
+		public const string PluginDescription_AndroidMirrorVideo = "LanguageResource/PluginDescription/AndroidMirrorVideo";
+				
+        /// <summary>
+        /// 提取安卓设备镜像文档文件信息
+        /// </summary>
+		public const string PluginDescription_AndroidMirrorWord = "LanguageResource/PluginDescription/AndroidMirrorWord";
+				
+        /// <summary>
         /// 提取IOS设备属性信息
         /// </summary>
 		public const string PluginDescription_IosDeviceProperty = "LanguageResource/PluginDescription/IosDeviceProperty";
@@ -279,6 +434,16 @@ public class Languagekeys
         /// 提取IOS设备安装的应用列表
         /// </summary>
 		public const string PluginDescription_IosInstalledApp = "LanguageResource/PluginDescription/IosInstalledApp";
+				
+        /// <summary>
+        /// 提取IOS设备属性信息（镜像）
+        /// </summary>
+		public const string PluginDescription_IosMirrorDeviceProperty = "LanguageResource/PluginDescription/IosMirrorDeviceProperty";
+				
+        /// <summary>
+        /// 提取IOS设备安装的应用列表（镜像）
+        /// </summary>
+		public const string PluginDescription_IosMirrorInstalledApp = "LanguageResource/PluginDescription/IosMirrorInstalledApp";
 				
         /// <summary>
         /// 提取IOS设备联系人信息
@@ -319,6 +484,51 @@ public class Languagekeys
         /// 提取IOS设备微信信息
         /// </summary>
 		public const string PluginDescription_IosWechat = "LanguageResource/PluginDescription/IosWechat";
+				
+        /// <summary>
+        /// 提取IOS设备图片文件信息
+        /// </summary>
+		public const string PluginDescription_IosImage = "LanguageResource/PluginDescription/IosImage";
+				
+        /// <summary>
+        /// 提取IOS设备音频文件信息
+        /// </summary>
+		public const string PluginDescription_IosAudio = "LanguageResource/PluginDescription/IosAudio";
+				
+        /// <summary>
+        /// 提取IOS设备视频文件信息
+        /// </summary>
+		public const string PluginDescription_IosVideo = "LanguageResource/PluginDescription/IosVideo";
+				
+        /// <summary>
+        /// 提取IOS设备文档文件信息
+        /// </summary>
+		public const string PluginDescription_IosWord = "LanguageResource/PluginDescription/IosWord";
+				
+        /// <summary>
+        /// 提取微信电脑备份信息
+        /// </summary>
+		public const string PluginDescription_WechatBackup = "LanguageResource/PluginDescription/WechatBackup";
+				
+        /// <summary>
+        /// 提取MTP设备图片文件信息
+        /// </summary>
+		public const string PluginDescription_MTPImage = "LanguageResource/PluginDescription/MTPImage";
+				
+        /// <summary>
+        /// 提取MTP设备音频文件信息
+        /// </summary>
+		public const string PluginDescription_MTPAudio = "LanguageResource/PluginDescription/MTPAudio";
+				
+        /// <summary>
+        /// 提取MTP设备视频文件信息
+        /// </summary>
+		public const string PluginDescription_MTPVideo = "LanguageResource/PluginDescription/MTPVideo";
+				
+        /// <summary>
+        /// 提取MTP设备文档文件信息
+        /// </summary>
+		public const string PluginDescription_MTPWord = "LanguageResource/PluginDescription/MTPWord";
 				
         /// <summary>
         /// 手机号码

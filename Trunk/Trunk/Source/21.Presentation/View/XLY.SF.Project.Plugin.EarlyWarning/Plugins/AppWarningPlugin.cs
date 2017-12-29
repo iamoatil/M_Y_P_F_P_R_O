@@ -5,8 +5,6 @@
 * ==============================================================================*/
 
 
-using System;
-using System.Collections.Generic;
 using XLY.SF.Framework.Core.Base.CoreInterface;
 using XLY.SF.Project.Domains;
 
@@ -30,7 +28,6 @@ namespace XLY.SF.Project.EarlyWarningView
         {
             EarlyWarningPluginArgument ewArg = (EarlyWarningPluginArgument)arg;
             DeviceDataSource ds = ewArg.DeviceDataSource;
-            DbFromConfigData configDbManager = ewArg.ConfigDbManager;
 
             AbstractDataSource dataSource = ds.DataSource as AbstractDataSource;
 
@@ -40,7 +37,7 @@ namespace XLY.SF.Project.EarlyWarningView
                 return null;
             }
             string keyColumn = "Name";
-            ColumnUpdate(dataSource.Items, configDbManager, keyColumn);
+            ColumnUpdate(dataSource.Items.DbTableName, keyColumn);
             return null;
         }
         

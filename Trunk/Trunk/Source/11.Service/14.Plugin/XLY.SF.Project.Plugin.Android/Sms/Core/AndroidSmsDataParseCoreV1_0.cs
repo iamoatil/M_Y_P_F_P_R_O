@@ -125,6 +125,52 @@ namespace XLY.SF.Project.Plugin.Android
                 mainContext?.Dispose();
                 mainContext = null;
             }
+
+            try
+            {
+                var newFile = SqliteRecoveryHelper.DataRecovery(MainDbPath, @"chalib\com.android.providers.telephony\mmssms(threads).db.charactor", "threads");
+
+                using (var sqlitecontext = new SqliteContext(newFile))
+                {
+                    var list = sqlitecontext.FindByName("threads");
+
+                    DateTime? date;
+                    string text, type;
+
+                    foreach (var dyData in list)
+                    {
+                        date = DynamicConvert.ToSafeDateTime(dyData.date);
+                        text = DynamicConvert.ToSafeString(dyData.snippet);
+                        type = DynamicConvert.ToSafeString(dyData.message_type);
+
+                        if (items.Any(s => s.StartDate == date && s.Content == text))
+                        {
+                            continue;
+                        }
+
+                        SMS sms = new SMS();
+                        sms.DataState = EnumDataState.Deleted;
+                        sms.StartDate = date;
+                        sms.Content = text;
+
+                        if ("0" == type)
+                        {
+                            sms.SmsState = EnumSMSState.ReceiveSMS;
+                        }
+                        else
+                        {
+                            sms.SmsState = EnumSMSState.SendSMS;
+                        }
+
+                        items.Add(sms);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerManagerSingle.Instance.Error(ex, "解析安卓短信threads表出错");
+            }
+
             return items;
         }
 
@@ -252,7 +298,12 @@ namespace XLY.SF.Project.Plugin.Android
             {
                 string selectSql = string.Format(@"select sql from sqlite_master where tbl_name='{0}' and type='table'", tableName);
                 var data = context.Find(new SQLiteString(selectSql));
-                return DynamicConvert.ToSafeString(data.FirstOrDefault().sql);
+
+                if (data.IsValid())
+                {
+                    return DynamicConvert.ToSafeString(data.FirstOrDefault().sql);
+                }
+                return string.Empty;
             }
             catch
             {

@@ -106,6 +106,8 @@ namespace XLY.SF.Project.Models.Logical
             set => Entity.CaseProjectFile = value;
         }
 
+        public String Path => System.IO.Path.GetDirectoryName(CaseProjectFile);
+
         #endregion
     }
 }

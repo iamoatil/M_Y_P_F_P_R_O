@@ -26,7 +26,8 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 当前节点的父节点
         /// </summary>
-        ICheckedItem Parent { get; }
+        ICheckedItem Parent { get; set; }
+        string SourcePath { get; set; }
         /// <summary>
         /// 子节点列表
         /// </summary>
@@ -46,7 +47,6 @@ namespace XLY.SF.Project.Domains
         {
             if (item.IsChecked != value)
             {
-                //item.IsChecked = value;
                 OnPropertyChanged();
                 if (item.IsChecked == true) // 如果节点被选中
                 {
@@ -60,7 +60,7 @@ namespace XLY.SF.Project.Domains
                             if (dt.IsChecked != true)
                             {
                                 bExistUncheckedChildren = true;
-                                break;
+                                break; 
                             }
                         if (bExistUncheckedChildren)
                             item.Parent.IsChecked = null;
@@ -93,6 +93,85 @@ namespace XLY.SF.Project.Domains
                     if (item.Parent != null)
                         item.Parent.IsChecked = null;
                 }
+            }
+        }
+
+        /// <summary>
+        /// 设置树节点的状态，如果有父节点或子节点，则会依次设置
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="value"></param>
+        /// <param name="OnPropertyChanged"></param>
+        public static void SetTreeState(this ICheckedItem item, bool? value, Func<dynamic, bool?> getter, Action<dynamic, bool?> setter, Action OnPropertyChanged)
+        {
+            if (getter(item) != value)
+            {
+                OnPropertyChanged();
+                if (getter(item) == true) // 如果节点被选中
+                {
+                    if (item.GetChildren() != null)
+                        foreach (var dt in item.GetChildren())
+                            setter(dt, true);
+                    if (item.Parent != null)
+                    {
+                        Boolean bExistUncheckedChildren = false;
+                        foreach (var dt in item.Parent.GetChildren())
+                            if (getter(dt) != true)
+                            {
+                                bExistUncheckedChildren = true;
+                                break;
+                            }
+                        if (bExistUncheckedChildren)
+                            setter(item.Parent, null);
+                        else
+                            setter(item.Parent, true);
+                    }
+                }
+                else if (getter(item) == false)   // 如果节点未选中
+                {
+                    if (item.GetChildren() != null)
+                        foreach (var dt in item.GetChildren())
+                            setter(dt, false);
+                    if (item.Parent != null)
+                    {
+                        Boolean bExistCheckedChildren = false;
+                        foreach (var dt in item.Parent.GetChildren())
+                            if (getter(dt) != false)
+                            {
+                                bExistCheckedChildren = true;
+                                break;
+                            }
+                        if (bExistCheckedChildren)
+                            setter(item.Parent, null);
+                        else
+                            setter(item.Parent, false);
+                    }
+                }
+                else
+                {
+                    if (item.Parent != null)
+                        setter(item.Parent, null);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 遍历一棵树
+        /// </summary>
+        /// <param name="tree"></param>
+        /// <param name="action"></param>
+        public static void TranverseTree(this ICheckedItem tree, Action<ICheckedItem> action)
+        {
+            if(tree == null)
+            {
+                return;
+            }
+            foreach (var item in tree.GetChildren())
+            {
+                if (item == null)
+                    continue;
+                action(item);
+                TranverseTree(item, action);
             }
         }
     }

@@ -44,11 +44,6 @@ namespace XLY.SF.Framework.Core.Base.ModuleBase
         #region Properties
 
         /// <summary>
-        /// 标识适配器是否已经初始化。
-        /// </summary>
-        protected Boolean IsInit { get; private set; }
-
-        /// <summary>
         /// 标识适配器是否已经加载。
         /// </summary>
         protected Boolean IsLoaded { get; private set; }
@@ -60,27 +55,15 @@ namespace XLY.SF.Framework.Core.Base.ModuleBase
         #region Public
 
         /// <summary>
-        /// 初始化模块。
-        /// </summary>
-        public void Initialize()
-        {
-            if (IsInit) return;
-            IsInit = InitializeCore();
-        }
-
-        /// <summary>
         /// 加载模块
         /// </summary>
         /// <param name="parameter">加载参数。</param>
-        public void Load(Object parameter)
+        public void Load(Object parameter = null)
         {
-            if (!IsInit) throw new InvalidOperationException("Adapter is not initialize");
             if (IsLoaded) return;
-            if (LoadCore(parameter))
-            {
-                IsLoaded = true;
-                Loaded?.Invoke(this, EventArgs.Empty);
-            }
+            LoadCore(parameter);
+            IsLoaded = true;
+            Loaded?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -88,7 +71,6 @@ namespace XLY.SF.Framework.Core.Base.ModuleBase
         /// </summary>
         public void Unload()
         {
-            if (!IsInit) throw new InvalidOperationException("Adapter is not initialize");
             if (!IsLoaded) return;
             UnloadCore();
             IsLoaded = false;
@@ -98,27 +80,24 @@ namespace XLY.SF.Framework.Core.Base.ModuleBase
         /// <summary>
         /// 获取属性值。
         /// </summary>
-        /// <typeparam name="T">属性值的类型。</typeparam>
         /// <param name="propertyName">属性名称。</param>
         /// <returns>属性值。</returns>
-        public abstract T GetProperty<T>(String propertyName);
+        public abstract Object GetProperty(String propertyName);
 
         /// <summary>
         /// 设置属性值。
         /// </summary>
-        /// <typeparam name="T">属性值的类型。</typeparam>
         /// <param name="propertyName">属性名称。</param>
         /// <param name="value">属性值。</param>
-        public abstract void SetProperty<T>(String propertyName, T value);
+        public abstract void SetProperty(String propertyName, Object value);
 
         /// <summary>
         /// 调用方法。
         /// </summary>
-        /// <typeparam name="T">返回值的类型。</typeparam>
         /// <param name="methodName">方法名称。</param>
         /// <param name="args">参数列表。</param>
         /// <returns>返回值。</returns>
-        public abstract T Invoke<T>(String methodName, params Object[] args);
+        public abstract Object Invoke(String methodName, Object args = null);
 
         /// <summary>
         /// 添加事件处理器。
@@ -139,17 +118,10 @@ namespace XLY.SF.Framework.Core.Base.ModuleBase
         #region Protected
 
         /// <summary>
-        /// 初始化适配器。
-        /// </summary>
-        /// <returns>成功返回true；否则返回false。</returns>
-        protected virtual Boolean InitializeCore() => true;
-
-        /// <summary>
         /// 加载适配器。
         /// </summary>
         /// <param name="parameter">参数。</param>
-        /// <returns>成功返回true；否则返回false。</returns>
-        protected virtual Boolean LoadCore(Object parameter) => true;
+        protected virtual void LoadCore(Object parameter) { }
 
         /// <summary>
         /// 卸载适配器。

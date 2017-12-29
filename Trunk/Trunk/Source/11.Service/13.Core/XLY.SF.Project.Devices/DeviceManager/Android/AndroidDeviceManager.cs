@@ -116,7 +116,7 @@ namespace XLY.SF.Project.Devices
         /// <summary>
         /// 拷贝指定文件
         /// </summary>
-        public string CopyFile(Device device, string source, string targetPath, IAsyncTaskProgress asyn)
+        public string CopyFile(Device device, string source, string targetPath, DefaultAsyncTaskProgress asyn)
         {
             return AndroidHelper.Instance.CopyFile(device, source, targetPath, asyn);
         }

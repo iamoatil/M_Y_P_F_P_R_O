@@ -404,6 +404,7 @@ namespace XLY.SF.Project.Plugin.IOS
             var msgRootNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
+                Type = typeof(DefaultMessageList),
                 Text = LanguageHelper.GetString(Languagekeys.PluginQQ_FriendMsg),
             };
             
@@ -465,7 +466,7 @@ namespace XLY.SF.Project.Plugin.IOS
                          groupDy = r.ToDynamic();
                          groupInfo = new QQGroupShow();
 
-                         groupInfo.DataState = DynamicConvert.ToEnumByValue(groupDy.XLY_DataType, EnumDataState.None);
+                         groupInfo.DataState = DynamicConvert.ToEnumByValue(groupDy.XLY_DataType, EnumDataState.Normal);
                          groupInfo.Name = DynamicConvert.ToSafeString(groupDy.GroupName);
                          groupInfo.GroupId = DynamicConvert.ToSafeString(groupDy.groupid);
                          groupInfo.QQNumber = DynamicConvert.ToSafeString(groupDy.groupcode);
@@ -493,7 +494,7 @@ namespace XLY.SF.Project.Plugin.IOS
                                   memberDy = rd.ToDynamic();
                                   memberInfo = new QQGroupMemberShow();
 
-                                  memberInfo.DataState = DynamicConvert.ToEnumByValue(memberDy.XLY_DataType, EnumDataState.None);
+                                  memberInfo.DataState = DynamicConvert.ToEnumByValue(memberDy.XLY_DataType, EnumDataState.Normal);
                                   memberInfo.QQNumber = DynamicConvert.ToSafeString(memberDy.MemUin);
                                   memberInfo.Nick = DynamicConvert.ToSafeString(memberDy.Nick);
                                   memberInfo.SpecialTitle = DynamicConvert.ToSafeString(memberDy.SpecialTitle);
@@ -519,6 +520,7 @@ namespace XLY.SF.Project.Plugin.IOS
             var troopMsgNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
+                Type = typeof(DefaultMessageList),
                 Text = LanguageHelper.GetString(Languagekeys.PluginQQ_TroopMsg),
             };
             
@@ -566,7 +568,7 @@ namespace XLY.SF.Project.Plugin.IOS
                     disDy = r.ToDynamic();
                     disInfo = new QQDiscussShow();
 
-                    disInfo.DataState = DynamicConvert.ToEnumByValue(disDy.XLY_DataType, EnumDataState.None);
+                    disInfo.DataState = DynamicConvert.ToEnumByValue(disDy.XLY_DataType, EnumDataState.Normal);
                     disInfo.Name = DynamicConvert.ToSafeString(disDy.name);
                     disInfo.QQNumber = DynamicConvert.ToSafeString(disDy.uin);
                     disInfo.Creator = DynamicConvert.ToSafeString(disDy.owner_uin);
@@ -595,7 +597,7 @@ namespace XLY.SF.Project.Plugin.IOS
                             memberDy = rd.ToDynamic();
                             memberInfo = new QQGroupMemberShow();
 
-                            memberInfo.DataState = DynamicConvert.ToEnumByValue(memberDy.XLY_DataType, EnumDataState.None);
+                            memberInfo.DataState = DynamicConvert.ToEnumByValue(memberDy.XLY_DataType, EnumDataState.Normal);
                             memberInfo.QQNumber = DynamicConvert.ToSafeString(memberDy.uin);
                             memberInfo.Nick = DynamicConvert.ToSafeString(memberDy.interemark);
                             memberInfo.JoinTime = DynamicConvert.ToSafeDateTime(memberDy.join_time);
@@ -617,6 +619,7 @@ namespace XLY.SF.Project.Plugin.IOS
             var disMsgNode = new TreeNode
             {
                 DataState = EnumDataState.Normal,
+                Type = typeof(DefaultMessageList),
                 Text = LanguageHelper.GetString(Languagekeys.PluginQQ_DiscussMsg),
             };
             
@@ -1226,7 +1229,7 @@ namespace XLY.SF.Project.Plugin.IOS
 
             #endregion
 
-            msg.DataState = DynamicConvert.ToEnumByValue(messDy.XLY_DataType, EnumDataState.None);
+            msg.DataState = DynamicConvert.ToEnumByValue(messDy.XLY_DataType, EnumDataState.Normal);
             msg.Date = DynamicConvert.ToSafeDateTime(messDy.time);
 
             if (DynamicConvert.ToSafeString(messDy.flag) == "0")
@@ -1277,7 +1280,7 @@ namespace XLY.SF.Project.Plugin.IOS
 
             #endregion
 
-            msg.DataState = DynamicConvert.ToEnumByValue(messDy.XLY_DataType, EnumDataState.None);
+            msg.DataState = DynamicConvert.ToEnumByValue(messDy.XLY_DataType, EnumDataState.Normal);
             msg.Date = DynamicConvert.ToSafeDateTime(messDy.MsgTime);
 
             string sendUin = DynamicConvert.ToSafeString(messDy.SendUin);
@@ -1330,7 +1333,7 @@ namespace XLY.SF.Project.Plugin.IOS
 
             #endregion
 
-            msg.DataState = DynamicConvert.ToEnumByValue(messDy.XLY_DataType, EnumDataState.None);
+            msg.DataState = DynamicConvert.ToEnumByValue(messDy.XLY_DataType, EnumDataState.Normal);
             msg.Date = DynamicConvert.ToSafeDateTime(messDy.MsgTime);
 
             string sendUin = DynamicConvert.ToSafeString(messDy.SendUin);

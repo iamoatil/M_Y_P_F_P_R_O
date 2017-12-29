@@ -1,3 +1,48 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <LanguageResource>
+  <FileBrowing>
+    <Msg_SelectDownloadFileNode>Please select the files/folders to export!</Msg_SelectDownloadFileNode>
+    <View_SerachBtnName>Search</View_SerachBtnName>
+    <View_CancelSearchBtnName>Cancel</View_CancelSearchBtnName>
+    <View_ResetSerachArgs>Reset Rules</View_ResetSerachArgs>
+    <View_SearchIngTip>Searching</View_SearchIngTip>
+    <View_LoadingTip>Loading </View_LoadingTip>
+    <View_ExportTip>Export selected files/folders</View_ExportTip>
+    <View_ExportBtnName>Export files</View_ExportBtnName>
+    <View_Grid_MarkCol>Mark</View_Grid_MarkCol>
+    <View_Grid_State>Status</View_Grid_State>
+    <View_Grid_NameCol>Filename</View_Grid_NameCol>
+    <View_Grid_TypeCol>Type</View_Grid_TypeCol>
+    <View_Grid_CreateTimeCol>Create Time</View_Grid_CreateTimeCol>
+    <View_Grid_LastWriteTimeCol>Last modified time</View_Grid_LastWriteTimeCol>
+    <View_Grid_LastAccessTimeCol>Time Last Accessed </View_Grid_LastAccessTimeCol>
+    <View_Grid_FileSizeCol>Size</View_Grid_FileSizeCol>
+    <View_Grid_OperateCol>Operation</View_Grid_OperateCol>
+    <View_ExportView_Tital>Exporting </View_ExportView_Tital>
+    <View_ExportView_End>Finished</View_ExportView_End>
+    <View_ExportView_Failure>Failure</View_ExportView_Failure>
+    <View_ExportView_Success>Success</View_ExportView_Success>
+    <View_ExportView_BtnCancel>Cancel</View_ExportView_BtnCancel>
+    <View_ExportView_BtnClose>Close</View_ExportView_BtnClose>
+    <View_ExportView_BtnOpenPath>Open Path</View_ExportView_BtnOpenPath>
+    <View_ExportViewModel_Exporting>Exporting…</View_ExportViewModel_Exporting>
+    <View_FileType_All>All</View_FileType_All>
+    <View_FileType_Txt>TXT</View_FileType_Txt>
+    <View_FileType_Image>Pictures</View_FileType_Image>
+    <View_FileType_Voice>Audios</View_FileType_Voice>
+    <View_FileType_Video>Videos</View_FileType_Video>
+    <View_FileType_Rar>Compressed Files</View_FileType_Rar>
+    <View_FileType_DB>Databases</View_FileType_DB>
+    <View_FileType_Other>Others</View_FileType_Other>
+    <View_PreView_NoPre>No Preview</View_PreView_NoPre>
+    <View_PreView_DownloadError>Download failed</View_PreView_DownloadError>
+    <View_PreView_FileZero>"File size 0, unable to preview"</View_PreView_FileZero>
+    <View_Search_DataStateAll>All</View_Search_DataStateAll>
+    <View_Search_DataStateNormal>Normal</View_Search_DataStateNormal>
+    <View_Search_DataStateDelete>Deleted</View_Search_DataStateDelete>
+    <View_Search_Keyword>Keywords</View_Search_Keyword>
+    <View_Search_KeywordTip>Input keywords</View_Search_KeywordTip>
+    <View_Search_ZhengZe>Regex</View_Search_ZhengZe>
+    <View_Search_ZhengZeTip>Please input regex</View_Search_ZhengZeTip>
+  </FileBrowing>
 </LanguageResource>

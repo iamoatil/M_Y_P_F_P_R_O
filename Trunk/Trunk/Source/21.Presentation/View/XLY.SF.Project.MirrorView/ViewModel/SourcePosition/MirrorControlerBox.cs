@@ -72,7 +72,7 @@ namespace XLY.SF.Project.MirrorView
                         {
                             break;
                         }
-                        else if (_curState.Match(CmdStrings.StopMirror)
+                        else if (_curState.Match(CmdStrings.StopMirror) || _curState.Match(CmdStrings.PauseMirror)
                         || _curState.Match(CmdStrings.Exception))
                         {
                             return;

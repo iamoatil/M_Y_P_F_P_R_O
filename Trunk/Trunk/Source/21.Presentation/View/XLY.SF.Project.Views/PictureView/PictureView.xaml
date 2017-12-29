@@ -7,9 +7,9 @@
              xmlns:ex="clr-namespace:ProjectExtend.Context;assembly=XLY.SF.Project.Extension"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
 		     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+             xmlns:ee="http://schemas.microsoft.com/expression/2010/effects"
              xmlns:local="clr-namespace:XLY.SF.Project.Views.PictureView"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             mc:Ignorable="d" Width="1000" Height="800" Loaded="UcViewBase_Loaded">
     <core:UcViewBase.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -17,14 +17,129 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!--此处以下添加自己的引用-->
+            <BooleanToVisibilityConverter x:Key="bToV"/>
 
+            <Storyboard x:Key="OnMouseEnter">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="br">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <QuinticEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="br">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="10">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <QuinticEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="OnMouseLeave">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="br">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <QuarticEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="br">
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="30">
+                        <EasingDoubleKeyFrame.EasingFunction>
+                            <QuarticEase EasingMode="EaseOut"/>
+                        </EasingDoubleKeyFrame.EasingFunction>
+                    </EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
         </ResourceDictionary>
     </core:UcViewBase.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-        <Image Stretch="Fill" Source="{Binding PictureSource}"/>
+    <core:UcViewBase.Triggers>
+        <EventTrigger RoutedEvent="UIElement.MouseEnter">
+            <BeginStoryboard Storyboard="{StaticResource OnMouseEnter}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="UIElement.MouseLeave">
+            <BeginStoryboard Storyboard="{StaticResource OnMouseLeave}"/>
+        </EventTrigger>
+    </core:UcViewBase.Triggers>
+    <Grid x:Name="gd_Main" ClipToBounds="True">
+        <Grid Margin="0 10 0 5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Border Background="Transparent" MouseLeftButtonDown="Border_MouseLeftButtonDown"  Height="20">
+                <!--关闭-->
+                <Button Width="15" Height="15" Cursor="Hand" VerticalAlignment="Top" Command="{Binding ClosePictureViewCommand}" BorderThickness="0" HorizontalAlignment="Right" Margin="0 0 15 0" Background="Transparent" RenderTransformOrigin="0.5,0.5">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="45"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Opacity" Value="0.5"/>
+                            <Setter Property="Template" Value="{StaticResource btn_EmptyCT}"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Opacity" Value="1"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                    <Path Data="M6.5,0 L8.5,0 8.5,6.5000001 15,6.5000001 15,8.5 8.5,8.5 8.5,15 6.5,15 6.5,8.5 0,8.5 0,6.5000001 6.5,6.5000001 z" Fill="White" Stretch="Fill"/>
+                </Button>
+            </Border>
+            
+            <ScrollViewer Margin="3 3 3 0" Grid.Row="1" x:Name="gd" ClipToBounds="True" Visibility="Visible" MouseMove="gd_MouseMove" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden">
+                <Image x:Name="img" Margin="2" Source="{Binding ViewImage}" MouseWheel="ScrollViewer_PreviewMouseWheel" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="Uniform" RenderTransformOrigin="0.5,0.5">
+                    <Image.LayoutTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform x:Name="ro" CenterX="0.5" CenterY="0.5"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Image.LayoutTransform>
+                </Image>
+            </ScrollViewer>
+        </Grid>
+
+        <Border x:Name="br" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="#99000000" Opacity="0" CornerRadius="10" RenderTransformOrigin="0.5,0.5">
+            <Border.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform Y="70"/>
+                </TransformGroup>
+            </Border.RenderTransform>
+            <StackPanel Orientation="Horizontal" Margin="10 10 10 20">
+                <StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="Template" Value="{StaticResource btn_EmptyCT}"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Effect">
+                                    <Setter.Value>
+                                        <ee:ColorToneEffect DarkColor="#379be6" LightColor="#379be6"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Resources>
+                <Button Height="40" Width="40" Click="Button_Click_4">
+                    <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/PictureViewReset.png"></Image>
+                </Button>
+                <Button Height="40" Width="40" Margin="10 0 0 0" Click="Button_Click">
+                    <Image Source="pack://application:,,,/XLY.SF.Project.Themes;component/Resources/Images/PictureViewRotate.png" Stretch="Fill"></Image>
+                </Button>
+            </StackPanel>
+        </Border>
     </Grid>
 </core:UcViewBase>

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using XLY.SF.Project.Domains.Contract;
 
 namespace XLY.SF.Project.Domains
@@ -17,7 +16,7 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 插件定义信息
         /// </summary>
-        IPluginInfo PluginInfo { get; set; }
+        DataParsePluginInfo PluginInfo { get; set; }
 
         /// <summary>
         /// 数据列表
@@ -39,9 +38,13 @@ namespace XLY.SF.Project.Domains
         /// </summary>
         string CurrentTaskPath { get; set; }
 
+        new ICheckedItem Parent { get; set; }
+
         int Total { get; }
 
-        IEnumerable<T> Filter<T>(params FilterArgs[] args);
+        int DeleteTotal { get; }
+
+        void Filter<T>(params FilterArgs[] args);
 
         void SetCurrentPath(string path);
     }

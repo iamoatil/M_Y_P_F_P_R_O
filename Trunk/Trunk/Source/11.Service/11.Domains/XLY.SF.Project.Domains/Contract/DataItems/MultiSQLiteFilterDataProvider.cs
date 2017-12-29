@@ -35,7 +35,7 @@ namespace XLY.SF.Project.Domains
         /// <summary>
         /// 附加数据库的别名
         /// </summary>
-        public string AttachedDatabaseAliasName { get; set; }
+        public const string AttachedDatabaseAliasName = "ath";
 
         /// <summary>
         /// 获取数据（目前暂时使用内容为SQL语句的常量表达式）。
@@ -100,28 +100,32 @@ namespace XLY.SF.Project.Domains
             if (expression.Type != typeof(String)) return null;
             ConstantExpression constantExpression = (ConstantExpression)expression;
             String str = constantExpression.Value as String;
-            if(str.StartsWith("#"))  //联合查询
+            if(str.StartsWith("#"))  //关联查询
             {
+                //str = str.TrimStart('#');
+                //string limitStr = "";
+                //int limit = str.LastIndexOf("LIMIT");
+                //if(limit >= 0)
+                //{
+                //    limitStr = str.Substring(limit);
+                //    str = str.Substring(0, limit);
+                //}
+                //return $"SELECT a.*,b.BookMarkId FROM {tableName} a, {AttachedDatabaseAliasName}.{tableName} b WHERE a.[MD5] = b.[MD5] AND {str} AND b.BookMarkId < 0 " +
+                //    $" UNION "+
+                //    $"SELECT a.*,-1 from {tableName} a where a.[MD5] not in (SELECT md5 from {AttachedDatabaseAliasName}.{tableName}) AND {str} " +
+                //    limitStr;
                 str = str.TrimStart('#');
-                string limitStr = "";
-                int limit = str.LastIndexOf("LIMIT");
-                if(limit >= 0)
-                {
-                    limitStr = str.Substring(limit);
-                    str = str.Substring(0, limit);
-                }
-                return $"SELECT a.*,b.BookMarkId FROM {tableName} a, {AttachedDatabaseAliasName}.{tableName} b WHERE a.[MD5] = b.[MD5] AND {str} AND b.BookMarkId < 0 " +
-                    $" UNION "+
-                    $"SELECT a.*,-1 from {tableName} a where a.[MD5] not in (SELECT md5 from {AttachedDatabaseAliasName}.{tableName}) AND {str} " +
-                    limitStr;
+                return $"SELECT a.* FROM {tableName} a, {AttachedDatabaseAliasName}.{BookmarkDecorationProperty.DPTableName} b WHERE {str}";
             }
             else if(str.StartsWith("$"))  
             {
-                return $"SELECT a.*,b.BookMarkId FROM {tableName} a, {AttachedDatabaseAliasName}.{tableName} b WHERE a.[MD5] = b.[MD5] AND {str.TrimStart('$')}";
+                //return $"SELECT a.*,b.BookMarkId FROM {tableName} a, {AttachedDatabaseAliasName}.{tableName} b WHERE a.[MD5] = b.[MD5] AND {str.TrimStart('$')}";
+                str = str.TrimStart('$');
+                return $"SELECT a.* FROM {tableName} a WHERE {str}";
             }
             else
             {
-                return $"SELECT * FROM {tableName} a";
+                return $"SELECT * FROM {tableName} a WHERE {str}";
             }
         }
 
@@ -135,17 +139,20 @@ namespace XLY.SF.Project.Domains
             if (str.StartsWith("#"))
             {
                 str = str.TrimStart('#');
-                return $"SELECT (SELECT COUNT(*) FROM {tableName} a, {AttachedDatabaseAliasName}.{tableName} b WHERE a.[MD5] = b.[MD5] AND {str} AND b.BookMarkId < 0 )  " +
-                    $" + " +
-                    $"(SELECT COUNT(*) from {tableName} a where a.[MD5] not in (SELECT md5 from {AttachedDatabaseAliasName}.{tableName}) AND {str}) ";
+                //return $"SELECT (SELECT COUNT(*) FROM {tableName} a, {AttachedDatabaseAliasName}.{tableName} b WHERE a.[MD5] = b.[MD5] AND {str} AND b.BookMarkId < 0 )  " +
+                //    $" + " +
+                //    $"(SELECT COUNT(*) from {tableName} a where a.[MD5] not in (SELECT md5 from {AttachedDatabaseAliasName}.{tableName}) AND {str}) ";
+                return $"SELECT COUNT(*) FROM {tableName} a, {AttachedDatabaseAliasName}.{BookmarkDecorationProperty.DPTableName} b WHERE {str}";
             }
             else if (str.StartsWith("$"))
             {
-                return $"SELECT COUNT(*) FROM {tableName} a, {AttachedDatabaseAliasName}.{tableName} b WHERE a.[MD5] = b.[MD5] AND {str.TrimStart('$')}";
+                //return $"SELECT COUNT(*) FROM {tableName} a, {AttachedDatabaseAliasName}.{tableName} b WHERE a.[MD5] = b.[MD5] AND {str.TrimStart('$')}";
+                str = str.TrimStart('$');
+                return $"SELECT COUNT(*) FROM {tableName} a WHERE {str}";
             }
             else
             {
-                return $"SELECT COUNT(*) FROM {tableName} a";
+                return $"SELECT COUNT(*) FROM {tableName} a WHERE {str}";
             }
         }
     }

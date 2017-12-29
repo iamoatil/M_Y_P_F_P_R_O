@@ -119,7 +119,7 @@ namespace XLY.SF.Project.Devices.DeviceManager.Mtp
             fileNode.DateAuthored = GetFileDateAuthoredProperty(objectValues);
         }
 
-        public MTPFileNode GetRootFileNode(MTPDevice device, SingleTaskReporterBase asyn)
+        public MTPFileNode GetRootFileNode(MTPDevice device, DefaultAsyncTaskProgress asyn)
         {
             MTPFileNode root = new MTPFileNode() { Type = MTPFileNodeType.Root, Name = "Root", Childrens = new List<MTPFileNode>(), Level = -1 };
 
@@ -186,7 +186,7 @@ namespace XLY.SF.Project.Devices.DeviceManager.Mtp
             return root;
         }
 
-        private void CreateTree(MTPFileNode parentNode, IPortableDeviceContent content, IPortableDeviceProperties properties, IAsyncTaskProgress asyn)
+        private void CreateTree(MTPFileNode parentNode, IPortableDeviceContent content, IPortableDeviceProperties properties, DefaultAsyncTaskProgress asyn)
         {
             List<string> objectsId = GetChildrenObjectIds(content, parentNode.Id);
             if (objectsId != null && objectsId.Count > 0)

@@ -60,6 +60,16 @@ namespace XLY.SF.Project.ViewModels.Main.DeviceMain.Navigation
             return targetView;
         }
 
+        /// <summary>
+        /// 释放缓存的View
+        /// </summary>
+        /// <param name="exportKey"></param>
+        public void ReleaseView(string exportKey)
+        {
+            PreCacheToken delToken = new PreCacheToken(_devID, exportKey);
+            SystemContext.Instance.CurCacheViews.RemoveViewCache(delToken);
+        }
+
         #endregion
     }
 }

@@ -43,6 +43,7 @@ using System.Windows.Markup;
 
 [assembly:XmlnsDefinition("http://www.spfpro.com", "XLY.SF.Project.Themes.CustromControl")]
 [assembly: XmlnsDefinition("http://www.spfpro.com", "XLY.SF.Project.Themes.Converter")]
+[assembly: XmlnsDefinition("http://www.spfpro.com", "XLY.SF.Project.Themes")]
 
 // 程序集的版本信息由下面四个值组成: 
 //

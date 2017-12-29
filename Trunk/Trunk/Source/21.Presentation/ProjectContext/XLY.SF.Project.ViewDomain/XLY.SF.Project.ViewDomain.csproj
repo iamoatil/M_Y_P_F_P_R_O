@@ -51,6 +51,7 @@
     <Compile Include="MefKeys\ExportKeys.cs" />
     <Compile Include="MefKeys\GeneralKeys.cs" />
     <Compile Include="Model\Device\DeviceConnectedDelegate.cs" />
+    <Compile Include="Model\Device\DeviceInfoModel.cs" />
     <Compile Include="Model\MessageElement\OpenSubViewMsgModel.cs" />
     <Compile Include="Model\Logs\ObtainEvidenceLogModel.cs" />
     <Compile Include="Model\PresentationNavigationElement\PreCacheToken.cs" />

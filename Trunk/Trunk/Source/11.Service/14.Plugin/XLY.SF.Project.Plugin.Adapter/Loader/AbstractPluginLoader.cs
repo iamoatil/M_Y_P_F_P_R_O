@@ -9,7 +9,10 @@
 // ***********************************************************************
 
 using System.Collections.Generic;
+using System.IO;
 using XLY.SF.Framework.Core.Base.CoreInterface;
+using XLY.SF.Framework.Language;
+using XLY.SF.Project.BaseUtility.Helper;
 using XLY.SF.Project.Domains;
 
 
@@ -53,5 +56,36 @@ namespace XLY.SF.Project.Plugin.Adapter
         /// <returns></returns>
         protected abstract void LoadPlugin(IAsyncTaskProgress asyn, params string[] pluginPaths);
 
+        protected List<FileInfo> GetPluginFileList(string[] extsions, params string[] pluginPaths)
+        {
+            string dir = LanguageManager.Current.Type == LanguageType.En ? FileHelper.GetPhysicalPath("\\Script\\en")
+                : FileHelper.GetPhysicalPath("\\Script\\cn");
+
+            List<string> dirs = new List<string>();
+            dirs.Add(dir);
+            if (pluginPaths != null && pluginPaths.Length > 0)
+            {
+                foreach (var path in pluginPaths)
+                {
+                    string scp = Path.Combine(path, LanguageManager.Current.Type == LanguageType.En ? "en" : "cn");
+                    if (Directory.Exists(scp))
+                    {
+                        dirs.Add(scp);
+                    }
+                }
+            }
+            List<FileInfo> pluginFiles = new List<FileInfo>();
+            foreach (var d in dirs)
+            {
+                foreach (var f in FileHelper.GetFiles(d, extsions))
+                {
+                    if (!pluginFiles.Exists(p => p.Name == f.Name))
+                    {
+                        pluginFiles.Add(f);
+                    }
+                }
+            }
+            return pluginFiles;
+        }
     }
 }

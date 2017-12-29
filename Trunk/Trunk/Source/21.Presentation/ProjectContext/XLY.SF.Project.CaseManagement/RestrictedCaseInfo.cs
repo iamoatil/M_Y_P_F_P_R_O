@@ -40,7 +40,6 @@ namespace XLY.SF.Project.CaseManagement
         public override String Path
         {
             get => base.Path;
-            set { throw new NotSupportedException(); }
         }
 
         /// <summary>

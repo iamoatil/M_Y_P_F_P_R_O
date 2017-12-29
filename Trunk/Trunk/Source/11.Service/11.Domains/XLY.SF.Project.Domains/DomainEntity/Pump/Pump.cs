@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.IO;
-using XLY.SF.Project.Domains;
 
 namespace XLY.SF.Project.Domains
 {
@@ -26,14 +26,26 @@ namespace XLY.SF.Project.Domains
         #region Constructors
 
         public Pump(String savePath, String dbFileName)
+            :this(savePath,dbFileName,Guid.NewGuid().ToString())
+        {
+        }
+
+        [JsonConstructor]
+        public Pump(String savePath, String dbFileName, String id)
         {
             SavePath = savePath ?? throw new ArgumentNullException("savePath");
             DbFileName = dbFileName ?? throw new ArgumentNullException("dbFileName");
+            Id = id ?? throw new ArgumentNullException(nameof(id));
         }
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// 唯一标识。
+        /// </summary>
+        public String Id { get; }
 
         /// <summary>
         /// 操作系统类型。

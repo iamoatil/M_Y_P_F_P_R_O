@@ -17,14 +17,13 @@ namespace XLY.SF.Project.Domains.Contract
     /// <summary>
     /// 提供对数据的查询过滤接口
     /// </summary>
-    public interface IFilterItem
+    public interface IFilterItem : IPage
     {
         /// <summary>
         /// 过滤数据
         /// </summary>
         /// <param name="args">过滤参数，可以设置多个过滤参数</param>
-        /// <returns>true符合条件，false不符合过滤条件</returns>
-        bool Filter(params FilterArgs[] args);
+        void Filter(params FilterArgs[] args);
 
         /// <summary>
         /// 查询数据，并返回数据结果
@@ -41,9 +40,8 @@ namespace XLY.SF.Project.Domains.Contract
         int Static(params FilterArgs[] args);
 
         /// <summary>
-        /// 是否过滤
+        /// 当前过滤参数
         /// </summary>
-        bool IsVisible { get; set; }
-
+        FilterArgs[] FilterArguments { get; set; }
     }
 }

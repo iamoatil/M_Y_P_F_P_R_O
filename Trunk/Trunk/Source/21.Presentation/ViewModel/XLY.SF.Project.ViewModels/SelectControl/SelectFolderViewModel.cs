@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using ProjectExtend.Context;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -54,6 +55,29 @@ namespace XLY.SF.Project.ViewModels.SelectControl
             private set
             {
                 this._curSelectedItemInFolder = value;
+                CurInput = value?.Name;
+                base.OnPropertyChanged();
+            }
+        }
+
+        #endregion
+
+        #region 当前的输入
+
+        private string _curInput;
+        /// <summary>
+        /// 当前的输入
+        /// </summary>
+        public string CurInput
+        {
+            get
+            {
+                return this._curInput;
+            }
+
+            set
+            {
+                this._curInput = value;
                 base.OnPropertyChanged();
             }
         }
@@ -123,7 +147,7 @@ namespace XLY.SF.Project.ViewModels.SelectControl
             LoadFolderCommand = new RelayCommand<FolderElement>(ExecuteLoadFolderCommand);
             SelectedItemCommand = new RelayCommand<FolderElement>(ExecuteSelectedItemCommand);
             InSelectedItemCommand = new RelayCommand<FolderElement>(ExecuteInSelectedItemCommand);
-            SelectedCompleteCommand = new RelayCommand(ExecuteSelectedCompleteCommand);
+            SelectedCompleteCommand = new RelayCommand<string>(ExecuteSelectedCompleteCommand);
             CancelSelectCommand = new RelayCommand(ExecuteCancelSelectCommand);
         }
 
@@ -136,12 +160,19 @@ namespace XLY.SF.Project.ViewModels.SelectControl
             {
                 Folders.Add(item);
             }
+
+            //进入系统默认路径            
+            FolderElement tmpFolder = new FolderElement(new DirectoryInfo(SystemContext.Instance.SavePath));
+            UpdateFolders(SelectManager.InFolderAndUpdateLevel(tmpFolder));
         }
 
         public override object GetResult()
         {
             if (DialogResult)
-                return Path.Combine(CurSelectedItemInFolder.Parent.FullPath, CurSelectedItemInFolder.Name);
+            {
+                string selectedPath = CurInput == CurSelectedItemInFolder.Name ? CurSelectedItemInFolder.FullPath : Path.Combine(SelectManager.CurFolderLevel.FullPath, CurInput);
+                return selectedPath;
+            }
             return null;
         }
 
@@ -155,12 +186,18 @@ namespace XLY.SF.Project.ViewModels.SelectControl
         }
 
         //完成选择【确定按钮】
-        private void ExecuteSelectedCompleteCommand()
+        private void ExecuteSelectedCompleteCommand(string curInputName)
         {
-            if (CurSelectedItemInFolder != null)
+            if (CurSelectedItemInFolder != null && !string.IsNullOrWhiteSpace(curInputName))
             {
-                var curFullPath = Path.Combine(CurSelectedItemInFolder.Parent.FullPath, CurSelectedItemInFolder.Name);
-                if (Directory.Exists(curFullPath))
+                string inputName = curInputName == CurSelectedItemInFolder.Name ? CurSelectedItemInFolder.FullPath : curInputName;
+
+                //修改后在当前路径下查找
+                string selectFolder = Path.Combine(SelectManager.CurFolderLevel.FullPath, inputName);
+                if (!Directory.Exists(selectFolder))
+                    _msgService.ShowDialogErrorMsg("选择文件夹不存在");
+
+                if (Directory.Exists(selectFolder))
                 {
                     //确定选择的文件夹
                     base.DialogResult = true;
@@ -186,6 +223,8 @@ namespace XLY.SF.Project.ViewModels.SelectControl
         private void ExecuteLoadFolderCommand(FolderElement obj)
         {
             UpdateFolders(SelectManager.InFolderAndUpdateLevel(obj));
+            //选中根目录
+            CurSelectedItemInFolder = obj;
         }
 
         //新建文件夹

@@ -179,16 +179,15 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>set ProcessName=XLY.SF.Project.DeviceExtractionService.exe
-tasklist /nh|find /i  "%25ProcessName%25" &gt; null
-if %25ERRORLEVEL%25 equ 0  ( taskkill /f /im "%25ProcessName%25" /T  &gt; null ) else ( exit 0 )
-
-</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>cd /d $(ProjectDir)..\..\..\..\Tools\CopyDll\
 set parameterFile=config.cfg
 if $(ConfigurationName) == Release  set parameterFile=config_Release.cfg
-CopyDll.exe /f %25parameterFile%25</PostBuildEvent>
+CopyDll.exe /f %25parameterFile%25
+copy /y ..\..\Lib\vcdllX64\Mirror\$(ConfigurationName)\hasp_windows_x64_103427.dll ..\..\Source\31.Build\$(ConfigurationName)\
+copy /y ..\..\Lib\vcdllX64\Mirror\$(ConfigurationName)\apidsp_windows_x64.dll ..\..\Source\31.Build\$(ConfigurationName)\</PostBuildEvent>
   </PropertyGroup>
 </Project>

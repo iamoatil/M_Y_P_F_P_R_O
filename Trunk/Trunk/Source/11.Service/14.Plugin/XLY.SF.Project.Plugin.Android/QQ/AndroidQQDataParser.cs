@@ -17,7 +17,7 @@ namespace XLY.SF.Project.Plugin.Android
             pluginInfo.Name = LanguageHelper.GetString(Languagekeys.PluginName_QQ);
             pluginInfo.Group = LanguageHelper.GetString(Languagekeys.PluginGroupName_SocialChat);
             pluginInfo.DeviceOSType = EnumOSType.Android;
-            pluginInfo.VersionStr = "0.0";
+            pluginInfo.VersionStr = "1.0";
             pluginInfo.Pump = EnumPump.USB | EnumPump.Mirror | EnumPump.LocalData;
             pluginInfo.GroupIndex = 1;
             pluginInfo.OrderIndex = 1;
